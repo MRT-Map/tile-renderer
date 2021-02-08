@@ -11,15 +11,15 @@ Made by i____7d
 Points, Lines & Areas:
 ```json
 {
-  "<nameid>": [
+  "(nameid)": [
     [
-      "type": "<type>",
-      "shape": "<point/line/area>",
-      "displayname": "<displayname>"
+      "type": "(type)",
+      "shape": "(point/line/area)",
+      "displayname": "(displayname)"
       "layer": layer_no,
       "coords": [nodeid, nodeid, ...],
       "attrs": {
-        "<attr name>": "<attr val>",
+        "(attr name)": "(attr val)",
         // etc
       }
     ],
@@ -31,7 +31,7 @@ Points, Lines & Areas:
 Nodes (Note: Nodes != Points):
 ```json
 {
-  "<nodeid>": {
+  "(nodeid)": {
     "x": x,
     "y": y,
     "connections": [
