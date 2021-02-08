@@ -9,10 +9,10 @@ Made by i____7d
 
 ## Renderer input format
 Points, Lines & Areas:
-```json
+```
 {
   "(nameid)": [
-    [
+    {
       "type": "(type)",
       "shape": "(point/line/area)",
       "displayname": "(displayname)"
@@ -22,14 +22,14 @@ Points, Lines & Areas:
         "(attr name)": "(attr val)",
         // etc
       }
-    ],
+    },
   ]
   //etc
 }
 ```
 
 Nodes (Note: Nodes != Points):
-```json
+```
 {
   "(nodeid)": {
     "x": x,
