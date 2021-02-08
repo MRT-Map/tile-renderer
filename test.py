@@ -1,0 +1,3 @@
+import renderer
+
+renderer.render()
