@@ -1,6 +1,5 @@
 # tile-renderer
-Tile renderer for leaflet.js usage
-Made by i____7d
+Tile renderer for leaflet.js usage, made by i____7d
 
 ## Current version: v0.0
 * v0.0
