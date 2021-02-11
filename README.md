@@ -1,7 +1,7 @@
 # tile-renderer
 Tile renderer for leaflet.js usage, made by i____7d
 
-## Current version: v0.0
+## Current version: v0.0.1 
 * v0.0.1 (11/2/21)
   * just a quickie
   * updated input format and added json reading code for test.py
