@@ -2,7 +2,11 @@
 Tile renderer for leaflet.js usage, made by i____7d
 
 ## Current version: v0.0
-* v0.0
+* v0.0.1 (11/2/21)
+  * just a quickie
+  * updated input format and added json reading code for test.py
+  * added minzoom, maxzoom, maxzoomrange for `renderer.render()`
+* **v0.0 (8/2/21)**
   * started project
   * documented JSON dictionary structure
 
@@ -17,6 +21,7 @@ Points, Lines & Areas:
       "displayname": "(displayname)"
       "layer": layer_no,
       "coords": [nodeid, nodeid, ...],
+      "renderedin": [(z,x,y), (z,x,y), ...]
       "attrs": {
         "(attr name)": "(attr val)",
         // etc
