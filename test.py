@@ -13,4 +13,6 @@ def examplenodesRead():
         f.close()
         return data
 
-renderer.render(exampleplaRead(), examplenodesRead(), 0, 2, 8)
+print(renderer.tools.lineToTiles([(3,4), (10,5)], 0, 2, 8))
+
+#renderer.render(exampleplaRead(), examplenodesRead(), 0, 2, 8)
