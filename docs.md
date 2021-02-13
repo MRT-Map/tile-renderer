@@ -1,7 +1,7 @@
 # Tile Renderer Documentation (v0.1)
 
 ## Useful Information
-* To convert tuple to list efficiently use *****(tuple)
+* To convert tuple to list efficiently use *(tuple)
 
 ## Renderer input format
 Points, Lines & Areas:
