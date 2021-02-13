@@ -60,7 +60,7 @@ Renders tiles from given coordinates and zoom values.
 #### Returns
 ?
 
-#### `renderer.tools.lineToTiles(coords: list, minZoom: int, maxZoom: int, maxZoomRange: int)`
+### `renderer.tools.lineToTiles(coords: list, minZoom: int, maxZoom: int, maxZoomRange: int)`
 Generates tile coordinates from list of regular coordinates using `renderer.tools.coordToTiles()`. Mainly for rendering whole points, lines, or areas.
 
 ### Arguments
