@@ -60,11 +60,11 @@ Renders tiles from given coordinates and zoom values.
 #### Returns
 ?
 
-#### `renderer.tools.coordToTiles(coord: list, minZoom: int, maxZoom: int, maxZoomRange: int)`
-Generates tile coordinates from list of regular coordinates using `renderer.tools.lineToTiles()`. Mainly for rendering whole points, lines, or areas.
+#### `renderer.tools.lineToTiles(coords: list, minZoom: int, maxZoom: int, maxZoomRange: int)`
+Generates tile coordinates from list of regular coordinates using `renderer.tools.coordToTiles()`. Mainly for rendering whole points, lines, or areas.
 
 ### Arguments
-* list[tuple] **coord**: list of coordinates in tuples of `(x,y)`
+* list[tuple] **coords**: list of coordinates in tuples of `(x,y)`
 * int **minZoom**: minimum zoom value
 * int **maxZoom**: maximum zoom value
 * int **maxZoomValue**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a `maxZoom` of 5 and a `maxZoomValue` of 8 will make a 5-zoom tile cover 8 units
@@ -72,11 +72,11 @@ Generates tile coordinates from list of regular coordinates using `renderer.tool
 #### Returns
 * **list[tuple]** A list of tile coordinates
 
-### `renderer.tools.lineToTiles(coords: list, minZoom: int, maxZoom: int, maxZoomRange: int)`
-Returns all tiles in the form of tile coordinates that contain the provided regular coordinates.
+### `renderer.tools.coordToTiles(coord: list, minZoom: int, maxZoom: int, maxZoomRange: int)`
+Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
 
 #### Arguments
-* list[int/float] **coords**: Coordinates provided in the form `[x,y]`
+* list[int/float] **coord**: Coordinates provided in the form `[x,y]`
 * int **minZoom**: minimum zoom value
 * int **maxZoom**: maximum zoom value
 * int **maxZoomValue**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a `maxZoom` of 5 and a `maxZoomValue` of 8 will make a 5-zoom tile cover 8 units
