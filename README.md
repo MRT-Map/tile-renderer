@@ -2,7 +2,7 @@
 Tile renderer for leaflet.js usage, made by i____7d
 
 ## Current version: v0.0.1 
-* v0.1 (13/2/21)
+* **v0.1 (13/2/21)**
   * two new functions: `renderer.tools.coordToTiles()` and `renderer.tools.lineToTiles()`
   * moved renderer input format documentation to docs page
 * v0.0.1 (11/2/21)
