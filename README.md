@@ -13,4 +13,4 @@ Tile renderer for leaflet.js usage, made by i____7d
   * started project
   * documented JSON dictionary structure
 
-## [Documentation](../blob/main/docs.md)
+## [Documentation](../main/docs.md)
