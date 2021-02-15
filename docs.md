@@ -1,4 +1,4 @@
-# Tile Renderer Documentation (v0.1)
+# Tile Renderer Documentation (v0.2)
 
 ## Useful Information
 * To convert tuple to list efficiently use *(tuple)
@@ -7,20 +7,18 @@
 Points, Lines & Areas:
 ```
 {
-  "(nameid)": [
-    {
-      "type": "(type)",
-      "shape": "(point/line/area)",
-      "displayname": "(displayname)"
-      "layer": layer_no,
-      "coords": [nodeid, nodeid, ...],
-      "renderedin": [(z,x,y), (z,x,y), ...]
-      "attrs": {
-        "(attr name)": "(attr val)",
-        // etc
-      }
-    },
-  ]
+  "(nameid)": {
+    "type": "(type)",
+    "shape": "(point/line/area)",
+    "displayname": "(displayname)",
+    "description": "(description)"
+    "layer": layer_no,
+    "nodes": [nodeid, nodeid, ...],
+    "attrs": {
+      "(attr name)": "(attr val)",
+    // etc
+    }
+  },
   //etc
 }
 ```
@@ -45,7 +43,7 @@ Nodes (Note: Nodes != Points):
 
 ## API
 
-### `renderer.render(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, tiles=...])`
+### `renderer.render(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, tiles=...: list])`
 Renders tiles from given coordinates and zoom values.
 **NOTE: INCOMPLETE**
 
@@ -55,7 +53,7 @@ Renders tiles from given coordinates and zoom values.
 * int **minZoom**: minimum zoom value
 * int **maxZoom**: maximum zoom value
 * int **maxZoomValue**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a `maxZoom` of 5 and a `maxZoomValue` of 8 will make a 5-zoom tile cover 8 units
-* list[tuple] **tiles** (optional): a list of tiles to render, given in tuples of `(z,x,y)` where z = zoom and x,y = tile coordinates
+* list[tuple] **tiles** *(optional)*: a list of tiles to render, given in tuples of `(z,x,y)` where z = zoom and x,y = tile coordinates
 
 #### Returns
 ?
@@ -84,3 +82,92 @@ Returns all tiles in the form of tile coordinates that contain the provided regu
 #### Returns
 * **list[tuple]** A list of tile coordinates
 
+### `renderer.tools.plaJson_calcRenderedIn(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int)`
+Like `renderer.tools.lineToTiles()`, but for a JSON or dictionary of PLAs.
+
+### Arguments
+* dict **plaList**: a dictionary of points, lines and areas (see "Renderer input format")
+* dict **nodeList**: a dictionary of nodes (see "Renderer input format")
+* int **minZoom**: minimum zoom value
+* int **maxZoom**: maximum zoom value
+* int **maxZoomValue**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a `maxZoom` of 5 and a `maxZoomValue` of 8 will make a 5-zoom tile cover 8 units
+
+#### Returns
+* **list[tuple]** A list of tile coordinates
+
+### `renderer.tools.plaJson_findEnds(plaList: dict, nodeList: dict)`
+Finds the minimum and maximum X and Y values of a JSON or dictionary of PLAs.
+
+### Arguments
+* dict **plaList**: a dictionary of points, lines and areas (see "Renderer input format")
+* dict **nodeList**: a dictionary of nodes (see "Renderer input format")
+
+#### Returns
+* **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
+
+### `renderer.tools.nodesToCoords(nodes: list, nodeList: dict)`
+Converts a list of nodes IDs into a list of coordinates with a node dictionary/JSON as its reference.
+
+### Arguments
+* list **nodes**: a list of node IDs.
+* dict **nodeList**: a dictionary of nodes (see "Renderer input format")
+
+### Returns
+* **list[tuple]** A list of coordinates
+
+### `renderer.utils.coordListIntegrity(coords: list[, error=...: bool, silent=...:bool])`
+Checks integrity of a list of coordinates.
+
+### Arguments
+* list **coords**: a list of coordinates.
+* bool **error** *(optional)*: False by default; if True, when a problem is spotted an error is raised instead of an warning message.
+* bool **silent** *(optional)*: False by default; if True, info messages will not be shown.
+
+### Returns
+* **list[str]** A list of errors
+
+### `renderer.utils.tileCoordListIntegrity(tiles: list, minZoom: int, maxZoom: int[, error=...: bool, silent=...:bool])`
+Checks integrity of a list of tile coordinates.
+
+### Arguments
+* list **tiles**: a list of tile coordinates.
+* int **minZoom**: minimum zoom value
+* int **maxZoom**: maximum zoom value
+* bool **error** *(optional)*: False by default; if True, when a problem is spotted an error is raised instead of an warning message.
+* bool **silent** *(optional)*: False by default; if True, info messages will not be shown.
+
+### Returns
+* **list[str]** A list of errors
+
+### `renderer.utils.nodeListIntegrity(nodes: list, nodeList: dict[, error=...: bool, silent=...:bool])`
+Checks integrity of a list of node IDs.
+
+### Arguments
+* list **nodes**: a list of node IDs.
+* dict **nodeList**: a dictionary of nodes (see "Renderer input format")
+* bool **error** *(optional)*: False by default; if True, when a problem is spotted an error is raised instead of an warning message.
+* bool **silent** *(optional)*: False by default; if True, info messages will not be shown.
+
+### Returns
+* **list[str]** A list of errors
+
+### `renderer.utils.nodeJsonIntegrity(nodeList: dict[, error=...: bool])`
+Checks integrity of a dictionary/JSON of nodes.
+
+### Arguments
+* dict **nodeList**: a dictionary of nodes (see "Renderer input format")
+* bool **error** *(optional)*: False by default; if True, when a problem is spotted an error is raised instead of an warning message.
+
+### Returns
+* **list[str]** A list of errors
+
+### `renderer.utils.PlaJsonIntegrity(plaList: dict, nodeList: dict[, error=...: bool])`
+Checks integrity of a dictionary/JSON of PLAs.
+
+### Arguments
+* dict **plaList**: a dictionary of points, lines and areas (see "Renderer input format")
+* dict **nodeList**: a dictionary of nodes (see "Renderer input format")
+* bool **error** *(optional)*: False by default; if True, when a problem is spotted an error is raised instead of an warning message.
+
+### Returns
+* **list[str]** A list of errors

@@ -13,6 +13,8 @@ def examplenodesRead():
         f.close()
         return data
 
-print(renderer.tools.lineToTiles([(3,4), (10,5)], 0, 2, 8))
+#renderer.utils.tileCoordListIntegrity([(0,1,1), (2,3,4)], 1, 5, error=True)
 
-#renderer.render(exampleplaRead(), examplenodesRead(), 0, 2, 8)
+#print(renderer.tools.lineToTiles([(3,4), (10,5)], 0, 2, 8))
+
+renderer.render(exampleplaRead(), examplenodesRead(), 2, 2, 8)
