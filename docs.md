@@ -2,9 +2,10 @@
 
 ## Useful Information
 * To convert tuple to list efficiently use *(tuple)
+* PLA = Points, Lines and Areas
 
 ## Renderer input format
-Points, Lines & Areas:
+PLAs:
 ```
 {
   "(nameid)": {
@@ -48,7 +49,7 @@ Renders tiles from given coordinates and zoom values.
 **NOTE: INCOMPLETE**
 
 #### Arguments
-* dict **plaList**: a dictionary of points, lines and areas (see "Renderer input format")
+* dict **plaList**: a dictionary of PLAs (see "Renderer input format")
 * dict **nodeList**: a dictionary of nodes (see "Renderer input format")
 * int **minZoom**: minimum zoom value
 * int **maxZoom**: maximum zoom value
@@ -59,7 +60,7 @@ Renders tiles from given coordinates and zoom values.
 ?
 
 ### `renderer.tools.lineToTiles(coords, minZoom, maxZoom, maxZoomRange)`
-Generates tile coordinates from list of regular coordinates using `renderer.tools.coordToTiles()`. Mainly for rendering whole points, lines, or areas.
+Generates tile coordinates from list of regular coordinates using `renderer.tools.coordToTiles()`. Mainly for rendering whole PLAs.
 
 ### Arguments
 * list[tuple] **coords** of coordinates in tuples of `(x,y)`
@@ -86,7 +87,7 @@ Returns all tiles in the form of tile coordinates that contain the provided regu
 Like `renderer.tools.lineToTiles()`, but for a JSON or dictionary of PLAs.
 
 ### Arguments
-* dict **plaList**: a dictionary of points, lines and areas (see "Renderer input format")
+* dict **plaList**: a dictionary of PLAs (see "Renderer input format")
 * dict **nodeList**: a dictionary of nodes (see "Renderer input format")
 * int **minZoom**: minimum zoom value
 * int **maxZoom**: maximum zoom value
@@ -99,7 +100,7 @@ Like `renderer.tools.lineToTiles()`, but for a JSON or dictionary of PLAs.
 Finds the minimum and maximum X and Y values of a JSON or dictionary of PLAs.
 
 ### Arguments
-* dict **plaList**: a dictionary of points, lines and areas (see "Renderer input format")
+* dict **plaList**: a dictionary of PLAs (see "Renderer input format")
 * dict **nodeList**: a dictionary of nodes (see "Renderer input format")
 
 #### Returns
@@ -161,11 +162,11 @@ Checks integrity of a dictionary/JSON of nodes.
 ### Returns
 * **list[str]** A list of errors
 
-### `renderer.utils.PlaJsonIntegrity(plaList, nodeList[, error=...])`
+### `renderer.utils.plaJsonIntegrity(plaList, nodeList[, error=...])`
 Checks integrity of a dictionary/JSON of PLAs.
 
 ### Arguments
-* dict **plaList**: a dictionary of points, lines and areas (see "Renderer input format")
+* dict **plaList**: a dictionary of PLAs (see "Renderer input format")
 * dict **nodeList**: a dictionary of nodes (see "Renderer input format")
 * bool **error** *(optional)*: False by default; if True, when a problem is spotted an error is raised instead of an warning message.
 
