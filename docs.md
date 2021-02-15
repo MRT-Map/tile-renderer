@@ -43,7 +43,7 @@ Nodes (Note: Nodes != Points):
 
 ## API
 
-### `renderer.render(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, tiles=...: list])`
+### `renderer.render(plaList, nodeList, minZoom, maxZoom, maxZoomRange[, tiles=...])`
 Renders tiles from given coordinates and zoom values.
 **NOTE: INCOMPLETE**
 
@@ -58,11 +58,11 @@ Renders tiles from given coordinates and zoom values.
 #### Returns
 ?
 
-### `renderer.tools.lineToTiles(coords: list, minZoom: int, maxZoom: int, maxZoomRange: int)`
+### `renderer.tools.lineToTiles(coords, minZoom, maxZoom, maxZoomRange)`
 Generates tile coordinates from list of regular coordinates using `renderer.tools.coordToTiles()`. Mainly for rendering whole points, lines, or areas.
 
 ### Arguments
-* list[tuple] **coords**: list of coordinates in tuples of `(x,y)`
+* list[tuple] **coords** of coordinates in tuples of `(x,y)`
 * int **minZoom**: minimum zoom value
 * int **maxZoom**: maximum zoom value
 * int **maxZoomValue**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a `maxZoom` of 5 and a `maxZoomValue` of 8 will make a 5-zoom tile cover 8 units
@@ -70,7 +70,7 @@ Generates tile coordinates from list of regular coordinates using `renderer.tool
 #### Returns
 * **list[tuple]** A list of tile coordinates
 
-### `renderer.tools.coordToTiles(coord: list, minZoom: int, maxZoom: int, maxZoomRange: int)`
+### `renderer.tools.coordToTiles(coord, minZoom, maxZoom, maxZoomRange)`
 Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
 
 #### Arguments
@@ -82,7 +82,7 @@ Returns all tiles in the form of tile coordinates that contain the provided regu
 #### Returns
 * **list[tuple]** A list of tile coordinates
 
-### `renderer.tools.plaJson_calcRenderedIn(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int)`
+### `renderer.tools.plaJson_calcRenderedIn(plaList, nodeList, minZoom, maxZoom, maxZoomRange)`
 Like `renderer.tools.lineToTiles()`, but for a JSON or dictionary of PLAs.
 
 ### Arguments
@@ -95,7 +95,7 @@ Like `renderer.tools.lineToTiles()`, but for a JSON or dictionary of PLAs.
 #### Returns
 * **list[tuple]** A list of tile coordinates
 
-### `renderer.tools.plaJson_findEnds(plaList: dict, nodeList: dict)`
+### `renderer.tools.plaJson_findEnds(plaList, nodeList)`
 Finds the minimum and maximum X and Y values of a JSON or dictionary of PLAs.
 
 ### Arguments
@@ -105,7 +105,7 @@ Finds the minimum and maximum X and Y values of a JSON or dictionary of PLAs.
 #### Returns
 * **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
 
-### `renderer.tools.nodesToCoords(nodes: list, nodeList: dict)`
+### `renderer.tools.nodesToCoords(nodes, nodeList)`
 Converts a list of nodes IDs into a list of coordinates with a node dictionary/JSON as its reference.
 
 ### Arguments
@@ -115,7 +115,7 @@ Converts a list of nodes IDs into a list of coordinates with a node dictionary/J
 ### Returns
 * **list[tuple]** A list of coordinates
 
-### `renderer.utils.coordListIntegrity(coords: list[, error=...: bool, silent=...:bool])`
+### `renderer.utils.coordListIntegrity(coords[, error=..., silent=...])`
 Checks integrity of a list of coordinates.
 
 ### Arguments
@@ -126,7 +126,7 @@ Checks integrity of a list of coordinates.
 ### Returns
 * **list[str]** A list of errors
 
-### `renderer.utils.tileCoordListIntegrity(tiles: list, minZoom: int, maxZoom: int[, error=...: bool, silent=...:bool])`
+### `renderer.utils.tileCoordListIntegrity(tiles, minZoom, maxZoom[, error=..., silent=...])`
 Checks integrity of a list of tile coordinates.
 
 ### Arguments
@@ -139,7 +139,7 @@ Checks integrity of a list of tile coordinates.
 ### Returns
 * **list[str]** A list of errors
 
-### `renderer.utils.nodeListIntegrity(nodes: list, nodeList: dict[, error=...: bool, silent=...:bool])`
+### `renderer.utils.nodeListIntegrity(nodes, nodeList[, error=..., silent=...])`
 Checks integrity of a list of node IDs.
 
 ### Arguments
@@ -151,7 +151,7 @@ Checks integrity of a list of node IDs.
 ### Returns
 * **list[str]** A list of errors
 
-### `renderer.utils.nodeJsonIntegrity(nodeList: dict[, error=...: bool])`
+### `renderer.utils.nodeJsonIntegrity(nodeList[, error=...])`
 Checks integrity of a dictionary/JSON of nodes.
 
 ### Arguments
@@ -161,7 +161,7 @@ Checks integrity of a dictionary/JSON of nodes.
 ### Returns
 * **list[str]** A list of errors
 
-### `renderer.utils.PlaJsonIntegrity(plaList: dict, nodeList: dict[, error=...: bool])`
+### `renderer.utils.PlaJsonIntegrity(plaList, nodeList[, error=...])`
 Checks integrity of a dictionary/JSON of PLAs.
 
 ### Arguments
