@@ -262,7 +262,7 @@ def render(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRan
         raise ValueError("Max zoom value is greater than min zoom value")
 
     # integrity checks
-    utils.PlaJsonIntegrity(plaList, nodeList, error=True)
+    utils.plaJsonIntegrity(plaList, nodeList, error=True)
     utils.nodeJsonIntegrity(nodeList, error=True)
 
     #finds which tiles to render

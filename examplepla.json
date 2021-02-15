@@ -1,1 +1,13 @@
-{"(nameid)": {"type": "simpleLine", "shape": "line", "displayname": "I am a Line.", "description": "asdfasdf", "layer": 0, "nodes": ["a", "b", "c"], "attrs": {"(attr name)": "(attr val)"}}}
+{
+  "test": {
+    "type": "simpleLine",
+    "shape": "line",
+    "displayname": "I am a Line.",
+    "description": "asdfasdf",
+    "layer": 0,
+    "nodes": ["a", "b", "c"],
+    "attrs": {
+      "(attr name)": "(attr val)"
+    }
+  }
+}
