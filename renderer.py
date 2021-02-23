@@ -163,6 +163,9 @@ class utils:
         return errors
                 
 class internal:
+    def dictIndex(d: dict, v):
+        return list(d.keys())[list(d.values()).index(v)]
+
     def readJson(file: str):
         with open(file, "r") as f:
             data = json.load(f)
@@ -184,7 +187,7 @@ class internal:
         return str(t)[1:-1]
 
     def strToTuple(s: str):
-        return tuple(s.split(","))
+        return tuple(s.split(", "))
 
 class tools:
     def nodesToCoords(nodes: list, nodeList: dict):
@@ -257,7 +260,7 @@ class tools:
         return tiles
 
 
-def render(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int, **kwargs):
+def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, **kwargs):
     if maxZoom < minZoom:
         raise ValueError("Max zoom value is greater than min zoom value")
 
@@ -273,16 +276,50 @@ def render(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRan
         xMax, xMin, yMax, yMin = tools.plaJson_findEnds(plaList, nodeList)
         tiles = tools.lineToTiles([(xMax,yMax),(xMin,yMax),(xMax,yMin),(xMin,yMin)], minZoom, maxZoom, maxZoomRange)
 
-    #sort PLAs into tile objects
+    #sort PLAs by tiles
     tileList = {}
     for tile in tiles:
-        tileList[internal.tupleToStr(tile)] = []
+        tileList[internal.tupleToStr(tile)] = {}
     for pla in plaList.keys():
         coords = tools.nodesToCoords(plaList[pla]['nodes'], nodeList)
         renderedIn = tools.lineToTiles(coords, minZoom, maxZoom, maxZoomRange)
         for tile in renderedIn:
             if internal.tupleToStr(tile) in tileList.keys():
-                tileList[internal.tupleToStr(tile)].append(plaList[pla])
+                tileList[internal.tupleToStr(tile)][pla] = plaList[pla]
+    print(Fore.GREEN + "Starting processing..." + Style.RESET_ALL)
+    for tilePlas in tileList.keys():
+        #sort PLAs in tiles by layer
+        newTilePlas = {}
+        for pla in tileList[tilePlas].keys():
+            if not tileList[tilePlas][pla]['layer'] in newTilePlas.keys():
+                newTilePlas[str(float(tileList[tilePlas][pla]['layer']))] = {}
+            newTilePlas[str(float(tileList[tilePlas][pla]['layer']))][pla] = tileList[tilePlas][pla]
+        
+        #sort PLAs in layers in files by type
+        for layer in newTilePlas.keys():
+            #print(newTilePlas[layer].items())
+            newTilePlas[layer] = {k: v for k, v in sorted(newTilePlas[layer].items(), key=lambda x: skinJson['order'].index(x[1]['type'].split(' ')[0]))}
+        
+        #merge layers
+        tileList[tilePlas] = {}
+        for layer in newTilePlas.values():
+            for key, pla in layer.items():
+                tileList[tilePlas][key] = pla
+                
+        #print(newTilePlas)
+        #print(tileList[tilePlas])
 
+        #groups PLAs of the same type
+        newerTilePlas = [{}]
+        keys = list(tileList[tilePlas].keys())
+        for i in range(len(tileList[tilePlas])):
+            newerTilePlas[-1][keys[i]] = tileList[tilePlas][keys[i]]
+            if i != len(keys)-1 and tileList[tilePlas][keys[i+1]]['type'].split(' ')[0] != tileList[tilePlas][keys[i]]['type'].split(' ')[0]:
+                newerTilePlas.append({})
+        tileList[tilePlas] = newerTilePlas
 
+        print(Fore.GREEN + "Processed " + tilePlas + Style.RESET_ALL)
 
+    print(tileList)
+            
+    print(Fore.GREEN + "Starting render..." + Style.RESET_ALL)

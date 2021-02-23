@@ -1,7 +1,9 @@
 # tile-renderer
 Tile renderer for leaflet.js usage, made by i____7d
 
-## Current version: v0.2
+## Current version: v0.3
+* **v0.3 (23/2/21)**
+* * PLA processing for `renderer.render()`
 * **v0.2 (15/2/21)**
   * Added functions:
     * `renderer.utils.coordListIntegrity()`

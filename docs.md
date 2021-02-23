@@ -1,4 +1,4 @@
-# Tile Renderer Documentation (v0.2)
+# Tile Renderer Documentation (v0.3)
 
 ## Useful Information
 * To convert tuple to list efficiently use *(tuple)
@@ -44,13 +44,14 @@ Nodes (Note: Nodes != Points):
 
 ## API
 
-### `renderer.render(plaList, nodeList, minZoom, maxZoom, maxZoomRange[, tiles=...])`
+### `renderer.render(plaList, nodeList, skinJson, minZoom, maxZoom, maxZoomRange[, tiles=...])`
 Renders tiles from given coordinates and zoom values.
 **NOTE: INCOMPLETE**
 
 #### Arguments
 * dict **plaList**: a dictionary of PLAs (see "Renderer input format")
 * dict **nodeList**: a dictionary of nodes (see "Renderer input format")
+* dict **skinJson**: a JSON of the skin used to render tiles
 * int **minZoom**: minimum zoom value
 * int **maxZoom**: maximum zoom value
 * int **maxZoomValue**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a `maxZoom` of 5 and a `maxZoomValue` of 8 will make a 5-zoom tile cover 8 units
