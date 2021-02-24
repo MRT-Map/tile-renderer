@@ -1,7 +1,9 @@
 # tile-renderer
 Tile renderer for leaflet.js usage, made by i____7d
 
-## Current version: v0.4
+## Current version: v0.4.1
+* v0.4.1 (24/2/21)
+  * renderer creates new "tiles" directory to store tiles if directory not present
 * **v0.4 (24/2/21)**
   * PLA processing: grouping now only works for lines with "road" tag
   * `renderer.render()` now able to render lines and areas

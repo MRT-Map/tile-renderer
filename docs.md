@@ -1,4 +1,4 @@
-# Tile Renderer Documentation (v0.4)
+# Tile Renderer Documentation (v0.4.1)
 
 ## Useful Information
 * To convert tuple to list efficiently use *(tuple)

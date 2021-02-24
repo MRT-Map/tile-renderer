@@ -2,6 +2,7 @@ from colorama import Fore, Style, init
 import math
 import json
 from PIL import Image, ImageDraw
+import os
 init()
 
 class utils:
@@ -353,6 +354,8 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                             img.ellipse([x-step['width']/2+1, y-step['width']/2+1, x+step['width']/2, y+step['width']/2], fill=step['colour'])
                     elif info['type'] == "area":
                         img.polygon(coords, fill=step['colour'])
-                        
+        
+        if not os.path.isdir('./tiles'):
+            os.mkdir(os.getcwd()+"tiles")
         im.save(f'tiles/{tilePlas}.png', 'PNG')
         print(Fore.GREEN + "Rendered " + tilePlas + Style.RESET_ALL)
