@@ -1,6 +1,7 @@
 from colorama import Fore, Style, init
 import math
 import json
+from PIL import Image, ImageDraw
 init()
 
 class utils:
@@ -134,12 +135,12 @@ class utils:
         errors = []
         for pla in plaList.keys():
             print(Fore.GREEN + f"{pla}: Starting check" + Style.RESET_ALL)
-            for key in ["type","shape","displayname","description","layer","nodes","attrs"]:
+            for key in ["type","displayname","description","layer","nodes","attrs"]:
                 if not key in plaList[pla].keys():
                     errors.append(throwError(f"{pla}: Key '{key}' missing", KeyError))
 
             for key in plaList[pla].keys():
-                if key in ["type", "shape", "displayname", "description"] and not isinstance(plaList[pla][key], str):
+                if key in ["type", "displayname", "description"] and not isinstance(plaList[pla][key], str):
                     errors.append(throwError(f"{pla}: Value of key '{key}' is type {str(type(plaList[pla][key]).__name__)} instead of str", TypeError))
                 elif key in ["layer"] and not isinstance(plaList[pla][key], (int, float)):
                     errors.append(throwError(f"{pla}: Value of key '{key}' is type {str(type(plaList[pla][key]).__name__)} instead of int/float", TypeError))
@@ -154,8 +155,8 @@ class utils:
                     if not isinstance(plaList[pla][key], dict):
                         errors.append(throwError(f"{pla}: Value of key '{key}' is type {str(type(plaList[pla][key]).__name__)} instead of dict", TypeError))
 
-                if key == "shape" and not plaList[pla][key] in ["point", "line", "area"]:
-                    errors.append(throwError(f"{pla}: Shape is '{plaList[pla][key]}' instead of PLA type", ValueError))
+                #if key == "shape" and not plaList[pla][key] in ["point", "line", "area"]:
+                    #errors.append(throwError(f"{pla}: Shape is '{plaList[pla][key]}' instead of PLA type", ValueError))
         print(Fore.GREEN + "Checks complete; below is a list of errors if any:" + Style.RESET_ALL)
         if errors == []:
             errors = ["None"]
@@ -187,7 +188,7 @@ class internal:
         return str(t)[1:-1]
 
     def strToTuple(s: str):
-        return tuple(s.split(", "))
+        return tuple([int(x) for x in s.split(", ")])
 
 class tools:
     def nodesToCoords(nodes: list, nodeList: dict):
@@ -286,15 +287,18 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
         for tile in renderedIn:
             if internal.tupleToStr(tile) in tileList.keys():
                 tileList[internal.tupleToStr(tile)][pla] = plaList[pla]
+    
+    #print(tileList)
+    
     print(Fore.GREEN + "Starting processing..." + Style.RESET_ALL)
     for tilePlas in tileList.keys():
         #sort PLAs in tiles by layer
         newTilePlas = {}
         for pla in tileList[tilePlas].keys():
-            if not tileList[tilePlas][pla]['layer'] in newTilePlas.keys():
+            if not str(float(tileList[tilePlas][pla]['layer'])) in newTilePlas.keys():
                 newTilePlas[str(float(tileList[tilePlas][pla]['layer']))] = {}
             newTilePlas[str(float(tileList[tilePlas][pla]['layer']))][pla] = tileList[tilePlas][pla]
-        
+    
         #sort PLAs in layers in files by type
         for layer in newTilePlas.keys():
             #print(newTilePlas[layer].items())
@@ -309,17 +313,46 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
         #print(newTilePlas)
         #print(tileList[tilePlas])
 
-        #groups PLAs of the same type
+        #groups PLAs of the same type if "road" tag present
         newerTilePlas = [{}]
         keys = list(tileList[tilePlas].keys())
         for i in range(len(tileList[tilePlas])):
             newerTilePlas[-1][keys[i]] = tileList[tilePlas][keys[i]]
-            if i != len(keys)-1 and tileList[tilePlas][keys[i+1]]['type'].split(' ')[0] != tileList[tilePlas][keys[i]]['type'].split(' ')[0]:
+            if i != len(keys)-1 and (tileList[tilePlas][keys[i+1]]['type'].split(' ')[0] != tileList[tilePlas][keys[i]]['type'].split(' ')[0] or not "road" in skinJson['types'][tileList[tilePlas][keys[i]]['type'].split(' ')[0]]['tags']):
                 newerTilePlas.append({})
         tileList[tilePlas] = newerTilePlas
 
         print(Fore.GREEN + "Processed " + tilePlas + Style.RESET_ALL)
 
-    print(tileList)
+    #print(tileList)
             
     print(Fore.GREEN + "Starting render..." + Style.RESET_ALL)
+    for tilePlas in tileList.keys():
+        if tileList[tilePlas] == [{}]:
+            continue
+        
+        size = maxZoomRange*2**(maxZoom-internal.strToTuple(tilePlas)[0])
+        im = Image.new(mode = "RGB", size = (1024, 1024), color = (238, 238, 238))
+        img = ImageDraw.Draw(im)
+        #im.save(f'tiles/{tilePlas}.png', 'PNG')
+        for group in tileList[tilePlas]:
+            info = skinJson['types'][list(group.values())[0]['type']]
+            style = []
+            for zoom in info['style'].keys():
+                if maxZoom-internal.strToTuple(zoom)[1] <= internal.strToTuple(tilePlas)[0] <= maxZoom-internal.strToTuple(zoom)[0]:
+                    style = info['style'][zoom]
+                    break
+            for step in style:
+                for plaId, pla in group.items():
+                    coords = [(x-internal.strToTuple(tilePlas)[1]*size, y-internal.strToTuple(tilePlas)[2]*size) for x,y in tools.nodesToCoords(pla['nodes'], nodeList)]
+                    coords = [(int(1024/maxZoomRange*x), int(1024/maxZoomRange*y)) for x,y in coords]
+                    #print(step)
+                    if info["type"] == "line":
+                        img.line(coords, fill=step['colour'], width=step['width'])
+                        for x, y in coords:
+                            img.ellipse([x-step['width']/2+1, y-step['width']/2+1, x+step['width']/2, y+step['width']/2], fill=step['colour'])
+                    elif info['type'] == "area":
+                        img.polygon(coords, fill=step['colour'])
+                        
+        im.save(f'tiles/{tilePlas}.png', 'PNG')
+        print(Fore.GREEN + "Rendered " + tilePlas + Style.RESET_ALL)

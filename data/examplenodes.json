@@ -13,5 +13,10 @@
     "x": -4,
     "y": -2,
     "connections": []
+  },
+  "d": {
+    "x": 3,
+    "y": 8,
+    "connections": []
   }
 }

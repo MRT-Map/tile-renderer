@@ -1,10 +1,27 @@
 {
     "order": [
+        "simpleArea",
         "simpleLine"
     ],
-    "style": {
+    "types": {
+        "simpleArea": {
+            "tags": [],
+            "type": "area",
+            "style": {
+                "0, 5": [{
+                    "colour": "#aaaaaa"
+                }]
+            }
+        },
         "simpleLine": {
-            
+            "tags": ["road"],
+            "type": "line",
+            "style": {
+                "0, 5": [{
+                    "colour": "#808080",
+                    "width": 4
+                }]
+            }
         }
     }
 }

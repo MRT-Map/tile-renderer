@@ -2,8 +2,12 @@
 Tile renderer for leaflet.js usage, made by i____7d
 
 ## Current version: v0.3
+* **v0.4 (24/2/21)**
+  * PLA processing: grouping now only works for lines with "road" tag
+  * `renderer.render()` now able to render lines and areas
+  * New default skin; simpleLine and simpleArea PLA types added
 * **v0.3 (23/2/21)**
-* * PLA processing for `renderer.render()`
+  * PLA processing for `renderer.render()`
 * **v0.2 (15/2/21)**
   * Added functions:
     * `renderer.utils.coordListIntegrity()`

@@ -1,11 +1,20 @@
 {
   "test": {
     "type": "simpleLine",
-    "shape": "line",
     "displayname": "I am a Line.",
     "description": "asdfasdf",
     "layer": 0,
     "nodes": ["a", "b", "c"],
+    "attrs": {
+      "(attr name)": "(attr val)"
+    }
+  },
+  "area": {
+    "type": "simpleArea",
+    "displayname": "I am an Area.",
+    "description": "asdfasdf",
+    "layer": 0,
+    "nodes": ["a", "b", "d"],
     "attrs": {
       "(attr name)": "(attr val)"
     }
