@@ -1,4 +1,4 @@
-# Tile Renderer Documentation (v0.4.1)
+# Tile Renderer Documentation (v0.5)
 
 ## Useful Information
 * To convert tuple to list efficiently use *(tuple)
@@ -13,7 +13,7 @@ PLAs:
     "displayname": "(displayname)",
     "description": "(description)"
     "layer": layer_no,
-    "nodes": [nodeid, nodeid, ...],
+    "nodes": [nodeid, nodeid, False],
     "attrs": {
       "(attr name)": "(attr val)",
     // etc
@@ -41,9 +41,9 @@ Nodes (Note: Nodes != Points):
 }
 ```
 
-## API
+## API - Main
 
-### `renderer.render(plaList, nodeList, skinJson, minZoom, maxZoom, maxZoomRange[, tiles=...])`
+### `renderer.render(plaList, nodeList, skinJson, minZoom, maxZoom, maxZoomRange[, tiles=False])`
 Renders tiles from given coordinates and zoom values.
 **NOTE: INCOMPLETE**
 
@@ -57,7 +57,9 @@ Renders tiles from given coordinates and zoom values.
 * list[tuple] **tiles** *(optional)*: a list of tiles to render, given in tuples of `(z,x,y)` where z = zoom and x,y = tile coordinates
 
 #### Returns
-?
+* **None**
+
+## API - Main
 
 ### `renderer.tools.lineToTiles(coords, minZoom, maxZoom, maxZoomRange)`
 Generates tile coordinates from list of regular coordinates using `renderer.tools.coordToTiles()`. Mainly for rendering whole PLAs.
@@ -70,6 +72,8 @@ Generates tile coordinates from list of regular coordinates using `renderer.tool
 
 #### Returns
 * **list[tuple]** A list of tile coordinates
+
+## API - Tools
 
 ### `renderer.tools.coordToTiles(coord, minZoom, maxZoom, maxZoomRange)`
 Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
@@ -109,14 +113,71 @@ Finds the minimum and maximum X and Y values of a JSON or dictionary of PLAs.
 ### `renderer.tools.nodesToCoords(nodes, nodeList)`
 Converts a list of nodes IDs into a list of coordinates with a node dictionary/JSON as its reference.
 
-### Arguments
-* list **nodes**: a list of node IDs.
+#### Arguments
+* list **nodes**: a list of node IDs
 * dict **nodeList**: a dictionary of nodes (see "Renderer input format")
 
-### Returns
+#### Returns
 * **list[tuple]** A list of coordinates
 
-### `renderer.utils.coordListIntegrity(coords[, error=..., silent=...])`
+### `renderer.tools.findPlasAttachedToNode(nodeId, plaList)`
+Finds which PLAs attach to a node.
+
+#### Arguments
+* str **nodeId**: the node to search for
+* dict **plaList**: a dictionary of PLAs (see "Renderer input format")
+
+#### Returns
+* **list[tuple]** A tuple in the form of (plaId, posInNodeList)
+
+### `renderer.tools.lineInBox(line, top, bottom, left, right)`
+Finds if any nodes of a line go within the box.
+
+#### Arguments
+* list **line**: the line to check for
+* int **top, bottom, left, right**: the bounds of the box
+
+#### Returns
+* **bool** Whether any nodes of a line go within the box.
+
+## API - Math Tools
+
+### `renderer.mathtools.midpoint(x1, y1, x2, y2, o[, returnBoth=False])`
+Calculates the midpoint of two lines, offsets the distance away from the line, and calculates the rotation of the line.
+
+#### Arguments
+* int/float **x1, y1, x2, y2**: the coordinates of two points
+* int/float **o**: the offset from the line. If positive, the point above the line is returned; if negative, the point below the line is returned
+* bool **returnBoth** *(optional)*: False by default; if True, it will return both possible points.
+
+#### Returns
+* *returnBoth=False* **tuple** A tuple in the form of (x, y, rot)
+* *returnBoth=True* **list[tuple]** A list of two tuples in the form of (x, y, rot)
+
+### `renderer.mathtools.linesIntersect(x1, y1, x2, y2, x3, y3, x4, y4)`
+Finds if two segments intersect.
+
+#### Arguments
+* int/float **x1, y1, x2, y2**: the coordinates of two points of the first segment.
+* int/float **x3, y3, x4, y4**: the coordinates of two points of the second segment.
+
+#### Returns
+* **bool** Whether the two segments intersect.
+
+### `renderer.mathtools.pointInPoly(xp, yp, coords)`
+Finds if a point is in a polygon.
+**WARNING: If your polygon has a lot of corners, this will take very long.**
+
+#### Arguments
+* int/float **xp, yp**: the coordinates of the point.
+* list **coords**: the coordinates of the polygon; give in (x,y)
+
+#### Returns
+* **bool** Whether the point is inside the polygon.
+
+## API - Utils
+
+### `renderer.utils.coordListIntegrity(coords[, error=False, silent=False])`
 Checks integrity of a list of coordinates.
 
 ### Arguments
@@ -127,7 +188,7 @@ Checks integrity of a list of coordinates.
 ### Returns
 * **list[str]** A list of errors
 
-### `renderer.utils.tileCoordListIntegrity(tiles, minZoom, maxZoom[, error=..., silent=...])`
+### `renderer.utils.tileCoordListIntegrity(tiles, minZoom, maxZoom[, error=False, silent=False])`
 Checks integrity of a list of tile coordinates.
 
 ### Arguments
@@ -140,7 +201,7 @@ Checks integrity of a list of tile coordinates.
 ### Returns
 * **list[str]** A list of errors
 
-### `renderer.utils.nodeListIntegrity(nodes, nodeList[, error=..., silent=...])`
+### `renderer.utils.nodeListIntegrity(nodes, nodeList[, error=False, silent=False])`
 Checks integrity of a list of node IDs.
 
 ### Arguments
@@ -152,7 +213,7 @@ Checks integrity of a list of node IDs.
 ### Returns
 * **list[str]** A list of errors
 
-### `renderer.utils.nodeJsonIntegrity(nodeList[, error=...])`
+### `renderer.utils.nodeJsonIntegrity(nodeList[, error=False])`
 Checks integrity of a dictionary/JSON of nodes.
 
 ### Arguments
@@ -162,7 +223,7 @@ Checks integrity of a dictionary/JSON of nodes.
 ### Returns
 * **list[str]** A list of errors
 
-### `renderer.utils.plaJsonIntegrity(plaList, nodeList[, error=...])`
+### `renderer.utils.plaJsonIntegrity(plaList, nodeList[, error=False])`
 Checks integrity of a dictionary/JSON of PLAs.
 
 ### Arguments

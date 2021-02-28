@@ -1,7 +1,20 @@
 # tile-renderer
 Tile renderer for leaflet.js usage, made by i____7d
 
-## Current version: v0.4.1
+## Current version: v0.5
+* v0.5 (28/2/21)
+  * "shape" key in PLA structure removed
+  * A Roads, B Roads, local main roads, and simplePoint added to default skin
+  * New font for renders (Clear Sans), will be customisable later on
+  * Added functions `renderer.mathtools.midpoint()`, `renderer.mathtools.linesIntersect()`, `renderer.mathtools.pointInPoly()`, `renderer.tools.lineInBox()`, `renderer.tools.lineInBox()`, `findPlasAttachedToNode()`
+  * Not every info printout is green now; some are white or gray
+  * `renderer.render()` now able to render:
+    * points
+    * text on lines
+    * text on borders of areas
+    * text in center of areas
+    * joined roads
+  * ahhh
 * v0.4.1 (24/2/21)
   * renderer creates new "tiles" directory to store tiles if directory not present
 * **v0.4 (24/2/21)**
