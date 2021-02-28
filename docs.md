@@ -10,7 +10,6 @@ PLAs:
 {
   "(nameid)": {
     "type": "(type)",
-    "shape": "(point/line/area)",
     "displayname": "(displayname)",
     "description": "(description)"
     "layer": layer_no,

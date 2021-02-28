@@ -20,7 +20,7 @@ def skinFileRead():
         return data
 
 #renderer.utils.tileCoordListIntegrity([(0,1,1), (2,3,4)], 1, 5, error=True)
-
 #print(renderer.tools.lineToTiles([(3,4), (10,5)], 0, 2, 8))
-
-renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 2, 2, 8)
+#print(renderer.mathtools.pointInPoly(1,4,[(0,0),(2,0),(1,5)]))
+#print(renderer.tools.findPlasAttachedToNode("a", exampleplaRead()))
+renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 1, 2, 8)

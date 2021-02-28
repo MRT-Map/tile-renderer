@@ -1,16 +1,35 @@
 {
     "order": [
         "simpleArea",
-        "simpleLine"
+        "simpleLine",
+        "localMainRoad",
+        "bRoad",
+        "aRoad",
+        "simplePoint"
     ],
     "types": {
         "simpleArea": {
             "tags": [],
             "type": "area",
             "style": {
-                "0, 5": [{
-                    "colour": "#aaaaaa"
-                }]
+                "0, 5": [
+                    {
+                        "layer": "fill",
+                        "colour": "#aaaaaa",
+                        "outline": "#808080"
+                    },
+                    {
+                        "layer": "bordertext",
+                        "colour": "#808080",
+                        "offset": 5,
+                        "size": 10
+                    },
+                    {
+                        "layer": "centertext",
+                        "colour": "#808080",
+                        "size": 25
+                    }
+                ]
             }
         },
         "simpleLine": {
@@ -18,9 +37,103 @@
             "type": "line",
             "style": {
                 "0, 5": [{
+                    "layer": "fore",
                     "colour": "#808080",
                     "width": 4
                 }]
+            }
+        },
+        "aRoad": {
+            "tags": ["road"],
+            "type": "line",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "back",
+                        "colour": "#ff8080",
+                        "width": 28
+                    },
+                    {
+                        "layer": "fore",
+                        "colour": "#ffaaaa",
+                        "width": 24
+                    },
+                    {
+                        "layer": "text",
+                        "colour": "#000000",
+                        "size": 24,
+                        "offset": 0
+                    }
+                ]
+            }
+        },
+        "bRoad": {
+            "tags": ["road"],
+            "type": "line",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "back",
+                        "colour": "#ff8000",
+                        "width": 24
+                    },
+                    {
+                        "layer": "fore",
+                        "colour": "#ffaa00",
+                        "width": 20
+                    },
+                    {
+                        "layer": "text",
+                        "colour": "#000000",
+                        "size": 20,
+                        "offset": 0
+                    }
+                ]
+            }
+        },
+        "localMainRoad": {
+            "tags": ["road"],
+            "type": "line",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "back",
+                        "colour": "#ffcc00",
+                        "width": 20
+                    },
+                    {
+                        "layer": "fore",
+                        "colour": "#ffee00",
+                        "width": 16
+                    },
+                    {
+                        "layer": "text",
+                        "colour": "#000000",
+                        "size": 16,
+                        "offset": 0
+                    }
+                ]
+            }
+        },
+        "simplePoint": {
+            "tags": [],
+            "type": "point",
+            "style": {
+                "0, 5": [
+                    {
+                        "shape": "circle",
+                        "colour": "#ffffff",
+                        "outline": "#000000",
+                        "size": 30,
+                        "width": 6
+                    },
+                    {
+                        "shape": "text",
+                        "colour": "#000000",
+                        "offset": [10,10],
+                        "size": 25
+                    }
+                ]
             }
         }
     }

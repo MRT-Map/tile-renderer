@@ -18,5 +18,10 @@
     "x": 3,
     "y": 8,
     "connections": []
+  },
+  "e": {
+    "x": 3,
+    "y": 1,
+    "connections": []
   }
 }

@@ -1,8 +1,10 @@
 from colorama import Fore, Style, init
 import math
 import json
-from PIL import Image, ImageDraw
+from PIL import Image, ImageDraw, ImageFont
 import os
+import sympy as sym
+from typing import Union
 init()
 
 class utils:
@@ -191,7 +193,115 @@ class internal:
     def strToTuple(s: str):
         return tuple([int(x) for x in s.split(", ")])
 
+class mathtools:
+    def midpoint(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], o: Union[int, float], returnBoth=False):
+        x3, y3 = ((x1+x2)/2, (y1+y2)/2)
+        xv, yv = sym.symbols('xv,yv')
+        if x1 == x2:
+            m1 = None
+            m2 = 0
+            eq1 = sym.Eq(yv,y3)
+        elif y1 == y2:
+            m1 = 0
+            m2 = None
+            eq1 = sym.Eq(xv,x3)
+        else:
+            m1 = (y2-y1)/(x2-x1)
+            m2 = -1 / m1
+            eq1 = sym.Eq(yv-y3,m2*(xv-x3))
+        eq2 = sym.Eq(((yv-y3)**2 + (xv-x3)**2)**0.5,abs(o))
+        results = sym.solve([eq1, eq2], (xv, yv)) if o != 0 else [(x3, y3), (x3, y3)]
+        if returnBoth:
+            rot = 90 if x1 == x2 else math.degrees(-math.atan(m1))
+            return [(results[0][0], results[0][1], rot), (results[1][0], results[1][1], rot)]
+        #print(results)
+        if x1 == x2:
+            if o < 0:
+                x4, y4 = results[0] if results[0][0] < results[1][0] else results[1]
+            else:
+                x4, y4 = results[0] if results[0][0] > results[1][0] else results[1]
+            rot = 90
+        else:
+            if o < 0:
+                x4, y4 = results[0] if results[0][1] < results[1][1] else results[1]
+            else:
+                x4, y4 = results[0] if results[0][1] > results[1][1] else results[1]
+            rot = math.degrees(-math.atan(m1))
+        return x4, y4, rot
+
+    def linesIntersect(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], x3: Union[int, float], y3: Union[int, float], x4: Union[int, float], y4: Union[int, float]):
+        xv, yv = sym.symbols('xv,yv')
+        if x1 == x2:
+            m1 = None
+            eq1 = sym.Eq(xv,x1)
+            c1 = None if x1 != 0 else math.inf
+        else:
+            m1 = (y2-y1)/(x2-x1)
+            eq1 = sym.Eq(yv-y1,m1*(xv-x1))
+            c1 = y1-m1*x1
+        if x3 == x4:
+            m2 = None
+            eq2 = sym.Eq(xv,x3)
+            c2 = None if x3 != 0 else math.inf
+        else:
+            m2 = (y4-y3)/(x4-x3)
+            eq2 = sym.Eq(yv-y3,m2*(xv-x3))
+            c2 = y3-m2*x3
+        if m1 == m2 and c1 == c2: #same eq
+            if x1 == x2:
+                return False if (min(y1,y2)>max(y3,y4) and max(y1,x2)>min(y3,y4)) or (min(y3,y4)>max(y1,y2) and max(y3,y4)>min(y1,y2)) else True
+            else:
+                return False if (min(x1,x2)>max(x3,x4) and max(x1,x2)>min(x3,x4)) or (min(x3,x4)>max(x1,x2) and max(x3,x4)>min(x1,x2)) else True
+        elif m1 == m2: #parallel
+            return False
+        #print(eq1, eq2)
+        result = sym.solve([eq1, eq2], (xv, yv))
+        if isinstance(result, list):
+            x5, y5 = result[0]
+        elif isinstance(result, dict):
+            x5 = result[xv]
+            y5 = result[yv]
+        x1 = round(x1, 10); x2 = round(x2, 10); x3 = round(x3, 10); x4 = round(x4, 10); x5 = round(x5, 10)
+        y1 = round(y1, 10); y2 = round(y2, 10); y3 = round(y3, 10); y4 = round(y4, 10); y5 = round(y5, 10)
+        return False if (x5>max(x1,x2) or x5<min(x1,x2) or y5>max(y1,y2) or y5<min(y1,y2) or x5>max(x3,x4) or x5<min(x3,x4) or y5>max(y3,y4) or y5<min(y3,y4)) else True
+
+    def pointInPoly(xp: Union[int, float], yp: Union[int, float], coords: list):
+        r = -math.inf
+        for x, y in coords:
+            if x > r:
+                r = x
+        r += 10
+        cross = 0
+        for i in range(len(coords)):
+            j = i + 1 if i != len(coords)-1 else 0
+            if mathtools.linesIntersect(coords[i][0], coords[i][1], coords[j][0], coords[j][1], xp, yp, r, yp):
+                if coords[i][1] == yp:
+                    h = i - 1 if i != 0 else len(coords)-1
+                    cross += 0 if (coords[h][1]>yp and coords[i][1]>yp) or (coords[h][1]<yp and coords[i][1]<yp) else 0.5
+                elif coords[j][1] == yp:
+                    k = j + 1 if j != len(coords)-1 else 0 
+                    cross += 0 if (coords[j][1]>yp and coords[k][1]>yp) or (coords[j][1]<yp and coords[k][1]<yp) else 0.5
+                else:
+                    cross += 1
+        return cross % 2 == 1
+                
+
 class tools:
+    def lineInBox(line: list, top: int, bottom: int, left: int, right: int):
+        for x,y in line:
+            if top < x < bottom or left < y < right:
+                return True
+        return False
+
+    def findPlasAttachedToNode(nodeId: str, plaList: dict):
+        plas = []
+        for plaId, pla in plaList.items():
+            #print(plaId)
+            if nodeId in pla['nodes']:
+                plas.append((plaId, pla['nodes'].index(nodeId)))
+        return plas
+
+
     def nodesToCoords(nodes: list, nodeList: dict):
         coords = []
         for nodeid in nodes:
@@ -201,10 +311,10 @@ class tools:
         return coords
     
     def plaJson_findEnds(plaList: dict, nodeList: dict):
-        xMax = 0
-        xMin = 0
-        yMax = 0
-        yMin = 0
+        xMax = -math.inf
+        xMin = math.inf
+        yMax = -math.inf
+        yMin = math.inf
         for pla in plaList.keys():
             coords = tools.nodesToCoords(plaList[pla]['nodes'], nodeList)
             for x, y in coords:
@@ -323,7 +433,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                 newerTilePlas.append({})
         tileList[tilePlas] = newerTilePlas
 
-        print(Fore.GREEN + "Processed " + tilePlas + Style.RESET_ALL)
+        print("Processed " + tilePlas + Style.RESET_ALL)
 
     #print(tileList)
             
@@ -333,8 +443,9 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
             continue
         
         size = maxZoomRange*2**(maxZoom-internal.strToTuple(tilePlas)[0])
-        im = Image.new(mode = "RGB", size = (1024, 1024), color = (238, 238, 238))
+        im = Image.new(mode = "RGBA", size = (1024, 1024), color = (238, 238, 238))
         img = ImageDraw.Draw(im)
+        textList = []
         #im.save(f'tiles/{tilePlas}.png', 'PNG')
         for group in tileList[tilePlas]:
             info = skinJson['types'][list(group.values())[0]['type']]
@@ -346,16 +457,123 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
             for step in style:
                 for plaId, pla in group.items():
                     coords = [(x-internal.strToTuple(tilePlas)[1]*size, y-internal.strToTuple(tilePlas)[2]*size) for x,y in tools.nodesToCoords(pla['nodes'], nodeList)]
-                    coords = [(int(1024/maxZoomRange*x), int(1024/maxZoomRange*y)) for x,y in coords]
-                    #print(step)
-                    if info["type"] == "line":
+                    coords = [(int(1024/size*x), int(1024/size*y)) for x,y in coords]
+                    #print(coords)
+                    #print(coords)
+                    if info['type'] == "point":
+                        if step['shape'] == "circle":
+                            img.ellipse([coords[0][0]-step['size']/2+1, coords[0][1]-step['size']/2+1, coords[0][0]+step['size']/2, coords[0][1]+step['size']/2], fill=step['colour'], outline=step['outline'], width=step['width'])
+                        elif step['shape'] == "text":
+                            font = ImageFont.truetype("skins/assets/ClearSans-Medium.ttf", step['size'])
+                            img.text((coords[0][0]+step['offset'][0], coords[0][1]+step['offset'][1]), pla['displayname'], fill=step['colour'], font=font)
+                    
+                    elif info['type'] == "line" and step['layer'] == "text":
+                        font = ImageFont.truetype("skins/assets/ClearSans-Medium.ttf", step['size'])
+                        textLength = int(img.textlength(pla['displayname'], font))
+                        for c in range(len(coords)-1):
+                            if tools.lineInBox(coords, 0, 1024, 0, 1024) and 2*textLength <= ((coords[c+1][0]-coords[c][0])**2+(coords [c+1][1]-coords[c][1])**2)**0.5:
+                                i = Image.new('RGBA', (2*textLength,50), (0, 0, 0, 0))
+                                d = ImageDraw.Draw(i)
+                                #print(coords)
+                                tx, ty, trot = mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset'])
+                                d.text((textLength, 25), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
+                                i = i.rotate(trot, expand=True)
+                                textList.append((i, tx, ty))
+                                
+                    elif info['type'] == "line":
                         img.line(coords, fill=step['colour'], width=step['width'])
                         for x, y in coords:
                             img.ellipse([x-step['width']/2+1, y-step['width']/2+1, x+step['width']/2, y+step['width']/2], fill=step['colour'])
+
+                    elif info['type'] == "area" and step['layer'] == "bordertext":
+                        font = ImageFont.truetype("skins/assets/ClearSans-Medium.ttf", step['size'])
+                        textLength = int(img.textlength(pla['displayname'], font))
+                        for c1 in range(len(coords)):
+                            c2 = c1+1 if c1 != len(coords)-1 else 0
+                            if tools.lineInBox(coords, 0, 1024, 0, 1024) and 2*textLength <= ((coords[c2][0]-coords[c1][0])**2+(coords [c2][1]-coords[c1][1])**2)**0.5:
+                                i = Image.new('RGBA', (2*textLength,50), (0, 0, 0, 0))
+                                d = ImageDraw.Draw(i)
+                                #coords[c]
+                                points = mathtools.midpoint(coords[c1][0], coords[c1][1], coords[c2][0], coords[c2][1], step['offset'], returnBoth=True)
+                                if step['offset'] < 0:
+                                    tx, ty, trot = points[0] if not mathtools.pointInPoly(points[0][0], points[0][1], coords) else points[1]
+                                else:
+                                    #print(points[0][0], points[0][1], coords)
+                                    #print(mathtools.pointInPoly(points[0][0], points[0][1], coords))
+                                    tx, ty, trot = points[0] if mathtools.pointInPoly(points[0][0], points[0][1], coords) else points[1]
+                                d.text((textLength, 25), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
+                                i = i.rotate(trot, expand=True)
+                                textList.append((i, tx, ty))
+
+                    elif info['type'] == "area" and step['layer'] == "centertext":
+                        xMax = -math.inf
+                        xMin = math.inf
+                        yMax = -math.inf
+                        yMin = math.inf
+                        for x, y in coords:
+                            xMax = x if x > xMax else xMax
+                            xMin = x if x < xMin else xMin
+                            yMax = y if y > yMax else yMax
+                            yMin = y if y < yMin else yMin
+                        cx = (xMin+xMax)/2
+                        cy = (yMin+yMax)/2
+                        font = ImageFont.truetype("skins/assets/ClearSans-Medium.ttf", step['size'])
+                        textLength = int(img.textlength(pla['displayname'], font))
+                        i = Image.new('RGBA', (2*textLength,50), (0, 0, 0, 0))
+                        d = ImageDraw.Draw(i)
+                        d.text((textLength, 25), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
+                        textList.append((i, cx, cy))
+                                
                     elif info['type'] == "area":
-                        img.polygon(coords, fill=step['colour'])
+                        img.polygon(coords, fill=step['colour'], outline=step['outline'])
+                        
+                    print(Style.DIM + f"Rendered step {style.index(step)+1} of {len(style)} PLA {plaId}" + Style.RESET_ALL)
+
+                if info['type'] == "line" and "road" in info['tags'] and step['layer'] == "back":
+                    nodes = []
+                    for pla in group.values():
+                        nodes += pla['nodes']
+                    connectedPre = [tools.findPlasAttachedToNode(x, plaList) for x in nodes]
+                    connected = []
+                    for i in connectedPre:
+                       connected += i
+                    for conPla, index in connected:
+                        if not "road" in skinJson['types'][plaList[conPla]['type']]['tags']:
+                            continue
+                        conInfo = skinJson['types'][plaList[conPla]['type']]
+                        conStyle = []
+                        for zoom in conInfo['style'].keys():
+                            if maxZoom-internal.strToTuple(zoom)[1] <= internal.strToTuple(tilePlas)[0] <= maxZoom-internal.strToTuple(zoom)[0]:
+                                conStyle = conInfo['style'][zoom]
+                                break
+                        for conStep in conStyle:
+                            if conStep['layer'] in ["back", "text"]:
+                                continue
+                            conCoords = [(x-internal.strToTuple(tilePlas)[1]*size, y-internal.strToTuple(tilePlas)[2]*size) for x,y in tools.nodesToCoords(plaList[conPla]['nodes'], nodeList)]
+                            conCoords = [(int(1024/size*x), int(1024/size*y)) for x,y in conCoords]
+                    
+                            if index == 0:
+                                conCoords = [conCoords[0], conCoords[1]]
+                                conCoords[1] = ((conCoords[0][0]+conCoords[1][0])/2, (conCoords[0][1]+conCoords[1][1])/2)
+                            elif index == len(conCoords)-1:
+                                conCoords = [conCoords[index-1], conCoords[index]]
+                                conCoords[0] = ((conCoords[0][0]+conCoords[1][0])/2, (conCoords[0][1]+conCoords[1][1])/2)
+                            else:
+                                conCoords = [conCoords[index-1], conCoords[index], conCoords[index+1]]
+                                conCoords[0] = ((conCoords[0][0]+conCoords[1][0])/2, (conCoords[0][1]+conCoords[1][1])/2)
+                                conCoords[2] = ((conCoords[2][0]+conCoords[1][0])/2, (conCoords[2][1]+conCoords[1][1])/2)
+                            img.line(conCoords, fill=conStep['colour'], width=conStep['width'])
+                            for x, y in conCoords:
+                                img.ellipse([x-conStep['width']/2+1, y-conStep['width']/2+1, x+conStep['width']/2, y+conStep['width']/2], fill=conStep['colour'])
+                    print(Style.DIM + "Rendered road studs" + Style.RESET_ALL)
+                            
+        for i, x, y in textList:
+            im.paste(i, (int(x-i.width/2), int(y-i.height/2)), i)
+        print(Style.DIM + "Rendered text" + Style.RESET_ALL)
         
         if not os.path.isdir('./tiles'):
             os.mkdir(os.getcwd()+"tiles")
         im.save(f'tiles/{tilePlas}.png', 'PNG')
-        print(Fore.GREEN + "Rendered " + tilePlas + Style.RESET_ALL)
+        print("Rendered " + tilePlas + Style.RESET_ALL)
+    
+    print(Fore.GREEN + "Render complete" + Style.RESET_ALL)
