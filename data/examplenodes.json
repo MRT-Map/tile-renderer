@@ -23,5 +23,20 @@
     "x": 3,
     "y": 1,
     "connections": []
+  },
+  "f": {
+    "x": 7,
+    "y": 5,
+    "connections": []
+  },
+  "g": {
+    "x": 8,
+    "y": 0,
+    "connections": []
+  },
+  "h": {
+    "x": 8,
+    "y": 8,
+    "connections": []
   }
 }

@@ -1,27 +1,27 @@
 {
   "line": {
-    "type": "simpleLine",
-    "displayname": "I am a Line.",
+    "type": "rail",
+    "displayname": "Nowhere Express",
     "description": "asdfasdf",
     "layer": 0,
-    "nodes": ["a", "b", "c"],
+    "nodes": ["b", "c"],
     "attrs": {
       "(attr name)": "(attr val)"
     }
   },
   "area": {
-    "type": "simpleArea",
-    "displayname": "I am an Area.",
+    "type": "building_underground",
+    "displayname": "water",
     "description": "asdfasdf",
-    "layer": 0,
+    "layer": -1,
     "nodes": ["a", "b", "e"],
     "attrs": {
       "(attr name)": "(attr val)"
     }
   },
   "road1": {
-    "type": "aRoad",
-    "displayname": "I am an A road.",
+    "type": "aRoad oneWay",
+    "displayname": "A123",
     "description": "asdfasdf",
     "layer": 0,
     "nodes": ["a", "b"],
@@ -31,7 +31,7 @@
   },
   "road2": {
     "type": "bRoad",
-    "displayname": "I am a B road.",
+    "displayname": "B456",
     "description": "asdfasdf",
     "layer": 0,
     "nodes": ["c", "d", "b"],
@@ -40,8 +40,18 @@
     }
   },
   "road3": {
+    "type": "localHighway",
+    "displayname": "Testing Hwy",
+    "description": "asdfasdf",
+    "layer": 0,
+    "nodes": ["b", "f"],
+    "attrs": {
+      "(attr name)": "(attr val)"
+    }
+  },
+  "road4": {
     "type": "localMainRoad",
-    "displayname": "I am a local main road.",
+    "displayname": "Rubbish Blvd",
     "description": "asdfasdf",
     "layer": 0,
     "nodes": ["a", "d"],
@@ -49,12 +59,52 @@
       "(attr name)": "(attr val)"
     }
   },
-  "point": {
-    "type": "simplePoint",
-    "displayname": "I am a Point.",
+  "road5": {
+    "type": "localSecondaryRoad",
+    "displayname": "Nonsense Av",
     "description": "asdfasdf",
     "layer": 0,
-    "nodes": ["a"],
+    "nodes": ["f", "e"],
+    "attrs": {
+      "(attr name)": "(attr val)"
+    }
+  },
+  "road6": {
+    "type": "localTertiaryRoad",
+    "displayname": "Rubbish Rd",
+    "description": "asdfasdf",
+    "layer": 0,
+    "nodes": ["f", "g"],
+    "attrs": {
+      "(attr name)": "(attr val)"
+    }
+  },
+  "road7": {
+    "type": "localQuaternaryRoad",
+    "displayname": "Random Dr",
+    "description": "asdfasdf",
+    "layer": 0,
+    "nodes": ["e", "g"],
+    "attrs": {
+      "(attr name)": "(attr val)"
+    }
+  },
+  "road8": {
+    "type": "localPedestrianTertiaryRoad",
+    "displayname": "Idk Walk",
+    "description": "asdfasdf",
+    "layer": 0,
+    "nodes": ["b", "h"],
+    "attrs": {
+      "(attr name)": "(attr val)"
+    }
+  },
+  "road9": {
+    "type": "pathway",
+    "displayname": "Idk Path",
+    "description": "asdfasdf",
+    "layer": 0,
+    "nodes": ["g", "h"],
     "attrs": {
       "(attr name)": "(attr val)"
     }

@@ -1,0 +1,10 @@
+{
+    "B209_North_1": {
+        "type": "bRoad oneWay",
+        "displayname": "B209",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-1", "enc-2"],
+        "attrs": {}
+    },
+}
