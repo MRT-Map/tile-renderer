@@ -1,4 +1,4 @@
-# Tile Renderer Documentation (v0.5)
+# Tile Renderer Documentation (v0.6)
 
 ## Useful Information
 * To convert tuple to list efficiently use *(tuple)
@@ -130,16 +130,6 @@ Finds which PLAs attach to a node.
 #### Returns
 * **list[tuple]** A tuple in the form of (plaId, posInNodeList)
 
-### `renderer.tools.lineInBox(line, top, bottom, left, right)`
-Finds if any nodes of a line go within the box.
-
-#### Arguments
-* list **line**: the line to check for
-* int **top, bottom, left, right**: the bounds of the box
-
-#### Returns
-* **bool** Whether any nodes of a line go within the box.
-
 ## API - Math Tools
 
 ### `renderer.mathtools.midpoint(x1, y1, x2, y2, o[, returnBoth=False])`
@@ -174,6 +164,35 @@ Finds if a point is in a polygon.
 
 #### Returns
 * **bool** Whether the point is inside the polygon.
+
+### `renderer.mathtools.polyCenter(coords)`
+Finds the center point of a polygon.
+
+#### Arguments
+* list **coords**: the coordinates of the polygon; give in (x,y)
+
+#### Returns
+* **tuple** The center of the polygon, given in (x,y)
+
+### `renderer.mathtools.lineInBox(line, top, bottom, left, right)`
+Finds if any nodes of a line go within the box.
+
+#### Arguments
+* list **line**: the line to check for
+* int **top, bottom, left, right**: the bounds of the box
+
+#### Returns
+* **bool** Whether any nodes of a line go within the box.
+
+### `renderer.mathtools.dash(x1, y1, x2, y2, d)`
+Finds points along a segment that are a specified distance apart.
+
+#### Arguments
+* int/float **x1, y1, x2, y2**: the coordinates of two points of the segment
+* int **d**: the distance between points
+
+#### Returns
+* **list[tuple]** A list of points along the segment.
 
 ## API - Utils
 
