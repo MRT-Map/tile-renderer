@@ -1,10 +1,50 @@
 {
+    "B209_South_1": {
+        "type": "bRoad oneWay",
+        "displayname": "B209",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["B209s1", "B209s2", "B209s3", "B209s4", "B209s5", "B209s6"],
+        "attrs": {}
+    },
+    "B209_South_2": {
+        "type": "bRoad_elevated oneWay",
+        "displayname": "B209",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["B209s6", "B209s7"],
+        "attrs": {}
+    },
+    "B209_South_3": {
+        "type": "bRoad oneWay",
+        "displayname": "B209",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["B209s7", "B209s8"],
+        "attrs": {}
+    },
     "B209_North_1": {
         "type": "bRoad oneWay",
         "displayname": "B209",
         "description": "Encinitas",
         "layer": 0,
-        "nodes": ["enc-1", "enc-2"],
+        "nodes": ["B209n6", "B209n5", "B209n4", "B209n3", "B209n2", "B209n1"],
         "attrs": {}
     },
+    "B209_North_2": {
+        "type": "bRoad oneWay",
+        "displayname": "B209",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["B209n7", "B209n6"],
+        "attrs": {}
+    },
+    "B209_North_3": {
+        "type": "bRoad oneWay",
+        "displayname": "B209",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["B209n8", "B209n7"],
+        "attrs": {}
+    }
 }

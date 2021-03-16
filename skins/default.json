@@ -1,6 +1,12 @@
 {
-    "tile": {
-        "size": 2048
+    "info": {
+        "size": 2048,
+        "font": {
+            "": "ClearSans-Medium.ttf",
+            "b": "ClearSans-Bold.ttf",
+            "i": "ClearSans-MediumItalic.ttf",
+            "bi": "ClearSans-BoldItalic.ttf"
+        }
     },
     "order": [
         "residentialArea",
@@ -1781,7 +1787,31 @@
                             10,
                             10
                         ],
-                        "size": 25
+                        "size": 25,
+                        "anchor": null
+                    }
+                ]
+            }
+        },
+        "clinic": {
+            "tags": [],
+            "type": "point",
+            "style": {
+                "0, 5": [
+                    {
+                        "shape": "image",
+                        "file": "clinic.png",
+                        "offset": [0, 0]
+                    },
+                    {
+                        "shape": "text",
+                        "colour": "#ff0303",
+                        "offset": [
+                            0,
+                            50
+                        ],
+                        "size": 50,
+                        "anchor": "mm"
                     }
                 ]
             }
@@ -1805,7 +1835,8 @@
                             0,
                             20
                         ],
-                        "size": 50
+                        "size": 50,
+                        "anchor": "mm"
                     }
                 ]
             }
@@ -1816,7 +1847,7 @@
             "style": {
                 "0, 5": [
                     {
-                        "shape": "circle",
+                        "shape": "square",
                         "colour": "#1e85ae",
                         "outline": null,
                         "size": 20,
@@ -1829,7 +1860,8 @@
                             0,
                             20
                         ],
-                        "size": 50
+                        "size": 50,
+                        "anchor": "mm"
                     }
                 ]
             }
@@ -1840,7 +1872,7 @@
             "style": {
                 "0, 5": [
                     {
-                        "shape": "circle",
+                        "shape": "square",
                         "colour": "#66ccff",
                         "outline": null,
                         "size": 20,
@@ -1853,7 +1885,8 @@
                             0,
                             20
                         ],
-                        "size": 25
+                        "size": 25,
+                        "anchor": "mm"
                     }
                 ]
             }
@@ -2101,9 +2134,9 @@
                         "layer": "fill",
                         "colour": null,
                         "outline": "#744d25"
-                    },
+                    }
                 ]
             }
-        },
+        }
     }
 }

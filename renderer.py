@@ -5,6 +5,7 @@ from PIL import Image, ImageDraw, ImageFont
 import os
 import sympy as sym
 from typing import Union
+import time
 init()
 
 class utils:
@@ -192,6 +193,30 @@ class internal:
 
     def strToTuple(s: str):
         return tuple([int(x) for x in s.split(", ")])
+
+    def msToTime(ms):
+        if ms == 0:
+            return "0ms"
+        s = math.floor(ms / 1000)
+        ms = round(ms % 1000, 2)
+        m = math.floor(s / 60)
+        s = s % 60
+        h = math.floor(m / 60)
+        m = m % 60
+        d = math.floor(h / 24)
+        h = h % 24
+        res = ""
+        if d != 0:
+            res = res + str(d) + "d "
+        if h != 0:
+            res = res + str(h) + "h "
+        if m != 0:
+            res = res + str(m) + "min "
+        if s != 0:
+            res = res + str(s) + "s "
+        if ms != 0:
+            res = res + str(ms) + "ms "
+        return res.strip()
 
 class mathtools:
     def midpoint(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], o: Union[int, float], n=1, returnBoth=False):
@@ -404,25 +429,26 @@ class tools:
             raise ValueError("Empty list of coords given")
         elif maxZoom < minZoom:
             raise ValueError("Max zoom value is lesser than min zoom value")
-
+        
         tiles = []
-        xMax = 0
-        xMin = 0
-        yMax = 0
-        yMin = 0
+        xMax = -math.inf
+        xMin = math.inf
+        yMax = -math.inf
+        yMin = math.inf
+        
         for x, y in coords:
             xMax = x+10 if x > xMax else xMax
             xMin = x-10 if x < xMin else xMin
             yMax = y+10 if y > yMax else yMax
             yMin = y-10 if y < yMin else yMin
-        for x in range(xMin, xMax+1):
-            for y in range(yMin, yMax+1):
+        for x in range(xMin, xMax+1, int(maxZoomRange/2)):
+            for y in range(yMin, yMax+1, int(maxZoomRange/2)):
                 tiles.extend(tools.coordToTiles([x,y], minZoom, maxZoom, maxZoomRange))
         tiles = list(dict.fromkeys(tiles))
         return tiles
 
 
-def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, **kwargs):
+def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, assetsDir="skins/assets/", **kwargs):
     if maxZoom < minZoom:
         raise ValueError("Max zoom value is greater than min zoom value")
 
@@ -451,6 +477,8 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     
     #print(tileList)
     
+    processStart = time.time() * 1000
+    processed = 0
     print(Fore.GREEN + "Starting processing..." + Style.RESET_ALL)
     for tilePlas in tileList.keys():
         #sort PLAs in tiles by layer
@@ -472,7 +500,6 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
             for key, pla in newTilePlas[layer].items():
                 tileList[tilePlas][key] = pla
         
-                
         #print(newTilePlas)
         #print(tileList[tilePlas])
 
@@ -485,19 +512,29 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                 newerTilePlas.append({})
         tileList[tilePlas] = newerTilePlas
 
-        print("Processed " + tilePlas + Style.RESET_ALL)
-
+        processed += 1
+        timeLeft = round(((int(round(time.time() * 1000)) - processStart) / processed * (len(tileList) - processed)), 2)
+        #logging.info('tile %d/%d [%d, %d] (%s left)', processed, len(tileList), x, y, msToTime(timeLeft))
+        print(f"Processed {tilePlas} ({round(processed/len(tileList)*100, 2)}%, {internal.msToTime(timeLeft)} remaining)" + Style.RESET_ALL)
+    
     #print(tileList)
-            
+    renderStart = time.time() * 1000
+    rendered = 0
     print(Fore.GREEN + "Starting render..." + Style.RESET_ALL)
     for tilePlas in tileList.keys():
         if tileList[tilePlas] == [{}]:
             continue
         
         size = maxZoomRange*2**(maxZoom-internal.strToTuple(tilePlas)[0])
-        im = Image.new(mode = "RGBA", size = (skinJson['tile']['size'], skinJson['tile']['size']), color = (221, 221, 221))
+        im = Image.new(mode = "RGBA", size = (skinJson['info']['size'], skinJson['info']['size']), color = (221, 221, 221))
         img = ImageDraw.Draw(im)
         textList = []
+
+        def getFont(f: str, s: int):
+            if f in skinJson['info']['font'].keys():
+                return ImageFont.truetype(assetsDir+skinJson['info']['font'][f], s)
+            raise ValueError
+
         #im.save(f'tiles/{tilePlas}.png', 'PNG')
         for group in tileList[tilePlas]:
             info = skinJson['types'][list(group.values())[0]['type'].split(" ")[0]]
@@ -508,26 +545,30 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                     break
             for step in style:
                 for plaId, pla in group.items():
-                    coords = [(x-internal.strToTuple(tilePlas)[1]*size, y-internal.strToTuple(tilePlas)[2]*size) for x,y in tools.nodesToCoords(pla['nodes'], nodeList)]
-                    coords = [(int(skinJson['tile']['size']/size*x), int(skinJson['tile']['size']/size*y)) for x,y in coords]
-                    #print(coords)
-                    #print(coords)
+                    coords = [(x - internal.strToTuple(tilePlas)[1] * size, y - internal.strToTuple(tilePlas)[2] * size) for x, y in tools.nodesToCoords(pla['nodes'], nodeList)]
+                    coords = [(int(skinJson['info']['size'] / size * x), int(skinJson['info']['size'] / size * y)) for x, y in coords]
+
                     if info['type'] == "point":
                         if step['shape'] == "circle":
                             img.ellipse([coords[0][0]-step['size']/2+1, coords[0][1]-step['size']/2+1, coords[0][0]+step['size']/2, coords[0][1]+step['size']/2], fill=step['colour'], outline=step['outline'], width=step['width'])
                         elif step['shape'] == "text":
-                            font = ImageFont.truetype("skins/assets/ClearSans-Medium.ttf", step['size'])
-                            img.text((coords[0][0]+step['offset'][0], coords[0][1]+step['offset'][1]), pla['displayname'], fill=step['colour'], font=font)
-                    
+                            font = getFont("", step['size'])
+                            img.text((coords[0][0]+step['offset'][0], coords[0][1]+step['offset'][1]), pla['displayname'], fill=step['colour'], font=font, anchor=step['anchor'])
+                        elif step['shape'] == "square":
+                            img.rectangle([coords[0][0]-step['size']/2+1, coords[0][1]-step['size']/2+1, coords[0][0]+step['size']/2, coords[0][1]+step['size']/2], fill=step['colour'], outline=step['outline'], width=step['width'])
+                        elif step['shape'] == "image":
+                            icon = Image.open(assetsDir+step['file'])
+                            im.paste(icon, (int(coords[0][0]-icon.width/2+step['offset'][0]), int(coords[0][1]-icon.height/2+step['offset'][1])), icon)
+
                     elif info['type'] == "line" and step['layer'] == "text":
-                        font = ImageFont.truetype("skins/assets/ClearSans-Medium.ttf", step['size'])
+                        font = getFont("", step['size'])
                         textLength = int(img.textlength(pla['displayname'], font))
                         for c in range(len(coords)-1):
                             #print(coords)
-                            #print(mathtools.lineInBox(coords, 0, skinJson['tile']['size'], 0, skinJson['tile']['size']))
+                            #print(mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']))
                             t = math.floor(((coords[c+1][0]-coords[c][0])**2+(coords[c+1][1]-coords[c][1])**2)**0.5/(4*textLength))
                             t = 1 if t == 0 else t
-                            if mathtools.lineInBox(coords, 0, skinJson['tile']['size'], 0, skinJson['tile']['size']) and 2*textLength <= ((coords[c+1][0]-coords[c][0])**2+(coords[c+1][1]-coords[c][1])**2)**0.5:
+                            if mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']) and 2*textLength <= ((coords[c+1][0]-coords[c][0])**2+(coords[c+1][1]-coords[c][1])**2)**0.5:
                                 #print(mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset']))     
                                 for tx, ty, trot in mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset'], n=t):
                                     i = Image.new('RGBA', (2*textLength,50), (0, 0, 0, 0))
@@ -562,11 +603,11 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                     img.line(dashCoords, fill=step['colour'], width=step['width'])                
 
                     elif info['type'] == "area" and step['layer'] == "bordertext":
-                        font = ImageFont.truetype("skins/assets/ClearSans-Medium.ttf", step['size'])
+                        font = getFont("", step['size'])
                         textLength = int(img.textlength(pla['displayname'], font))
                         for c1 in range(len(coords)):
                             c2 = c1+1 if c1 != len(coords)-1 else 0
-                            if mathtools.lineInBox(coords, 0, skinJson['tile']['size'], 0, skinJson['tile']['size']) and 2*textLength <= ((coords[c2][0]-coords[c1][0])**2+(coords[c2][1]-coords[c1][1])**2)**0.5:
+                            if mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']) and 2*textLength <= ((coords[c2][0]-coords[c1][0])**2+(coords[c2][1]-coords[c1][1])**2)**0.5:
                                 #coords[c]
                                 t = math.floor(((coords[c2][0]-coords[c1][0])**2+(coords[c2][1]-coords[c1][1])**2)**0.5/(4*textLength))
                                 t = 1 if t == 0 else t
@@ -587,7 +628,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
 
                     elif info['type'] == "area" and step['layer'] == "centertext":
                         cx, cy = mathtools.polyCenter(coords)
-                        font = ImageFont.truetype("skins/assets/ClearSans-Medium.ttf", step['size'])
+                        font = getFont("", step['size'])
                         textLength = int(img.textlength(pla['displayname'], font))
                         i = Image.new('RGBA', (2*textLength,50), (0, 0, 0, 0))
                         d = ImageDraw.Draw(i)
@@ -620,7 +661,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                             if conStep['layer'] in ["back", "text"]:
                                 continue
                             conCoords = [(x-internal.strToTuple(tilePlas)[1]*size, y-internal.strToTuple(tilePlas)[2]*size) for x,y in tools.nodesToCoords(plaList[conPla]['nodes'], nodeList)]
-                            conCoords = [(int(skinJson['tile']['size']/size*x), int(skinJson['tile']['size']/size*y)) for x,y in conCoords]
+                            conCoords = [(int(skinJson['info']['size']/size*x), int(skinJson['info']['size']/size*y)) for x,y in conCoords]
                     
                             if index == 0:
                                 conCoords = [conCoords[0], conCoords[1]]
@@ -650,6 +691,9 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
         if not os.path.isdir('./tiles'):
             os.mkdir(os.getcwd()+"tiles")
         im.save(f'tiles/{tilePlas}.png', 'PNG')
-        print("Rendered " + tilePlas + Style.RESET_ALL)
+
+        rendered += 1
+        timeLeft = round(((int(round(time.time() * 1000)) - renderStart) / rendered * (len(tileList) - rendered)), 2)
+        print(Fore.GREEN + f"Rendered {tilePlas} ({round(rendered/len(tileList)*100, 2)}%, {internal.msToTime(timeLeft)} remaining)" + Style.RESET_ALL)
     
     print(Fore.GREEN + "Render complete" + Style.RESET_ALL)

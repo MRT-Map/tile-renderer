@@ -108,5 +108,15 @@
     "attrs": {
       "(attr name)": "(attr val)"
     }
+  },
+  "point": {
+    "type": "clinic",
+    "displayname": "yes",
+    "description": "asdfasdf",
+    "layer": 0,
+    "nodes": ["a"],
+    "attrs": {
+      "(attr name)": "(attr val)"
+    }
   }
 }

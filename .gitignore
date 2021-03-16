@@ -3,3 +3,4 @@ pyproject.toml
 poetry.lock
 *.pyc
 tiles/*
+.vscode
