@@ -85,18 +85,18 @@
         "connections": []
     },
     "enc-roundabout2": {
-        "x": 26535,
-        "y": -18132,
+        "x": 26532,
+        "y": -18146,
         "connections": []
     },
     "enc-roundabout3": {
-        "x": 26531,
-        "y": -18141,
+        "x": 26535,
+        "y": -18151,
         "connections": []
     },
     "enc-roundabout4": {
-        "x": 26536,
-        "y": -18151,
+        "x": 26540,
+        "y": -18153,
         "connections": []
     },
     "enc-roundabout5": {
@@ -105,18 +105,123 @@
         "connections": []
     },
     "enc-roundabout6": {
-        "x": 26553,
-        "y": -18151,
+        "x": 26549,
+        "y": -18153,
         "connections": []
     },
     "enc-roundabout7": {
+        "x": 26553,
+        "y": -18150,
+        "connections": []
+    },
+    "enc-roundabout8": {
+        "x": 26556,
+        "y": -18147,
+        "connections": []
+    },
+    "enc-roundabout9": {
         "x": 26557,
         "y": -18141,
         "connections": []
     },
-    "enc-roundabout8": {
+    "enc-roundabout10": {
+        "x": 26556,
+        "y": -18136,
+        "connections": []
+    },
+    "enc-roundabout11": {
         "x": 26553,
-        "y": -18131,
+        "y": -18132,
+        "connections": []
+    },
+    "enc-roundabout12": {
+        "x": 26553,
+        "y": -18132,
+        "connections": []
+    },
+    "enc-roundabout13": {
+        "x": 26544,
+        "y": -18128,
+        "connections": []
+    },
+    "enc-roundabout14": {
+        "x": 26538,
+        "y": -18130,
+        "connections": []
+    },
+    "enc-roundabout15": {
+        "x": 26534,
+        "y": -18133,
+        "connections": []
+    },
+    "enc-roundabout16": {
+        "x": 26532,
+        "y": -18137,
+        "connections": []
+    },
+    "enc-roundaboutSlip1": {
+        "x": 26560,
+        "y": -18127,
+        "connections": []
+    },
+    "enc-roundaboutSlip2": {
+        "x": 26528,
+        "y": -18127,
+        "connections": []
+    },
+    "enc-cruzAv1_joyaSt2": {
+        "x": 26495,
+        "y": -18141,
+        "connections": []
+    },
+    "enc-cruzAv2": {
+        "x": 26520,
+        "y": -18141,
+        "connections": []
+    },
+    "enc-cruzAve3": {
+        "x": 26527,
+        "y": -18137,
+        "connections": []
+    },
+    "enc-cruzAvw3": {
+        "x": 26527,
+        "y": -18145,
+        "connections": []
+    },
+    "enc-cruzAve4": {
+        "x": 26562,
+        "y": -18137,
+        "connections": []
+    },
+    "enc-cruzAvw4": {
+        "x": 26562,
+        "y": -18144,
+        "connections": []
+    },
+    "enc-cruzAv5": {
+        "x": 26567,
+        "y": -18141,
+        "connections": []
+    },
+    "enc-cruzAv6_cabrilloAv1": {
+        "x": 26607,
+        "y": -18141,
+        "connections": []
+    },
+    "enc-cruzAv7_costaBlvd1": {
+        "x": 26676,
+        "y": -18141,
+        "connections": []
+    },
+    "enc-cruzAv7_wCross": {
+        "x": 26681,
+        "y": -18139,
+        "connections": []
+    },
+    "enc-cruzAv8": {
+        "x": 26752,
+        "y": -18139,
         "connections": []
     }
 }

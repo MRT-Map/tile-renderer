@@ -1,5 +1,5 @@
 {
-    "B209_South_1": {
+    "B209_1s": {
         "type": "bRoad oneWay",
         "displayname": "B209",
         "description": "Encinitas",
@@ -7,7 +7,7 @@
         "nodes": ["B209s1", "B209s2", "B209s3", "B209s4", "B209s5", "B209s6"],
         "attrs": {}
     },
-    "B209_South_2": {
+    "B209_2s": {
         "type": "bRoad_elevated oneWay",
         "displayname": "B209",
         "description": "Encinitas",
@@ -15,7 +15,7 @@
         "nodes": ["B209s6", "B209s7"],
         "attrs": {}
     },
-    "B209_South_3": {
+    "B209_3s": {
         "type": "bRoad oneWay",
         "displayname": "B209",
         "description": "Encinitas",
@@ -23,7 +23,7 @@
         "nodes": ["B209s7", "B209s8"],
         "attrs": {}
     },
-    "B209_North_1": {
+    "B209_1n": {
         "type": "bRoad oneWay",
         "displayname": "B209",
         "description": "Encinitas",
@@ -31,7 +31,7 @@
         "nodes": ["B209n6", "B209n5", "B209n4", "B209n3", "B209n2", "B209n1"],
         "attrs": {}
     },
-    "B209_North_2": {
+    "B209_2n": {
         "type": "bRoad oneWay",
         "displayname": "B209",
         "description": "Encinitas",
@@ -39,12 +39,85 @@
         "nodes": ["B209n7", "B209n6"],
         "attrs": {}
     },
-    "B209_North_3": {
+    "B209_3n": {
         "type": "bRoad oneWay",
         "displayname": "B209",
         "description": "Encinitas",
         "layer": 0,
         "nodes": ["B209n8", "B209n7"],
+        "attrs": {}
+    },
+    "enc-roundabout": {
+        "type": "bRoadSlip oneWay",
+        "displayname": "Cruz Av",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-roundabout16", "enc-roundabout15", "enc-roundabout14", "enc-roundabout13", "enc-roundabout12", "enc-roundabout11", "enc-roundabout10", "enc-roundabout9", 
+                  "enc-roundabout8","enc-roundabout7", "enc-roundabout6", "enc-roundabout5", "enc-roundabout4", "enc-roundabout3", "enc-roundabout2", "enc-roundabout1", "enc-roundabout16"],
+        "attrs": {}
+    },
+    "enc-B209slip_1": {
+        "type": "bRoadSlip oneWay",
+        "displayname": " ",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cruzAv2", "enc-roundaboutSlip2", "B209s1"],
+        "attrs": {}
+    },
+    "enc-B209slip_2": {
+        "type": "bRoadSlip oneWay",
+        "displayname": " ",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["B209n1", "enc-roundaboutSlip1", "enc-cruzAv5"],
+        "attrs": {}
+    },
+    "enc-cruzAv_1": {
+        "type": "localMainRoad",
+        "displayname": "Cruz Av",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cruzAv1_joyaSt2", "enc-cruzAv2"],
+        "attrs": {}
+    },
+    "enc-cruzAv_2e": {
+        "type": "localMainRoad oneWay",
+        "displayname": "Cruz Av",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cruzAv2", "enc-cruzAve3", "enc-roundabout3"],
+        "attrs": {}
+    },
+    "enc-cruzAv_2w": {
+        "type": "localMainRoad oneWay",
+        "displayname": "Cruz Av",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-roundabout7", "enc-cruzAvw3", "enc-cruzAv2"],
+        "attrs": {}
+    },
+    "enc-cruzAv_3e": {
+        "type": "localMainRoad oneWay",
+        "displayname": "Cruz Av",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-roundabout15", "enc-cruzAve4", "enc-cruzAv5"],
+        "attrs": {}
+    },
+    "enc-cruzAv_3w": {
+        "type": "localMainRoad oneWay",
+        "displayname": "Cruz Av",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cruzAv5", "enc-cruzAvw4", "enc-roundabout11"],
+        "attrs": {}
+    },
+    "enc-cruzAv_4": {
+        "type": "localMainRoad",
+        "displayname": "Cruz Av",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cruzAv5", "enc-cruzAv6_cabrilloAv1", "enc-cruzAv7_costaBlvd1", "enc-cruzAv7_wCross", "enc-cruzAv8"],
         "attrs": {}
     }
 }

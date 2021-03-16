@@ -523,6 +523,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     print(Fore.GREEN + "Starting render..." + Style.RESET_ALL)
     for tilePlas in tileList.keys():
         if tileList[tilePlas] == [{}]:
+            rendered += 1
             continue
         
         size = maxZoomRange*2**(maxZoom-internal.strToTuple(tilePlas)[0])
