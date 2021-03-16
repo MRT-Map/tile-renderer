@@ -688,8 +688,8 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
             im.paste(i, (int(x-i.width/2), int(y-i.height/2)), i)
         print(Style.DIM + "Rendered text" + Style.RESET_ALL)
         
-        if not os.path.isdir('./tiles'):
-            os.mkdir(os.getcwd()+"tiles")
+        if not os.path.isdir('/tiles'):
+            os.mkdir(os.getcwd()+"/tiles")
         im.save(f'tiles/{tilePlas}.png', 'PNG')
 
         rendered += 1
