@@ -699,14 +699,164 @@
         "y": -17843,
         "connections": []
     },
-    "montanasCabrillos1": {
+    "enc-montanasCabrillos1": {
         "x": 26406,
         "y": -18219,
         "connections": []
     },
-    "montanasCabrillos3": {
+    "enc-montanasCabrillos3": {
         "x": 26424,
         "y": -18219,
+        "connections": []
+    },
+    "enc-ecjTerminal1": {
+        "x": 26430,
+        "y": -17968,
+        "connections": []
+    },
+    "enc-ecjTerminal2": {
+        "x": 26406,
+        "y": -17968,
+        "connections": []
+    },
+    "enc-ecjTerminal3": {
+        "x": 26406,
+        "y": -18048,
+        "connections": []
+    },
+    "enc-ecjTerminal4": {
+        "x": 26430,
+        "y": -18048,
+        "connections": []
+    },
+    "enc-ecjApron1": {
+        "x": 26405,
+        "y": -18048,
+        "connections": []
+    },
+    "enc-ecjApron2": {
+        "x": 26390,
+        "y": -18048,
+        "connections": []
+    },
+    "enc-ecjApron3": {
+        "x": 26387,
+        "y": -18046,
+        "connections": []
+    },
+    "enc-ecjApron4": {
+        "x": 26384,
+        "y": -18041,
+        "connections": []
+    },
+    "enc-ecjApron5": {
+        "x": 26384,
+        "y": -17975,
+        "connections": []
+    },
+    "enc-ecjApron6": {
+        "x": 26387,
+        "y": -17970,
+        "connections": []
+    },
+    "enc-ecjApron7": {
+        "x": 26390,
+        "y": -17968,
+        "connections": []
+    },
+    "enc-ecjApron8": {
+        "x": 26405,
+        "y": -17968,
+        "connections": []
+    },
+    "enc-ecjTaxiway1_runway2": {
+        "x": 26369,
+        "y": -18039,
+        "connections": []
+    },
+    "enc-ecjTaxiway2": {
+        "x": 26378,
+        "y": -18039,
+        "connections": []
+    },
+    "enc-ecjTaxiway3": {
+        "x": 26381,
+        "y": -18037,
+        "connections": []
+    },
+    "enc-ecjTaxiway4": {
+        "x": 26384,
+        "y": -18031,
+        "connections": []
+    },
+    "enc-ecjTaxiway5": {
+        "x": 26384,
+        "y": -17985,
+        "connections": []
+    },
+    "enc-ecjTaxiway6": {
+        "x": 26381,
+        "y": -17979,
+        "connections": []
+    },
+    "enc-ecjTaxiway7": {
+        "x": 26378,
+        "y": -17977,
+        "connections": []
+    },
+    "enc-ecjTaxiway8_runway3": {
+        "x": 26369,
+        "y": -17977,
+        "connections": []
+    },
+    "enc-ecjRunway1": {
+        "x": 26369,
+        "y": -18048,
+        "connections": []
+    },
+    "enc-ecjRunway4": {
+        "x": 26369,
+        "y": -17968,
+        "connections": []
+    },
+    "enc-ecjFountain1": {
+        "x": 26434,
+        "y": -18035,
+        "connections": []
+    },
+    "enc-ecjFountain2": {
+        "x": 26440,
+        "y": -18035,
+        "connections": []
+    },
+    "enc-ecjFountain3": {
+        "x": 26440,
+        "y": -17988,
+        "connections": []
+    },
+    "enc-ecjFountain4": {
+        "x": 26434,
+        "y": -17988,
+        "connections": []
+    },
+    "enc-ecjFront1": {
+        "x": 26431,
+        "y": -17968,
+        "connections": []
+    },
+    "enc-ecjFront2": {
+        "x": 26431,
+        "y": -18048,
+        "connections": []
+    },
+    "enc-ecjFront3": {
+        "x": 26443,
+        "y": -18048,
+        "connections": []
+    },
+    "enc-ecjFront4": {
+        "x": 26443,
+        "y": -17968,
         "connections": []
     }
 }

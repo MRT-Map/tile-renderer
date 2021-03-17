@@ -147,13 +147,29 @@
                   "enc-escondidoSt5", "enc-escondidoSt6", "enc-arelaPkwy3_escondidoSt7", "enc-escondidoSt8"],
         "attrs": {}
     },
-    "enc-joyaSt": {
+    "enc-joyaSt1": {
         "type": "localSecondaryRoad",
         "displayname": "Joya St",
         "description": "Encinitas",
         "layer": 0,
         "nodes": ["enc-arelaPkwy4_joyaSt1", "enc-cruzAv1_joyaSt2", "enc-joyaSt3", "enc-joyaSt4", "enc-joyaSt5", "enc-joyaSt6", "enc-joyaSt7",
-                  "enc-joyaSt8", "enc-joyaSt9", "enc-joyaSt10", "enc-joyaSt11_B209sSlip2", "enc-joyaSt12_B209nSlip2", "enc-joyaSt13_diplomacyBlvd1_unnamedB3"],
+                  "enc-joyaSt8", "enc-joyaSt9", "enc-joyaSt10", "enc-joyaSt11_B209sSlip2"],
+        "attrs": {}
+    },
+    "enc-joyaSt2": {
+        "type": "localSecondaryRoad_underground",
+        "displayname": "Joya St",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-joyaSt11_B209sSlip2", "enc-joyaSt12_B209nSlip2"],
+        "attrs": {}
+    },
+    "enc-joyaSt3": {
+        "type": "localSecondaryRoad",
+        "displayname": "Joya St",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-joyaSt12_B209nSlip2", "enc-joyaSt13_diplomacyBlvd1_unnamedB3"],
         "attrs": {}
     },
     "enc-diplomacyBlvd": {
@@ -225,7 +241,55 @@
         "displayname": "Montañas Cabrillos",
         "description": "Encinitas",
         "layer": 0,
-        "nodes": ["montanasCabrillos1", "enc-calleMontana6_montanasCabrillos2", "montanasCabrillos3"],
+        "nodes": ["enc-montanasCabrillos1", "enc-calleMontana6_montanasCabrillos2", "enc-montanasCabrillos3"],
+        "attrs": {}
+    },
+    "enc-ecjTerminal": {
+        "type": "transportBuilding",
+        "displayname": "Encinitas Joya Airfield",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-ecjTerminal1", "enc-ecjTerminal2", "enc-ecjTerminal3", "enc-ecjTerminal4"],
+        "attrs": {}
+    },
+    "enc-ecjApron": {
+        "type": "apron",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-ecjApron1", "enc-ecjApron2", "enc-ecjApron3", "enc-ecjApron4", "enc-ecjApron5", "enc-ecjApron6", "enc-ecjApron7", "enc-ecjApron8"],
+        "attrs": {}
+    },
+    "enc-ecjTaxiway": {
+        "type": "taxiway",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-ecjTaxiway1_runway2", "enc-ecjTaxiway2", "enc-ecjTaxiway3", "enc-ecjTaxiway4", "enc-ecjTaxiway5", "enc-ecjTaxiway6", "enc-ecjTaxiway7", "enc-ecjTaxiway8_runway3"],
+        "attrs": {}
+    },
+    "enc-ecjRunway": {
+        "type": "runway",
+        "displayname": "09/27",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-ecjRunway1", "enc-ecjTaxiway1_runway2", "enc-ecjTaxiway8_runway3", "enc-ecjRunway4"],
+        "attrs": {}
+    },
+    "enc-ecjFountain": {
+        "type": "waterSmall",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 1,
+        "nodes": ["enc-ecjFountain1", "enc-ecjFountain2", "enc-ecjFountain3", "enc-ecjFountain4"],
+        "attrs": {}
+    },
+    "enc-ecjFront": {
+        "type": "plaza",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-ecjFront1", "enc-ecjFront2", "enc-ecjFront3", "enc-ecjFront4"],
         "attrs": {}
     }
 }

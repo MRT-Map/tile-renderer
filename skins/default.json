@@ -27,6 +27,7 @@
         "shrub",
         "forest",
         "park",
+        "gate",
         "apron",
         "taxiway",
         "runway",
@@ -64,6 +65,7 @@
         "bRoad",
         "aRoad",
         "rail",
+        "plaza",
         "pathway_elevated",
         "localHighwaySlip_elevated",
         "bRoadSlip_elevated",
@@ -565,6 +567,24 @@
                 ]
             }
         },
+        "gate": {
+            "tags": [],
+            "type": "area",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "fill",
+                        "colour": null,
+                        "outline": "#33334d"
+                    },
+                    {
+                        "layer": "centertext",
+                        "colour": "#33334d",
+                        "size": 15
+                    }
+                ]
+            }
+        },
         "apron": {
             "tags": [],
             "type": "area",
@@ -587,7 +607,7 @@
             "tags": [],
             "type": "line",
             "style": {
-                "0, 5": [
+                "0, 2": [
                     {
                         "layer": "fore",
                         "colour": "#8f8fa3",
@@ -599,14 +619,27 @@
                         "size": 20,
                         "offset": 0
                     }
+                ],
+                "3, 5": [
+                    {
+                        "layer": "fore",
+                        "colour": "#8f8fa3",
+                        "width": 25
+                    },
+                    {
+                        "layer": "text",
+                        "colour": "#33334d",
+                        "size": 10,
+                        "offset": 0
+                    }
                 ]
             }
         },
         "runway": {
-            "tags": [],
+            "tags": ["unroundedEnds"],
             "type": "line",
             "style": {
-                "0, 5": [
+                "0, 2": [
                     {
                         "layer": "fore",
                         "colour": "#73738c",
@@ -616,6 +649,19 @@
                         "layer": "text",
                         "colour": "#33334d",
                         "size": 30,
+                        "offset": 0
+                    }
+                ],
+                "3, 5": [
+                    {
+                        "layer": "fore",
+                        "colour": "#73738c",
+                        "width": 50
+                    },
+                    {
+                        "layer": "text",
+                        "colour": "#33334d",
+                        "size": 15,
                         "offset": 0
                     }
                 ]
@@ -674,6 +720,24 @@
                         "layer": "fore",
                         "colour": "#808080",
                         "width": 8
+                    }
+                ]
+            }
+        },
+        "plaza": {
+            "tags": [],
+            "type": "area",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "fill",
+                        "colour": "#bbbbbb",
+                        "outline": "#ccccff"
+                    },
+                    {
+                        "layer": "centertext",
+                        "colour": "#000000",
+                        "size": 15
                     }
                 ]
             }

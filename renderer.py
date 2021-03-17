@@ -441,8 +441,12 @@ class tools:
             xMin = x-10 if x < xMin else xMin
             yMax = y+10 if y > yMax else yMax
             yMin = y-10 if y < yMin else yMin
-        for x in range(xMin, xMax+1, int(maxZoomRange/2)):
-            for y in range(yMin, yMax+1, int(maxZoomRange/2)):
+        xr = list(range(xMin, xMax+1, int(maxZoomRange/2)))
+        xr.append(xMax+1)
+        yr = list(range(yMin, yMax+1, int(maxZoomRange/2)))
+        yr.append(yMax+1)
+        for x in xr:
+            for y in yr:
                 tiles.extend(tools.coordToTiles([x,y], minZoom, maxZoom, maxZoomRange))
         tiles = list(dict.fromkeys(tiles))
         return tiles
@@ -601,7 +605,8 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                         if not "dash" in step.keys():
                             img.line(coords, fill=step['colour'], width=step['width'])
                             for x, y in coords:
-                                img.ellipse([x-step['width']/2+1, y-step['width']/2+1, x+step['width']/2, y+step['width']/2], fill=step['colour'])
+                                if not ("unroundedEnds" in info['tags'] and coords.index((x,y)) in [0, len(coords)-1]):
+                                    img.ellipse([x-step['width']/2+1, y-step['width']/2+1, x+step['width']/2, y+step['width']/2], fill=step['colour'])
                         else:
                             for c in range(len(coords)-1):
                                 for dashCoords in mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['dash']):
