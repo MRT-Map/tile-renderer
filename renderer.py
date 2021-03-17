@@ -524,6 +524,8 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     for tilePlas in tileList.keys():
         if tileList[tilePlas] == [{}]:
             rendered += 1
+            timeLeft = round(((int(round(time.time() * 1000)) - renderStart) / rendered * (len(tileList) - rendered)), 2)
+            print(Fore.GREEN + f"Rendered {tilePlas} ({round(rendered/len(tileList)*100, 2)}%, {internal.msToTime(timeLeft)} remaining)" + Style.RESET_ALL)
             continue
         
         size = maxZoomRange*2**(maxZoom-internal.strToTuple(tilePlas)[0])
@@ -564,6 +566,8 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                     elif info['type'] == "line" and step['layer'] == "text":
                         font = getFont("", step['size'])
                         textLength = int(img.textlength(pla['displayname'], font))
+                        if textLength == 0:
+                            textLength = int(img.textlength("----------", font))
                         for c in range(len(coords)-1):
                             #print(coords)
                             #print(mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']))
@@ -577,9 +581,10 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                     d.text((textLength, 25), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
                                     i = i.rotate(trot, expand=True)
                                     textList.append((i, tx, ty))
-                            if "oneWay" in pla['type'].split(" ")[1:]:
+                            if "oneWay" in pla['type'].split(" ")[1:] and textLength <= ((coords[c+1][0]-coords[c][0])**2+(coords[c+1][1]-coords[c][1])**2)**0.5:
                                 font = ImageFont.truetype("skins/assets/ClearSans-Bold.ttf", step['size'])
                                 counter = 0
+                                t = math.floor(((coords[c+1][0]-coords[c][0])**2+(coords[c+1][1]-coords[c][1])**2)**0.5/(4*textLength))
                                 for tx, ty, useless in mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset'], n=2*t+1):
                                     if counter % 2 == 1:
                                         counter += 1

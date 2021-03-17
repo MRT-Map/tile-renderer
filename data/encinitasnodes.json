@@ -79,86 +79,6 @@
         "y": -17680,
         "connections": []
     },
-    "enc-roundabout1": {
-        "x": 26544,
-        "y": -18128,
-        "connections": []
-    },
-    "enc-roundabout2": {
-        "x": 26532,
-        "y": -18146,
-        "connections": []
-    },
-    "enc-roundabout3": {
-        "x": 26535,
-        "y": -18151,
-        "connections": []
-    },
-    "enc-roundabout4": {
-        "x": 26540,
-        "y": -18153,
-        "connections": []
-    },
-    "enc-roundabout5": {
-        "x": 26544,
-        "y": -18154,
-        "connections": []
-    },
-    "enc-roundabout6": {
-        "x": 26549,
-        "y": -18153,
-        "connections": []
-    },
-    "enc-roundabout7": {
-        "x": 26553,
-        "y": -18150,
-        "connections": []
-    },
-    "enc-roundabout8": {
-        "x": 26556,
-        "y": -18147,
-        "connections": []
-    },
-    "enc-roundabout9": {
-        "x": 26557,
-        "y": -18141,
-        "connections": []
-    },
-    "enc-roundabout10": {
-        "x": 26556,
-        "y": -18136,
-        "connections": []
-    },
-    "enc-roundabout11": {
-        "x": 26553,
-        "y": -18132,
-        "connections": []
-    },
-    "enc-roundabout12": {
-        "x": 26553,
-        "y": -18132,
-        "connections": []
-    },
-    "enc-roundabout13": {
-        "x": 26544,
-        "y": -18128,
-        "connections": []
-    },
-    "enc-roundabout14": {
-        "x": 26538,
-        "y": -18130,
-        "connections": []
-    },
-    "enc-roundabout15": {
-        "x": 26534,
-        "y": -18133,
-        "connections": []
-    },
-    "enc-roundabout16": {
-        "x": 26532,
-        "y": -18137,
-        "connections": []
-    },
     "enc-roundaboutSlip1": {
         "x": 26560,
         "y": -18127,
@@ -222,6 +142,571 @@
     "enc-cruzAv8": {
         "x": 26752,
         "y": -18139,
+        "connections": []
+    },
+    "enc-roundabout1": {
+        "x": 26544,
+        "y": -18128,
+        "connections": []
+    },
+    "enc-roundabout2": {
+        "x": 26538,
+        "y": -18129,
+        "connections": []
+    },
+    "enc-roundabout3": {
+        "x": 26535,
+        "y": -18131,
+        "connections": []
+    },
+    "enc-roundabout4": {
+        "x": 26533,
+        "y": -18135,
+        "connections": []
+    },
+    "enc-roundabout5": {
+        "x": 26531,
+        "y": -18141,
+        "connections": []
+    },
+    "enc-roundabout6": {
+        "x": 26532,
+        "y": -18146,
+        "connections": []
+    },
+    "enc-roundabout7": {
+        "x": 26535,
+        "y": -18151,
+        "connections": []
+    },
+    "enc-roundabout8": {
+        "x": 26539,
+        "y": -18153,
+        "connections": []
+    },
+    "enc-roundabout9": {
+        "x": 26544,
+        "y": -18154,
+        "connections": []
+    },
+    "enc-roundabout10": {
+        "x": 26549,
+        "y": -18153,
+        "connections": []
+    },
+    "enc-roundabout11": {
+        "x": 26553,
+        "y": -18150,
+        "connections": []
+    },
+    "enc-roundabout12": {
+        "x": 26556,
+        "y": -18146,
+        "connections": []
+    },
+    "enc-roundabout13": {
+        "x": 26557,
+        "y": -18141,
+        "connections": []
+    },
+    "enc-roundabout14": {
+        "x": 26555,
+        "y": -18136,
+        "connections": []
+    },
+    "enc-roundabout15": {
+        "x": 26553,
+        "y": -18132,
+        "connections": []
+    },
+    "enc-roundabout16": {
+        "x": 26550,
+        "y": -18129,
+        "connections": []
+    },
+    "enc-arelaPkwy1_costaBlvd2": {
+        "x": 26676,
+        "y": -18182,
+        "connections": []
+    },
+    "enc-escondidoSt1_costaBlvd3": {
+        "x": 26676,
+        "y": -18236,
+        "connections": []
+    },
+    "enc-costaBlvd4": {
+        "x": 26676,
+        "y": -18269,
+        "connections": []
+    },
+    "enc-costaBlvd5": {
+        "x": 26673,
+        "y": -18274,
+        "connections": []
+    },
+    "enc-costaBlvd6": {
+        "x": 26669,
+        "y": -18278,
+        "connections": []
+    },
+    "enc-costaBlvd7": {
+        "x": 26664,
+        "y": -18281,
+        "connections": []
+    },
+    "enc-costaBlvd8_cabrilloAv4": {
+        "x": 26607,
+        "y": -18281,
+        "connections": []
+    },
+    "enc-costaBlvd9": {
+        "x": 26550,
+        "y": -18281,
+        "connections": []
+    },
+    "enc-escondidoSt2_cabrilloAv3": {
+        "x": 26607,
+        "y": -18236,
+        "connections": []
+    },
+    "enc-escondidoSt3": {
+        "x": 26556,
+        "y": -18236,
+        "connections": []
+    },
+    "enc-escondidoSt4": {
+        "x": 26550,
+        "y": -18233,
+        "connections": []
+    },
+    "enc-escondidoSt5": {
+        "x": 26547,
+        "y": -18230,
+        "connections": []
+    },
+    "enc-escondidoSt6": {
+        "x": 26544,
+        "y": -18224,
+        "connections": []
+    },
+    "enc-arelaPkwy3_escondidoSt7": {
+        "x": 26544,
+        "y": -18182,
+        "connections": []
+    },
+    "enc-escondidoSt8": {
+        "x": 26544,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-arelaPkwy2_cabrilloAv2": {
+        "x": 26607,
+        "y": -18182,
+        "connections": []
+    },
+    "enc-arelaPkwy4_joyaSt1": {
+        "x": 26495,
+        "y": -18182,
+        "connections": []
+    },
+    "enc-arelaPkwy5_calleMontana1": {
+        "x": 26447,
+        "y": -18182,
+        "connections": []
+    },
+    "enc-calleMontana2": {
+        "x": 26433,
+        "y": -18187,
+        "connections": []
+    },
+    "enc-calleMontana3": {
+        "x": 26430,
+        "y": -18189,
+        "connections": []
+    },
+    "enc-calleMontana4": {
+        "x": 26421,
+        "y": -18198,
+        "connections": []
+    },
+    "enc-calleMontana5": {
+        "x": 26419,
+        "y": -18201,
+        "connections": []
+    },
+    "enc-calleMontana6_montanasCabrillos2": {
+        "x": 26414,
+        "y": -18219,
+        "connections": []
+    },
+    "enc-calleMontana7": {
+        "x": 26412,
+        "y": -18229,
+        "connections": []
+    },
+    "enc-calleMontana8": {
+        "x": 26412,
+        "y": -18252,
+        "connections": []
+    },
+    "enc-calleMontana9": {
+        "x": 26414,
+        "y": -18256,
+        "connections": []
+    },
+    "enc-calleMontana10": {
+        "x": 26417,
+        "y": -18259,
+        "connections": []
+    },
+    "enc-calleMontana11": {
+        "x": 26423,
+        "y": -18262,
+        "connections": []
+    },
+    "enc-calleMontana12": {
+        "x": 26447,
+        "y": -18262,
+        "connections": []
+    },
+    "enc-calleMontana13": {
+        "x": 26453,
+        "y": -18265,
+        "connections": []
+    },
+    "enc-calleMontana14": {
+        "x": 26456,
+        "y": -18268,
+        "connections": []
+    },
+    "enc-calleMontana15": {
+        "x": 26459,
+        "y": -18274,
+        "connections": []
+    },
+    "enc-calleMontana16": {
+        "x": 26459,
+        "y": -18283,
+        "connections": []
+    },
+    "enc-calleMontana17": {
+        "x": 26462,
+        "y": -18290,
+        "connections": []
+    },
+    "enc-calleMontana18": {
+        "x": 26471,
+        "y": -18303,
+        "connections": []
+    },
+    "enc-calleMontana19": {
+        "x": 26479,
+        "y": -18311,
+        "connections": []
+    },
+    "enc-calleMontana20": {
+        "x": 26489,
+        "y": -18316,
+        "connections": []
+    },
+    "enc-calleMontana21": {
+        "x": 26499,
+        "y": -18316,
+        "connections": []
+    },
+    "enc-calleMontana22": {
+        "x": 26509,
+        "y": -18321,
+        "connections": []
+    },
+    "enc-calleMontana23": {
+        "x": 26526,
+        "y": -18337,
+        "connections": []
+    },
+    "enc-calleMontana24": {
+        "x": 26533,
+        "y": -18342,
+        "connections": []
+    },
+    "enc-calleMontana25": {
+        "x": 26540,
+        "y": -18345,
+        "connections": []
+    },
+    "enc-calleMontana26": {
+        "x": 26549,
+        "y": -18345,
+        "connections": []
+    },
+    "enc-calleMontana27": {
+        "x": 26557,
+        "y": -18349,
+        "connections": []
+    },
+    "enc-calleMontana28": {
+        "x": 26562,
+        "y": -18352,
+        "connections": []
+    },
+    "enc-calleMontana29": {
+        "x": 26565,
+        "y": -18357,
+        "connections": []
+    },
+    "enc-calleMontana30": {
+        "x": 26569,
+        "y": -18365,
+        "connections": []
+    },
+    "enc-calleMontana31": {
+        "x": 26569,
+        "y": -18385,
+        "connections": []
+    },
+    "enc-calleMontana32": {
+        "x": 26572,
+        "y": -18391,
+        "connections": []
+    },
+    "enc-calleMontana33": {
+        "x": 26575,
+        "y": -18394,
+        "connections": []
+    },
+    "enc-calleMontana34": {
+        "x": 26581,
+        "y": -18397,
+        "connections": []
+    },
+    "enc-calleMontana35_cabrilloAv9": {
+        "x": 26594,
+        "y": -18397,
+        "connections": []
+    },
+    "enc-calleMontana36": {
+        "x": 26605,
+        "y": -18397,
+        "connections": []
+    },
+    "enc-calleMontana37": {
+        "x": 26616,
+        "y": -18392,
+        "connections": []
+    },
+    "enc-calleMontana38": {
+        "x": 26621,
+        "y": -18387,
+        "connections": []
+    },
+    "enc-calleMontana39": {
+        "x": 26638,
+        "y": -18380,
+        "connections": []
+    },
+    "enc-calleMontana40_caminoDiamanteA1": {
+        "x": 26679,
+        "y": -18380,
+        "connections": []
+    },
+    "enc-calleMontana41": {
+        "x": 26748,
+        "y": -18380,
+        "connections": []
+    },
+    "enc-caminoDiamanteB1": {
+        "x": 26626,
+        "y": -18362,
+        "connections": []
+    },
+    "enc-caminoDiamanteB2": {
+        "x": 26641,
+        "y": -18358,
+        "connections": []
+    },
+    "enc-caminoDiamanteB3": {
+        "x": 26644,
+        "y": -18355,
+        "connections": []
+    },
+    "enc-caminoDiamanteB4": {
+        "x": 26664,
+        "y": -18349,
+        "connections": []
+    },
+    "enc-caminoDiamanteA2_B5": {
+        "x": 26679,
+        "y": -18349,
+        "connections": []
+    },
+    "enc-caminoDiamanteB6": {
+        "x": 26692,
+        "y": -18349,
+        "connections": []
+    },
+    "enc-caminoDiamanteB7": {
+        "x": 26703,
+        "y": -18345,
+        "connections": []
+    },
+    "enc-caminoDiamanteB8": {
+        "x": 26715,
+        "y": -18333,
+        "connections": []
+    },
+    "enc-caminoDiamanteB9": {
+        "x": 26728,
+        "y": -18329,
+        "connections": []
+    },
+    "enc-cabrilloAv5": {
+        "x": 26607,
+        "y": -18332,
+        "connections": []
+    },
+    "enc-cabrilloAv6": {
+        "x": 26603,
+        "y": -18343,
+        "connections": []
+    },
+    "enc-cabrilloAv7": {
+        "x": 26598,
+        "y": -18348,
+        "connections": []
+    },
+    "enc-cabrilloAv8": {
+        "x": 26594,
+        "y": -18359,
+        "connections": []
+    },
+    "enc-joyaSt3": {
+        "x": 26495,
+        "y": -18097,
+        "connections": []
+    },
+    "enc-joyaSt4": {
+        "x": 26492,
+        "y": -18087,
+        "connections": []
+    },
+    "enc-joyaSt5": {
+        "x": 26455,
+        "y": -18042,
+        "connections": []
+    },
+    "enc-joyaSt6": {
+        "x": 26450,
+        "y": -18034,
+        "connections": []
+    },
+    "enc-joyaSt7": {
+        "x": 26447,
+        "y": -18018,
+        "connections": []
+    },
+    "enc-joyaSt8": {
+        "x": 26447,
+        "y": -17966,
+        "connections": []
+    },
+    "enc-joyaSt9": {
+        "x": 26451,
+        "y": -17952,
+        "connections": []
+    },
+    "enc-joyaSt10": {
+        "x": 26457,
+        "y": -17944,
+        "connections": []
+    },
+    "enc-joyaSt11_B209sSlip2": {
+        "x": 26489,
+        "y": -17912,
+        "connections": []
+    },
+    "enc-joyaSt12_B209nSlip2": {
+        "x": 26509,
+        "y": -17892,
+        "connections": []
+    },
+    "enc-joyaSt13_diplomacyBlvd1_unnamedB3": {
+        "x": 26546,
+        "y": -17854,
+        "connections": []
+    },
+    "enc-diplomacyBlvd2": {
+        "x": 26558,
+        "y": -17872,
+        "connections": []
+    },
+    "enc-diplomacyBlvd3": {
+        "x": 26568,
+        "y": -17882,
+        "connections": []
+    },
+    "enc-diplomacyBlvd4": {
+        "x": 26587,
+        "y": -17909,
+        "connections": []
+    },
+    "enc-diplomacyBlvd5": {
+        "x": 26592,
+        "y": -17933,
+        "connections": []
+    },
+    "enc-diplomacyBlvd6": {
+        "x": 26592,
+        "y": -17999,
+        "connections": []
+    },
+    "enc-diplomacyBlvd7": {
+        "x": 26588,
+        "y": -18016,
+        "connections": []
+    },
+    "enc-diplomacyBlvd8": {
+        "x": 26582,
+        "y": -18024,
+        "connections": []
+    },
+    "enc-diplomacyBlvd9": {
+        "x": 26578,
+        "y": -18033,
+        "connections": []
+    },
+    "enc-diplomacyBlvd10": {
+        "x": 26578,
+        "y": -18040,
+        "connections": []
+    },
+    "enc-unnamedA1": {
+        "x": 26498,
+        "y": -17822,
+        "connections": []
+    },
+    "enc-unnamedA2_B1": {
+        "x": 26547,
+        "y": -17822,
+        "connections": []
+    },
+    "enc-unnamedA3": {
+        "x": 26743,
+        "y": -17822,
+        "connections": []
+    },
+    "enc-unnamedB2": {
+        "x": 26547,
+        "y": -17843,
+        "connections": []
+    },
+    "montanasCabrillos1": {
+        "x": 26406,
+        "y": -18219,
+        "connections": []
+    },
+    "montanasCabrillos3": {
+        "x": 26424,
+        "y": -18219,
         "connections": []
     }
 }

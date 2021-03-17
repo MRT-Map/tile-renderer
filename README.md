@@ -6,7 +6,7 @@ Tile renderer for leaflet.js usage, made by i____7d
   * new `nodeJsonBuilder.py`, intended for use as an assistance for marking nodes on Minecraft
   * fixed `renderer.tools.lineToTiles()`
   * processing and rendering now show ETA
-  
+  * fixed oneway roads showing too many arrows
 * **v0.6 (11/3/21)**
   * added loads of PLAs to the default skin; there are now about 90 different PLA types :))
   * tweaked `renderer.mathtools.midpoint()` a bit
