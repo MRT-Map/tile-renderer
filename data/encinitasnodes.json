@@ -709,28 +709,23 @@
         "y": -18219,
         "connections": []
     },
-    "enc-ecjTerminal1": {
+    "enc-ecjTerminal1_front1": {
         "x": 26430,
         "y": -17968,
         "connections": []
     },
-    "enc-ecjTerminal2": {
+    "enc-ecjTerminal2_apron8": {
         "x": 26406,
         "y": -17968,
         "connections": []
     },
-    "enc-ecjTerminal3": {
+    "enc-ecjTerminal3_apron1": {
         "x": 26406,
         "y": -18048,
         "connections": []
     },
-    "enc-ecjTerminal4": {
+    "enc-ecjTerminal4_front2": {
         "x": 26430,
-        "y": -18048,
-        "connections": []
-    },
-    "enc-ecjApron1": {
-        "x": 26405,
         "y": -18048,
         "connections": []
     },
@@ -761,11 +756,6 @@
     },
     "enc-ecjApron7": {
         "x": 26390,
-        "y": -17968,
-        "connections": []
-    },
-    "enc-ecjApron8": {
-        "x": 26405,
         "y": -17968,
         "connections": []
     },
@@ -839,16 +829,6 @@
         "y": -17988,
         "connections": []
     },
-    "enc-ecjFront1": {
-        "x": 26431,
-        "y": -17968,
-        "connections": []
-    },
-    "enc-ecjFront2": {
-        "x": 26431,
-        "y": -18048,
-        "connections": []
-    },
     "enc-ecjFront3": {
         "x": 26443,
         "y": -18048,
@@ -909,23 +889,23 @@
         "y": -18081,
         "connections": []
     },
-    "enc-subwayStn_joyaAirfieldConcourse3": {
-        "x": 26437,
+    "enc-subwayStn_joyaAirfieldConcourse3_platforms4": {
+        "x": 26436,
         "y": -18081,
         "connections": []
     },
-    "enc-subwayStn_joyaAirfieldConcourse4": {
-        "x": 26437,
+    "enc-subwayStn_joyaAirfieldConcourse4_platforms5": {
+        "x": 26436,
         "y": -18087,
         "connections": []
     },
-    "enc-subwayStn_joyaAirfieldConcourse5": {
-        "x": 26449,
+    "enc-subwayStn_joyaAirfieldConcourse5_platformn5": {
+        "x": 26450,
         "y": -18087,
         "connections": []
     },
-    "enc-subwayStn_joyaAirfieldConcourse6": {
-        "x": 26449,
+    "enc-subwayStn_joyaAirfieldConcourse6_platformn4": {
+        "x": 26450,
         "y": -18081,
         "connections": []
     },
@@ -954,11 +934,6 @@
         "y": -18046,
         "connections": []
     },
-    "enc-subwayStn_joyaAirfieldPlatformn4": {
-        "x": 26450,
-        "y": -18087,
-        "connections": []
-    },
     "enc-subwayStn_joyaAirfieldPlatforms1": {
         "x": 26432,
         "y": -18087,
@@ -972,11 +947,6 @@
     "enc-subwayStn_joyaAirfieldPlatforms3": {
         "x": 26436,
         "y": -18046,
-        "connections": []
-    },
-    "enc-subwayStn_joyaAirfieldPlatforms4": {
-        "x": 26436,
-        "y": -18087,
         "connections": []
     },
     "enc-subwayStn_uptownEntrance1": {
@@ -1029,24 +999,24 @@
         "y": -18190,
         "connections": []
     },
-    "enc-subwayStn_uptownConcourse3": {
+    "enc-subwayStn_uptownConcourse3_platformn4": {
         "x": 26571,
-        "y": -18189,
+        "y": -18188,
         "connections": []
     },
-    "enc-subwayStn_uptownConcourse4": {
+    "enc-subwayStn_uptownConcourse4_platformn5": {
         "x": 26568,
-        "y": -18189,
+        "y": -18188,
         "connections": []
     },
-    "enc-subwayStn_uptownConcourse5": {
+    "enc-subwayStn_uptownConcourse5_platforms5": {
         "x": 26568,
-        "y": -18201,
+        "y": -18202,
         "connections": []
     },
-    "enc-subwayStn_uptownConcourse6": {
+    "enc-subwayStn_uptownConcourse6_platforms4": {
         "x": 26571,
-        "y": -18201,
+        "y": -18202,
         "connections": []
     },
     "enc-subwayStn_uptownConcourse7": {
@@ -1074,11 +1044,6 @@
         "y": -18188,
         "connections": []
     },
-    "enc-subwayStn_uptownPlatformn4": {
-        "x": 26568,
-        "y": -18188,
-        "connections": []
-    },
     "enc-subwayStn_uptownPlatforms1": {
         "x": 26568,
         "y": -18207,
@@ -1091,11 +1056,6 @@
     },
     "enc-subwayStn_uptownPlatforms3": {
         "x": 26602,
-        "y": -18202,
-        "connections": []
-    },
-    "enc-subwayStn_uptownPlatforms4": {
-        "x": 26568,
         "y": -18202,
         "connections": []
     },
@@ -1149,23 +1109,23 @@
         "y": -18319,
         "connections": []
     },
-    "enc-subwayStn_marketConcourse3": {
-        "x": 26650,
+    "enc-subwayStn_marketConcourse3_platforms4": {
+        "x": 26649,
         "y": -18319,
         "connections": []
     },
-    "enc-subwayStn_marketConcourse4": {
-        "x": 26650,
+    "enc-subwayStn_marketConcourse4_platforms5": {
+        "x": 26649,
         "y": -18325,
         "connections": []
     },
-    "enc-subwayStn_marketConcourse5": {
-        "x": 26662,
+    "enc-subwayStn_marketConcourse5_platformn5": {
+        "x": 26663,
         "y": -18325,
         "connections": []
     },
-    "enc-subwayStn_marketConcourse6": {
-        "x": 26662,
+    "enc-subwayStn_marketConcourse6_platformn4": {
+        "x": 26663,
         "y": -18319,
         "connections": []
     },
@@ -1194,11 +1154,6 @@
         "y": -18284,
         "connections": []
     },
-    "enc-subwayStn_marketPlatformn4": {
-        "x": 26663,
-        "y": -18325,
-        "connections": []
-    },
     "enc-subwayStn_marketPlatforms1": {
         "x": 26645,
         "y": -18325,
@@ -1212,11 +1167,6 @@
     "enc-subwayStn_marketPlatforms3": {
         "x": 26649,
         "y": -18284,
-        "connections": []
-    },
-    "enc-subwayStn_marketPlatforms4": {
-        "x": 26649,
-        "y": -18325,
         "connections": []
     },
     "enc-subwayStn_cabrilloEntrance1": {
@@ -1269,23 +1219,23 @@
         "y": -18433,
         "connections": []
     },
-    "enc-subwayStn_cabrilloConcourse3": {
-        "x": 26650,
+    "enc-subwayStn_cabrilloConcourse3_platforms4": {
+        "x": 26649,
         "y": -18433,
         "connections": []
     },
-    "enc-subwayStn_cabrilloConcourse4": {
-        "x": 26650,
+    "enc-subwayStn_cabrilloConcourse4_platforms5": {
+        "x": 26649,
         "y": -18439,
         "connections": []
     },
-    "enc-subwayStn_cabrilloConcourse5": {
-        "x": 26662,
+    "enc-subwayStn_cabrilloConcourse5_platformn5": {
+        "x": 26663,
         "y": -18439,
         "connections": []
     },
-    "enc-subwayStn_cabrilloConcourse6": {
-        "x": 26662,
+    "enc-subwayStn_cabrilloConcourse6_platformn4": {
+        "x": 26663,
         "y": -18433,
         "connections": []
     },
@@ -1314,11 +1264,6 @@
         "y": -18398,
         "connections": []
     },
-    "enc-subwayStn_cabrilloPlatformn4": {
-        "x": 26663,
-        "y": -18439,
-        "connections": []
-    },
     "enc-subwayStn_cabrilloPlatforms1": {
         "x": 26645,
         "y": -18439,
@@ -1332,11 +1277,6 @@
     "enc-subwayStn_cabrilloPlatforms3": {
         "x": 26649,
         "y": -18398,
-        "connections": []
-    },
-    "enc-subwayStn_cabrilloPlatforms4": {
-        "x": 26649,
-        "y": -18439,
         "connections": []
     },
     "enc-subwayTrackss1": {
@@ -1457,6 +1397,276 @@
     "enc-subwayStn_cabrilloMarker": {
         "x": 26656,
         "y": -18396,
+        "connections": []
+    },
+    "enc-cityHall1": {
+        "x": 26638,
+        "y": -18247,
+        "connections": []
+    },
+    "enc-cityHall2": {
+        "x": 26620,
+        "y": -18247,
+        "connections": []
+    },
+    "enc-cityHall3": {
+        "x": 26620,
+        "y": -18269,
+        "connections": []
+    },
+    "enc-cityHall4": {
+        "x": 26638,
+        "y": -18269,
+        "connections": []
+    },
+    "enc-cityHallFountaine1": {
+        "x": 26642,
+        "y": -18243,
+        "connections": []
+    },
+    "enc-cityHallFountaine2": {
+        "x": 26631,
+        "y": -18243,
+        "connections": []
+    },
+    "enc-cityHallFountaine3": {
+        "x": 26631,
+        "y": -18246,
+        "connections": []
+    },
+    "enc-cityHallFountaine4": {
+        "x": 26639,
+        "y": -18246,
+        "connections": []
+    },
+    "enc-cityHallFountaine5": {
+        "x": 26639,
+        "y": -18270,
+        "connections": []
+    },
+    "enc-cityHallFountaine6": {
+        "x": 26631,
+        "y": -18270,
+        "connections": []
+    },
+    "enc-cityHallFountaine7": {
+        "x": 26631,
+        "y": -18273,
+        "connections": []
+    },
+    "enc-cityHallFountaine8": {
+        "x": 26642,
+        "y": -18273,
+        "connections": []
+    },
+    "enc-cityHallFountainw1": {
+        "x": 26616,
+        "y": -18243,
+        "connections": []
+    },
+    "enc-cityHallFountainw2": {
+        "x": 26627,
+        "y": -18243,
+        "connections": []
+    },
+    "enc-cityHallFountainw3": {
+        "x": 26627,
+        "y": -18246,
+        "connections": []
+    },
+    "enc-cityHallFountainw4": {
+        "x": 26619,
+        "y": -18246,
+        "connections": []
+    },
+    "enc-cityHallFountainw5": {
+        "x": 26619,
+        "y": -18270,
+        "connections": []
+    },
+    "enc-cityHallFountainw6": {
+        "x": 26627,
+        "y": -18270,
+        "connections": []
+    },
+    "enc-cityHallFountainw7": {
+        "x": 26627,
+        "y": -18273,
+        "connections": []
+    },
+    "enc-cityHallFountainw8": {
+        "x": 26616,
+        "y": -18273,
+        "connections": []
+    },
+    "enc-officeA1": {
+        "x": 26502,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-officeA2": {
+        "x": 26518,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-officeA3": {
+        "x": 26518,
+        "y": -18175,
+        "connections": []
+    },
+    "enc-officeA4": {
+        "x": 26502,
+        "y": -18175,
+        "connections": []
+    },
+    "enc-apartmentA1": {
+        "x": 26521,
+        "y": -18175,
+        "connections": []
+    },
+    "enc-apartmentA2": {
+        "x": 26537,
+        "y": -18175,
+        "connections": []
+    },
+    "enc-apartmentA3": {
+        "x": 26537,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-apartmentA4": {
+        "x": 26521,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-parkA1": {
+        "x": 26551,
+        "y": -18175,
+        "connections": []
+    },
+    "enc-parkA2": {
+        "x": 26559,
+        "y": -18175,
+        "connections": []
+    },
+    "enc-parkA3": {
+        "x": 26559,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-parkA4": {
+        "x": 26551,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-apartmentB1": {
+        "x": 26563,
+        "y": -18175,
+        "connections": []
+    },
+    "enc-apartmentB2": {
+        "x": 26579,
+        "y": -18175,
+        "connections": []
+    },
+    "enc-apartmentB3": {
+        "x": 26579,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-apartmentB4": {
+        "x": 26563,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-officeB1": {
+        "x": 26582,
+        "y": -18175,
+        "connections": []
+    },
+    "enc-officeB2": {
+        "x": 26600,
+        "y": -18175,
+        "connections": []
+    },
+    "enc-officeB3": {
+        "x": 26600,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-officeB4": {
+        "x": 26582,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-apartmentC1": {
+        "x": 26619,
+        "y": -18175,
+        "connections": []
+    },
+    "enc-apartmentC2": {
+        "x": 26635,
+        "y": -18175,
+        "connections": []
+    },
+    "enc-apartmentC3": {
+        "x": 26635,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-apartmentC4": {
+        "x": 26619,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-officeC1": {
+        "x": 26638,
+        "y": -18175,
+        "connections": []
+    },
+    "enc-officeC2": {
+        "x": 26650,
+        "y": -18175,
+        "connections": []
+    },
+    "enc-officeC3": {
+        "x": 26650,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-officeC4": {
+        "x": 26638,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-apartmentD1": {
+        "x": 26653,
+        "y": -18175,
+        "connections": []
+    },
+    "enc-apartmentD2": {
+        "x": 26669,
+        "y": -18175,
+        "connections": []
+    },
+    "enc-apartmentD3": {
+        "x": 26669,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-apartmentD4": {
+        "x": 26653,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-zone_cruzArela1": {
+        "x": 26495,
+        "y": -18161,
+        "connections": []
+    },
+    "enc-zone_cruzArela2": {
+        "x": 26676,
+        "y": -18162,
         "connections": []
     }
 }

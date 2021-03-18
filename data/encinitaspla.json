@@ -81,7 +81,7 @@
         "attrs": {}
     },
     "enc-cruzAv_2e": {
-        "type": "localMainRoad oneWay",
+        "type": "bRoadSlip oneWay",
         "displayname": "Cruz Av",
         "description": "Encinitas",
         "layer": 0,
@@ -89,7 +89,7 @@
         "attrs": {}
     },
     "enc-cruzAv_2w": {
-        "type": "localMainRoad oneWay",
+        "type": "bRoadSlip oneWay",
         "displayname": "Cruz Av",
         "description": "Encinitas",
         "layer": 0,
@@ -97,7 +97,7 @@
         "attrs": {}
     },
     "enc-cruzAv_3e": {
-        "type": "localMainRoad oneWay",
+        "type": "bRoadSlip oneWay",
         "displayname": "Cruz Av",
         "description": "Encinitas",
         "layer": 0,
@@ -105,7 +105,7 @@
         "attrs": {}
     },
     "enc-cruzAv_3w": {
-        "type": "localMainRoad oneWay",
+        "type": "bRoadSlip oneWay",
         "displayname": "Cruz Av",
         "description": "Encinitas",
         "layer": 0,
@@ -249,7 +249,7 @@
         "displayname": "Encinitas Joya Airfield",
         "description": "Encinitas",
         "layer": 0,
-        "nodes": ["enc-ecjTerminal1", "enc-ecjTerminal2", "enc-ecjTerminal3", "enc-ecjTerminal4"],
+        "nodes": ["enc-ecjTerminal1_front1", "enc-ecjTerminal2_apron8", "enc-ecjTerminal3_apron1", "enc-ecjTerminal4_front2"],
         "attrs": {}
     },
     "enc-ecjApron": {
@@ -257,7 +257,7 @@
         "displayname": "",
         "description": "Encinitas",
         "layer": 0,
-        "nodes": ["enc-ecjApron1", "enc-ecjApron2", "enc-ecjApron3", "enc-ecjApron4", "enc-ecjApron5", "enc-ecjApron6", "enc-ecjApron7", "enc-ecjApron8"],
+        "nodes": ["enc-ecjTerminal3_apron1", "enc-ecjApron2", "enc-ecjApron3", "enc-ecjApron4", "enc-ecjApron5", "enc-ecjApron6", "enc-ecjApron7", "enc-ecjTerminal2_apron8"],
         "attrs": {}
     },
     "enc-ecjTaxiway": {
@@ -289,7 +289,7 @@
         "displayname": "",
         "description": "Encinitas",
         "layer": 0,
-        "nodes": ["enc-ecjFront1", "enc-ecjFront2", "enc-ecjFront3", "enc-ecjFront4"],
+        "nodes": ["enc-ecjTerminal1_front1", "enc-ecjTerminal4_front2", "enc-ecjFront3", "enc-ecjFront4"],
         "attrs": {}
     },
     "enc-subwayStn_joyaAirfieldEntrance": {
@@ -306,8 +306,8 @@
         "displayname": "",
         "description": "Encinitas",
         "layer": 0,
-        "nodes": ["enc-subwayStn_joyaAirfieldConcourse1", "enc-subwayStn_joyaAirfieldConcourse2", "enc-subwayStn_joyaAirfieldConcourse3", "enc-subwayStn_joyaAirfieldConcourse4",
-                  "enc-subwayStn_joyaAirfieldConcourse5", "enc-subwayStn_joyaAirfieldConcourse6", "enc-subwayStn_joyaAirfieldConcourse7", "enc-subwayStn_joyaAirfieldConcourse8"],
+        "nodes": ["enc-subwayStn_joyaAirfieldConcourse1", "enc-subwayStn_joyaAirfieldConcourse2", "enc-subwayStn_joyaAirfieldConcourse3_platforms4", "enc-subwayStn_joyaAirfieldConcourse4_platforms5",
+                  "enc-subwayStn_joyaAirfieldConcourse5_platformn5", "enc-subwayStn_joyaAirfieldConcourse6_platformn4", "enc-subwayStn_joyaAirfieldConcourse7", "enc-subwayStn_joyaAirfieldConcourse8"],
         "attrs": {}
     },
     "enc-subwayStn_joyaAirfieldPlatformN": {
@@ -315,7 +315,7 @@
         "displayname": "",
         "description": "Encinitas",
         "layer": 0,
-        "nodes": ["enc-subwayStn_joyaAirfieldPlatformn1", "enc-subwayStn_joyaAirfieldPlatformn2", "enc-subwayStn_joyaAirfieldPlatformn3", "enc-subwayStn_joyaAirfieldPlatformn4"],
+        "nodes": ["enc-subwayStn_joyaAirfieldPlatformn1", "enc-subwayStn_joyaAirfieldPlatformn2", "enc-subwayStn_joyaAirfieldPlatformn3", "enc-subwayStn_joyaAirfieldConcourse6_platformn4", "enc-subwayStn_joyaAirfieldConcourse5_platformn5"],
         "attrs": {}
     },
     "enc-subwayStn_joyaAirfieldPlatformS": {
@@ -323,7 +323,7 @@
         "displayname": "",
         "description": "Encinitas",
         "layer": 0,
-        "nodes": ["enc-subwayStn_joyaAirfieldPlatforms1", "enc-subwayStn_joyaAirfieldPlatforms2", "enc-subwayStn_joyaAirfieldPlatforms3", "enc-subwayStn_joyaAirfieldPlatforms4"],
+        "nodes": ["enc-subwayStn_joyaAirfieldPlatforms1", "enc-subwayStn_joyaAirfieldPlatforms2", "enc-subwayStn_joyaAirfieldPlatforms3", "enc-subwayStn_joyaAirfieldConcourse3_platforms4", "enc-subwayStn_joyaAirfieldConcourse4_platforms5"],
         "attrs": {}
     },
     "enc-subwayStn_joyaAirfieldMarker": {
@@ -348,8 +348,8 @@
         "displayname": "",
         "description": "Encinitas",
         "layer": 0,
-        "nodes": ["enc-subwayStn_uptownConcourse1", "enc-subwayStn_uptownConcourse2", "enc-subwayStn_uptownConcourse3", "enc-subwayStn_uptownConcourse4",
-                  "enc-subwayStn_uptownConcourse5", "enc-subwayStn_uptownConcourse6", "enc-subwayStn_uptownConcourse7", "enc-subwayStn_uptownConcourse8"],
+        "nodes": ["enc-subwayStn_uptownConcourse1", "enc-subwayStn_uptownConcourse2", "enc-subwayStn_uptownConcourse3_platformn4", "enc-subwayStn_uptownConcourse4_platformn5",
+                  "enc-subwayStn_uptownConcourse5_platforms5", "enc-subwayStn_uptownConcourse6_platforms4", "enc-subwayStn_uptownConcourse7", "enc-subwayStn_uptownConcourse8"],
         "attrs": {}
     },
     "enc-subwayStn_uptownPlatformN": {
@@ -357,7 +357,7 @@
         "displayname": "",
         "description": "Encinitas",
         "layer": 0,
-        "nodes": ["enc-subwayStn_uptownPlatformn1", "enc-subwayStn_uptownPlatformn2", "enc-subwayStn_uptownPlatformn3", "enc-subwayStn_uptownPlatformn4"],
+        "nodes": ["enc-subwayStn_uptownPlatformn1", "enc-subwayStn_uptownPlatformn2", "enc-subwayStn_uptownPlatformn3", "enc-subwayStn_uptownConcourse3_platformn4", "enc-subwayStn_uptownConcourse4_platformn5"],
         "attrs": {}
     },
     "enc-subwayStn_uptownPlatformS": {
@@ -365,7 +365,7 @@
         "displayname": "",
         "description": "Encinitas",
         "layer": 0,
-        "nodes": ["enc-subwayStn_uptownPlatforms1", "enc-subwayStn_uptownPlatforms2", "enc-subwayStn_uptownPlatforms3", "enc-subwayStn_uptownPlatforms4"],
+        "nodes": ["enc-subwayStn_uptownPlatforms1", "enc-subwayStn_uptownPlatforms2", "enc-subwayStn_uptownPlatforms3", "enc-subwayStn_uptownConcourse6_platforms4", "enc-subwayStn_uptownConcourse5_platforms5"],
         "attrs": {}
     },
     "enc-subwayStn_uptownMarker": {
@@ -374,48 +374,6 @@
         "description": "Encinitas",
         "layer": 0,
         "nodes": ["enc-subwayStn_uptownMarker"],
-        "attrs": {}
-    },
-    "enc-subwayStn_cabrilloEntrance": {
-        "type": "transportBuilding",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_cabrilloEntrance1", "enc-subwayStn_cabrilloEntrance2", "enc-subwayStn_cabrilloEntrance3", "enc-subwayStn_cabrilloEntrance4",
-                  "enc-subwayStn_cabrilloEntrance5", "enc-subwayStn_cabrilloEntrance6", "enc-subwayStn_cabrilloEntrance7", "enc-subwayStn_cabrilloEntrance8"],
-        "attrs": {}
-    },
-    "enc-subwayStn_cabrilloConcourse": {
-        "type": "transportBuilding_underground",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_cabrilloConcourse1", "enc-subwayStn_cabrilloConcourse2", "enc-subwayStn_cabrilloConcourse3", "enc-subwayStn_cabrilloConcourse4",
-                  "enc-subwayStn_cabrilloConcourse5", "enc-subwayStn_cabrilloConcourse6", "enc-subwayStn_cabrilloConcourse7", "enc-subwayStn_cabrilloConcourse8"],
-        "attrs": {}
-    },
-    "enc-subwayStn_cabrilloPlatformN": {
-        "type": "platform_underground",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_cabrilloPlatformn1", "enc-subwayStn_cabrilloPlatformn2", "enc-subwayStn_cabrilloPlatformn3", "enc-subwayStn_cabrilloPlatformn4"],
-        "attrs": {}
-    },
-    "enc-subwayStn_cabrilloPlatformS": {
-        "type": "platform_underground",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_cabrilloPlatforms1", "enc-subwayStn_cabrilloPlatforms2", "enc-subwayStn_cabrilloPlatforms3", "enc-subwayStn_cabrilloPlatforms4"],
-        "attrs": {}
-    },
-    "enc-subwayStn_cabrilloMarker": {
-        "type": "railStation",
-        "displayname": "Cabrillo",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_cabrilloMarker"],
         "attrs": {}
     },
     "enc-subwayStn_marketEntrance": {
@@ -432,8 +390,8 @@
         "displayname": "",
         "description": "Encinitas",
         "layer": 0,
-        "nodes": ["enc-subwayStn_marketConcourse1", "enc-subwayStn_marketConcourse2", "enc-subwayStn_marketConcourse3", "enc-subwayStn_marketConcourse4",
-                  "enc-subwayStn_marketConcourse5", "enc-subwayStn_marketConcourse6", "enc-subwayStn_marketConcourse7", "enc-subwayStn_marketConcourse8"],
+        "nodes": ["enc-subwayStn_marketConcourse1", "enc-subwayStn_marketConcourse2", "enc-subwayStn_marketConcourse3_platforms4", "enc-subwayStn_marketConcourse4_platforms5",
+                  "enc-subwayStn_marketConcourse5_platformn5", "enc-subwayStn_marketConcourse6_platformn4", "enc-subwayStn_marketConcourse7", "enc-subwayStn_marketConcourse8"],
         "attrs": {}
     },
     "enc-subwayStn_marketPlatformN": {
@@ -441,7 +399,7 @@
         "displayname": "",
         "description": "Encinitas",
         "layer": 0,
-        "nodes": ["enc-subwayStn_marketPlatformn1", "enc-subwayStn_marketPlatformn2", "enc-subwayStn_marketPlatformn3", "enc-subwayStn_marketPlatformn4"],
+        "nodes": ["enc-subwayStn_marketPlatformn1", "enc-subwayStn_marketPlatformn2", "enc-subwayStn_marketPlatformn3", "enc-subwayStn_marketConcourse6_platformn4", "enc-subwayStn_marketConcourse5_platformn5"],
         "attrs": {}
     },
     "enc-subwayStn_marketPlatformS": {
@@ -449,7 +407,7 @@
         "displayname": "",
         "description": "Encinitas",
         "layer": 0,
-        "nodes": ["enc-subwayStn_marketPlatforms1", "enc-subwayStn_marketPlatforms2", "enc-subwayStn_marketPlatforms3", "enc-subwayStn_marketPlatforms4"],
+        "nodes": ["enc-subwayStn_marketPlatforms1", "enc-subwayStn_marketPlatforms2", "enc-subwayStn_marketPlatforms3", "enc-subwayStn_marketConcourse3_platforms4", "enc-subwayStn_marketConcourse4_platforms5"],
         "attrs": {}
     },
     "enc-subwayStn_marketMarker": {
@@ -458,6 +416,48 @@
         "description": "Encinitas",
         "layer": 0,
         "nodes": ["enc-subwayStn_marketMarker"],
+        "attrs": {}
+    },
+    "enc-subwayStn_cabrilloEntrance": {
+        "type": "transportBuilding",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_cabrilloEntrance1", "enc-subwayStn_cabrilloEntrance2", "enc-subwayStn_cabrilloEntrance3", "enc-subwayStn_cabrilloEntrance4",
+                  "enc-subwayStn_cabrilloEntrance5", "enc-subwayStn_cabrilloEntrance6", "enc-subwayStn_cabrilloEntrance7", "enc-subwayStn_cabrilloEntrance8"],
+        "attrs": {}
+    },
+    "enc-subwayStn_cabrilloConcourse": {
+        "type": "transportBuilding_underground",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_cabrilloConcourse1", "enc-subwayStn_cabrilloConcourse2", "enc-subwayStn_cabrilloConcourse3_platforms4", "enc-subwayStn_cabrilloConcourse4_platforms5",
+                  "enc-subwayStn_cabrilloConcourse5_platformn5", "enc-subwayStn_cabrilloConcourse6_platformn4", "enc-subwayStn_cabrilloConcourse7", "enc-subwayStn_cabrilloConcourse8"],
+        "attrs": {}
+    },
+    "enc-subwayStn_cabrilloPlatformN": {
+        "type": "platform_underground",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_cabrilloPlatformn1", "enc-subwayStn_cabrilloPlatformn2", "enc-subwayStn_cabrilloPlatformn3", "enc-subwayStn_cabrilloConcourse6_platformn4", "enc-subwayStn_cabrilloConcourse5_platformn5"],
+        "attrs": {}
+    },
+    "enc-subwayStn_cabrilloPlatformS": {
+        "type": "platform_underground",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_cabrilloPlatforms1", "enc-subwayStn_cabrilloPlatforms2", "enc-subwayStn_cabrilloPlatforms3", "enc-subwayStn_cabrilloConcourse3_platforms4", "enc-subwayStn_cabrilloConcourse4_platforms5"],
+        "attrs": {}
+    },
+    "enc-subwayStn_cabrilloMarker": {
+        "type": "railStation",
+        "displayname": "Cabrillo",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_cabrilloMarker"],
         "attrs": {}
     },
     "enc-subwayTracksN": {
@@ -471,11 +471,109 @@
     },
     "enc-subwayTracksS": {
         "type": "rail_underground",
-        "displayname": "",
-        "description": "Encinitas Subway",
+        "displayname": "Encinitas Subway",
+        "description": "Encinitas",
         "layer": 0,
         "nodes": ["enc-subwayTrackss1", "enc-subwayTrackss2", "enc-subwayTrackss3", "enc-subwayTrackss4", "enc-subwayTrackss5",
                   "enc-subwayTrackss6", "enc-subwayTrackss7", "enc-subwayTrackss8", "enc-subwayTrackss9", "enc-subwayTrackss10"],
+        "attrs": {}
+    },
+    "enc-cityHall": {
+        "type": "cityHall",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cityHall1", "enc-cityHall2", "enc-cityHall3", "enc-cityHall4"],
+        "attrs": {}
+    },
+    "enc-cityHallFountainW": {
+        "type": "waterSmall",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cityHallFountainw1", "enc-cityHallFountainw2", "enc-cityHallFountainw3", "enc-cityHallFountainw4",
+                  "enc-cityHallFountainw5", "enc-cityHallFountainw6", "enc-cityHallFountainw7", "enc-cityHallFountainw8"],
+        "attrs": {}
+    },
+    "enc-cityHallFountainE": {
+        "type": "waterSmall",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cityHallFountaine1", "enc-cityHallFountaine2", "enc-cityHallFountaine3", "enc-cityHallFountaine4",
+                  "enc-cityHallFountaine5", "enc-cityHallFountaine6", "enc-cityHallFountaine7", "enc-cityHallFountaine8"],
+        "attrs": {}
+    },
+    "enc-officeA": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Cruz-Arela, andesite/sandstone/cyan terr",
+        "layer": 0,
+        "nodes": ["enc-officeA1", "enc-officeA2", "enc-officeA3", "enc-officeA4"],
+        "attrs": {}
+    },
+    "enc-apartmentA": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Cruz-Arela, smooth stone/red terr/white terr",
+        "layer": 0,
+        "nodes": ["enc-apartmentA1", "enc-apartmentA2", "enc-apartmentA3", "enc-apartmentA4"],
+        "attrs": {}
+    },
+    "enc-parkA": {
+        "type": "park",
+        "displayname": "",
+        "description": "Encinitas, Cruz-Arela",
+        "layer": 0,
+        "nodes": ["enc-parkA1", "enc-parkA2", "enc-parkA3", "enc-parkA4"],
+        "attrs": {}
+    },
+    "enc-apartmentB": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Cruz-Arela, blue terr/andesite/white terr",
+        "layer": 0,
+        "nodes": ["enc-apartmentB1", "enc-apartmentB2", "enc-apartmentB3", "enc-apartmentB4"],
+        "attrs": {}
+    },
+    "enc-officeB": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Cruz-Arela, yellow terr/stone bricks/stone",
+        "layer": 0,
+        "nodes": ["enc-officeB1", "enc-officeB2", "enc-officeB3", "enc-officeB4"],
+        "attrs": {}
+    },
+    "enc-apartmentC": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Cruz-Arela, red terr/andesite/white terr",
+        "layer": 0,
+        "nodes": ["enc-apartmentC1", "enc-apartmentC2", "enc-apartmentC3", "enc-apartmentC4"],
+        "attrs": {}
+    },
+    "enc-officeC": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Cruz-Arela, light blue terr/bricks/stone",
+        "layer": 0,
+        "nodes": ["enc-officeC1", "enc-officeC2", "enc-officeC3", "enc-officeC4"],
+        "attrs": {}
+    },
+    "enc-apartmentD": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Cruz-Arela, magenta terr/netherite/stone",
+        "layer": 0,
+        "nodes": ["enc-apartmentD1", "enc-apartmentD2", "enc-apartmentD3", "enc-apartmentD4"],
+        "attrs": {}
+    },
+    "enc-zone_cruzArela": {
+        "type": "residentialOfficeArea",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-zone_cruzArela1", "enc-zone_cruzArela2", "enc-arelaPkwy1_costaBlvd2", "enc-arelaPkwy4_joyaSt1"],
         "attrs": {}
     }
 }

@@ -608,7 +608,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                     i = i.rotate(trot, expand=True)
                                     textList.append((i, tx, ty))
                             if "oneWay" in pla['type'].split(" ")[1:] and textLength <= ((coords[c+1][0]-coords[c][0])**2+(coords[c+1][1]-coords[c][1])**2)**0.5:
-                                font = ImageFont.truetype("skins/assets/ClearSans-Bold.ttf", step['size'])
+                                getFont("b", step['size'])
                                 counter = 0
                                 t = math.floor(((coords[c+1][0]-coords[c][0])**2+(coords[c+1][1]-coords[c][1])**2)**0.5/(4*textLength))
                                 for tx, ty, useless in mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset'], n=2*t+1):

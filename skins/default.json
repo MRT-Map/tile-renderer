@@ -13,6 +13,7 @@
         "industrialArea",
         "commercialArea",
         "officeArea",
+        "residentialOfficeArea",
         "schoolArea",
         "healthArea",
         "agricultureArea",
@@ -316,6 +317,24 @@
                 ]
             }
         },
+        "residentialOfficeArea": {
+            "tags": [],
+            "type": "area",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "fill",
+                        "colour": "#d9dbb2",
+                        "outline": null
+                    },
+                    {
+                        "layer": "centertext",
+                        "colour": "#669240",
+                        "size": 30
+                    }
+                ]
+            }
+        },
         "schoolArea": {
             "tags": [],
             "type": "area",
@@ -581,6 +600,24 @@
                     {
                         "layer": "centertext",
                         "colour": "#808080",
+                        "size": 50
+                    }
+                ]
+            }
+        },
+        "park": {
+            "tags": [],
+            "type": "area",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "fill",
+                        "colour": "#669900",
+                        "outline": null
+                    },
+                    {
+                        "layer": "centertext",
+                        "colour": "#008000",
                         "size": 50
                     }
                 ]
