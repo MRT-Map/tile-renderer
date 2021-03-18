@@ -221,7 +221,7 @@
     },
     "enc-caminoDiamanteA": {
         "type": "localTertiaryRoad",
-        "displayname": "",
+        "displayname": "Camino Diamante",
         "description": "Encinitas",
         "layer": 0,
         "nodes": ["enc-calleMontana40_caminoDiamanteA1", "enc-caminoDiamanteA2_B5"],
@@ -229,7 +229,7 @@
     },
     "enc-caminoDiamanteB": {
         "type": "localTertiaryRoad",
-        "displayname": "",
+        "displayname": "Camino Diamante",
         "description": "Encinitas",
         "layer": 0,
         "nodes": ["enc-caminoDiamanteB1", "enc-caminoDiamanteB2", "enc-caminoDiamanteB3", "enc-caminoDiamanteB4", "enc-caminoDiamanteA2_B5", "enc-caminoDiamanteB6",
@@ -290,6 +290,192 @@
         "description": "Encinitas",
         "layer": 0,
         "nodes": ["enc-ecjFront1", "enc-ecjFront2", "enc-ecjFront3", "enc-ecjFront4"],
+        "attrs": {}
+    },
+    "enc-subwayStn_joyaAirfieldEntrance": {
+        "type": "transportBuilding",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_joyaAirfieldEntrance1", "enc-subwayStn_joyaAirfieldEntrance2", "enc-subwayStn_joyaAirfieldEntrance3", "enc-subwayStn_joyaAirfieldEntrance4",
+                  "enc-subwayStn_joyaAirfieldEntrance5", "enc-subwayStn_joyaAirfieldEntrance6", "enc-subwayStn_joyaAirfieldEntrance7", "enc-subwayStn_joyaAirfieldEntrance8"],
+        "attrs": {}
+    },
+    "enc-subwayStn_joyaAirfieldConcourse": {
+        "type": "transportBuilding_underground",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_joyaAirfieldConcourse1", "enc-subwayStn_joyaAirfieldConcourse2", "enc-subwayStn_joyaAirfieldConcourse3", "enc-subwayStn_joyaAirfieldConcourse4",
+                  "enc-subwayStn_joyaAirfieldConcourse5", "enc-subwayStn_joyaAirfieldConcourse6", "enc-subwayStn_joyaAirfieldConcourse7", "enc-subwayStn_joyaAirfieldConcourse8"],
+        "attrs": {}
+    },
+    "enc-subwayStn_joyaAirfieldPlatformN": {
+        "type": "platform_underground",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_joyaAirfieldPlatformn1", "enc-subwayStn_joyaAirfieldPlatformn2", "enc-subwayStn_joyaAirfieldPlatformn3", "enc-subwayStn_joyaAirfieldPlatformn4"],
+        "attrs": {}
+    },
+    "enc-subwayStn_joyaAirfieldPlatformS": {
+        "type": "platform_underground",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_joyaAirfieldPlatforms1", "enc-subwayStn_joyaAirfieldPlatforms2", "enc-subwayStn_joyaAirfieldPlatforms3", "enc-subwayStn_joyaAirfieldPlatforms4"],
+        "attrs": {}
+    },
+    "enc-subwayStn_joyaAirfieldMarker": {
+        "type": "railStation",
+        "displayname": "Joya Airfield",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_joyaAirfieldMarker"],
+        "attrs": {}
+    },
+    "enc-subwayStn_uptownEntrance": {
+        "type": "transportBuilding",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_uptownEntrance1", "enc-subwayStn_uptownEntrance2", "enc-subwayStn_uptownEntrance3", "enc-subwayStn_uptownEntrance4",
+                  "enc-subwayStn_uptownEntrance5", "enc-subwayStn_uptownEntrance6", "enc-subwayStn_uptownEntrance7", "enc-subwayStn_uptownEntrance8"],
+        "attrs": {}
+    },
+    "enc-subwayStn_uptownConcourse": {
+        "type": "transportBuilding_underground",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_uptownConcourse1", "enc-subwayStn_uptownConcourse2", "enc-subwayStn_uptownConcourse3", "enc-subwayStn_uptownConcourse4",
+                  "enc-subwayStn_uptownConcourse5", "enc-subwayStn_uptownConcourse6", "enc-subwayStn_uptownConcourse7", "enc-subwayStn_uptownConcourse8"],
+        "attrs": {}
+    },
+    "enc-subwayStn_uptownPlatformN": {
+        "type": "platform_underground",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_uptownPlatformn1", "enc-subwayStn_uptownPlatformn2", "enc-subwayStn_uptownPlatformn3", "enc-subwayStn_uptownPlatformn4"],
+        "attrs": {}
+    },
+    "enc-subwayStn_uptownPlatformS": {
+        "type": "platform_underground",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_uptownPlatforms1", "enc-subwayStn_uptownPlatforms2", "enc-subwayStn_uptownPlatforms3", "enc-subwayStn_uptownPlatforms4"],
+        "attrs": {}
+    },
+    "enc-subwayStn_uptownMarker": {
+        "type": "railStation",
+        "displayname": "Uptown",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_uptownMarker"],
+        "attrs": {}
+    },
+    "enc-subwayStn_cabrilloEntrance": {
+        "type": "transportBuilding",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_cabrilloEntrance1", "enc-subwayStn_cabrilloEntrance2", "enc-subwayStn_cabrilloEntrance3", "enc-subwayStn_cabrilloEntrance4",
+                  "enc-subwayStn_cabrilloEntrance5", "enc-subwayStn_cabrilloEntrance6", "enc-subwayStn_cabrilloEntrance7", "enc-subwayStn_cabrilloEntrance8"],
+        "attrs": {}
+    },
+    "enc-subwayStn_cabrilloConcourse": {
+        "type": "transportBuilding_underground",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_cabrilloConcourse1", "enc-subwayStn_cabrilloConcourse2", "enc-subwayStn_cabrilloConcourse3", "enc-subwayStn_cabrilloConcourse4",
+                  "enc-subwayStn_cabrilloConcourse5", "enc-subwayStn_cabrilloConcourse6", "enc-subwayStn_cabrilloConcourse7", "enc-subwayStn_cabrilloConcourse8"],
+        "attrs": {}
+    },
+    "enc-subwayStn_cabrilloPlatformN": {
+        "type": "platform_underground",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_cabrilloPlatformn1", "enc-subwayStn_cabrilloPlatformn2", "enc-subwayStn_cabrilloPlatformn3", "enc-subwayStn_cabrilloPlatformn4"],
+        "attrs": {}
+    },
+    "enc-subwayStn_cabrilloPlatformS": {
+        "type": "platform_underground",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_cabrilloPlatforms1", "enc-subwayStn_cabrilloPlatforms2", "enc-subwayStn_cabrilloPlatforms3", "enc-subwayStn_cabrilloPlatforms4"],
+        "attrs": {}
+    },
+    "enc-subwayStn_cabrilloMarker": {
+        "type": "railStation",
+        "displayname": "Cabrillo",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_cabrilloMarker"],
+        "attrs": {}
+    },
+    "enc-subwayStn_marketEntrance": {
+        "type": "transportBuilding",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_marketEntrance1", "enc-subwayStn_marketEntrance2", "enc-subwayStn_marketEntrance3", "enc-subwayStn_marketEntrance4",
+                  "enc-subwayStn_marketEntrance5", "enc-subwayStn_marketEntrance6", "enc-subwayStn_marketEntrance7", "enc-subwayStn_marketEntrance8"],
+        "attrs": {}
+    },
+    "enc-subwayStn_marketConcourse": {
+        "type": "transportBuilding_underground",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_marketConcourse1", "enc-subwayStn_marketConcourse2", "enc-subwayStn_marketConcourse3", "enc-subwayStn_marketConcourse4",
+                  "enc-subwayStn_marketConcourse5", "enc-subwayStn_marketConcourse6", "enc-subwayStn_marketConcourse7", "enc-subwayStn_marketConcourse8"],
+        "attrs": {}
+    },
+    "enc-subwayStn_marketPlatformN": {
+        "type": "platform_underground",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_marketPlatformn1", "enc-subwayStn_marketPlatformn2", "enc-subwayStn_marketPlatformn3", "enc-subwayStn_marketPlatformn4"],
+        "attrs": {}
+    },
+    "enc-subwayStn_marketPlatformS": {
+        "type": "platform_underground",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_marketPlatforms1", "enc-subwayStn_marketPlatforms2", "enc-subwayStn_marketPlatforms3", "enc-subwayStn_marketPlatforms4"],
+        "attrs": {}
+    },
+    "enc-subwayStn_marketMarker": {
+        "type": "railStation",
+        "displayname": "Market",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayStn_marketMarker"],
+        "attrs": {}
+    },
+    "enc-subwayTracksN": {
+        "type": "rail_underground",
+        "displayname": "Encinitas Subway",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-subwayTracksn1", "enc-subwayTracksn2", "enc-subwayTracksn3", "enc-subwayTracksn4", "enc-subwayTracksn5",
+                  "enc-subwayTracksn6", "enc-subwayTracksn7", "enc-subwayTracksn8", "enc-subwayTracksn9", "enc-subwayTracksn10"],
+        "attrs": {}
+    },
+    "enc-subwayTracksS": {
+        "type": "rail_underground",
+        "displayname": "",
+        "description": "Encinitas Subway",
+        "layer": 0,
+        "nodes": ["enc-subwayTrackss1", "enc-subwayTrackss2", "enc-subwayTrackss3", "enc-subwayTrackss4", "enc-subwayTrackss5",
+                  "enc-subwayTrackss6", "enc-subwayTrackss7", "enc-subwayTrackss8", "enc-subwayTrackss9", "enc-subwayTrackss10"],
         "attrs": {}
     }
 }

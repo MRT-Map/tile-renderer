@@ -26,6 +26,7 @@
         "grass",
         "shrub",
         "forest",
+        "stone",
         "park",
         "gate",
         "apron",
@@ -567,6 +568,24 @@
                 ]
             }
         },
+        "stone": {
+            "tags": [],
+            "type": "area",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "fill",
+                        "colour": "#aaaaaa",
+                        "outline": null
+                    },
+                    {
+                        "layer": "centertext",
+                        "colour": "#808080",
+                        "size": 50
+                    }
+                ]
+            }
+        },
         "gate": {
             "tags": [],
             "type": "area",
@@ -731,8 +750,8 @@
                 "0, 5": [
                     {
                         "layer": "fill",
-                        "colour": "#bbbbbb",
-                        "outline": "#ccccff"
+                        "colour": "#ccccff",
+                        "outline": "#bbbbbb"
                     },
                     {
                         "layer": "centertext",
@@ -1095,7 +1114,7 @@
                         "layer": "text",
                         "colour": "#555555",
                         "size": 16,
-                        "offset": 10
+                        "offset": 15
                     }
                 ]
             }
@@ -1468,7 +1487,7 @@
                         "layer": "text",
                         "colour": "#555555",
                         "size": 16,
-                        "offset": 10
+                        "offset": 15
                     }
                 ]
             }
@@ -1827,7 +1846,7 @@
                         "layer": "text",
                         "colour": "#555555",
                         "size": 16,
-                        "offset": 5
+                        "offset": 15
                     }
                 ]
             }
@@ -1899,7 +1918,7 @@
                             0,
                             20
                         ],
-                        "size": 50,
+                        "size": 25,
                         "anchor": "mm"
                     }
                 ]
@@ -1924,7 +1943,7 @@
                             0,
                             20
                         ],
-                        "size": 50,
+                        "size": 25,
                         "anchor": "mm"
                     }
                 ]

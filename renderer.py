@@ -521,15 +521,37 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
         #logging.info('tile %d/%d [%d, %d] (%s left)', processed, len(tileList), x, y, msToTime(timeLeft))
         print(f"Processed {tilePlas} ({round(processed/len(tileList)*100, 2)}%, {internal.msToTime(timeLeft)} remaining)" + Style.RESET_ALL)
     
-    #print(tileList)
+    #count # of rendering operations
+    print(Fore.GREEN + "Counting no. of operations..." + Style.RESET_ALL)
+    operations = 0
+    for tilePlas in tileList.keys():
+        if tileList[tilePlas] == [{}]:
+            continue
+
+        for group in tileList[tilePlas]:
+            info = skinJson['types'][list(group.values())[0]['type'].split(" ")[0]]
+            style = []
+            for zoom in info['style'].keys():
+                if maxZoom-internal.strToTuple(zoom)[1] <= internal.strToTuple(tilePlas)[0] <= maxZoom-internal.strToTuple(zoom)[0]:
+                    style = info['style'][zoom]
+                    break
+            for step in style:
+                for plaId, pla in group.items():
+                    operations += 1
+                if info['type'] == "line" and "road" in info['tags'] and step['layer'] == "back":
+                    operations += 1
+    
+    #render
+    operated = 0
     renderStart = time.time() * 1000
-    rendered = 0
     print(Fore.GREEN + "Starting render..." + Style.RESET_ALL)
     for tilePlas in tileList.keys():
         if tileList[tilePlas] == [{}]:
-            rendered += 1
-            timeLeft = round(((int(round(time.time() * 1000)) - renderStart) / rendered * (len(tileList) - rendered)), 2)
-            print(Fore.GREEN + f"Rendered {tilePlas} ({round(rendered/len(tileList)*100, 2)}%, {internal.msToTime(timeLeft)} remaining)" + Style.RESET_ALL)
+            if operated != 0:
+                timeLeft = round(((int(round(time.time() * 1000)) - renderStart) / operated * (operations - operated)), 2)
+                print(Fore.GREEN + f"Rendered {tilePlas} ({round(operated/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)" + Style.RESET_ALL)
+            else:
+                print(Fore.GREEN + f"Rendered {tilePlas}" + Style.RESET_ALL)
             continue
         
         size = maxZoomRange*2**(maxZoom-internal.strToTuple(tilePlas)[0])
@@ -650,6 +672,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                         img.polygon(coords, fill=step['colour'], outline=step['outline'])
                         
                     print(Style.DIM + f"Rendered step {style.index(step)+1} of {len(style)} of PLA {plaId}" + Style.RESET_ALL)
+                    operated += 1
 
                 if info['type'] == "line" and "road" in info['tags'] and step['layer'] == "back":
                     nodes = []
@@ -694,6 +717,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                         #print(dashCoords)
                                         img.line(dashCoords, fill=conStep['colour'], width=conStep['width'])
                     print(Style.DIM + "Rendered road studs" + Style.RESET_ALL)
+                    operated += 1
                             
         for i, x, y in textList:
             im.paste(i, (int(x-i.width/2), int(y-i.height/2)), i)
@@ -703,8 +727,10 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
             os.mkdir(os.getcwd()+"/tiles")
         im.save(f'tiles/{tilePlas}.png', 'PNG')
 
-        rendered += 1
-        timeLeft = round(((int(round(time.time() * 1000)) - renderStart) / rendered * (len(tileList) - rendered)), 2)
-        print(Fore.GREEN + f"Rendered {tilePlas} ({round(rendered/len(tileList)*100, 2)}%, {internal.msToTime(timeLeft)} remaining)" + Style.RESET_ALL)
-    
+        if operated != 0:
+            timeLeft = round(((int(round(time.time() * 1000)) - renderStart) / operated * (operations - operated)), 2)
+            print(Fore.GREEN + f"Rendered {tilePlas} ({round(operated/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)" + Style.RESET_ALL)
+        else:
+            print(Fore.GREEN + f"Rendered {tilePlas}" + Style.RESET_ALL)
+
     print(Fore.GREEN + "Render complete" + Style.RESET_ALL)
