@@ -280,7 +280,7 @@
         "type": "waterSmall",
         "displayname": "",
         "description": "Encinitas",
-        "layer": 1,
+        "layer": 0,
         "nodes": ["enc-ecjFountain1", "enc-ecjFountain2", "enc-ecjFountain3", "enc-ecjFountain4"],
         "attrs": {}
     },
@@ -288,7 +288,7 @@
         "type": "plaza",
         "displayname": "",
         "description": "Encinitas",
-        "layer": 0,
+        "layer": -1,
         "nodes": ["enc-ecjTerminal1_front1", "enc-ecjTerminal4_front2", "enc-ecjFront3", "enc-ecjFront4"],
         "attrs": {}
     },
@@ -574,6 +574,247 @@
         "description": "Encinitas",
         "layer": 0,
         "nodes": ["enc-zone_cruzArela1", "enc-zone_cruzArela2", "enc-arelaPkwy1_costaBlvd2", "enc-arelaPkwy4_joyaSt1"],
+        "attrs": {}
+    },
+    "enc-officeD": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Arela-Escondido, andesite/white terr/stone bricks",
+        "layer": 0,
+        "nodes": ["enc-officeD1", "enc-officeD2", "enc-officeD3", "enc-officeD4"],
+        "attrs": {}
+    },
+    "enc-officeE": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Arela-Escondido, light blue terr/stone bricks/stone",
+        "layer": 0,
+        "nodes": ["enc-officeE1", "enc-officeE2", "enc-officeE3", "enc-officeE4"],
+        "attrs": {}
+    },
+    "enc-apartmentE": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Arela-Escondido, cobble/purpur pillar/light gray terr",
+        "layer": 0,
+        "nodes": ["enc-apartmentE1", "enc-apartmentE2", "enc-apartmentE3", "enc-apartmentE4"],
+        "attrs": {}
+    },
+    "enc-ECLibrary": {
+        "type": "building",
+        "displayname": "Edwards Central Library",
+        "description": "Encinitas, Arela-Escondido",
+        "layer": 0,
+        "nodes": ["enc-ECLibrary1", "enc-ECLibrary2", "enc-ECLibrary3", "enc-ECLibrary4"],
+        "attrs": {}
+    },
+    "enc-parkB": {
+        "type": "park",
+        "displayname": "",
+        "description": "Encinitas, Arela-Escondido",
+        "layer": 0,
+        "nodes": ["enc-parkB1", "enc-parkB2", "enc-parkB3", "enc-parkB4"],
+        "attrs": {}
+    },
+    "enc-apartmentF": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Arela-Escondido, cobble/blue terr/andesite",
+        "layer": 0,
+        "nodes": ["enc-apartmentF1", "enc-apartmentF2", "enc-apartmentF3", "enc-apartmentF4"],
+        "attrs": {}
+    },
+    "enc-officeFa": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Arela-Escondido, white/light gray terr",
+        "layer": 0,
+        "nodes": ["enc-officeFa1", "enc-officeFa2", "enc-officeFa3", "enc-officeFa4"],
+        "attrs": {}
+    },
+    "enc-officeFb": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Arela-Escondido, white/light gray terr",
+        "layer": 0,
+        "nodes": ["enc-officeFb1", "enc-officeFb2", "enc-officeFb3", "enc-officeFb4"],
+        "attrs": {}
+    },
+    "enc-officeG": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Arela-Escondido, cyan terr/andesite/white terr",
+        "layer": 0,
+        "nodes": ["enc-officeG1", "enc-officeG2", "enc-officeG3", "enc-officeG4"],
+        "attrs": {}
+    },
+    "enc-officeH": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Arela-Escondido, quartz bricks/terr/smooth stone",
+        "layer": 0,
+        "nodes": ["enc-officeH1", "enc-officeH2", "enc-officeH3", "enc-officeH4"],
+        "attrs": {}
+    },
+    "enc-centuryTower": {
+        "type": "building",
+        "displayname": "Century Tower",
+        "description": "Encinitas, Arela-Escondido",
+        "layer": 0,
+        "nodes": ["enc-centuryTower1", "enc-centuryTower2", "enc-centuryTower3", "enc-centuryTower4", "enc-centuryTower5", "enc-centuryTower6", "enc-centuryTower7", "enc-centuryTower8",
+                  "enc-centuryTower9", "enc-centuryTower10", "enc-centuryTower11", "enc-centuryTower12", "enc-centuryTower13", "enc-centuryTower14", "enc-centuryTower16", "enc-centuryTower16"],
+        "attrs": {}
+    },
+    "enc-apartmentG1": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Arela-Escondido, pink terr/smooth stone/smooth stone",
+        "layer": 0,
+        "nodes": ["enc-apartmentG1", "enc-apartmentG2", "enc-apartmentG3", "enc-apartmentG4"],
+        "attrs": {}
+    },
+    "enc-officeI": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Arela-Escondido, andesite/crimson hyphae/cyan terr",
+        "layer": 0,
+        "nodes": ["enc-officeI1", "enc-officeI2", "enc-officeI3", "enc-officeI4"],
+        "attrs": {}
+    },
+    "enc-apartmentH1": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Arela-Escondido, cobblestone/green/lime terr/stone bricks",
+        "layer": 0,
+        "nodes": ["enc-apartmentH1", "enc-apartmentH2", "enc-apartmentH3", "enc-apartmentH4"],
+        "attrs": {}
+    },
+    "enc-officeJ": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Costa West, blackstone",
+        "layer": 0,
+        "nodes": ["enc-officeJ1", "enc-officeJ2", "enc-officeJ3", "enc-officeJ4"],
+        "attrs": {}
+    },
+    "enc-seasidePlaza": {
+        "type": "plaza",
+        "displayname": "",
+        "description": "Encinitas, Cruz-Escondido",
+        "layer": 0,
+        "nodes": ["enc-seasidePlaza1","enc-seasidePlaza2_capitolPlazaStnEntrance1", "enc-seasidePlaza3_capitolPlazaStnEntrance2", "enc-seasidePlaza4_capitolPlazaStnEntrance3",
+                  "enc-seasidePlaza5", "enc-seasidePlaza6", "enc-seasidePlaza7", "enc-seasidePlaza8", "enc-seasidePlaza9", "enc-seasidePlaza10", "enc-seasidePlaza11",
+                  "enc-seasidePlaza12", "enc-seasidePlaza13", "enc-seasidePlaza14", "enc-seasidePlaza15", "enc-seasidePlaza16", "enc-seasidePlaza17", "enc-seasidePlaza18",
+                  "enc-seasidePlaza19", "enc-seasidePlaza20"],
+        "attrs": {}
+    },
+    "enc-capitolPlazaStnEntrance": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Cruz-Escondido",
+        "layer": 0,
+        "nodes": ["enc-seasidePlaza2_capitolPlazaStnEntrance1", "enc-seasidePlaza3_capitolPlazaStnEntrance2", "enc-seasidePlaza4_capitolPlazaStnEntrance3", "enc-capitolPlazaStnEntrance4"],
+        "attrs": {}
+    },
+    "enc-seasidePark": {
+        "type": "park",
+        "displayname": "",
+        "description": "Encinitas, Cruz-Escondido",
+        "layer": 0,
+        "nodes": ["enc-seasidePark1", "enc-seasidePark2", "enc-seasidePark3", "enc-seasidePark4"],
+        "attrs": {}
+    },
+    "enc-officeK": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Escondido-Costa, blue terr/andesite/stone bricks",
+        "layer": 0,
+        "nodes": ["enc-officeK1", "enc-officeK2", "enc-officeK3", "enc-officeK4"],
+        "attrs": {}
+    },
+    "enc-officeL": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Escondido-Costa, light blue terr/cobble/stone",
+        "layer": 0,
+        "nodes": ["enc-officeL1", "enc-officeL2", "enc-officeL3", "enc-officeL4"],
+        "attrs": {}
+    },
+    "enc-parkC": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Escondido-Costa",
+        "layer": 0,
+        "nodes": ["enc-parkC1", "enc-parkC2", "enc-parkC3", "enc-parkC4"],
+        "attrs": {}
+    },
+    "enc-parkCFountain": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Escondido-Costa",
+        "layer": 0,
+        "nodes": ["enc-parkCFountain1", "enc-parkCFountain2", "enc-parkCFountain3", "enc-parkCFountain4",
+                  "enc-parkCFountain5", "enc-parkCFountain6", "enc-parkCFountain7", "enc-parkCFountain8"],
+        "attrs": {}
+    },
+    "enc-bankOfOaks": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Escondido-Costa, quartz/stone bricks",
+        "layer": 0,
+        "nodes": ["enc-bankOfOaks1", "enc-bankOfOaks2", "enc-bankOfOaks3", "enc-bankOfOaks4"],
+        "attrs": {}
+    },
+    "enc-officeM": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Costa West, quartz/stone bricks",
+        "layer": 0,
+        "nodes": ["enc-officeM1", "enc-officeM2", "enc-officeM3", "enc-officeM4"],
+        "attrs": {}
+    },
+    "enc-apartmentI": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Costa West, andesite/smooth stone",
+        "layer": 0,
+        "nodes": ["enc-apartmentI1", "enc-apartmentI2", "enc-apartmentI3", "enc-apartmentI4"],
+        "attrs": {}
+    },
+    "enc-officeN": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Costa West, smooth stone/light blue terr/polished basalt",
+        "layer": 0,
+        "nodes": ["enc-officeN1", "enc-officeN2", "enc-officeN3", "enc-officeN4", "enc-officeN5", "enc-officeN6", "enc-officeN7"],
+        "attrs": {}
+    },
+    "enc-zone_arelaEscondido": {
+        "type": "residentialOfficeArea",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-zone_arelaEscondido1", "enc-zone_arelaEscondido2", "enc-zone_arelaEscondido3",
+                  "enc-escondidoSt3", "enc-escondidoSt4", "enc-escondidoSt5", "enc-escondidoSt6",
+                  "enc-escondidoSt1_costaBlvd3", "enc-arelaPkwy1_costaBlvd2"],
+        "attrs": {}
+    },
+    "enc-zone_escondidoCosta": {
+        "type": "officeArea",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-zone_escondidoCosta1", "enc-zone_escondidoCosta2",
+            "enc-costaBlvd4", "enc-costaBlvd5", "enc-costaBlvd6", "enc-costaBlvd7",
+            "enc-escondidoSt1_costaBlvd3"],
+        "attrs": {}
+    },
+    "enc-zone_costaWest": {
+        "type": "residentialOfficeArea",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-zone_costaWest1", "enc-zone_costaWest2", "enc-zone_costaWest3", "enc-zone_costaWest4", "enc-escondidoSt1_costaBlvd3"],
         "attrs": {}
     }
 }
