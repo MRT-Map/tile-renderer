@@ -306,12 +306,12 @@
                 "0, 5": [
                     {
                         "layer": "fill",
-                        "colour": "#ffeb99",
+                        "colour": "#ffcc99",
                         "outline": null
                     },
                     {
                         "layer": "centertext",
-                        "colour": "#cca300",
+                        "colour": "#cc6000",
                         "size": 30
                     }
                 ]

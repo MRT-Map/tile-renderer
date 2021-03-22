@@ -665,7 +665,7 @@
                   "enc-centuryTower9", "enc-centuryTower10", "enc-centuryTower11", "enc-centuryTower12", "enc-centuryTower13", "enc-centuryTower14", "enc-centuryTower16", "enc-centuryTower16"],
         "attrs": {}
     },
-    "enc-apartmentG1": {
+    "enc-apartmentG": {
         "type": "building",
         "displayname": "",
         "description": "Encinitas, Arela-Escondido, pink terr/smooth stone/smooth stone",
