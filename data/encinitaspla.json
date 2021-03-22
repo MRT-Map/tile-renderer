@@ -741,7 +741,7 @@
         "attrs": {}
     },
     "enc-parkC": {
-        "type": "building",
+        "type": "park",
         "displayname": "",
         "description": "Encinitas, Escondido-Costa",
         "layer": 0,
@@ -749,7 +749,7 @@
         "attrs": {}
     },
     "enc-parkCFountain": {
-        "type": "building",
+        "type": "waterSmall",
         "displayname": "",
         "description": "Encinitas, Escondido-Costa",
         "layer": 0,
@@ -795,7 +795,7 @@
         "description": "Encinitas",
         "layer": 0,
         "nodes": ["enc-zone_arelaEscondido1", "enc-zone_arelaEscondido2", "enc-zone_arelaEscondido3",
-                  "enc-escondidoSt3", "enc-escondidoSt4", "enc-escondidoSt5", "enc-escondidoSt6",
+                  "enc-escondidoSt6", "enc-escondidoSt5", "enc-escondidoSt4", "enc-escondidoSt3",
                   "enc-escondidoSt1_costaBlvd3", "enc-arelaPkwy1_costaBlvd2"],
         "attrs": {}
     },
@@ -805,7 +805,7 @@
         "description": "Encinitas",
         "layer": 0,
         "nodes": ["enc-zone_escondidoCosta1", "enc-zone_escondidoCosta2",
-            "enc-costaBlvd4", "enc-costaBlvd5", "enc-costaBlvd6", "enc-costaBlvd7",
+            "enc-costaBlvd7", "enc-costaBlvd6", "enc-costaBlvd5", "enc-costaBlvd4",
             "enc-escondidoSt1_costaBlvd3"],
         "attrs": {}
     },

@@ -28,15 +28,16 @@
         "shrub",
         "forest",
         "stone",
-        "park",
         "gate",
         "apron",
         "taxiway",
         "runway",
         "helipad",
+        "plaza",
         "building_underground",
         "transportBuilding_underground",
         "platform_underground",
+        "park",
         "pathway_underground",
         "localHighwaySlip_underground",
         "bRoadSlip_underground",
@@ -67,7 +68,6 @@
         "bRoad",
         "aRoad",
         "rail",
-        "plaza",
         "pathway_elevated",
         "localHighwaySlip_elevated",
         "bRoadSlip_elevated",
@@ -414,13 +414,13 @@
                 "0, 5": [
                     {
                         "layer": "fill",
-                        "colour": "#aaaaaa",
-                        "outline": "#808080"
+                        "colour": "#a2a288",
+                        "outline": "#727256"
                     },
                     {
                         "layer": "centertext",
                         "colour": "#555555",
-                        "size": 30
+                        "size": 15
                     }
                 ]
             }
@@ -486,8 +486,8 @@
                 "0, 5": [
                     {
                         "layer": "fill",
-                        "colour": "#cccccc",
-                        "outline": "#a0a0a0"
+                        "colour": "#c6c6b5",
+                        "outline": "#a5a57a"
                     },
                     {
                         "layer": "centertext",
