@@ -337,7 +337,7 @@ class mathtools:
                 return True
         return False
 
-    def dash(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], d: Union[int, float]):
+    def dash(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], d: Union[int, float], o: Union[int, float], emptyStart=False):
         if d <= 0:
             return None
         xv, yv = sym.symbols('xv,yv')
@@ -347,22 +347,32 @@ class mathtools:
         else:
             m = (y2-y1)/(x2-x1)
             eq1 = sym.Eq(yv-y1,m*(xv-x1))
-        eq2 = sym.Eq(((yv-y1)**2 + (xv-x1)**2)**0.5,d)
-        results = sym.solve([eq1, eq2], (xv, yv))
-        x3, y3 = results[0] if min(x1,x2) <= results[0][0] <= max(x1,x2) and min(y1,y2) <= results[0][1] <= max(y1,y2) else results[1]
-        dx, dy = (x3-x1, y3-y1)
-        predash = [(x1, y1), (x3, y3)]
-        while x2-x3 >= dx and y2-y3 >= dy:
-            x3 += dx; y3 += dy
-            predash.append((x3, y3))
+
+        if o == 0:
+            x3, y3 = (x1, y1)
+        else:
+            eq2 = sym.Eq(((yv-y1)**2 + (xv-x1)**2)**0.5,o)
+            results = sym.solve([eq1, eq2], (xv, yv))
+            x3, y3 = results[0] if min(x1,x2) <= results[0][0] <= max(x1,x2) and min(y1,y2) <= results[0][1] <= max(y1,y2) else results[1]
+
+        eq3 = sym.Eq(((yv-y3)**2 + (xv-x3)**2)**0.5,d)
+        results = sym.solve([eq1, eq3], (xv, yv))
+        x4, y4 = results[0] if min(x1,x2) <= results[0][0] <= max(x1,x2) and min(y1,y2) <= results[0][1] <= max(y1,y2) else results[1]
+        dx, dy = (x4-x1, y4-y1)
+        predash = [(x1, y1), (x4, y4)] if x1 == x3 and y1 == y3 else [(x1, y1), (x3, y3), (x4, y4)]
+        while x2-x4 >= dx and y2-y4 >= dy:
+            x4 += dx; y4 += dy
+            predash.append((x4, y4))
         predash[-1] = (round(predash[-1][0], 12), round(predash[-1][1], 12))
         if predash[-1] != (x2, y2):
             predash.append((x2, y2))
         dash = []
         for coord in predash:
-            if predash.index(coord) % 2 == 0:
+            if (not emptyStart and predash.index(coord) % 2 == 0) or (emptyStart and predash.index(coord) % 2 == 0):
                 dash.append([coord])
             else:
+                if dash == []:
+                    dash.append([])
                 dash[-1].append(coord)
         if len(dash[-1]) == 1:
             dash.pop()
