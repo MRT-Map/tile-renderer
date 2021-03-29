@@ -9,6 +9,7 @@ Tile renderer for leaflet.js usage, made by i____7d
   * fixed oneway roads showing too many arrows
   * added support for lines with unrounded ends through `unroundedEnds` tag
   * updated `renderer.mathtools.dash()` to support offset
+  * added `renderer.mathtools.dashOffset()`
 * **v0.6 (11/3/21)**
   * added loads of PLAs to the default skin; there are now about 90 different PLA types :))
   * tweaked `renderer.mathtools.midpoint()` a bit

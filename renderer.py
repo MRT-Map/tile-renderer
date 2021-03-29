@@ -337,7 +337,7 @@ class mathtools:
                 return True
         return False
 
-    def dash(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], d: Union[int, float], o: Union[int, float], emptyStart=False):
+    def dash(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], d: Union[int, float], o=0, emptyStart=False):
         if d <= 0:
             return None
         xv, yv = sym.symbols('xv,yv')
@@ -378,6 +378,26 @@ class mathtools:
             dash.pop()
         return dash
    
+    def dashOffset(coords: list, d: Union[int, float]):
+        o = 0
+        offsets = [0]
+        emptyStart = False
+        for c in range(len(coords)-2):
+            dashes = mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], d, o, emptyStart)
+            lastCoord = dashes[-1][1]
+            if lastCoord == (coords[c+1][0], coords[c+1][1]):
+                remnant = ((lastCoord[0]-coords[c][0])**2+(lastCoord[1]-coords[c][1])**2)**0.5
+                o = d - remnant
+                offsets.append(round(o, 2))
+                emptyStart = False
+            else:
+                remnant = ((lastCoord[0]-coords[c+1][0])**2+(lastCoord[1]-coords[c+1][1])**2)**0.5
+                o = d - remnant
+                offsets.append(round(o, 2))
+                emptyStart = True
+        return offsets
+
+
 class tools:
     def findPlasAttachedToNode(nodeId: str, plaList: dict):
         plas = []
