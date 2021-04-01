@@ -380,7 +380,7 @@ class mathtools:
    
     def dashOffset(coords: list, d: Union[int, float]):
         o = 0
-        offsets = [0]
+        offsets = [(0, False)]
         emptyStart = False
         for c in range(len(coords)-2):
             dashes = mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], d, o, emptyStart)
@@ -388,15 +388,13 @@ class mathtools:
             if lastCoord == (coords[c+1][0], coords[c+1][1]):
                 remnant = ((lastCoord[0]-coords[c][0])**2+(lastCoord[1]-coords[c][1])**2)**0.5
                 o = d - remnant
-                offsets.append(round(o, 2))
                 emptyStart = False
             else:
                 remnant = ((lastCoord[0]-coords[c+1][0])**2+(lastCoord[1]-coords[c+1][1])**2)**0.5
                 o = d - remnant
-                offsets.append(round(o, 2))
                 emptyStart = True
+            offsets.append((round(o, 2)), emptyStart)
         return offsets
-
 
 class tools:
     def findPlasAttachedToNode(nodeId: str, plaList: dict):
@@ -660,9 +658,12 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                 if not ("unroundedEnds" in info['tags'] and coords.index((x,y)) in [0, len(coords)-1]):
                                     img.ellipse([x-step['width']/2+1, y-step['width']/2+1, x+step['width']/2, y+step['width']/2], fill=step['colour'])
                         else:
+                            offsetInfo = mathtools.dashOffset(coords, step['dash'])
+                            #print(offsetInfo)
                             for c in range(len(coords)-1):
-                                for dashCoords in mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['dash']):
-                                    print(dashCoords)
+                                o, emptyStart = offsetInfo[c]
+                                for dashCoords in mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['dash'], o, emptyStart):
+                                    #print(dashCoords)
                                     img.line(dashCoords, fill=step['colour'], width=step['width'])                
 
                     elif info['type'] == "area" and step['layer'] == "bordertext":
@@ -726,24 +727,33 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                 continue
                             conCoords = [(x-internal.strToTuple(tilePlas)[1]*size, y-internal.strToTuple(tilePlas)[2]*size) for x,y in tools.nodesToCoords(plaList[conPla]['nodes'], nodeList)]
                             conCoords = [(int(skinJson['info']['size']/size*x), int(skinJson['info']['size']/size*y)) for x,y in conCoords]
-                    
+                            preConCoords = conCoords[:]
+
                             if index == 0:
                                 conCoords = [conCoords[0], conCoords[1]]
-                                conCoords[1] = ((conCoords[0][0]+conCoords[1][0])/2, (conCoords[0][1]+conCoords[1][1])/2)
+                                if not "dash" in conStep.keys():
+                                    conCoords[1] = ((conCoords[0][0]+conCoords[1][0])/2, (conCoords[0][1]+conCoords[1][1])/2)
                             elif index == len(conCoords)-1:
                                 conCoords = [conCoords[index-1], conCoords[index]]
-                                conCoords[0] = ((conCoords[0][0]+conCoords[1][0])/2, (conCoords[0][1]+conCoords[1][1])/2)
+                                if not "dash" in conStep.keys():
+                                    conCoords[0] = ((conCoords[0][0]+conCoords[1][0])/2, (conCoords[0][1]+conCoords[1][1])/2)
                             else:
                                 conCoords = [conCoords[index-1], conCoords[index], conCoords[index+1]]
-                                conCoords[0] = ((conCoords[0][0]+conCoords[1][0])/2, (conCoords[0][1]+conCoords[1][1])/2)
-                                conCoords[2] = ((conCoords[2][0]+conCoords[1][0])/2, (conCoords[2][1]+conCoords[1][1])/2)
+                                if not "dash" in conStep.keys():
+                                    conCoords[0] = ((conCoords[0][0]+conCoords[1][0])/2, (conCoords[0][1]+conCoords[1][1])/2)
+                                    conCoords[2] = ((conCoords[2][0]+conCoords[1][0])/2, (conCoords[2][1]+conCoords[1][1])/2)
                             if not "dash" in conStep.keys():
                                 img.line(conCoords, fill=conStep['colour'], width=conStep['width'])
                                 for x, y in conCoords:
                                     img.ellipse([x-conStep['width']/2+1, y-conStep['width']/2+1, x+conStep['width']/2, y+conStep['width']/2], fill=conStep['colour'])
                             else:
-                                for c in range(len(conCoords)-1):
-                                    for dashCoords in mathtools.dash(conCoords[c][0], conCoords[c][1], conCoords[c+1][0], conCoords[c+1][1], conStep['dash']):
+                                offsetInfo = mathtools.dashOffset(preConCoords, conStep['dash'])[index:]
+                                #print(offsetInfo)
+                                for c in range(len(conCoords)-2):
+                                    #print(offsetInfo)
+                                    #print(c)
+                                    o, emptyStart = offsetInfo[c]
+                                    for dashCoords in mathtools.dash(conCoords[c][0], conCoords[c][1], conCoords[c+1][0], conCoords[c+1][1], conStep['dash'], o, emptyStart):
                                         #print(dashCoords)
                                         img.line(dashCoords, fill=conStep['colour'], width=conStep['width'])
                     print(Style.DIM + "Rendered road studs" + Style.RESET_ALL)
