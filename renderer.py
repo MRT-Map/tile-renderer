@@ -168,6 +168,15 @@ class utils:
         return errors
                 
 class internal:
+    def log(msg: str, pLevel: int, vLevel: int):
+        colour = {
+            "0": Fore.GREEN,
+            "1": "",
+            "2": Style.DIM
+        }
+        if pLevel <= vLevel:
+            print(colour[str(pLevel)] + msg + Style.RESET_ALL)
+
     def dictIndex(d: dict, v):
         return list(d.keys())[list(d.values()).index(v)]
 
@@ -396,6 +405,17 @@ class mathtools:
             offsets.append((round(o, 2)), emptyStart)
         return offsets
 
+    def rotateAroundPivot(x: Union[int, float], y: Union[int, float], px: Union[int, float], py: Union[int, float], theta: Union[int, float]):
+        #provide θ in degrees
+        theta = math.radians(theta)
+        x -= px
+        y -= py
+        nx = x*math.cos(theta) - y*math.sin(theta)
+        ny = y*math.cos(theta) + x*math.sin(theta)
+        nx += px
+        ny += py
+        return nx, ny
+
 class tools:
     def findPlasAttachedToNode(nodeId: str, plaList: dict):
         plas = []
@@ -480,7 +500,7 @@ class tools:
         return tiles
 
 
-def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, assetsDir="skins/assets/", **kwargs):
+def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, assetsDir="skins/assets/", verbosityLevel=1, **kwargs):
     if maxZoom < minZoom:
         raise ValueError("Max zoom value is greater than min zoom value")
 
@@ -495,6 +515,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     else: #finds box of tiles
         xMax, xMin, yMax, yMin = tools.plaJson_findEnds(plaList, nodeList)
         tiles = tools.lineToTiles([(xMax,yMax),(xMin,yMax),(xMax,yMin),(xMin,yMin)], minZoom, maxZoom, maxZoomRange)
+    internal.log("Tiles to be generated found", 2, verbosityLevel)
 
     #sort PLAs by tiles
     tileList = {}
@@ -506,12 +527,13 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
         for tile in renderedIn:
             if internal.tupleToStr(tile) in tileList.keys():
                 tileList[internal.tupleToStr(tile)][pla] = plaList[pla]
+    internal.log("Sorted PLA by tiles", 2, verbosityLevel)
     
     #print(tileList)
     
     processStart = time.time() * 1000
     processed = 0
-    print(Fore.GREEN + "Starting processing..." + Style.RESET_ALL)
+    internal.log("Starting processing...", 0, verbosityLevel)
     for tilePlas in tileList.keys():
         #sort PLAs in tiles by layer
         newTilePlas = {}
@@ -519,11 +541,13 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
             if not str(float(tileList[tilePlas][pla]['layer'])) in newTilePlas.keys():
                 newTilePlas[str(float(tileList[tilePlas][pla]['layer']))] = {}
             newTilePlas[str(float(tileList[tilePlas][pla]['layer']))][pla] = tileList[tilePlas][pla]
-    
+        internal.log(f"{tilePlas}: Sorted PLA by layer", 2, verbosityLevel)
+
         #sort PLAs in layers in files by type
         for layer in newTilePlas.keys():
             #print(newTilePlas[layer].items())
             newTilePlas[layer] = {k: v for k, v in sorted(newTilePlas[layer].items(), key=lambda x: skinJson['order'].index(x[1]['type'].split(' ')[0]))}
+        internal.log(f"{tilePlas}: Sorted PLA by type", 2, verbosityLevel)
         
         #merge layers
         tileList[tilePlas] = {}
@@ -531,6 +555,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
         for layer in layers:
             for key, pla in newTilePlas[layer].items():
                 tileList[tilePlas][key] = pla
+        internal.log(f"{tilePlas}: Merged layers", 2, verbosityLevel)
         
         #print(newTilePlas)
         #print(tileList[tilePlas])
@@ -543,14 +568,15 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
             if i != len(keys)-1 and (tileList[tilePlas][keys[i+1]]['type'].split(' ')[0] != tileList[tilePlas][keys[i]]['type'].split(' ')[0] or not "road" in skinJson['types'][tileList[tilePlas][keys[i]]['type'].split(' ')[0]]['tags']):
                 newerTilePlas.append({})
         tileList[tilePlas] = newerTilePlas
+        internal.log(f"PLAs grouped", 2, verbosityLevel)
 
         processed += 1
         timeLeft = round(((int(round(time.time() * 1000)) - processStart) / processed * (len(tileList) - processed)), 2)
         #logging.info('tile %d/%d [%d, %d] (%s left)', processed, len(tileList), x, y, msToTime(timeLeft))
-        print(f"Processed {tilePlas} ({round(processed/len(tileList)*100, 2)}%, {internal.msToTime(timeLeft)} remaining)" + Style.RESET_ALL)
+        print(f"Processed {tilePlas} ({round(processed/len(tileList)*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 1, verbosityLevel)
     
     #count # of rendering operations
-    print(Fore.GREEN + "Counting no. of operations..." + Style.RESET_ALL)
+    internal.log("Counting no. of operations...", 0, verbosityLevel)
     operations = 0
     for tilePlas in tileList.keys():
         if tileList[tilePlas] == [{}]:
@@ -568,24 +594,26 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                     operations += 1
                 if info['type'] == "line" and "road" in info['tags'] and step['layer'] == "back":
                     operations += 1
+        internal.log(f"{tilePlas} counted", 2, verbosityLevel)
     
     #render
     operated = 0
     renderStart = time.time() * 1000
-    print(Fore.GREEN + "Starting render..." + Style.RESET_ALL)
+    internal.log("Starting render...", 0, verbosityLevel)
     for tilePlas in tileList.keys():
         if tileList[tilePlas] == [{}]:
             if operated != 0:
                 timeLeft = round(((int(round(time.time() * 1000)) - renderStart) / operated * (operations - operated)), 2)
-                print(Fore.GREEN + f"Rendered {tilePlas} ({round(operated/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)" + Style.RESET_ALL)
+                internal.log(f"Rendered {tilePlas} ({round(operated/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 0, verbosityLevel)
             else:
-                print(Fore.GREEN + f"Rendered {tilePlas}" + Style.RESET_ALL)
+                internal.log(f"Rendered {tilePlas}", 0, verbosityLevel)
             continue
         
         size = maxZoomRange*2**(maxZoom-internal.strToTuple(tilePlas)[0])
         im = Image.new(mode = "RGBA", size = (skinJson['info']['size'], skinJson['info']['size']), color = (221, 221, 221))
         img = ImageDraw.Draw(im)
-        textList = []
+        textList2 = []
+        internal.log(f"{tilePlas}: Initialised canvas", 2, verbosityLevel)
 
         def getFont(f: str, s: int):
             if f in skinJson['info']['font'].keys():
@@ -622,6 +650,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                         textLength = int(img.textlength(pla['displayname'], font))
                         if textLength == 0:
                             textLength = int(img.textlength("----------", font))
+                        internal.log(f"{tilePlas}: {plaId}: Text length calculated", 2, verbosityLevel)
                         for c in range(len(coords)-1):
                             #print(coords)
                             #print(mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']))
@@ -630,11 +659,13 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                             if mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']) and 2*textLength <= ((coords[c+1][0]-coords[c][0])**2+(coords[c+1][1]-coords[c][1])**2)**0.5:
                                 #print(mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset']))     
                                 for tx, ty, trot in mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset'], n=t):
-                                    i = Image.new('RGBA', (2*textLength,50), (0, 0, 0, 0))
+                                    i = Image.new('RGBA', (2*textLength,2*(step['size']+4)), (0, 0, 0, 0))
                                     d = ImageDraw.Draw(i)
-                                    d.text((textLength, 25), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
+                                    d.text((textLength, step['size']+4), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
+                                    tw, th = i.size
                                     i = i.rotate(trot, expand=True)
-                                    textList.append((i, tx, ty))
+                                    textList2.append((i, tx, ty, tw, th, trot))
+                                internal.log(f"{tilePlas}: {plaId}: Name text generated", 2, verbosityLevel)
                             if "oneWay" in pla['type'].split(" ")[1:] and textLength <= ((coords[c+1][0]-coords[c][0])**2+(coords[c+1][1]-coords[c][1])**2)**0.5:
                                 getFont("b", step['size'])
                                 counter = 0
@@ -644,19 +675,23 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                         counter += 1
                                         continue
                                     trot = math.degrees(math.atan2(coords[c+1][0]-coords[c][0], coords[c+1][1]-coords[c][1]))
-                                    i = Image.new('RGBA', (2*textLength,50), (0, 0, 0, 0))
+                                    i = Image.new('RGBA', (2*textLength,2*(step['size']+4)), (0, 0, 0, 0))
                                     d = ImageDraw.Draw(i)
-                                    d.text((textLength, 25), "↓", fill=step['colour'], font=font, anchor="mm")
+                                    d.text((textLength, step['size']+4), "↓", fill=step['colour'], font=font, anchor="mm")
+                                    tw, th = i.size
                                     i = i.rotate(trot, expand=True)
-                                    textList.append((i, tx, ty))
+                                    textList2.append((i, tx, ty, tw, th, trot))
                                     counter += 1
+                                internal.log(f"{tilePlas}: {plaId}: Oneway arrows generated", 2, verbosityLevel)
                                 
                     elif info['type'] == "line":
                         if not "dash" in step.keys():
                             img.line(coords, fill=step['colour'], width=step['width'])
+                            internal.log(f"{tilePlas}: {plaId}: Line drawn", 2, verbosityLevel)
                             for x, y in coords:
                                 if not ("unroundedEnds" in info['tags'] and coords.index((x,y)) in [0, len(coords)-1]):
                                     img.ellipse([x-step['width']/2+1, y-step['width']/2+1, x+step['width']/2, y+step['width']/2], fill=step['colour'])
+                            internal.log(f"{tilePlas}: {plaId}: Joints drawn", 2, verbosityLevel)
                         else:
                             offsetInfo = mathtools.dashOffset(coords, step['dash'])
                             #print(offsetInfo)
@@ -665,10 +700,13 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                 for dashCoords in mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['dash'], o, emptyStart):
                                     #print(dashCoords)
                                     img.line(dashCoords, fill=step['colour'], width=step['width'])                
+                                internal.log(f"{tilePlas}: {plaId}: Dashes drawn for section {c+1} of {len(coords)}", 2, verbosityLevel)
+                            internal.log(f"{tilePlas}: {plaId}: Dashes drawn", 2, verbosityLevel)
 
                     elif info['type'] == "area" and step['layer'] == "bordertext":
                         font = getFont("", step['size'])
                         textLength = int(img.textlength(pla['displayname'], font))
+                        internal.log(f"{tilePlas}: {plaId}: Text length calculated", 2, verbosityLevel)
                         for c1 in range(len(coords)):
                             c2 = c1+1 if c1 != len(coords)-1 else 0
                             if mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']) and 2*textLength <= ((coords[c2][0]-coords[c1][0])**2+(coords[c2][1]-coords[c1][1])**2)**0.5:
@@ -684,26 +722,30 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                         #print(points[0][0], points[0][1], coords)
                                         #print(mathtools.pointInPoly(points[0][0], points[0][1], coords))
                                         tx, ty, trot = points[0] if mathtools.pointInPoly(points[0][0], points[0][1], coords) else points[1]
-                                    i = Image.new('RGBA', (2*textLength,50), (0, 0, 0, 0))
+                                    i = Image.new('RGBA', (2*textLength,2*(step['size']+4)), (0, 0, 0, 0))
                                     d = ImageDraw.Draw(i)
-                                    d.text((textLength, 25), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
+                                    d.text((textLength, step['size']+4), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
+                                    tw, th = i.size
                                     i = i.rotate(trot, expand=True)
-                                    textList.append((i, tx, ty))
+                                    textList2.append((i, tx, ty, tw, th, trot))
+                                    internal.log(f"{tilePlas}: {plaId}: Text {n+1} of {len(allPoints)} generated in section {c1} of {len(coords)+1}", 2, verbosityLevel)
 
                     elif info['type'] == "area" and step['layer'] == "centertext":
                         cx, cy = mathtools.polyCenter(coords)
                         font = getFont("", step['size'])
                         textLength = int(img.textlength(pla['displayname'], font))
-                        i = Image.new('RGBA', (2*textLength,50), (0, 0, 0, 0))
+                        i = Image.new('RGBA', (2*textLength,2*(step['size']+4)), (0, 0, 0, 0))
                         d = ImageDraw.Draw(i)
-                        d.text((textLength, 25), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
-                        textList.append((i, cx, cy))
+                        cw, ch = i.size
+                        d.text((textLength, step['size']+4), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
+                        textList2.append((i, cx, cy, cw, ch, 0))
                                 
                     elif info['type'] == "area":
                         img.polygon(coords, fill=step['colour'], outline=step['outline'])
-                        
-                    print(Style.DIM + f"Rendered step {style.index(step)+1} of {len(style)} of PLA {plaId}" + Style.RESET_ALL)
+                    
                     operated += 1
+                    timeLeft = round(((int(round(time.time() * 1000)) - renderStart) / operated * (operations - operated)), 2)
+                    internal.log(f"Rendered step {style.index(step)+1} of {len(style)} of PLA {plaId} ({round(operated/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 1, verbosityLevel)
 
                 if info['type'] == "line" and "road" in info['tags'] and step['layer'] == "back":
                     nodes = []
@@ -713,6 +755,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                     connected = []
                     for i in connectedPre:
                        connected += i
+                    internal.log(f"{tilePlas}: Connected lines found", 2, verbosityLevel)
                     for conPla, index in connected:
                         if not "road" in skinJson['types'][plaList[conPla]['type'].split(" ")[0]]['tags']:
                             continue
@@ -746,6 +789,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                 img.line(conCoords, fill=conStep['colour'], width=conStep['width'])
                                 for x, y in conCoords:
                                     img.ellipse([x-conStep['width']/2+1, y-conStep['width']/2+1, x+conStep['width']/2, y+conStep['width']/2], fill=conStep['colour'])
+                                
                             else:
                                 offsetInfo = mathtools.dashOffset(preConCoords, conStep['dash'])[index:]
                                 #print(offsetInfo)
@@ -756,12 +800,42 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                     for dashCoords in mathtools.dash(conCoords[c][0], conCoords[c][1], conCoords[c+1][0], conCoords[c+1][1], conStep['dash'], o, emptyStart):
                                         #print(dashCoords)
                                         img.line(dashCoords, fill=conStep['colour'], width=conStep['width'])
-                    print(Style.DIM + "Rendered road studs" + Style.RESET_ALL)
                     operated += 1
+                    timeLeft = round(((int(round(time.time() * 1000)) - renderStart) / operated * (operations - operated)), 2)
+                    internal.log(f"Rendered road studs ({round(operated/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 1, verbosityLevel)
                             
-        for i, x, y in textList:
-            im.paste(i, (int(x-i.width/2), int(y-i.height/2)), i)
-        print(Style.DIM + "Rendered text" + Style.RESET_ALL)
+        textList2.reverse()
+        dontCross = []
+        #print(textList2)
+        for i, x, y, w, h, rot in textList2:
+            r = lambda a,b : mathtools.rotateAroundPivot(a, b, x, y, rot)
+            currentBoxCoords = [r(x-w, y-h), r(x-w, y+h), r(x+w, y+h), r(x+w, y-h), r(x-w, y-h)]
+            canPrint = True
+            for box in dontCross:
+                useless1, ox, oy, ow, oh, useless2 = textList2[dontCross.index(box)]
+                oMaxDist = ((ow/2)**2+(oh/2)**2)**0.5
+                thisMaxDist = ((w/2)**2+(h/2)**2)**0.5
+                dist = ((x-ox)**2+(y-oy)**2)**0.5
+                if dist > oMaxDist + thisMaxDist:
+                    continue
+                for c in range(len(box)-2):
+                    for d in range(len(currentBoxCoords)-2):
+                        canPrint = False if mathtools.linesIntersect(box[c][0], box[c][1], box[c+1][0], box[c+1][1], currentBoxCoords[c][0], currentBoxCoords[c][1], currentBoxCoords[c+1][0], currentBoxCoords[c+1][1]) else canPrint
+                        if not canPrint:
+                            break
+                    if not canPrint:
+                        break
+                if canPrint and mathtools.pointInPoly(currentBoxCoords[0][0], currentBoxCoords[0][1], box) or mathtools.pointInPoly(box[0][0], box[0][1], currentBoxCoords):
+                    canPrint == False
+                if canPrint == False:
+                    break
+            if canPrint:
+                im.paste(i, (int(x-i.width/2), int(y-i.height/2)), i)
+                internal.log(f"{tilePlas}: Text pasted", 2, verbosityLevel)
+            else:
+                internal.log(f"{tilePlas}: Text skipped", 2, verbosityLevel)
+            dontCross.append(currentBoxCoords)
+        internal.log("Rendered text", 1, verbosityLevel)
         
         if not os.path.isdir('tiles'):
             os.mkdir(os.getcwd()+"/tiles")
@@ -769,8 +843,8 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
 
         if operated != 0:
             timeLeft = round(((int(round(time.time() * 1000)) - renderStart) / operated * (operations - operated)), 2)
-            print(Fore.GREEN + f"Rendered {tilePlas} ({round(operated/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)" + Style.RESET_ALL)
+            internal.log(f"Rendered {tilePlas} ({round(operated/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 0, verbosityLevel)
         else:
-            print(Fore.GREEN + f"Rendered {tilePlas}" + Style.RESET_ALL)
+            internal.log(f"Rendered {tilePlas}", 0, verbosityLevel)
 
-    print(Fore.GREEN + "Render complete" + Style.RESET_ALL)
+    internal.log("Render complete", 0, verbosityLevel)
