@@ -295,11 +295,13 @@ class mathtools:
             return False
         #print(eq1, eq2)
         result = sym.solve([eq1, eq2], (xv, yv))
-        if isinstance(result, list):
+        if isinstance(result, list) and result != []:
             x5, y5 = result[0]
         elif isinstance(result, dict):
             x5 = result[xv]
             y5 = result[yv]
+        else:
+            return False
         x1 = round(x1, 10); x2 = round(x2, 10); x3 = round(x3, 10); x4 = round(x4, 10); x5 = round(x5, 10)
         y1 = round(y1, 10); y2 = round(y2, 10); y3 = round(y3, 10); y4 = round(y4, 10); y5 = round(y5, 10)
         return False if (x5>max(x1,x2) or x5<min(x1,x2) or y5>max(y1,y2) or y5<min(y1,y2) or x5>max(x3,x4) or x5<min(x3,x4) or y5>max(y3,y4) or y5<min(y3,y4)) else True
@@ -573,7 +575,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
         processed += 1
         timeLeft = round(((int(round(time.time() * 1000)) - processStart) / processed * (len(tileList) - processed)), 2)
         #logging.info('tile %d/%d [%d, %d] (%s left)', processed, len(tileList), x, y, msToTime(timeLeft))
-        print(f"Processed {tilePlas} ({round(processed/len(tileList)*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 1, verbosityLevel)
+        internal.log(f"Processed {tilePlas} ({round(processed/len(tileList)*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 1, verbosityLevel)
     
     #count # of rendering operations
     internal.log("Counting no. of operations...", 0, verbosityLevel)
@@ -662,7 +664,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                     i = Image.new('RGBA', (2*textLength,2*(step['size']+4)), (0, 0, 0, 0))
                                     d = ImageDraw.Draw(i)
                                     d.text((textLength, step['size']+4), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
-                                    tw, th = i.size
+                                    tw, th = i.size[:]
                                     i = i.rotate(trot, expand=True)
                                     textList2.append((i, tx, ty, tw, th, trot))
                                 internal.log(f"{tilePlas}: {plaId}: Name text generated", 2, verbosityLevel)
@@ -678,7 +680,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                     i = Image.new('RGBA', (2*textLength,2*(step['size']+4)), (0, 0, 0, 0))
                                     d = ImageDraw.Draw(i)
                                     d.text((textLength, step['size']+4), "↓", fill=step['colour'], font=font, anchor="mm")
-                                    tw, th = i.size
+                                    tw, th = i.size[:]
                                     i = i.rotate(trot, expand=True)
                                     textList2.append((i, tx, ty, tw, th, trot))
                                     counter += 1
@@ -725,7 +727,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                     i = Image.new('RGBA', (2*textLength,2*(step['size']+4)), (0, 0, 0, 0))
                                     d = ImageDraw.Draw(i)
                                     d.text((textLength, step['size']+4), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
-                                    tw, th = i.size
+                                    tw, th = i.size[:]
                                     i = i.rotate(trot, expand=True)
                                     textList2.append((i, tx, ty, tw, th, trot))
                                     internal.log(f"{tilePlas}: {plaId}: Text {n+1} of {len(allPoints)} generated in section {c1} of {len(coords)+1}", 2, verbosityLevel)
@@ -809,24 +811,24 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
         #print(textList2)
         for i, x, y, w, h, rot in textList2:
             r = lambda a,b : mathtools.rotateAroundPivot(a, b, x, y, rot)
-            currentBoxCoords = [r(x-w, y-h), r(x-w, y+h), r(x+w, y+h), r(x+w, y-h), r(x-w, y-h)]
+            currentBoxCoords = [r(x-w/2, y-h/2), r(x-w/2, y+h/2), r(x+w/2, y+h/2), r(x+w/2, y-h/2), r(x-w/2, y-h/2)]
             canPrint = True
             for box in dontCross:
                 useless1, ox, oy, ow, oh, useless2 = textList2[dontCross.index(box)]
-                oMaxDist = ((ow/2)**2+(oh/2)**2)**0.5
-                thisMaxDist = ((w/2)**2+(h/2)**2)**0.5
+                oMaxDist = ((ow/2)**2+(oh/2)**2)**0.5/2
+                thisMaxDist = ((w/2)**2+(h/2)**2)**0.5/2
                 dist = ((x-ox)**2+(y-oy)**2)**0.5
                 if dist > oMaxDist + thisMaxDist:
                     continue
                 for c in range(len(box)-2):
                     for d in range(len(currentBoxCoords)-2):
-                        canPrint = False if mathtools.linesIntersect(box[c][0], box[c][1], box[c+1][0], box[c+1][1], currentBoxCoords[c][0], currentBoxCoords[c][1], currentBoxCoords[c+1][0], currentBoxCoords[c+1][1]) else canPrint
+                        canPrint = False if mathtools.linesIntersect(box[c][0], box[c][1], box[c+1][0], box[c+1][1], currentBoxCoords[d][0], currentBoxCoords[d][1], currentBoxCoords[d+1][0], currentBoxCoords[d+1][1]) else canPrint
                         if not canPrint:
                             break
                     if not canPrint:
                         break
                 if canPrint and mathtools.pointInPoly(currentBoxCoords[0][0], currentBoxCoords[0][1], box) or mathtools.pointInPoly(box[0][0], box[0][1], currentBoxCoords):
-                    canPrint == False
+                    canPrint = False
                 if canPrint == False:
                     break
             if canPrint:
