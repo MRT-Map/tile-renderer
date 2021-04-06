@@ -4,3 +4,5 @@ poetry.lock
 *.pyc
 tiles/*
 .vscode
+docs/_build/doctrees
+docs/_build/html
