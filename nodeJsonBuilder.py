@@ -30,7 +30,7 @@ while not e:
         e = True
         print(Fore.YELLOW + "Exited" + Style.RESET_ALL)
         continue
-    groups = re.search(f"@s (\S+) \S+ (\S+)", pasted)
+    groups = re.search(r"@s (\S+) \S+ (\S+)", pasted)
     if groups == None:
         print(Fore.RED + "Invalid paste" + Style.RESET_ALL)
         continue
@@ -41,8 +41,10 @@ while not e:
     while not nameConfirmed:
         name = input(Fore.YELLOW + "Node name: " + Style.RESET_ALL)
         if name in nodes.keys() or name in newNodes.keys():
-            print(Fore.RED + "Node already exists" + Style.RESET_ALL)
-            continue
+            print(Fore.RED + "Node already exists; do you want to override its current value?")
+            print(nodes[name] if name in nodes.keys() else newNodes[name])
+            if input("Type 'y' to confirm: " + Style.RESET_ALL) != "y":
+                continue
         nameConfirmed = True
 
     newNodes[name] = {"x": x, "y": y, "connections": []}
