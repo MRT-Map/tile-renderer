@@ -57,6 +57,7 @@ Tools
    * **list[tuple]** A list of tile coordinates
 
 .. py:function:: renderer.tools.plaJson_calcRenderedIn(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int)
+   
    Like ``renderer.tools.lineToTiles()``, but for a JSON or dictionary of PLAs.
 
    **Parameters**
