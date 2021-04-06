@@ -17,4 +17,4 @@ Tile renderer for leaflet.js usage, made by 7d
   * new logging function (`renderer.internal.log()`)
     * `renderer.render()` has new `verbosityLevel` optional argument, defaults to 1
   * estimated that last beta release before v1.0 is v0.8 or v0.9
-* **Past changelogs can be found in [https://tile-renderer.readthedocs.io/en/latest/changelog/]
+* **Past changelogs can be found in [https://tile-renderer.readthedocs.io/en/latest/changelog/]**
