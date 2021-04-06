@@ -1,12 +1,19 @@
 {
-    "tile": {
-        "size": 2048
+    "info": {
+        "size": 2048,
+        "font": {
+            "": "ClearSans-Medium.ttf",
+            "b": "ClearSans-Bold.ttf",
+            "i": "ClearSans-MediumItalic.ttf",
+            "bi": "ClearSans-BoldItalic.ttf"
+        }
     },
     "order": [
         "residentialArea",
         "industrialArea",
         "commercialArea",
         "officeArea",
+        "residentialOfficeArea",
         "schoolArea",
         "healthArea",
         "agricultureArea",
@@ -20,14 +27,17 @@
         "grass",
         "shrub",
         "forest",
-        "park",
+        "stone",
+        "gate",
         "apron",
         "taxiway",
         "runway",
         "helipad",
+        "plaza",
         "building_underground",
         "transportBuilding_underground",
         "platform_underground",
+        "park",
         "pathway_underground",
         "localHighwaySlip_underground",
         "bRoadSlip_underground",
@@ -296,12 +306,30 @@
                 "0, 5": [
                     {
                         "layer": "fill",
-                        "colour": "#ffeb99",
+                        "colour": "#ffcc99",
                         "outline": null
                     },
                     {
                         "layer": "centertext",
-                        "colour": "#cca300",
+                        "colour": "#cc6000",
+                        "size": 30
+                    }
+                ]
+            }
+        },
+        "residentialOfficeArea": {
+            "tags": [],
+            "type": "area",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "fill",
+                        "colour": "#d9dbb2",
+                        "outline": null
+                    },
+                    {
+                        "layer": "centertext",
+                        "colour": "#669240",
                         "size": 30
                     }
                 ]
@@ -386,13 +414,13 @@
                 "0, 5": [
                     {
                         "layer": "fill",
-                        "colour": "#aaaaaa",
-                        "outline": "#808080"
+                        "colour": "#a2a288",
+                        "outline": "#727256"
                     },
                     {
                         "layer": "centertext",
                         "colour": "#555555",
-                        "size": 30
+                        "size": 15
                     }
                 ]
             }
@@ -458,8 +486,8 @@
                 "0, 5": [
                     {
                         "layer": "fill",
-                        "colour": "#cccccc",
-                        "outline": "#a0a0a0"
+                        "colour": "#c6c6b5",
+                        "outline": "#a5a57a"
                     },
                     {
                         "layer": "centertext",
@@ -559,6 +587,60 @@
                 ]
             }
         },
+        "stone": {
+            "tags": [],
+            "type": "area",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "fill",
+                        "colour": "#aaaaaa",
+                        "outline": null
+                    },
+                    {
+                        "layer": "centertext",
+                        "colour": "#808080",
+                        "size": 50
+                    }
+                ]
+            }
+        },
+        "park": {
+            "tags": [],
+            "type": "area",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "fill",
+                        "colour": "#669900",
+                        "outline": null
+                    },
+                    {
+                        "layer": "centertext",
+                        "colour": "#008000",
+                        "size": 50
+                    }
+                ]
+            }
+        },
+        "gate": {
+            "tags": [],
+            "type": "area",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "fill",
+                        "colour": null,
+                        "outline": "#33334d"
+                    },
+                    {
+                        "layer": "centertext",
+                        "colour": "#33334d",
+                        "size": 15
+                    }
+                ]
+            }
+        },
         "apron": {
             "tags": [],
             "type": "area",
@@ -581,7 +663,7 @@
             "tags": [],
             "type": "line",
             "style": {
-                "0, 5": [
+                "0, 2": [
                     {
                         "layer": "fore",
                         "colour": "#8f8fa3",
@@ -593,14 +675,27 @@
                         "size": 20,
                         "offset": 0
                     }
+                ],
+                "3, 5": [
+                    {
+                        "layer": "fore",
+                        "colour": "#8f8fa3",
+                        "width": 25
+                    },
+                    {
+                        "layer": "text",
+                        "colour": "#33334d",
+                        "size": 10,
+                        "offset": 0
+                    }
                 ]
             }
         },
         "runway": {
-            "tags": [],
+            "tags": ["unroundedEnds"],
             "type": "line",
             "style": {
-                "0, 5": [
+                "0, 2": [
                     {
                         "layer": "fore",
                         "colour": "#73738c",
@@ -610,6 +705,19 @@
                         "layer": "text",
                         "colour": "#33334d",
                         "size": 30,
+                        "offset": 0
+                    }
+                ],
+                "3, 5": [
+                    {
+                        "layer": "fore",
+                        "colour": "#73738c",
+                        "width": 50
+                    },
+                    {
+                        "layer": "text",
+                        "colour": "#33334d",
+                        "size": 15,
                         "offset": 0
                     }
                 ]
@@ -668,6 +776,24 @@
                         "layer": "fore",
                         "colour": "#808080",
                         "width": 8
+                    }
+                ]
+            }
+        },
+        "plaza": {
+            "tags": [],
+            "type": "area",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "fill",
+                        "colour": "#ccccff",
+                        "outline": "#bbbbbb"
+                    },
+                    {
+                        "layer": "centertext",
+                        "colour": "#000000",
+                        "size": 15
                     }
                 ]
             }
@@ -993,12 +1119,14 @@
                     {
                         "layer": "back",
                         "colour": "#eeeeee",
-                        "width": 8
+                        "width": 8,
+                        "dash": 24
                     },
                     {
                         "layer": "fore",
                         "colour": "#008000",
-                        "width": 4
+                        "width": 4,
+                        "dash": 24
                     },
                     {
                         "layer": "text",
@@ -1025,7 +1153,7 @@
                         "layer": "text",
                         "colour": "#555555",
                         "size": 16,
-                        "offset": 10
+                        "offset": 15
                     }
                 ]
             }
@@ -1351,17 +1479,20 @@
                     {
                         "layer": "back",
                         "colour": "#000000",
-                        "width": 12
+                        "width": 12,
+                        "dash": 24
                     },
                     {
                         "layer": "back",
                         "colour": "#eeeeee",
-                        "width": 8
+                        "width": 8,
+                        "dash": 24
                     },
                     {
                         "layer": "fore",
                         "colour": "#008000",
-                        "width": 4
+                        "width": 4,
+                        "dash": 24
                     },
                     {
                         "layer": "text",
@@ -1398,7 +1529,7 @@
                         "layer": "text",
                         "colour": "#555555",
                         "size": 16,
-                        "offset": 10
+                        "offset": 15
                     }
                 ]
             }
@@ -1725,12 +1856,14 @@
                     {
                         "layer": "back",
                         "colour": "#eeeeee",
-                        "width": 8
+                        "width": 8,
+                        "dash": 24
                     },
                     {
                         "layer": "fore",
                         "colour": "#66ff66",
-                        "width": 4
+                        "width": 4,
+                        "dash": 24
                     },
                     {
                         "layer": "text",
@@ -1751,13 +1884,14 @@
                     {
                         "layer": "fore",
                         "colour": "#b3b3b3",
-                        "width": 8
+                        "width": 8,
+                        "dash": 50
                     },
                     {
                         "layer": "text",
                         "colour": "#555555",
                         "size": 16,
-                        "offset": 5
+                        "offset": 15
                     }
                 ]
             }
@@ -1781,7 +1915,31 @@
                             10,
                             10
                         ],
-                        "size": 25
+                        "size": 25,
+                        "anchor": null
+                    }
+                ]
+            }
+        },
+        "clinic": {
+            "tags": [],
+            "type": "point",
+            "style": {
+                "0, 5": [
+                    {
+                        "shape": "image",
+                        "file": "clinic.png",
+                        "offset": [0, 0]
+                    },
+                    {
+                        "shape": "text",
+                        "colour": "#ff0303",
+                        "offset": [
+                            0,
+                            50
+                        ],
+                        "size": 50,
+                        "anchor": "mm"
                     }
                 ]
             }
@@ -1805,7 +1963,8 @@
                             0,
                             20
                         ],
-                        "size": 50
+                        "size": 25,
+                        "anchor": "mm"
                     }
                 ]
             }
@@ -1816,7 +1975,7 @@
             "style": {
                 "0, 5": [
                     {
-                        "shape": "circle",
+                        "shape": "square",
                         "colour": "#1e85ae",
                         "outline": null,
                         "size": 20,
@@ -1829,7 +1988,8 @@
                             0,
                             20
                         ],
-                        "size": 50
+                        "size": 25,
+                        "anchor": "mm"
                     }
                 ]
             }
@@ -1840,7 +2000,7 @@
             "style": {
                 "0, 5": [
                     {
-                        "shape": "circle",
+                        "shape": "square",
                         "colour": "#66ccff",
                         "outline": null,
                         "size": 20,
@@ -1853,7 +2013,8 @@
                             0,
                             20
                         ],
-                        "size": 25
+                        "size": 25,
+                        "anchor": "mm"
                     }
                 ]
             }
@@ -2101,9 +2262,9 @@
                         "layer": "fill",
                         "colour": null,
                         "outline": "#744d25"
-                    },
+                    }
                 ]
             }
-        },
+        }
     }
 }
