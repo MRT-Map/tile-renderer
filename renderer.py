@@ -6,167 +6,183 @@ import os
 import sympy as sym
 from typing import Union
 import time
+from schema import Schema, And, Or, Regex, Optional
 init()
 
 class utils:
-    def coordListIntegrity(coords: list, **kwargs):
-        doError = True if 'error' in kwargs.keys() and kwargs['error'] == True else False
-        silent = True if 'silent' in kwargs.keys() and kwargs['silent'] == True else False
-        def throwError(msg, error):
-            if doError:
-                print(Fore.RED, end="")
-                raise error(msg)
-            else:
-                print(Fore.RED + msg + Style.RESET_ALL)
-                return msg
+    def coordListIntegrity(coords: list):
+        for item in coords:
+            if not isinstance(item, tuple):
+                raise TypeError(f"Coordinates {item} is not type 'tuple'")
+            elif len(item) != 2:
+                raise ValueError(f"Coordinates {item} has {len(item)} values instead of 2")
+            for n in item:
+                if not isinstance(n, (int, float)):
+                    raise TypeError(f"Coordinate {n} is not type 'int/float'")
+        return True
 
-        if not silent:
-            print(Fore.GREEN + "Starting coordinates list check..." + Style.RESET_ALL)
-        errors = []
-        for coord in coords:
-            if not isinstance(coord, tuple):
-                errors.append(throwError(f"Coord '{str(coord)}' is type {str(type(coord).__name__)} instead of tuple", TypeError))
-            elif len(coord) != 2:
-                errors.append(throwError(f"Coord '{str(coord)}' has {str(len(coord))} values instead of 2", ValueError))
-            else:
-                for n in coord:
-                    if not isinstance(n, (int, float)):
-                        errors.append(throwError(f"Coord '{str(coord)}' has '{str(n)}' which is not int/float", ValueError))
-        if not silent:
-            print(Fore.GREEN + "Check complete; below is a list of errors if any:" + Style.RESET_ALL)
-            if errors == []:
-                errors = ["None"]
-            print("\n".join(errors))
-        return errors
+    def tileCoordListIntegrity(tiles: list, minZoom: int, maxZoom: int):
+        for item in tiles:
+            if not isinstance(item, tuple):
+                raise TypeError(f"Tile coordinates {item} is not type 'tuple'")
+            elif len(item) != 3:
+                raise ValueError(f"Tile coordinates {item} has {len(item)} values instead of 3")
+            for n in item:
+                if not isinstance(n, (int, float)):
+                    raise TypeError(f"Tile coordinate {n} is not type 'int/float'")
+            if not minZoom <= item[0] <= maxZoom:
+                raise ValueError(f"Zoom value {item[0]} is not in the range {minZoom} <= z <= {maxZoom}")
+            elif not isinstance(item[0], int):
+                raise TypeError(f"Zoom value {item[0]} is not an integer")
+        return True
 
-    def tileCoordListIntegrity(tiles: list, minZoom: int, maxZoom: int, **kwargs):
-        if maxZoom < minZoom:
-            raise ValueError("Max zoom value is lesser than min zoom value")
-
-        doError = True if 'error' in kwargs.keys() and kwargs['error'] == True else False
-        silent = True if 'silent' in kwargs.keys() and kwargs['silent'] == True else False
-        def throwError(msg, error):
-            if doError:
-                print(Fore.RED, end="")
-                raise error(msg)
-            else:
-                print(Fore.RED + msg + Style.RESET_ALL)
-                return msg
-
-        if not silent:
-            print(Fore.GREEN + "Starting tile coordinates list check..." + Style.RESET_ALL)
-        errors = []
-        for coord in tiles:
-            if not isinstance(coord, tuple):
-                errors.append(throwError(f"Tile '{str(coord)}' is type {str(type(coord).__name__)} instead of tuple", TypeError))
-            elif len(coord) != 3:
-                errors.append(throwError(f"Tile '{str(coord)}' has {str(len(coord))} values instead of 3", ValueError))
-            else:
-                for n in coord:
-                    if not isinstance(n, (int, float)):
-                        errors.append(throwError(f"Tile '{str(coord)}' has '{str(n)}' which is not int/float", ValueError))
-                if coord[0] < minZoom or coord[0] > maxZoom:
-                    errors.append(throwError(f"Zoom of tile '{str(coord)}' is {str(coord[0])} which is out of zoom range {str(minZoom)} - {str(maxZoom)}", ValueError))
-        if not silent:
-            print(Fore.GREEN + "Check complete; below is a list of errors if any:" + Style.RESET_ALL)
-            if errors == []:
-                errors = ["None"]
-            print("\n".join(errors))
-        return errors
-        
-    def nodeJsonIntegrity(nodeList: dict, **kwargs):
-        doError = True if 'error' in kwargs.keys() and kwargs['error'] == True else False
-        def throwError(msg, error):
-            if doError:
-                print(Fore.RED, end="")
-                raise error(msg)
-            else:
-                print(Fore.RED + msg + Style.RESET_ALL)
-                return msg
-
-        print(Fore.GREEN + "Starting Node JSON integrity check..." + Style.RESET_ALL)
-        errors = []
-        for node in nodeList.keys():
-            print(Fore.GREEN + f"{node}: Starting check" + Style.RESET_ALL)
-            for key in ["x","y","connections"]:
-                if not key in nodeList[node].keys():
-                    errors.append(throwError(f"{node}: Key '{key}' missing", KeyError))
-
-            for key in nodeList[node].keys():
-                if key in ["x", "y"] and not isinstance(nodeList[node][key], (int, float)):
-                    errors.append(throwError(f"{node}: Value of key '{key}' is type {str(type(nodeList[node][key]).__name__)} instead of int/float", TypeError))
-        print(Fore.GREEN + "Checks complete; below is a list of errors if any:" + Style.RESET_ALL)
-        if errors == []:
-            errors = ["None"]
-        print("\n".join(errors))
-        return errors
-
-    def nodeListIntegrity(nodes: list, nodeList: dict, **kwargs):
-        doError = True if 'error' in kwargs.keys() and kwargs['error'] == True else False
-        silent = True if 'silent' in kwargs.keys() and kwargs['silent'] == True else False
-        def throwError(msg, error):
-            if doError:
-                print(Fore.RED, end="")
-                raise error(msg)
-            else:
-                print(Fore.RED + msg + Style.RESET_ALL)
-                return msg
-
-        if not silent:
-            print(Fore.GREEN + "Starting node list check..." + Style.RESET_ALL)
-        errors = []
+    def nodeListIntegrity(nodes: list, nodeList: dict):
         for node in nodes:
             if not node in nodeList.keys():
-                errors.append(throwError(f"Node '{node}' does not exist", ValueError))
-        if not silent:
-            print(Fore.GREEN + "Check complete; below is a list of errors if any:" + Style.RESET_ALL)
-            if errors == []:
-                errors = ["None"]
-            print("\n".join(errors))
-        return errors
+                raise ValueError(f"Node '{node}' does not exist")
 
-    def plaJsonIntegrity(plaList: dict, nodeList: dict, **kwargs):
-        doError = True if 'error' in kwargs.keys() and kwargs['error'] == True else False
-        def throwError(msg, error):
-            if doError:
-                print(Fore.RED, end="")
-                raise error(msg)
-            else:
-                print(Fore.RED + msg + Style.RESET_ALL)
-                return msg
+        return True
 
-        print(Fore.GREEN + "Starting PLA JSON integrity check..." + Style.RESET_ALL)
-        errors = []
-        for pla in plaList.keys():
-            print(Fore.GREEN + f"{pla}: Starting check" + Style.RESET_ALL)
-            for key in ["type","displayname","description","layer","nodes","attrs"]:
-                if not key in plaList[pla].keys():
-                    errors.append(throwError(f"{pla}: Key '{key}' missing", KeyError))
+    def nodeJsonIntegrity(nodeList: dict):
+        schema = Schema({
+            str: {
+                "x": Or(int, float),
+                "y": Or(int, float),
+                "connections": list
+            }
+        })
+        schema.validate(nodeList)
+        return True
 
-            for key in plaList[pla].keys():
-                if key in ["type", "displayname", "description"] and not isinstance(plaList[pla][key], str):
-                    errors.append(throwError(f"{pla}: Value of key '{key}' is type {str(type(plaList[pla][key]).__name__)} instead of str", TypeError))
-                elif key in ["layer"] and not isinstance(plaList[pla][key], (int, float)):
-                    errors.append(throwError(f"{pla}: Value of key '{key}' is type {str(type(plaList[pla][key]).__name__)} instead of int/float", TypeError))
-                elif key in ["nodes"]:
-                    if not isinstance(plaList[pla][key], list):
-                        errors.append(throwError(f"{pla}: Value of key '{key}' is type {str(type(plaList[pla][key]).__name__)} instead of list", TypeError))
-                    elif key == "nodes":
-                        temp = utils.nodeListIntegrity(plaList[pla][key], nodeList, error=doError, silent=True)
-                        for e in temp:
-                            errors.append(f"{pla}: " + e)
-                elif key in ["attr"]:
-                    if not isinstance(plaList[pla][key], dict):
-                        errors.append(throwError(f"{pla}: Value of key '{key}' is type {str(type(plaList[pla][key]).__name__)} instead of dict", TypeError))
-
-                #if key == "shape" and not plaList[pla][key] in ["point", "line", "area"]:
-                    #errors.append(throwError(f"{pla}: Shape is '{plaList[pla][key]}' instead of PLA type", ValueError))
-        print(Fore.GREEN + "Checks complete; below is a list of errors if any:" + Style.RESET_ALL)
-        if errors == []:
-            errors = ["None"]
-        print("\n".join(errors))
-        return errors
+    def plaJsonIntegrity(plaList: dict, nodeList: dict):
+        schema = Schema({
+            str: {
+                "type": str,
+                "displayname": str,
+                "description": str,
+                "layer": Or(int, float),
+                "nodes": And(list, lambda i: utils.nodeListIntegrity(i, nodeList)),
+                "attrs": dict
+            }
+        })
+        schema.validate(plaList)
+        return True
                 
+    def skinJsonIntegrity(skinJson: dict):
+        mainSchema = Schema({
+            "info": {
+                "size": int,
+                "font": {
+                    "": str,
+                    "b": str,
+                    "i": str,
+                    "bi": str
+                },
+                "background": And([int], lambda l: len(l) == 3 and not False in [0 <= n <= 255 for n in l])
+            },
+            "order": [str],
+            "types": {
+                str: {
+                    "tags": list,
+                    "type": lambda s: s in ['point', 'line', 'area'],
+                    "style": {
+                        str: list
+                    }
+                }
+            }
+        })
+        point_circle = Schema({
+            "layer": "circle",
+            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "outline": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "size": int,
+            "width": int
+        })
+        point_text = Schema({
+            "layer": "text",
+            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "offset": And(And(list, [int]), lambda o: len(o) == 2),
+            "size": int,
+            "anchor": Or(None, str)
+        })
+        point_square = Schema({
+            "layer": "square",
+            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "outline": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "size": int,
+            "width": int
+        })
+        point_image = Schema({
+            "layer": "image",
+            "file": str,
+            "offset": And(And(list, [int]), lambda o: len(o) == 2)
+        })
+        line_backfore = Schema({
+            "layer": Or("back", "fore"),
+            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "width": int,
+            Optional("dash"): int
+        })
+        line_text = Schema({
+            "layer": "text",
+            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "size": int,
+            "offset": int
+        })
+        area_fill = Schema({
+            "layer": "fill",
+            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "outline": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$')))
+        })
+        area_bordertext = Schema({
+            "layer": "bordertext",
+            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "offset": int,
+            "size": int
+        })
+        area_centertext = Schema({
+            "layer": "centertext",
+            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "size": int
+        })
+
+        schemas = {
+            "point": {
+                "circle": point_circle,
+                "text": point_text,
+                "square": point_square,
+                "image": point_image
+            },
+            "line": {
+                "text": line_text,
+                "back": line_backfore,
+                "fore": line_backfore
+            },
+            "area": {
+                "bordertext": area_bordertext,
+                "centertext": area_centertext,
+                "fill": area_fill
+            }
+        }
+
+        mainSchema.validate(skinJson)
+        for n, t in skinJson['types'].items():
+            if not n in skinJson['order']:
+                raise ValueError(f"Type {n} is not in order list")
+            s = t['style']
+            for z, steps in s.items():
+                if internal.strToTuple(z)[0] > internal.strToTuple(z)[1]:
+                    raise ValueError(f"Invalid range '{z}'")
+                for step in steps:
+                    if not step["layer"] in schemas[t['type']]:
+                        raise ValueError(f"Invalid layer '{step}'")
+                    else:
+                        try:
+                            schemas[t['type']][step['layer']].validate(step)
+                        except Exception as e:
+                            print(Fore.RED + f"Type {n}, range {z}, step {step['layer']}" + Style.RESET_ALL)
+                            raise e
+
 class internal:
     def log(msg: str, pLevel: int, vLevel: int):
         colour = {
@@ -186,8 +202,7 @@ class internal:
             f.close()
             return data
 
-    def writeJson(file: str, data: dict, **kwargs):
-        pp = True if 'pp' in kwargs.keys() and kwargs['pp'] == True else False
+    def writeJson(file: str, data: dict, pp=False):
         with open(file, "r+") as f:
             f.seek(0)
             f.truncate()
@@ -203,7 +218,7 @@ class internal:
     def strToTuple(s: str):
         return tuple([int(x) for x in s.split(", ")])
 
-    def msToTime(ms):
+    def msToTime(ms: Union[int, float]):
         if ms == 0:
             return "0ms"
         s = math.floor(ms / 1000)
@@ -336,7 +351,7 @@ class mathtools:
                 my.append(y3)
         return sum(mx)/len(mx), sum(my)/len(my)
 
-    def lineInBox(line: list, top: int, bottom: int, left: int, right: int):
+    def lineInBox(line: list, top: Union[int, float], bottom: Union[int, float], left: Union[int, float], right: Union[int, float]):
         for i in range(len(line)-1):
             x1, y1 = line[i]
             x2, y2 = line[i+1]
@@ -502,18 +517,23 @@ class tools:
         return tiles
 
 
-def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, assetsDir="skins/assets/", verbosityLevel=1, **kwargs):
+def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, verbosityLevel=1, saveImages=True, saveDir="tiles/", assetsDir="skins/assets/", **kwargs):
     if maxZoom < minZoom:
         raise ValueError("Max zoom value is greater than min zoom value")
-
+    tileReturn = []
+    
     # integrity checks
-    utils.plaJsonIntegrity(plaList, nodeList, error=True)
-    utils.nodeJsonIntegrity(nodeList, error=True)
+    internal.log("Validating skin...", 0, verbosityLevel)
+    utils.skinJsonIntegrity(skinJson)
+    internal.log("Validating PLAs...", 0, verbosityLevel)
+    utils.plaJsonIntegrity(plaList, nodeList)
+    internal.log("Validating nodes...", 0, verbosityLevel)
+    utils.nodeJsonIntegrity(nodeList)
 
     #finds which tiles to render
     if 'tiles' in kwargs.keys() and isinstance(kwargs['tiles'], list):
         tiles = kwargs['tiles']
-        utils.tileCoordListIntegrity(tiles, minZoom, maxZoom, error=True)
+        utils.tileCoordListIntegrity(tiles, minZoom, maxZoom)
     else: #finds box of tiles
         xMax, xMin, yMax, yMin = tools.plaJson_findEnds(plaList, nodeList)
         tiles = tools.lineToTiles([(xMax,yMax),(xMin,yMax),(xMax,yMin),(xMin,yMin)], minZoom, maxZoom, maxZoomRange)
@@ -570,7 +590,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
             if i != len(keys)-1 and (tileList[tilePlas][keys[i+1]]['type'].split(' ')[0] != tileList[tilePlas][keys[i]]['type'].split(' ')[0] or not "road" in skinJson['types'][tileList[tilePlas][keys[i]]['type'].split(' ')[0]]['tags']):
                 newerTilePlas.append({})
         tileList[tilePlas] = newerTilePlas
-        internal.log(f"PLAs grouped", 2, verbosityLevel)
+        internal.log("PLAs grouped", 2, verbosityLevel)
 
         processed += 1
         timeLeft = round(((int(round(time.time() * 1000)) - processStart) / processed * (len(tileList) - processed)), 2)
@@ -612,9 +632,10 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
             continue
         
         size = maxZoomRange*2**(maxZoom-internal.strToTuple(tilePlas)[0])
-        im = Image.new(mode = "RGBA", size = (skinJson['info']['size'], skinJson['info']['size']), color = (221, 221, 221))
+        im = Image.new(mode = "RGBA", size = (skinJson['info']['size'], skinJson['info']['size']), color = tuple(skinJson['info']['background']))
         img = ImageDraw.Draw(im)
-        textList2 = []
+        textList = []
+        pointsTextList = []
         internal.log(f"{tilePlas}: Initialised canvas", 2, verbosityLevel)
 
         def getFont(f: str, s: int):
@@ -634,20 +655,29 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                 for plaId, pla in group.items():
                     coords = [(x - internal.strToTuple(tilePlas)[1] * size, y - internal.strToTuple(tilePlas)[2] * size) for x, y in tools.nodesToCoords(pla['nodes'], nodeList)]
                     coords = [(int(skinJson['info']['size'] / size * x), int(skinJson['info']['size'] / size * y)) for x, y in coords]
+                    
+                    def point_circle():
+                        img.ellipse([coords[0][0]-step['size']/2+1, coords[0][1]-step['size']/2+1, coords[0][0]+step['size']/2, coords[0][1]+step['size']/2], fill=step['colour'], outline=step['outline'], width=step['width'])
 
-                    if info['type'] == "point":
-                        if step['shape'] == "circle":
-                            img.ellipse([coords[0][0]-step['size']/2+1, coords[0][1]-step['size']/2+1, coords[0][0]+step['size']/2, coords[0][1]+step['size']/2], fill=step['colour'], outline=step['outline'], width=step['width'])
-                        elif step['shape'] == "text":
-                            font = getFont("", step['size'])
-                            img.text((coords[0][0]+step['offset'][0], coords[0][1]+step['offset'][1]), pla['displayname'], fill=step['colour'], font=font, anchor=step['anchor'])
-                        elif step['shape'] == "square":
-                            img.rectangle([coords[0][0]-step['size']/2+1, coords[0][1]-step['size']/2+1, coords[0][0]+step['size']/2, coords[0][1]+step['size']/2], fill=step['colour'], outline=step['outline'], width=step['width'])
-                        elif step['shape'] == "image":
-                            icon = Image.open(assetsDir+step['file'])
-                            im.paste(icon, (int(coords[0][0]-icon.width/2+step['offset'][0]), int(coords[0][1]-icon.height/2+step['offset'][1])), icon)
+                    def point_text():
+                        font = getFont("", step['size'])
+                        textLength = int(img.textlength(pla['displayname'], font))
+                        i = Image.new('RGBA', (2*textLength,2*(step['size']+4)), (0, 0, 0, 0))
+                        d = ImageDraw.Draw(i)
+                        d.text((textLength, step['size']+4), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
+                        tw, th = i.size
+                        pointsTextList.append((i, coords[0][0]+step['offset'][0], coords[0][1]+step['offset'][1], tw, th, 0))
+                        # font = getFont("", step['size'])
+                        # img.text((coords[0][0]+step['offset'][0], coords[0][1]+step['offset'][1]), pla['displayname'], fill=step['colour'], font=font, anchor=step['anchor'])
 
-                    elif info['type'] == "line" and step['layer'] == "text":
+                    def point_square():
+                        img.rectangle([coords[0][0]-step['size']/2+1, coords[0][1]-step['size']/2+1, coords[0][0]+step['size']/2, coords[0][1]+step['size']/2], fill=step['colour'], outline=step['outline'], width=step['width'])
+
+                    def point_image():
+                        icon = Image.open(assetsDir+step['file'])
+                        im.paste(icon, (int(coords[0][0]-icon.width/2+step['offset'][0]), int(coords[0][1]-icon.height/2+step['offset'][1])), icon)
+
+                    def line_text():
                         font = getFont("", step['size'])
                         textLength = int(img.textlength(pla['displayname'], font))
                         if textLength == 0:
@@ -666,7 +696,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                     d.text((textLength, step['size']+4), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
                                     tw, th = i.size[:]
                                     i = i.rotate(trot, expand=True)
-                                    textList2.append((i, tx, ty, tw, th, trot))
+                                    textList.append((i, tx, ty, tw, th, trot))
                                 internal.log(f"{tilePlas}: {plaId}: Name text generated", 2, verbosityLevel)
                             if "oneWay" in pla['type'].split(" ")[1:] and textLength <= ((coords[c+1][0]-coords[c][0])**2+(coords[c+1][1]-coords[c][1])**2)**0.5:
                                 getFont("b", step['size'])
@@ -682,11 +712,11 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                     d.text((textLength, step['size']+4), "↓", fill=step['colour'], font=font, anchor="mm")
                                     tw, th = i.size[:]
                                     i = i.rotate(trot, expand=True)
-                                    textList2.append((i, tx, ty, tw, th, trot))
+                                    textList.append((i, tx, ty, tw, th, trot))
                                     counter += 1
                                 internal.log(f"{tilePlas}: {plaId}: Oneway arrows generated", 2, verbosityLevel)
                                 
-                    elif info['type'] == "line":
+                    def line_backfore():
                         if not "dash" in step.keys():
                             img.line(coords, fill=step['colour'], width=step['width'])
                             internal.log(f"{tilePlas}: {plaId}: Line drawn", 2, verbosityLevel)
@@ -705,7 +735,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                 internal.log(f"{tilePlas}: {plaId}: Dashes drawn for section {c+1} of {len(coords)}", 2, verbosityLevel)
                             internal.log(f"{tilePlas}: {plaId}: Dashes drawn", 2, verbosityLevel)
 
-                    elif info['type'] == "area" and step['layer'] == "bordertext":
+                    def area_bordertext():
                         font = getFont("", step['size'])
                         textLength = int(img.textlength(pla['displayname'], font))
                         internal.log(f"{tilePlas}: {plaId}: Text length calculated", 2, verbosityLevel)
@@ -729,10 +759,10 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                     d.text((textLength, step['size']+4), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
                                     tw, th = i.size[:]
                                     i = i.rotate(trot, expand=True)
-                                    textList2.append((i, tx, ty, tw, th, trot))
+                                    textList.append((i, tx, ty, tw, th, trot))
                                     internal.log(f"{tilePlas}: {plaId}: Text {n+1} of {len(allPoints)} generated in section {c1} of {len(coords)+1}", 2, verbosityLevel)
 
-                    elif info['type'] == "area" and step['layer'] == "centertext":
+                    def area_centertext():
                         cx, cy = mathtools.polyCenter(coords)
                         font = getFont("", step['size'])
                         textLength = int(img.textlength(pla['displayname'], font))
@@ -740,14 +770,37 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                         d = ImageDraw.Draw(i)
                         cw, ch = i.size
                         d.text((textLength, step['size']+4), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
-                        textList2.append((i, cx, cy, cw, ch, 0))
-                                
-                    elif info['type'] == "area":
+                        textList.append((i, cx, cy, cw, ch, 0))
+
+                    def area_fill():
                         img.polygon(coords, fill=step['colour'], outline=step['outline'])
-                    
+
+                    funcs = {
+                        "point": {
+                            "circle": point_circle,
+                            "text": point_text,
+                            "square": point_square,
+                            "image": point_image
+                        },
+                        "line": {
+                            "text": line_text,
+                            "back": line_backfore,
+                            "fore": line_backfore
+                        },
+                        "area": {
+                            "bordertext": area_bordertext,
+                            "centertext": area_centertext,
+                            "fill": area_fill
+                        }
+                    }
+
+                    if step['layer'] not in funcs[info['type']].keys():
+                        raise KeyError(f"{step['layer']} is not a valid layer")
+                    funcs[info['type']][step['layer']]()
+
                     operated += 1
                     timeLeft = round(((int(round(time.time() * 1000)) - renderStart) / operated * (operations - operated)), 2)
-                    internal.log(f"Rendered step {style.index(step)+1} of {len(style)} of PLA {plaId} ({round(operated/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 1, verbosityLevel)
+                    internal.log(f"Rendered step {style.index(step)+1} of {len(style)} of {plaId} ({round(operated/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 1, verbosityLevel)
 
                 if info['type'] == "line" and "road" in info['tags'] and step['layer'] == "back":
                     nodes = []
@@ -805,16 +858,17 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                     operated += 1
                     timeLeft = round(((int(round(time.time() * 1000)) - renderStart) / operated * (operations - operated)), 2)
                     internal.log(f"Rendered road studs ({round(operated/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 1, verbosityLevel)
-                            
-        textList2.reverse()
+
+        textList += pointsTextList 
+        textList.reverse()
         dontCross = []
-        #print(textList2)
-        for i, x, y, w, h, rot in textList2:
+        #print(textList)
+        for i, x, y, w, h, rot in textList:
             r = lambda a,b : mathtools.rotateAroundPivot(a, b, x, y, rot)
             currentBoxCoords = [r(x-w/2, y-h/2), r(x-w/2, y+h/2), r(x+w/2, y+h/2), r(x+w/2, y-h/2), r(x-w/2, y-h/2)]
             canPrint = True
             for box in dontCross:
-                useless1, ox, oy, ow, oh, useless2 = textList2[dontCross.index(box)]
+                useless1, ox, oy, ow, oh, useless2 = textList[dontCross.index(box)]
                 oMaxDist = ((ow/2)**2+(oh/2)**2)**0.5/2
                 thisMaxDist = ((w/2)**2+(h/2)**2)**0.5/2
                 dist = ((x-ox)**2+(y-oy)**2)**0.5
@@ -839,9 +893,9 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
             dontCross.append(currentBoxCoords)
         internal.log("Rendered text", 1, verbosityLevel)
         
-        if not os.path.isdir('tiles'):
-            os.mkdir(os.getcwd()+"/tiles")
-        im.save(f'tiles/{tilePlas}.png', 'PNG')
+        tileReturn.append(im)
+        if saveImages:
+            im.save(f'{saveDir}{tilePlas}.png', 'PNG')
 
         if operated != 0:
             timeLeft = round(((int(round(time.time() * 1000)) - renderStart) / operated * (operations - operated)), 2)
@@ -850,3 +904,5 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
             internal.log(f"Rendered {tilePlas}", 0, verbosityLevel)
 
     internal.log("Render complete", 0, verbosityLevel)
+
+    return tileReturn

@@ -22,7 +22,7 @@ copyright = '2021, The MRT Mapping Team'
 author = '7d'
 
 # The full version, including alpha/beta/rc tags
-release = 'v0.7'
+release = 'v0.8'
 
 
 # -- General configuration ---------------------------------------------------
