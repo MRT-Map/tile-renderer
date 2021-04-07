@@ -49,6 +49,7 @@ Skins
 
 .. code-block:: javascript
 
+
    {
        "info": {
            "size": size,
