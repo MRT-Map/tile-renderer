@@ -146,7 +146,13 @@ Skins
                     {
                         "layer": "centertext",
                         "colour": "(hex)",
-                        "size": size
+                        "size": size,
+                        "offset": [x,y]
+                    },
+                    {
+                        "layer": "centerimage",
+                        "file": "(image file location in assets)",
+                        "offset": [x, y]
                     }
                 ],
                 //etc

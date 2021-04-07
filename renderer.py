@@ -2,7 +2,6 @@ from colorama import Fore, Style, init
 import math
 import json
 from PIL import Image, ImageDraw, ImageFont
-import os
 import sympy as sym
 from typing import Union
 import time
@@ -143,7 +142,13 @@ class utils:
         area_centertext = Schema({
             "layer": "centertext",
             "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
-            "size": int
+            "size": int,
+            "offset": And(And(list, [int]), lambda o: len(o) == 2)
+        })
+        area_centerimage = Schema({
+            "layer": "image",
+            "file": str,
+            "offset": And(And(list, [int]), lambda o: len(o) == 2)
         })
 
         schemas = {
@@ -161,7 +166,8 @@ class utils:
             "area": {
                 "bordertext": area_bordertext,
                 "centertext": area_centertext,
-                "fill": area_fill
+                "fill": area_fill,
+                "centerimage": area_centerimage
             }
         }
 
@@ -517,7 +523,7 @@ class tools:
         return tiles
 
 
-def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, verbosityLevel=1, saveImages=True, saveDir="tiles/", assetsDir="skins/assets/", **kwargs):
+def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, verbosityLevel=1, saveImages=True, saveDir="", assetsDir="skins/assets/", **kwargs):
     if maxZoom < minZoom:
         raise ValueError("Max zoom value is greater than min zoom value")
     tileReturn = []
@@ -764,6 +770,8 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
 
                     def area_centertext():
                         cx, cy = mathtools.polyCenter(coords)
+                        cx += step['offset'][0]
+                        cy += step['offset'][1]
                         font = getFont("", step['size'])
                         textLength = int(img.textlength(pla['displayname'], font))
                         i = Image.new('RGBA', (2*textLength,2*(step['size']+4)), (0, 0, 0, 0))
@@ -774,6 +782,11 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
 
                     def area_fill():
                         img.polygon(coords, fill=step['colour'], outline=step['outline'])
+
+                    def area_centerimage():
+                        x, y = mathtools.polyCenter(coords)
+                        icon = Image.open(assetsDir+step['file'])
+                        im.paste(icon, (x+step['offset'][0], y+step['offset'][1]), icon)
 
                     funcs = {
                         "point": {
@@ -790,7 +803,8 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                         "area": {
                             "bordertext": area_bordertext,
                             "centertext": area_centertext,
-                            "fill": area_fill
+                            "fill": area_fill,
+                            "centerimage": area_centerimage
                         }
                     }
 

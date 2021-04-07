@@ -23,4 +23,4 @@ def skinFileRead():
 #print(renderer.tools.lineToTiles([(3,4), (10,5)], 0, 2, 8))
 #print(renderer.mathtools.pointInPoly(1,4,[(0,0),(2,0),(1,5)]))
 #print(renderer.tools.findPlasAttachedToNode("a", exampleplaRead()))
-renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 0, 3, 128)
+renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 0, 3, 128, saveDir="tiles/")

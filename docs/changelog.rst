@@ -1,6 +1,17 @@
 Changelog
 =========
 
+* **v0.8 (7/4/21)**
+
+  * Text of points are now rendered together with texts of lines and areas
+  * reordered rendering of PLAs (excluding road tag & text) into functions from if statements
+  * got rid of most ``**kwargs``
+  * redid integrity checking, mostly with Schema
+  * new function: ``renderer.utils.skinJsonIntegrity()``
+  * background of tile can now be customised by skin file
+  * added offset to area centertext
+  * added centerimage to areas
+
 * **v0.7 (6/4/21)**
 
   * new ``nodeJsonBuilder.py``, intended for use as an assistance for marking nodes on Minecraft

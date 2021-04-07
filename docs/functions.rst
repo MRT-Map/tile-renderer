@@ -21,13 +21,14 @@ Main
    * int **maxZoom**: maximum zoom value
    * int **maxZoomRange**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
    * int **verbosityLevel** *(default: 1)*: the verbosity level of the output by the function. Use any number from 0 to 2
-   * int **saveImages** *(default: True)*: whether to save the tile imaegs in a folder or not.
+   * int **saveImages** *(default: True)*: whether to save the tile imaegs in a folder or not
+   * str **saveDir** *(default: "tiles/")*: the directory to save tiles in
    * str **assetsDir** *(default: "skins/assets/")*: the asset directory for the skin
    * list[tuple] **tiles** *(optional)*: a list of tiles to render, given in tuples of ``(z,x,y)`` where z = zoom and x,y = tile coordinates
 
    **Returns**
 
-   * **None**
+   * **list[Image]** A list of tiles as PIL Image objects.
 
 Tools
 -----
@@ -231,76 +232,78 @@ Math Tools
 Utilities
 ---------
 
-.. py:function:: renderer.utils.coordListIntegrity(coords: list[, error=False, silent=False])
+.. py:function:: renderer.utils.coordListIntegrity(coords: list)
 
-Checks integrity of a list of coordinates.
+   Checks integrity of a list of coordinates.
+   
+   **Parameters**
+   
+   * list **coords**: a list of coordinates.
+   
+   **Returns**
+   
+   * **bool** Returns True if no errors
 
-**Parameters**
+.. py:function:: renderer.utils.tileCoordListIntegrity(tiles: list, minZoom: int, maxZoom: int)
 
-* list **coords**: a list of coordinates.
-* bool **error** *(default=False)*: if True, when a problem is spotted an error is raised instead of an warning message.
-* bool **silent** *(default=False)*: if True, info messages will not be shown.
+   Checks integrity of a list of tile coordinates.
+   
+   **Parameters**
+   
+   * list **tiles**: a list of tile coordinates.
+   * int **minZoom**: minimum zoom value
+   * int **maxZoom**: maximum zoom value
+   
+   **Returns**
+   
+   * **bool** Returns True if no errors
 
-**Returns**
+.. py:function:: renderer.utils.nodeListIntegrity(nodes: list, nodeList: dict)
 
-* **list[str]** A list of errors
+   Checks integrity of a list of node IDs.
+   
+   **Parameters**
+   
+   * list **nodes**: a list of node IDs.
+   * dict **nodeList**: a dictionary of nodes (see "Renderer input format")
+   
+   **Returns**
+   
+   * **bool** Returns True if no errors
 
-.. py:function:: renderer.utils.tileCoordListIntegrity(tiles: list, minZoom: int, maxZoom: int[, error=False, silent=False])
+.. py:function:: renderer.utils.nodeJsonIntegrity(nodeList: dict)
 
-Checks integrity of a list of tile coordinates.
+   Checks integrity of a dictionary/JSON of nodes.
+   
+   **Parameters**
+   
+   * dict **nodeList**: a dictionary of nodes (see "Renderer input format")
+   
+   **Returns**
+   
+   * **bool** Returns True if no errors
 
-**Parameters**
+.. py:function:: renderer.utils.plaJsonIntegrity(plaList: dict, nodeList: dict)
 
-* list **tiles**: a list of tile coordinates.
-* int **minZoom**: minimum zoom value
-* int **maxZoom**: maximum zoom value
-* bool **error** *(default=False)*: if True, when a problem is spotted an error is raised instead of an warning message.
-* bool **silent** *(default=False)*: if True, info messages will not be shown.
+   Checks integrity of a dictionary/JSON of PLAs.
+   
+   **Parameters**
+   
+   * dict **plaList**: a dictionary of PLAs (see "Renderer input format")
+   * dict **nodeList**: a dictionary of nodes (see "Renderer input format")
+   
+   **Returns**
+   
+   * **bool** Returns True if no errors
 
-**Returns**
+.. py:function:: renderer.utils.skinJsonIntegrity(skinJson: dict)
+   
+   Checks integrity of a skin JSON file.
 
-* **list[str]** A list of errors
+   **Parameters**
 
-.. py:function:: renderer.utils.nodeListIntegrity(nodes: list, nodeList: dict[, error=False, silent=False])
+   * dict **skinJson**: the skin JSON file
 
-Checks integrity of a list of node IDs.
-
-**Parameters**
-
-* list **nodes**: a list of node IDs.
-* dict **nodeList**: a dictionary of nodes (see "Renderer input format")
-* bool **error** *(default=False)*: if True, when a problem is spotted an error is raised instead of an warning message.
-* bool **silent** *(default=False)*: if True, info messages will not be shown.
-
-**Returns**
-
-* **list[str]** A list of errors
-
-.. py:function:: renderer.utils.nodeJsonIntegrity(nodeList: dict[, error=False, silent=False])
-
-Checks integrity of a dictionary/JSON of nodes.
-
-**Parameters**
-
-* dict **nodeList**: a dictionary of nodes (see "Renderer input format")
-* bool **error** *(default=False)*: if True, when a problem is spotted an error is raised instead of an warning message.
-* bool **silent** *(default=False)*: if True, info messages will not be shown.
-
-**Returns**
-
-* **list[str]** A list of errors
-
-.. py:function:: renderer.utils.plaJsonIntegrity(plaList: dict, nodeList: dict[, error=False, silent=False])
-
-Checks integrity of a dictionary/JSON of PLAs.
-
-**Parameters**
-
-* dict **plaList**: a dictionary of PLAs (see "Renderer input format")
-* dict **nodeList**: a dictionary of nodes (see "Renderer input format")
-* bool **error** *(default=False)*: if True, when a problem is spotted an error is raised instead of an warning message.
-* bool **silent** *(default=False)*: if True, info messages will not be shown.
-
-**Returns**
-
-* **list[str]** A list of errors
+   **Returns**
+   
+   * **bool** Returns True if no errors
