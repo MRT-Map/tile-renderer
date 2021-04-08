@@ -135,7 +135,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#00abf0",
-                        "size": 50
+                        "size": 50,
+                        "offset": [0, 0]
                     }
                 ],
                 "3, 5": [
@@ -160,7 +161,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#00abf0",
-                        "size": 50
+                        "size": 50,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -197,7 +199,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#808080",
-                        "size": 50
+                        "size": 50,
+                        "offset": [0, 0]
                     }
                 ],
                 "3, 5": [
@@ -222,7 +225,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#808080",
-                        "size": 50
+                        "size": 50,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -259,7 +263,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#008080",
-                        "size": 30
+                        "size": 30,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -277,7 +282,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#cc4400",
-                        "size": 30
+                        "size": 30,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -295,7 +301,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#c33c7b",
-                        "size": 30
+                        "size": 30,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -313,7 +320,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#cc6000",
-                        "size": 30
+                        "size": 30,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -331,7 +339,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#669240",
-                        "size": 30
+                        "size": 30,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -349,7 +358,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#bf4040",
-                        "size": 30
+                        "size": 30,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -367,7 +377,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#cc0000",
-                        "size": 30
+                        "size": 30,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -385,7 +396,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#66cc00",
-                        "size": 30
+                        "size": 30,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -403,7 +415,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#999966",
-                        "size": 30
+                        "size": 30,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -421,7 +434,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#555555",
-                        "size": 15
+                        "size": 15,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -439,7 +453,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#444422",
-                        "size": 30
+                        "size": 30,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -457,7 +472,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#808080",
-                        "size": 10
+                        "size": 10,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -475,7 +491,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#ff5555",
-                        "size": 30
+                        "size": 30,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -493,7 +510,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#777777",
-                        "size": 30
+                        "size": 30,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -511,7 +529,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#444422",
-                        "size": 30
+                        "size": 30,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -529,7 +548,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#555555",
-                        "size": 10
+                        "size": 10,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -547,7 +567,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#008000",
-                        "size": 50
+                        "size": 50,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -565,7 +586,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#008000",
-                        "size": 50
+                        "size": 50,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -583,7 +605,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#008000",
-                        "size": 50
+                        "size": 50,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -601,7 +624,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#808080",
-                        "size": 50
+                        "size": 50,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -619,7 +643,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#008000",
-                        "size": 50
+                        "size": 50,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -637,7 +662,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#33334d",
-                        "size": 15
+                        "size": 15,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -655,7 +681,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#33334d",
-                        "size": 30
+                        "size": 30,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -737,7 +764,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#ff66ff",
-                        "size": 50
+                        "size": 50,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -750,7 +778,8 @@
                     {
                         "layer": "fill",
                         "colour": "#aaaaaa",
-                        "outline": "#808080"
+                        "outline": "#808080",
+                        "stripe": [1, 2, 0]
                     },
                     {
                         "layer": "bordertext",
@@ -761,7 +790,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#555555",
-                        "size": 50
+                        "size": 50,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -794,7 +824,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#000000",
-                        "size": 15
+                        "size": 15,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -2053,7 +2084,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#d9b38c",
-                        "size": 50
+                        "size": 50,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -2090,7 +2122,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#cc9966",
-                        "size": 50
+                        "size": 50,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -2127,7 +2160,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#bf8040",
-                        "size": 50
+                        "size": 50,
+                        "offset": [0, 0]
                     }
                 ],
                 "9, 11": [
@@ -2139,7 +2173,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#bf8040",
-                        "size": 25
+                        "size": 25,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -2176,7 +2211,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#996633",
-                        "size": 50
+                        "size": 50,
+                        "offset": [0, 0]
                     }
                 ],
                 "11, 13": [
@@ -2188,7 +2224,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#996633",
-                        "size": 25
+                        "size": 25,
+                        "offset": [0, 0]
                     }
                 ]
             }
@@ -2225,7 +2262,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#86592d",
-                        "size": 50
+                        "size": 50,
+                        "offset": [0, 0]
                     }
                 ],
                 "11, 13": [
@@ -2237,7 +2275,8 @@
                     {
                         "layer": "centertext",
                         "colour": "#86592d",
-                        "size": 25
+                        "size": 25,
+                        "offset": [0, 0]
                     }
                 ]
             }

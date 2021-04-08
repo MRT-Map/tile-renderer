@@ -10,7 +10,7 @@
     }
   },
   "area": {
-    "type": "building_underground",
+    "type": "simpleArea",
     "displayname": "water",
     "description": "asdfasdf",
     "layer": -1,

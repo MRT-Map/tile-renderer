@@ -131,7 +131,8 @@ class utils:
         area_fill = Schema({
             "layer": "fill",
             "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
-            "outline": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$')))
+            "outline": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            Optional("stripe"): And([int], lambda l: len(l) == 3)
         })
         area_bordertext = Schema({
             "layer": "bordertext",
@@ -440,6 +441,18 @@ class mathtools:
         return nx, ny
 
 class tools:
+    def line_findEnds(coords: list):
+        xMax = -math.inf
+        xMin = math.inf
+        yMax = -math.inf
+        yMin = math.inf
+        for x, y in coords:
+            xMax = x if x > xMax else xMax
+            xMin = x if x < xMin else xMin
+            yMax = y if y > yMax else yMax
+            yMin = y if y < yMin else yMin
+        return xMax, xMin, yMax, yMin
+
     def findPlasAttachedToNode(nodeId: str, plaList: dict):
         plas = []
         for plaId, pla in plaList.items():
@@ -781,12 +794,32 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                         textList.append((i, cx, cy, cw, ch, 0))
 
                     def area_fill():
-                        img.polygon(coords, fill=step['colour'], outline=step['outline'])
+                        if "stripe" in step.keys():
+                            xMax, xMin, yMax, yMin = tools.line_findEnds(coords)
+                            i = Image.new("RGBA", (skinJson['info']['size'], skinJson['info']['size']), (0, 0, 0, 0))
+                            d = ImageDraw.Draw(i)
+                            tlx = xMin-1
+                            while tlx <= xMax:
+                                d.polygon([(tlx, yMin), (tlx+step['stripe'][0], yMin), (tlx+step['stripe'][0], yMax), (tlx, yMax)], fill=step['colour'])
+                                tlx += step['stripe'][0]+step['stripe'][1]
+                            i = i.rotate(step['stripe'][2])
+                            mi = Image.new("RGBA", (skinJson['info']['size'], skinJson['info']['size']), (0, 0, 0, 0))
+                            md = ImageDraw.Draw(mi)
+                            md.polygon(coords, fill=step['colour'])
+                            im.paste(i, (0, 0), mi)
+                        else:
+                            img.polygon(coords, fill=step['colour'], outline=step['outline'])
+                        outlineCoords = coords[:]
+                        outlineCoords.append(outlineCoords[0])
+                        img.line(outlineCoords, fill=step['colour'], width=1)
+                        for x, y in outlineCoords:
+                            if not ("unroundedEnds" in info['tags'] and outlineCoords.index((x,y)) in [0, len(outlineCoords)-1]):
+                                img.ellipse([x-1/2+1, y-1/2+1, x+1/2, y+1/2], fill=step['colour'])
 
                     def area_centerimage():
                         x, y = mathtools.polyCenter(coords)
                         icon = Image.open(assetsDir+step['file'])
-                        im.paste(icon, (x+step['offset'][0], y+step['offset'][1]), icon)
+                        im.paste(i, (x+step['offset'][0], y+step['offset'][1]), icon)
 
                     funcs = {
                         "point": {
