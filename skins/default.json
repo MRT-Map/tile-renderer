@@ -779,7 +779,7 @@
                         "layer": "fill",
                         "colour": "#aaaaaa",
                         "outline": "#808080",
-                        "stripe": [1, 2, 0]
+                        "stripe": [10, 10, 45]
                     },
                     {
                         "layer": "bordertext",

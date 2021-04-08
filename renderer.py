@@ -796,13 +796,17 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                     def area_fill():
                         if "stripe" in step.keys():
                             xMax, xMin, yMax, yMin = tools.line_findEnds(coords)
+                            xMax += xMax-xMin
+                            xMin -= yMax-yMin
+                            yMax += xMax-xMin
+                            yMin -= yMax-yMin
                             i = Image.new("RGBA", (skinJson['info']['size'], skinJson['info']['size']), (0, 0, 0, 0))
                             d = ImageDraw.Draw(i)
                             tlx = xMin-1
                             while tlx <= xMax:
                                 d.polygon([(tlx, yMin), (tlx+step['stripe'][0], yMin), (tlx+step['stripe'][0], yMax), (tlx, yMax)], fill=step['colour'])
                                 tlx += step['stripe'][0]+step['stripe'][1]
-                            i = i.rotate(step['stripe'][2])
+                            i = i.rotate(step['stripe'][2], center=mathtools.polyCenter(coords))
                             mi = Image.new("RGBA", (skinJson['info']['size'], skinJson['info']['size']), (0, 0, 0, 0))
                             md = ImageDraw.Draw(mi)
                             md.polygon(coords, fill=step['colour'])
@@ -813,10 +817,10 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                             img.polygon(coords, fill=step['colour'], outline=step['outline'])
                         outlineCoords = coords[:]
                         outlineCoords.append(outlineCoords[0])
-                        img.line(outlineCoords, fill=step['colour'], width=1)
+                        img.line(outlineCoords, fill=step['colour'], width=4)
                         for x, y in outlineCoords:
                             if not ("unroundedEnds" in info['tags'] and outlineCoords.index((x,y)) in [0, len(outlineCoords)-1]):
-                                img.ellipse([x-1/2+1, y-1/2+1, x+1/2, y+1/2], fill=step['colour'])
+                                img.ellipse([x-4/2+1, y-4/2+1, x+4/2, y+4/2], fill=step['colour'])
 
                     def area_centerimage():
                         x, y = mathtools.polyCenter(coords)
