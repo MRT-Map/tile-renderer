@@ -5,7 +5,9 @@ Tile renderer for leaflet.js usage, made by 7d
 
 ## Current version: v0.8
 * **v1.0 ()**
-  * 
+  * added stripes for areas
+  * added offset for image centertext
+  * new function: `renderer.tools.line_findEnds()`
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)

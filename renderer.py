@@ -806,7 +806,9 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                             mi = Image.new("RGBA", (skinJson['info']['size'], skinJson['info']['size']), (0, 0, 0, 0))
                             md = ImageDraw.Draw(mi)
                             md.polygon(coords, fill=step['colour'])
-                            im.paste(i, (0, 0), mi)
+                            pi = Image.new("RGBA", (skinJson['info']['size'], skinJson['info']['size']), (0, 0, 0, 0))
+                            pi.paste(i, (0, 0), mi)
+                            im.paste(pi, (0, 0), pi)
                         else:
                             img.polygon(coords, fill=step['colour'], outline=step['outline'])
                         outlineCoords = coords[:]

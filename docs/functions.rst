@@ -118,6 +118,18 @@ Tools
 
    * **list[tuple]** A tuple in the form of (plaId, posInNodeList)
 
+.. py:function:: renderer.tools.line_findEnds(coords: list)
+
+   Find the minimum and maximum x/y values of a set of coords.
+
+   **Parameters**
+
+   * list **coords**: a list of coordinates, provide in a tuple of (x,y)
+
+   **Return**
+
+   * **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
+
 Math Tools
 ----------
 .. py:function:: renderer.mathtools.midpoint(x1, y1, x2, y2, o[, returnBoth=False])
