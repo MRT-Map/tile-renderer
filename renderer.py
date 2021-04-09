@@ -549,7 +549,7 @@ class tools:
         tiles = list(dict.fromkeys(tiles))
         return tiles
 
-def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveDir="", zoom=[], verbosityLevel=1):
+def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveDir="", zoom=[]):
     if isinstance(images, str):
         imageDict = {}
         for d in glob.glob(images+"*.png"):
