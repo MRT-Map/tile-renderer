@@ -1,3 +1,4 @@
+#tile-renderer v1.0
 from colorama import Fore, Style, init
 import math
 import json
@@ -441,6 +442,18 @@ class mathtools:
         return nx, ny
 
 class tools:
+    def tile_findEnds(coords: list):
+        xMax = -math.inf
+        xMin = math.inf
+        yMax = -math.inf
+        yMin = math.inf
+        for z, x, y in coords:
+            xMax = x if x > xMax else xMax
+            xMin = x if x < xMin else xMin
+            yMax = y if y > yMax else yMax
+            yMin = y if y < yMin else yMin
+        return xMax, xMin, yMax, yMin
+
     def line_findEnds(coords: list):
         xMax = -math.inf
         xMin = math.inf
@@ -535,11 +548,40 @@ class tools:
         tiles = list(dict.fromkeys(tiles))
         return tiles
 
+def tileMerge(images: dict, verbosityLevel=1, saveImages=True, saveDir="", zoom=[]):
+    if zoom == []:
+        minZoom = math.inf()
+        maxZoom = -math.inf()
+        for c in images.keys():
+            z = internal.tupleToStr(c)[0]
+            minZoom = z if z < minZoom else minZoom
+            maxZoom = z if z > maxZoom else maxZoom
+    for z in range(minZoom, maxZoom+1):
+        toMerge = {}
+        for c, i in images.values():
+            if internal.strToTuple(c)[0] == minZoom:
+                toMerge[c] = i
+        tileCoords = toMerge.keys()
+        xMax, xMin, yMax, yMin = tools.tile_findEnds(tileCoords)
+        tileSize = images.values[0].size[0]
+        i = Image.new('RGBA', (tileSize*(xMax-xMin+1), tileSize*(yMax-yMin+1)), (0, 0, 0, 0))
+        px = 0
+        py = 0
+        for x in range(xMin, xMax+1):
+            for y in range(yMin, yMax+1):
+                if f"{z}, {x}, {y}" in toMerge.keys():
+                    i.paste(toMerge[f"{z}, {x}, {y}"], (px, py))
+                py += tileSize
+            px += tileSize
+        #tileReturn[tilePlas] = im
+        if saveImages:
+            i.save(f'{saveDir}merge_{z}.png', 'PNG')
+        
 
 def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, verbosityLevel=1, saveImages=True, saveDir="", assetsDir="skins/assets/", **kwargs):
     if maxZoom < minZoom:
         raise ValueError("Max zoom value is greater than min zoom value")
-    tileReturn = []
+    tileReturn = {}
     
     # integrity checks
     internal.log("Validating skin...", 0, verbosityLevel)
@@ -946,7 +988,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
             dontCross.append(currentBoxCoords)
         internal.log("Rendered text", 1, verbosityLevel)
         
-        tileReturn.append(im)
+        tileReturn[tilePlas] = im
         if saveImages:
             im.save(f'{saveDir}{tilePlas}.png', 'PNG')
 
