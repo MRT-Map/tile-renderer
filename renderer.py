@@ -6,6 +6,8 @@ from PIL import Image, ImageDraw, ImageFont
 import sympy as sym
 from typing import Union
 import time
+import glob
+import re
 from schema import Schema, And, Or, Regex, Optional
 init()
 
@@ -252,9 +254,11 @@ class internal:
 
 class mathtools:
     def midpoint(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], o: Union[int, float], n=1, returnBoth=False):
+        #print(x1, y1, x2, y2, o, n)
         points = []
         for p in range(1, n+1):
             x3, y3 = (x1+p*(x2-x1)/(n+1),y1+p*(y2-y1)/(n+1))
+           # print(x3, y3)
             #x3, y3 = ((x1+x2)/2, (y1+y2)/2)
             xv, yv = sym.symbols('xv,yv')
             if x1 == x2:
@@ -272,8 +276,12 @@ class mathtools:
             eq2 = sym.Eq(((yv-y3)**2 + (xv-x3)**2)**0.5,abs(o))
             results = sym.solve([eq1, eq2], (xv, yv)) if o != 0 else [(x3, y3), (x3, y3)]
             if returnBoth:
+               # print(eq1, eq2)
                 rot = 90 if x1 == x2 else math.degrees(-math.atan(m1))
-                points += [(results[0][0], results[0][1], rot), (results[1][0], results[1][1], rot)]
+                try:
+                    points += [(results[0][0], results[0][1], rot), (results[1][0], results[1][1], rot)]
+                except IndexError:
+                    pass
             #print(results)
             elif x1 == x2:
                 if o < 0:
@@ -548,32 +556,51 @@ class tools:
         tiles = list(dict.fromkeys(tiles))
         return tiles
 
-def tileMerge(images: dict, verbosityLevel=1, saveImages=True, saveDir="", zoom=[]):
+def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveDir="", zoom=[]):
+    if isinstance(images, str):
+        imageDict = {}
+        for d in glob.glob(images+"*.png"):
+            regex = re.search(fr"^{images}(-?\d+, -?\d+, -?\d+)\.png$", d)
+            if regex == None:
+                continue
+            coord = regex.group(1)
+            i = Image.open(d)
+            imageDict[coord] = i
+    else:
+        imageDict = images
+    
     if zoom == []:
-        minZoom = math.inf()
-        maxZoom = -math.inf()
-        for c in images.keys():
-            z = internal.tupleToStr(c)[0]
+        minZoom = math.inf
+        maxZoom = -math.inf
+        for c in imageDict.keys():
+            z = internal.strToTuple(c)[0]
             minZoom = z if z < minZoom else minZoom
             maxZoom = z if z > maxZoom else maxZoom
     for z in range(minZoom, maxZoom+1):
         toMerge = {}
-        for c, i in images.values():
-            if internal.strToTuple(c)[0] == minZoom:
+        for c, i in imageDict.items():
+            #i = imageDict[c]
+            if internal.strToTuple(c)[0] == z:
                 toMerge[c] = i
-        tileCoords = toMerge.keys()
+                print("a")
+        tileCoords = [internal.strToTuple(s) for s in toMerge.keys()]
+        #print(tileCoords)
         xMax, xMin, yMax, yMin = tools.tile_findEnds(tileCoords)
-        tileSize = images.values[0].size[0]
+        print(xMax, xMin, yMax, yMin)
+        #print(imageDict.values())
+        tileSize = list(imageDict.values())[0].size[0]
         i = Image.new('RGBA', (tileSize*(xMax-xMin+1), tileSize*(yMax-yMin+1)), (0, 0, 0, 0))
         px = 0
         py = 0
         for x in range(xMin, xMax+1):
             for y in range(yMin, yMax+1):
+                print("b")
                 if f"{z}, {x}, {y}" in toMerge.keys():
                     i.paste(toMerge[f"{z}, {x}, {y}"], (px, py))
                 py += tileSize
             px += tileSize
         #tileReturn[tilePlas] = im
+        print("c")
         if saveImages:
             i.save(f'{saveDir}merge_{z}.png', 'PNG')
         
