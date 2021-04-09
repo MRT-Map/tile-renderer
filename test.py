@@ -26,4 +26,4 @@ def skinFileRead():
 #renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 1, 2, 8, tiles=[(2,0,0),(1,0,0)], saveDir="tiles/")
 #print(renderer.mathtools.dash(5, 3, 3, 5, 1))
 #a = renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 1, 2, 8, saveDir="tiles/")
-renderer.tileMerge('tiles/', saveDir="tiles/")
+renderer.tileMerge('tiles/', zoom=[2], saveDir="tiles/")

@@ -576,13 +576,16 @@ def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveD
             z = internal.strToTuple(c)[0]
             minZoom = z if z < minZoom else minZoom
             maxZoom = z if z > maxZoom else maxZoom
+    else:
+        minZoom = min(zoom)
+        maxZoom = max(zoom)
     for z in range(minZoom, maxZoom+1):
         toMerge = {}
         for c, i in imageDict.items():
             #i = imageDict[c]
             if internal.strToTuple(c)[0] == z:
                 toMerge[c] = i
-                print("a")
+                print(c)
         tileCoords = [internal.strToTuple(s) for s in toMerge.keys()]
         #print(tileCoords)
         xMax, xMin, yMax, yMin = tools.tile_findEnds(tileCoords)
@@ -599,6 +602,7 @@ def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveD
                     i.paste(toMerge[f"{z}, {x}, {y}"], (px, py))
                 py += tileSize
             px += tileSize
+            py = 0
         #tileReturn[tilePlas] = im
         print("c")
         if saveImages:
