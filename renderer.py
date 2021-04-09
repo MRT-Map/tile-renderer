@@ -1,3 +1,4 @@
+#tile-renderer v1.0
 from colorama import Fore, Style, init
 import math
 import json
