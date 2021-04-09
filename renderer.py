@@ -258,23 +258,18 @@ class mathtools:
         points = []
         for p in range(1, n+1):
             x3, y3 = (x1+p*(x2-x1)/(n+1),y1+p*(y2-y1)/(n+1))
-           # print(x3, y3)
+            # print(x3, y3)
             #x3, y3 = ((x1+x2)/2, (y1+y2)/2)
-            xv, yv = sym.symbols('xv,yv')
             if x1 == x2:
                 m1 = None
                 m2 = 0
-                eq1 = sym.Eq(yv,y3)
             elif y1 == y2:
                 m1 = 0
                 m2 = None
-                eq1 = sym.Eq(xv,x3)
             else:
                 m1 = (y2-y1)/(x2-x1)
                 m2 = -1 / m1
-                eq1 = sym.Eq(yv-y3,m2*(xv-x3))
-            eq2 = sym.Eq(((yv-y3)**2 + (xv-x3)**2)**0.5,abs(o))
-            results = sym.solve([eq1, eq2], (xv, yv)) if o != 0 else [(x3, y3), (x3, y3)]
+            results = mathtools.pointsAway(x3, y3, o, m2)
             if returnBoth:
                # print(eq1, eq2)
                 rot = 90 if x1 == x2 else math.degrees(-math.atan(m1))
@@ -382,23 +377,15 @@ class mathtools:
     def dash(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], d: Union[int, float], o=0, emptyStart=False):
         if d <= 0:
             return None
-        xv, yv = sym.symbols('xv,yv')
-        if x1 == x2:
-            m = None
-            eq1 = sym.Eq(xv,x1)
-        else:
-            m = (y2-y1)/(x2-x1)
-            eq1 = sym.Eq(yv-y1,m*(xv-x1))
+        m = None if x1 == x2 else (y2-y1)/(x2-x1)
 
         if o == 0:
             x3, y3 = (x1, y1)
         else:
-            eq2 = sym.Eq(((yv-y1)**2 + (xv-x1)**2)**0.5,o)
-            results = sym.solve([eq1, eq2], (xv, yv))
+            results = mathtools.pointsAway(x1, y1, o, m)
             x3, y3 = results[0] if min(x1,x2) <= results[0][0] <= max(x1,x2) and min(y1,y2) <= results[0][1] <= max(y1,y2) else results[1]
 
-        eq3 = sym.Eq(((yv-y3)**2 + (xv-x3)**2)**0.5,d)
-        results = sym.solve([eq1, eq3], (xv, yv))
+        results = mathtools.pointsAway(x3, y3, d, m)
         x4, y4 = results[0] if min(x1,x2) <= results[0][0] <= max(x1,x2) and min(y1,y2) <= results[0][1] <= max(y1,y2) else results[1]
         dx, dy = (x4-x1, y4-y1)
         predash = [(x1, y1), (x4, y4)] if x1 == x3 and y1 == y3 else [(x1, y1), (x3, y3), (x4, y4)]
@@ -448,6 +435,12 @@ class mathtools:
         nx += px
         ny += py
         return nx, ny
+
+    def pointsAway(x: Union[int, float], y: Union[int, float], d: Union[int, float], m: Union[int, float]):
+        theta = math.atan(m) if m != None else math.pi/2
+        dx = round(d*math.cos(theta), 10)
+        dy = round(d*math.sin(theta), 10)
+        return [(x+dx, y+dy), (x-dx, y-dy)]
 
 class tools:
     def tile_findEnds(coords: list):
@@ -556,7 +549,7 @@ class tools:
         tiles = list(dict.fromkeys(tiles))
         return tiles
 
-def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveDir="", zoom=[]):
+def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveDir="", zoom=[], verbosityLevel=1):
     if isinstance(images, str):
         imageDict = {}
         for d in glob.glob(images+"*.png"):
@@ -566,8 +559,10 @@ def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveD
             coord = regex.group(1)
             i = Image.open(d)
             imageDict[coord] = i
+            internal.log(f"Retrieved {coord}", 1, verbosityLevel)
     else:
         imageDict = images
+    internal.log("Retrieved all images", 0, verbosityLevel)
     
     if zoom == []:
         minZoom = math.inf
@@ -579,17 +574,18 @@ def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveD
     else:
         minZoom = min(zoom)
         maxZoom = max(zoom)
+    internal.log("Zoom levels determined", 0, verbosityLevel)
     for z in range(minZoom, maxZoom+1):
         toMerge = {}
         for c, i in imageDict.items():
             #i = imageDict[c]
             if internal.strToTuple(c)[0] == z:
                 toMerge[c] = i
-                print(c)
+                internal.log(f"Zoom {z} will include {c}", 1, verbosityLevel)
+        internal.log(f"Zoom {z}: Tiles to be merged determined", 0, verbosityLevel)
         tileCoords = [internal.strToTuple(s) for s in toMerge.keys()]
         #print(tileCoords)
         xMax, xMin, yMax, yMin = tools.tile_findEnds(tileCoords)
-        print(xMax, xMin, yMax, yMin)
         #print(imageDict.values())
         tileSize = list(imageDict.values())[0].size[0]
         i = Image.new('RGBA', (tileSize*(xMax-xMin+1), tileSize*(yMax-yMin+1)), (0, 0, 0, 0))
@@ -597,16 +593,17 @@ def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveD
         py = 0
         for x in range(xMin, xMax+1):
             for y in range(yMin, yMax+1):
-                print("b")
                 if f"{z}, {x}, {y}" in toMerge.keys():
                     i.paste(toMerge[f"{z}, {x}, {y}"], (px, py))
+                    internal.log(f"{z}, {x}, {y} pasted", 1, verbosityLevel)
                 py += tileSize
             px += tileSize
             py = 0
         #tileReturn[tilePlas] = im
-        print("c")
         if saveImages:
             i.save(f'{saveDir}merge_{z}.png', 'PNG')
+        internal.log(f"Zoom {z} merged", 0, verbosityLevel)
+    internal.log("All merges complete", 0, verbosityLevel)
         
 
 def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, verbosityLevel=1, saveImages=True, saveDir="", assetsDir="skins/assets/", **kwargs):
@@ -838,6 +835,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                 t = math.floor(((coords[c2][0]-coords[c1][0])**2+(coords[c2][1]-coords[c1][1])**2)**0.5/(4*textLength))
                                 t = 1 if t == 0 else t
                                 allPoints = mathtools.midpoint(coords[c1][0], coords[c1][1], coords[c2][0], coords[c2][1], step['offset'], n=t, returnBoth=True)
+                                internal.log(f"{tilePlas}: {plaId}: Midpoints calculated", 2, verbosityLevel)
                                 for n in range(0, len(allPoints), 2):
                                     points = [allPoints[n], allPoints[n+1]]
                                     if step['offset'] < 0:
@@ -856,6 +854,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
 
                     def area_centertext():
                         cx, cy = mathtools.polyCenter(coords)
+                        internal.log(f"{tilePlas}: {plaId}: Center calculated", 2, verbosityLevel)
                         cx += step['offset'][0]
                         cy += step['offset'][1]
                         font = getFont("", step['size'])
@@ -879,6 +878,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                             while tlx <= xMax:
                                 d.polygon([(tlx, yMin), (tlx+step['stripe'][0], yMin), (tlx+step['stripe'][0], yMax), (tlx, yMax)], fill=step['colour'])
                                 tlx += step['stripe'][0]+step['stripe'][1]
+                            internal.log(f"{tilePlas}: {plaId}: Stripes generated", 2, verbosityLevel)
                             i = i.rotate(step['stripe'][2], center=mathtools.polyCenter(coords))
                             mi = Image.new("RGBA", (skinJson['info']['size'], skinJson['info']['size']), (0, 0, 0, 0))
                             md = ImageDraw.Draw(mi)
@@ -888,12 +888,14 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                             im.paste(pi, (0, 0), pi)
                         else:
                             img.polygon(coords, fill=step['colour'], outline=step['outline'])
+                        internal.log(f"{tilePlas}: {plaId}: Area filled", 2, verbosityLevel)
                         outlineCoords = coords[:]
                         outlineCoords.append(outlineCoords[0])
                         img.line(outlineCoords, fill=step['colour'], width=4)
                         for x, y in outlineCoords:
                             if not ("unroundedEnds" in info['tags'] and outlineCoords.index((x,y)) in [0, len(outlineCoords)-1]):
                                 img.ellipse([x-4/2+1, y-4/2+1, x+4/2, y+4/2], fill=step['colour'])
+                        internal.log(f"{tilePlas}: {plaId}: Outline drawn", 2, verbosityLevel)
 
                     def area_centerimage():
                         x, y = mathtools.polyCenter(coords)
@@ -949,9 +951,11 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                         for conStep in conStyle:
                             if conStep['layer'] in ["back", "text"]:
                                 continue
+                            
                             conCoords = [(x-internal.strToTuple(tilePlas)[1]*size, y-internal.strToTuple(tilePlas)[2]*size) for x,y in tools.nodesToCoords(plaList[conPla]['nodes'], nodeList)]
                             conCoords = [(int(skinJson['info']['size']/size*x), int(skinJson['info']['size']/size*y)) for x,y in conCoords]
                             preConCoords = conCoords[:]
+                            internal.log(f"{tilePlas}: Coords extracted", 2, verbosityLevel)
 
                             if index == 0:
                                 conCoords = [conCoords[0], conCoords[1]]
@@ -966,6 +970,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                 if not "dash" in conStep.keys():
                                     conCoords[0] = ((conCoords[0][0]+conCoords[1][0])/2, (conCoords[0][1]+conCoords[1][1])/2)
                                     conCoords[2] = ((conCoords[2][0]+conCoords[1][0])/2, (conCoords[2][1]+conCoords[1][1])/2)
+                            internal.log(f"{tilePlas}: Coords processed", 2, verbosityLevel)
                             if not "dash" in conStep.keys():
                                 img.line(conCoords, fill=conStep['colour'], width=conStep['width'])
                                 for x, y in conCoords:
@@ -981,6 +986,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                     for dashCoords in mathtools.dash(conCoords[c][0], conCoords[c][1], conCoords[c+1][0], conCoords[c+1][1], conStep['dash'], o, emptyStart):
                                         #print(dashCoords)
                                         img.line(dashCoords, fill=conStep['colour'], width=conStep['width'])
+                            internal.log(f"{tilePlas}: Segment drawn", 2, verbosityLevel)
                     operated += 1
                     timeLeft = round(((int(round(time.time() * 1000)) - renderStart) / operated * (operations - operated)), 2)
                     internal.log(f"Rendered road studs ({round(operated/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 1, verbosityLevel)
