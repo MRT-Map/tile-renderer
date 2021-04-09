@@ -149,7 +149,7 @@ Skins
                            "layer": "centertext",
                            "colour": "(hex)",
                            "size": size,
-                           "offset": [x,y]
+                           "offset": [x, y]
                        },
                        {
                            "layer": "centerimage",

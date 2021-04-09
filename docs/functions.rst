@@ -8,7 +8,7 @@ All Functions
 
 Main
 ----
-.. py:function:: render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, verbosityLevel=1, saveImages=True, saveDir="tiles/", assetsDir="skins/assets/", tiles: list])
+.. py:function:: renderer.render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, verbosityLevel=1, saveImages=True, saveDir="tiles/", assetsDir="skins/assets/", tiles: list])
 
    Renders tiles from given coordinates and zoom values.
 
@@ -21,14 +21,30 @@ Main
    * int **maxZoom**: maximum zoom value
    * int **maxZoomRange**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
    * int **verbosityLevel** *(default: 1)*: the verbosity level of the output by the function. Use any number from 0 to 2
-   * int **saveImages** *(default: True)*: whether to save the tile imaegs in a folder or not
+   * int **saveImages** *(default: True)*: whether to save the tile images in a folder or not
    * str **saveDir** *(default: "tiles/")*: the directory to save tiles in
    * str **assetsDir** *(default: "skins/assets/")*: the asset directory for the skin
    * list[tuple] **tiles** *(optional)*: a list of tiles to render, given in tuples of ``(z,x,y)`` where z = zoom and x,y = tile coordinates
 
    **Returns**
 
-   * **list[Image]** A list of tiles as PIL Image objects.
+   * **dict** Given in the form of ``"(tile coord)": (PIL Image)``
+
+.. py:function:: tileMerge(images: Union[str, dict] [, verbosityLevel=1, saveImages=True, saveDir="tiles/", zoom=[]])
+
+   Merges tiles rendered by ``renderer.render()``.
+
+   **Parameters**
+
+   * dict **images** Give in the form of ``"(tile coord)": (PIL Image)``, like the return value of ``renderer.render()``
+   * int **verbosityLevel** *(default: 1)*: the verbosity level of the output by the function. Use any number from 0 to 2
+   * int **saveImages** *(default: True)*: whether to save the tile imaegs in a folder or not
+   * str **saveDir** *(default: "")*: the directory to save tiles in
+   * list **zoom** *(default: [])*: if left empty, automatically calculates all zoom values based on tiles; otherwise, the layers of zoom to merge.
+
+   **Returns**
+
+   * **dict** Given in the form of ``"(Zoom)": (PIL Image)``
 
 Tools
 -----
@@ -233,13 +249,25 @@ Math Tools
 
    **Parameters**
 
-   * int/float **x, y**: the coordinates to be rotate
+   * int/float **x, y**: the coordinates to be rotated
    * int/float **px, py**: the coordinates of the pivot
    * int/float **theta**: how many **degrees** to rotate
 
    **Returns**
 
    * **tuple** The rotated coordinates, given in (x,y)
+
+.. py:function:: renderer.mathtools.pointsAway(x: Union[int, float], y: Union[int, float], d: Union[int, float], m: Union[int, float])
+
+   Finds two points that are a specified distance away from a specified point, all on a straight line.
+
+   **Parameters**
+   * int/float **x, y**: the coordinates of the original point
+   * int/float **d**: the distance the two points are from the original point
+   * int/float **m**: the gradient of the line
+
+   **Returns**
+   * **list[tuple]** Given in [(x1, y1), (x2, y2)]
 
 Utilities
 ---------

@@ -3,11 +3,20 @@ Tile renderer for leaflet.js usage, made by 7d
 
 **Documentation: https://tile-renderer.readthedocs.io/en/latest/**
 
-## Current version: v0.8
+## Current version: v1.0
 * **v1.0 ()**
   * added stripes for areas
   * added offset for image centertext
   * new function: `renderer.tools.line_findEnds()`
+  * new function: `renderer.mathtools.pointsAway()`
+    * replaces the messy and unresponsive find-two-points-n-units-away-from-a-point-on-a-straight-line calculations of sympy using trigo
+    * rendering should be faster now
+    * **REJECT SYMPY, EMBRACE TRIGONOMETRY, ALL HAIL TRIGO**
+  * added a few more level 2 logs to `renderer.render()`
+  * new function: `renderer.tileMerge()`, used to merge tiles
+  * changed output of `renderer.render()` from list to dict
+  * in counting of rendering operations in `renderer.render()`, added 1 to each tilePlas to account for text
+  * *TODO: Rewrite half of `renderer.mathtools.dash()`*
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)

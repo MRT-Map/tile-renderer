@@ -422,7 +422,7 @@ class mathtools:
                 remnant = ((lastCoord[0]-coords[c+1][0])**2+(lastCoord[1]-coords[c+1][1])**2)**0.5
                 o = d - remnant
                 emptyStart = True
-            offsets.append((round(o, 2)), emptyStart)
+            offsets.append((round(o, 2), emptyStart))
         return offsets
 
     def rotateAroundPivot(x: Union[int, float], y: Union[int, float], px: Union[int, float], py: Union[int, float], theta: Union[int, float]):
@@ -549,7 +549,8 @@ class tools:
         tiles = list(dict.fromkeys(tiles))
         return tiles
 
-def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveDir="", zoom=[]):
+def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveDir="tiles/", zoom=[]):
+    tileReturn = {}
     if isinstance(images, str):
         imageDict = {}
         for d in glob.glob(images+"*.png"):
@@ -602,8 +603,11 @@ def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveD
         #tileReturn[tilePlas] = im
         if saveImages:
             i.save(f'{saveDir}merge_{z}.png', 'PNG')
+        tileReturn[str(z)] = i
         internal.log(f"Zoom {z} merged", 0, verbosityLevel)
+        
     internal.log("All merges complete", 0, verbosityLevel)
+    return tileReturn
         
 
 def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, verbosityLevel=1, saveImages=True, saveDir="", assetsDir="skins/assets/", **kwargs):
@@ -705,6 +709,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                     operations += 1
                 if info['type'] == "line" and "road" in info['tags'] and step['layer'] == "back":
                     operations += 1
+        operations += 1 #text
         internal.log(f"{tilePlas} counted", 2, verbosityLevel)
     
     #render
@@ -816,7 +821,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                         else:
                             offsetInfo = mathtools.dashOffset(coords, step['dash'])
                             #print(offsetInfo)
-                            for c in range(len(coords)-1):
+                            for c in range(len(coords)-2):
                                 o, emptyStart = offsetInfo[c]
                                 for dashCoords in mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['dash'], o, emptyStart):
                                     #print(dashCoords)
@@ -1023,7 +1028,9 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
             else:
                 internal.log(f"{tilePlas}: Text skipped", 2, verbosityLevel)
             dontCross.append(currentBoxCoords)
-        internal.log("Rendered text", 1, verbosityLevel)
+        operated += 1
+        timeLeft = round(((int(round(time.time() * 1000)) - renderStart) / operated * (operations - operated)), 2)
+        internal.log(f"Rendered text ({round(operated/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 1, verbosityLevel)
         
         tileReturn[tilePlas] = im
         if saveImages:
