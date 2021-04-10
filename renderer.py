@@ -435,7 +435,7 @@ class mathtools:
         offsets = [(0, False)]
         emptyStart = False
         left = None
-        for c in range(len(coords)-2):
+        for c in range(len(coords)-1):
             dashes = mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], d, g, o, emptyStart)
             if dashes == []: #line has no dashes
                 prev = 0 if offsets == [] else left
@@ -452,15 +452,23 @@ class mathtools:
             else:
                 lastCoord = dashes[-1][1]
                 if lastCoord == coords[c+1]: #line ended with a dash
-                    remnant = math.dist(lastCoord, dashes[-1][0])
-                    left = remnant
-                    o = d - remnant
-                    emptyStart = False
+                    if round(remnant := math.dist(dashes[-1][0], lastCoord), 10) == d: #last dash is exactly d
+                        left = 0
+                        o = 0
+                        emptyStart = True
+                    else:
+                        left = remnant
+                        o = d - remnant
+                        emptyStart = False
                 else: #line ended with a gap
-                    remnant = math.dist(lastCoord, coords[c+1])
-                    o = g - remnant
-                    left = remnant
-                    emptyStart = True
+                    if round(remnant := math.dist(dashes[-1][0], coords[c+1]), 10) == g: #last gap is exactly g
+                        left = 0
+                        o = 0
+                        emptyStart = False
+                    else:
+                        o = g - remnant
+                        left = remnant
+                        emptyStart = True
             offsets.append((round(o, 2), emptyStart))
         return offsets
 
@@ -860,7 +868,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                         else:
                             offsetInfo = mathtools.dashOffset(coords, step['dash'][0], step['dash'][1])
                             #print(offsetInfo)
-                            for c in range(len(coords)-2):
+                            for c in range(len(coords)-1):
                                 o, emptyStart = offsetInfo[c]
                                 for dashCoords in mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['dash'][0], step['dash'][1], o, emptyStart):
                                     #print(dashCoords)
@@ -1023,7 +1031,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                             else:
                                 offsetInfo = mathtools.dashOffset(preConCoords, conStep['dash'][0], conStep['dash'][1])[index:]
                                 #print(offsetInfo)
-                                for c in range(len(conCoords)-2):
+                                for c in range(len(conCoords)-1):
                                     #print(offsetInfo)
                                     #print(c)
                                     o, emptyStart = offsetInfo[c]
@@ -1050,8 +1058,8 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                 dist = ((x-ox)**2+(y-oy)**2)**0.5
                 if dist > oMaxDist + thisMaxDist:
                     continue
-                for c in range(len(box)-2):
-                    for d in range(len(currentBoxCoords)-2):
+                for c in range(len(box)-1):
+                    for d in range(len(currentBoxCoords)-1):
                         canPrint = False if mathtools.linesIntersect(box[c][0], box[c][1], box[c+1][0], box[c+1][1], currentBoxCoords[d][0], currentBoxCoords[d][1], currentBoxCoords[d+1][0], currentBoxCoords[d+1][1]) else canPrint
                         if not canPrint:
                             break
