@@ -16,7 +16,7 @@ Tile renderer for leaflet.js usage, made by 7d
   * new function: `renderer.tileMerge()`, used to merge tiles
   * changed output of `renderer.render()` from list to dict
   * in counting of rendering operations in `renderer.render()`, added 1 to each tilePlas to account for text
-  * *TODO: Rewrite half of `renderer.mathtools.dash()`*
+  * rewritten half of `renderer.mathtools.dash()`, but they're still broken
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)

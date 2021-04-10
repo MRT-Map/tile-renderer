@@ -1151,14 +1151,12 @@
                     {
                         "layer": "back",
                         "colour": "#eeeeee",
-                        "width": 8,
-                        "dash": 24
+                        "width": 8
                     },
                     {
                         "layer": "fore",
                         "colour": "#008000",
-                        "width": 4,
-                        "dash": 24
+                        "width": 4
                     },
                     {
                         "layer": "text",
@@ -1512,20 +1510,17 @@
                     {
                         "layer": "back",
                         "colour": "#000000",
-                        "width": 12,
-                        "dash": 24
+                        "width": 12
                     },
                     {
                         "layer": "back",
                         "colour": "#eeeeee",
-                        "width": 8,
-                        "dash": 24
+                        "width": 8
                     },
                     {
                         "layer": "fore",
                         "colour": "#008000",
-                        "width": 4,
-                        "dash": 24
+                        "width": 4
                     },
                     {
                         "layer": "text",
@@ -1889,14 +1884,12 @@
                     {
                         "layer": "back",
                         "colour": "#eeeeee",
-                        "width": 8,
-                        "dash": 24
+                        "width": 8
                     },
                     {
                         "layer": "fore",
                         "colour": "#66ff66",
-                        "width": 4,
-                        "dash": 24
+                        "width": 4
                     },
                     {
                         "layer": "text",
@@ -1918,7 +1911,7 @@
                         "layer": "fore",
                         "colour": "#b3b3b3",
                         "width": 8,
-                        "dash": 50
+                        "dash": [50, 25]
                     },
                     {
                         "layer": "text",

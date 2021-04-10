@@ -103,7 +103,7 @@ class utils:
         point_text = Schema({
             "layer": "text",
             "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
-            "offset": And(And(list, [int]), lambda o: len(o) == 2),
+            "offset": And([int], lambda o: len(o) == 2),
             "size": int,
             "anchor": Or(None, str)
         })
@@ -117,13 +117,13 @@ class utils:
         point_image = Schema({
             "layer": "image",
             "file": str,
-            "offset": And(And(list, [int]), lambda o: len(o) == 2)
+            "offset": And([int], lambda o: len(o) == 2)
         })
         line_backfore = Schema({
             "layer": Or("back", "fore"),
             "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
             "width": int,
-            Optional("dash"): int
+            Optional("dash"): And([int], lambda l: len(l) == 2)
         })
         line_text = Schema({
             "layer": "text",
@@ -374,54 +374,70 @@ class mathtools:
                 return True
         return False
 
-    def dash(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], d: Union[int, float], o=0, emptyStart=False):
-        if d <= 0:
-            return None
+    def dash(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], d: Union[int, float], g: Union[int, float], o=0, emptyStart=False):
+        if d <= 0 or g <= 0:
+            return ValueError("dash or gap length cannot be <= 0")
         m = None if x1 == x2 else (y2-y1)/(x2-x1)
+
+        dash = []
+        gap = False
 
         if o == 0:
             x3, y3 = (x1, y1)
         else:
             results = mathtools.pointsAway(x1, y1, o, m)
             x3, y3 = results[0] if min(x1,x2) <= results[0][0] <= max(x1,x2) and min(y1,y2) <= results[0][1] <= max(y1,y2) else results[1]
+        if not emptyStart:
+            dash.append([(x1, y1), (x3, y3)])
+            gap = True
+        else:
+            dash.append([(x3, y3)])
 
-        results = mathtools.pointsAway(x3, y3, d, m)
-        x4, y4 = results[0] if min(x1,x2) <= results[0][0] <= max(x1,x2) and min(y1,y2) <= results[0][1] <= max(y1,y2) else results[1]
-        dx, dy = (x4-x1, y4-y1)
-        predash = [(x1, y1), (x4, y4)] if x1 == x3 and y1 == y3 else [(x1, y1), (x3, y3), (x4, y4)]
-        while x2-x4 >= dx and y2-y4 >= dy:
-            x4 += dx; y4 += dy
-            predash.append((x4, y4))
-        predash[-1] = (round(predash[-1][0], 12), round(predash[-1][1], 12))
-        if predash[-1] != (x2, y2):
-            predash.append((x2, y2))
-        dash = []
-        for coord in predash:
-            if (not emptyStart and predash.index(coord) % 2 == 0) or (emptyStart and predash.index(coord) % 2 == 0):
-                dash.append([coord])
+        while x3 >= min(x1, x2) and x3 <= max(x1, x2) and y3 >= min(y1, y2) and y3 <= max(y1, y2):
+            if gap:
+                results = mathtools.pointsAway(x3, y3, g, m)
+                x3, y3 = results[0] if results[1][0] >= min(x1, x3) and results[1][0] <= max(x1, x3) and results[1][1] >= min(y1, y3) and results[1][1] <= max(y1, y3) else results[1]
+                dash.append([(x3, y3)])
+                gap = False
             else:
-                if dash == []:
-                    dash.append([])
-                dash[-1].append(coord)
-        if len(dash[-1]) == 1:
+                results = mathtools.pointsAway(x3, y3, d, m)
+                x3, y3 = results[0] if results[1][0] >= min(x1, x3) and results[1][0] <= max(x1, x3) and results[1][1] >= min(y1, y3) and results[1][1] <= max(y1, y3) else results[1]
+                dash[-1].append((x3, y3))
+                gap = True
+        
+        if len(dash[-1]) == 1: # last is gap
             dash.pop()
+        else: # last is dash
+            dash[-1][1] = (x2, y2)
+
         return dash
    
-    def dashOffset(coords: list, d: Union[int, float]):
+    def dashOffset(coords: list, d: Union[int, float], g: Union[int, float]):
         o = 0
         offsets = [(0, False)]
         emptyStart = False
         for c in range(len(coords)-2):
-            dashes = mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], d, o, emptyStart)
-            lastCoord = dashes[-1][1]
-            if lastCoord == (coords[c+1][0], coords[c+1][1]):
-                remnant = ((lastCoord[0]-coords[c][0])**2+(lastCoord[1]-coords[c][1])**2)**0.5
-                o = d - remnant
+            dashes = mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], d, g, o, emptyStart)
+            if dashes == []:
+                prev = 0 if offsets == [] else offsets[-1][0]
+                remnant = ((coords[c][0]-coords[c+1][0])**2+(coords[c][0]-coords[c+1][1])**2)**0.5
+                o = abs(g - prev - remnant)
+                emptyStart = True
+            elif dashes[0] == [coords[c], coords[c+1]]:
+                prev = 0 if offsets == [] else offsets[-1][0]
+                remnant = ((coords[c][0]-coords[c+1][0])**2+(coords[c][0]-coords[c+1][1])**2)**0.5
+                o = abs(d - prev - remnant)
                 emptyStart = False
             else:
-                remnant = ((lastCoord[0]-coords[c+1][0])**2+(lastCoord[1]-coords[c+1][1])**2)**0.5
-                o = d - remnant
-                emptyStart = True
+                lastCoord = dashes[-1][1]
+                if lastCoord == coords[c+1]:
+                    remnant = ((lastCoord[0]-coords[c][0])**2+(lastCoord[1]-coords[c][1])**2)**0.5
+                    o = d - remnant
+                    emptyStart = False
+                else:
+                    remnant = ((lastCoord[0]-coords[c+1][0])**2+(lastCoord[1]-coords[c+1][1])**2)**0.5
+                    o = g - remnant
+                    emptyStart = True
             offsets.append((round(o, 2), emptyStart))
         return offsets
 
@@ -819,11 +835,11 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                     img.ellipse([x-step['width']/2+1, y-step['width']/2+1, x+step['width']/2, y+step['width']/2], fill=step['colour'])
                             internal.log(f"{tilePlas}: {plaId}: Joints drawn", 2, verbosityLevel)
                         else:
-                            offsetInfo = mathtools.dashOffset(coords, step['dash'])
+                            offsetInfo = mathtools.dashOffset(coords, step['dash'][0], step['dash'][1])
                             #print(offsetInfo)
                             for c in range(len(coords)-2):
                                 o, emptyStart = offsetInfo[c]
-                                for dashCoords in mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['dash'], o, emptyStart):
+                                for dashCoords in mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['dash'][0], step['dash'][1], o, emptyStart):
                                     #print(dashCoords)
                                     img.line(dashCoords, fill=step['colour'], width=step['width'])                
                                 internal.log(f"{tilePlas}: {plaId}: Dashes drawn for section {c+1} of {len(coords)}", 2, verbosityLevel)
@@ -982,13 +998,13 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                     img.ellipse([x-conStep['width']/2+1, y-conStep['width']/2+1, x+conStep['width']/2, y+conStep['width']/2], fill=conStep['colour'])
                                 
                             else:
-                                offsetInfo = mathtools.dashOffset(preConCoords, conStep['dash'])[index:]
+                                offsetInfo = mathtools.dashOffset(preConCoords, conStep['dash'][0], conStep['dash'][1])[index:]
                                 #print(offsetInfo)
                                 for c in range(len(conCoords)-2):
                                     #print(offsetInfo)
                                     #print(c)
                                     o, emptyStart = offsetInfo[c]
-                                    for dashCoords in mathtools.dash(conCoords[c][0], conCoords[c][1], conCoords[c+1][0], conCoords[c+1][1], conStep['dash'], o, emptyStart):
+                                    for dashCoords in mathtools.dash(conCoords[c][0], conCoords[c][1], conCoords[c+1][0], conCoords[c+1][1], conStep['dash'][0], conStep['dash'][1], o, emptyStart):
                                         #print(dashCoords)
                                         img.line(dashCoords, fill=conStep['colour'], width=conStep['width'])
                             internal.log(f"{tilePlas}: Segment drawn", 2, verbosityLevel)
