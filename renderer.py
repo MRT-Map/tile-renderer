@@ -259,7 +259,7 @@ class mathtools:
         points = []
         for p in range(1, n+1):
             x3, y3 = (x1+p*(x2-x1)/(n+1),y1+p*(y2-y1)/(n+1))
-            # print(x3, y3)
+            #print(x3, y3)
             #x3, y3 = ((x1+x2)/2, (y1+y2)/2)
             if x1 == x2:
                 m1 = None
@@ -272,7 +272,7 @@ class mathtools:
                 m2 = -1 / m1
             results = mathtools.pointsAway(x3, y3, o, m2)
             if returnBoth:
-               # print(eq1, eq2)
+               #print(eq1, eq2)
                 rot = 90 if x1 == x2 else math.degrees(-math.atan(m1))
                 try:
                     points += [(results[0][0], results[0][1], rot), (results[1][0], results[1][1], rot)]
@@ -420,7 +420,7 @@ class mathtools:
                 #x3, y3 = results[0] if np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1) and math.dist(results[0], (x1,y1)) > math.dist(results[1], (x1,y1)) else results[1]
                 dash[-1].append((x3, y3))
                 gap = True
-        print(dash)
+        
         if len(dash[-1]) == 1: # last is gap
             dash.pop()
         else: # last is dash
