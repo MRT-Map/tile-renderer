@@ -8,6 +8,7 @@ from typing import Union
 import time
 import glob
 import re
+import numpy as np
 from schema import Schema, And, Or, Regex, Optional
 init()
 
@@ -378,7 +379,6 @@ class mathtools:
         if d <= 0 or g <= 0:
             return ValueError("dash or gap length cannot be <= 0")
         m = None if x1 == x2 else (y2-y1)/(x2-x1)
-
         dash = []
         gap = False
 
@@ -387,28 +387,46 @@ class mathtools:
         else:
             results = mathtools.pointsAway(x1, y1, o, m)
             x3, y3 = results[0] if min(x1,x2) <= results[0][0] <= max(x1,x2) and min(y1,y2) <= results[0][1] <= max(y1,y2) else results[1]
-        if not emptyStart:
+        if not emptyStart and o != 0:
             dash.append([(x1, y1), (x3, y3)])
             gap = True
         else:
             dash.append([(x3, y3)])
 
-        while x3 >= min(x1, x2) and x3 <= max(x1, x2) and y3 >= min(y1, y2) and y3 <= max(y1, y2):
+        while min(x1,x2) <= x3 <= max(x1,x2) and min(y1,y2) <= y3 <= max(y1,y2):
             if gap:
                 results = mathtools.pointsAway(x3, y3, g, m)
-                x3, y3 = results[0] if results[1][0] >= min(x1, x3) and results[1][0] <= max(x1, x3) and results[1][1] >= min(y1, y3) and results[1][1] <= max(y1, y3) else results[1]
+                if np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1):
+                    if math.dist(results[0], (x1,y1)) > math.dist(results[1], (x1,y1)):
+                        x3, y3 = results[0]
+                    else:
+                        x3, y3 = results[1]
+                else:
+                    x3, y3 = results[1]
+                #x3, y3 = results[0] if np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1) and math.dist(results[0], (x1,y1)) > math.dist(results[1], (x1,y1)) else results[1]
                 dash.append([(x3, y3)])
                 gap = False
             else:
                 results = mathtools.pointsAway(x3, y3, d, m)
-                x3, y3 = results[0] if results[1][0] >= min(x1, x3) and results[1][0] <= max(x1, x3) and results[1][1] >= min(y1, y3) and results[1][1] <= max(y1, y3) else results[1]
+                #print(results)
+                #print(np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1))
+                if np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1):
+                    if not (np.sign(x2-x1) == np.sign(results[1][0]-x1) and np.sign(y2-y1) == np.sign(results[1][1]-y1)) or math.dist(results[0], (x1,y1)) > math.dist(results[1], (x1,y1)):
+                        x3, y3 = results[0]
+                    else:
+                        x3, y3 = results[1]
+                else:
+                    x3, y3 = results[1]
+                #x3, y3 = results[0] if np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1) and math.dist(results[0], (x1,y1)) > math.dist(results[1], (x1,y1)) else results[1]
                 dash[-1].append((x3, y3))
                 gap = True
-        
+        print(dash)
         if len(dash[-1]) == 1: # last is gap
             dash.pop()
         else: # last is dash
             dash[-1][1] = (x2, y2)
+            if dash[-1][0] == dash[-1][1]:
+                dash.pop()
 
         return dash
    
@@ -416,27 +434,32 @@ class mathtools:
         o = 0
         offsets = [(0, False)]
         emptyStart = False
+        left = None
         for c in range(len(coords)-2):
             dashes = mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], d, g, o, emptyStart)
-            if dashes == []:
-                prev = 0 if offsets == [] else offsets[-1][0]
-                remnant = ((coords[c][0]-coords[c+1][0])**2+(coords[c][0]-coords[c+1][1])**2)**0.5
+            if dashes == []: #line has no dashes
+                prev = 0 if offsets == [] else left
+                remnant = math.dist(coords[c], coords[c+1])
                 o = abs(g - prev - remnant)
+                left = prev + remnant
                 emptyStart = True
-            elif dashes[0] == [coords[c], coords[c+1]]:
-                prev = 0 if offsets == [] else offsets[-1][0]
-                remnant = ((coords[c][0]-coords[c+1][0])**2+(coords[c][0]-coords[c+1][1])**2)**0.5
+            elif dashes[0] == [coords[c], coords[c+1]]: #line is entirely dash
+                prev = 0 if offsets == [] else left
+                remnant = math.dist(coords[c], coords[c+1])
                 o = abs(d - prev - remnant)
+                left = prev + remnant
                 emptyStart = False
             else:
                 lastCoord = dashes[-1][1]
-                if lastCoord == coords[c+1]:
-                    remnant = ((lastCoord[0]-coords[c][0])**2+(lastCoord[1]-coords[c][1])**2)**0.5
+                if lastCoord == coords[c+1]: #line ended with a dash
+                    remnant = math.dist(lastCoord, dashes[-1][0])
+                    left = remnant
                     o = d - remnant
                     emptyStart = False
-                else:
-                    remnant = ((lastCoord[0]-coords[c+1][0])**2+(lastCoord[1]-coords[c+1][1])**2)**0.5
+                else: #line ended with a gap
+                    remnant = math.dist(lastCoord, coords[c+1])
                     o = g - remnant
+                    left = remnant
                     emptyStart = True
             offsets.append((round(o, 2), emptyStart))
         return offsets
@@ -796,9 +819,9 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                         for c in range(len(coords)-1):
                             #print(coords)
                             #print(mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']))
-                            t = math.floor(((coords[c+1][0]-coords[c][0])**2+(coords[c+1][1]-coords[c][1])**2)**0.5/(4*textLength))
+                            t = math.floor(math.dist(coords[c], coords[c+1])/(4*textLength))
                             t = 1 if t == 0 else t
-                            if mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']) and 2*textLength <= ((coords[c+1][0]-coords[c][0])**2+(coords[c+1][1]-coords[c][1])**2)**0.5:
+                            if mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']) and 2*textLength <= math.dist(coords[c], coords[c+1]):
                                 #print(mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset']))     
                                 for tx, ty, trot in mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset'], n=t):
                                     i = Image.new('RGBA', (2*textLength,2*(step['size']+4)), (0, 0, 0, 0))
@@ -808,10 +831,10 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                     i = i.rotate(trot, expand=True)
                                     textList.append((i, tx, ty, tw, th, trot))
                                 internal.log(f"{tilePlas}: {plaId}: Name text generated", 2, verbosityLevel)
-                            if "oneWay" in pla['type'].split(" ")[1:] and textLength <= ((coords[c+1][0]-coords[c][0])**2+(coords[c+1][1]-coords[c][1])**2)**0.5:
+                            if "oneWay" in pla['type'].split(" ")[1:] and textLength <= math.dist(coords[c], coords[c+1]):
                                 getFont("b", step['size'])
                                 counter = 0
-                                t = math.floor(((coords[c+1][0]-coords[c][0])**2+(coords[c+1][1]-coords[c][1])**2)**0.5/(4*textLength))
+                                t = math.floor(math.dist(coords[c], coords[c+1])/(4*textLength))
                                 for tx, ty, useless in mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset'], n=2*t+1):
                                     if counter % 2 == 1:
                                         counter += 1
@@ -851,9 +874,9 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                         internal.log(f"{tilePlas}: {plaId}: Text length calculated", 2, verbosityLevel)
                         for c1 in range(len(coords)):
                             c2 = c1+1 if c1 != len(coords)-1 else 0
-                            if mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']) and 2*textLength <= ((coords[c2][0]-coords[c1][0])**2+(coords[c2][1]-coords[c1][1])**2)**0.5:
+                            if mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']) and 2*textLength <= math.dist(coords[c1], coords[c2]):
                                 #coords[c]
-                                t = math.floor(((coords[c2][0]-coords[c1][0])**2+(coords[c2][1]-coords[c1][1])**2)**0.5/(4*textLength))
+                                t = math.floor(math.dist(coords[c1], coords[c2])/(4*textLength))
                                 t = 1 if t == 0 else t
                                 allPoints = mathtools.midpoint(coords[c1][0], coords[c1][1], coords[c2][0], coords[c2][1], step['offset'], n=t, returnBoth=True)
                                 internal.log(f"{tilePlas}: {plaId}: Midpoints calculated", 2, verbosityLevel)
