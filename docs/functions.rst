@@ -266,7 +266,7 @@ Math Tools
    **Parameters**
    * int/float **x, y**: the coordinates of the original point
    * int/float **d**: the distance the two points are from the original point
-   * int/float **m**: the gradient of the line
+   * int/float **m**: the gradient of the line. Give ``None`` for a gradient of undefined.
 
    **Returns**
    * **list[tuple]** Given in [(x1, y1), (x2, y2)]

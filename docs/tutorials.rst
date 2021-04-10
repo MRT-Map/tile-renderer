@@ -14,4 +14,4 @@ First steps
 ^^^^^^^^^^^
 
 Download/clone the repository on Github. Then, copy over ``renderer.py``, ``data``, and ``skins`` into your project directory.
-
+In a python file in the same directory,
