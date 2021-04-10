@@ -10,7 +10,7 @@ Tile renderer for leaflet.js usage, made by 7d
   * new function: `renderer.tools.line_findEnds()`
   * new function: `renderer.mathtools.pointsAway()`
     * replaces the messy and unresponsive find-two-points-n-units-away-from-a-point-on-a-straight-line calculations of sympy using trigo
-    * rendering should be faster now
+    * rendering should be faster now (`renderer.render.midpoint()`'s speed is now 0-1% of the original speed)
     * **REJECT SYMPY, EMBRACE TRIGONOMETRY, ALL HAIL TRIGO**
   * added a few more level 2 logs to `renderer.render()`
   * new function: `renderer.tileMerge()`, used to merge tiles
