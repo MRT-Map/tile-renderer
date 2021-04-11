@@ -36,7 +36,7 @@ def readFile(dir): # extract from JSON as dict
 
 pla = readFile("path_to_your_PLA_file/pla.json")
 nodes = readFile("path_to_your_nodes_file/nodes.json")
-skin = readFile("path_to_your_skin_file/skin.json")
+skin = readFile("path_to_your_skin_file/default.json")
 
 renderer.render(pla, nodes, skin, 1, 2, 8)
 # renders tiles at zoom levels 1 and 2 with the max zoom tile covering 8 units
