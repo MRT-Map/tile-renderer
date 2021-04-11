@@ -816,5 +816,373 @@
         "layer": 0,
         "nodes": ["enc-zone_costaWest1", "enc-zone_costaWest2", "enc-zone_costaWest3", "enc-zone_costaWest4", "enc-escondidoSt1_costaBlvd3"],
         "attrs": {}
+    },
+    "enc-officeO": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Costa North, yellow terr/smooth stone/stone",
+        "layer": 0,
+        "nodes": ["enc-officeO1", "enc-officeO2", "enc-officeO3", "enc-officeO4"],
+        "attrs": {}
+    },
+    "enc-apartmentJ1": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Costa North, chiselled stone/white/purple terr",
+        "layer": 0,
+        "nodes": ["enc-apartmentJ11", "enc-apartmentJ12", "enc-apartmentJ13", "enc-apartmentJ14"],
+        "attrs": {}
+    },
+    "enc-officeP": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Costa North, stripped crimson hyphae/polished andesite/cyan terr",
+        "layer": 0,
+        "nodes": ["enc-officeP1", "enc-officeP2", "enc-officeP3", "enc-officeP4"],
+        "attrs": {}
+    },
+    "enc-officeQ": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Costa North, stripped warped hyphae/andesite/polished andesite",
+        "layer": 0,
+        "nodes": ["enc-officeQ1", "enc-officeQ2", "enc-officeQ3", "enc-officeQ4"],
+        "attrs": {}
+    },
+    "enc-apartmentK": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Costa North, cyan terr/stone/smooth stone",
+        "layer": 0,
+        "nodes": ["enc-apartmentK1", "enc-apartmentK2", "enc-apartmentK3", "enc-apartmentK4"],
+        "attrs": {}
+    },
+    "enc-apartmentL": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Costa North, cobble/purple/light gray terr",
+        "layer": 0,
+        "nodes": ["enc-apartmentL1", "enc-apartmentL2", "enc-apartmentL3", "enc-apartmentL4"],
+        "attrs": {}
+    },
+    "enc-officeR": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Costa North, blue terr/bricks/smooth stone",
+        "layer": 0,
+        "nodes": ["enc-officeR1", "enc-officeR2", "enc-officeR3", "enc-officeR4"],
+        "attrs": {}
+    },
+    "enc-apartmentM": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Costa North, terr/cobble/smooth stone",
+        "layer": 0,
+        "nodes": ["enc-apartmentM1", "enc-apartmentM2", "enc-apartmentM3", "enc-apartmentM4"],
+        "attrs": {}
+    },
+    "enc-officeS": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Costa North, stone bricks/red terr/stone",
+        "layer": 0,
+        "nodes": ["enc-officeS1", "enc-officeS2", "enc-officeS3", "enc-officeS4"],
+        "attrs": {}
+    },
+    "enc-officeT": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Costa North, cut sandstone/blackstone bricks/polished andesite",
+        "layer": 0,
+        "nodes": ["enc-officeT1", "enc-officeT2", "enc-officeT3", "enc-officeT4"],
+        "attrs": {}
+    },
+    "enc-officeU": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Costa North, magenta terr/chiselled stone bricks/smooth stone",
+        "layer": 0,
+        "nodes": ["enc-officeU1", "enc-officeU2", "enc-officeU3", "enc-officeU4"],
+        "attrs": {}
+    },
+    "enc-apartmentN": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, Costa North, bricks/white terr/polished andesite",
+        "layer": 0,
+        "nodes": ["enc-apartmentN1", "enc-apartmentN2", "enc-apartmentN3", "enc-apartmentN4", "enc-apartmentN5"],
+        "attrs": {}
+    },
+    "enc-cabrilloHouseA": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, quartz/andesite",
+        "layer": 0,
+        "nodes": ["enc-cabrilloHouseA1", "enc-cabrilloHouseA2", "enc-cabrilloHouseA3", "enc-cabrilloHouseA4"],
+        "attrs": {}
+    },
+    "enc-eliteNeonHouse": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, brick/sandstone",
+        "layer": 0,
+        "nodes": ["enc-eliteNeonHouse1", "enc-eliteNeonHouse2", "enc-eliteNeonHouse3", "enc-eliteNeonHouse4"],
+        "attrs": {}
+    },
+    "enc-cabrilloHouseB": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, white terr/stone bricks",
+        "layer": 0,
+        "nodes": ["enc-cabrilloHouseB1", "enc-cabrilloHouseB2", "enc-cabrilloHouseB3", "enc-cabrilloHouseB4"],
+        "attrs": {}
+    },
+    "enc-cabrilloHouseC": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, cyan terr/cobble",
+        "layer": 0,
+        "nodes": ["enc-cabrilloHouseC1", "enc-cabrilloHouseC2", "enc-cabrilloHouseC3", "enc-cabrilloHouseC4"],
+        "attrs": {}
+    },
+    "enc-cabrilloHouseD": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, blackstone/sandstone",
+        "layer": 0,
+        "nodes": ["enc-cabrilloHouseD1", "enc-cabrilloHouseD2", "enc-cabrilloHouseD3", "enc-cabrilloHouseD4"],
+        "attrs": {}
+    },
+    "enc-cabrilloHouseE": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, red terr/andesite",
+        "layer": 0,
+        "nodes": ["enc-cabrilloHouseE1", "enc-cabrilloHouseE2", "enc-cabrilloHouseE3", "enc-cabrilloHouseE4"],
+        "attrs": {}
+    },
+    "enc-cabrilloHouseF": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, brick/cobble",
+        "layer": 0,
+        "nodes": ["enc-cabrilloHouseF1", "enc-cabrilloHouseF2", "enc-cabrilloHouseF3", "enc-cabrilloHouseF4"],
+        "attrs": {}
+    },
+    "enc-cabrilloHouseG": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, yellow terr/stone",
+        "layer": 0,
+        "nodes": ["enc-cabrilloHouseG1", "enc-cabrilloHouseG2", "enc-cabrilloHouseG3", "enc-cabrilloHouseG4"],
+        "attrs": {}
+    },
+    "enc-cabrilloHouseH": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, netherite/clay",
+        "layer": 0,
+        "nodes": ["enc-cabrilloHouseH1", "enc-cabrilloHouseH2", "enc-cabrilloHouseH3", "enc-cabrilloHouseH4"],
+        "attrs": {}
+    },
+    "enc-cabrilloHouseI": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, purple terr/sandstone",
+        "layer": 0,
+        "nodes": ["enc-cabrilloHouseI1", "enc-cabrilloHouseI2", "enc-cabrilloHouseI3", "enc-cabrilloHouseI4"],
+        "attrs": {}
+    },
+    "enc-cabrilloHouseJ": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, acacia wood/stone bricks",
+        "layer": 0,
+        "nodes": ["enc-cabrilloHouseJ1", "enc-cabrilloHouseJ2", "enc-cabrilloHouseJ3", "enc-cabrilloHouseJ4"],
+        "attrs": {}
+    },
+    "enc-cabrilloHouseK": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, blue terr/polished basalt",
+        "layer": 0,
+        "nodes": ["enc-cabrilloHouseK1", "enc-cabrilloHouseK2", "enc-cabrilloHouseK3", "enc-cabrilloHouseK4"],
+        "attrs": {}
+    },
+    "enc-cabrilloStallA": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, rocky plateau food hub",
+        "layer": 0,
+        "nodes": ["enc-cabrilloStallA1", "enc-cabrilloStallA2", "enc-cabrilloStallA3", "enc-cabrilloStallA4"],
+        "attrs": {}
+    },
+    "enc-cabrilloStallB": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, rocky plateau food hub",
+        "layer": 0,
+        "nodes": ["enc-cabrilloStallB1", "enc-cabrilloStallB2", "enc-cabrilloStallB3", "enc-cabrilloStallB4"],
+        "attrs": {}
+    },
+    "enc-cabrilloHouseL": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, quartz/polished andesite/sandstone",
+        "layer": 0,
+        "nodes": ["enc-cabrilloHouseL1", "enc-cabrilloHouseL2", "enc-cabrilloHouseL3", "enc-cabrilloHouseL4"],
+        "attrs": {}
+    },
+    "enc-cabrilloEdgeA": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, terr/sandstone/cobble",
+        "layer": 0,
+        "nodes": ["enc-cabrilloEdgeA1", "enc-cabrilloEdgeA2", "enc-cabrilloEdgeA3", "enc-cabrilloEdgeA4"],
+        "attrs": {}
+    },
+    "enc-cabrilloEdgeB": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, terr/sandstone/cobble",
+        "layer": 0,
+        "nodes": ["enc-cabrilloEdgeB1", "enc-cabrilloEdgeB2", "enc-cabrilloEdgeB3", "enc-cabrilloEdgeB4"],
+        "attrs": {}
+    },
+    "enc-rockyPlateauHighSch_Block1": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-rockyPlateauHighSch_Block1_1", "enc-rockyPlateauHighSch_Block1_2", "enc-rockyPlateauHighSch_Block1_3", "enc-rockyPlateauHighSch_Block1_4"],
+        "attrs": {}
+    },
+    "enc-rockyPlateauHighSch_Block2": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-rockyPlateauHighSch_Block2_1", "enc-rockyPlateauHighSch_Block2_2", "enc-rockyPlateauHighSch_Block2_3", "enc-rockyPlateauHighSch_Block2_4"],
+        "attrs": {}
+    },
+    "enc-rockyPlateauHighSch_Block3": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-rockyPlateauHighSch_Block3_1", "enc-rockyPlateauHighSch_Block3_2", "enc-rockyPlateauHighSch_Block3_3", "enc-rockyPlateauHighSch_Block3_4"],
+        "attrs": {}
+    },
+    "enc-rockyPlateauHighSch_Block4": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-rockyPlateauHighSch_Block4_1", "enc-rockyPlateauHighSch_Block4_2", "enc-rockyPlateauHighSch_Block4_3", "enc-rockyPlateauHighSch_Block4_4"],
+        "attrs": {}
+    },
+    "enc-rockyPlateauHighSch_Block5": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-rockyPlateauHighSch_Block5_1", "enc-rockyPlateauHighSch_Block5_2", "enc-rockyPlateauHighSch_Block5_3", "enc-rockyPlateauHighSch_Block5_4"],
+        "attrs": {}
+    },
+    "enc-rockyPlateauHighSch_Block6": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-rockyPlateauHighSch_Block6_1", "enc-rockyPlateauHighSch_Block6_2", "enc-rockyPlateauHighSch_Block6_3", "enc-rockyPlateauHighSch_Block6_4"],
+        "attrs": {}
+    },
+    "enc-rockyPlateauHighSch_Block7": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-rockyPlateauHighSch_Block7_1", "enc-rockyPlateauHighSch_Block7_2", "enc-rockyPlateauHighSch_Block7_3", "enc-rockyPlateauHighSch_Block7_4"],
+        "attrs": {}
+    },
+    "enc-rockyPlateauHighSch_Block8": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-rockyPlateauHighSch_Block8_1", "enc-rockyPlateauHighSch_Block8_2", "enc-rockyPlateauHighSch_Block8_3", "enc-rockyPlateauHighSch_Block8_4"],
+        "attrs": {}
+    },
+    "enc-rockyPlateauHighSch_bBallCourt": {
+        "type": "park",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-rockyPlateauHighSch_bBallCourt1", "enc-rockyPlateauHighSch_bBallCourt2", "enc-rockyPlateauHighSch_bBallCourt3", "enc-rockyPlateauHighSch_bBallCourt4"],
+        "attrs": {}
+    },
+    "enc-cabrilloHouseM": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, bricks/stone bricks",
+        "layer": 0,
+        "nodes": ["enc-cabrilloHouseM1", "enc-cabrilloHouseM2", "enc-cabrilloHouseM3", "enc-cabrilloHouseM4", "enc-cabrilloHouseM5", "enc-cabrilloHouseM6", "enc-cabrilloHouseM7", "enc-cabrilloHouseM8"],
+        "attrs": {}
+    },
+    "enc-mayorHouse": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, quartz/polished andesite/sandstone",
+        "layer": 0,
+        "nodes": ["enc-mayorHouse1", "enc-mayorHouse2", "enc-mayorHouse3", "enc-mayorHouse4", "enc-mayorHouse5", "enc-mayorHouse6", "enc-mayorHouse7", "enc-mayorHouse8"],
+        "attrs": {}
+    },
+    "enc-lighthousea": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, quartz/polished andesite/sandstone",
+        "layer": 0,
+        "nodes": ["enc-lighthousea1", "enc-lighthousea2", "enc-lighthousea3", "enc-lighthousea4"],
+        "attrs": {}
+    },
+    "enc-lighthouseb": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, quartz/polished andesite/sandstone",
+        "layer": 0,
+        "nodes": ["enc-lighthouseb1", "enc-lighthouseb2", "enc-lighthouseb3", "enc-lighthouseb4", "enc-lighthouseb5", "enc-lighthouseb6", "enc-lighthouseb7", "enc-lighthouseb8"],
+        "attrs": {}
+    },
+    "enc-montanasCabrillosRangerOffice": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, quartz/polished andesite/sandstone",
+        "layer": 0,
+        "nodes": ["enc-montanasCabrillosRangerOffice1", "enc-montanasCabrillosRangerOffice2", "enc-montanasCabrillosRangerOffice3", "enc-montanasCabrillosRangerOffice4", "enc-montanasCabrillosRangerOffice5", "enc-montanasCabrillosRangerOffice6"],
+        "attrs": {}
+    },
+    "enc-CCIAa": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, quartz/polished andesite/sandstone",
+        "layer": 0,
+        "nodes": ["enc-CCIAa1", "enc-CCIAa2", "enc-CCIAa3b3c2", "enc-CCIAa4", "enc-CCIAa5b8", "enc-CCIAa6"],
+        "attrs": {}
+    },
+    "enc-CCIAb": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, quartz/polished andesite/sandstone",
+        "layer": 0,
+        "nodes": ["enc-CCIAb1", "enc-CCIAb2c1", "enc-CCIAa3b3c2", "enc-CCIAb4c3", "enc-CCIAb5c4", "enc-CCIAb6c5", "CCIAb7c6", "enc-CCIAa5b8"],
+        "attrs": {}
+    },
+    "enc-CCIAc": {
+        "type": "building",
+        "displayname": "",
+        "description": "Encinitas, quartz/polished andesite/sandstone",
+        "layer": 0,
+        "nodes": ["enc-CCIAb2c1", "enc-CCIAa3b3c2", "enc-CCIAb4c3", "enc-CCIAb5c4", "enc-CCIAb6c5", "CCIAb7c6"],
+        "attrs": {}
     }
 }

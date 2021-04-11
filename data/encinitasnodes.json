@@ -2534,31 +2534,6 @@
         "y": -18303,
         "connections": []
     },
-    "enc-parkD1": {
-        "x": 26566,
-        "y": -18307,
-        "connections": []
-    },
-    "enc-parkD2": {
-        "x": 26566,
-        "y": -18315,
-        "connections": []
-    },
-    "enc-parkD3": {
-        "x": 26568,
-        "y": -18316,
-        "connections": []
-    },
-    "enc-parkD4": {
-        "x": 26579,
-        "y": -18316,
-        "connections": []
-    },
-    "enc-parkD5": {
-        "x": 26579,
-        "y": -18307,
-        "connections": []
-    },
     "enc-apartmentM1": {
         "x": 26582,
         "y": -18319,
@@ -3334,34 +3309,914 @@
         "y": -18440,
         "connections": []
     },
-    "montanasCabrillosRangerOffice1": {
+    "enc-montanasCabrillosRangerOffice1": {
         "x": 26403,
         "y": -18215,
         "connections": []
     },
-    "montanasCabrillosRangerOffice2": {
+    "enc-montanasCabrillosRangerOffice2": {
         "x": 26403,
         "y": -18203,
         "connections": []
     },
-    "montanasCabrillosRangerOffice3": {
+    "enc-montanasCabrillosRangerOffice3": {
         "x": 26391,
         "y": -18203,
         "connections": []
     },
-    "montanasCabrillosRangerOffice4": {
+    "enc-montanasCabrillosRangerOffice4": {
         "x": 26391,
         "y": -18220,
         "connections": []
     },
-    "montanasCabrillosRangerOffice5": {
+    "enc-montanasCabrillosRangerOffice5": {
         "x": 26399,
         "y": -18220,
         "connections": []
     },
-    "montanasCabrillosRangerOffice6": {
+    "enc-montanasCabrillosRangerOffice6": {
         "x": 26399,
         "y": -18215,
+        "connections": []
+    },
+    "enc-CCIAa1": {
+        "x": 26542,
+        "y": -17872,
+        "connections": []
+    },
+    "enc-CCIAa2": {
+        "x": 26526,
+        "y": -17888,
+        "connections": []
+    },
+    "enc-CCIAa3b3c2": {
+        "x": 26530,
+        "y": -17892,
+        "connections": []
+    },
+    "enc-CCIAa4": {
+        "x": 26554,
+        "y": -17916,
+        "connections": []
+    },
+    "enc-CCIAa5b8": {
+        "x": 26566,
+        "y": -17904,
+        "connections": []
+    },
+    "enc-CCIAa6": {
+        "x": 26570,
+        "y": -17900,
+        "connections": []
+    },
+    "enc-CCIAb1": {
+        "x": 26542,
+        "y": -17880,
+        "connections": []
+    },
+    "enc-CCIAb2c1": {
+        "x": 26534,
+        "y": -17888,
+        "connections": []
+    },
+    "enc-CCIAb4c3": {
+        "x": 26526,
+        "y": -17896,
+        "connections": []
+    },
+    "enc-CCIAb5c4": {
+        "x": 26554,
+        "y": -17924,
+        "connections": []
+    },
+    "enc-CCIAb6c5": {
+        "x": 26562,
+        "y": -17916,
+        "connections": []
+    },
+    "enc-CCIAb7c6": {
+        "x": 26558,
+        "y": -17912,
+        "connections": []
+    },
+    "enc-crestaCapitol_building1": {
+        "x": 26727,
+        "y": -17832,
+        "connections": []
+    },
+    "enc-crestaCapitol_building2": {
+        "x": 26701,
+        "y": -17913,
+        "connections": []
+    },
+    "enc-crestaCapitol_building3": {
+        "x": 26700,
+        "y": -17912,
+        "connections": []
+    },
+    "enc-crestaCapitol_building4": {
+        "x": 26684,
+        "y": -17912,
+        "connections": []
+    },
+    "enc-crestaCapitol_building5": {
+        "x": 26684,
+        "y": -17908,
+        "connections": []
+    },
+    "enc-crestaCapitol_building6": {
+        "x": 26670,
+        "y": -17905,
+        "connections": []
+    },
+    "enc-crestaCapitol_building7": {
+        "x": 26652,
+        "y": -17905,
+        "connections": []
+    },
+    "enc-crestaCapitol_building8": {
+        "x": 26638,
+        "y": -17908,
+        "connections": []
+    },
+    "enc-crestaCapitol_building9": {
+        "x": 26638,
+        "y": -17912,
+        "connections": []
+    },
+    "enc-crestaCapitol_building10": {
+        "x": 26622,
+        "y": -17912,
+        "connections": []
+    },
+    "enc-crestaCapitol_building11": {
+        "x": 26622,
+        "y": -17913,
+        "connections": []
+    },
+    "enc-crestaCapitol_building12": {
+        "x": 26595,
+        "y": -17832,
+        "connections": []
+    },
+    "enc-crestaCapitol_building13": {
+        "x": 26557,
+        "y": -17841,
+        "connections": []
+    },
+    "enc-crestaCapitol_building14": {
+        "x": 26609,
+        "y": -17918,
+        "connections": []
+    },
+    "enc-crestaCapitol_building15": {
+        "x": 26616,
+        "y": -17932,
+        "connections": []
+    },
+    "enc-crestaCapitol_building16": {
+        "x": 26619,
+        "y": -17939,
+        "connections": []
+    },
+    "enc-crestaCapitol_building17": {
+        "x": 26625,
+        "y": -17962,
+        "connections": []
+    },
+    "enc-crestaCapitol_building18": {
+        "x": 26625,
+        "y": -17999,
+        "connections": []
+    },
+    "enc-crestaCapitol_building19": {
+        "x": 26619,
+        "y": -18022,
+        "connections": []
+    },
+    "enc-crestaCapitol_building20": {
+        "x": 26616,
+        "y": -18029,
+        "connections": []
+    },
+    "enc-crestaCapitol_building21": {
+        "x": 26558,
+        "y": -18120,
+        "connections": []
+    },
+    "enc-crestaCapitol_building22": {
+        "x": 26595,
+        "y": -18129,
+        "connections": []
+    },
+    "enc-crestaCapitol_building23": {
+        "x": 26622,
+        "y": -18048,
+        "connections": []
+    },
+    "enc-crestaCapitol_building24": {
+        "x": 26622,
+        "y": -18049,
+        "connections": []
+    },
+    "enc-crestaCapitol_building25": {
+        "x": 26638,
+        "y": -18049,
+        "connections": []
+    },
+    "enc-crestaCapitol_building26": {
+        "x": 26638,
+        "y": -18053,
+        "connections": []
+    },
+    "enc-crestaCapitol_building27": {
+        "x": 26652,
+        "y": -18056,
+        "connections": []
+    },
+    "enc-crestaCapitol_building28": {
+        "x": 26670,
+        "y": -18056,
+        "connections": []
+    },
+    "enc-crestaCapitol_building29": {
+        "x": 26684,
+        "y": -18053,
+        "connections": []
+    },
+    "enc-crestaCapitol_building30": {
+        "x": 26684,
+        "y": -18049,
+        "connections": []
+    },
+    "enc-crestaCapitol_building31": {
+        "x": 26700,
+        "y": -18049,
+        "connections": []
+    },
+    "enc-crestaCapitol_building32": {
+        "x": 26700,
+        "y": -18048,
+        "connections": []
+    },
+    "enc-crestaCapitol_building33": {
+        "x": 26727,
+        "y": -18129,
+        "connections": []
+    },
+    "enc-crestaCapitol_building34": {
+        "x": 26765,
+        "y": -18120,
+        "connections": []
+    },
+    "enc-crestaCapitol_building35": {
+        "x": 26706,
+        "y": -18029,
+        "connections": []
+    },
+    "enc-crestaCapitol_building36": {
+        "x": 26703,
+        "y": -18022,
+        "connections": []
+    },
+    "enc-crestaCapitol_building37": {
+        "x": 26697,
+        "y": -17992,
+        "connections": []
+    },
+    "enc-crestaCapitol_building38": {
+        "x": 26697,
+        "y": -17969,
+        "connections": []
+    },
+    "enc-crestaCapitol_building39": {
+        "x": 26703,
+        "y": -17939,
+        "connections": []
+    },
+    "enc-crestaCapitol_building40": {
+        "x": 26706,
+        "y": -17932,
+        "connections": []
+    },
+    "enc-crestaCapitol_building41": {
+        "x": 26765,
+        "y": -17841,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn1": {
+        "x": 26728,
+        "y": -17832,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn2": {
+        "x": 26707,
+        "y": -17914,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn3": {
+        "x": 26701,
+        "y": -17914,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn4": {
+        "x": 26701,
+        "y": -17919,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn5": {
+        "x": 26621,
+        "y": -17919,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn6": {
+        "x": 26621,
+        "y": -17914,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn7": {
+        "x": 26615,
+        "y": -17914,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn8": {
+        "x": 26593,
+        "y": -17832,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn9": {
+        "x": 26558,
+        "y": -17840,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn10": {
+        "x": 26615,
+        "y": -17922,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn11": {
+        "x": 26626,
+        "y": -17948,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn12": {
+        "x": 26629,
+        "y": -17961,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn13": {
+        "x": 26629,
+        "y": -18000,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn14": {
+        "x": 26626,
+        "y": -18013,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn15": {
+        "x": 26615,
+        "y": -18039,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn16": {
+        "x": 26559,
+        "y": -18120,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn17": {
+        "x": 26593,
+        "y": -18129,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn18": {
+        "x": 26615,
+        "y": -18047,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn19": {
+        "x": 26621,
+        "y": -18047,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn20": {
+        "x": 26621,
+        "y": -18042,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn21": {
+        "x": 26701,
+        "y": -18042,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn22": {
+        "x": 26701,
+        "y": -18047,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn23": {
+        "x": 26707,
+        "y": -18047,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn24": {
+        "x": 26729,
+        "y": -18129,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn25": {
+        "x": 26763,
+        "y": -18120,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn26": {
+        "x": 26707,
+        "y": -18039,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn27": {
+        "x": 26698,
+        "y": -18019,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn28": {
+        "x": 26693,
+        "y": -18000,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn29": {
+        "x": 26693,
+        "y": -17961,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn30": {
+        "x": 26696,
+        "y": -17948,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn31": {
+        "x": 26707,
+        "y": -17922,
+        "connections": []
+    },
+    "enc-crestaCapitol_lawn32": {
+        "x": 26763,
+        "y": -17841,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainN1": {
+        "x": 26664,
+        "y": -18122,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainN2": {
+        "x": 26669,
+        "y": -18120,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainN3": {
+        "x": 26674,
+        "y": -18115,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainN4": {
+        "x": 26676,
+        "y": -18110,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainN5": {
+        "x": 26676,
+        "y": -18104,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainN6": {
+        "x": 26674,
+        "y": -18099,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainN7": {
+        "x": 26669,
+        "y": -18094,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainN8": {
+        "x": 26664,
+        "y": -18092,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainN9": {
+        "x": 26658,
+        "y": -18092,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainN10": {
+        "x": 26653,
+        "y": -18094,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainN11": {
+        "x": 26648,
+        "y": -18099,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainN12": {
+        "x": 26646,
+        "y": -18104,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainN13": {
+        "x": 26646,
+        "y": -18110,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainN14": {
+        "x": 26648,
+        "y": -18115,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainN15": {
+        "x": 26653,
+        "y": -18120,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainN16": {
+        "x": 26658,
+        "y": -18122,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainS1": {
+        "x": 26658,
+        "y": -17839,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainS2": {
+        "x": 26653,
+        "y": -17841,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainS3": {
+        "x": 26648,
+        "y": -17846,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainS4": {
+        "x": 26646,
+        "y": -17851,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainS5": {
+        "x": 26646,
+        "y": -17857,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainS6": {
+        "x": 26648,
+        "y": -17862,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainS7": {
+        "x": 26653,
+        "y": -17867,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainS8": {
+        "x": 26658,
+        "y": -17869,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainS9": {
+        "x": 26664,
+        "y": -17869,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainS10": {
+        "x": 26669,
+        "y": -17867,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainS11": {
+        "x": 26674,
+        "y": -17862,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainS12": {
+        "x": 26676,
+        "y": -17857,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainS13": {
+        "x": 26676,
+        "y": -17851,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainS14": {
+        "x": 26674,
+        "y": -17846,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainS15": {
+        "x": 26669,
+        "y": -17841,
+        "connections": []
+    },
+    "enc-crestaCapitol_fountainS16": {
+        "x": 26664,
+        "y": -17839,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathSE1": {
+        "x": 26702,
+        "y": -17829,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathSE2": {
+        "x": 26702,
+        "y": -17845,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathSE3": {
+        "x": 26700,
+        "y": -17852,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathSE4": {
+        "x": 26681,
+        "y": -17870,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathSE5": {
+        "x": 26666,
+        "y": -17882,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathSE6": {
+        "x": 26661,
+        "y": -17891,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathSE7": {
+        "x": 26661,
+        "y": -17906,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathSW1": {
+        "x": 26620,
+        "y": -17829,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathSW2": {
+        "x": 26620,
+        "y": -17845,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathSW3": {
+        "x": 26621,
+        "y": -17850,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathSW4": {
+        "x": 26641,
+        "y": -17870,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathSW5": {
+        "x": 26655,
+        "y": -17882,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathNE1": {
+        "x": 26702,
+        "y": -18132,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathNE2": {
+        "x": 26702,
+        "y": -18116,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathNE3": {
+        "x": 26699,
+        "y": -18109,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathNE4": {
+        "x": 26681,
+        "y": -18091,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathNE5": {
+        "x": 26668,
+        "y": -18080,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathNE6": {
+        "x": 26661,
+        "y": -18070,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathNE7": {
+        "x": 26661,
+        "y": -18055,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathNW1": {
+        "x": 26620,
+        "y": -18132,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathNW2": {
+        "x": 26620,
+        "y": -18116,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathNW3": {
+        "x": 26623,
+        "y": -18109,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathNW4": {
+        "x": 26641,
+        "y": -18091,
+        "connections": []
+    },
+    "enc-crestaCapitol_pathNW5": {
+        "x": 26654,
+        "y": -18080,
+        "connections": []
+    },
+    "enc-seawallPark1": {
+        "x": 26703,
+        "y": -18208,
+        "connections": []
+    },
+    "enc-seawallPark2": {
+        "x": 26706,
+        "y": -18208,
+        "connections": []
+    },
+    "enc-seawallPark3": {
+        "x": 26713,
+        "y": -18211,
+        "connections": []
+    },
+    "enc-seawallPark4": {
+        "x": 26716,
+        "y": -18214,
+        "connections": []
+    },
+    "enc-seawallPark5": {
+        "x": 26719,
+        "y": -18221,
+        "connections": []
+    },
+    "enc-seawallPark6": {
+        "x": 26718,
+        "y": -18226,
+        "connections": []
+    },
+    "enc-seawallPark7": {
+        "x": 26718,
+        "y": -18252,
+        "connections": []
+    },
+    "enc-seawallPark8": {
+        "x": 26716,
+        "y": -18256,
+        "connections": []
+    },
+    "enc-seawallPark9": {
+        "x": 26712,
+        "y": -18258,
+        "connections": []
+    },
+    "enc-seawallPark10": {
+        "x": 26712,
+        "y": -18263,
+        "connections": []
+    },
+    "enc-seawallPark11": {
+        "x": 26714,
+        "y": -18267,
+        "connections": []
+    },
+    "enc-seawallPark12": {
+        "x": 26714,
+        "y": -18271,
+        "connections": []
+    },
+    "enc-seawallPark13": {
+        "x": 26718,
+        "y": -18276,
+        "connections": []
+    },
+    "enc-seawallPark14": {
+        "x": 26720,
+        "y": -18281,
+        "connections": []
+    },
+    "enc-seawallPark15": {
+        "x": 26724,
+        "y": -18286,
+        "connections": []
+    },
+    "enc-seawallPark16": {
+        "x": 26741,
+        "y": -18293,
+        "connections": []
+    },
+    "enc-seawallPark17": {
+        "x": 26748,
+        "y": -18295,
+        "connections": []
+    },
+    "enc-seawallPark18": {
+        "x": 26751,
+        "y": -18302,
+        "connections": []
+    },
+    "enc-seawallPark19": {
+        "x": 26754,
+        "y": -18305,
+        "connections": []
+    },
+    "enc-seawallPark20": {
+        "x": 26756,
+        "y": -18305,
+        "connections": []
+    },
+    "enc-seawallPark21": {
+        "x": 26758,
+        "y": -18307,
+        "connections": []
+    },
+    "enc-seawallPark22": {
+        "x": 26758,
+        "y": -18312,
+        "connections": []
+    },
+    "enc-seawallPark23": {
+        "x": 26760,
+        "y": -18318,
+        "connections": []
+    },
+    "enc-seawallPark24": {
+        "x": 26768,
+        "y": -18326,
+        "connections": []
+    },
+    "enc-seawallPark25": {
+        "x": 26769,
+        "y": -18328,
+        "connections": []
+    },
+    "enc-seawallPark26": {
+        "x": 26769,
+        "y": -18333,
+        "connections": []
+    },
+    "enc-seawallPark27": {
+        "x": 26761,
+        "y": -18327,
+        "connections": []
+    },
+    "enc-seawallPark28": {
+        "x": 26749,
+        "y": -18327,
+        "connections": []
+    },
+    "enc-seawallPark29": {
+        "x": 26749,
+        "y": -18320,
+        "connections": []
+    },
+    "enc-seawallPark30": {
+        "x": 26744,
+        "y": -18311,
+        "connections": []
+    },
+    "enc-seawallPark31": {
+        "x": 26734,
+        "y": -18306,
+        "connections": []
+    },
+    "enc-seawallPark32": {
+        "x": 26730,
+        "y": -18306,
+        "connections": []
+    },
+    "enc-seawallPark33": {
+        "x": 26722,
+        "y": -18308,
+        "connections": []
+    },
+    "enc-seawallPark34": {
+        "x": 26712,
+        "y": -18308,
+        "connections": []
+    },
+    "enc-seawallPark35": {
+        "x": 26703,
+        "y": -18313,
         "connections": []
     }
 }
