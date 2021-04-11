@@ -943,10 +943,10 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                         internal.log(f"{tilePlas}: {plaId}: Area filled", 2, verbosityLevel)
                         outlineCoords = coords[:]
                         outlineCoords.append(outlineCoords[0])
-                        img.line(outlineCoords, fill=step['colour'], width=4)
+                        img.line(outlineCoords, fill=step['outline'], width=2)
                         for x, y in outlineCoords:
                             if not ("unroundedEnds" in info['tags'] and outlineCoords.index((x,y)) in [0, len(outlineCoords)-1]):
-                                img.ellipse([x-4/2+1, y-4/2+1, x+4/2, y+4/2], fill=step['colour'])
+                                img.ellipse([x-2/2+1, y-2/2+1, x+2/2-1, y+2/2-1], fill=step['outline'])
                         internal.log(f"{tilePlas}: {plaId}: Outline drawn", 2, verbosityLevel)
 
                     def area_centerimage():

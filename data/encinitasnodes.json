@@ -3949,12 +3949,12 @@
         "y": -17882,
         "connections": []
     },
-    "enc-crestaCapitol_pathSE6": {
+    "enc-crestaCapitol_pathS6": {
         "x": 26661,
         "y": -17891,
         "connections": []
     },
-    "enc-crestaCapitol_pathSE7": {
+    "enc-crestaCapitol_pathS7": {
         "x": 26661,
         "y": -17906,
         "connections": []
@@ -4009,12 +4009,12 @@
         "y": -18080,
         "connections": []
     },
-    "enc-crestaCapitol_pathNE6": {
+    "enc-crestaCapitol_pathN6": {
         "x": 26661,
         "y": -18070,
         "connections": []
     },
-    "enc-crestaCapitol_pathNE7": {
+    "enc-crestaCapitol_pathN7": {
         "x": 26661,
         "y": -18055,
         "connections": []
