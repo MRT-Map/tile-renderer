@@ -25,5 +25,5 @@ def skinFileRead():
 #print(renderer.tools.findPlasAttachedToNode("a", exampleplaRead()))
 
 
-a = renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 0, 3, 128, saveDir="tiles/", verbosityLevel=1)
+a = renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 0, 3, 128, saveDir="tiles/", verbosityLevel=2)
 renderer.tileMerge(a, saveDir="tiles/")

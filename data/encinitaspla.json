@@ -830,7 +830,7 @@
         "displayname": "",
         "description": "Encinitas, Costa North, chiselled stone/white/purple terr",
         "layer": 0,
-        "nodes": ["enc-apartmentJ11", "enc-apartmentJ12", "enc-apartmentJ13", "enc-apartmentJ14"],
+        "nodes": ["enc-apartmentJ1", "enc-apartmentJ2", "enc-apartmentJ3", "enc-apartmentJ4"],
         "attrs": {}
     },
     "enc-officeP": {
@@ -1174,7 +1174,7 @@
         "displayname": "",
         "description": "Encinitas, quartz/polished andesite/sandstone",
         "layer": 0,
-        "nodes": ["enc-CCIAb1", "enc-CCIAb2c1", "enc-CCIAa3b3c2", "enc-CCIAb4c3", "enc-CCIAb5c4", "enc-CCIAb6c5", "CCIAb7c6", "enc-CCIAa5b8"],
+        "nodes": ["enc-CCIAb1", "enc-CCIAb2c1", "enc-CCIAa3b3c2", "enc-CCIAb4c3", "enc-CCIAb5c4", "enc-CCIAb6c5", "enc-CCIAb7c6", "enc-CCIAa5b8"],
         "attrs": {}
     },
     "enc-CCIAc": {
@@ -1182,7 +1182,7 @@
         "displayname": "",
         "description": "Encinitas, quartz/polished andesite/sandstone",
         "layer": 0,
-        "nodes": ["enc-CCIAb2c1", "enc-CCIAa3b3c2", "enc-CCIAb4c3", "enc-CCIAb5c4", "enc-CCIAb6c5", "CCIAb7c6"],
+        "nodes": ["enc-CCIAb2c1", "enc-CCIAa3b3c2", "enc-CCIAb4c3", "enc-CCIAb5c4", "enc-CCIAb6c5", "enc-CCIAb7c6"],
         "attrs": {}
     }
 }
