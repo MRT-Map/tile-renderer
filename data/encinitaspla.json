@@ -1205,7 +1205,7 @@
         "type": "grass",
         "displayname": "",
         "description": "Encinitas",
-        "layer": 0,
+        "layer": 0.1,
         "nodes": ["enc-crestaCapitol_lawn1", "enc-crestaCapitol_lawn2", "enc-crestaCapitol_lawn3", "enc-crestaCapitol_lawn4", "enc-crestaCapitol_lawn5", 
                   "enc-crestaCapitol_lawn6", "enc-crestaCapitol_lawn7", "enc-crestaCapitol_lawn8", "enc-crestaCapitol_lawn9", "enc-crestaCapitol_lawn10", 
                   "enc-crestaCapitol_lawn11", "enc-crestaCapitol_lawn12", "enc-crestaCapitol_lawn13", "enc-crestaCapitol_lawn14", "enc-crestaCapitol_lawn15", 
