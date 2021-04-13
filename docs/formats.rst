@@ -1,6 +1,6 @@
 Formats
 =======
-
+.. _formats:
 PLAs
 ----
 .. code-block:: javascript
@@ -111,13 +111,13 @@ Skins
                            "layer": "back",
                            "colour": "(hex)",
                            "width": width,
-                           *"dash": 24 (Optional)*
+                           *"dash": [dashlength, gaplength] (Optional)*
                        },
                        {
                            "layer": "fore",
                            "colour": "(hex)",
                            "width": width,
-                           *"dash": 24 (Optional)*
+                           *"dash": [dashlength, gaplength] (Optional)*
                        },
                        {
                            "layer": "text",
@@ -149,7 +149,7 @@ Skins
                            "layer": "centertext",
                            "colour": "(hex)",
                            "size": size,
-                           "offset": [x,y]
+                           "offset": [x, y]
                        },
                        {
                            "layer": "centerimage",

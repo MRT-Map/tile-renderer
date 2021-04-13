@@ -1,18 +1,26 @@
 # tile-renderer
 Tile renderer for leaflet.js usage, made by 7d
 
+**Note: renderer is complete, but not the skin or the tutorials.**
+**Hence mapping is not open to the public yet.**
+
 **Documentation: https://tile-renderer.readthedocs.io/en/latest/**
 
-## Current version: v0.8
-* **v0.8 (7/4/21)**
-  * Text of points are now rendered together with texts of lines and areas
-  * reordered rendering of PLAs (excluding road tag & text) into functions from if statements
-  * got rid of most `**kwargs`
-  * redid integrity checking, mostly with Schema
-  * new function: `renderer.utils.skinJsonIntegrity()`
-  * background of tile can now be customised by skin file
-  * added offset to area centertext
-  * added centerimage to areas
+## Current version: v1.0
+* **v1.0 (13/4/21)**
+  * added stripes for areas
+  * added offset for image centertext
+  * new function: `renderer.tools.line_findEnds()`
+  * new function: `renderer.mathtools.pointsAway()`
+    * replaces the messy and unresponsive find-two-points-n-units-away-from-a-point-on-a-straight-line calculations of sympy using trigo
+    * rendering should be faster now (`renderer.render.midpoint()`'s speed is now 0-1% of the original speed)
+    * **REJECT SYMPY, EMBRACE TRIGONOMETRY, ALL HAIL TRIGO**
+  * added a few more level 2 logs to `renderer.render()`
+  * new function: `renderer.tileMerge()`, used to merge tiles
+  * changed output of `renderer.render()` from list to dict
+  * in counting of rendering operations in `renderer.render()`, added 1 to each tilePlas to account for text
+  * rewrote `renderer.mathtools.dash()` and `renderer.mathtools.dashOffset()`, they're no longer broken :D
+  * we've gone out of v0 versions woo
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)
@@ -32,7 +40,7 @@ def readFile(dir): # extract from JSON as dict
 
 pla = readFile("path_to_your_PLA_file/pla.json")
 nodes = readFile("path_to_your_nodes_file/nodes.json")
-skin = readFile("path_to_your_skin_file/skin.json")
+skin = readFile("path_to_your_skin_file/default.json")
 
 renderer.render(pla, nodes, skin, 1, 2, 8)
 # renders tiles at zoom levels 1 and 2 with the max zoom tile covering 8 units

@@ -8,27 +8,43 @@ All Functions
 
 Main
 ----
-.. py:function:: render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, verbosityLevel=1, saveImages=True, saveDir="tiles/", assetsDir="skins/assets/", tiles: list])
+.. py:function:: renderer.render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, verbosityLevel=1, saveImages=True, saveDir="tiles/", assetsDir="skins/assets/", tiles: list])
 
    Renders tiles from given coordinates and zoom values.
 
    **Parameters**
 
-   * dict **plaList**: a dictionary of PLAs (see "Renderer input format")
-   * dict **nodeList**: a dictionary of nodes (see "Renderer input format")
+   * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
+   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
    * dict **skinJson**: a JSON of the skin used to render tiles
    * int **minZoom**: minimum zoom value
    * int **maxZoom**: maximum zoom value
    * int **maxZoomRange**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
    * int **verbosityLevel** *(default: 1)*: the verbosity level of the output by the function. Use any number from 0 to 2
-   * int **saveImages** *(default: True)*: whether to save the tile imaegs in a folder or not
+   * int **saveImages** *(default: True)*: whether to save the tile images in a folder or not
    * str **saveDir** *(default: "tiles/")*: the directory to save tiles in
    * str **assetsDir** *(default: "skins/assets/")*: the asset directory for the skin
    * list[tuple] **tiles** *(optional)*: a list of tiles to render, given in tuples of ``(z,x,y)`` where z = zoom and x,y = tile coordinates
 
    **Returns**
 
-   * **list[Image]** A list of tiles as PIL Image objects.
+   * **dict** Given in the form of ``"(tile coord)": (PIL Image)``
+
+.. py:function:: tileMerge(images: Union[str, dict] [, verbosityLevel=1, saveImages=True, saveDir="tiles/", zoom=[]])
+
+   Merges tiles rendered by ``renderer.render()``.
+
+   **Parameters**
+
+   * dict **images** Give in the form of ``"(tile coord)": (PIL Image)``, like the return value of ``renderer.render()``
+   * int **verbosityLevel** *(default: 1)*: the verbosity level of the output by the function. Use any number from 0 to 2
+   * int **saveImages** *(default: True)*: whether to save the tile imaegs in a folder or not
+   * str **saveDir** *(default: "")*: the directory to save tiles in
+   * list **zoom** *(default: [])*: if left empty, automatically calculates all zoom values based on tiles; otherwise, the layers of zoom to merge.
+
+   **Returns**
+
+   * **dict** Given in the form of ``"(Zoom)": (PIL Image)``
 
 Tools
 -----
@@ -69,8 +85,8 @@ Tools
 
    **Parameters**
 
-   * dict **plaList**: a dictionary of PLAs (see "Renderer input format")
-   * dict **nodeList**: a dictionary of nodes (see "Renderer input format")
+   * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
+   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
    * int **minZoom**: minimum zoom value
    * int **maxZoom**: maximum zoom value
    * int **maxZoomValue**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
@@ -85,8 +101,8 @@ Tools
    
    **Parameters**
 
-   * dict **plaList**: a dictionary of PLAs (see "Renderer input format")
-   * dict **nodeList**: a dictionary of nodes (see "Renderer input format")
+   * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
+   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
    
    **Returns**
 
@@ -99,7 +115,7 @@ Tools
    **Parameters**
 
    * list **nodes**: a list of node IDs
-   * dict **nodeList**: a dictionary of nodes (see "Renderer input format")
+   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
    
    **Returns**
 
@@ -112,11 +128,35 @@ Tools
    **Parameters**
 
    * str **nodeId**: the node to search for
-   * dict **plaList**: a dictionary of PLAs (see "Renderer input format")
+   * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
    
    **Returns**
 
    * **list[tuple]** A tuple in the form of (plaId, posInNodeList)
+
+.. py:function:: renderer.tools.line_findEnds(coords: list)
+
+   Find the minimum and maximum x/y values of a set of coords.
+
+   **Parameters**
+
+   * list **coords**: a list of coordinates, provide in a tuple of (x,y)
+
+   **Return**
+
+   * **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
+   
+.. py:function:: renderer.tools.tile_findEnds(coords: list)
+
+   Find the minimum and maximum x/y values of a set of tiles coords.
+
+   **Parameters**
+
+   * list **coords**: a list of tile coordinates, provide in a tuple of (z,x,y)
+
+   **Return**
+
+   * **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
 
 Math Tools
 ----------
@@ -187,14 +227,15 @@ Math Tools
    
    * **bool** Whether any nodes of a line go within the box.
    
-.. py:function:: renderer.mathtools.dash(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], d: Union[int, float] [, o=0, emptyStart=False])
+.. py:function:: renderer.mathtools.dash(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], d: Union[int, float], g: Union[int, float] [, o=0, emptyStart=False])
    
    Finds points along a segment that are a specified distance apart.
    
    **Parameters**
    
    * int/float **x1, y1, x2, y2**: the coordinates of two points of the segment
-   * int/float **d**: the distance between points
+   * int/float **d**: the length of a single dash
+   * int/float **g**: the length of the gap between dashes
    * int/float **o** *(default=0)*: the offset from (x1,y1) towards (x2,y2) before dashes are calculated
    * bool **emptyStart** *(default=False)*: Whether to start the line from (x1,y1) empty before the start of the next dash
    
@@ -202,18 +243,19 @@ Math Tools
    
    * **list[list[tuple]]** A list of points along the segment, given in [[(x1, y1), (x2, y2)], etc]
 
-.. py:function:: renderer.mathtools.dashOffset(coords: list, d: Union[int, float])
+.. py:function:: renderer.mathtools.dashOffset(coords: list, d: Union[int, float], g: Union[int, float])
 
    Calculates the offsets on each coord of a line for a smoother dashing sequence.
 
    **Parameters**
 
    * list **coords**: the coords of the line
-   * int/float **d**: the distance between points
+   * int/float **d**: the length of a single dash
+   * int/float **g**: the length of the gap between dashes
 
    **Returns**
 
-   * **list[float]** The offsets of each coordinate
+   * **list[tuple]** The offsets of each coordinate, and whether to start the next segment with emptyStart, given in (offset, emptyStart)
 
 .. py:function:: renderer.mathtools.rotateAroundPivot(x: Union[int, float], y: Union[int, float], px: Union[int, float], py: Union[int, float], theta: Union[int, float])
 
@@ -221,13 +263,25 @@ Math Tools
 
    **Parameters**
 
-   * int/float **x, y**: the coordinates to be rotate
+   * int/float **x, y**: the coordinates to be rotated
    * int/float **px, py**: the coordinates of the pivot
    * int/float **theta**: how many **degrees** to rotate
 
    **Returns**
 
    * **tuple** The rotated coordinates, given in (x,y)
+
+.. py:function:: renderer.mathtools.pointsAway(x: Union[int, float], y: Union[int, float], d: Union[int, float], m: Union[int, float])
+
+   Finds two points that are a specified distance away from a specified point, all on a straight line.
+
+   **Parameters**
+   * int/float **x, y**: the coordinates of the original point
+   * int/float **d**: the distance the two points from the original point
+   * int/float **m**: the gradient of the line. Give ``None`` for a gradient of undefined.
+
+   **Returns**
+   * **list[tuple]** Given in [(x1, y1), (x2, y2)]
 
 Utilities
 ---------
@@ -265,7 +319,7 @@ Utilities
    **Parameters**
    
    * list **nodes**: a list of node IDs.
-   * dict **nodeList**: a dictionary of nodes (see "Renderer input format")
+   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
    
    **Returns**
    
@@ -277,7 +331,7 @@ Utilities
    
    **Parameters**
    
-   * dict **nodeList**: a dictionary of nodes (see "Renderer input format")
+   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
    
    **Returns**
    
@@ -289,8 +343,8 @@ Utilities
    
    **Parameters**
    
-   * dict **plaList**: a dictionary of PLAs (see "Renderer input format")
-   * dict **nodeList**: a dictionary of nodes (see "Renderer input format")
+   * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
+   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
    
    **Returns**
    

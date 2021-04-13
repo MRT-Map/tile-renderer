@@ -1,6 +1,24 @@
 Changelog
 =========
 
+* **v1.0 (13/4/21)**
+
+  * added stripes for areas
+  * added offset for image centertext
+  * new function: ``renderer.tools.line_findEnds()``
+  * new function: ``renderer.mathtools.pointsAway()``
+
+    * replaces the messy and unresponsive find-two-points-n-units-away-from-a-point-on-a-straight-line calculations of sympy using trigo
+    * rendering should be faster now (``renderer.render.midpoint()``'s speed is now 0-1% of the original speed)
+    * **REJECT SYMPY, EMBRACE TRIGONOMETRY, ALL HAIL TRIGO**
+
+  * added a few more level 2 logs to ``renderer.render()``
+  * new function: ``renderer.tileMerge()``, used to merge tiles
+  * changed output of ``renderer.render()`` from list to dict
+  * in counting of rendering operations in ``renderer.render()``, added 1 to each tilePlas to account for text
+  * rewrote ``renderer.mathtools.dash()`` and ``renderer.mathtools.dashOffset()``, they're no longer broken :D
+  * we've gone out of v0 versions woo
+
 * **v0.8 (7/4/21)**
 
   * Text of points are now rendered together with texts of lines and areas
