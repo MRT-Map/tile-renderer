@@ -1,10 +1,13 @@
 # tile-renderer
 Tile renderer for leaflet.js usage, made by 7d
 
+**Note: renderer is complete, but not the skin or the tutorials.**
+**Hence mapping is not open to the public yet.**
+
 **Documentation: https://tile-renderer.readthedocs.io/en/latest/**
 
 ## Current version: v1.0
-* **v1.0 ()**
+* **v1.0 (13/4/21)**
   * added stripes for areas
   * added offset for image centertext
   * new function: `renderer.tools.line_findEnds()`
@@ -17,6 +20,7 @@ Tile renderer for leaflet.js usage, made by 7d
   * changed output of `renderer.render()` from list to dict
   * in counting of rendering operations in `renderer.render()`, added 1 to each tilePlas to account for text
   * rewrote `renderer.mathtools.dash()` and `renderer.mathtools.dashOffset()`, they're no longer broken :D
+  * we've gone out of v0 versions woo
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)
