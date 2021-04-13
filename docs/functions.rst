@@ -145,6 +145,18 @@ Tools
    **Return**
 
    * **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
+   
+.. py:function:: renderer.tools.tile_findEnds(coords: list)
+
+   Find the minimum and maximum x/y values of a set of tiles coords.
+
+   **Parameters**
+
+   * list **coords**: a list of tile coordinates, provide in a tuple of (z,x,y)
+
+   **Return**
+
+   * **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
 
 Math Tools
 ----------
@@ -265,7 +277,7 @@ Math Tools
 
    **Parameters**
    * int/float **x, y**: the coordinates of the original point
-   * int/float **d**: the distance the two points are from the original point
+   * int/float **d**: the distance the two points from the original point
    * int/float **m**: the gradient of the line. Give ``None`` for a gradient of undefined.
 
    **Returns**
