@@ -1,4 +1,4 @@
-tile-renderer 1.0
+tile-renderer 1.1
 =========================================
 
 Tile renderer for leaflet.js usage, made by 7d. `Git repo here <https://github.com/MRT-Map/tile-renderer>`_
