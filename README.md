@@ -9,6 +9,7 @@ Tile renderer for leaflet.js usage, made by 7d
 ## Current version: v1.1
 * **v1.1 ()**
   * Added log prefixes to `renderer.render()` and `renderer.tileMerge()`
+  * Improved curved line drawing
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)

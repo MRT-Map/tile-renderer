@@ -858,12 +858,11 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                 
                     def line_backfore():
                         if not "dash" in step.keys():
-                            img.line(coords, fill=step['colour'], width=step['width'])
+                            img.line(coords, fill=step['colour'], width=step['width'], joint="curve")
+                            if not "unroundedEnds" in info['tags']:
+                                img.ellipse([coords[0][0]-step['width']/2+1, coords[0][1]-step['width']/2+1, coords[0][0]+step['width']/2, coords[0][1]+step['width']/2], fill=step['colour'])
+                                img.ellipse([coords[-1][0]-step['width']/2+1, coords[-1][1]-step['width']/2+1, coords[-1][0]+step['width']/2, coords[-1][1]+step['width']/2], fill=step['colour'])
                             internal.log(f"{tilePlas}: {plaId}: Line drawn", 2, verbosityLevel, logPrefix)
-                            for x, y in coords:
-                                if not ("unroundedEnds" in info['tags'] and coords.index((x,y)) in [0, len(coords)-1]):
-                                    img.ellipse([x-step['width']/2+1, y-step['width']/2+1, x+step['width']/2, y+step['width']/2], fill=step['colour'])
-                            internal.log(f"{tilePlas}: {plaId}: Joints drawn", 2, verbosityLevel, logPrefix)
                         else:
                             offsetInfo = mathtools.dashOffset(coords, step['dash'][0], step['dash'][1])
                             #print(offsetInfo)
@@ -942,10 +941,9 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                         internal.log(f"{tilePlas}: {plaId}: Area filled", 2, verbosityLevel, logPrefix)
                         outlineCoords = coords[:]
                         outlineCoords.append(outlineCoords[0])
-                        img.line(outlineCoords, fill=step['outline'], width=2)
-                        for x, y in outlineCoords:
-                            if not ("unroundedEnds" in info['tags'] and outlineCoords.index((x,y)) in [0, len(outlineCoords)-1]):
-                                img.ellipse([x-2/2+1, y-2/2+1, x+2/2-1, y+2/2-1], fill=step['outline'])
+                        img.line(coords, fill=step['colour'], width=step['width'], joint="curve")
+                        if not "unroundedEnds" in info['tags']:
+                            img.ellipse([coords[0][0]-step['width']/2+1, coords[0][1]-step['width']/2+1, coords[0][0]+step['width']/2, coords[0][1]+step['width']/2], fill=step['colour'])
                         internal.log(f"{tilePlas}: {plaId}: Outline drawn", 2, verbosityLevel, logPrefix)
 
                     def area_centerimage():
@@ -1023,10 +1021,10 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                     conCoords[2] = ((conCoords[2][0]+conCoords[1][0])/2, (conCoords[2][1]+conCoords[1][1])/2)
                             internal.log(f"{tilePlas}: Coords processed", 2, verbosityLevel, logPrefix)
                             if not "dash" in conStep.keys():
-                                img.line(conCoords, fill=conStep['colour'], width=conStep['width'])
-                                for x, y in conCoords:
-                                    img.ellipse([x-conStep['width']/2+1, y-conStep['width']/2+1, x+conStep['width']/2, y+conStep['width']/2], fill=conStep['colour'])
-                                
+                                img.line(conCoords, fill=conStep['colour'], width=conStep['width'], joint="curve")
+                                img.ellipse([conCoords[0][0]-conStep['width']/2+1, conCoords[0][1]-conStep['width']/2+1, conCoords[0][0]+conStep['width']/2, conCoords[0][1]+conStep['width']/2], fill=step['colour'])
+                                img.ellipse([conCoords[-1][0]-conStep['width']/2+1, conCoords[-1][1]-conStep['width']/2+1, conCoords[-1][0]+conStep['width']/2, conCoords[-1][1]+conStep['width']/2], fill=step['colour'])
+
                             else:
                                 offsetInfo = mathtools.dashOffset(preConCoords, conStep['dash'][0], conStep['dash'][1])[index:]
                                 #print(offsetInfo)
