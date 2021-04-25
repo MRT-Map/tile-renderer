@@ -2376,7 +2376,7 @@
     },
     "enc-zone_costaWest1": {
         "x": 26676,
-        "y": -18208,
+        "y": -18210,
         "connections": []
     },
     "enc-zone_costaWest2": {
@@ -3139,12 +3139,12 @@
         "y": -18423,
         "connections": []
     },
-    "enc-rockyPlateauHighSch_Block8_3": {
+    "enc-rockyPlateauHighSch_Block8_3_fence18": {
         "x": 26620,
         "y": -18423,
         "connections": []
     },
-    "enc-rockyPlateauHighSch_Block8_4": {
+    "enc-rockyPlateauHighSch_Block8_4_fence17": {
         "x": 26620,
         "y": -18441,
         "connections": []
@@ -4217,6 +4217,1166 @@
     "enc-seawallPark35": {
         "x": 26703,
         "y": -18313,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence1": {
+        "x": 26721,
+        "y": -18386,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence2": {
+        "x": 26721,
+        "y": -18416,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence3": {
+        "x": 26709,
+        "y": -18416,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence4": {
+        "x": 26705,
+        "y": -18421,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence5": {
+        "x": 26705,
+        "y": -18430,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence6": {
+        "x": 26701,
+        "y": -18434,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence7": {
+        "x": 26693,
+        "y": -18434,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence8": {
+        "x": 26685,
+        "y": -18442,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence9": {
+        "x": 26684,
+        "y": -18446,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence10": {
+        "x": 26678,
+        "y": -18452,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence11": {
+        "x": 26672,
+        "y": -18455,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence12": {
+        "x": 26668,
+        "y": -18455,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence13": {
+        "x": 26659,
+        "y": -18462,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence14": {
+        "x": 26653,
+        "y": -18462,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence15": {
+        "x": 26634,
+        "y": -18457,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence16": {
+        "x": 26626,
+        "y": -18450,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence19": {
+        "x": 26626,
+        "y": -18418,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence20": {
+        "x": 26647,
+        "y": -18418,
+        "connections": []
+    },
+    "enc-rockyPlateauHighSch_fence21": {
+        "x": 26647,
+        "y": -18395,
+        "connections": []
+    },
+    "enc-lookoutPark1": {
+        "x": 26662,
+        "y": -18343,
+        "connections": []
+    },
+    "enc-lookoutPark2": {
+        "x": 26662,
+        "y": -18323,
+        "connections": []
+    },
+    "enc-lookoutPark3": {
+        "x": 26640,
+        "y": -18339,
+        "connections": []
+    },
+    "enc-lookoutPark4": {
+        "x": 26629,
+        "y": -18344,
+        "connections": []
+    },
+    "enc-lookoutPark5": {
+        "x": 26609,
+        "y": -18344,
+        "connections": []
+    },
+    "enc-lookoutPark6": {
+        "x": 26602,
+        "y": -18351,
+        "connections": []
+    },
+    "enc-lookoutPark7": {
+        "x": 26599,
+        "y": -18360,
+        "connections": []
+    },
+    "enc-lookoutPark8": {
+        "x": 26599,
+        "y": -18391,
+        "connections": []
+    },
+    "enc-lookoutPark9": {
+        "x": 26614,
+        "y": -18385,
+        "connections": []
+    },
+    "enc-lookoutPark10": {
+        "x": 26625,
+        "y": -18377,
+        "connections": []
+    },
+    "enc-lookoutPark11": {
+        "x": 26633,
+        "y": -18374,
+        "connections": []
+    },
+    "enc-lookoutPark12": {
+        "x": 26633,
+        "y": -18368,
+        "connections": []
+    },
+    "enc-lookoutPark13": {
+        "x": 26623,
+        "y": -18368,
+        "connections": []
+    },
+    "enc-lookoutPark14": {
+        "x": 26620,
+        "y": -18365,
+        "connections": []
+    },
+    "enc-lookoutPark15": {
+        "x": 26620,
+        "y": -18359,
+        "connections": []
+    },
+    "enc-lookoutPark17": {
+        "x": 26623,
+        "y": -18356,
+        "connections": []
+    },
+    "enc-lookoutPark18": {
+        "x": 26638,
+        "y": -18352,
+        "connections": []
+    },
+    "enc-lookoutPark19": {
+        "x": 26644,
+        "y": -18347,
+        "connections": []
+    },
+    "enc-cityForest1": {
+        "x": 26556,
+        "y": -18160,
+        "connections": []
+    },
+    "enc-cityForestA1": {
+        "x": 26556,
+        "y": -18160,
+        "connections": []
+    },
+    "enc-cityForestA2": {
+        "x": 26600,
+        "y": -18160,
+        "connections": []
+    },
+    "enc-cityForestA3": {
+        "x": 26600,
+        "y": -18148,
+        "connections": []
+    },
+    "enc-cityForestA4": {
+        "x": 26566,
+        "y": -18148,
+        "connections": []
+    },
+    "enc-cityForestA5": {
+        "x": 26564,
+        "y": -18153,
+        "connections": []
+    },
+    "enc-cityForestB1": {
+        "x": 26470,
+        "y": -18189,
+        "connections": []
+    },
+    "enc-cityForestB2": {
+        "x": 26470,
+        "y": -18190,
+        "connections": []
+    },
+    "enc-cityForestB3": {
+        "x": 26475,
+        "y": -18195,
+        "connections": []
+    },
+    "enc-cityForestB4": {
+        "x": 26475,
+        "y": -18197,
+        "connections": []
+    },
+    "enc-cityForestB6": {
+        "x": 26480,
+        "y": -18200,
+        "connections": []
+    },
+    "enc-cityForestB5": {
+        "x": 26478,
+        "y": -18200,
+        "connections": []
+    },
+    "7": {
+        "x": 26480,
+        "y": -18189,
+        "connections": []
+    },
+    "enc-cityForestB7": {
+        "x": 26480,
+        "y": -18189,
+        "connections": []
+    },
+    "enc-cityForestC1": {
+        "x": 26493,
+        "y": -18208,
+        "connections": []
+    },
+    "enc-cityForestC2": {
+        "x": 26498,
+        "y": -18214,
+        "connections": []
+    },
+    "enc-cityForestC3": {
+        "x": 26507,
+        "y": -18220,
+        "connections": []
+    },
+    "enc-cityForestC4": {
+        "x": 26510,
+        "y": -18220,
+        "connections": []
+    },
+    "enc-cityForestC5": {
+        "x": 26514,
+        "y": -18215,
+        "connections": []
+    },
+    "enc-cityForestC6": {
+        "x": 26514,
+        "y": -18213,
+        "connections": []
+    },
+    "enc-cityForestC7": {
+        "x": 26518,
+        "y": -18208,
+        "connections": []
+    },
+    "enc-cityForestD1": {
+        "x": 26551,
+        "y": -18210,
+        "connections": []
+    },
+    "enc-cityForestD2": {
+        "x": 26551,
+        "y": -18223,
+        "connections": []
+    },
+    "enc-cityForestD3": {
+        "x": 26555,
+        "y": -18228,
+        "connections": []
+    },
+    "enc-cityForestD4": {
+        "x": 26558,
+        "y": -18229,
+        "connections": []
+    },
+    "enc-cityForestD5": {
+        "x": 26563,
+        "y": -18229,
+        "connections": []
+    },
+    "enc-cityForestD6": {
+        "x": 26563,
+        "y": -18210,
+        "connections": []
+    },
+    "enc-cityForestE1": {
+        "x": 26600,
+        "y": -18221,
+        "connections": []
+    },
+    "enc-cityForestE2": {
+        "x": 26597,
+        "y": -18226,
+        "connections": []
+    },
+    "enc-cityForestE3": {
+        "x": 26592,
+        "y": -18229,
+        "connections": []
+    },
+    "enc-cityForestE4": {
+        "x": 26600,
+        "y": -18229,
+        "connections": []
+    },
+    "enc-cityForestF1": {
+        "x": 26542,
+        "y": -18234,
+        "connections": []
+    },
+    "enc-cityForestF2": {
+        "x": 26542,
+        "y": -18242,
+        "connections": []
+    },
+    "enc-cityForestF3": {
+        "x": 26545,
+        "y": -18244,
+        "connections": []
+    },
+    "enc-cityForestF4": {
+        "x": 26545,
+        "y": -18246,
+        "connections": []
+    },
+    "enc-cityForestF5": {
+        "x": 26547,
+        "y": -18249,
+        "connections": []
+    },
+    "enc-cityForestF6": {
+        "x": 26551,
+        "y": -18251,
+        "connections": []
+    },
+    "/execute in minecraft:overworld run tp @s 26558.70 71.00 -18258.84 2357.12 90.00": {
+        "x": 26558,
+        "y": -18258,
+        "connections": []
+    },
+    "enc-cityForestF7": {
+        "x": 26558,
+        "y": -18258,
+        "connections": []
+    },
+    "enc-cityForestF8": {
+        "x": 26557,
+        "y": -18268,
+        "connections": []
+    },
+    "enc-cityForestF9": {
+        "x": 26550,
+        "y": -18274,
+        "connections": []
+    },
+    "enc-cityForestF10": {
+        "x": 26561,
+        "y": -18274,
+        "connections": []
+    },
+    "enc-cityForestF11": {
+        "x": 26561,
+        "y": -18243,
+        "connections": []
+    },
+    "enc-cityForestF12": {
+        "x": 26555,
+        "y": -18243,
+        "connections": []
+    },
+    "enc-cityForestF13": {
+        "x": 26547,
+        "y": -18240,
+        "connections": []
+    },
+    "enc-cityForestG1": {
+        "x": 26543,
+        "y": -18279,
+        "connections": []
+    },
+    "enc-cityForestG2": {
+        "x": 26537,
+        "y": -18279,
+        "connections": []
+    },
+    "enc-cityForestG3": {
+        "x": 26534,
+        "y": -18284,
+        "connections": []
+    },
+    "enc-cityForestG4": {
+        "x": 26530,
+        "y": -18286,
+        "connections": []
+    },
+    "enc-cityForestG5": {
+        "x": 26523,
+        "y": -18298,
+        "connections": []
+    },
+    "enc-cityForestG6": {
+        "x": 26546,
+        "y": -18298,
+        "connections": []
+    },
+    "enc-cityForestG7": {
+        "x": 26546,
+        "y": -18286,
+        "connections": []
+    },
+    "enc-cityForestG8": {
+        "x": 26543,
+        "y": -18283,
+        "connections": []
+    },
+    "enc-cityForestH1": {
+        "x": 26676,
+        "y": -18281,
+        "connections": []
+    },
+    "enc-cityForestH2": {
+        "x": 26676,
+        "y": -18297,
+        "connections": []
+    },
+    "enc-cityForestH3": {
+        "x": 26698,
+        "y": -18297,
+        "connections": []
+    },
+    "enc-cityForestH4": {
+        "x": 26698,
+        "y": -18301,
+        "connections": []
+    },
+    "enc-cityForestH5": {
+        "x": 26700,
+        "y": -18306,
+        "connections": []
+    },
+    "enc-cityForestH6": {
+        "x": 26700,
+        "y": -18312,
+        "connections": []
+    },
+    "enc-cityForestH7": {
+        "x": 26693,
+        "y": -18309,
+        "connections": []
+    },
+    "enc-cityForestH8": {
+        "x": 26687,
+        "y": -18309,
+        "connections": []
+    },
+    "enc-cityForestH9": {
+        "x": 26683,
+        "y": -18311,
+        "connections": []
+    },
+    "enc-cityForestH10": {
+        "x": 26676,
+        "y": -18318,
+        "connections": []
+    },
+    "enc-cityForestH11": {
+        "x": 26676,
+        "y": -18301,
+        "connections": []
+    },
+    "enc-cityForestH12": {
+        "x": 26665,
+        "y": -18301,
+        "connections": []
+    },
+    "enc-cityForestH13": {
+        "x": 26665,
+        "y": -18287,
+        "connections": []
+    },
+    "enc-cityForestH14": {
+        "x": 26669,
+        "y": -18287,
+        "connections": []
+    },
+    "enc-cityForestI1": {
+        "x": 26675,
+        "y": -18321,
+        "connections": []
+    },
+    "enc-cityForestI2": {
+        "x": 26667,
+        "y": -18321,
+        "connections": []
+    },
+    "enc-cityForestI3": {
+        "x": 26668,
+        "y": -18323,
+        "connections": []
+    },
+    "enc-cityForestI4": {
+        "x": 26673,
+        "y": -18325,
+        "connections": []
+    },
+    "enc-cityForestJ1": {
+        "x": 26653,
+        "y": -18325,
+        "connections": []
+    },
+    "enc-cityForestJ2": {
+        "x": 26638,
+        "y": -18325,
+        "connections": []
+    },
+    "enc-cityForestJ3": {
+        "x": 26638,
+        "y": -18336,
+        "connections": []
+    },
+    "enc-cityForestK1": {
+        "x": 26600,
+        "y": -18322,
+        "connections": []
+    },
+    "enc-cityForestK2": {
+        "x": 26593,
+        "y": -18322,
+        "connections": []
+    },
+    "enc-cityForestK3": {
+        "x": 26593,
+        "y": -18343,
+        "connections": []
+    },
+    "enc-cityForestK4": {
+        "x": 26597,
+        "y": -18338,
+        "connections": []
+    },
+    "enc-cityForestK5": {
+        "x": 26600,
+        "y": -18329,
+        "connections": []
+    },
+    "enc-cityForestL1": {
+        "x": 26579,
+        "y": -18307,
+        "connections": []
+    },
+    "enc-cityForestL2": {
+        "x": 26566,
+        "y": -18307,
+        "connections": []
+    },
+    "enc-cityForestL3": {
+        "x": 26566,
+        "y": -18315,
+        "connections": []
+    },
+    "enc-cityForestL4": {
+        "x": 26568,
+        "y": -18316,
+        "connections": []
+    },
+    "enc-cityForestL5": {
+        "x": 26579,
+        "y": -18316,
+        "connections": []
+    },
+    "enc-cityForestM1": {
+        "x": 26545,
+        "y": -18319,
+        "connections": []
+    },
+    "enc-cityForestM2": {
+        "x": 26531,
+        "y": -18319,
+        "connections": []
+    },
+    "enc-cityForestM3": {
+        "x": 26532,
+        "y": -18322,
+        "connections": []
+    },
+    "enc-cityForestM4": {
+        "x": 26535,
+        "y": -18325,
+        "connections": []
+    },
+    "enc-cityForestM5": {
+        "x": 26537,
+        "y": -18325,
+        "connections": []
+    },
+    "enc-MCNP_forest1_river1": {
+        "x": 26479,
+        "y": -18133,
+        "connections": []
+    },
+    "enc-MCNP_forest1_river2": {
+        "x": 26470,
+        "y": -18142,
+        "connections": []
+    },
+    "enc-MCNP_forest2_river2": {
+        "x": 26470,
+        "y": -18142,
+        "connections": []
+    },
+    "enc-MCNP_forest3_river3": {
+        "x": 26460,
+        "y": -18146,
+        "connections": []
+    },
+    "enc-MCNP_forest4_river4": {
+        "x": 26452,
+        "y": -18146,
+        "connections": []
+    },
+    "enc-MCNP_forest5_river5": {
+        "x": 26437,
+        "y": -18158,
+        "connections": []
+    },
+    "enc-MCNP_forest6_river6": {
+        "x": 26425,
+        "y": -18161,
+        "connections": []
+    },
+    "enc-MCNP_forest7_river7": {
+        "x": 26412,
+        "y": -18162,
+        "connections": []
+    },
+    "enc-MCNP_forest8_river8": {
+        "x": 26410,
+        "y": -18164,
+        "connections": []
+    },
+    "enc-MCNP_forest9_river9": {
+        "x": 26407,
+        "y": -18168,
+        "connections": []
+    },
+    "enc-MCNP_forest10_river10": {
+        "x": 26396,
+        "y": -18170,
+        "connections": []
+    },
+    "enc-MCNP_forest11_river11": {
+        "x": 26388,
+        "y": -18176,
+        "connections": []
+    },
+    "enc-MCNP_forest12_river12": {
+        "x": 26380,
+        "y": -18183,
+        "connections": []
+    },
+    "enc-MCNP_forest13_river13": {
+        "x": 26378,
+        "y": -18183,
+        "connections": []
+    },
+    "enc-MCNP_forest14_river14": {
+        "x": 26376,
+        "y": -18180,
+        "connections": []
+    },
+    "enc-MCNP_forest15_river15": {
+        "x": 26371,
+        "y": -18179,
+        "connections": []
+    },
+    "enc-MCNP_forest16_river16": {
+        "x": 26371,
+        "y": -18170,
+        "connections": []
+    },
+    "enc-MCNP_forest17_river16": {
+        "x": 26377,
+        "y": -18165,
+        "connections": []
+    },
+    "enc-MCNP_forest16_river17": {
+        "x": 26377,
+        "y": -18165,
+        "connections": []
+    },
+    "enc-MCNP_forest18_river18": {
+        "x": 26380,
+        "y": -18161,
+        "connections": []
+    },
+    "enc-MCNP_forest19_river19": {
+        "x": 26388,
+        "y": -18161,
+        "connections": []
+    },
+    "enc-MCNP_forest20_river20": {
+        "x": 26392,
+        "y": -18164,
+        "connections": []
+    },
+    "enc-MCNP_forest21_river21": {
+        "x": 26401,
+        "y": -18164,
+        "connections": []
+    },
+    "enc-MCNP_forest22_river22": {
+        "x": 26408,
+        "y": -18155,
+        "connections": []
+    },
+    "enc-MCNP_forest23_river23": {
+        "x": 26408,
+        "y": -18148,
+        "connections": []
+    },
+    "enc-MCNP_forest24_river24": {
+        "x": 26412,
+        "y": -18143,
+        "connections": []
+    },
+    "enc-MCNP_forest25_river25": {
+        "x": 26417,
+        "y": -18141,
+        "connections": []
+    },
+    "enc-MCNP_forest26_river26": {
+        "x": 26427,
+        "y": -18142,
+        "connections": []
+    },
+    "enc-MCNP_forest27_river27": {
+        "x": 26431,
+        "y": -18140,
+        "connections": []
+    },
+    "enc-MCNP_forest28_river28": {
+        "x": 26433,
+        "y": -18135,
+        "connections": []
+    },
+    "enc-MCNP_forest29_river29": {
+        "x": 26430,
+        "y": -18128,
+        "connections": []
+    },
+    "enc-MCNP_forest30_river30": {
+        "x": 26428,
+        "y": -18127,
+        "connections": []
+    },
+    "enc-MCNP_forest31_river31": {
+        "x": 26435,
+        "y": -18123,
+        "connections": []
+    },
+    "enc-MCNP_forest32_river32": {
+        "x": 26452,
+        "y": -18123,
+        "connections": []
+    },
+    "enc-MCNP_forest33_river33": {
+        "x": 26457,
+        "y": -18124,
+        "connections": []
+    },
+    "enc-MCNP_forest34_river34": {
+        "x": 26457,
+        "y": -18119,
+        "connections": []
+    },
+    "enc-MCNP_forest35_river35": {
+        "x": 26445,
+        "y": -18108,
+        "connections": []
+    },
+    "enc-MCNP_forest36_river36": {
+        "x": 26441,
+        "y": -18102,
+        "connections": []
+    },
+    "enc-MCNP_forest37_river37": {
+        "x": 26436,
+        "y": -18099,
+        "connections": []
+    },
+    "enc-MCNP_forest38_river38": {
+        "x": 26431,
+        "y": -18102,
+        "connections": []
+    },
+    "enc-MCNP_forest39_river39": {
+        "x": 26428,
+        "y": -18112,
+        "connections": []
+    },
+    "enc-MCNP_forest40_river40": {
+        "x": 26413,
+        "y": -18112,
+        "connections": []
+    },
+    "enc-MCNP_forest41_river41": {
+        "x": 26405,
+        "y": -18108,
+        "connections": []
+    },
+    "enc-MCNP_forest42_river42": {
+        "x": 26403,
+        "y": -18108,
+        "connections": []
+    },
+    "enc-MCNP_forest43_river43": {
+        "x": 26399,
+        "y": -18111,
+        "connections": []
+    },
+    "enc-MCNP_forest44_river44": {
+        "x": 26395,
+        "y": -18121,
+        "connections": []
+    },
+    "enc-MCNP_forest45_river45": {
+        "x": 26389,
+        "y": -18128,
+        "connections": []
+    },
+    "enc-MCNP_forest46_river46": {
+        "x": 26382,
+        "y": -18131,
+        "connections": []
+    },
+    "enc-MCNP_forest47_river47": {
+        "x": 26369,
+        "y": -18131,
+        "connections": []
+    },
+    "enc-MCNP_forest48_river48": {
+        "x": 26359,
+        "y": -18133,
+        "connections": []
+    },
+    "enc-MCNP_forest49_river49": {
+        "x": 26355,
+        "y": -18137,
+        "connections": []
+    },
+    "enc-MCNP_forest50_river5-0": {
+        "x": 26351,
+        "y": -18146,
+        "connections": []
+    },
+    "enc-MCNP_forest50_river50": {
+        "x": 26351,
+        "y": -18146,
+        "connections": []
+    },
+    "enc-MCNP_forest51_river51": {
+        "x": 26351,
+        "y": -18155,
+        "connections": []
+    },
+    "enc-MCNP_forest52_river52": {
+        "x": 26348,
+        "y": -18163,
+        "connections": []
+    },
+    "enc-MCNP_forest53_river53": {
+        "x": 26342,
+        "y": -18167,
+        "connections": []
+    },
+    "enc-MCNP_forest54_river54": {
+        "x": 26343,
+        "y": -18176,
+        "connections": []
+    },
+    "enc-MCNP_forest55_river55": {
+        "x": 26345,
+        "y": -18179,
+        "connections": []
+    },
+    "enc-MCNP_forest56_river56_stoneA1": {
+        "x": 26342,
+        "y": -18185,
+        "connections": []
+    },
+    "enc-MCNP_forest57_stoneA2": {
+        "x": 26350,
+        "y": -18190,
+        "connections": []
+    },
+    "enc-MCNP_forest58_stoneA3": {
+        "x": 26352,
+        "y": -18196,
+        "connections": []
+    },
+    "enc-MCNP_forest59_stoneA4": {
+        "x": 26360,
+        "y": -18198,
+        "connections": []
+    },
+    "enc-MCNP_forest60_stoneA5": {
+        "x": 26366,
+        "y": -18203,
+        "connections": []
+    },
+    "enc-MCNP_forest61_stoneA6": {
+        "x": 26370,
+        "y": -18212,
+        "connections": []
+    },
+    "enc-MCNP_forest62_stoneA7": {
+        "x": 26375,
+        "y": -18216,
+        "connections": []
+    },
+    "enc-MCNP_forest63_stoneA8": {
+        "x": 26377,
+        "y": -18221,
+        "connections": []
+    },
+    "enc-MCNP_forest64_river83_stoneA9": {
+        "x": 26376,
+        "y": -18231,
+        "connections": []
+    },
+    "enc-MCNP_river82_stoneA10": {
+        "x": 26370,
+        "y": -18236,
+        "connections": []
+    },
+    "enc-MCNP_river81_stoneA11": {
+        "x": 26369,
+        "y": -18239,
+        "connections": []
+    },
+    "enc-MCNP_river80_stoneA12": {
+        "x": 26369,
+        "y": -18243,
+        "connections": []
+    },
+    "enc-MCNP_river79_stoneA13": {
+        "x": 26375,
+        "y": -18250,
+        "connections": []
+    },
+    "enc-MCNP_river78_stoneA1": {
+        "x": 26378,
+        "y": -18251,
+        "connections": []
+    },
+    "enc-MCNP_river77_stoneA14": {
+        "x": 26378,
+        "y": -18251,
+        "connections": []
+    },
+    "enc-MCNP_river76_stoneA15": {
+        "x": 26385,
+        "y": -18260,
+        "connections": []
+    },
+    "enc-MCNP_river75_stoneA16": {
+        "x": 26385,
+        "y": -18265,
+        "connections": []
+    },
+    "enc-MCNP_river74_stoneA17": {
+        "x": 26377,
+        "y": -18270,
+        "connections": []
+    },
+    "enc-MCNP_river73_stoneA18": {
+        "x": 26372,
+        "y": -18268,
+        "connections": []
+    },
+    "enc-MCNP_secforestA1_river72_stoneA18": {
+        "x": 26375,
+        "y": -18270,
+        "connections": []
+    },
+    "enc-MCNP_secforestA2_stoneA19": {
+        "x": 26374,
+        "y": -18262,
+        "connections": []
+    },
+    "enc-MCNP_secforestA3_stoneA20": {
+        "x": 26370,
+        "y": -18259,
+        "connections": []
+    },
+    "enc-MCNP_secforestA4_stoneA21": {
+        "x": 26365,
+        "y": -18256,
+        "connections": []
+    },
+    "enc-MCNP_secforestA5_stoneA22": {
+        "x": 26355,
+        "y": -18256,
+        "connections": []
+    },
+    "enc-MCNP_secforestA6_stoneA23": {
+        "x": 26352,
+        "y": -18250,
+        "connections": []
+    },
+    "enc-MCNP_secforestA7_stoneA24": {
+        "x": 26350,
+        "y": -18245,
+        "connections": []
+    },
+    "enc-MCNP_secforestA8_stoneA25": {
+        "x": 26343,
+        "y": -18243,
+        "connections": []
+    },
+    "enc-MCNP_secforestA9_stoneA26": {
+        "x": 26341,
+        "y": -18231,
+        "connections": []
+    },
+    "enc-MCNP_secforestA10_stoneA27": {
+        "x": 26338,
+        "y": -18228,
+        "connections": []
+    },
+    "enc-MCNP_secforestA11_stoneA28": {
+        "x": 26336,
+        "y": -18222,
+        "connections": []
+    },
+    "enc-MCNP_secforestA12_stoneA29": {
+        "x": 26332,
+        "y": -18222,
+        "connections": []
+    },
+    "enc-MCNP_secforestA13_stoneA30": {
+        "x": 26328,
+        "y": -18221,
+        "connections": []
+    },
+    "enc-MCNP_secforestA14_stoneA31": {
+        "x": 26324,
+        "y": -18214,
+        "connections": []
+    },
+    "enc-MCNP_secforestA15_river59_stoneA32": {
+        "x": 26319,
+        "y": -18210,
+        "connections": []
+    },
+    "enc-MCNP_river58_stoneA33": {
+        "x": 26321,
+        "y": -18203,
+        "connections": []
+    },
+    "enc-MCNP_river57_stoneA34": {
+        "x": 26328,
+        "y": -18200,
+        "connections": []
+    },
+    "enc-MCNP_secforestA16_river60": {
+        "x": 26321,
+        "y": -18214,
+        "connections": []
+    },
+    "enc-MCNP_secforestA17_river61": {
+        "x": 26323,
+        "y": -18222,
+        "connections": []
+    },
+    "enc-MCNP_secforestA18_river62": {
+        "x": 26330,
+        "y": -18226,
+        "connections": []
+    },
+    "enc-MCNP_secforestA19_river63": {
+        "x": 26336,
+        "y": -18231,
+        "connections": []
+    },
+    "enc-MCNP_secforestA20_river64": {
+        "x": 26337,
+        "y": -18236,
+        "connections": []
+    },
+    "enc-MCNP_secforestA21_river65": {
+        "x": 26336,
+        "y": -18245,
+        "connections": []
+    },
+    "enc-MCNP_secforestA22_river66": {
+        "x": 26342,
+        "y": -18247,
+        "connections": []
+    },
+    "enc-MCNP_secforestA23_river67": {
+        "x": 26348,
+        "y": -18254,
+        "connections": []
+    },
+    "enc-MCNP_secforestA24_river68": {
+        "x": 26349,
+        "y": -18262,
+        "connections": []
+    },
+    "enc-MCNP_secforestA25_river69": {
+        "x": 26353,
+        "y": -18265,
+        "connections": []
+    },
+    "enc-MCNP_secforestA26_river70": {
+        "x": 26356,
+        "y": -18269,
+        "connections": []
+    },
+    "enc-MCNP_secforestA27_river71": {
+        "x": 26372,
+        "y": -18268,
         "connections": []
     }
 }
