@@ -10,6 +10,9 @@ import glob
 import re
 import numpy as np
 from schema import Schema, And, Or, Regex, Optional
+import multiprocessing
+import tqdm
+import sys
 init()
 
 class utils:
@@ -438,13 +441,13 @@ class mathtools:
         for c in range(len(coords)-1):
             dashes = mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], d, g, o, emptyStart)
             if dashes == []: #line has no dashes
-                prev = 0 if offsets == [] else left
+                prev = 0 if offsets == [] or left == None else left
                 remnant = math.dist(coords[c], coords[c+1])
                 o = abs(g - prev - remnant)
                 left = prev + remnant
                 emptyStart = True
             elif dashes[0] == [coords[c], coords[c+1]]: #line is entirely dash
-                prev = 0 if offsets == [] else left
+                prev = 0 if offsets == [] or left == None else left
                 remnant = math.dist(coords[c], coords[c+1])
                 o = abs(d - prev - remnant)
                 left = prev + remnant
@@ -490,6 +493,10 @@ class mathtools:
         return [(x+dx, y+dy), (x-dx, y-dy)]
 
 class tools:
+    def plaJsonToTiles(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int):
+        xMax, xMin, yMax, yMin = tools.plaJson_findEnds(plaList, nodeList)
+        return tools.lineToTiles([(xMax,yMax),(xMin,yMax),(xMax,yMin),(xMin,yMin)], minZoom, maxZoom, maxZoomRange)
+
     def tile_findEnds(coords: list):
         xMax = -math.inf
         xMin = math.inf
@@ -674,8 +681,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     if tiles != None:
         utils.tileCoordListIntegrity(tiles, minZoom, maxZoom)
     else: #finds box of tiles
-        xMax, xMin, yMax, yMin = tools.plaJson_findEnds(plaList, nodeList)
-        tiles = tools.lineToTiles([(xMax,yMax),(xMin,yMax),(xMax,yMin),(xMin,yMin)], minZoom, maxZoom, maxZoomRange)
+        tiles = tools.plaJsonToTiles(plaList, nodeList, minZoom, maxZoom, maxZoomRange)
     internal.log("Tiles to be generated found", 2, verbosityLevel, logPrefix)
 
     #sort PLAs by tiles
@@ -842,7 +848,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                                 getFont("b", step['size'])
                                 counter = 0
                                 t = math.floor(math.dist(coords[c], coords[c+1])/(4*textLength))
-                                for tx, ty, useless in mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset'], n=2*t+1):
+                                for tx, ty, _ in mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset'], n=2*t+1):
                                     if counter % 2 == 1:
                                         counter += 1
                                         continue
@@ -1049,7 +1055,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
             currentBoxCoords = [r(x-w/2, y-h/2), r(x-w/2, y+h/2), r(x+w/2, y+h/2), r(x+w/2, y-h/2), r(x-w/2, y-h/2)]
             canPrint = True
             for box in dontCross:
-                useless1, ox, oy, ow, oh, useless2 = textList[dontCross.index(box)]
+                _1, ox, oy, ow, oh, _2 = textList[dontCross.index(box)]
                 oMaxDist = ((ow/2)**2+(oh/2)**2)**0.5/2
                 thisMaxDist = ((w/2)**2+(h/2)**2)**0.5/2
                 dist = ((x-ox)**2+(y-oy)**2)**0.5
@@ -1089,3 +1095,31 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     internal.log("Render complete", 0, verbosityLevel, logPrefix)
 
     return tileReturn
+
+def _prerender(tiles, plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, **kwargs):
+    return render(plaList, nodeList, minZoom, maxZoom, maxZoomRange, **kwargs, tiles=tiles)
+
+def render_multiprocess(processes: int, plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, **kwargs):
+    #print(__name__)
+    if __name__ == 'renderer':
+        if not 'tiles' in kwargs.keys() or kwargs['tiles'] == None:
+            tiles = tools.plaJsonToTiles(plaList, nodeList, minZoom, maxZoom, maxZoomRange)
+        else:
+            tiles = kwargs['tiles']
+        for i in range(len(tiles)):
+            tiles[i] = (tiles[i], plaList, nodeList, minZoom, maxZoom, maxZoomRange, kwargs)
+        p = multiprocessing.Pool(processes)
+        try:
+            print(tiles)
+            preresult = list(tqdm.tqdm(p.imap(_prerender, tiles), total=len(tiles)))
+        except KeyboardInterrupt:
+            p.terminate()
+            sys.exit()
+        result = {}
+        for i in preresult:
+            if i == {}:
+                continue
+            k, v = list(i.items())[0]
+            result[k] = v
+        return result
+    
