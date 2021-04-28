@@ -20,7 +20,7 @@ def skinFileRead():
         f.close()
         return data
 #start = time.time()
-a = renderer.render_multiprocess(5, exampleplaRead(), examplenodesRead(), skinFileRead(), 8, 8, 8, saveDir="tiles/")
+#a = renderer.render_multiprocess(5, exampleplaRead(), examplenodesRead(), skinFileRead(), 8, 8, 8, saveDir="tiles/")
 #print(time.time() - start)
 #renderer.tileMerge(a, saveDir="tiles/")
 #print(renderer.mathtools.dash(0,0,11,0, 5, 5))
