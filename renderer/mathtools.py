@@ -99,7 +99,7 @@ def linesIntersect(x1: Union[int, float], y1: Union[int, float], x2: Union[int, 
 
 def pointInPoly(xp: Union[int, float], yp: Union[int, float], coords: list):
     r = -math.inf
-    for x, y in coords:
+    for x, _ in coords:
         if x > r:
             r = x
     r += 10
@@ -122,7 +122,7 @@ def polyCenter(coords: list):
     my = []
     for x1, y1 in coords:
         for x2, y2 in coords:
-            x3, y3, r = midpoint(x1, y1, x2, y2, 0)[0]
+            x3, y3, _ = midpoint(x1, y1, x2, y2, 0)[0]
             mx.append(x3)
             my.append(y3)
     return sum(mx)/len(mx), sum(my)/len(my)

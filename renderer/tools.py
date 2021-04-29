@@ -5,10 +5,12 @@ import renderer.validate as validate
 import renderer.mathtools as mathtools
 
 class plaJson:
+    @staticmethod
     def toTiles(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int):
         xMax, xMin, yMax, yMin = plaJson.findEnds(plaList, nodeList)
         return line.toTiles([(xMax,yMax),(xMin,yMax),(xMax,yMin),(xMin,yMin)], minZoom, maxZoom, maxZoomRange)
     
+    @staticmethod
     def findEnds(plaList: dict, nodeList: dict):
         xMax = -math.inf
         xMin = math.inf
@@ -23,6 +25,7 @@ class plaJson:
                 yMin = y if y < yMin else yMin
         return xMax, xMin, yMax, yMin
 
+    @staticmethod
     def renderedIn(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int):
         if maxZoom < minZoom:
             raise ValueError("Max zoom value is lesser than min zoom value")
@@ -35,12 +38,13 @@ class plaJson:
         return tiles
 
 class tile:
+    @staticmethod
     def findEnds(coords: list):
         xMax = -math.inf
         xMin = math.inf
         yMax = -math.inf
         yMin = math.inf
-        for z, x, y in coords:
+        for _, x, y in coords:
             xMax = x if x > xMax else xMax
             xMin = x if x < xMin else xMin
             yMax = y if y > yMax else yMax
@@ -48,6 +52,7 @@ class tile:
         return xMax, xMin, yMax, yMin
 
 class line:
+    @staticmethod
     def findEnds(coords: list):
         xMax = -math.inf
         xMin = math.inf
@@ -60,6 +65,7 @@ class line:
             yMin = y if y < yMin else yMin
         return xMax, xMin, yMax, yMin
 
+    @staticmethod
     def toTiles(coords: list, minZoom: int, maxZoom: int, maxZoomRange: int):
         if len(coords) == 0:
             raise ValueError("Empty list of coords given")
@@ -88,6 +94,7 @@ class line:
         return tiles
 
 class nodes:
+    @staticmethod
     def findPlasAttached(nodeId: str, plaList: dict):
         plas = []
         for plaId, pla in plaList.items():
@@ -96,6 +103,7 @@ class nodes:
                 plas.append((plaId, pla['nodes'].index(nodeId)))
         return plas
 
+    @staticmethod
     def toCoords(nodes: list, nodeList: dict):
         coords = []
         for nodeid in nodes:
@@ -105,6 +113,7 @@ class nodes:
         return coords
 
 class coord:
+    @staticmethod
     def toTiles(coord: list, minZoom: int, maxZoom: int, maxZoomRange: int):
         if maxZoom < minZoom:
             raise ValueError("Max zoom value is lesser than min zoom value")
