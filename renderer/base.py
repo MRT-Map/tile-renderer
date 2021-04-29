@@ -88,15 +88,15 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     
     # validation
     internal.log("Validating skin...", 0, verbosityLevel, logPrefix)
-    validate.skinJson(skinJson)
+    validate.vSkinJson(skinJson)
     internal.log("Validating PLAs...", 0, verbosityLevel, logPrefix)
-    validate.plaJson(plaList, nodeList)
+    validate.vPlaJson(plaList, nodeList)
     internal.log("Validating nodes...", 0, verbosityLevel, logPrefix)
-    validate.nodeJson(nodeList)
+    validate.vNodeJson(nodeList)
 
     #finds which tiles to render
     if tiles != None:
-        validate.tileCoords(tiles, minZoom, maxZoom)
+        validate.vTileCoords(tiles, minZoom, maxZoom)
     else: #finds box of tiles
         tiles = tools.plaJson.toTiles(plaList, nodeList, minZoom, maxZoom, maxZoomRange)
     internal.log("Tiles to be generated found", 2, verbosityLevel, logPrefix)

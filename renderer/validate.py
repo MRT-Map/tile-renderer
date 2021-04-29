@@ -6,7 +6,7 @@ import renderer.tools as tools
 import renderer.mathtools as mathtools
 init()
 
-def coords(coords: list):
+def vCoords(coords: list):
     """
     Validates a list of coordinates.
     More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.coords
@@ -21,7 +21,7 @@ def coords(coords: list):
                 raise TypeError(f"Coordinate {n} is not type 'int/float'")
     return True
 
-def tileCoords(tiles: list, minZoom: int, maxZoom: int):
+def vTileCoords(tiles: list, minZoom: int, maxZoom: int):
     """
     Validates a list of tile coordinates.
     More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.tileCoords
@@ -40,7 +40,7 @@ def tileCoords(tiles: list, minZoom: int, maxZoom: int):
             raise TypeError(f"Zoom value {item[0]} is not an integer")
     return True
 
-def nodeList(nodes: list, nodeList: dict):
+def vNodeList(nodes: list, nodeList: dict):
     """
     Validates a list of node IDs.
     More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.nodeList
@@ -51,7 +51,7 @@ def nodeList(nodes: list, nodeList: dict):
 
     return True
 
-def nodeJson(nodeList: dict):
+def vNodeJson(nodeList: dict):
     """
     Validates a dictionary/JSON of nodes.
     More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.nodeJson
@@ -66,7 +66,7 @@ def nodeJson(nodeList: dict):
     schema.validate(nodeList)
     return True
 
-def plaJson(plaList: dict, nodeList: dict):
+def vPlaJson(plaList: dict, nodeList: dict):
     """
     Validates a dictionary/JSON of PLAs.
     More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.plaJson
@@ -77,14 +77,14 @@ def plaJson(plaList: dict, nodeList: dict):
             "displayname": str,
             "description": str,
             "layer": Or(int, float),
-            "nodes": And(list, lambda i: nodeList(i, nodeList)),
+            "nodes": And(list, lambda i: vNodeList(i, nodeList)),
             "attrs": dict
         }
     })
     schema.validate(plaList)
     return True
             
-def skinJson(skinJson: dict):
+def vSkinJson(skinJson: dict):
     """
     Validates a skin JSON file.
     More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.skinJson
