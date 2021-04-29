@@ -10,13 +10,17 @@ Tile renderer for leaflet.js usage, made by 7d
 * **v1.1 ()**
   * Added log prefixes to `renderer.render()` and `renderer.tileMerge()`
   * Improved curved line drawing
+  * `renderer.py` is now split into a package
+    * `renderer.utils` renamed to `renderer.validate`
+    * all functions of `renderer.tools` and `renderer.validate` renamed
+    * method descriptions added to all functions except those in `renderer.internal`
+  * New function: `renderer.misc.getSkin()`
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)
-1. Download or clone this repo
-2. The important files and folders are `renderer.py` and `skins`. Copypaste those into the same directory as your project file.
-3. Write a node JSON file and a PLA JSON file. (Tutorial coming soon) Or, use the example files provided in `data`.
-4. In another Python file in the same directory as `renderer.py`, run the renderer. Here is an example code:
+1. Download or clone this repo<!--; or run `pip install tile-renderer`-->
+2. Write a node JSON file and a PLA JSON file. (Tutorial coming soon) Or, use the example files provided in `data`.
+3. In your file, run the renderer. Here is an example code:
 ```python
 import renderer # important!!
 import json
@@ -29,7 +33,7 @@ def readFile(dir): # extract from JSON as dict
 
 pla = readFile("path_to_your_PLA_file/pla.json")
 nodes = readFile("path_to_your_nodes_file/nodes.json")
-skin = readFile("path_to_your_skin_file/default.json")
+skin = renderer.misc.getSkin("default")
 
 renderer.render(pla, nodes, skin, 1, 2, 8)
 # renders tiles at zoom levels 1 and 2 with the max zoom tile covering 8 units

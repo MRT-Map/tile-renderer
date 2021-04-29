@@ -7,6 +7,10 @@ import renderer.mathtools as mathtools
 init()
 
 def coords(coords: list):
+    """
+    Validates a list of coordinates.
+    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.coords
+    """
     for item in coords:
         if not isinstance(item, tuple):
             raise TypeError(f"Coordinates {item} is not type 'tuple'")
@@ -18,6 +22,10 @@ def coords(coords: list):
     return True
 
 def tileCoords(tiles: list, minZoom: int, maxZoom: int):
+    """
+    Validates a list of tile coordinates.
+    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.tileCoords
+    """
     for item in tiles:
         if not isinstance(item, tuple):
             raise TypeError(f"Tile coordinates {item} is not type 'tuple'")
@@ -33,6 +41,10 @@ def tileCoords(tiles: list, minZoom: int, maxZoom: int):
     return True
 
 def nodeList(nodes: list, nodeList: dict):
+    """
+    Validates a list of node IDs.
+    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.nodeList
+    """
     for node in nodes:
         if not node in nodeList.keys():
             raise ValueError(f"Node '{node}' does not exist")
@@ -40,6 +52,10 @@ def nodeList(nodes: list, nodeList: dict):
     return True
 
 def nodeJson(nodeList: dict):
+    """
+    Validates a dictionary/JSON of nodes.
+    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.nodeJson
+    """
     schema = Schema({
         str: {
             "x": Or(int, float),
@@ -51,6 +67,10 @@ def nodeJson(nodeList: dict):
     return True
 
 def plaJson(plaList: dict, nodeList: dict):
+    """
+    Validates a dictionary/JSON of PLAs.
+    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.plaJson
+    """
     schema = Schema({
         str: {
             "type": str,
@@ -65,6 +85,10 @@ def plaJson(plaList: dict, nodeList: dict):
     return True
             
 def skinJson(skinJson: dict):
+    """
+    Validates a skin JSON file.
+    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.skinJson
+    """
     mainSchema = Schema({
         "info": {
             "size": int,

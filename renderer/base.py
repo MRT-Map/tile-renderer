@@ -14,6 +14,10 @@ import renderer.validate as validate
 import renderer.mathtools as mathtools
 
 def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveDir="tiles/", zoom=[], logPrefix=""):
+    """
+    Merges tiles rendered by renderer.render().
+    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#tileMerge
+    """
     tileReturn = {}
     if isinstance(images, str):
         imageDict = {}
@@ -74,6 +78,10 @@ def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveD
     return tileReturn
 
 def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, verbosityLevel=1, saveImages=True, saveDir="", assetsDir="renderer/skins/assets/", logPrefix="", tiles=None):
+    """
+    Renders tiles from given coordinates and zoom values.
+    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.render
+    """
     if maxZoom < minZoom:
         raise ValueError("Max zoom value is greater than min zoom value")
     tileReturn = {}

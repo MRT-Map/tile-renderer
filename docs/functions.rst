@@ -21,7 +21,7 @@ Main
    * int **maxZoom**: maximum zoom value
    * int **maxZoomRange**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
    * int **verbosityLevel** *(default: 1)*: the verbosity level of the output by the function. Use any number from 0 to 2
-   * int **saveImages** *(default: False)*: whether to save the tile images in a folder or not
+   * int **saveImages** *(default: True)*: whether to save the tile images in a folder or not
    * str **saveDir** *(default: "")*: the directory to save tiles in
    * str **assetsDir** *(default: "renderer/skins/assets/")*: the asset directory for the skin
    * list[tuple] **tiles** *(default: None)*: a list of tiles to render, given in tuples of ``(z,x,y)`` where z = zoom and x,y = tile coordinates
@@ -377,3 +377,18 @@ Validate
    **Returns**
    
    * **bool** Returns True if no errors
+
+Misc
+----
+
+.. py:function:: renderer.misc.getSkin(sname: str)
+   
+   Gets a skin from inside the package.
+
+   **Parameters**
+
+   * str **name**: the name of the skin
+
+   **Returns**
+   
+   * **dict** The skin JSON

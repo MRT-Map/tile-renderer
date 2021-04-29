@@ -19,6 +19,10 @@ import renderer.validate as validate
 init()
 
 def midpoint(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], o: Union[int, float], n=1, returnBoth=False):
+    """
+    Calculates the midpoint of two lines, offsets the distance away from the line, and calculates the rotation of the line.
+    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.mathtools.midpoint
+    """
     #print(x1, y1, x2, y2, o, n)
     points = []
     for p in range(1, n+1):
@@ -60,6 +64,10 @@ def midpoint(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float]
     return points
 
 def linesIntersect(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], x3: Union[int, float], y3: Union[int, float], x4: Union[int, float], y4: Union[int, float]):
+    """
+    Finds if two segments intersect.
+    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.mathtools.linesIntersect
+    """
     xv, yv = sym.symbols('xv,yv')
     if x1 == x2:
         m1 = None
@@ -98,6 +106,10 @@ def linesIntersect(x1: Union[int, float], y1: Union[int, float], x2: Union[int, 
     return False if (x5>max(x1,x2) or x5<min(x1,x2) or y5>max(y1,y2) or y5<min(y1,y2) or x5>max(x3,x4) or x5<min(x3,x4) or y5>max(y3,y4) or y5<min(y3,y4)) else True
 
 def pointInPoly(xp: Union[int, float], yp: Union[int, float], coords: list):
+    """
+    Finds if a point is in a polygon. WARNING: If your polygon has a lot of corners, this will take very long.
+    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.mathtools.pointInPoly
+    """
     r = -math.inf
     for x, _ in coords:
         if x > r:
@@ -118,6 +130,10 @@ def pointInPoly(xp: Union[int, float], yp: Union[int, float], coords: list):
     return cross % 2 == 1
             
 def polyCenter(coords: list):
+    """
+    Finds the center point of a polygon.
+    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.mathtools.polyCenter
+    """
     mx = []
     my = []
     for x1, y1 in coords:
@@ -128,6 +144,10 @@ def polyCenter(coords: list):
     return sum(mx)/len(mx), sum(my)/len(my)
 
 def lineInBox(line: list, top: Union[int, float], bottom: Union[int, float], left: Union[int, float], right: Union[int, float]):
+    """
+    Finds if any nodes of a line go within the box.
+    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.mathtools.lineInBox
+    """
     for i in range(len(line)-1):
         x1, y1 = line[i]
         x2, y2 = line[i+1]
@@ -140,6 +160,10 @@ def lineInBox(line: list, top: Union[int, float], bottom: Union[int, float], lef
     return False
 
 def dash(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], d: Union[int, float], g: Union[int, float], o=0, emptyStart=False):
+    """
+    Finds points along a segment that are a specified distance apart.
+    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.mathtools.dash
+    """
     if d <= 0 or g <= 0:
         return ValueError("dash or gap length cannot be <= 0")
     m = None if x1 == x2 else (y2-y1)/(x2-x1)
@@ -195,6 +219,10 @@ def dash(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2
     return dash
 
 def dashOffset(coords: list, d: Union[int, float], g: Union[int, float]):
+    """
+    Calculates the offsets on each coord of a line for a smoother dashing sequence.
+    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.mathtools.dashOffset
+    """
     o = 0
     offsets = [(0, False)]
     emptyStart = False
@@ -237,6 +265,10 @@ def dashOffset(coords: list, d: Union[int, float], g: Union[int, float]):
     return offsets
 
 def rotateAroundPivot(x: Union[int, float], y: Union[int, float], px: Union[int, float], py: Union[int, float], theta: Union[int, float]):
+    """
+    Rotates a set of coordinates around a pivot point.
+    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.mathtools.rotateAroundPivot
+    """
     #provide θ in degrees
     theta = math.radians(theta)
     x -= px
@@ -248,6 +280,10 @@ def rotateAroundPivot(x: Union[int, float], y: Union[int, float], px: Union[int,
     return nx, ny
 
 def pointsAway(x: Union[int, float], y: Union[int, float], d: Union[int, float], m: Union[int, float]):
+    """
+    Finds two points that are a specified distance away from a specified point, all on a straight line.
+    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.mathtools.pointsAway
+    """
     theta = math.atan(m) if m != None else math.pi/2
     dx = round(d*math.cos(theta), 10)
     dy = round(d*math.sin(theta), 10)

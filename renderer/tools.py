@@ -7,11 +7,19 @@ import renderer.mathtools as mathtools
 class plaJson:
     @staticmethod
     def toTiles(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int):
+        """
+        Finds all the tiles that all the PLAs in the JSON will be rendered in.
+        More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.plaJson.toTiles
+        """
         xMax, xMin, yMax, yMin = plaJson.findEnds(plaList, nodeList)
         return line.toTiles([(xMax,yMax),(xMin,yMax),(xMax,yMin),(xMin,yMin)], minZoom, maxZoom, maxZoomRange)
     
     @staticmethod
     def findEnds(plaList: dict, nodeList: dict):
+        """
+        Finds the minimum and maximum X and Y values of a JSON or dictionary of PLAs
+        More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.plaJson.findEnds
+        """
         xMax = -math.inf
         xMin = math.inf
         yMax = -math.inf
@@ -27,6 +35,10 @@ class plaJson:
 
     @staticmethod
     def renderedIn(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int):
+        """
+        Like renderer.tools.lineToTiles(), but for a JSON or dictionary of PLAs.
+        More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.plaJson.renderedIn
+        """
         if maxZoom < minZoom:
             raise ValueError("Max zoom value is lesser than min zoom value")
 
@@ -40,6 +52,10 @@ class plaJson:
 class tile:
     @staticmethod
     def findEnds(coords: list):
+        """
+        Find the minimum and maximum x/y values of a set of tiles coords.
+        More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.tile.findEnds
+        """
         xMax = -math.inf
         xMin = math.inf
         yMax = -math.inf
@@ -54,6 +70,10 @@ class tile:
 class line:
     @staticmethod
     def findEnds(coords: list):
+        """
+        Find the minimum and maximum x/y values of a set of coords.
+        More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.line.findEnds
+        """
         xMax = -math.inf
         xMin = math.inf
         yMax = -math.inf
@@ -67,6 +87,10 @@ class line:
 
     @staticmethod
     def toTiles(coords: list, minZoom: int, maxZoom: int, maxZoomRange: int):
+        """
+        Generates tile coordinates from list of regular coordinates using renderer.tools.coordToTiles().
+        More info: Mainly for rendering whole PLAs. https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.line.toTiles
+        """
         if len(coords) == 0:
             raise ValueError("Empty list of coords given")
         elif maxZoom < minZoom:
@@ -96,6 +120,10 @@ class line:
 class nodes:
     @staticmethod
     def findPlasAttached(nodeId: str, plaList: dict):
+        """
+        Finds which PLAs attach to a node.
+        More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.nodes.findPlasAttached
+        """
         plas = []
         for plaId, pla in plaList.items():
             #print(plaId)
@@ -105,6 +133,10 @@ class nodes:
 
     @staticmethod
     def toCoords(nodes: list, nodeList: dict):
+        """
+        Converts a list of nodes IDs into a list of coordinates with a node dictionary/JSON as its reference.
+        More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.nodes.toCoords
+        """
         coords = []
         for nodeid in nodes:
             if not nodeid in nodeList.keys():
@@ -115,6 +147,10 @@ class nodes:
 class coord:
     @staticmethod
     def toTiles(coord: list, minZoom: int, maxZoom: int, maxZoomRange: int):
+        """
+        Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
+        More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.coord.toTiles
+        """
         if maxZoom < minZoom:
             raise ValueError("Max zoom value is lesser than min zoom value")
 
