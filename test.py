@@ -15,12 +15,12 @@ def examplenodesRead():
         return data
 
 def skinFileRead():
-    with open("skins/default.json", "r") as f:
+    with open("renderer/skins/default.json", "r") as f:
         data = json.load(f)
         f.close()
         return data
 #start = time.time()
-#a = renderer.render_multiprocess(5, exampleplaRead(), examplenodesRead(), skinFileRead(), 8, 8, 8, saveDir="tiles/")
+a = renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 8, 8, 8, saveDir="tiles/")
 #print(time.time() - start)
 #renderer.tileMerge(a, saveDir="tiles/")
 #print(renderer.mathtools.dash(0,0,11,0, 5, 5))

@@ -13,9 +13,9 @@ import multiprocessing
 import tqdm
 import sys
 
-import renderer.internal
-import renderer.tools
-import renderer.utils
+import renderer.internal as internal
+import renderer.tools as tools
+import renderer.validate as validate
 init()
 
 def midpoint(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], o: Union[int, float], n=1, returnBoth=False):

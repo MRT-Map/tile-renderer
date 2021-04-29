@@ -1,6 +1,6 @@
 from renderer.base import *
 import renderer.tools
 import renderer.mathtools
-import renderer.utils
+import renderer.validate
 
-__version__ = 'v1.1'
+__version__ = '1.1'

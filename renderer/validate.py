@@ -1,24 +1,12 @@
 from colorama import Fore, Style, init
-import math
-import json
-from PIL import Image, ImageDraw, ImageFont
-import sympy as sym
-from typing import Union
-import time
-import glob
-import re
-import numpy as np
 from schema import Schema, And, Or, Regex, Optional
-import multiprocessing
-import tqdm
-import sys
 
-import renderer.internal
-import renderer.tools
-import renderer.mathtools
+import renderer.internal as internal
+import renderer.tools as tools
+import renderer.mathtools as mathtools
 init()
 
-def coordListIntegrity(coords: list):
+def coords(coords: list):
     for item in coords:
         if not isinstance(item, tuple):
             raise TypeError(f"Coordinates {item} is not type 'tuple'")
@@ -29,7 +17,7 @@ def coordListIntegrity(coords: list):
                 raise TypeError(f"Coordinate {n} is not type 'int/float'")
     return True
 
-def tileCoordListIntegrity(tiles: list, minZoom: int, maxZoom: int):
+def tileCoords(tiles: list, minZoom: int, maxZoom: int):
     for item in tiles:
         if not isinstance(item, tuple):
             raise TypeError(f"Tile coordinates {item} is not type 'tuple'")
@@ -44,14 +32,14 @@ def tileCoordListIntegrity(tiles: list, minZoom: int, maxZoom: int):
             raise TypeError(f"Zoom value {item[0]} is not an integer")
     return True
 
-def nodeListIntegrity(nodes: list, nodeList: dict):
+def nodeList(nodes: list, nodeList: dict):
     for node in nodes:
         if not node in nodeList.keys():
             raise ValueError(f"Node '{node}' does not exist")
 
     return True
 
-def nodeJsonIntegrity(nodeList: dict):
+def nodeJson(nodeList: dict):
     schema = Schema({
         str: {
             "x": Or(int, float),
@@ -62,21 +50,21 @@ def nodeJsonIntegrity(nodeList: dict):
     schema.validate(nodeList)
     return True
 
-def plaJsonIntegrity(plaList: dict, nodeList: dict):
+def plaJson(plaList: dict, nodeList: dict):
     schema = Schema({
         str: {
             "type": str,
             "displayname": str,
             "description": str,
             "layer": Or(int, float),
-            "nodes": And(list, lambda i: nodeListIntegrity(i, nodeList)),
+            "nodes": And(list, lambda i: nodeList(i, nodeList)),
             "attrs": dict
         }
     })
     schema.validate(plaList)
     return True
             
-def skinJsonIntegrity(skinJson: dict):
+def skinJson(skinJson: dict):
     mainSchema = Schema({
         "info": {
             "size": int,

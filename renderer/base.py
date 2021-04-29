@@ -1,23 +1,17 @@
-from colorama import Fore, Style, init
 import math
-import json
 from PIL import Image, ImageDraw, ImageFont
-import sympy as sym
 from typing import Union
 import time
 import glob
 import re
-import numpy as np
-from schema import Schema, And, Or, Regex, Optional
 import multiprocessing
 import tqdm
 import sys
 
 import renderer.internal as internal
 import renderer.tools as tools
-import renderer.utils as utils
+import renderer.validate as validate
 import renderer.mathtools as mathtools
-init()
 
 def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveDir="tiles/", zoom=[], logPrefix=""):
     tileReturn = {}
@@ -56,7 +50,7 @@ def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveD
         internal.log(f"Zoom {z}: Tiles to be merged determined", 0, verbosityLevel, logPrefix)
         tileCoords = [internal.strToTuple(s) for s in toMerge.keys()]
         #print(tileCoords)
-        xMax, xMin, yMax, yMin = tools.tile_findEnds(tileCoords)
+        xMax, xMin, yMax, yMin = tools.tile.findEnds(tileCoords)
         #print(imageDict.values())
         tileSize = list(imageDict.values())[0].size[0]
         i = Image.new('RGBA', (tileSize*(xMax-xMin+1), tileSize*(yMax-yMin+1)), (0, 0, 0, 0))
@@ -79,24 +73,24 @@ def tileMerge(images: Union[str, dict], verbosityLevel=1, saveImages=True, saveD
     internal.log("All merges complete", 0, verbosityLevel, logPrefix)
     return tileReturn
 
-def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, verbosityLevel=1, saveImages=True, saveDir="", assetsDir="skins/assets/", logPrefix="", tiles=None):
+def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, verbosityLevel=1, saveImages=True, saveDir="", assetsDir="renderer/skins/assets/", logPrefix="", tiles=None):
     if maxZoom < minZoom:
         raise ValueError("Max zoom value is greater than min zoom value")
     tileReturn = {}
     
-    # integrity checks
+    # validation
     internal.log("Validating skin...", 0, verbosityLevel, logPrefix)
-    utils.skinJsonIntegrity(skinJson)
+    validate.skinJson(skinJson)
     internal.log("Validating PLAs...", 0, verbosityLevel, logPrefix)
-    utils.plaJsonIntegrity(plaList, nodeList)
+    validate.plaJson(plaList, nodeList)
     internal.log("Validating nodes...", 0, verbosityLevel, logPrefix)
-    utils.nodeJsonIntegrity(nodeList)
+    validate.nodeJson(nodeList)
 
     #finds which tiles to render
     if tiles != None:
-        utils.tileCoordListIntegrity(tiles, minZoom, maxZoom)
+        validate.tileCoords(tiles, minZoom, maxZoom)
     else: #finds box of tiles
-        tiles = tools.plaJsonToTiles(plaList, nodeList, minZoom, maxZoom, maxZoomRange)
+        tiles = tools.plaJson.toTiles(plaList, nodeList, minZoom, maxZoom, maxZoomRange)
     internal.log("Tiles to be generated found", 2, verbosityLevel, logPrefix)
 
     #sort PLAs by tiles
@@ -104,8 +98,8 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     for tile in tiles:
         tileList[internal.tupleToStr(tile)] = {}
     for pla in plaList.keys():
-        coords = tools.nodesToCoords(plaList[pla]['nodes'], nodeList)
-        renderedIn = tools.lineToTiles(coords, minZoom, maxZoom, maxZoomRange)
+        coords = tools.nodes.toCoords(plaList[pla]['nodes'], nodeList)
+        renderedIn = tools.line.toTiles(coords, minZoom, maxZoom, maxZoomRange)
         for tile in renderedIn:
             if internal.tupleToStr(tile) in tileList.keys():
                 tileList[internal.tupleToStr(tile)][pla] = plaList[pla]
@@ -201,6 +195,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
 
         def getFont(f: str, s: int):
             if f in skinJson['info']['font'].keys():
+                #print(assetsDir+skinJson['info']['font'][f])
                 return ImageFont.truetype(assetsDir+skinJson['info']['font'][f], s)
             raise ValueError
 
@@ -214,7 +209,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                     break
             for step in style:
                 for plaId, pla in group.items():
-                    coords = [(x - internal.strToTuple(tilePlas)[1] * size, y - internal.strToTuple(tilePlas)[2] * size) for x, y in tools.nodesToCoords(pla['nodes'], nodeList)]
+                    coords = [(x - internal.strToTuple(tilePlas)[1] * size, y - internal.strToTuple(tilePlas)[2] * size) for x, y in tools.nodes.toCoords(pla['nodes'], nodeList)]
                     coords = [(int(skinJson['info']['size'] / size * x), int(skinJson['info']['size'] / size * y)) for x, y in coords]
                     
                     def point_circle():
@@ -338,7 +333,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
 
                     def area_fill():
                         if "stripe" in step.keys():
-                            xMax, xMin, yMax, yMin = tools.line_findEnds(coords)
+                            xMax, xMin, yMax, yMin = tools.line.findEnds(coords)
                             xMax += xMax-xMin
                             xMin -= yMax-yMin
                             yMax += xMax-xMin
@@ -404,7 +399,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                     nodes = []
                     for pla in group.values():
                         nodes += pla['nodes']
-                    connectedPre = [tools.findPlasAttachedToNode(x, plaList) for x in nodes]
+                    connectedPre = [tools.nodes.findPlasAttached(x, plaList) for x in nodes]
                     connected = []
                     for i in connectedPre:
                        connected += i
@@ -422,7 +417,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                             if conStep['layer'] in ["back", "text"]:
                                 continue
                             
-                            conCoords = [(x-internal.strToTuple(tilePlas)[1]*size, y-internal.strToTuple(tilePlas)[2]*size) for x,y in tools.nodesToCoords(plaList[conPla]['nodes'], nodeList)]
+                            conCoords = [(x-internal.strToTuple(tilePlas)[1]*size, y-internal.strToTuple(tilePlas)[2]*size) for x,y in tools.nodes.toCoords(plaList[conPla]['nodes'], nodeList)]
                             conCoords = [(int(skinJson['info']['size']/size*x), int(skinJson['info']['size']/size*y)) for x,y in conCoords]
                             preConCoords = conCoords[:]
                             internal.log(f"{tilePlas}: Coords extracted", 2, verbosityLevel, logPrefix)
@@ -518,7 +513,7 @@ def render_multiprocess(processes: int, plaList: dict, nodeList: dict, skinJson:
     #print(__name__)
     if __name__ == 'renderer':
         if not 'tiles' in kwargs.keys() or kwargs['tiles'] == None:
-            tiles = tools.plaJsonToTiles(plaList, nodeList, minZoom, maxZoom, maxZoomRange)
+            tiles = tools.plaJson.toTiles(plaList, nodeList, minZoom, maxZoom, maxZoomRange)
         else:
             tiles = kwargs['tiles']
         for i in range(len(tiles)):
