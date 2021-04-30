@@ -302,7 +302,7 @@ Math Tools
 Validate
 --------
 
-.. py:function:: renderer.validate.coords(coords: list)
+.. py:function:: renderer.validate.vCoords(coords: list)
 
    Validates a list of coordinates.
    
@@ -314,7 +314,7 @@ Validate
    
    * **bool** Returns True if no errors
 
-.. py:function:: renderer.validate.tileCoords(tiles: list, minZoom: int, maxZoom: int)
+.. py:function:: renderer.validate.vTileCoords(tiles: list, minZoom: int, maxZoom: int)
 
    Validates a list of tile coordinates.
    
@@ -328,7 +328,7 @@ Validate
    
    * **bool** Returns True if no errors
 
-.. py:function:: renderer.validate.nodeList(nodes: list, nodeList: dict)
+.. py:function:: renderer.validate.vNodeList(nodes: list, nodeList: dict)
 
    Validates a list of node IDs.
    
@@ -341,7 +341,7 @@ Validate
    
    * **bool** Returns True if no errors
 
-.. py:function:: renderer.validate.nodeJson(nodeList: dict)
+.. py:function:: renderer.validate.vNodeJson(nodeList: dict)
 
    Validates a dictionary/JSON of nodes.
    
@@ -353,7 +353,7 @@ Validate
    
    * **bool** Returns True if no errors
 
-.. py:function:: renderer.validate.plaJson(plaList: dict, nodeList: dict)
+.. py:function:: renderer.validate.vPlaJson(plaList: dict, nodeList: dict)
 
    Validates a dictionary/JSON of PLAs.
    
@@ -366,7 +366,7 @@ Validate
    
    * **bool** Returns True if no errors
 
-.. py:function:: renderer.validate.skinJson(skinJson: dict)
+.. py:function:: renderer.validate.vSkinJson(skinJson: dict)
    
    Validates a skin JSON file.
 
