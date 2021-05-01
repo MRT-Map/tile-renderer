@@ -9,7 +9,7 @@ import renderer.validate as validate
 import renderer.mathtools as mathtools
 
 def tiles(args):
-    tileCoords, tilePlas, plaList, nodeList, skinJson, _, maxZoom, maxZoomRange, verbosityLevel, saveImages, saveDir, assetsDir, logPrefix = args # _ is minZoom
+    logInfo, tileCoords, tilePlas, plaList, nodeList, skinJson, _, maxZoom, maxZoomRange, verbosityLevel, saveImages, saveDir, assetsDir, logPrefix = args # _ is minZoom
     #print(tilePlas)
     renderStart = 1
     operations = 1

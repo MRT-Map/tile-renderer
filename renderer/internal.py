@@ -2,6 +2,7 @@ from colorama import Fore, Style, init
 import math
 import json
 from typing import Union
+import time
 init()
 
 def log(msg: str, pLevel: int, vLevel: int, logPrefix=""):
@@ -39,6 +40,7 @@ def strToTuple(s: str):
     return tuple([int(x) for x in s.split(", ")])
 
 def msToTime(ms: Union[int, float]):
+    ms = float(ms)
     if ms == 0:
         return "0ms"
     s = math.floor(ms / 1000)
@@ -53,11 +55,25 @@ def msToTime(ms: Union[int, float]):
     if d != 0:
         res = res + str(d) + "d "
     if h != 0:
-        res = res + str(h) + "h "
+        zero = "0" if h < 10 else ""
+        res = res + zero + str(h) + "h "
     if m != 0:
-        res = res + str(m) + "min "
+        zero = "0" if m < 10 else ""
+        res = res + zero + str(m) + "min "
     if s != 0:
-        res = res + str(s) + "s "
+        zero = "0" if s < 10 else ""
+        res = res + zero + str(s) + "s "
     if ms != 0:
-        res = res + str(ms) + "ms "
+        pzero = "00" if ms < 10 else "0" if 10 <= ms < 100 else ""
+        szero = "0" if len(str(ms).split(".")[1]) == 1 else ""
+        res = res + pzero + str(ms) + szero + "ms "
     return res.strip()
+
+def percentage(c: Union[int, float], t: Union[int, float]):
+    res = round(c/t*100, 2)
+    pzero = "0" if res < 10 else ""
+    szero = "0" if len(str(res).split(".")[1]) == 1 else ""
+    return pzero + str(res) + szero
+
+def timeRemaining(start: Union[int, float], c: Union[int, float], t: Union[int, float]):
+    return round(((int(round(time.time() * 1000)) - start) / c * (t - c)), 2)
