@@ -126,7 +126,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     processed = 0
     timeLeft = 0.0
     l = lambda processed, timeLeft, tilePlas, msg: term.clear_eol + term.green(f"{internal.percentage(processed, len(tileList))}% | {internal.msToTime(timeLeft)} left | ") + f"{tilePlas}: " + term.bright_black(msg)
-    print(term.green("sorted\nStarting processing"))
+    print(term.green("sorted\n")+term.bright_green("Starting processing"))
     for tilePlas in tileList.keys():
         #sort PLAs in tiles by layer
         newTilePlas = {}
@@ -172,12 +172,16 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
         timeLeft = internal.timeRemaining(processStart, processed, len(tileList))
         #timeLeft = round(((int(round(time.time() * 1000)) - processStart) / processed * (len(tileList) - processed)), 2)
         #internal.log(f"Processed {tilePlas} ({round(processed/len(tileList)*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 1, verbosityLevel, logPrefix)
-    print(term.green("Processing complete"))
+    print(term.bright_green("\nCounting no. of operations"))
     #count # of rendering operations
-    internal.log("Counting no. of operations...", 0, verbosityLevel, logPrefix)
+    #internal.log("Counting no. of operations", 0, verbosityLevel, logPrefix)
+    
     operations = 0
+    opTiles = {}
+    tileOperations = 0
     for tilePlas in tileList.keys():
         if tileList[tilePlas] == [{}]:
+            opTiles[tilePlas] = 0
             continue
 
         for group in tileList[tilePlas]:
@@ -189,29 +193,37 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                     break
             for step in style:
                 for _, pla in group.items():
-                    operations += 1
+                    operations += 1; tileOperations += 1
                 if info['type'] == "line" and "road" in info['tags'] and step['layer'] == "back":
-                    operations += 1
-        operations += 1 #text
-        internal.log(f"{tilePlas} counted", 2, verbosityLevel, logPrefix)
+                    operations += 1; tileOperations += 1
+        operations += 1; tileOperations += 1 #text
+
+        opTiles[tilePlas] = tileOperations
+        tileOperations = 0
+        print(term.clear_eol + f"Counted {tilePlas}", end="\r")
     
     #render
+    processes=5
     #operated = 0
-    #renderStart = time.time() * 1000
-    internal.log("Starting render...", 0, verbosityLevel, logPrefix)
-    if __name__ == 'renderer.base':
-        manager = multiprocessing.Manager()
-        logInfo = manager.dict()
+    renderStart = time.time() * 1000
+    print(term.bright_green("\nStarting render..."))
+    if processes > 0 and __name__ == 'renderer.base':
+        operated = multiprocessing.Manager().Value('i', 0)
+
+        #print(term.bright_green(f"{internal.percentage(operated, operations)}% | 0.0s left"))
+        #for n in range(processes):
+        #    print(term.bright_green(f"{n+1} | ")+term.green(f"00.0% | 0.0s left |"))
+
         input = []
         for i in tileList.keys():
             #print(type(tileList[i]))
-            input.append((logInfo, i, tileList[i], plaList, nodeList, skinJson, minZoom, maxZoom, maxZoomRange, verbosityLevel, saveImages, saveDir, assetsDir, logPrefix))
+            input.append((operated, i, tileList[i], operations, plaList, nodeList, skinJson, minZoom, maxZoom, maxZoomRange, verbosityLevel, saveImages, saveDir, assetsDir, logPrefix, processes))
             #print(len(tileList[i]))
         p = multiprocessing.Pool(5)
         try:
             #internal.writeJson("a.json", {"a":input}, True)
             #print(len(tileList.values()))
-            preresult = list(tqdm.tqdm(p.imap(rendering.tiles, input), total=len(input)))
+            preresult = p.map(rendering.tiles, input)
         except KeyboardInterrupt:
             p.terminate()
             sys.exit()
@@ -221,36 +233,10 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                 continue
             k, v = list(i.items())[0]
             result[k] = v
+    else:
+        pass
 
     internal.log("Render complete", 0, verbosityLevel, logPrefix)
     
     #return tileReturn
     return result
-
-def _prerender(tiles, plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, **kwargs):
-    raise ValueError("asdfasfs")
-    #return render(plaList, nodeList, minZoom, maxZoom, maxZoomRange, **kwargs, tiles=tiles)
-
-def render_multiprocess(processes: int, plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, **kwargs):
-    #print(__name__)
-    if __name__ == 'renderer.base':
-        if not 'tiles' in kwargs.keys() or kwargs['tiles'] == None:
-            tiles = tools.plaJson.toTiles(plaList, nodeList, minZoom, maxZoom, maxZoomRange)
-        else:
-            tiles = kwargs['tiles']
-        for i in range(len(tiles)):
-            tiles[i] = (tiles[i], plaList, nodeList, minZoom, maxZoom, maxZoomRange, kwargs)
-        p = multiprocessing.Pool(processes)
-        try:
-            print(tiles)
-            preresult = list(tqdm.tqdm(p.imap(_prerender, tiles), total=len(tiles)))
-        except KeyboardInterrupt:
-            p.terminate()
-            sys.exit()
-        result = {}
-        for i in preresult:
-            if i == {}:
-                continue
-            k, v = list(i.items())[0]
-            result[k] = v
-        return result

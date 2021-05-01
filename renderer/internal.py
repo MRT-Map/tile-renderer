@@ -40,11 +40,10 @@ def strToTuple(s: str):
     return tuple([int(x) for x in s.split(", ")])
 
 def msToTime(ms: Union[int, float]):
-    ms = float(ms)
     if ms == 0:
-        return "0ms"
-    s = math.floor(ms / 1000)
-    ms = round(ms % 1000, 2)
+        return "0.0s"
+    s = round(ms / 1000, 1)
+    #ms = round(ms % 1000, 2)
     m = math.floor(s / 60)
     s = s % 60
     h = math.floor(m / 60)
@@ -63,10 +62,12 @@ def msToTime(ms: Union[int, float]):
     if s != 0:
         zero = "0" if s < 10 else ""
         res = res + zero + str(s) + "s "
-    if ms != 0:
-        pzero = "00" if ms < 10 else "0" if 10 <= ms < 100 else ""
-        szero = "0" if len(str(ms).split(".")[1]) == 1 else ""
-        res = res + pzero + str(ms) + szero + "ms "
+    if res == "":
+        res = "0.0s"
+    #if ms != 0:
+    #    pzero = "00" if ms < 10 else "0" if 10 <= ms < 100 else ""
+    #    szero = "0" if len(str(ms).split(".")[1]) == 1 else ""
+    #    res = res + pzero + str(ms) + szero + "ms "
     return res.strip()
 
 def percentage(c: Union[int, float], t: Union[int, float]):
