@@ -11,7 +11,7 @@ import renderer.validate as validate
 import renderer.mathtools as mathtools
 
 def tiles(args):
-    lock, operated, start, tileCoords, tilePlas, operations, plaList, nodeList, skinJson, _, maxZoom, maxZoomRange, _, saveImages, saveDir, assetsDir, _, _ = args # _ is minZoom, verbosityLevel, logPrefix, processes
+    lock, operated, start, tileCoords, tilePlas, operations, plaList, nodeList, skinJson, _, maxZoom, maxZoomRange, saveImages, saveDir, assetsDir = args # _ is minZoom
     #print(operations)
     pid = multiprocessing.current_process()._identity[0] - 1
     

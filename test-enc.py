@@ -25,6 +25,6 @@ def skinFileRead():
 #print(renderer.tools.findPlasAttachedToNode("a", exampleplaRead()))
 
 #a = renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 0, 3, 128, saveDir="tiles/", verbosityLevel=2)
-#renderer.tileMerge(a, saveDir="tiles/")
+#renderer.tileMerge("tiles/", saveDir="tiles/")
 
-if __name__ == "__main__": print(renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 0, 3, 128, saveDir="tiles/", saveImages=False))
+if __name__ == "__main__": print(renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 0, 8, 32, saveDir="tiles/", saveImages=False, processes=10))
