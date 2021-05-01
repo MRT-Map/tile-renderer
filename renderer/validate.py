@@ -1,10 +1,11 @@
-from colorama import Fore, Style, init
+import blessed
 from schema import Schema, And, Or, Regex, Optional
 
 import renderer.internal as internal
 import renderer.tools as tools
 import renderer.mathtools as mathtools
-init()
+import renderer.rendering as rendering
+import renderer.misc as misc
 
 def vCoords(coords: list):
     """
@@ -208,5 +209,6 @@ def vSkinJson(skinJson: dict):
                     try:
                         schemas[t['type']][step['layer']].validate(step)
                     except Exception as e:
-                        print(Fore.RED + f"Type {n}, range {z}, step {step['layer']}" + Style.RESET_ALL)
+                        term = blessed.Terminal()
+                        print(term.red(f"Type {n}, range {z}, step {step['layer']}"))
                         raise e

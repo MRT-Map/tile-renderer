@@ -3,6 +3,8 @@ import math
 import renderer.internal as internal
 import renderer.validate as validate
 import renderer.mathtools as mathtools
+import renderer.rendering as rendering
+import renderer.misc as misc
 
 class plaJson:
     @staticmethod

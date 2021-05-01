@@ -5,7 +5,6 @@ import time
 import glob
 import re
 import multiprocessing
-import tqdm
 import sys
 import blessed
 
@@ -14,6 +13,7 @@ import renderer.tools as tools
 import renderer.validate as validate
 import renderer.mathtools as mathtools
 import renderer.rendering as rendering
+import renderer.misc as misc
 
 def tileMerge(images: Union[str, dict], saveImages=True, saveDir="tiles/", zoom=[]):
     """

@@ -1,18 +1,7 @@
-from colorama import Fore, Style, init
 import math
 import json
 from typing import Union
 import time
-init()
-
-def log(msg: str, pLevel: int, vLevel: int, logPrefix=""):
-    colour = {
-        "0": Fore.GREEN,
-        "1": "",
-        "2": Style.DIM
-    }
-    if pLevel <= vLevel:
-        print(colour[str(pLevel)] + logPrefix + msg + Style.RESET_ALL)
 
 def dictIndex(d: dict, v):
     return list(d.keys())[list(d.values()).index(v)]

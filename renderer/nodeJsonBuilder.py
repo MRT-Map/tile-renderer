@@ -1,49 +1,49 @@
-from colorama import Fore, Style, init
+import blessed
 import re
 import json
-init()
+term = blessed.Terminal()
 
-print(Fore.YELLOW + "Welcome to the nodeJson builder!\n--------------------------------" + Style.RESET_ALL)
+print(term.yellow("Welcome to the nodeJson builder!\n--------------------------------"))
 
 fileConfirmed = False
 while not fileConfirmed:
-    filePath = input(Fore.YELLOW + "Which Node JSON file are you writing to? " + Style.RESET_ALL)
+    filePath = input(term.yellow("Which Node JSON file are you writing to? "))
     try:
         open(filePath, "r")
         if filePath.endswith(".json"):
             fileConfirmed = True
         else:
-            print(Fore.RED + "File is not a JSON file" + Style.RESET_ALL)
+            print(term.red("File is not a JSON file"))
     except FileNotFoundError:
-        print(Fore.RED + "File does not exist" + Style.RESET_ALL)
+        print(term.red("File does not exist"))
 
 with open(filePath, "r") as f:
     nodes = json.load(f)
     f.close()
 
-print(Fore.YELLOW + "Ingame, press F3+C once, and paste it here.\nType 'exit' to exit." + Style.RESET_ALL)
+print(term.yellow("Ingame, press F3+C once, and paste it here.\nType 'exit' to exit."))
 newNodes = {}
 e = False
 while not e:
-    pasted = input(Fore.YELLOW + "Paste: " + Style.RESET_ALL)
+    pasted = input(term.yellow("Paste: "))
     if pasted == "exit":
         e = True
-        print(Fore.YELLOW + "Exited" + Style.RESET_ALL)
+        print(term.yellow("Exited"))
         continue
     groups = re.search(r"@s (\S+) \S+ (\S+)", pasted)
     if groups == None:
-        print(Fore.RED + "Invalid paste" + Style.RESET_ALL)
+        print(term.red("Invalid paste"))
         continue
     x = int(float(groups.group(1)))
     y = int(float(groups.group(2)))
 
     nameConfirmed = False
     while not nameConfirmed:
-        name = input(Fore.YELLOW + "Node name: " + Style.RESET_ALL)
+        name = input(term.yellow("Node name: "))
         if name in nodes.keys() or name in newNodes.keys():
-            print(Fore.RED + "Node already exists; do you want to override its current value?")
-            print(nodes[name] if name in nodes.keys() else newNodes[name])
-            if input("Type 'y' to confirm: " + Style.RESET_ALL) != "y":
+            print(term.red("Node already exists; do you want to override its current value?"))
+            print(term.red(nodes[name] if name in nodes.keys() else newNodes[name]))
+            if input(term.red("Type 'y' to confirm: ")) != "y":
                 continue
         nameConfirmed = True
 
@@ -57,4 +57,4 @@ with open(filePath, "r+") as f:
     json.dump(d, f, indent=4)
     f.close()
 
-print(Fore.YELLOW + "Written to " + filePath + Style.RESET_ALL)
+print(term.yellow("Written to " + filePath))
