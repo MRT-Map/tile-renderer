@@ -85,7 +85,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     """
     if maxZoom < minZoom:
         raise ValueError("Max zoom value is greater than min zoom value")
-    tileReturn = {}
+    #tileReturn = {}
     
     # validation
     internal.log("Validating skin...", 0, verbosityLevel, logPrefix)
@@ -175,7 +175,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                     style = info['style'][zoom]
                     break
             for step in style:
-                for plaId, pla in group.items():
+                for _, pla in group.items():
                     operations += 1
                 if info['type'] == "line" and "road" in info['tags'] and step['layer'] == "back":
                     operations += 1
@@ -183,8 +183,8 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
         internal.log(f"{tilePlas} counted", 2, verbosityLevel, logPrefix)
     
     #render
-    operated = 0
-    renderStart = time.time() * 1000
+    #operated = 0
+    #renderStart = time.time() * 1000
     internal.log("Starting render...", 0, verbosityLevel, logPrefix)
     if __name__ == 'renderer.base':
         input = []

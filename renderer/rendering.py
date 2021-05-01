@@ -2,11 +2,6 @@ import math
 from PIL import Image, ImageDraw, ImageFont
 from typing import Union
 import time
-import glob
-import re
-import multiprocessing
-import tqdm
-import sys
 
 import renderer.internal as internal
 import renderer.tools as tools
@@ -14,7 +9,7 @@ import renderer.validate as validate
 import renderer.mathtools as mathtools
 
 def tiles(args):
-    tileCoords, tilePlas, plaList, nodeList, skinJson, minZoom, maxZoom, maxZoomRange, verbosityLevel, saveImages, saveDir, assetsDir, logPrefix = args
+    tileCoords, tilePlas, plaList, nodeList, skinJson, _, maxZoom, maxZoomRange, verbosityLevel, saveImages, saveDir, assetsDir, logPrefix = args # _ is minZoom
     #print(tilePlas)
     renderStart = 1
     operations = 1
