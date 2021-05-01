@@ -41,7 +41,7 @@ def strToTuple(s: str):
 
 def msToTime(ms: Union[int, float]):
     if ms == 0:
-        return "0.0s"
+        return "00.0s"
     s = round(ms / 1000, 1)
     #ms = round(ms % 1000, 2)
     m = math.floor(s / 60)
@@ -61,9 +61,9 @@ def msToTime(ms: Union[int, float]):
         res = res + zero + str(m) + "min "
     if s != 0:
         zero = "0" if s < 10 else ""
-        res = res + zero + str(s) + "s "
+        res = res + zero + str(round(s, 1)) + "s "
     if res == "":
-        res = "0.0s"
+        res = "00.0s"
     #if ms != 0:
     #    pzero = "00" if ms < 10 else "0" if 10 <= ms < 100 else ""
     #    szero = "0" if len(str(ms).split(".")[1]) == 1 else ""

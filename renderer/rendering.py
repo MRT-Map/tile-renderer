@@ -12,21 +12,18 @@ import renderer.validate as validate
 import renderer.mathtools as mathtools
 
 def tiles(args):
-    operated, tileCoords, tilePlas, operations, plaList, nodeList, skinJson, _, maxZoom, maxZoomRange, verbosityLevel, saveImages, saveDir, assetsDir, logPrefix, processes = args # _ is minZoom
+    operated, start, tileCoords, tilePlas, operations, plaList, nodeList, skinJson, _, maxZoom, maxZoomRange, verbosityLevel, saveImages, saveDir, assetsDir, logPrefix, processes = args # _ is minZoom
     #print(operations)
     pid = multiprocessing.current_process()._identity[0] - 1
-    start = time.time() * 1000
     
     def pLog(msg):
-        #lock.acquire()
         #print(term.move_up(processes - pid + 1), end="")
-        if operated.value != 0 and operations != 0:
-            print(term.bright_green(f"{pid} | ")+term.green(f"{internal.percentage(operated.value, operations)}% | {internal.msToTime(internal.timeRemaining(start, operated.value, operations))} left | ") + f"{tileCoords}: " + term.bright_black(msg), end=term.clear_eol+"\r")
-        else:
-            print(term.bright_green(f"{pid} | ")+term.green(f"00.0% | 0.0s left | ") + f"{tileCoords}: " + term.bright_black(msg), end=term.clear_eol+"\r")
+        with term.location():
+            if operated.value != 0 and operations != 0:
+                print(term.green(f"{internal.percentage(operated.value, operations)}% | {internal.msToTime(internal.timeRemaining(start, operated.value, operations))} left | ") + f"{pid} | {tileCoords}: " + term.bright_black(msg), end=term.clear_eos+"\r")
+            else:
+                print(term.green(f"00.0% | 0.0s left | ") + f"{pid} | {tileCoords}: " + term.bright_black(msg), end=term.clear_eos+"\r")
         #print(term.move_down(processes - pid + 1), end="")
-        #print("asdfasdfasdfsd")
-        #lock.release()
 
     if tilePlas == [{}]:
         if operated.value != 0:
@@ -224,9 +221,9 @@ def tiles(args):
                     pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Drawing outline")
                     outlineCoords = coords[:]
                     outlineCoords.append(outlineCoords[0])
-                    img.line(coords, fill=step['colour'], width=step['width'], joint="curve")
+                    img.line(coords, fill=step['outline'], width=2, joint="curve")
                     if not "unroundedEnds" in info['tags']:
-                        img.ellipse([coords[0][0]-step['width']/2+1, coords[0][1]-step['width']/2+1, coords[0][0]+step['width']/2, coords[0][1]+step['width']/2], fill=step['colour'])
+                        img.ellipse([coords[0][0]-2/2+1, coords[0][1]-2/2+1, coords[0][0]+2/2, coords[0][1]+2/2], fill=step['outline'])
                     #internal.log(f"{tileCoords}: {plaId}: Outline drawn", 2, verbosityLevel, logPrefix)
 
                 def area_centerimage():

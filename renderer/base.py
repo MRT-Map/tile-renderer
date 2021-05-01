@@ -88,7 +88,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
         raise ValueError("Max zoom value is greater than min zoom value")
     #tileReturn = {}
     term = blessed.Terminal()
-    
+
     # validation
     print(term.green("Validating skin..."), end=" ")
     #internal.log("Validating skin...", 0, verbosityLevel, logPrefix)
@@ -203,7 +203,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
         print(term.clear_eol + f"Counted {tilePlas}", end="\r")
     
     #render
-    processes=5
+    processes=10
     #operated = 0
     renderStart = time.time() * 1000
     print(term.bright_green("\nStarting render..."))
@@ -217,7 +217,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
         input = []
         for i in tileList.keys():
             #print(type(tileList[i]))
-            input.append((operated, i, tileList[i], operations, plaList, nodeList, skinJson, minZoom, maxZoom, maxZoomRange, verbosityLevel, saveImages, saveDir, assetsDir, logPrefix, processes))
+            input.append((operated, renderStart, i, tileList[i], operations, plaList, nodeList, skinJson, minZoom, maxZoom, maxZoomRange, verbosityLevel, saveImages, saveDir, assetsDir, logPrefix, processes))
             #print(len(tileList[i]))
         p = multiprocessing.Pool(5)
         try:
@@ -236,7 +236,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     else:
         pass
 
-    internal.log("Render complete", 0, verbosityLevel, logPrefix)
+    print(term.bright_green("\nRender complete"))
     
     #return tileReturn
     return result
