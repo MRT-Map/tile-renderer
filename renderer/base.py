@@ -86,18 +86,14 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     """
     if maxZoom < minZoom:
         raise ValueError("Max zoom value is greater than min zoom value")
-    #tileReturn = {}
     term = blessed.Terminal()
 
     # validation
     print(term.green("Validating skin..."), end=" ")
-    #internal.log("Validating skin...", 0, verbosityLevel, logPrefix)
     validate.vSkinJson(skinJson)
     print(term.green("validated\nValidating PLAs..."), end=" ")
-    #internal.log("Validating PLAs...", 0, verbosityLevel, logPrefix)
     validate.vPlaJson(plaList, nodeList)
     print(term.green("validated\nValidating nodes..."), end=" ")
-    #internal.log("Validating nodes...", 0, verbosityLevel, logPrefix)
     validate.vNodeJson(nodeList)
 
     print(term.green("validated\nFinding tiles..."), end=" ")
@@ -118,9 +114,6 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
         for tile in renderedIn:
             if internal.tupleToStr(tile) in tileList.keys():
                 tileList[internal.tupleToStr(tile)][pla] = plaList[pla]
-    #internal.log("Sorted PLA by tiles", 2, verbosityLevel, logPrefix)
-    
-    #print(tileList)
     
     processStart = time.time() * 1000
     processed = 0
@@ -134,7 +127,6 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
             if not str(float(tileList[tilePlas][pla]['layer'])) in newTilePlas.keys():
                 newTilePlas[str(float(tileList[tilePlas][pla]['layer']))] = {}
             newTilePlas[str(float(tileList[tilePlas][pla]['layer']))][pla] = tileList[tilePlas][pla]
-        #internal.log(f"{tilePlas}: Sorted PLA by layer", 2, verbosityLevel, logPrefix)
         print(l(processed, timeLeft, tilePlas, "Sorted PLA by layer"), end="\r")
         
 
@@ -142,7 +134,6 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
         for layer in newTilePlas.keys():
             #print(newTilePlas[layer].items())
             newTilePlas[layer] = {k: v for k, v in sorted(newTilePlas[layer].items(), key=lambda x: skinJson['order'].index(x[1]['type'].split(' ')[0]))}
-        #internal.log(f"{tilePlas}: Sorted PLA by type", 2, verbosityLevel, logPrefix)
         print(l(processed, timeLeft, tilePlas, "Sorted PLA by type"), end="\r")
         
         #merge layers
@@ -151,11 +142,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
         for layer in layers:
             for key, pla in newTilePlas[layer].items():
                 tileList[tilePlas][key] = pla
-        #internal.log(f"{tilePlas}: Merged layers", 2, verbosityLevel, logPrefix)
         print(l(processed, timeLeft, tilePlas, "Merged layers"), end="\r")
-        
-        #print(newTilePlas)
-        #print(tileList[tilePlas])
 
         #groups PLAs of the same type if "road" tag present
         newerTilePlas = [{}]
@@ -165,17 +152,14 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
             if i != len(keys)-1 and (tileList[tilePlas][keys[i+1]]['type'].split(' ')[0] != tileList[tilePlas][keys[i]]['type'].split(' ')[0] or not "road" in skinJson['types'][tileList[tilePlas][keys[i]]['type'].split(' ')[0]]['tags']):
                 newerTilePlas.append({})
         tileList[tilePlas] = newerTilePlas
-        #internal.log("PLAs grouped", 2, verbosityLevel, logPrefix)
         print(l(processed, timeLeft, tilePlas, "PLAs grouped"), end="\r")
 
         processed += 1
         timeLeft = internal.timeRemaining(processStart, processed, len(tileList))
         #timeLeft = round(((int(round(time.time() * 1000)) - processStart) / processed * (len(tileList) - processed)), 2)
-        #internal.log(f"Processed {tilePlas} ({round(processed/len(tileList)*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 1, verbosityLevel, logPrefix)
-    print(term.bright_green("\nCounting no. of operations"))
-    #count # of rendering operations
-    #internal.log("Counting no. of operations", 0, verbosityLevel, logPrefix)
     
+    #count # of rendering operations
+    print(term.bright_green("\nCounting no. of operations"))
     operations = 0
     opTiles = {}
     tileOperations = 0
@@ -207,22 +191,16 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     #operated = 0
     renderStart = time.time() * 1000
     print(term.bright_green("\nStarting render..."))
-    if processes > 0 and __name__ == 'renderer.base':
-        operated = multiprocessing.Manager().Value('i', 0)
-
-        #print(term.bright_green(f"{internal.percentage(operated, operations)}% | 0.0s left"))
-        #for n in range(processes):
-        #    print(term.bright_green(f"{n+1} | ")+term.green(f"00.0% | 0.0s left |"))
+    if __name__ == 'renderer.base':
+        m = multiprocessing.Manager()
+        operated = m.Value('i', 0)
+        lock = m.Lock() # pylint: disable=no-member
 
         input = []
         for i in tileList.keys():
-            #print(type(tileList[i]))
-            input.append((operated, renderStart, i, tileList[i], operations, plaList, nodeList, skinJson, minZoom, maxZoom, maxZoomRange, verbosityLevel, saveImages, saveDir, assetsDir, logPrefix, processes))
-            #print(len(tileList[i]))
+            input.append((lock, operated, renderStart, i, tileList[i], operations, plaList, nodeList, skinJson, minZoom, maxZoom, maxZoomRange, verbosityLevel, saveImages, saveDir, assetsDir, logPrefix, processes))
         p = multiprocessing.Pool(5)
         try:
-            #internal.writeJson("a.json", {"a":input}, True)
-            #print(len(tileList.values()))
             preresult = p.map(rendering.tiles, input)
         except KeyboardInterrupt:
             p.terminate()
@@ -233,10 +211,6 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
                 continue
             k, v = list(i.items())[0]
             result[k] = v
-    else:
-        pass
 
     print(term.bright_green("\nRender complete"))
-    
-    #return tileReturn
     return result

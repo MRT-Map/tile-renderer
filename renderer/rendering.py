@@ -1,6 +1,5 @@
 import math
 from PIL import Image, ImageDraw, ImageFont
-from typing import Union
 import time
 import blessed
 import multiprocessing
@@ -12,28 +11,23 @@ import renderer.validate as validate
 import renderer.mathtools as mathtools
 
 def tiles(args):
-    operated, start, tileCoords, tilePlas, operations, plaList, nodeList, skinJson, _, maxZoom, maxZoomRange, verbosityLevel, saveImages, saveDir, assetsDir, logPrefix, processes = args # _ is minZoom
+    lock, operated, start, tileCoords, tilePlas, operations, plaList, nodeList, skinJson, _, maxZoom, maxZoomRange, _, saveImages, saveDir, assetsDir, _, _ = args # _ is minZoom, verbosityLevel, logPrefix, processes
     #print(operations)
     pid = multiprocessing.current_process()._identity[0] - 1
     
     def pLog(msg):
         #print(term.move_up(processes - pid + 1), end="")
+        lock.acquire()
         with term.location():
             if operated.value != 0 and operations != 0:
                 print(term.green(f"{internal.percentage(operated.value, operations)}% | {internal.msToTime(internal.timeRemaining(start, operated.value, operations))} left | ") + f"{pid} | {tileCoords}: " + term.bright_black(msg), end=term.clear_eos+"\r")
             else:
                 print(term.green(f"00.0% | 0.0s left | ") + f"{pid} | {tileCoords}: " + term.bright_black(msg), end=term.clear_eos+"\r")
+        lock.release()
         #print(term.move_down(processes - pid + 1), end="")
 
     if tilePlas == [{}]:
-        if operated.value != 0:
-            #timeLeft = round(((int(round(time.time() * 1000)) - start) / operated.value * (operations - operated.value)), 2)
-            #internal.log(f"Rendered {tileCoords} ({round(operated.value/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 0, verbosityLevel, logPrefix)
-            pLog("Rendered")
-        else:
-            #internal.log(f"Rendered {tileCoords}", 0, verbosityLevel, logPrefix)
-            pLog("Rendered")
-        #continue
+        pLog("rendered")
         return None
     
     pLog("Initialising canvas")
@@ -42,17 +36,13 @@ def tiles(args):
     img = ImageDraw.Draw(im)
     textList = []
     pointsTextList = []
-    #internal.log(f"{tileCoords}: Initialised canvas", 2, verbosityLevel, logPrefix)
 
     def getFont(f: str, s: int):
         if f in skinJson['info']['font'].keys():
-            #print(assetsDir+skinJson['info']['font'][f])
             return ImageFont.truetype(assetsDir+skinJson['info']['font'][f], s)
         raise ValueError
 
-    #im.save(f'tiles/{tileCoords}.png', 'PNG')
     for group in tilePlas:
-        #print(group)
         info = skinJson['types'][list(group.values())[0]['type'].split(" ")[0]]
         style = []
         for zoom in info['style'].keys():
@@ -91,7 +81,6 @@ def tiles(args):
                     textLength = int(img.textlength(pla['displayname'], font))
                     if textLength == 0:
                         textLength = int(img.textlength("----------", font))
-                    #internal.log(f"{tileCoords}: {plaId}: Text length calculated", 2, verbosityLevel, logPrefix)
                     for c in range(len(coords)-1):
                         #print(coords)
                         #print(mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']))
@@ -107,7 +96,6 @@ def tiles(args):
                                 tw, th = i.size[:]
                                 i = i.rotate(trot, expand=True)
                                 textList.append((i, tx, ty, tw, th, trot))
-                            #internal.log(f"{tileCoords}: {plaId}: Name text generated", 2, verbosityLevel, logPrefix)
                         if "oneWay" in pla['type'].split(" ")[1:] and textLength <= math.dist(coords[c], coords[c+1]):
                             pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Generating oneway arrows")
                             getFont("b", step['size'])
@@ -125,7 +113,6 @@ def tiles(args):
                                 i = i.rotate(trot, expand=True)
                                 textList.append((i, tx, ty, tw, th, trot))
                                 counter += 1
-                            #internal.log(f"{tileCoords}: {plaId}: Oneway arrows generated", 2, verbosityLevel, logPrefix)
                             
                 def line_backfore():
                     if not "dash" in step.keys():
@@ -134,7 +121,6 @@ def tiles(args):
                         if not "unroundedEnds" in info['tags']:
                             img.ellipse([coords[0][0]-step['width']/2+1, coords[0][1]-step['width']/2+1, coords[0][0]+step['width']/2, coords[0][1]+step['width']/2], fill=step['colour'])
                             img.ellipse([coords[-1][0]-step['width']/2+1, coords[-1][1]-step['width']/2+1, coords[-1][0]+step['width']/2, coords[-1][1]+step['width']/2], fill=step['colour'])
-                        #internal.log(f"{tileCoords}: {plaId}: Line drawn", 2, verbosityLevel, logPrefix)
                     else:
                         offsetInfo = mathtools.dashOffset(coords, step['dash'][0], step['dash'][1])
                         #print(offsetInfo)
@@ -144,14 +130,11 @@ def tiles(args):
                             for dashCoords in mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['dash'][0], step['dash'][1], o, emptyStart):
                                 #print(dashCoords)
                                 img.line(dashCoords, fill=step['colour'], width=step['width'])                
-                            #internal.log(f"{tileCoords}: {plaId}: Dashes drawn for section {c+1} of {len(coords)}", 2, verbosityLevel, logPrefix)
-                        #internal.log(f"{tileCoords}: {plaId}: Dashes drawn", 2, verbosityLevel, logPrefix)
 
                 def area_bordertext():
                     pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Calculating text length")
                     font = getFont("", step['size'])
                     textLength = int(img.textlength(pla['displayname'], font))
-                    #internal.log(f"{tileCoords}: {plaId}: Text length calculated", 2, verbosityLevel, logPrefix)
                     for c1 in range(len(coords)):
                         c2 = c1+1 if c1 != len(coords)-1 else 0
                         if mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']) and 2*textLength <= math.dist(coords[c1], coords[c2]):
@@ -160,7 +143,6 @@ def tiles(args):
                             t = math.floor(math.dist(coords[c1], coords[c2])/(4*textLength))
                             t = 1 if t == 0 else t
                             allPoints = mathtools.midpoint(coords[c1][0], coords[c1][1], coords[c2][0], coords[c2][1], step['offset'], n=t, returnBoth=True)
-                            #internal.log(f"{tileCoords}: {plaId}: Midpoints calculated", 2, verbosityLevel, logPrefix)
                             for n in range(0, len(allPoints), 2):
                                 pLog(f"{style.index(step)+1}/{len(style)} {plaId}: {plaId}: Generating text {n+1} of {len(allPoints)} in section {c1} of {len(coords)+1}")
                                 points = [allPoints[n], allPoints[n+1]]
@@ -176,12 +158,10 @@ def tiles(args):
                                 tw, th = i.size[:]
                                 i = i.rotate(trot, expand=True)
                                 textList.append((i, tx, ty, tw, th, trot))
-                                #internal.log(f"{tileCoords}: {plaId}: Text {n+1} of {len(allPoints)} generated in section {c1} of {len(coords)+1}", 2, verbosityLevel, logPrefix)
 
                 def area_centertext():
                     pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Calculating center")
                     cx, cy = mathtools.polyCenter(coords)
-                    #internal.log(f"{tileCoords}: {plaId}: Center calculated", 2, verbosityLevel, logPrefix)
                     cx += step['offset'][0]
                     cy += step['offset'][1]
                     font = getFont("", step['size'])
@@ -206,7 +186,6 @@ def tiles(args):
                         while tlx <= xMax:
                             d.polygon([(tlx, yMin), (tlx+step['stripe'][0], yMin), (tlx+step['stripe'][0], yMax), (tlx, yMax)], fill=step['colour'])
                             tlx += step['stripe'][0]+step['stripe'][1]
-                        #internal.log(f"{tileCoords}: {plaId}: Stripes generated", 2, verbosityLevel, logPrefix)
                         i = i.rotate(step['stripe'][2], center=mathtools.polyCenter(coords))
                         mi = Image.new("RGBA", (skinJson['info']['size'], skinJson['info']['size']), (0, 0, 0, 0))
                         md = ImageDraw.Draw(mi)
@@ -217,14 +196,12 @@ def tiles(args):
                     else:
                         pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Filling area")
                         img.polygon(coords, fill=step['colour'], outline=step['outline'])
-                    #internal.log(f"{tileCoords}: {plaId}: Area filled", 2, verbosityLevel, logPrefix)
                     pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Drawing outline")
                     outlineCoords = coords[:]
                     outlineCoords.append(outlineCoords[0])
                     img.line(coords, fill=step['outline'], width=2, joint="curve")
                     if not "unroundedEnds" in info['tags']:
                         img.ellipse([coords[0][0]-2/2+1, coords[0][1]-2/2+1, coords[0][0]+2/2, coords[0][1]+2/2], fill=step['outline'])
-                    #internal.log(f"{tileCoords}: {plaId}: Outline drawn", 2, verbosityLevel, logPrefix)
 
                 def area_centerimage():
                     x, y = mathtools.polyCenter(coords)
@@ -257,8 +234,6 @@ def tiles(args):
                 funcs[info['type']][step['layer']]()
 
                 operated.value += 1
-                timeLeft = round(((int(round(time.time() * 1000)) - start) / operated.value * (operations - operated.value)), 2)
-                #internal.log(f"Rendered step {style.index(step)+1} of {len(style)} of {plaId} ({round(operated.value/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 1, verbosityLevel, logPrefix)
 
             if info['type'] == "line" and "road" in info['tags'] and step['layer'] == "back":
                 pLog("Studs: Finding connected lines")
@@ -269,7 +244,6 @@ def tiles(args):
                 connected = []
                 for i in connectedPre:
                     connected += i
-                #internal.log(f"{tileCoords}: Connected lines found", 2, verbosityLevel, logPrefix)
                 for conPla, index in connected:
                     if not "road" in skinJson['types'][plaList[conPla]['type'].split(" ")[0]]['tags']:
                         continue
@@ -287,7 +261,6 @@ def tiles(args):
                         conCoords = [(x-internal.strToTuple(tileCoords)[1]*size, y-internal.strToTuple(tileCoords)[2]*size) for x,y in tools.nodes.toCoords(plaList[conPla]['nodes'], nodeList)]
                         conCoords = [(int(skinJson['info']['size']/size*x), int(skinJson['info']['size']/size*y)) for x,y in conCoords]
                         preConCoords = conCoords[:]
-                        #internal.log(f"{tileCoords}: Coords extracted", 2, verbosityLevel, logPrefix)
                         
                         pLog("Studs: Coords processed")
                         if index == 0:
@@ -303,7 +276,6 @@ def tiles(args):
                             if not "dash" in conStep.keys():
                                 conCoords[0] = ((conCoords[0][0]+conCoords[1][0])/2, (conCoords[0][1]+conCoords[1][1])/2)
                                 conCoords[2] = ((conCoords[2][0]+conCoords[1][0])/2, (conCoords[2][1]+conCoords[1][1])/2)
-                        #internal.log(f"{tileCoords}: Coords processed", 2, verbosityLevel, logPrefix)
                         pLog("Studs: Segment drawn")
                         if not "dash" in conStep.keys():
                             img.line(conCoords, fill=conStep['colour'], width=conStep['width'], joint="curve")
@@ -320,10 +292,7 @@ def tiles(args):
                                 for dashCoords in mathtools.dash(conCoords[c][0], conCoords[c][1], conCoords[c+1][0], conCoords[c+1][1], conStep['dash'][0], conStep['dash'][1], o, emptyStart):
                                     #print(dashCoords)
                                     img.line(dashCoords, fill=conStep['colour'], width=conStep['width'])
-                        #internal.log(f"{tileCoords}: Segment drawn", 2, verbosityLevel, logPrefix)
                 operated.value += 1
-                timeLeft = round(((int(round(time.time() * 1000)) - start) / operated.value * (operations - operated.value)), 2)
-                #internal.log(f"Rendered road studs ({round(operated.value/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 1, verbosityLevel, logPrefix)
 
     textList += pointsTextList 
     textList.reverse()
@@ -356,25 +325,15 @@ def tiles(args):
         if canPrint:
             pLog(f"Text {processed}/{len(textList)} pasted")
             im.paste(i, (int(x-i.width/2), int(y-i.height/2)), i)
-            #internal.log(f"{tileCoords}: Text pasted", 2, verbosityLevel, logPrefix)
         else:
             pLog(f"Text {processed}/{len(textList)} skipped")
-            #internal.log(f"{tileCoords}: Text skipped", 2, verbosityLevel, logPrefix)
         dontCross.append(currentBoxCoords)
     operated.value += 1
-    timeLeft = round(((int(round(time.time() * 1000)) - start) / operated.value * (operations - operated.value)), 2)
-    #internal.log(f"Rendered text ({round(operated.value/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 1, verbosityLevel, logPrefix)
     
     #tileReturn[tileCoords] = im
     if saveImages:
         im.save(f'{saveDir}{tileCoords}.png', 'PNG')
 
-    if operated.value != 0:
-        timeLeft = round(((int(round(time.time() * 1000)) - start) / operated.value * (operations - operated.value)), 2)
-        pLog("Rendered")
-        #internal.log(f"Rendered {tileCoords} ({round(operated.value/operations*100, 2)}%, {internal.msToTime(timeLeft)} remaining)", 0, verbosityLevel, logPrefix)
-    else:
-        pLog("Rendered")
-        #internal.log(f"Rendered {tileCoords}", 0, verbosityLevel, logPrefix)
+    pLog("Rendered")
 
     return {tileCoords: im}
