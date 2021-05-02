@@ -3,7 +3,6 @@ All Functions
 
 **Useful information**
 
-* To convert tuple to list efficiently use *(tuple)
 * PLA = Points, Lines and Areas
 
 Main
@@ -11,6 +10,8 @@ Main
 .. py:function:: renderer.render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, saveImages=True, saveDir="tiles/", assetsDir="skins/assets/", processes=1, tiles: list])
 
    Renders tiles from given coordinates and zoom values.
+
+   **Important:** Run this function under ``if __name__ == "__main__"``, or else there would be a lot of multiprocessing RuntimeErrors.
 
    **Parameters**
 
@@ -206,7 +207,6 @@ Math Tools
 .. py:function:: renderer.mathtools.pointInPoly(xp: Union[int,float], yp: Union[int,float], coords: list)
    
    Finds if a point is in a polygon.
-   **WARNING: If your polygon has a lot of corners, this will take very long.**
    
    **Parameters**
    

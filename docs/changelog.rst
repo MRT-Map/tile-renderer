@@ -1,6 +1,25 @@
 Changelog
 =========
 
+* *v1.2 (coming soon)*
+  * holes in areas
+  * PLA to GeoJson, GML parser (maybe more who knows)
+
+* **v1.1 (2/5/21)**
+  * Added log prefixes to ``renderer.render()`` and ``renderer.tileMerge()``
+  * Improved curved line drawing
+  * ``renderer.py`` is now split into a package
+
+    * ``renderer.utils`` renamed to ``renderer.validate``
+    * all functions of ``renderer.tools`` and ``renderer.validate`` renamed
+    * method descriptions added to all functions except those in ``renderer.internal``
+
+  * New function: ``renderer.misc.getSkin()``
+  * New logging system that does not clog your terminal
+  * changed colour library from ``colorama`` to ``blessed``
+  * fixed ``renderer.mergeTiles()``, especially in determining which zooms to merge and retrieving images
+  * fixed ``renderer.misc.getSkin()``
+
 * **v1.0 (13/4/21)**
 
   * added stripes for areas
