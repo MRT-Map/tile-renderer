@@ -9,3 +9,4 @@ docs/_build/html
 output.png
 .pytest_cache
 .tox
+dist

@@ -10,3 +10,9 @@ renderer\nodeJsonBuilder.py
 renderer\rendering.py
 renderer\tools.py
 renderer\validate.py
+renderer\skins\default.json
+renderer\skins\assets\ClearSans-Bold.ttf
+renderer\skins\assets\ClearSans-BoldItalic.ttf
+renderer\skins\assets\ClearSans-Medium.ttf
+renderer\skins\assets\ClearSans-MediumItalic.ttf
+renderer\skins\assets\clinic.png
