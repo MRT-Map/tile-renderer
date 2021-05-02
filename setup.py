@@ -1,10 +1,16 @@
-from distutils.core import setup
+from setuptools import setup
+
+with open("README.md", "r", encoding="utf-8") as fh:
+    long_description = fh.read()
+
 setup(
   name = 'tile-renderer',
   packages = ['renderer'],
-  version = '1.1',
+  version = '1.1.0.1',
   license ='gpl-3.0',
   description = 'Leaflet.js tile renderer',
+  long_description=long_description,
+  long_description_content_type="text/markdown",
   author = '7d (from Minecart Rapid Transit Mapping Team)',
   author_email = 'i.third.7d@protonmail.com',
   url = 'https://github.com/MRT-Map/tile-renderer',
@@ -27,7 +33,7 @@ setup(
     'Intended Audience :: Developers',
     'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
     'Natural Language :: English',
-    'Programming Language :: Python'
+    'Programming Language :: Python',
     'Programming Language :: Python :: 3',
     'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',

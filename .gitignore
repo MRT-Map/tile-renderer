@@ -10,3 +10,5 @@ output.png
 .pytest_cache
 .tox
 dist
+build
+tile_renderer.egg-info
