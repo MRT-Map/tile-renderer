@@ -7,3 +7,5 @@ tiles/*
 docs/_build/doctrees
 docs/_build/html
 output.png
+.pytest_cache
+.tox

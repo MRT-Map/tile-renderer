@@ -1,0 +1,12 @@
+{
+  "line": {
+    "type": "aRoad oneWay",
+    "displayname": "Nowhere Express",
+    "description": "asdfasdf",
+    "layer": 0,
+    "nodes": ["a", "b", "c", "d", "e", "f", "g", "h", "a"],
+    "attrs": {
+      "(attr name)": "(attr val)"
+    }
+  }
+}

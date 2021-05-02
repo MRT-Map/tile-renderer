@@ -3,41 +3,41 @@ All Functions
 
 **Useful information**
 
-* To convert tuple to list efficiently use *(tuple)
 * PLA = Points, Lines and Areas
 
 Main
 ----
-.. py:function:: renderer.render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, verbosityLevel=1, saveImages=True, saveDir="tiles/", assetsDir="skins/assets/", tiles: list])
+.. py:function:: renderer.render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, saveImages=True, saveDir="tiles/", assetsDir="skins/assets/", processes=1, tiles: list])
 
    Renders tiles from given coordinates and zoom values.
+
+   **Important:** Run this function under ``if __name__ == "__main__"``, or else there would be a lot of multiprocessing RuntimeErrors.
 
    **Parameters**
 
    * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
    * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
-   * dict **skinJson**: a JSON of the skin used to render tiles
+   * dict **skinJson**: a JSON of the skin used to render tiles (see :ref:`formats`)
    * int **minZoom**: minimum zoom value
    * int **maxZoom**: maximum zoom value
    * int **maxZoomRange**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
-   * int **verbosityLevel** *(default: 1)*: the verbosity level of the output by the function. Use any number from 0 to 2
    * int **saveImages** *(default: True)*: whether to save the tile images in a folder or not
-   * str **saveDir** *(default: "tiles/")*: the directory to save tiles in
-   * str **assetsDir** *(default: "skins/assets/")*: the asset directory for the skin
-   * list[tuple] **tiles** *(optional)*: a list of tiles to render, given in tuples of ``(z,x,y)`` where z = zoom and x,y = tile coordinates
+   * str **saveDir** *(default: "")*: the directory to save tiles in
+   * str **assetsDir** *(default: "renderer/skins/assets/")*: the asset directory for the skin
+   * int **processes** The amount of processes to run for rendering
+   * list[tuple] **tiles** *(default: None)*: a list of tiles to render, given in tuples of ``(z,x,y)`` where z = zoom and x,y = tile coordinates
 
    **Returns**
 
    * **dict** Given in the form of ``"(tile coord)": (PIL Image)``
 
-.. py:function:: tileMerge(images: Union[str, dict] [, verbosityLevel=1, saveImages=True, saveDir="tiles/", zoom=[]])
+.. py:function:: tileMerge(images: Union[str, dict] [, saveImages=True, saveDir="tiles/", zoom=[]])
 
    Merges tiles rendered by ``renderer.render()``.
 
    **Parameters**
 
    * dict **images** Give in the form of ``"(tile coord)": (PIL Image)``, like the return value of ``renderer.render()``
-   * int **verbosityLevel** *(default: 1)*: the verbosity level of the output by the function. Use any number from 0 to 2
    * int **saveImages** *(default: True)*: whether to save the tile imaegs in a folder or not
    * str **saveDir** *(default: "")*: the directory to save tiles in
    * list **zoom** *(default: [])*: if left empty, automatically calculates all zoom values based on tiles; otherwise, the layers of zoom to merge.
@@ -48,38 +48,37 @@ Main
 
 Tools
 -----
+.. py:function:: renderer.tools.plaJson.toTiles(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int)
 
-.. py:function:: renderer.tools.lineToTiles(coords: list, minZoom: int, maxZoom: int, maxZoomRange: int)
-
-   Generates tile coordinates from list of regular coordinates using ``renderer.tools.coordToTiles()``. Mainly for rendering whole PLAs.
-
+   Finds all the tiles that all the PLAs in the JSON will be rendered in.
+   
    **Parameters**
 
-   * list[tuple] **coords** of coordinates in tuples of ``(x,y)``
+   * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
+   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
    * int **minZoom**: minimum zoom value
    * int **maxZoom**: maximum zoom value
    * int **maxZoomValue**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
-
+   
    **Returns**
 
-   * **list[tuple]** A list of tile coordinates
+   * **list[tuples]** A list of tile coordintes
 
-.. py:function:: renderer.tools.coordToTiles(coord: list, minZoom: int, maxZoom: int, maxZoomRange: int)
+.. py:function:: renderer.tools.plaJson.findEnds(plaList: dict, nodeList: dict)
 
-   Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
-
+   Finds the minimum and maximum X and Y values of a JSON or dictionary of PLAs.
+   
    **Parameters**
 
-   * list[int/float] **coord**: Coordinates provided in the form ``[x,y]``
-   * int **minZoom**: minimum zoom value
-   * int **maxZoom**: maximum zoom value
-   * int **maxZoomValue**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
-
+   * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
+   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
+   
    **Returns**
 
-   * **list[tuple]** A list of tile coordinates
+   * **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
+   
 
-.. py:function:: renderer.tools.plaJson_calcRenderedIn(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int)
+.. py:function:: renderer.tools.plaJson.renderedIn(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int)
    
    Like ``renderer.tools.lineToTiles()``, but for a JSON or dictionary of PLAs.
 
@@ -95,33 +94,46 @@ Tools
 
    * **list[tuple]** A list of tile coordinates
 
-.. py:function:: renderer.tools.plaJson_findEnds(plaList: dict, nodeList: dict)
+.. py:function:: renderer.tools.tile.findEnds(coords: list)
 
-   Finds the minimum and maximum X and Y values of a JSON or dictionary of PLAs.
-   
+   Find the minimum and maximum x/y values of a set of tiles coords.
+
    **Parameters**
 
-   * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
-   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
-   
-   **Returns**
+   * list **coords**: a list of tile coordinates, provide in a tuple of (z,x,y)
+
+   **Return**
 
    * **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
-   
-.. py:function:: renderer.tools.nodesToCoords(nodes: list, nodeList: dict)
-   
-   Converts a list of nodes IDs into a list of coordinates with a node dictionary/JSON as its reference.
-   
+
+.. py:function:: renderer.tools.line.findEnds(coords: list)
+
+   Find the minimum and maximum x/y values of a set of coords.
+
    **Parameters**
 
-   * list **nodes**: a list of node IDs
-   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
-   
+   * list **coords**: a list of coordinates, provide in a tuple of (x,y)
+
+   **Return**
+
+   * **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
+
+.. py:function:: renderer.tools.line.toTiles(coords: list, minZoom: int, maxZoom: int, maxZoomRange: int)
+
+   Generates tile coordinates from list of regular coordinates using ``renderer.tools.coordToTiles()``. Mainly for rendering whole PLAs.
+
+   **Parameters**
+
+   * list[tuple] **coords** of coordinates in tuples of ``(x,y)``
+   * int **minZoom**: minimum zoom value
+   * int **maxZoom**: maximum zoom value
+   * int **maxZoomValue**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
+
    **Returns**
 
-   * **list[tuple]** A list of coordinates
-   
-.. py:function:: renderer.tools.findPlasAttachedToNode(nodeId: str, plaList: dict)
+   * **list[tuple]** A list of tile coordinates
+
+.. py:function:: renderer.tools.nodes.findPlasAttached(nodeId: str, plaList: dict)
 
    Finds which PLAs attach to a node.
    
@@ -134,29 +146,33 @@ Tools
 
    * **list[tuple]** A tuple in the form of (plaId, posInNodeList)
 
-.. py:function:: renderer.tools.line_findEnds(coords: list)
-
-   Find the minimum and maximum x/y values of a set of coords.
-
-   **Parameters**
-
-   * list **coords**: a list of coordinates, provide in a tuple of (x,y)
-
-   **Return**
-
-   * **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
+.. py:function:: renderer.tools.nodes.toCoords(nodes: list, nodeList: dict)
    
-.. py:function:: renderer.tools.tile_findEnds(coords: list)
+   Converts a list of nodes IDs into a list of coordinates with a node dictionary/JSON as its reference.
+   
+   **Parameters**
 
-   Find the minimum and maximum x/y values of a set of tiles coords.
+   * list **nodes**: a list of node IDs
+   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
+   
+   **Returns**
+
+   * **list[tuple]** A list of coordinates
+
+.. py:function:: renderer.tools.coord.toTiles(coord: list, minZoom: int, maxZoom: int, maxZoomRange: int)
+
+   Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
 
    **Parameters**
 
-   * list **coords**: a list of tile coordinates, provide in a tuple of (z,x,y)
+   * list[int/float] **coord**: Coordinates provided in the form ``[x,y]``
+   * int **minZoom**: minimum zoom value
+   * int **maxZoom**: maximum zoom value
+   * int **maxZoomValue**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
 
-   **Return**
+   **Returns**
 
-   * **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
+   * **list[tuple]** A list of tile coordinates
 
 Math Tools
 ----------
@@ -191,7 +207,6 @@ Math Tools
 .. py:function:: renderer.mathtools.pointInPoly(xp: Union[int,float], yp: Union[int,float], coords: list)
    
    Finds if a point is in a polygon.
-   **WARNING: If your polygon has a lot of corners, this will take very long.**
    
    **Parameters**
    
@@ -283,12 +298,12 @@ Math Tools
    **Returns**
    * **list[tuple]** Given in [(x1, y1), (x2, y2)]
 
-Utilities
----------
+Validate
+--------
 
-.. py:function:: renderer.utils.coordListIntegrity(coords: list)
+.. py:function:: renderer.validate.vCoords(coords: list)
 
-   Checks integrity of a list of coordinates.
+   Validates a list of coordinates.
    
    **Parameters**
    
@@ -298,9 +313,9 @@ Utilities
    
    * **bool** Returns True if no errors
 
-.. py:function:: renderer.utils.tileCoordListIntegrity(tiles: list, minZoom: int, maxZoom: int)
+.. py:function:: renderer.validate.vTileCoords(tiles: list, minZoom: int, maxZoom: int)
 
-   Checks integrity of a list of tile coordinates.
+   Validates a list of tile coordinates.
    
    **Parameters**
    
@@ -312,9 +327,9 @@ Utilities
    
    * **bool** Returns True if no errors
 
-.. py:function:: renderer.utils.nodeListIntegrity(nodes: list, nodeList: dict)
+.. py:function:: renderer.validate.vNodeList(nodes: list, nodeList: dict)
 
-   Checks integrity of a list of node IDs.
+   Validates a list of node IDs.
    
    **Parameters**
    
@@ -325,9 +340,9 @@ Utilities
    
    * **bool** Returns True if no errors
 
-.. py:function:: renderer.utils.nodeJsonIntegrity(nodeList: dict)
+.. py:function:: renderer.validate.vNodeJson(nodeList: dict)
 
-   Checks integrity of a dictionary/JSON of nodes.
+   Validates a dictionary/JSON of nodes.
    
    **Parameters**
    
@@ -337,9 +352,9 @@ Utilities
    
    * **bool** Returns True if no errors
 
-.. py:function:: renderer.utils.plaJsonIntegrity(plaList: dict, nodeList: dict)
+.. py:function:: renderer.validate.vPlaJson(plaList: dict, nodeList: dict)
 
-   Checks integrity of a dictionary/JSON of PLAs.
+   Validates a dictionary/JSON of PLAs.
    
    **Parameters**
    
@@ -350,9 +365,9 @@ Utilities
    
    * **bool** Returns True if no errors
 
-.. py:function:: renderer.utils.skinJsonIntegrity(skinJson: dict)
+.. py:function:: renderer.validate.vSkinJson(skinJson: dict)
    
-   Checks integrity of a skin JSON file.
+   Validates a skin JSON file.
 
    **Parameters**
 
@@ -361,3 +376,18 @@ Utilities
    **Returns**
    
    * **bool** Returns True if no errors
+
+Misc
+----
+
+.. py:function:: renderer.misc.getSkin(sname: str)
+   
+   Gets a skin from inside the package.
+
+   **Parameters**
+
+   * str **name**: the name of the skin
+
+   **Returns**
+   
+   * **dict** The skin JSON

@@ -1110,7 +1110,7 @@
         "displayname": "Block 8",
         "description": "Encinitas",
         "layer": 0,
-        "nodes": ["enc-rockyPlateauHighSch_Block8_1", "enc-rockyPlateauHighSch_Block8_2", "enc-rockyPlateauHighSch_Block8_3", "enc-rockyPlateauHighSch_Block8_4"],
+        "nodes": ["enc-rockyPlateauHighSch_Block8_1", "enc-rockyPlateauHighSch_Block8_2", "enc-rockyPlateauHighSch_Block8_3_fence18", "enc-rockyPlateauHighSch_Block8_4_fence17"],
         "attrs": {}
     },
     "enc-rockyPlateauHighSch_bBallCourt": {

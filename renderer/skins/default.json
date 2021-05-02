@@ -1,6 +1,6 @@
 {
     "info": {
-        "size": 2048,
+        "size": 256,
         "font": {
             "": "ClearSans-Medium.ttf",
             "b": "ClearSans-Bold.ttf",
