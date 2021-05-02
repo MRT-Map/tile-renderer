@@ -2,10 +2,12 @@ Changelog
 =========
 
 * *v1.2 (coming soon)*
+
   * holes in areas
   * PLA to GeoJson, GML parser (maybe more who knows)
 
 * **v1.1 (2/5/21)**
+
   * Added log prefixes to ``renderer.render()`` and ``renderer.tileMerge()``
   * Improved curved line drawing
   * ``renderer.py`` is now split into a package
