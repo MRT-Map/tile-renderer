@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
   name = 'tile-renderer',
   packages = ['renderer'],
-  version = '1.1.0.1',
+  version = '1.1.0.2',
   license ='gpl-3.0',
   description = 'Leaflet.js tile renderer',
   long_description=long_description,
@@ -20,14 +20,13 @@ setup(
   package_data={
     'renderer': ['skins/*', 'skins/assets/*'],
   },
-  include_package_data=True,
   install_requires=[
-          'pillow',
-          'blessed',
-          'sympy',
-          'schema',
-          'numpy'
-      ],
+    'pillow',
+    'blessed',
+    'sympy',
+    'schema',
+    'numpy'
+  ],
   classifiers=[
     'Development Status :: 5 - Production/Stable',
     'Intended Audience :: Developers',

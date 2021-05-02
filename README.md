@@ -5,6 +5,7 @@
 [![Version](https://img.shields.io/pypi/v/tile-renderer.svg)](https://pypi.org/project/tile-renderer/)
 [![License](https://img.shields.io/pypi/l/tile-renderer.svg)](https://pypi.org/project/tile-renderer/)
 [![Versions](https://img.shields.io/pypi/pyversions/tile-renderer.svg)](https://pypi.org/project/tile-renderer/)
+
 Leaflet.js tile renderer, made by 7d
 
 **Note: renderer is complete, but not the skin or the tutorials.**
