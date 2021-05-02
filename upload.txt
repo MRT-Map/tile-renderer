@@ -1,4 +1,0 @@
-commands for upload in case i forget
-
-py -m build
-py -3.9-64 -m twine upload dist/*
