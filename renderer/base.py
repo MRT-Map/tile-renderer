@@ -7,6 +7,7 @@ import re
 import multiprocessing
 import sys
 import blessed
+import os
 
 import renderer.internal as internal
 import renderer.tools as tools
@@ -21,12 +22,12 @@ def tileMerge(images: Union[str, dict], saveImages=True, saveDir="tiles/", zoom=
     More info: https://tile-renderer.readthedocs.io/en/main/functions.html#tileMerge
     """
     term = blessed.Terminal()
+    imageDict = {}
     tileReturn = {}
     if isinstance(images, str):
         print(term.green("Retrieving images..."), end="\r")
-        imageDict = {}
-        for d in glob.glob(images+"*.png"):
-            regex = re.search(fr"^{images}(-?\d+, -?\d+, -?\d+)\.png$", d)
+        for d in glob.glob(glob.escape(images)+"*.png"):
+            regex = re.search(f"^{re.escape(images)}(-?\d+, -?\d+, -?\d+)\.png$", d) # pylint: disable=anomalous-backslash-in-string
             if regex == None:
                 continue
             coord = regex.group(1)
@@ -38,18 +39,13 @@ def tileMerge(images: Union[str, dict], saveImages=True, saveDir="tiles/", zoom=
     print(term.green("\nAll images retrieved"))
     print(term.green("Determined zoom levels..."), end=" ")
     if zoom == []:
-        minZoom = math.inf
-        maxZoom = -math.inf
         for c in imageDict.keys():
             z = internal.strToTuple(c)[0]
-            minZoom = z if z < minZoom else minZoom
-            maxZoom = z if z > maxZoom else maxZoom
-    else:
-        minZoom = min(zoom)
-        maxZoom = max(zoom)
+            if not z in zoom:
+                zoom.append(z)
     print(term.green("determined"))
-    for z in range(minZoom, maxZoom+1):
-        print(term.green(f"Zoom {z}: "), "Determining tiles to be merged")
+    for z in zoom:
+        print(term.green(f"Zoom {z}: ") + "Determining tiles to be merged", end=term.clear_eos+"\r")
         toMerge = {}
         for c, i in imageDict.items():
             #i = imageDict[c]
@@ -71,19 +67,20 @@ def tileMerge(images: Union[str, dict], saveImages=True, saveDir="tiles/", zoom=
                 if f"{z}, {x}, {y}" in toMerge.keys():
                     i.paste(toMerge[f"{z}, {x}, {y}"], (px, py))
                     merged += 1
-                    with term.location(): print(term.green(f"Zoom {z}: ") + f"{internal.percentage(merged, len(toMerge.keys()))} | {internal.timeRemaining(start, merged, len(toMerge.keys()))} left | " + term.bright_black(f"Pasted {z}, {x}, {y}"), end=term.clear_eos+"\r")
+                    with term.location(): print(term.green(f"Zoom {z}: ") + f"{internal.percentage(merged, len(toMerge.keys()))} | {internal.msToTime(internal.timeRemaining(start, merged, len(toMerge.keys())))} left | " + term.bright_black(f"Pasted {z}, {x}, {y}"), end=term.clear_eos+"\r")
                 py += tileSize
             px += tileSize
             py = 0
         #tileReturn[tilePlas] = im
         if saveImages:
+            print(term.green(f"Zoom {z}: ") + "Saving image", end=term.clear_eos+"\r")
             i.save(f'{saveDir}merge_{z}.png', 'PNG')
         tileReturn[str(z)] = i
         
     print(term.green("\nAll merges complete"))
     return tileReturn
 
-def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, saveImages=True, saveDir="", assetsDir="renderer/skins/assets/", processes=1, tiles=None):
+def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, saveImages=True, saveDir="", assetsDir=os.path.dirname(__file__)+"/skins/assets/", processes=1, tiles=None):
     """
     Renders tiles from given coordinates and zoom values.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.render
@@ -162,8 +159,10 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
         timeLeft = internal.timeRemaining(processStart, processed, len(tileList))
         #timeLeft = round(((int(round(time.time() * 1000)) - processStart) / processed * (len(tileList) - processed)), 2)
     
+    print(term.green("100.00% | 0.0s left | ") + "Processing complete" + term.clear_eos)
+
     #count # of rendering operations
-    print(term.bright_green("\nCounting no. of operations"))
+    print(term.bright_green("Counting no. of operations"))
     operations = 0
     opTiles = {}
     tileOperations = 0
@@ -192,7 +191,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     
     #render
     renderStart = time.time() * 1000
-    print(term.bright_green("\nStarting render..."))
+    print(term.bright_green("\nStarting render"))
     if __name__ == 'renderer.base':
         m = multiprocessing.Manager()
         operated = m.Value('i', 0)
@@ -214,5 +213,6 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
             k, v = list(i.items())[0]
             result[k] = v
 
-    print(term.bright_green("\nRender complete"))
+        print(term.green("100.00% | 0.0s left | ") + "Rendering complete" + term.clear_eos)
+    print(term.bright_green("Render complete"))
     return result

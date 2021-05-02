@@ -1,3 +1,5 @@
+import os
+
 import renderer.internal as internal
 import renderer.tools as tools
 import renderer.validate as validate
@@ -10,6 +12,6 @@ def getSkin(name: str):
     More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.misc.getSkin
     """
     try:
-        return internal.readJson("renderer/skins/"+name+".json")
+        return internal.readJson(os.path.dirname(__file__)+"/skins/"+name+".json")
     except FileNotFoundError:
         raise FileNotFoundError(f"Skin '{name}' not found")

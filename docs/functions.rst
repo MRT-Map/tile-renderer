@@ -8,7 +8,7 @@ All Functions
 
 Main
 ----
-.. py:function:: renderer.render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, verbosityLevel=1, saveImages=True, saveDir="tiles/", assetsDir="skins/assets/", tiles: list])
+.. py:function:: renderer.render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, saveImages=True, saveDir="tiles/", assetsDir="skins/assets/", processes=1, tiles: list])
 
    Renders tiles from given coordinates and zoom values.
 
@@ -16,28 +16,27 @@ Main
 
    * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
    * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
-   * dict **skinJson**: a JSON of the skin used to render tiles
+   * dict **skinJson**: a JSON of the skin used to render tiles (see :ref:`formats`)
    * int **minZoom**: minimum zoom value
    * int **maxZoom**: maximum zoom value
    * int **maxZoomRange**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
-   * int **verbosityLevel** *(default: 1)*: the verbosity level of the output by the function. Use any number from 0 to 2
    * int **saveImages** *(default: True)*: whether to save the tile images in a folder or not
    * str **saveDir** *(default: "")*: the directory to save tiles in
    * str **assetsDir** *(default: "renderer/skins/assets/")*: the asset directory for the skin
+   * int **processes** The amount of processes to run for rendering
    * list[tuple] **tiles** *(default: None)*: a list of tiles to render, given in tuples of ``(z,x,y)`` where z = zoom and x,y = tile coordinates
 
    **Returns**
 
    * **dict** Given in the form of ``"(tile coord)": (PIL Image)``
 
-.. py:function:: tileMerge(images: Union[str, dict] [, verbosityLevel=1, saveImages=True, saveDir="tiles/", zoom=[]])
+.. py:function:: tileMerge(images: Union[str, dict] [, saveImages=True, saveDir="tiles/", zoom=[]])
 
    Merges tiles rendered by ``renderer.render()``.
 
    **Parameters**
 
    * dict **images** Give in the form of ``"(tile coord)": (PIL Image)``, like the return value of ``renderer.render()``
-   * int **verbosityLevel** *(default: 1)*: the verbosity level of the output by the function. Use any number from 0 to 2
    * int **saveImages** *(default: True)*: whether to save the tile imaegs in a folder or not
    * str **saveDir** *(default: "")*: the directory to save tiles in
    * list **zoom** *(default: [])*: if left empty, automatically calculates all zoom values based on tiles; otherwise, the layers of zoom to merge.

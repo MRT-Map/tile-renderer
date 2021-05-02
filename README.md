@@ -17,6 +17,8 @@ Tile renderer for leaflet.js usage, made by 7d
   * New function: `renderer.misc.getSkin()`
   * New logging system that does not clog your terminal
   * changed colour library from `colorama` to `blessed`
+  * fixed `renderer.mergeTiles()`, especially in determining which zooms to merge and retrieving images
+  * fixed `renderer.misc.getSkin()`
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)
