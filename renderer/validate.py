@@ -213,3 +213,29 @@ def vSkinJson(skinJson: dict):
                         term = blessed.Terminal()
                         print(term.red(f"Type {n}, range {z}, step {step['layer']}"))
                         raise e
+
+def vGeoJson(geoJson: dict):
+    mainSchema = Schema({
+        "type": "FeatureCollection", 
+        "features": [{
+            "type": "Feature",
+            "geometry": dict,
+            "properties": dict,
+            object: object
+        }]
+    })
+
+    point = Schema({
+        "type": "Point",
+        "coordinates": [float],
+        object: object
+    })
+
+    lineString = Schema({
+        "type": "lineString",
+        "coordinates": [[float]]
+    })
+
+    mainSchema.validate(geoJson)
+    for feature in geoJson['features']:
+        pass
