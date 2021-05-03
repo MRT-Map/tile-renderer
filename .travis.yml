@@ -3,8 +3,8 @@ python:
   - "3.8"
   - "3.9"
 install:
-  - pip install pillow blessed schema sympy numpy
+  - pip install pillow blessed schema sympy numpy codecov
 script:
   - pytest test.py
 after_success:
-  - bash <(curl -s https://codecov.io/bash)
+  - codecov
