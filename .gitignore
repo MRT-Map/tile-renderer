@@ -12,3 +12,4 @@ output.png
 dist
 build
 tile_renderer.egg-info
+__pycache__

@@ -1,12 +1,13 @@
 {
-  "line": {
-    "type": "aRoad oneWay",
-    "displayname": "Nowhere Express",
-    "description": "asdfasdf",
-    "layer": 0,
-    "nodes": ["a", "b", "c", "d", "e", "f", "g", "h", "a"],
-    "attrs": {
-      "(attr name)": "(attr val)"
+    "line": {
+      "type": "building",
+      "displayname": "donut building",
+      "description": "asdfasdf",
+      "layer": 0,
+      "nodes": ["g", "h", "i", "j"],
+      "hollows": [["a", "b", "e"]],
+      "attrs": {
+        "(attr name)": "(attr val)"
+      }
     }
-  }
 }

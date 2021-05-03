@@ -79,6 +79,7 @@ def vPlaJson(plaList: dict, nodeList: dict):
             "description": str,
             "layer": Or(int, float),
             "nodes": And(list, lambda i: vNodeList(i, nodeList)),
+            Optional("hollows"): [And(list, lambda i: vNodeList(i, nodeList))],
             "attrs": dict
         }
     })

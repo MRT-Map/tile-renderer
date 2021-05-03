@@ -104,7 +104,20 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     else: #finds box of tiles
         tiles = tools.plaJson.toTiles(plaList, nodeList, minZoom, maxZoom, maxZoomRange)
 
-    print(term.green("found\nSorting PLA by tiles..."), end=" ")
+    print(term.green("found\nRemoving PLAs with unknown type..."), end=" ")
+    # remove PLAs whose type is not in skin
+    removeList = []
+    for pla in plaList.keys():
+        if not plaList[pla]['type'].split(' ')[0] in skinJson['order']:
+            removeList.append(pla)
+    for pla in removeList:
+        del plaList[pla]
+    print(term.green("removed"))
+    if removeList != []:
+        print(term.yellow('The following PLAs were removed:'))
+        print(term.yellow(" | ".join(removeList)))
+
+    print(term.green("Sorting PLA by tiles..."), end=" ")
     #sort PLAs by tiles
     tileList = {}
     for tile in tiles:
