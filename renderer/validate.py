@@ -13,7 +13,7 @@ def vCoords(coords: list):
     More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.coords
     """
     for item in coords:
-        if not isinstance(item, tuple):
+        if not isinstance(item, (tuple, list)):
             raise TypeError(f"Coordinates {item} is not type 'tuple'")
         elif len(item) != 2:
             raise ValueError(f"Coordinates {item} has {len(item)} values instead of 2")
@@ -220,22 +220,59 @@ def vGeoJson(geoJson: dict):
         "features": [{
             "type": "Feature",
             "geometry": dict,
-            "properties": dict,
-            object: object
+            "properties": dict
         }]
-    })
+    }, ignore_extra_keys=True)
 
     point = Schema({
         "type": "Point",
-        "coordinates": [float],
-        object: object
-    })
+        "coordinates": And([int, float], lambda c: len(c)==2)
+    }, ignore_extra_keys=True)
 
     lineString = Schema({
-        "type": "lineString",
-        "coordinates": [[float]]
-    })
+        "type": "LineString",
+        "coordinates": vCoords
+    }, ignore_extra_keys=True)
+
+    polygon = Schema({
+        "type": "Polygon",
+        "coordinates": lambda cs: all([vCoords(c) for c in cs])
+    }, ignore_extra_keys=True)
+
+    multiPoint = Schema({
+        "type": "MultiPoint",
+        "coordinates": vCoords
+    }, ignore_extra_keys=True)
+
+    multiLineString = Schema({
+        "type": "MultiLineString",
+        "coordinates": lambda cs: all([vCoords(c) for c in cs])
+    }, ignore_extra_keys=True)
+
+    multiPolygon = Schema({
+        "type": "MultiPolygon",
+        "coordinates": lambda css: all([all([vCoords(c) for c in cs]) for cs in css])
+    }, ignore_extra_keys=True)
+
+    def vFeatures(features: list):
+        schemas = {
+            "Point": point,
+            "LineString": lineString,
+            "Polygon": polygon,
+            "MultiPoint": multiPoint,
+            "MultiLineString": multiLineString,
+            "MultiPolygon": multiPolygon
+        }
+
+        for feature in features:
+            if feature['geometry']['type'] == "GeometryCollection":
+                vFeatures(feature['geometries'])
+            elif feature['geometry']['type'] in schemas.keys():
+                schemas[feature['geometry']['type']].validate(feature['geometry'])
+            else:
+                raise ValueError(f"Invalid type {feature['geometry']['type']}")
 
     mainSchema.validate(geoJson)
-    for feature in geoJson['features']:
-        pass
+    vFeatures(geoJson['features'])
+
+    return True

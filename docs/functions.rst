@@ -377,6 +377,18 @@ Validate
    
    * **bool** Returns True if no errors
 
+.. py:function:: renderer.validate.vSkinJson(geoJson: dict)
+   
+   Validates a GeoJson file.
+
+   **Parameters**
+
+   * dict **geoJson**: the GeoJson file
+
+   **Returns**
+   
+   * **bool** Returns True if no errors
+
 Misc
 ----
 

@@ -16,6 +16,8 @@ Leaflet.js tile renderer, made by 7d
 * **v1.2 ()**
   * `renderer.render()` now ignores PLAs if their type is not specified in the skin Json
   * Hollows are now supported in areas
+  * New function, `renderer.validate.vGeoJson()`
+    * `renderer.validate.vCoords()` now supports lists along with tuples
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)
