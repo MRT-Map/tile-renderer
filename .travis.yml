@@ -6,3 +6,10 @@ install:
   - pip install pillow blessed schema sympy numpy
 script:
   - pytest test.py
+branches:
+  only:
+  - main
+jobs:
+  allow_failures:
+  - python: "3.7"
+  fast_finish: true
