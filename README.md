@@ -18,6 +18,8 @@ Leaflet.js tile renderer, made by 7d
   * Hollows are now supported in areas
   * New function, `renderer.validate.vGeoJson()`
     * `renderer.validate.vCoords()` now supports lists along with tuples
+  * The renderer now has a CLI, to show the help page do `python -m renderer -h`
+  * `renderer.render()` now supports float maxZoomRanges
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)

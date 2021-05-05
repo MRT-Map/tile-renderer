@@ -80,7 +80,7 @@ def tileMerge(images: Union[str, dict], saveImages=True, saveDir="tiles/", zoom=
     print(term.green("\nAll merges complete"))
     return tileReturn
 
-def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, saveImages=True, saveDir="", assetsDir=os.path.dirname(__file__)+"/skins/assets/", processes=1, tiles=None):
+def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: Union[str, float], saveImages=True, saveDir="", assetsDir=os.path.dirname(__file__)+"/skins/assets/", processes=1, tiles=None):
     """
     Renders tiles from given coordinates and zoom values.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.render
