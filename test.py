@@ -4,7 +4,7 @@ import time
 import pytest
 
 def exampleplaRead():
-    with open("data/examplepla2.json", "r") as f:
+    with open("data/examplepla.json", "r") as f:
         data = json.load(f)
         f.close()
         return data
@@ -15,14 +15,15 @@ def examplenodesRead():
         f.close()
         return data
 
-def skinFileRead():
-    #with open("renderer/skins/default.json", "r") as f:
-    #    data = json.load(f)
-    #    f.close()
-    #    return data
-    return renderer.misc.getSkin("default")
+p = exampleplaRead()
+n = examplenodesRead()
+s = renderer.misc.getSkin("default")
 
-#if __name__ == "__main__": a = renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 8, 8, 16, saveDir="tiles/")
+#if __name__ == "__main__": a = renderer.render(p, n, s, 8, 8, 16, saveDir="tiles/")
+
+print(renderer.tools.plaJson.toGeoJson(p, n, s))
 
 def test_pytest():
-	if __name__ == "__main__": a = renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 8, 8, 8, saveDir="tiles/", saveImages=False); print(a)
+    if __name__ == "__main__":
+        a = renderer.render(p, n, s, 8, 8, 16, saveDir="tiles/", processes=10)
+        renderer.tileMerge(a, saveImages=False)
