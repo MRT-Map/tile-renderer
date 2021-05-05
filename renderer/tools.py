@@ -110,7 +110,24 @@ class plaJson:
 
         return geoJson
 
+class geoJson:
+    @staticmethod
+    def toNodePlaJson(geoJson: dict):
+        validate.vGeoJson(geoJson)
+        plaJson = {}
+        nodeJson = {}
 
+        def singleFeature(feature: dict):
+            geoProperties = feature['properties']
+            plaName = geoProperties['name'] if 'name' in geoProperties.keys() else internal.genID()
+            
+
+
+        for feature in geoJson['features']:
+            p, n = singleFeature(feature)
+            plaJson.update(p)
+            nodeJson.update(n)
+            
 class tile:
     @staticmethod
     def findEnds(coords: list):

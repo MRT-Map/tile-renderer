@@ -2,6 +2,7 @@ import math
 import json
 from typing import Union
 import time
+import random
 
 def dictIndex(d: dict, v):
     return list(d.keys())[list(d.values()).index(v)]
@@ -67,3 +68,17 @@ def percentage(c: Union[int, float], t: Union[int, float]):
 
 def timeRemaining(start: Union[int, float], c: Union[int, float], t: Union[int, float]):
     return round(((int(round(time.time() * 1000)) - start) / c * (t - c)), 2)
+
+def genId():
+    def b10_b64(n: int):
+        BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+        q = n
+        o = ""
+        while True:
+            o += BASE64[q % 64]
+            q = math.floor(q / 64)
+            if q == 0:
+                break
+        return o[::-1]
+    decimalId = int(time.time() * 10000000)
+    return b10_b64(decimalId) + "-" + b10_b64(random.randint(1, 64**5))

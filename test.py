@@ -22,6 +22,7 @@ s = renderer.misc.getSkin("default")
 #if __name__ == "__main__": a = renderer.render(p, n, s, 8, 8, 16, saveDir="tiles/")
 
 print(renderer.tools.plaJson.toGeoJson(p, n, s))
+print(renderer.internal.genId())
 
 def test_pytest():
     if __name__ == "__main__":
