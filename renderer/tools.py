@@ -117,16 +117,22 @@ class geoJson:
         plaJson = {}
         nodeJson = {}
 
+        def singleGeometry(coords, name=internal.genId()):
+            pass
+
         def singleFeature(feature: dict):
             geoProperties = feature['properties']
             plaName = geoProperties['name'] if 'name' in geoProperties.keys() else internal.genID()
-            
+            if feature['geometry']['type'] == "GeometryCollection":
+                for sgeo in feature['geometry']['geometries']:
+                    singleGeometry(sgeo)
+            elif feature['geometry']['type'].startswith("Multi"):
+                for scoord in feature['geometry']['coordinates']:
+                    singleGeometry({"type": feature['geometry']['type'], "coordinates": scoord})
 
 
         for feature in geoJson['features']:
-            p, n = singleFeature(feature)
-            plaJson.update(p)
-            nodeJson.update(n)
+            singleFeature(feature)
             
 class tile:
     @staticmethod

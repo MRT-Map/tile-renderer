@@ -236,7 +236,7 @@ def vGeoJson(geoJson: dict):
 
     polygon = Schema({
         "type": "Polygon",
-        "coordinates": lambda cs: all([vCoords(c) for c in cs])
+        "coordinates": lambda cs: all([vCoords(c) and c[0] == c[-1] for c in cs])
     }, ignore_extra_keys=True)
 
     multiPoint = Schema({
@@ -251,10 +251,10 @@ def vGeoJson(geoJson: dict):
 
     multiPolygon = Schema({
         "type": "MultiPolygon",
-        "coordinates": lambda css: all([all([vCoords(c) for c in cs]) for cs in css])
+        "coordinates": lambda css: all([all([vCoords(c) and c[0] == c[-1] for c in cs]) for cs in css])
     }, ignore_extra_keys=True)
 
-    def vFeatures(features: list):
+    def vGeometry(geo: dict):
         schemas = {
             "Point": point,
             "LineString": lineString,
@@ -264,15 +264,16 @@ def vGeoJson(geoJson: dict):
             "MultiPolygon": multiPolygon
         }
 
-        for feature in features:
-            if feature['geometry']['type'] == "GeometryCollection":
-                vFeatures(feature['geometries'])
-            elif feature['geometry']['type'] in schemas.keys():
-                schemas[feature['geometry']['type']].validate(feature['geometry'])
-            else:
-                raise ValueError(f"Invalid type {feature['geometry']['type']}")
+        if geo['type'] == "GeometryCollection":
+            for sgeo in geo['geometries']:
+                vGeometry(sgeo)
+        elif geo['type'] in schemas.keys():
+            schemas[geo['type']].validate(geo)
+        else:
+            raise ValueError(f"Invalid type {geo['type']}")
 
     mainSchema.validate(geoJson)
-    vFeatures(geoJson['features'])
+    for feature in geoJson['features']:
+        vGeometry(feature['geometry'])
 
     return True
