@@ -5,7 +5,7 @@ import blessed
 import multiprocessing
 term = blessed.Terminal()
 
-import renderer.internal as internal
+import renderer.internals.internal as internal
 import renderer.tools as tools
 import renderer.validate as validate
 import renderer.mathtools as mathtools

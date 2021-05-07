@@ -1,16 +1,15 @@
 import blessed
 from schema import Schema, And, Or, Regex, Optional
 
-import renderer.internal as internal
+import renderer.internals.internal as internal
 import renderer.tools as tools
 import renderer.mathtools as mathtools
-import renderer.rendering as rendering
 import renderer.misc as misc
 
 def vCoords(coords: list):
     """
     Validates a list of coordinates.
-    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.coords
+    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.coords
     """
     for item in coords:
         if not isinstance(item, (tuple, list)):
@@ -25,7 +24,7 @@ def vCoords(coords: list):
 def vTileCoords(tiles: list, minZoom: int, maxZoom: int):
     """
     Validates a list of tile coordinates.
-    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.tileCoords
+    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.tileCoords
     """
     for item in tiles:
         if not isinstance(item, tuple):
@@ -44,7 +43,7 @@ def vTileCoords(tiles: list, minZoom: int, maxZoom: int):
 def vNodeList(nodes: list, nodeList: dict):
     """
     Validates a list of node IDs.
-    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.nodeList
+    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.nodeList
     """
     for node in nodes:
         if not node in nodeList.keys():
@@ -55,7 +54,7 @@ def vNodeList(nodes: list, nodeList: dict):
 def vNodeJson(nodeList: dict):
     """
     Validates a dictionary/JSON of nodes.
-    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.nodeJson
+    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.nodeJson
     """
     schema = Schema({
         str: {
@@ -70,7 +69,7 @@ def vNodeJson(nodeList: dict):
 def vPlaJson(plaList: dict, nodeList: dict):
     """
     Validates a dictionary/JSON of PLAs.
-    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.plaJson
+    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.plaJson
     """
     schema = Schema({
         str: {
@@ -89,7 +88,7 @@ def vPlaJson(plaList: dict, nodeList: dict):
 def vSkinJson(skinJson: dict):
     """
     Validates a skin JSON file.
-    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.validate.skinJson
+    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.skinJson
     """
     mainSchema = Schema({
         "info": {

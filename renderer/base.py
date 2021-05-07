@@ -9,17 +9,17 @@ import sys
 import blessed
 import os
 
-import renderer.internal as internal
+import renderer.internals.internal as internal
 import renderer.tools as tools
 import renderer.validate as validate
 import renderer.mathtools as mathtools
-import renderer.rendering as rendering
+import renderer.internals.rendering as rendering
 import renderer.misc as misc
 
 def tileMerge(images: Union[str, dict], saveImages=True, saveDir="tiles/", zoom=[]):
     """
     Merges tiles rendered by renderer.render().
-    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#tileMerge
+    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#tileMerge
     """
     term = blessed.Terminal()
     imageDict = {}
