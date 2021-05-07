@@ -220,7 +220,7 @@ class line:
         Generates tile coordinates from list of regular coordinates using renderer.tools.coordToTiles().
         More info: Mainly for rendering whole PLAs. https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.line.toTiles
         """
-        validate.vTileCoords(coords, minZoom, maxZoom)
+        validate.vCoords(coords)
         if len(coords) == 0:
             raise ValueError("Empty list of coords given")
         elif maxZoom < minZoom:
