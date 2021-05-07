@@ -15,16 +15,12 @@ def examplenodesRead():
         f.close()
         return data
 
-p = exampleplaRead()
-n = examplenodesRead()
-s = renderer.misc.getSkin("default")
-
-#if __name__ == "__main__": a = renderer.render(p, n, s, 8, 8, 16, saveDir="tiles/")
-
-print(renderer.tools.geoJson.toNodePlaJson(renderer.tools.plaJson.toGeoJson(p, n, s)))
-
 def test_pytest():
     if __name__ == "__main__":
+        p = exampleplaRead()
+        n = examplenodesRead()
+        s = renderer.misc.getSkin("default")
+
         #base
         a = renderer.render(p, n, s, 8, 8, 16, saveDir="tiles/", processes=10)
         renderer.tileMerge(a, saveImages=False)
@@ -65,4 +61,7 @@ def test_pytest():
 
         #misc
         renderer.misc.getSkin('default')
+
+        print("complete")
         
+test_pytest()
