@@ -99,12 +99,14 @@ class plaJson:
             }
 
             geoFeature['properties'] = {
+                "name": pla['name'],
                 "plaType": pla['type'],
                 "displayname": pla['displayname'],
                 "description": pla['description'],
-                "layer": pla['layer'],
-                "attrs": pla['attrs']
+                "layer": pla['layer']
             }
+            for k, v in pla['attrs']:
+                geoFeature['properties'][k] = v
         
             geoJson['features'].append(geoFeature)
 
@@ -116,20 +118,48 @@ class geoJson:
         validate.vGeoJson(geoJson)
         plaJson = {}
         nodeJson = {}
+        
+        def addNode(x, y):
+            for k, v in nodeJson.items():
+                if v['x'] == x and v['y'] == y:
+                    return k
+            k = internal.genId()
+            nodeJson[k] = {
+                "x": x,
+                "y": y,
+                "connections": []
+            }
+            return k
 
-        def singleGeometry(coords, name=internal.genId()):
-            pass
+        def singleGeometry(geo, properties, name=internal.genId()):
+            plaType = properties['plaType'] if "plaType" in properties else "UNKNOWN"
+            displayname = properties['displayname'] if "displayname" in properties else ""
+            description = properties['description'] if "description" in properties else ""
+            layer = properties['layer'] if "layer" in properties else 0
+            attrs = {}
+            for k, v in properties:
+                if not k in ['plaType', 'displayname', 'description', 'layer']:
+                    attrs[k] = v
+
+            
+            if geo['type'] == "Polygon":
+                plaJson[name] = {
+                    "type": plaType
+                }
 
         def singleFeature(feature: dict):
             geoProperties = feature['properties']
-            plaName = geoProperties['name'] if 'name' in geoProperties.keys() else internal.genID()
+            plaName = geoProperties['name'] if 'name' in geoProperties.keys() else internal.genId()
             if feature['geometry']['type'] == "GeometryCollection":
-                for sgeo in feature['geometry']['geometries']:
-                    singleGeometry(sgeo)
+                name = feature['properties']['name'] if 'name' in feature['properties']['keys'] else internal.genId()
+                for itemNo, sgeo in enumerate(feature['geometry']['geometries']):
+                    singleGeometry(sgeo, feature['properties'], name=name)
             elif feature['geometry']['type'].startswith("Multi"):
+                name = feature['properties']['name'] if 'name' in feature['properties']['keys'] else internal.genId()
                 for scoord in feature['geometry']['coordinates']:
-                    singleGeometry({"type": feature['geometry']['type'], "coordinates": scoord})
-
+                    singleGeometry({"type": feature['geometry']['type'].replace("Multi", ""), "coordinates": scoord}, feature['properties'], name=name)
+            else:
+                singleGeometry(feature['geometry'], feature['properties'])
 
         for feature in geoJson['features']:
             singleFeature(feature)
