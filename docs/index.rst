@@ -1,7 +1,7 @@
 tile-renderer v1.1
 =========================================
 
-Tile renderer for leaflet.js usage, made by 7d. `Git repo here <https://github.com/MRT-Map/tile-renderer>`_
+Leaflet.js streetmap tile renderer, made by 7d. `Git repo here <https://github.com/MRT-Map/tile-renderer>`_
 
 .. toctree::
    :maxdepth: 2
