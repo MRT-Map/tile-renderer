@@ -25,7 +25,6 @@ author = '7d'
 import renderer
 release = renderer.__version__
 
-
 # -- General configuration ---------------------------------------------------
 
 # Add any Sphinx extension module names here, as strings. They can be
