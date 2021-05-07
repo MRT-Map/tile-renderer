@@ -99,13 +99,13 @@ class plaJson:
             }
 
             geoFeature['properties'] = {
-                "name": pla['name'],
+                "name": plaId,
                 "plaType": pla['type'],
                 "displayname": pla['displayname'],
                 "description": pla['description'],
                 "layer": pla['layer']
             }
-            for k, v in pla['attrs']:
+            for k, v in pla['attrs'].items():
                 geoFeature['properties'][k] = v
         
             geoJson['features'].append(geoFeature)
@@ -131,21 +131,38 @@ class geoJson:
             }
             return k
 
-        def singleGeometry(geo, properties, name=internal.genId()):
+        def singleGeometry(geo, properties, name=None):
+            if name == None:
+                if 'name' in properties.keys(): name = properties['name']
+                else: name = internal.genId()
             plaType = properties['plaType'] if "plaType" in properties else "UNKNOWN"
             displayname = properties['displayname'] if "displayname" in properties else ""
             description = properties['description'] if "description" in properties else ""
             layer = properties['layer'] if "layer" in properties else 0
             attrs = {}
-            for k, v in properties:
-                if not k in ['plaType', 'displayname', 'description', 'layer']:
+            for k, v in properties.items():
+                if not k in ['name', 'plaType', 'displayname', 'description', 'layer']:
                     attrs[k] = v
 
-            
+            hollows = []
             if geo['type'] == "Polygon":
-                plaJson[name] = {
-                    "type": plaType
-                }
+                nodes = [addNode(*c) for c in geo['coordinates'][0]]
+                if len(geo['coordinates']) > 1:
+                    for i in range(1, len(geo['coordinates'])):
+                        hollows.append([addNode(*c) for c in geo['coordinates'][i]])
+            elif geo['type'] == "LineString":
+                nodes = [addNode(*c) for c in geo['coordinates']]
+            else:
+                nodes = addNode(*geo['coordinates'])
+            plaJson[name] = {
+                "type": plaType,
+                "displayname": displayname,
+                "description": description,
+                "layer": layer,
+                "nodes": nodes,
+                "attrs": attrs
+            }
+            if hollows != []: plaJson[name]['hollows'] = hollows
 
         def singleFeature(feature: dict):
             geoProperties = feature['properties']
@@ -153,7 +170,7 @@ class geoJson:
             if feature['geometry']['type'] == "GeometryCollection":
                 name = feature['properties']['name'] if 'name' in feature['properties']['keys'] else internal.genId()
                 for itemNo, sgeo in enumerate(feature['geometry']['geometries']):
-                    singleGeometry(sgeo, feature['properties'], name=name)
+                    singleGeometry(sgeo, feature['properties'], name=name+"_"+itemNo)
             elif feature['geometry']['type'].startswith("Multi"):
                 name = feature['properties']['name'] if 'name' in feature['properties']['keys'] else internal.genId()
                 for scoord in feature['geometry']['coordinates']:
@@ -163,6 +180,7 @@ class geoJson:
 
         for feature in geoJson['features']:
             singleFeature(feature)
+        return plaJson, nodeJson
             
 class tile:
     @staticmethod
