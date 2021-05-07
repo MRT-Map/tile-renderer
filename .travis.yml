@@ -6,7 +6,7 @@ install:
   - pip install pillow blessed schema sympy numpy codecov
 script:
   - pytest test.py
-- coverage run test.py
+  - coverage run test.py
 after_success:
   - codecov
 branches:
