@@ -31,7 +31,7 @@ Main
 
    * **dict** Given in the form of ``"(tile coord)": (PIL Image)``
 
-.. py:function:: tileMerge(images: Union[str, dict] [, saveImages=True, saveDir="tiles/", zoom=[]])
+.. py:function:: renderer.tileMerge(images: Union[str, dict] [, saveImages=True, saveDir="tiles/", zoom=[]])
 
    Merges tiles rendered by ``renderer.render()``.
 
@@ -48,22 +48,6 @@ Main
 
 Tools
 -----
-.. py:function:: renderer.tools.plaJson.toTiles(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int)
-
-   Finds all the tiles that all the PLAs in the JSON will be rendered in.
-   
-   **Parameters**
-
-   * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
-   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
-   * int **minZoom**: minimum zoom value
-   * int **maxZoom**: maximum zoom value
-   * int **maxZoomValue**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
-   
-   **Returns**
-
-   * **list[tuples]** A list of tile coordintes
-
 .. py:function:: renderer.tools.plaJson.findEnds(plaList: dict, nodeList: dict)
 
    Finds the minimum and maximum X and Y values of a JSON or dictionary of PLAs.
@@ -93,6 +77,30 @@ Tools
    **Returns**
 
    * **list[tuple]** A list of tile coordinates
+
+.. py:function:: renderer.tools.plaJson.toGeoJson(plaList: dict, nodeList: dict, skinJson: dict):
+
+   Converts PLA Json into GeoJson (with nodes and skin).
+
+   **Parameters**
+   * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
+   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
+   * dict **skinJson**: a JSON of the skin (see :ref:`formats`)
+
+   **Returns**
+
+   * **dict** A GeoJson dictionary
+
+.. py:function:: renderer.tools.geoJson.toNodePlaJson(geoJson: dict)
+
+   Converts GeoJson to PLA and Node JSONs.
+
+   **Parameters**
+
+   * dict **geoJson** a GeoJson dictionary
+
+   **Returns**
+   * **tuple[dict]** Given in ``plaJson, nodeJson``
 
 .. py:function:: renderer.tools.tile.findEnds(coords: list)
 
@@ -159,7 +167,7 @@ Tools
 
    * **list[tuple]** A list of coordinates
 
-.. py:function:: renderer.tools.coord.toTiles(coord: list, minZoom: int, maxZoom: int, maxZoomRange: int)
+.. py:function:: renderer.tools.coord.toTiles(coord: Union[list, tuple], minZoom: int, maxZoom: int, maxZoomRange: int)
 
    Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
 
@@ -176,7 +184,7 @@ Tools
 
 Math Tools
 ----------
-.. py:function:: renderer.mathtools.midpoint(x1, y1, x2, y2, o[, returnBoth=False])
+.. py:function:: renderer.mathtools.midpoint(x1, y1, x2, y2, o[, n=1, returnBoth=False])
 
    Calculates the midpoint of two lines, offsets the distance away from the line, and calculates the rotation of the line.
    
@@ -184,12 +192,13 @@ Math Tools
    
    * int/float **x1, y1, x2, y2**: the coordinates of two points
    * int/float **o**: the offset from the line. If positive, the point above the line is returned; if negative, the point below the line is returned
+   * int/float **n** *(default=1)*: the number of midpoints on a single segment
    * bool **returnBoth** *(default=False)*: if True, it will return both possible points.
    
    **Returns**
    
-   * *returnBoth=False* **tuple** A tuple in the form of (x, y, rot)
-   * *returnBoth=True* **list[tuple]** A list of two tuples in the form of (x, y, rot)
+   * *returnBoth=False* **tuple** A list of tuples in the form of (x, y, rot)
+   * *returnBoth=True* **list[tuple]** A list of lists of two tuples in the form of (x, y, rot)
    
 .. py:function:: renderer.mathtools.linesIntersect(x1: Union[int,float], y1: Union[int,float], x2: Union[int,float], y2: Union[int,float], x3: Union[int,float], y3: Union[int,float], x4: Union[int,float], y4: Union[int,float])
    
@@ -372,6 +381,18 @@ Validate
    **Parameters**
 
    * dict **skinJson**: the skin JSON file
+
+   **Returns**
+   
+   * **bool** Returns True if no errors
+
+.. py:function:: renderer.validate.vGeoJson(geoJson: dict)
+   
+   Validates a GeoJson file.
+
+   **Parameters**
+
+   * dict **geoJson**: the GeoJson file
 
    **Returns**
    

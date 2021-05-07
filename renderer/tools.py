@@ -1,27 +1,22 @@
 import math
+import blessed
+from typing import Union
+term = blessed.Terminal()
 
-import renderer.internal as internal
+import renderer.internals.internal as internal # type: ignore
 import renderer.validate as validate
 import renderer.mathtools as mathtools
-import renderer.rendering as rendering
 import renderer.misc as misc
 
 class plaJson:
     @staticmethod
-    def toTiles(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int):
-        """
-        Finds all the tiles that all the PLAs in the JSON will be rendered in.
-        More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.plaJson.toTiles
-        """
-        xMax, xMin, yMax, yMin = plaJson.findEnds(plaList, nodeList)
-        return line.toTiles([(xMax,yMax),(xMin,yMax),(xMax,yMin),(xMin,yMin)], minZoom, maxZoom, maxZoomRange)
-    
-    @staticmethod
     def findEnds(plaList: dict, nodeList: dict):
         """
         Finds the minimum and maximum X and Y values of a JSON or dictionary of PLAs
-        More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.plaJson.findEnds
+        More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.plaJson.findEnds
         """
+        validate.vPlaJson(plaList, nodeList)
+        validate.vNodeJson(nodeList)
         xMax = -math.inf
         xMin = math.inf
         yMax = -math.inf
@@ -39,8 +34,10 @@ class plaJson:
     def renderedIn(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int):
         """
         Like renderer.tools.lineToTiles(), but for a JSON or dictionary of PLAs.
-        More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.plaJson.renderedIn
+        More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.plaJson.renderedIn
         """
+        validate.vPlaJson(plaList, nodeList)
+        validate.vNodeJson(nodeList)
         if maxZoom < minZoom:
             raise ValueError("Max zoom value is lesser than min zoom value")
 
@@ -51,13 +48,142 @@ class plaJson:
 
         return tiles
 
+    @staticmethod
+    def toGeoJson(plaList: dict, nodeList: dict, skinJson: dict):
+        """
+        Converts PLA Json into GeoJson (with nodes and skin).
+        More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.plaJson.toGeoJson
+        """
+        validate.vPlaJson(plaList, nodeList)
+        validate.vNodeJson(nodeList)
+        validate.vSkinJson(skinJson)
+        geoJson = {"type": "FeatureCollection", "features":[]}
+        
+        for plaId, pla in plaList.items():
+            geoFeature = {"type": "Feature"}
+            if not pla['type'].split()[0] in skinJson['types'].keys():
+                plaType = "UNKNOWN"
+                plaShape = "UNKNOWN"
+                print(term.yellow(f"WARNING: Type {pla['type']} not in skin file"))
+            else:
+                plaType = pla['type'].split()[0]
+                plaShape = skinJson['types'][plaType]['type']
+            
+            if plaShape == "point":
+                geoCoords = list(nodes.toCoords(pla['nodes'], nodeList)[0])
+                geoShape = "Point"
+            elif plaShape == "area":
+                geoCoords = []
+                geoCoords.append([list(c) for c in nodes.toCoords(pla['nodes'], nodeList)])
+                if geoCoords[0][0] != geoCoords[0][-1]:
+                    geoCoords[0].append(geoCoords[0][0])
+                if 'hollows' in pla.keys():
+                    for hollow in pla['hollows']:
+                        geoCoords.append([list(c) for c in nodes.toCoords(hollow, nodeList)])
+                        if geoCoords[-1][0] != geoCoords[-1][-1]:
+                            geoCoords[-1].append(geoCoords[-1][0])
+                geoShape = "Polygon"
+            else:
+                geoCoords = [list(c) for c in nodes.toCoords(pla['nodes'], nodeList)]
+                geoShape = "LineString"
+            geoFeature['geometry'] = {
+                "type": geoShape,
+                "coordinates": geoCoords
+            }
+
+            geoFeature['properties'] = {
+                "name": plaId,
+                "plaType": pla['type'],
+                "displayname": pla['displayname'],
+                "description": pla['description'],
+                "layer": pla['layer']
+            }
+            for k, v in pla['attrs'].items():
+                geoFeature['properties'][k] = v
+        
+            geoJson['features'].append(geoFeature)
+
+        return geoJson
+
+class geoJson:
+    @staticmethod
+    def toNodePlaJson(geoJson: dict):
+        """
+        Converts GeoJson to PLA and Node JSONs.
+        More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.geoJson.toNodePlaJson
+        """
+        validate.vGeoJson(geoJson)
+        plaJson = {}
+        nodeJson = {}
+        
+        def addNode(x, y):
+            for k, v in nodeJson.items():
+                if v['x'] == x and v['y'] == y:
+                    return k
+            k = internal.genId()
+            nodeJson[k] = {
+                "x": x,
+                "y": y,
+                "connections": []
+            }
+            return k
+
+        def singleGeometry(geo, properties, name=None):
+            if name == None:
+                if 'name' in properties.keys(): name = properties['name']
+                else: name = internal.genId()
+            plaType = properties['plaType'] if "plaType" in properties else "UNKNOWN"
+            displayname = properties['displayname'] if "displayname" in properties else ""
+            description = properties['description'] if "description" in properties else ""
+            layer = properties['layer'] if "layer" in properties else 0
+            attrs = {}
+            for k, v in properties.items():
+                if not k in ['name', 'plaType', 'displayname', 'description', 'layer']:
+                    attrs[k] = v
+
+            hollows = []
+            if geo['type'] == "Polygon":
+                nodes = [addNode(*c) for c in geo['coordinates'][0]]
+                if len(geo['coordinates']) > 1:
+                    for i in range(1, len(geo['coordinates'])):
+                        hollows.append([addNode(*c) for c in geo['coordinates'][i]])
+            elif geo['type'] == "LineString":
+                nodes = [addNode(*c) for c in geo['coordinates']]
+            else:
+                nodes = addNode(*geo['coordinates'])
+            plaJson[name] = {
+                "type": plaType,
+                "displayname": displayname,
+                "description": description,
+                "layer": layer,
+                "nodes": nodes,
+                "attrs": attrs
+            }
+            if hollows != []: plaJson[name]['hollows'] = hollows
+
+        def singleFeature(feature: dict):
+            name = feature['properties']['name'] if 'name' in feature['properties'].keys() else internal.genId()
+            if feature['geometry']['type'] == "GeometryCollection":
+                for itemNo, sgeo in enumerate(feature['geometry']['geometries']):
+                    singleGeometry(sgeo, feature['properties'], name=name+"_"+itemNo)
+            elif feature['geometry']['type'].startswith("Multi"):
+                for scoord in feature['geometry']['coordinates']:
+                    singleGeometry({"type": feature['geometry']['type'].replace("Multi", ""), "coordinates": scoord}, feature['properties'], name=name)
+            else:
+                singleGeometry(feature['geometry'], feature['properties'])
+
+        for feature in geoJson['features']:
+            singleFeature(feature)
+        return plaJson, nodeJson
+            
 class tile:
     @staticmethod
     def findEnds(coords: list):
         """
         Find the minimum and maximum x/y values of a set of tiles coords.
-        More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.tile.findEnds
+        More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.tile.findEnds
         """
+        validate.vTileCoords(coords, -math.inf, math.inf)
         xMax = -math.inf
         xMin = math.inf
         yMax = -math.inf
@@ -74,8 +200,9 @@ class line:
     def findEnds(coords: list):
         """
         Find the minimum and maximum x/y values of a set of coords.
-        More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.line.findEnds
+        More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.line.findEnds
         """
+        validate.vCoords(coords)
         xMax = -math.inf
         xMin = math.inf
         yMax = -math.inf
@@ -91,8 +218,9 @@ class line:
     def toTiles(coords: list, minZoom: int, maxZoom: int, maxZoomRange: int):
         """
         Generates tile coordinates from list of regular coordinates using renderer.tools.coordToTiles().
-        More info: Mainly for rendering whole PLAs. https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.line.toTiles
+        More info: Mainly for rendering whole PLAs. https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.line.toTiles
         """
+        validate.vTileCoords(coords, minZoom, maxZoom)
         if len(coords) == 0:
             raise ValueError("Empty list of coords given")
         elif maxZoom < minZoom:
@@ -124,7 +252,7 @@ class nodes:
     def findPlasAttached(nodeId: str, plaList: dict):
         """
         Finds which PLAs attach to a node.
-        More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.nodes.findPlasAttached
+        More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.nodes.findPlasAttached
         """
         plas = []
         for plaId, pla in plaList.items():
@@ -137,8 +265,10 @@ class nodes:
     def toCoords(nodes: list, nodeList: dict):
         """
         Converts a list of nodes IDs into a list of coordinates with a node dictionary/JSON as its reference.
-        More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.nodes.toCoords
+        More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.nodes.toCoords
         """
+        validate.vNodeJson(nodeList)
+        validate.vNodeList(nodes, nodeList)
         coords = []
         for nodeid in nodes:
             if not nodeid in nodeList.keys():
@@ -148,10 +278,10 @@ class nodes:
 
 class coord:
     @staticmethod
-    def toTiles(coord: list, minZoom: int, maxZoom: int, maxZoomRange: int):
+    def toTiles(coord: Union[list, tuple], minZoom: int, maxZoom: int, maxZoomRange: int):
         """
         Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
-        More info: https://tile-renderer.readthedocs.io/en/main/functions.html#renderer.tools.coord.toTiles
+        More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.coord.toTiles
         """
         if maxZoom < minZoom:
             raise ValueError("Max zoom value is lesser than min zoom value")

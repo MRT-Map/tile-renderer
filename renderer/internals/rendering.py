@@ -5,7 +5,7 @@ import blessed
 import multiprocessing
 term = blessed.Terminal()
 
-import renderer.internal as internal
+import renderer.internals.internal as internal
 import renderer.tools as tools
 import renderer.validate as validate
 import renderer.mathtools as mathtools
@@ -174,6 +174,9 @@ def tiles(args):
                     textList.append((i, cx, cy, cw, ch, 0))
 
                 def area_fill():
+                    ai = Image.new("RGBA", (skinJson['info']['size'], skinJson['info']['size']), (0, 0, 0, 0))
+                    ad = ImageDraw.Draw(ai)
+
                     if "stripe" in step.keys():
                         pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Generating stripes")
                         xMax, xMin, yMax, yMin = tools.line.findEnds(coords)
@@ -193,16 +196,33 @@ def tiles(args):
                         md.polygon(coords, fill=step['colour'])
                         pi = Image.new("RGBA", (skinJson['info']['size'], skinJson['info']['size']), (0, 0, 0, 0))
                         pi.paste(i, (0, 0), mi)
-                        im.paste(pi, (0, 0), pi)
+                        ai.paste(pi, (0, 0), pi)
                     else:
                         pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Filling area")
-                        img.polygon(coords, fill=step['colour'], outline=step['outline'])
+                        ad.polygon(coords, fill=step['colour'], outline=step['outline'])
+
+                    if 'hollows' in pla.keys():
+                        for n in pla['hollows']:
+                            nCoords = [(x - internal.strToTuple(tileCoords)[1] * size, y - internal.strToTuple(tileCoords)[2] * size) for x, y in tools.nodes.toCoords(n, nodeList)]
+                            nCoords = [(int(skinJson['info']['size'] / size * x), int(skinJson['info']['size'] / size * y)) for x, y in nCoords]
+                            ad.polygon(nCoords, fill=(0, 0, 0, 0))
+                    im.paste(ai, (0, 0), ai)
+
+
                     pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Drawing outline")
-                    outlineCoords = coords[:]
-                    outlineCoords.append(outlineCoords[0])
-                    img.line(coords, fill=step['outline'], width=2, joint="curve")
-                    if not "unroundedEnds" in info['tags']:
-                        img.ellipse([coords[0][0]-2/2+1, coords[0][1]-2/2+1, coords[0][0]+2/2, coords[0][1]+2/2], fill=step['outline'])
+                    exteriorOutline = coords[:]
+                    exteriorOutline.append(exteriorOutline[0])
+                    outlines = [exteriorOutline]
+                    if 'hollows' in pla.keys():
+                        for n in pla['hollows']:
+                            nCoords = [(x - internal.strToTuple(tileCoords)[1] * size, y - internal.strToTuple(tileCoords)[2] * size) for x, y in tools.nodes.toCoords(n, nodeList)]
+                            nCoords = [(int(skinJson['info']['size'] / size * x), int(skinJson['info']['size'] / size * y)) for x, y in nCoords]
+                            nCoords.append(nCoords[0])
+                            outlines.append(nCoords)
+                    for oCoords in outlines:
+                        img.line(oCoords, fill=step['outline'], width=2, joint="curve")
+                        if not "unroundedEnds" in info['tags']:
+                            img.ellipse([oCoords[0][0]-2/2+1, oCoords[0][1]-2/2+1, oCoords[0][0]+2/2, oCoords[0][1]+2/2], fill=step['outline'])
 
                 def area_centerimage():
                     x, y = mathtools.polyCenter(coords)

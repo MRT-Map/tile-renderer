@@ -15,22 +15,54 @@ def examplenodesRead():
         f.close()
         return data
 
-def skinFileRead():
-    #with open("renderer/skins/default.json", "r") as f:
-    #    data = json.load(f)
-    #    f.close()
-    #    return data
-    return renderer.misc.getSkin("default")
+p = exampleplaRead()
+n = examplenodesRead()
+s = renderer.misc.getSkin("default")
 
-#start = time.time()
-#a = renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 8, 8, 8, saveDir="tiles/")
-if __name__ == "__main__": a = renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 8, 8, 8, saveDir="tiles/", saveImages=False); print(a)
-#print(time.time() - start)
-#renderer.tileMerge(a, saveDir="tiles/")
-#print(renderer.mathtools.dash(0,0,11,0, 5, 5))
-#print(a := renderer.mathtools.dashOffset(coords := [(0,0),(11,0),(11,11),(0,11)], 5, 5))
-#for c in range(len(coords)-1):
-#    print(renderer.mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], 5, 5, o=a[c][0], emptyStart=a[c][1]))
+#if __name__ == "__main__": a = renderer.render(p, n, s, 8, 8, 16, saveDir="tiles/")
+
+print(renderer.tools.geoJson.toNodePlaJson(renderer.tools.plaJson.toGeoJson(p, n, s)))
 
 def test_pytest():
-	if __name__ == "__main__": a = renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 8, 8, 8, saveDir="tiles/", saveImages=False); print(a)
+    if __name__ == "__main__":
+        #base
+        a = renderer.render(p, n, s, 8, 8, 16, saveDir="tiles/", processes=10)
+        renderer.tileMerge(a, saveImages=False)
+        
+        #tools
+        renderer.tools.plaJson.findEnds(p, n)
+        t = renderer.tools.plaJson.renderedIn(p, n, 8, 8, 16)
+        g = renderer.tools.plaJson.toGeoJson(p, n, s)
+        renderer.tools.geoJson.toNodePlaJson(g)
+
+        l = [(0,0), (1,1), (2,2), (3,3)]
+        renderer.tools.tile.findEnds(t)
+        renderer.tools.line.findEnds(l)
+        renderer.tools.line.toTiles(l, 8, 8, 16)
+
+        nl = n.keys()
+        renderer.tools.nodes.findPlasAttached(nl, p)
+        renderer.tools.nodes.toCoords(nl, n)
+
+        renderer.tools.coord.toTiles((342, 552), 8, 8, 16)
+        
+        #mathtools
+        renderer.mathtools.midpoint(0, 1, 2, 3, 5, n=5) #incl pointsAway
+        renderer.mathtools.pointInPoly(0, 0, l) #incl linesIntersect
+        renderer.mathtools.polyCenter(l)
+        renderer.mathtools.lineInBox(l, 1, -1, -1, 1)
+        renderer.mathtools.dashOffset(l, 1, 1) #incl dash
+        renderer.mathtools.rotateAroundPivot(5, 5, 10, 10, 9)
+
+        #validate
+        renderer.validate.vCoords(l)
+        renderer.validate.vTileCoords(t, 8, 8)
+        renderer.validate.vNodeList(nl, n)
+        renderer.validate.vNodeJson(n)
+        renderer.validate.vPlaJson(p, n)
+        renderer.validate.vSkinJson(s)
+        renderer.validate.vGeoJson(g)
+
+        #misc
+        renderer.misc.getSkin('default')
+        

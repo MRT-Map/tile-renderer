@@ -7,28 +7,26 @@
 [![Python Versions](https://img.shields.io/pypi/pyversions/tile-renderer.svg)](https://pypi.org/project/tile-renderer/)
 [![License](https://img.shields.io/pypi/l/tile-renderer.svg)](https://pypi.org/project/tile-renderer/)
 
-Leaflet.js tile renderer, made by 7d
+Leaflet.js streetmap tile renderer, made by 7d
 
 **Note: renderer is complete, but not the skin or the tutorials.**
 
 **Documentation: https://tile-renderer.readthedocs.io/en/latest/**
 
-## Current version: v1.1
-* **v1.1 (2/5/21)**
-  * Added log prefixes to `renderer.render()` and `renderer.tileMerge()`
-  * Improved curved line drawing
-  * `renderer.py` is now split into a package
-    * `renderer.utils` renamed to `renderer.validate`
-    * all functions of `renderer.tools` and `renderer.validate` renamed
-    * method descriptions added to all functions except those in `renderer.internal`
-  * New function: `renderer.misc.getSkin()`
-  * New logging system that does not clog your terminal
-  * changed colour library from `colorama` to `blessed`
-  * fixed `renderer.mergeTiles()`, especially in determining which zooms to merge and retrieving images
-  * fixed `renderer.misc.getSkin()`
-* ***v1.2 (coming soon)***
-  * holes in areas
-  * PLA to GeoJson, GML parser (maybe more who knows)
+## Current version: v1.2
+* **v1.2 ()**
+  * `renderer.render()` now ignores PLAs if their type is not specified in the skin Json
+  * Hollows are now supported in areas
+  * New function, `renderer.validate.vGeoJson()`
+    * `renderer.validate.vCoords()` now supports lists along with tuples
+  * The renderer now has a CLI, to show the help page do `python -m renderer -h`
+  * `renderer.render()` now supports float maxZoomRanges
+  * New functions: `renderer.tools.plaJson.toGeoJson()` and `renderer.tools.geoJson.toNodePlaJson()`
+    * these are for translating our custom format of storing geographical format to geoJson
+    * (btw why we're not using geoJson is because its harder to store nodes)
+  * internal-use files have been moved to `renderer/internals/`
+  * removed `renderer.tools.plaJson.toTiles()` as it's a duplicate of `renderer.tools.plaJson.renderedIn()`
+  * `renderer.tools.coord.toTiles()` now supports tuples as `coords` parameter
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)

@@ -9,17 +9,17 @@ import sys
 import blessed
 import os
 
-import renderer.internal as internal
+import renderer.internals.internal as internal # type: ignore
 import renderer.tools as tools
 import renderer.validate as validate
 import renderer.mathtools as mathtools
-import renderer.rendering as rendering
+import renderer.internals.rendering as rendering # type: ignore
 import renderer.misc as misc
 
 def tileMerge(images: Union[str, dict], saveImages=True, saveDir="tiles/", zoom=[]):
     """
     Merges tiles rendered by renderer.render().
-    More info: https://tile-renderer.readthedocs.io/en/main/functions.html#tileMerge
+    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#tileMerge
     """
     term = blessed.Terminal()
     imageDict = {}
@@ -80,7 +80,7 @@ def tileMerge(images: Union[str, dict], saveImages=True, saveDir="tiles/", zoom=
     print(term.green("\nAll merges complete"))
     return tileReturn
 
-def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int, saveImages=True, saveDir="", assetsDir=os.path.dirname(__file__)+"/skins/assets/", processes=1, tiles=None):
+def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: Union[str, float], saveImages=True, saveDir="", assetsDir=os.path.dirname(__file__)+"/skins/assets/", processes=1, tiles=None):
     """
     Renders tiles from given coordinates and zoom values.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.render
@@ -102,9 +102,22 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     if tiles != None:
         validate.vTileCoords(tiles, minZoom, maxZoom)
     else: #finds box of tiles
-        tiles = tools.plaJson.toTiles(plaList, nodeList, minZoom, maxZoom, maxZoomRange)
+        tiles = tools.plaJson.renderedIn(plaList, nodeList, minZoom, maxZoom, maxZoomRange)
 
-    print(term.green("found\nSorting PLA by tiles..."), end=" ")
+    print(term.green("found\nRemoving PLAs with unknown type..."), end=" ")
+    # remove PLAs whose type is not in skin
+    removeList = []
+    for pla in plaList.keys():
+        if not plaList[pla]['type'].split(' ')[0] in skinJson['order']:
+            removeList.append(pla)
+    for pla in removeList:
+        del plaList[pla]
+    print(term.green("removed"))
+    if removeList != []:
+        print(term.yellow('The following PLAs were removed:'))
+        print(term.yellow(" | ".join(removeList)))
+
+    print(term.green("Sorting PLA by tiles..."), end=" ")
     #sort PLAs by tiles
     tileList = {}
     for tile in tiles:
