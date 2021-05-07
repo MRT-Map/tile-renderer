@@ -1,7 +1,7 @@
 import blessed
 from schema import Schema, And, Or, Regex, Optional
 
-import renderer.internals.internal as internal
+import renderer.internals.internal as internal # type: ignore
 import renderer.tools as tools
 import renderer.mathtools as mathtools
 import renderer.misc as misc

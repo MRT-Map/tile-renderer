@@ -3,7 +3,7 @@ import sympy as sym
 from typing import Union
 import numpy as np
 
-import renderer.internals.internal as internal
+import renderer.internals.internal as internal # type: ignore
 import renderer.tools as tools
 import renderer.validate as validate
 import renderer.misc as misc

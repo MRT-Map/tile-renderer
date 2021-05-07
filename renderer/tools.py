@@ -1,24 +1,14 @@
 import math
 import blessed
+from typing import Union
 term = blessed.Terminal()
 
-import renderer.internals.internal as internal
+import renderer.internals.internal as internal # type: ignore
 import renderer.validate as validate
 import renderer.mathtools as mathtools
 import renderer.misc as misc
 
 class plaJson:
-    @staticmethod
-    def toTiles(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int):
-        """
-        Finds all the tiles that all the PLAs in the JSON will be rendered in.
-        More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.plaJson.toTiles
-        """
-        validate.vPlaJson(plaList, nodeList)
-        validate.vNodeJson(nodeList)
-        xMax, xMin, yMax, yMin = plaJson.findEnds(plaList, nodeList)
-        return line.toTiles([(xMax,yMax),(xMin,yMax),(xMax,yMin),(xMin,yMin)], minZoom, maxZoom, maxZoomRange)
-    
     @staticmethod
     def findEnds(plaList: dict, nodeList: dict):
         """
@@ -89,7 +79,7 @@ class plaJson:
                     geoCoords[0].append(geoCoords[0][0])
                 if 'hollows' in pla.keys():
                     for hollow in pla['hollows']:
-                        geoCoords.append([list(c) for c in nodes.toCoords(pla['nodes'], nodeList)])
+                        geoCoords.append([list(c) for c in nodes.toCoords(hollow, nodeList)])
                         if geoCoords[-1][0] != geoCoords[-1][-1]:
                             geoCoords[-1].append(geoCoords[-1][0])
                 geoShape = "Polygon"
@@ -172,7 +162,7 @@ class geoJson:
             if hollows != []: plaJson[name]['hollows'] = hollows
 
         def singleFeature(feature: dict):
-            name = feature['properties']['name'] if 'name' in feature['properties']['keys'] else internal.genId()
+            name = feature['properties']['name'] if 'name' in feature['properties'].keys() else internal.genId()
             if feature['geometry']['type'] == "GeometryCollection":
                 for itemNo, sgeo in enumerate(feature['geometry']['geometries']):
                     singleGeometry(sgeo, feature['properties'], name=name+"_"+itemNo)
@@ -288,7 +278,7 @@ class nodes:
 
 class coord:
     @staticmethod
-    def toTiles(coord: list, minZoom: int, maxZoom: int, maxZoomRange: int):
+    def toTiles(coord: Union[list, tuple], minZoom: int, maxZoom: int, maxZoomRange: int):
         """
         Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
         More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.coord.toTiles

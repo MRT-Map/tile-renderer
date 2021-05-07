@@ -9,11 +9,11 @@ import sys
 import blessed
 import os
 
-import renderer.internals.internal as internal
+import renderer.internals.internal as internal # type: ignore
 import renderer.tools as tools
 import renderer.validate as validate
 import renderer.mathtools as mathtools
-import renderer.internals.rendering as rendering
+import renderer.internals.rendering as rendering # type: ignore
 import renderer.misc as misc
 
 def tileMerge(images: Union[str, dict], saveImages=True, saveDir="tiles/", zoom=[]):
@@ -102,7 +102,7 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     if tiles != None:
         validate.vTileCoords(tiles, minZoom, maxZoom)
     else: #finds box of tiles
-        tiles = tools.plaJson.toTiles(plaList, nodeList, minZoom, maxZoom, maxZoomRange)
+        tiles = tools.plaJson.renderedIn(plaList, nodeList, minZoom, maxZoom, maxZoomRange)
 
     print(term.green("found\nRemoving PLAs with unknown type..."), end=" ")
     # remove PLAs whose type is not in skin

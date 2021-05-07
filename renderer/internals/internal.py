@@ -83,14 +83,3 @@ def genId():
         return o[::-1]
     decimalId = int(time.time() * 10000000)
     return b10_b64(decimalId) + "-" + b10_b64(random.randint(1, 64**5))
-
-def getLang():
-    lang = readJson(os.path.dirname(os.path.dirname(__file__))+"/langs/index.json")['user']
-    try:
-        return readJson(os.path.dirname(os.path.dirname(__file__))+f"/langs/{lang}.json")
-    except:
-        return None
-
-def langMsg(msg: str, langFile: str): # language
-    if langFile == None: return msg
-    else: return langFile['msg']

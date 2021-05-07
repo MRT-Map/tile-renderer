@@ -6,7 +6,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
   name = 'tile-renderer',
   packages = ['renderer'],
-  version = '1.1.0.2',
+  version = '1.2',
   license ='gpl-3.0',
   description = 'Leaflet.js tile renderer',
   long_description=long_description,

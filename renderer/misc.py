@@ -1,6 +1,6 @@
 import os
 
-import renderer.internals.internal as internal
+import renderer.internals.internal as internal # type: ignore
 import renderer.tools as tools
 import renderer.validate as validate
 import renderer.mathtools as mathtools

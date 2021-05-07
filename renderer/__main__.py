@@ -12,10 +12,7 @@ p_info = subparsers.add_parser('info', help='view info about the renderer', form
 
 p_nodebuider = subparsers.add_parser('nodebuilder', help='launch the node builder', formatter_class=argparse.MetavarTypeHelpFormatter)
 
-p_setlang = subparsers.add_parser('setlang', help='Set the language of the renderer', formatter_class=argparse)
-p_setlang.add_argument('lang', required=True, type=str, help="The language to set to")
-
-p_render = subparsers.add_parser('render', help='render tiles', formatter_class=argparse.MetavarTypeHelpFormatter.MetavarTypeHelpFormatter)
+p_render = subparsers.add_parser('render', help='render tiles', formatter_class=argparse.MetavarTypeHelpFormatter)
 p_render.add_argument('-p', '--plaJson', required=True, type=str, help='the PLA Json file directory')
 p_render.add_argument('-n', '--nodeJson', required=True, type=str, help='the node Json file directory')
 p_render.add_argument('-s', '--skinJson', type=str, help='the name of the skin to use', default='default')
@@ -36,6 +33,6 @@ if args.task == "info":
     print("PyPI: https://pypi.org/project/tile-renderer/")
     print("Docs: https://tile-renderer.readthedocs.io/en/latest/")
 if args.task == "nodebuilder":
-    import renderer.internals.nodeJsonBuilder
+    import renderer.internals.nodeJsonBuilder # type: ignore
 elif args.task == "render" and __name__ == '__main__':
     renderer.render(renderer.internals.internal.readJson(args.plaJson), renderer.internals.internal.readJson(args.nodeJson), renderer.misc.getSkin(args.skinJson), args.minZoom, args.maxZoom, args.maxZoomRange, saveDir=args.saveDir, processes=args.processes, tiles=args.tiles)

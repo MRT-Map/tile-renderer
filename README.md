@@ -24,6 +24,8 @@ Leaflet.js streetmap tile renderer, made by 7d
     * these are for translating our custom format of storing geographical format to geoJson
     * (btw why we're not using geoJson is because its harder to store nodes)
   * internal-use files have been moved to `renderer/internals/`
+  * removed `renderer.tools.plaJson.toTiles()` as it's a duplicate of `renderer.tools.plaJson.renderedIn()`
+  * `renderer.tools.coord.toTiles()` now supports tuples as `coords` parameter
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)
