@@ -20,6 +20,9 @@ Leaflet.js streetmap tile renderer, made by 7d
     * `renderer.validate.vCoords()` now supports lists along with tuples
   * The renderer now has a CLI, to show the help page do `python -m renderer -h`
   * `renderer.render()` now supports float maxZoomRanges
+  * New functions: `renderer.tools.plaJson.toGeoJson()` and `renderer.tools.geoJson.toNodePlaJson()`
+    * these are for translating our custom format of storing geographical format to geoJson
+    * (btw why we're not using geoJson is because its harder to store nodes)
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)

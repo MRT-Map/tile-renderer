@@ -31,7 +31,7 @@ Main
 
    * **dict** Given in the form of ``"(tile coord)": (PIL Image)``
 
-.. py:function:: tileMerge(images: Union[str, dict] [, saveImages=True, saveDir="tiles/", zoom=[]])
+.. py:function:: renderer.tileMerge(images: Union[str, dict] [, saveImages=True, saveDir="tiles/", zoom=[]])
 
    Merges tiles rendered by ``renderer.render()``.
 
@@ -93,6 +93,30 @@ Tools
    **Returns**
 
    * **list[tuple]** A list of tile coordinates
+
+.. py:function:: renderer.tools.plaJson.def toGeoJson(plaList: dict, nodeList: dict, skinJson: dict):
+
+   Converts PLA Json into GeoJson (with nodes and skin).
+
+   **Parameters**
+   * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
+   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
+   * dict **skinJson**: a JSON of the skin (see :ref:`formats`)
+
+   **Returns**
+
+   * **dict** A GeoJson dictionary
+
+.. py:function:: renderer.tools.geoJson.toNodePlaJson(geoJson: dict)
+
+   Converts GeoJson to PLA and Node JSONs.
+
+   **Parameters**
+
+   * dict **geoJson** a GeoJson dictionary
+
+   **Returns**
+   * **tuple[dict]** Given in ``plaJson, nodeJson``
 
 .. py:function:: renderer.tools.tile.findEnds(coords: list)
 
