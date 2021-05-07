@@ -4,6 +4,7 @@ python:
   - "3.9"
 install:
   - pip install pillow blessed schema sympy numpy codecov
+  - mkdir tiles
 script:
   - pytest test.py
   - coverage run test.py
