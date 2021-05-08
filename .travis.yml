@@ -7,7 +7,8 @@ install:
   - mkdir tiles
 script:
   - pytest test.py
-  - coverage run test.py
+  - coverage run test.py --concurrency=multiprocessing
+  - coverage combine
 after_success:
   - codecov
 branches:
