@@ -8,7 +8,6 @@ install:
 script:
   - pytest test.py
   - coverage run test.py --concurrency=multiprocessing
-  - coverage combine
 after_success:
   - codecov
 branches:
