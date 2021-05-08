@@ -4,4 +4,4 @@ import renderer.mathtools
 import renderer.validate
 import renderer.misc
 
-__version__ = '1.1'
+__version__ = '1.2'

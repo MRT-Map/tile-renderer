@@ -1,4 +1,5 @@
 from setuptools import setup
+import renderer
 
 with open("README.md", "r", encoding="utf-8") as fh:
     long_description = fh.read()
@@ -6,15 +7,15 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
   name = 'tile-renderer',
   packages = ['renderer'],
-  version = '1.2',
+  version = renderer.__version__+"",
   license ='gpl-3.0',
-  description = 'Leaflet.js tile renderer',
+  description = 'Leaflet.js streetmap tile renderer',
   long_description=long_description,
   long_description_content_type="text/markdown",
   author = '7d (from Minecart Rapid Transit Mapping Team)',
   author_email = 'i.third.7d@protonmail.com',
   url = 'https://github.com/MRT-Map/tile-renderer',
-  download_url = 'https://github.com/MRT-Map/tile-renderer/archive/refs/tags/v1.1.tar.gz',
+  download_url = f'https://github.com/MRT-Map/tile-renderer/archive/refs/tags/v{renderer.__version__}.tar.gz',
   keywords = ['leaflet', 'leaflet.js', 'leafletjs', 'map', 'tiles', 'renderer', 'tile-renderer', 'mapping'],
   python_requires='>=3.8',
   package_data={

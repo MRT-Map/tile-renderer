@@ -24,8 +24,7 @@ p_render.add_argument('-m', '--processes', type=int, help="the amount of process
 p_render.add_argument('-t', '--tiles', type=list, help="a list of tiles to render, given in tuples of (z,x,y)")
 
 args = parser.parse_args()
-import os
-print(os.getcwd())
+
 if args.task == "info":
     print(term.yellow(f"tile-renderer v{renderer.__version__}"))
     print(term.yellow("Made by 7d for the OpenMRTMap project"))
@@ -36,3 +35,5 @@ if args.task == "nodebuilder":
     import renderer.internals.nodeJsonBuilder # type: ignore
 elif args.task == "render" and __name__ == '__main__':
     renderer.render(renderer.internals.internal.readJson(args.plaJson), renderer.internals.internal.readJson(args.nodeJson), renderer.misc.getSkin(args.skinJson), args.minZoom, args.maxZoom, args.maxZoomRange, saveDir=args.saveDir, processes=args.processes, tiles=args.tiles)
+else:
+    parser.print_help()
