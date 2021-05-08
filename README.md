@@ -72,6 +72,6 @@ if __name__ == "__main__": renderer.render(pla, nodes, skin, 1, 2, 8)
 <!--
 commands for upload in case i forget
 
-py -m build
+python -m build
 twine upload dist/*
 -->
