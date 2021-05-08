@@ -1962,9 +1962,216 @@
                         "colour": "#ff0303",
                         "offset": [
                             0,
-                            50
+                            32
                         ],
-                        "size": 50,
+                        "size": 32,
+                        "anchor": "mm"
+                    }
+                ]
+            }
+        },
+        "parking": {
+            "tags": [],
+            "type": "point",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "image",
+                        "file": "parking.png",
+                        "offset": [0, 0]
+                    },
+                    {
+                        "layer": "text",
+                        "colour": "#0000dc",
+                        "offset": [
+                            0,
+                            32
+                        ],
+                        "size": 32,
+                        "anchor": "mm"
+                    }
+                ]
+            }
+        },
+        "pedestrianCrossing": {
+            "tags": [],
+            "type": "point",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "image",
+                        "file": "pedestriancrossing.png",
+                        "offset": [0, 0]
+                    },
+                    {
+                        "layer": "text",
+                        "colour": "#000000",
+                        "offset": [
+                            0,
+                            32
+                        ],
+                        "size": 32,
+                        "anchor": "mm"
+                    }
+                ]
+            }
+        },
+        "railCrossing": {
+            "tags": [],
+            "type": "point",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "image",
+                        "file": "railcrossing.png",
+                        "offset": [0, 0]
+                    },
+                    {
+                        "layer": "text",
+                        "colour": "#000000",
+                        "offset": [
+                            0,
+                            32
+                        ],
+                        "size": 32,
+                        "anchor": "mm"
+                    }
+                ]
+            }
+        },
+        "bikeRack": {
+            "tags": [],
+            "type": "point",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "image",
+                        "file": "bikerack.png",
+                        "offset": [0, 0]
+                    },
+                    {
+                        "layer": "text",
+                        "colour": "#000000",
+                        "offset": [
+                            0,
+                            32
+                        ],
+                        "size": 32,
+                        "anchor": "mm"
+                    }
+                ]
+            }
+        },
+        "shop": {
+            "tags": [],
+            "type": "point",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "image",
+                        "file": "shop.png",
+                        "offset": [0, 0]
+                    },
+                    {
+                        "layer": "text",
+                        "colour": "#000000",
+                        "offset": [
+                            0,
+                            32
+                        ],
+                        "size": 32,
+                        "anchor": "mm"
+                    }
+                ]
+            }
+        },
+        "arcade": {
+            "tags": [],
+            "type": "point",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "image",
+                        "file": "arcade.png",
+                        "offset": [0, 0]
+                    },
+                    {
+                        "layer": "text",
+                        "colour": "#ffdc00",
+                        "offset": [
+                            0,
+                            32
+                        ],
+                        "size": 32,
+                        "anchor": "mm"
+                    }
+                ]
+            }
+        },
+        "hotel": {
+            "tags": [],
+            "type": "point",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "image",
+                        "file": "hotel.png",
+                        "offset": [0, 0]
+                    },
+                    {
+                        "layer": "text",
+                        "colour": "#0000dc",
+                        "offset": [
+                            0,
+                            32
+                        ],
+                        "size": 32,
+                        "anchor": "mm"
+                    }
+                ]
+            }
+        },
+        "restaurant": {
+            "tags": [],
+            "type": "point",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "image",
+                        "file": "restaurant.png",
+                        "offset": [0, 0]
+                    },
+                    {
+                        "layer": "text",
+                        "colour": "#000000",
+                        "offset": [
+                            0,
+                            32
+                        ],
+                        "size": 32,
+                        "anchor": "mm"
+                    }
+                ]
+            }
+        },
+        "supermarket": {
+            "tags": [],
+            "type": "point",
+            "style": {
+                "0, 5": [
+                    {
+                        "layer": "image",
+                        "file": "supermarket.png",
+                        "offset": [0, 0]
+                    },
+                    {
+                        "layer": "text",
+                        "colour": "#000000",
+                        "offset": [
+                            0,
+                            32
+                        ],
+                        "size": 32,
                         "anchor": "mm"
                     }
                 ]
