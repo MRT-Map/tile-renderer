@@ -1,10 +1,31 @@
 Changelog
 =========
 
-* *v1.2 (coming soon)*
+* *v1.3 (coming soon)*
 
-  * holes in areas
-  * PLA to GeoJson, GML parser (maybe more who knows)
+  * Long label breaking
+  * Validating from CLI (& more)
+  * Fixing texts for once
+  * Skin installer
+  
+* **v1.2 (8/5/21)**
+
+  * ``renderer.render()`` now ignores PLAs if their type is not specified in the skin Json
+  * Hollows are now supported in areas
+  * New function, ``renderer.validate.vGeoJson()``
+
+    * ``renderer.validate.vCoords()`` now supports lists along with tuples
+
+  * The renderer now has a CLI, to show the help page do ``python -m renderer -h``
+  * ``renderer.render()`` now supports float maxZoomRanges
+  * New functions: ``renderer.tools.plaJson.toGeoJson()`` and ``renderer.tools.geoJson.toNodePlaJson()``
+
+    * these are for translating our custom format of storing geographical format to geoJson
+    * (btw why we're not using geoJson is because its harder to store nodes)
+
+  * internal-use files have been moved to ``renderer/internals/``
+  * removed ``renderer.tools.plaJson.toTiles()`` as it's a duplicate of ``renderer.tools.plaJson.renderedIn()``
+  * ``renderer.tools.coord.toTiles()`` now supports tuples as ``coords`` parameter
 
 * **v1.1 (2/5/21)**
 
