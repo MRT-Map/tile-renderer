@@ -5,11 +5,11 @@ import blessed
 import multiprocessing
 term = blessed.Terminal()
 
-import renderer.internals.internal as internal
-import renderer.tools as tools
-import renderer.validate as validate
-import renderer.mathtools as mathtools
-import renderer.misc as misc
+import renderer.internals.internal as internal #pylint: disable=import-error
+import renderer.tools as tools #pylint: disable=import-error
+import renderer.validate as validate #pylint: disable=import-error
+import renderer.mathtools as mathtools #pylint: disable=import-error
+import renderer.misc as misc #pylint: disable=import-error
 
 def tiles(args):
     lock, operated, start, tileCoords, tilePlas, operations, plaList, nodeList, skinJson, _, maxZoom, maxZoomRange, saveImages, saveDir, assetsDir = args # _ is minZoom
@@ -300,8 +300,8 @@ def tiles(args):
                         pLog("Studs: Segment drawn")
                         if not "dash" in conStep.keys():
                             img.line(conCoords, fill=conStep['colour'], width=conStep['width'], joint="curve")
-                            img.ellipse([conCoords[0][0]-conStep['width']/2+1, conCoords[0][1]-conStep['width']/2+1, conCoords[0][0]+conStep['width']/2, conCoords[0][1]+conStep['width']/2], fill=step['colour'])
-                            img.ellipse([conCoords[-1][0]-conStep['width']/2+1, conCoords[-1][1]-conStep['width']/2+1, conCoords[-1][0]+conStep['width']/2, conCoords[-1][1]+conStep['width']/2], fill=step['colour'])
+                            img.ellipse([conCoords[0][0]-conStep['width']/2+1, conCoords[0][1]-conStep['width']/2+1, conCoords[0][0]+conStep['width']/2, conCoords[0][1]+conStep['width']/2], fill=conStep['colour'])
+                            img.ellipse([conCoords[-1][0]-conStep['width']/2+1, conCoords[-1][1]-conStep['width']/2+1, conCoords[-1][0]+conStep['width']/2, conCoords[-1][1]+conStep['width']/2], fill=conStep['colour'])
 
                         else:
                             offsetInfo = mathtools.dashOffset(preConCoords, conStep['dash'][0], conStep['dash'][1])[index:]
