@@ -14,7 +14,7 @@ Leaflet.js streetmap tile renderer, made by 7d
 **Documentation: https://tile-renderer.readthedocs.io/en/latest/**
 
 ## Current version: v1.2
-* **v1.2 ()**
+* **v1.2 (8/5/21)**
   * `renderer.render()` now ignores PLAs if their type is not specified in the skin Json
   * Hollows are now supported in areas
   * New function, `renderer.validate.vGeoJson()`
@@ -27,6 +27,11 @@ Leaflet.js streetmap tile renderer, made by 7d
   * internal-use files have been moved to `renderer/internals/`
   * removed `renderer.tools.plaJson.toTiles()` as it's a duplicate of `renderer.tools.plaJson.renderedIn()`
   * `renderer.tools.coord.toTiles()` now supports tuples as `coords` parameter
+* *v1.3 (coming soon)*
+  * Long label breaking
+  * Validating from CLI (& more)
+  * Fixing texts for once
+  * Skin installer
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)
