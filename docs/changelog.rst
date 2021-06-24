@@ -1,12 +1,9 @@
 Changelog
 =========
 
-* *v1.3 (coming soon)*
+* **v1.3 ()**
 
-  * Long label breaking
-  * Validating from CLI (& more)
-  * Fixing texts for once
-  * Skin installer
+  * New subcommands in CLI: ``validate`` and ``vdir``, to validate JSON files
   
 * **v1.2 (8/5/21)**
 

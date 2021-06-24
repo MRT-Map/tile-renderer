@@ -1,5 +1,5 @@
 import argparse
-from typing import Union
+import glob
 import renderer
 import blessed
 term = blessed.Terminal()
@@ -11,6 +11,16 @@ subparsers = parser.add_subparsers(help='task to run', dest="task")
 p_info = subparsers.add_parser('info', help='view info about the renderer', formatter_class=argparse.MetavarTypeHelpFormatter)
 
 p_nodebuider = subparsers.add_parser('nodebuilder', help='launch the node builder', formatter_class=argparse.MetavarTypeHelpFormatter)
+
+p_validate = subparsers.add_parser('validate', help='validate a JSON file', formatter_class=argparse.MetavarTypeHelpFormatter)
+p_validate.add_argument('-p', '--pla', type=str, help='PLA JSON file to validate')
+p_validate.add_argument('-n', '--nodes', required=True, type=str, help='node JSON file to validate')
+
+p_vdir = subparsers.add_parser('vdir', help='validate a directory of JSON files', formatter_class=argparse.MetavarTypeHelpFormatter)
+p_vdir.add_argument('-p', '--pla', type=str, help='directory of folder of PLA JSON files to validate')
+p_vdir.add_argument('-n', '--nodes', required=True, type=str, help='directory of folder of node JSON files to validate')
+p_vdir.add_argument('-ps', '--plaSuffix', type=str, help='The suffix for PLA files\' names', default='pla')
+p_vdir.add_argument('-ns', '--nodesSuffix', type=str, help='The suffix for node files\' names', default='nodes')
 
 p_render = subparsers.add_parser('render', help='render tiles', formatter_class=argparse.MetavarTypeHelpFormatter)
 p_render.add_argument('-p', '--plaJson', required=True, type=str, help='the PLA Json file directory')
@@ -31,9 +41,42 @@ if args.task == "info":
     print("Github: https://github.com/MRT-Map/tile-renderer")
     print("PyPI: https://pypi.org/project/tile-renderer/")
     print("Docs: https://tile-renderer.readthedocs.io/en/latest/")
-if args.task == "nodebuilder":
+elif args.task == "nodebuilder":
     import renderer.internals.nodeJsonBuilder # type: ignore
 elif args.task == "render" and __name__ == '__main__':
-    renderer.render(renderer.internals.internal.readJson(args.plaJson), renderer.internals.internal.readJson(args.nodeJson), renderer.misc.getSkin(args.skinJson), args.minZoom, args.maxZoom, args.maxZoomRange, saveDir=args.saveDir, processes=args.processes, tiles=args.tiles)
+    renderer.render(renderer.internals.internal.readJson(args.plaJson),
+                    renderer.internals.internal.readJson(args.nodeJson),
+                    renderer.misc.getSkin(args.skinJson), args.minZoom,
+                    args.maxZoom, args.maxZoomRange,
+                    saveDir=args.saveDir,
+                    processes=args.processes,
+                    tiles=args.tiles)
+elif args.task == "validate":
+    n = renderer.internals.internal.readJson(args.nodes)
+    if args.pla is not None:
+        p = renderer.internals.internal.readJson(args.pla)
+        renderer.validate.vPlaJson(p, n)
+    else:
+        renderer.validate.vNodeJson(n)
+    print(term.green("Validated"))
+elif args.task == "vdir":
+    if args.pla is not None:
+        if not args.pla.endswith("/"): args.pla += "/"
+        plas = {}
+        for d in glob.glob(glob.escape(args.pla)+"*.json"):
+            if d.endswith(args.plaSuffix+".json"):
+                plas.update(renderer.internals.internal.readJson(d))
+
+    if not args.nodes.endswith("/"): args.nodes += "/"
+    nodes = {}
+    for d in glob.glob(glob.escape(args.nodes)+"*.json"):
+        if d.endswith(args.nodesSuffix+".json"):
+            nodes.update(renderer.internals.internal.readJson(d))
+
+    if args.pla is not None:
+        renderer.validate.vPlaJson(plas, nodes)
+    else:
+        renderer.validate.vNodeJson(nodes)
+    print(term.green("Validated"))
 else:
     parser.print_help()
