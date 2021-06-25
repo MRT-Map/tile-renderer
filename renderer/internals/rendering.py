@@ -3,6 +3,8 @@ from PIL import Image, ImageDraw, ImageFont
 import time
 import blessed
 import multiprocessing
+import re
+import itertools
 term = blessed.Terminal()
 
 import renderer.internals.internal as internal #pylint: disable=import-error
@@ -135,7 +137,7 @@ def tiles(args):
                 def area_bordertext():
                     pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Calculating text length")
                     font = getFont("", step['size'])
-                    textLength = int(img.textlength(pla['displayname'], font))
+                    textLength = int(img.textlength(pla['displayname'].replace('\n', ''), font))
                     for c1 in range(len(coords)):
                         c2 = c1+1 if c1 != len(coords)-1 else 0
                         if mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']) and 2*textLength <= math.dist(coords[c1], coords[c2]):
@@ -155,7 +157,7 @@ def tiles(args):
                                     tx, ty, trot = points[0] if mathtools.pointInPoly(points[0][0], points[0][1], coords) else points[1]
                                 i = Image.new('RGBA', (2*textLength,2*(step['size']+4)), (0, 0, 0, 0))
                                 d = ImageDraw.Draw(i)
-                                d.text((textLength, step['size']+4), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
+                                d.text((textLength, step['size']+4), pla["displayname"].replace('\n', ''), fill=step['colour'], font=font, anchor="mm")
                                 tw, th = i.size[:]
                                 i = i.rotate(trot, expand=True)
                                 textList.append((i, tx, ty, tw, th, trot))
@@ -166,11 +168,33 @@ def tiles(args):
                     cx += step['offset'][0]
                     cy += step['offset'][1]
                     font = getFont("", step['size'])
-                    textLength = int(img.textlength(pla['displayname'], font))
-                    i = Image.new('RGBA', (2*textLength,2*(step['size']+4)), (0, 0, 0, 0))
+                    textLength = int(min(img.textlength(x, font) for x in pla['displayname'].split('\n')))
+
+                    left = min(c[0] for c in coords)
+                    right = max(c[0] for c in coords)
+                    dist = right - left
+                    if textLength > dist:
+                        pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Breaking up string")
+                        tokens = pla['displayname'].split()
+                        wss = re.findall(r"\s+", pla['displayname'])
+                        text = ""
+                        for token, ws in list(itertools.zip_longest(tokens, wss, fillvalue='')):
+                            temptext = text[:]
+                            temptext += token
+                            if int(img.textLength(temptext.split('\n')[-1], font)) > dist:
+                                text += '\n'+token+ws
+                            else:
+                                text += token+ws
+                        textLength = max(img.textLength(x, font) for x in text.split("\n"))
+                        size = img.textsize(text, font)+4
+                    else:
+                        text = pla['displayname']
+                        size = step['size']+4
+
+                    i = Image.new('RGBA', (2*textLength,2*size), (0, 0, 0, 0))
                     d = ImageDraw.Draw(i)
                     cw, ch = i.size
-                    d.text((textLength, step['size']+4), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
+                    d.text((textLength, size), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
                     textList.append((i, cx, cy, cw, ch, 0))
 
                 def area_fill():

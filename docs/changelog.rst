@@ -3,7 +3,12 @@ Changelog
 
 * **v1.3 ()**
 
-  * New subcommands in CLI: ``validate`` and ``vdir``, to validate JSON files
+  * New subcommands in CLI:
+  
+    * ``validate`` and ``vdir``, to validate JSON files
+    * ``merge`` to merge 
+    
+  * Area centertext will now break up into multiple lines
   
 * **v1.2 (8/5/21)**
 

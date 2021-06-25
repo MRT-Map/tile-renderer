@@ -2,6 +2,7 @@ import argparse
 import glob
 import renderer
 import blessed
+import os
 term = blessed.Terminal()
 
 parser = argparse.ArgumentParser()
@@ -32,6 +33,11 @@ p_render.add_argument('-r', '--maxZoomRange', type=float, required=True, help="a
 p_render.add_argument('-d', '--saveDir', type=str, help="the directory to save tiles in", default='')
 p_render.add_argument('-m', '--processes', type=int, help="the amount of processes to run for rendering", default=1)
 p_render.add_argument('-t', '--tiles', type=list, help="a list of tiles to render, given in tuples of (z,x,y)")
+
+p_merge = subparsers.add_parser('merge', help='merge tiles', formatter_class=argparse.MetavarTypeHelpFormatter)
+p_merge.add_argument('-i', '--imageDir', type=str, help='the directory of tiles', default=os.getcwd())
+p_merge.add_argument('-s', '--saveDir', type=str, help='the directory to save the merged image to', default='')
+p_merge.add_argument('-z', '--zoom', type=int, nargs='*', help='the zoom levels to merge', default=[])
 
 args = parser.parse_args()
 
@@ -78,5 +84,7 @@ elif args.task == "vdir":
     else:
         renderer.validate.vNodeJson(nodes)
     print(term.green("Validated"))
+elif args.task == "merge":
+    renderer.tileMerge(args.imageDir, saveDir=args.saveDir, zoom=args.zoom)
 else:
     parser.print_help()
