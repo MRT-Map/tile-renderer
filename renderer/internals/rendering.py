@@ -181,11 +181,11 @@ def tiles(args):
                         for token, ws in list(itertools.zip_longest(tokens, wss, fillvalue='')):
                             temptext = text[:]
                             temptext += token
-                            if int(img.textLength(temptext.split('\n')[-1], font)) > dist:
+                            if int(img.textlength(temptext.split('\n')[-1], font)) > dist:
                                 text += '\n'+token+ws
                             else:
                                 text += token+ws
-                        textLength = max(img.textLength(x, font) for x in text.split("\n"))
+                        textLength = max(img.textlength(x, font) for x in text.split("\n"))
                         size = img.textsize(text, font)+4
                     else:
                         text = pla['displayname']
