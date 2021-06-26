@@ -7,31 +7,29 @@
 [![Python Versions](https://img.shields.io/pypi/pyversions/tile-renderer.svg)](https://pypi.org/project/tile-renderer/)
 [![License](https://img.shields.io/pypi/l/tile-renderer.svg)](https://pypi.org/project/tile-renderer/)
 
+![GitHub code size](https://img.shields.io/github/languages/code-size/MRT-Map/tile-renderer)
+![GitHub repo size](https://img.shields.io/github/repo-size/MRT-Map/tile-renderer)
+![GitHub last commit](https://img.shields.io/github/last-commit/MRT-Map/tile-renderer)
+![GitHub Release Date](https://img.shields.io/github/release-date/MRT-Map/tile-renderer)
+![Lines of code](https://img.shields.io/tokei/lines/github/MRT-Map/tile-renderer)
+[![codecov](https://codecov.io/gh/MRT-Map/tile-renderer/branch/main/graph/badge.svg?token=VTJ73KYYF0)](https://codecov.io/gh/MRT-Map/tile-renderer)
+[![CodeFactor](https://www.codefactor.io/repository/github/mrt-map/tile-renderer/badge)](https://www.codefactor.io/repository/github/mrt-map/tile-renderer)
+
 Leaflet.js streetmap tile renderer, made by 7d
 
 **Note: renderer is complete, but not the skin or the tutorials.**
 
 **Documentation: https://tile-renderer.readthedocs.io/en/latest/**
 
-## Current version: v1.2
-* **v1.2 (8/5/21)**
-  * `renderer.render()` now ignores PLAs if their type is not specified in the skin Json
-  * Hollows are now supported in areas
-  * New function, `renderer.validate.vGeoJson()`
-    * `renderer.validate.vCoords()` now supports lists along with tuples
-  * The renderer now has a CLI, to show the help page do `python -m renderer -h`
-  * `renderer.render()` now supports float maxZoomRanges
-  * New functions: `renderer.tools.plaJson.toGeoJson()` and `renderer.tools.geoJson.toNodePlaJson()`
-    * these are for translating our custom format of storing geographical format to geoJson
-    * (btw why we're not using geoJson is because its harder to store nodes)
-  * internal-use files have been moved to `renderer/internals/`
-  * removed `renderer.tools.plaJson.toTiles()` as it's a duplicate of `renderer.tools.plaJson.renderedIn()`
-  * `renderer.tools.coord.toTiles()` now supports tuples as `coords` parameter
-* *v1.3 (coming soon)*
-  * Long label breaking
-  * Validating from CLI (& more)
-  * Fixing texts for once
-  * Skin installer
+## Current version: v1.3
+* **v1.3 (26/6/21)**
+  * New subcommands in CLI:
+    * `validate` and `vdir`, to validate JSON files
+    * `merge` to merge 
+    * `plabuilder` for the new PLA builder
+  * Area centertext will now break up into multiple lines
+  * New PLA builder
+    * additionally, builders now have their own submodule
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)
@@ -59,15 +57,6 @@ if __name__ == "__main__": renderer.render(pla, nodes, skin, 1, 2, 8)
 # Too slow? Increase the number of processes
 # if __name__ == "__main__": renderer.render(pla, nodes, skin, 1, 2, 8, processes=5)
 ```
-
-## Other stats
-![GitHub code size](https://img.shields.io/github/languages/code-size/MRT-Map/tile-renderer)
-![GitHub repo size](https://img.shields.io/github/repo-size/MRT-Map/tile-renderer)
-![GitHub last commit](https://img.shields.io/github/last-commit/MRT-Map/tile-renderer)
-![GitHub Release Date](https://img.shields.io/github/release-date/MRT-Map/tile-renderer)
-![Lines of code](https://img.shields.io/tokei/lines/github/MRT-Map/tile-renderer)
-[![codecov](https://codecov.io/gh/MRT-Map/tile-renderer/branch/main/graph/badge.svg?token=VTJ73KYYF0)](https://codecov.io/gh/MRT-Map/tile-renderer)
-[![CodeFactor](https://www.codefactor.io/repository/github/mrt-map/tile-renderer/badge)](https://www.codefactor.io/repository/github/mrt-map/tile-renderer)
 
 <!--
 commands for upload in case i forget

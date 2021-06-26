@@ -22,7 +22,7 @@ def test_pytest():
         s = renderer.misc.getSkin("default")
 
         #base
-        a = renderer.render(p, n, s, 8, 8, 16, saveDir="tiles/", processes=10)
+        a = renderer.render(p, n, s, 8, 8, 8, saveDir="tiles/", processes=10)
         renderer.tileMerge(a, saveImages=False)
         
         #tools

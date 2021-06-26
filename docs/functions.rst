@@ -7,7 +7,7 @@ All Functions
 
 Main
 ----
-.. py:function:: renderer.render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, saveImages=True, saveDir="tiles/", assetsDir="skins/assets/", processes=1, tiles: list])
+.. py:function:: renderer.render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, saveImages=True, saveDir="tiles/", assetsDir="skins/assets/", processes=1, tiles: list, offset=(0,0)])
 
    Renders tiles from given coordinates and zoom values.
 
@@ -26,6 +26,7 @@ Main
    * str **assetsDir** *(default: "renderer/skins/assets/")*: the asset directory for the skin
    * int **processes** The amount of processes to run for rendering
    * list[tuple] **tiles** *(default: None)*: a list of tiles to render, given in tuples of ``(z,x,y)`` where z = zoom and x,y = tile coordinates
+   * tuple[int/float] **offset** *(default: (0, 0))*: the offset to shift all node coordinates by, given as ``(x,y)``
 
    **Returns**
 

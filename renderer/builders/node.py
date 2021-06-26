@@ -3,23 +3,11 @@ import re
 import json
 term = blessed.Terminal()
 
+import renderer.internals.internal as internal
+
 print(term.yellow("Welcome to the nodeJson builder!\n--------------------------------"))
 
-fileConfirmed = False
-while not fileConfirmed:
-    filePath = input(term.yellow("Which Node JSON file are you writing to? "))
-    try:
-        open(filePath, "r")
-        if filePath.endswith(".json"):
-            fileConfirmed = True
-        else:
-            print(term.red("File is not a JSON file"))
-    except FileNotFoundError:
-        print(term.red("File does not exist"))
-
-with open(filePath, "r") as f:
-    nodes = json.load(f)
-    f.close()
+nodes, filePath = internal.askFileName("Node") # pylint: disable=no-member
 
 print(term.yellow("Ingame, press F3+C once, and paste it here.\nType 'exit' to exit."))
 newNodes = {}

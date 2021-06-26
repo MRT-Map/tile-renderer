@@ -1,12 +1,18 @@
 Changelog
 =========
 
-* *v1.3 (coming soon)*
+* **v1.3 (26/6/21)**
 
-  * Long label breaking
-  * Validating from CLI (& more)
-  * Fixing texts for once
-  * Skin installer
+  * New subcommands in CLI:
+  
+    * ``validate`` and ``vdir``, to validate JSON files
+    * ``merge`` to merge 
+    * ``plabuilder`` for the new PLA builder
+    
+  * Area centertext will now break up into multiple lines
+  * New PLA builder
+
+    * additionally, builders now have their own submodule
   
 * **v1.2 (8/5/21)**
 

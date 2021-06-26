@@ -4,6 +4,9 @@ from typing import Union
 import time
 import random
 import os
+import blessed
+import difflib
+term = blessed.Terminal()
 
 def dictIndex(d: dict, v):
     return list(d.keys())[list(d.values()).index(v)]
@@ -83,3 +86,26 @@ def genId():
         return o[::-1]
     decimalId = int(time.time() * 10000000)
     return b10_b64(decimalId) + "-" + b10_b64(random.randint(1, 64**5))
+
+def askFileName(name: str):
+    fileConfirmed = False
+    while not fileConfirmed:
+        filePath = input(term.yellow(f"Which {name} JSON file are you writing to/referencing? "))
+        try:
+            open(filePath, "r")
+            if filePath.endswith(".json"):
+                fileConfirmed = True
+            else:
+                print(term.red("File is not a JSON file"))
+        except FileNotFoundError:
+            print(term.red("File does not exist"))
+    
+    with open(filePath, "r") as f:
+        data = json.load(f)
+        f.close()
+
+    return data, filePath
+
+def similar(s, i):
+    if len(sim := difflib.get_close_matches(s, i)) != 0:
+        print(term.bright_red(f"Perhaps you mean: {', '.join(sim)}"))

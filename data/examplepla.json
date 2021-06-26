@@ -11,7 +11,7 @@
   },
   "area": {
     "type": "simpleArea",
-    "displayname": "water",
+    "displayname": "water\nyes",
     "description": "asdfasdf",
     "layer": -1,
     "nodes": ["a", "b", "e"],
