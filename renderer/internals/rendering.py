@@ -186,7 +186,7 @@ def tiles(args):
                             else:
                                 text += token+ws
                         textLength = max(img.textlength(x, font) for x in text.split("\n"))
-                        size = img.textsize(text, font)+4
+                        size = img.textsize(text, font)[1]+4
                     else:
                         text = pla['displayname']
                         size = step['size']+4
