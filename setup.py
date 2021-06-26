@@ -26,7 +26,8 @@ setup(
     'blessed',
     'sympy',
     'schema',
-    'numpy'
+    'numpy',
+    'click'
   ],
   classifiers=[
     'Development Status :: 5 - Production/Stable',
