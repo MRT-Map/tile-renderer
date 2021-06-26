@@ -5,6 +5,8 @@ import time
 import random
 import os
 import blessed
+import difflib
+term = blessed.Terminal()
 
 def dictIndex(d: dict, v):
     return list(d.keys())[list(d.values()).index(v)]
@@ -86,7 +88,6 @@ def genId():
     return b10_b64(decimalId) + "-" + b10_b64(random.randint(1, 64**5))
 
 def askFileName(name: str):
-    term = blessed.Terminal()
     fileConfirmed = False
     while not fileConfirmed:
         filePath = input(term.yellow(f"Which {name} JSON file are you writing to/referencing? "))
@@ -104,3 +105,7 @@ def askFileName(name: str):
         f.close()
 
     return data, filePath
+
+def similar(s, i):
+    if len(sim := difflib.get_close_matches(s, i)) != 0:
+        print(term.bright_red(f"Perhaps you mean: {', '.join(sim)}"))

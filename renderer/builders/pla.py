@@ -2,6 +2,7 @@ import blessed
 import re
 import json
 import click
+import difflib
 term = blessed.Terminal()
 
 import renderer.internals.internal as internal
@@ -40,6 +41,7 @@ while not e:
         type_ = input(term.yellow(f"PLA type of {name}: "))
         if not type_.split(" ")[0] in skin['types'].keys():
             print(term.red(f"Type {type_.split(' ')[0]} does not exist"))
+            internal.similar(type_.split(' ')[0], skin['types'].keys()) # pylint: disable=no-member
             continue
         typeConfirmed = True
     displayname = input(term.yellow(f"Display name of {name}: "))
@@ -93,6 +95,7 @@ while not e:
                 for n in nodeList.split('\n'):
                     if n not in nodes.keys():
                         print(term.red(f"Node {n} does not exist"))
+                        internal.similar(n, nodes.keys()) # pylint: disable=no-member
                         raise exiter
             except exiter:
                 preNodes = nodeList.split('\n')
