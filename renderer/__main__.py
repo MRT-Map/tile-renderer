@@ -12,6 +12,7 @@ subparsers = parser.add_subparsers(help='task to run', dest="task")
 p_info = subparsers.add_parser('info', help='view info about the renderer', formatter_class=argparse.MetavarTypeHelpFormatter)
 
 p_nodebuider = subparsers.add_parser('nodebuilder', help='launch the node builder', formatter_class=argparse.MetavarTypeHelpFormatter)
+p_plabuilder = subparsers.add_parser('plabuilder', help='launch the PLA builder', formatter_class=argparse.MetavarTypeHelpFormatter)
 
 p_validate = subparsers.add_parser('validate', help='validate a JSON file', formatter_class=argparse.MetavarTypeHelpFormatter)
 p_validate.add_argument('-p', '--pla', type=str, help='PLA JSON file to validate')
@@ -49,6 +50,8 @@ if args.task == "info":
     print("Docs: https://tile-renderer.readthedocs.io/en/latest/")
 elif args.task == "nodebuilder":
     import renderer.builders.node # type: ignore
+elif args.task == "plabuilder":
+    import renderer.builders.pla # type: ignore
 elif args.task == "render" and __name__ == '__main__':
     renderer.render(renderer.internals.internal.readJson(args.plaJson),
                     renderer.internals.internal.readJson(args.nodeJson),

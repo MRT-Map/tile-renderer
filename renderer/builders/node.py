@@ -7,7 +7,7 @@ import renderer.internals.internal as internal
 
 print(term.yellow("Welcome to the nodeJson builder!\n--------------------------------"))
 
-nodes, filePath = internal.askFile("Node")
+nodes, filePath = internal.askFileName("Node") # pylint: disable=no-member
 
 print(term.yellow("Ingame, press F3+C once, and paste it here.\nType 'exit' to exit."))
 newNodes = {}

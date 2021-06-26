@@ -1,13 +1,24 @@
 {
     "line": {
-      "type": "building",
-      "displayname": "donut building",
-      "description": "asdfasdf",
-      "layer": 0,
-      "nodes": ["g", "h", "i", "j"],
-      "hollows": [["a", "b", "e"]],
-      "attrs": {
-        "(attr name)": "(attr val)"
-      }
+        "type": "building",
+        "displayname": "donut building",
+        "description": "asdfasdf",
+        "layer": 0,
+        "nodes": [
+            "g",
+            "h",
+            "i",
+            "j"
+        ],
+        "hollows": [
+            [
+                "a",
+                "b",
+                "e"
+            ]
+        ],
+        "attrs": {
+            "(attr name)": "(attr val)"
+        }
     }
 }

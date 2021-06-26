@@ -85,11 +85,11 @@ def genId():
     decimalId = int(time.time() * 10000000)
     return b10_b64(decimalId) + "-" + b10_b64(random.randint(1, 64**5))
 
-def askFile(name):
+def askFileName(name: str):
     term = blessed.Terminal()
     fileConfirmed = False
     while not fileConfirmed:
-        filePath = input(term.yellow(f"Which {name} JSON file are you writing to? "))
+        filePath = input(term.yellow(f"Which {name} JSON file are you writing to/referencing? "))
         try:
             open(filePath, "r")
             if filePath.endswith(".json"):
@@ -100,8 +100,7 @@ def askFile(name):
             print(term.red("File does not exist"))
     
     with open(filePath, "r") as f:
-        if f.read() == "": data = {}
-        else: data = json.load(f)
+        data = json.load(f)
         f.close()
 
     return data, filePath
