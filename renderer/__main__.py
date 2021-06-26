@@ -48,7 +48,7 @@ if args.task == "info":
     print("PyPI: https://pypi.org/project/tile-renderer/")
     print("Docs: https://tile-renderer.readthedocs.io/en/latest/")
 elif args.task == "nodebuilder":
-    import renderer.internals.nodeJsonBuilder # type: ignore
+    import renderer.builders.node # type: ignore
 elif args.task == "render" and __name__ == '__main__':
     renderer.render(renderer.internals.internal.readJson(args.plaJson),
                     renderer.internals.internal.readJson(args.nodeJson),

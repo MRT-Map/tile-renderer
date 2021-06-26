@@ -19,7 +19,7 @@ setup(
   keywords = ['leaflet', 'leaflet.js', 'leafletjs', 'map', 'tiles', 'renderer', 'tile-renderer', 'mapping'],
   python_requires='>=3.8',
   package_data={
-    'renderer': ['skins/*', 'skins/assets/*', 'internals/*'],
+    'renderer': ['skins/*', 'skins/assets/*', 'internals/*', 'builders/*'],
   },
   install_requires=[
     'pillow',

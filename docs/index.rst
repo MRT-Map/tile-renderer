@@ -1,4 +1,4 @@
-tile-renderer v1.2
+tile-renderer v1.3
 =========================================
 
 Leaflet.js streetmap tile renderer, made by 7d. `Git repo here <https://github.com/MRT-Map/tile-renderer>`_

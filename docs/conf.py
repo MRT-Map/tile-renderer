@@ -10,9 +10,10 @@
 # add these directories to sys.path here. If the directory is relative to the
 # documentation root, use os.path.abspath to make it absolute, like shown here.
 #
-# import os
-# import sys
-# sys.path.insert(0, os.path.abspath('.'))
+import os
+import sys
+sys.path.insert(0, os.path.abspath('..'))
+import renderer
 
 
 # -- Project information -----------------------------------------------------
@@ -22,7 +23,7 @@ copyright = '2021, The MRT Mapping Team'
 author = '7d'
 
 # The full version, including alpha/beta/rc tags
-release = "v1.2"
+release = "v"+renderer.__version__
 
 # -- General configuration ---------------------------------------------------
 
