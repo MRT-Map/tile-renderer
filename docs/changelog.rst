@@ -7,8 +7,12 @@ Changelog
   
     * ``validate`` and ``vdir``, to validate JSON files
     * ``merge`` to merge 
+    * ``plabuilder`` for the new PLA builder
     
   * Area centertext will now break up into multiple lines
+  * New PLA builder
+
+    * additionally, builders now have their own submodule
   
 * **v1.2 (8/5/21)**
 

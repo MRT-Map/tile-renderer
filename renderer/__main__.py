@@ -34,6 +34,7 @@ p_render.add_argument('-r', '--maxZoomRange', type=float, required=True, help="a
 p_render.add_argument('-d', '--saveDir', type=str, help="the directory to save tiles in", default='')
 p_render.add_argument('-m', '--processes', type=int, help="the amount of processes to run for rendering", default=1)
 p_render.add_argument('-t', '--tiles', type=list, help="a list of tiles to render, given in tuples of (z,x,y)")
+p_render.add_argument('-o', '--offset', type=tuple, help="the offset of node coordinates, given as (x,y)")
 
 p_merge = subparsers.add_parser('merge', help='merge tiles', formatter_class=argparse.MetavarTypeHelpFormatter)
 p_merge.add_argument('-i', '--imageDir', type=str, help='the directory of tiles', default=os.getcwd())
@@ -59,7 +60,8 @@ elif args.task == "render" and __name__ == '__main__':
                     args.maxZoom, args.maxZoomRange,
                     saveDir=args.saveDir,
                     processes=args.processes,
-                    tiles=args.tiles)
+                    tiles=args.tiles,
+                    offset=args.offset)
 elif args.task == "validate":
     n = renderer.internals.internal.readJson(args.nodes)
     if args.pla is not None:

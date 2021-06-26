@@ -80,7 +80,7 @@ def tileMerge(images: Union[str, dict], saveImages=True, saveDir="tiles/", zoom=
     print(term.green("\nAll merges complete"))
     return tileReturn
 
-def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: Union[str, float], saveImages=True, saveDir="", assetsDir=os.path.dirname(__file__)+"/skins/assets/", processes=1, tiles=None):
+def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: Union[str, float], saveImages=True, saveDir="", assetsDir=os.path.dirname(__file__)+"/skins/assets/", processes=1, tiles=None, offset=(0,0)):
     """
     Renders tiles from given coordinates and zoom values.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.render
@@ -92,10 +92,16 @@ def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom:
     # validation
     print(term.green("Validating skin..."), end=" ")
     validate.vSkinJson(skinJson)
-    print(term.green("validated\nValidating PLAs..."), end=" ")
-    validate.vPlaJson(plaList, nodeList)
     print(term.green("validated\nValidating nodes..."), end=" ")
     validate.vNodeJson(nodeList)
+    print(term.green("validated\nValidating PLAs..."), end=" ")
+    validate.vPlaJson(plaList, nodeList)
+    
+
+    # offset
+    for node in nodeList.keys():
+        nodeList[node]['x'] += offset[0]
+        nodeList[node]['y'] += offset[1]
 
     print(term.green("validated\nFinding tiles..."), end=" ")
     #finds which tiles to render
