@@ -7,7 +7,7 @@ All Functions
 
 Main
 ----
-.. py:function:: renderer.render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, saveImages=True, saveDir="tiles/", assetsDir="skins/assets/", processes=1, tiles: list])
+.. py:function:: renderer.render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, saveImages=True, saveDir="tiles/", assetsDir="skins/assets/", processes=1, tiles: list, offset=(0,0)])
 
    Renders tiles from given coordinates and zoom values.
 

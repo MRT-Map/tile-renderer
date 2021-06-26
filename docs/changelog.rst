@@ -1,7 +1,7 @@
 Changelog
 =========
 
-* **v1.3 ()**
+* **v1.3 (26/6/21)**
 
   * New subcommands in CLI:
   

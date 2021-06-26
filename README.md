@@ -22,7 +22,14 @@ Leaflet.js streetmap tile renderer, made by 7d
 **Documentation: https://tile-renderer.readthedocs.io/en/latest/**
 
 ## Current version: v1.3
-* **v1.3 ()**
+* **v1.3 (26/6/21)**
+  * New subcommands in CLI:
+    * `validate` and `vdir`, to validate JSON files
+    * `merge` to merge 
+    * `plabuilder` for the new PLA builder
+  * Area centertext will now break up into multiple lines
+  * New PLA builder
+    * additionally, builders now have their own submodule
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)
