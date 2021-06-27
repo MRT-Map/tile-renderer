@@ -181,12 +181,12 @@ def tiles(args):
                         for token, ws in list(itertools.zip_longest(tokens, wss, fillvalue='')):
                             temptext = text[:]
                             temptext += token
-                            if int(img.textLength(temptext.split('\n')[-1], font)) > dist:
+                            if int(img.textlength(temptext.split('\n')[-1], font)) > dist:
                                 text += '\n'+token+ws
                             else:
                                 text += token+ws
-                        textLength = max(img.textLength(x, font) for x in text.split("\n"))
-                        size = img.textsize(text, font)+4
+                        textLength = int(max(img.textlength(x, font) for x in text.split("\n")))
+                        size = int(img.textsize(text, font)[1]+4)
                     else:
                         text = pla['displayname']
                         size = step['size']+4
@@ -232,21 +232,21 @@ def tiles(args):
                             ad.polygon(nCoords, fill=(0, 0, 0, 0))
                     im.paste(ai, (0, 0), ai)
 
-
-                    pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Drawing outline")
-                    exteriorOutline = coords[:]
-                    exteriorOutline.append(exteriorOutline[0])
-                    outlines = [exteriorOutline]
-                    if 'hollows' in pla.keys():
-                        for n in pla['hollows']:
-                            nCoords = [(x - internal.strToTuple(tileCoords)[1] * size, y - internal.strToTuple(tileCoords)[2] * size) for x, y in tools.nodes.toCoords(n, nodeList)]
-                            nCoords = [(int(skinJson['info']['size'] / size * x), int(skinJson['info']['size'] / size * y)) for x, y in nCoords]
-                            nCoords.append(nCoords[0])
-                            outlines.append(nCoords)
-                    for oCoords in outlines:
-                        img.line(oCoords, fill=step['outline'], width=2, joint="curve")
-                        if not "unroundedEnds" in info['tags']:
-                            img.ellipse([oCoords[0][0]-2/2+1, oCoords[0][1]-2/2+1, oCoords[0][0]+2/2, oCoords[0][1]+2/2], fill=step['outline'])
+                    if step['outline'] is not None:
+                        pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Drawing outline")
+                        exteriorOutline = coords[:]
+                        exteriorOutline.append(exteriorOutline[0])
+                        outlines = [exteriorOutline]
+                        if 'hollows' in pla.keys():
+                            for n in pla['hollows']:
+                                nCoords = [(x - internal.strToTuple(tileCoords)[1] * size, y - internal.strToTuple(tileCoords)[2] * size) for x, y in tools.nodes.toCoords(n, nodeList)]
+                                nCoords = [(int(skinJson['info']['size'] / size * x), int(skinJson['info']['size'] / size * y)) for x, y in nCoords]
+                                nCoords.append(nCoords[0])
+                                outlines.append(nCoords)
+                        for oCoords in outlines:
+                            img.line(oCoords, fill=step['outline'], width=2, joint="curve")
+                            if not "unroundedEnds" in info['tags']:
+                                img.ellipse([oCoords[0][0]-2/2+1, oCoords[0][1]-2/2+1, oCoords[0][0]+2/2, oCoords[0][1]+2/2], fill=step['outline'])
 
                 def area_centerimage():
                     x, y = mathtools.polyCenter(coords)

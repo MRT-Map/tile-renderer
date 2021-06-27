@@ -27,7 +27,7 @@ def tileMerge(images: Union[str, dict], saveImages=True, saveDir="tiles/", zoom=
     if isinstance(images, str):
         print(term.green("Retrieving images..."), end="\r")
         for d in glob.glob(glob.escape(images)+"*.png"):
-            regex = re.search("^"+re.escape(images)+r"(-?\d+, -?\d+, -?\d+)\.png$", d) # pylint: disable=anomalous-backslash-in-string
+            regex = re.search(r"(-?\d+, -?\d+, -?\d+)\.png$", d) # pylint: disable=anomalous-backslash-in-string
             if regex == None:
                 continue
             coord = regex.group(1)
