@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
   name = 'tile-renderer',
   packages = ['renderer'],
-  version = renderer.__version__+".0.4",
+  version = renderer.__version__+".0.5",
   license ='gpl-3.0',
   description = 'Leaflet.js streetmap tile renderer',
   long_description=long_description,

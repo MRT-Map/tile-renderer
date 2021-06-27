@@ -90,6 +90,7 @@ elif args.task == "vdir":
         renderer.validate.vNodeJson(nodes)
     print(term.green("Validated"))
 elif args.task == "merge":
+    if not args.imageDir.endswith("/") and args.imageDir != "": args.imageDir += '/'
     renderer.tileMerge(args.imageDir, saveDir=args.saveDir, zoom=args.zoom)
 else:
     parser.print_help()
