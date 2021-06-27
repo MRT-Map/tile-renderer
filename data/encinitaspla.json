@@ -1295,7 +1295,7 @@
     },
     "enc-seawallPark": {
         "type": "park",
-        "displayname": "",
+        "displayname": "Seawall Park",
         "description": "Encinitas",
         "layer": 0,
         "nodes": ["enc-seawallPark1", "enc-seawallPark2", "enc-seawallPark3", "enc-seawallPark4", "enc-seawallPark5", 
@@ -1305,6 +1305,137 @@
                   "enc-seawallPark21", "enc-seawallPark22", "enc-seawallPark23", "enc-seawallPark24", "enc-seawallPark25", 
                   "enc-seawallPark26", "enc-seawallPark27", "enc-seawallPark28", "enc-seawallPark29", "enc-seawallPark30", 
                   "enc-seawallPark31", "enc-seawallPark32", "enc-seawallPark33", "enc-seawallPark34", "enc-seawallPark35"],
+        "attrs": {}
+    },
+    "enc-rockyPlateauHighSch_fence": {
+        "type": "schoolArea",
+        "displayname": "Rocky Plateau High School",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-rockyPlateauHighSch_fence1", "enc-rockyPlateauHighSch_fence2", "enc-rockyPlateauHighSch_fence3", "enc-rockyPlateauHighSch_fence4", "enc-rockyPlateauHighSch_fence5", 
+                  "enc-rockyPlateauHighSch_fence6", "enc-rockyPlateauHighSch_fence7", "enc-rockyPlateauHighSch_fence8", "enc-rockyPlateauHighSch_fence9", "enc-rockyPlateauHighSch_fence10", 
+                  "enc-rockyPlateauHighSch_fence11", "enc-rockyPlateauHighSch_fence12", "enc-rockyPlateauHighSch_fence13", "enc-rockyPlateauHighSch_fence14", "enc-rockyPlateauHighSch_fence15", 
+                  "enc-rockyPlateauHighSch_fence16", "enc-rockyPlateauHighSch_Block8_4_fence17", "enc-rockyPlateauHighSch_Block8_3_fence18", "enc-rockyPlateauHighSch_fence19", "enc-rockyPlateauHighSch_fence20", 
+                  "enc-rockyPlateauHighSch_fence21", "enc-subwayStn_cabrilloEntrance8"],
+        "attrs": {}
+    },
+    "enc-lookoutPark": {
+        "type": "park",
+        "displayname": "Lookout Park",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-lookoutPark1", "enc-lookoutPark2", "enc-lookoutPark3", "enc-lookoutPark4", "enc-lookoutPark5", 
+                  "enc-lookoutPark6", "enc-lookoutPark7", "enc-lookoutPark8", "enc-lookoutPark9", "enc-lookoutPark10", 
+                  "enc-lookoutPark11", "enc-lookoutPark12", "enc-lookoutPark13", "enc-lookoutPark14", "enc-lookoutPark15", 
+                  "enc-lookoutPark16", "enc-lookoutPark17", "enc-lookoutPark18"],
+        "attrs": {}
+    },
+    "enc-cityForestA": {
+        "type": "forest",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cityForestA1", "enc-cityForestA2", "enc-cityForestA3", "enc-cityForestA4", "enc-cityForestA5"],
+        "attrs": {}
+    },
+    "enc-cityForestB": {
+        "type": "forest",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cityForestB1", "enc-cityForestB2", "enc-cityForestB3", "enc-cityForestB4", "enc-cityForestB5", "enc-cityForestB6", "enc-cityForestB7"],
+        "attrs": {}
+    },
+    "enc-cityForestC": {
+        "type": "forest",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cityForestC1", "enc-cityForestC2", "enc-cityForestC3", "enc-cityForestC4", "enc-cityForestC5", "enc-cityForestC6", "enc-cityForestC7"],
+        "attrs": {}
+    },
+    "enc-cityForestD": {
+        "type": "forest",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cityForestD1", "enc-cityForestD2", "enc-cityForestD3", "enc-cityForestD4", "enc-cityForestD5", "enc-cityForestD6"],
+        "attrs": {}
+    },
+    "enc-cityForestE": {
+        "type": "forest",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cityForestE1", "enc-cityForestE2", "enc-cityForestE3", "enc-cityForestE4"],
+        "attrs": {}
+    },
+    "enc-cityForestF": {
+        "type": "forest",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cityForestF1", "enc-cityForestF2", "enc-cityForestF3", "enc-cityForestF4", "enc-cityForestF5",
+                  "enc-cityForestF6", "enc-cityForestF7", "enc-cityForestF8", "enc-cityForestF9", "enc-cityForestF10",
+                  "enc-cityForestF11", "enc-cityForestF12", "enc-cityForestF13"],
+        "attrs": {}
+    },
+    "enc-cityForestG": {
+        "type": "forest",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cityForestG1", "enc-cityForestG2", "enc-cityForestG3", "enc-cityForestG4", "enc-cityForestG5", "enc-cityForestG6", "enc-cityForestG8"],
+        "attrs": {}
+    },
+    "enc-cityForestH": {
+        "type": "forest",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cityForestH1", "enc-cityForestH2", "enc-cityForestH3", "enc-cityForestH4", "enc-cityForestH5",
+                  "enc-cityForestH6", "enc-cityForestH7", "enc-cityForestH8", "enc-cityForestH9", "enc-cityForestH10",
+                  "enc-cityForestH11", "enc-cityForestH12", "enc-cityForestH13", "enc-cityForestH14"],
+        "attrs": {}
+    },
+    "enc-cityForestI": {
+        "type": "forest",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cityForestI1", "enc-cityForestI2", "enc-cityForestI3", "enc-cityForestI4"],
+        "attrs": {}
+    },
+    "enc-cityForestJ": {
+        "type": "forest",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cityForestJ1", "enc-cityForestJ2", "enc-cityForestJ3"],
+        "attrs": {}
+    },
+    "enc-cityForestK": {
+        "type": "forest",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cityForestK1", "enc-cityForestK2", "enc-cityForestK3", "enc-cityForestK4", "enc-cityForestK5"],
+        "attrs": {}
+    },
+    "enc-cityForestL": {
+        "type": "forest",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cityForestL1", "enc-cityForestL2", "enc-cityForestL3", "enc-cityForestL4", "enc-cityForestL5"],
+        "attrs": {}
+    },
+    "enc-cityForestM": {
+        "type": "forest",
+        "displayname": "",
+        "description": "Encinitas",
+        "layer": 0,
+        "nodes": ["enc-cityForestM1", "enc-cityForestM2", "enc-cityForestM3", "enc-cityForestM4", "enc-cityForestM5"],
         "attrs": {}
     }
 }
