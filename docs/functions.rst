@@ -32,7 +32,7 @@ Main
 
    * **dict** Given in the form of ``"(tile coord)": (PIL Image)``
 
-.. py:function:: renderer.tileMerge(images: Union[str, dict] [, saveImages=True, saveDir="tiles/", zoom=[]])
+.. py:function:: renderer.tileMerge(images: Union[str, dict], saveImages: bool=True, saveDir: str="tiles/", zoom: list=[])
 
    Merges tiles rendered by ``renderer.render()``.
 

@@ -53,11 +53,12 @@ while not e:
     layer = int(layer) if int(layer) == layer else layer
 
     if skin['types'][type_.split(" ")[0]]['type'] == "point":
-        nodeConfirmed = False
+        nodeConfirmed = False   
         while not nodeConfirmed:
             node = input(term.yellow("Node attached: "))
             if node not in nodes.keys():
                 print(term.red("Node does not exist"))
+                internal.similar(node, nodes) # pylint: disable=no-member
                 continue
             nodeConfirmed = True
         newNodes = [node]

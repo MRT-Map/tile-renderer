@@ -16,7 +16,7 @@ import renderer.mathtools as mathtools
 import renderer.internals.rendering as rendering # type: ignore
 import renderer.misc as misc
 
-def tileMerge(images: Union[str, dict], saveImages=True, saveDir="tiles/", zoom=[]):
+def tileMerge(images: Union[str, dict], saveImages: bool=True, saveDir: str="tiles/", zoom: list=[]):
     """
     Merges tiles rendered by renderer.render().
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#tileMerge
@@ -67,7 +67,7 @@ def tileMerge(images: Union[str, dict], saveImages=True, saveDir="tiles/", zoom=
                 if f"{z}, {x}, {y}" in toMerge.keys():
                     i.paste(toMerge[f"{z}, {x}, {y}"], (px, py))
                     merged += 1
-                    with term.location(): print(term.green(f"Zoom {z}: ") + f"{internal.percentage(merged, len(toMerge.keys()))} | {internal.msToTime(internal.timeRemaining(start, merged, len(toMerge.keys())))} left | " + term.bright_black(f"Pasted {z}, {x}, {y}"), end=term.clear_eos+"\r")
+                    with term.location(): print(term.green(f"Zoom {z}: ") + f"{internal.percentage(merged, len(toMerge.keys()))}% | {internal.msToTime(internal.timeRemaining(start, merged, len(toMerge.keys())))} left | " + term.bright_black(f"Pasted {z}, {x}, {y}"), end=term.clear_eos+"\r")
                 py += tileSize
             px += tileSize
             py = 0
@@ -80,7 +80,7 @@ def tileMerge(images: Union[str, dict], saveImages=True, saveDir="tiles/", zoom=
     print(term.green("\nAll merges complete"))
     return tileReturn
 
-def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: Union[str, float], saveImages=True, saveDir="", assetsDir=os.path.dirname(__file__)+"/skins/assets/", processes=1, tiles=None, offset=(0,0)):
+def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: Union[str, float], saveImages: bool=True, saveDir: str="", assetsDir: str=os.path.dirname(__file__)+"/skins/assets/", processes: int=1, tiles: list=None, offset: tuple=(0,0)):
     """
     Renders tiles from given coordinates and zoom values.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.render
