@@ -1,0 +1,7 @@
+sphinxcontrib-programoutput
+sympy
+numpy
+schema
+blessed
+pillow
+click
