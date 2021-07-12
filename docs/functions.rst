@@ -38,6 +38,8 @@ Main
    :returns: Given in the form of ``"(tile coord)": (PIL Image)``
    :rtype: Dict[str, Image]
 
+   :raises ValueError: if maxZoom < minZoom
+
 .. py:function:: tileMerge(images: Union[str, Dict[str, Image]], saveImages: bool=True, saveDir: str="tiles/", zoom: List[int]=[]) -> List[Image]
 
    Merges tiles rendered by ``renderer.render()``.
@@ -52,9 +54,9 @@ Main
 
 Tools
 -----
-.. py:currentmodule:: renderer.tools
+.. py:currentmodule:: renderer.tools.plaJson
 
-.. py:function:: plaJson.findEnds(plaList: dict, nodeList: dict) -> Tuple[RealNum, RealNum, RealNum, RealNum]
+.. py:function:: findEnds(plaList: dict, nodeList: dict) -> Tuple[RealNum, RealNum, RealNum, RealNum]
 
    Finds the minimum and maximum X and Y values of a JSON or dictionary of PLAs.
    
@@ -65,7 +67,7 @@ Tools
    :rtype: Tuple[RealNum, RealNum, RealNum, RealNum]
    
 
-.. py:function:: plaJson.renderedIn(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]
+.. py:function:: renderedIn(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]
    
    Like ``renderer.tools.lineToTiles()``, but for a JSON or dictionary of PLAs.
 
@@ -78,7 +80,9 @@ Tools
    :returns: A list of tile coordinates
    :rtype: List[TileCoord]
 
-.. py:function:: plaJson.toGeoJson(plaList: dict, nodeList: dict, skinJson: dict) -> dict
+   :raises ValueError: if maxZoom < minZoom
+
+.. py:function:: toGeoJson(plaList: dict, nodeList: dict, skinJson: dict) -> dict
 
    Converts PLA Json into GeoJson (with nodes and skin).
    :param dict plaList: a dictionary of PLAs (see :ref:`formats`)
@@ -88,7 +92,9 @@ Tools
    :returns: A GeoJson dictionary
    :rtype: dict
 
-.. py:function:: geoJson.toNodePlaJson(geoJson: dict) -> Tuple[dict, dict]
+.. py:currentmodule:: renderer.tools.geoJson
+
+.. py:function:: toNodePlaJson(geoJson: dict) -> Tuple[dict, dict]
 
    Converts GeoJson to PLA and Node JSONs.
 
@@ -97,7 +103,9 @@ Tools
    :returns: Given in ``plaJson, nodeJson``
    :rtype: Tuple[dict, dict]
 
-.. py:function:: tile.findEnds(coords: List[TileCoord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]
+.. py:currentmodule:: renderer.tools.tile
+
+.. py:function:: findEnds(coords: List[TileCoord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]
 
    Find the minimum and maximum x/y values of a set of tiles coords.
 
@@ -106,7 +114,9 @@ Tools
    :returns: Returns in the form `(xMax, xMin, yMax, yMin)`
    :rtype: Tuple[RealNum, RealNum, RealNum, RealNum]
 
-.. py:function:: line.findEnds(coords: List[Coord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]
+.. py:currentmodule:: renderer.tools.line
+
+.. py:function:: findEnds(coords: List[Coord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]
 
    Find the minimum and maximum x/y values of a set of coords.
 
@@ -115,7 +125,7 @@ Tools
    :returns: Returns in the form `(xMax, xMin, yMax, yMin)`
    :rtype: Tuple[RealNum, RealNum, RealNum, RealNum]
 
-.. py:function:: line.toTiles(coords: List[Coord], minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]
+.. py:function:: toTiles(coords: List[Coord], minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]
 
    Generates tile coordinates from list of regular coordinates using ``renderer.tools.coordToTiles()``. Mainly for rendering whole PLAs.
 
@@ -127,7 +137,12 @@ Tools
    :returns: A list of tile coordinates
    :rtype: List[TileCoord]
 
-.. py:function:: nodes.findPlasAttached(nodeId: str, plaList: dict) -> List[Tuple[str, int]]
+   :raises ValueError: if maxZoom < minZoom
+   :raises ValueError: if empty list of coords given
+
+.. py:currentmodule:: renderer.tools.node
+
+.. py:function:: findPlasAttached(nodeId: str, plaList: dict) -> List[Tuple[str, int]]
 
    Finds which PLAs attach to a node.
    
@@ -137,7 +152,7 @@ Tools
    :returns: A tuple in the form of ``(plaId, posInNodeList)``
    :rtype: List[Tuple[str, int]]
 
-.. py:function:: nodes.toCoords(nodes: List[str], nodeList: dict) -> List[Coord]
+.. py:function:: toCoords(nodes: List[str], nodeList: dict) -> List[Coord]
    
    Converts a list of nodes IDs into a list of coordinates with a node dictionary/JSON as its reference.
    
@@ -145,9 +160,13 @@ Tools
    :param dict nodeList: a dictionary of nodes (see :ref:`formats`)
    
    :returns: A list of coordinates
-   :rtype:
+   :rtype: List[Coord]
 
-.. py:function:: coord.toTiles(coord: Coord, minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]
+   :raises KeyError: if a node does not exist
+
+.. py:currentmodule:: renderer.tools.coord
+
+.. py:function:: toTiles(coord: Coord, minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]
 
    Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
 
@@ -158,6 +177,8 @@ Tools
 
    :returns: A list of tile coordinates
    :rtype: List[TileCoord]
+
+   :raises ValueError: if maxZoom < minZoom
 
 Math Tools
 ----------
@@ -354,3 +375,5 @@ Misc
    
    :returns: The skin JSON
    :rtype: dict
+
+   :raises FileNotFoundError: if skin does not exist
