@@ -1,6 +1,5 @@
-import math
-from PIL import Image, ImageDraw, ImageFont
-from typing import Union
+from typing import Union, List, Dict, Tuple, Optional
+from PIL import Image
 import time
 import glob
 import re
@@ -16,7 +15,11 @@ import renderer.mathtools as mathtools
 import renderer.internals.rendering as rendering # type: ignore
 import renderer.misc as misc
 
-def tileMerge(images: Union[str, dict], saveImages: bool=True, saveDir: str="tiles/", zoom: list=[]):
+RealNum = Union[int, float]
+Coord = Tuple[RealNum, RealNum]
+TileCoord = Tuple[RealNum, RealNum, RealNum]
+
+def tileMerge(images: Union[str, Dict[str, Image]], saveImages: bool=True, saveDir: str="tiles/", zoom: List[int]=[]) -> List[Image]:
     """
     Merges tiles rendered by renderer.render().
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#tileMerge
@@ -80,7 +83,8 @@ def tileMerge(images: Union[str, dict], saveImages: bool=True, saveDir: str="til
     print(term.green("\nAll merges complete"))
     return tileReturn
 
-def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: Union[str, float], saveImages: bool=True, saveDir: str="", assetsDir: str=os.path.dirname(__file__)+"/skins/assets/", processes: int=1, tiles: list=None, offset: tuple=(0,0)):
+def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: RealNum, saveImages: bool=True, saveDir: str="", assetsDir: str=os.path.dirname(__file__)+"/skins/assets/", \
+    processes: int=1, tiles: Optional[List[TileCoord]]=None, offset: Tuple[RealNum, RealNum]=(0,0)) -> Dict[str, Image]:
     """
     Renders tiles from given coordinates and zoom values.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.render
