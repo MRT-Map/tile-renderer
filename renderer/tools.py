@@ -35,7 +35,7 @@ class plaJson:
         return xMax, xMin, yMax, yMin
 
     @staticmethod
-    def renderedIn(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int) -> List[TileCoord]:
+    def renderedIn(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]:
         """
         Like renderer.tools.lineToTiles(), but for a JSON or dictionary of PLAs.
         More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.plaJson.renderedIn
@@ -219,7 +219,7 @@ class line:
         return xMax, xMin, yMax, yMin
 
     @staticmethod
-    def toTiles(coords: List[Coord], minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> TileCoord:
+    def toTiles(coords: List[Coord], minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]:
         """
         Generates tile coordinates from list of regular coordinates using renderer.tools.coordToTiles().
         More info: Mainly for rendering whole PLAs. https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.line.toTiles

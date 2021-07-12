@@ -12,7 +12,7 @@ RealNum = Union[int, float]
 Coord = Tuple[RealNum, RealNum]
 TileCoord = Tuple[int, int, int]
 
-def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: int=1, returnBoth: bool=False) -> List[Tuple[RealNum, RealNum, RealNum]]:
+def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: int=1, returnBoth: bool=False) -> Union[List[Tuple[RealNum, RealNum, RealNum]], List[List[Tuple[RealNum, RealNum, RealNum]]]]:
     """
     Calculates the midpoint of two lines, offsets the distance away from the line, and calculates the rotation of the line.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.midpoint
