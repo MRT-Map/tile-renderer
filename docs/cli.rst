@@ -3,7 +3,7 @@ Renderer CLI
 
 For more help, run ``renderer <task> -h``
 
- .. program-output:: python -m renderer -h
+ .. program-output:: ls
 
 .. describe:: renderer nodebuilder
 
