@@ -10,7 +10,7 @@ import renderer.misc as misc
 
 RealNum = Union[int, float]
 Coord = Tuple[RealNum, RealNum]
-TileCoord = Tuple[RealNum, RealNum, RealNum]
+TileCoord = Tuple[int, int, int]
 
 def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: int=1, returnBoth: bool=False) -> List[Tuple[RealNum, RealNum, RealNum]]:
     """

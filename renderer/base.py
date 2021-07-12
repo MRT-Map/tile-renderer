@@ -17,7 +17,7 @@ import renderer.misc as misc
 
 RealNum = Union[int, float]
 Coord = Tuple[RealNum, RealNum]
-TileCoord = Tuple[RealNum, RealNum, RealNum]
+TileCoord = Tuple[int, int, int]
 
 def tileMerge(images: Union[str, Dict[str, Image]], saveImages: bool=True, saveDir: str="tiles/", zoom: List[int]=[]) -> List[Image]:
     """
