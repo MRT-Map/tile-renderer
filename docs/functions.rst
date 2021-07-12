@@ -4,14 +4,23 @@ All Functions
 **Useful information**
 
 * PLA = Points, Lines and Areas
+* Type aliases:
+
+  * RealNum = Union[int, float]
+  * Coord = Tuple[RealNum, RealNum]
+  * TileCoord = Tuple[int, int, int]
 
 Main
 ----
-.. py:function:: renderer.render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, saveImages=True, saveDir="tiles/", assetsDir="skins/assets/", processes=1, tiles: list, offset=(0,0)])
+.. py:currentmodule:: renderer
+
+.. py:function:: render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: RealNum, saveImages: bool=True, saveDir: str="", assetsDir: str=os.path.dirname(__file__)+"/skins/assets/", \
+                 processes: int=1, tiles: Optional[List[TileCoord]]=None, offset: Tuple[RealNum, RealNum]=(0,0)) -> Dict[str, Image]
 
    Renders tiles from given coordinates and zoom values.
 
-   **Important:** Run this function under ``if __name__ == "__main__"``, or else there would be a lot of multiprocessing RuntimeErrors.
+   .. warning::
+      Run this function under ``if __name__ == "__main__"``, or else there would be a lot of multiprocessing RuntimeErrors.
 
    **Parameters**
 
@@ -32,7 +41,7 @@ Main
 
    * **dict** Given in the form of ``"(tile coord)": (PIL Image)``
 
-.. py:function:: renderer.tileMerge(images: Union[str, dict], saveImages: bool=True, saveDir: str="tiles/", zoom: list=[])
+.. py:function:: tileMerge(images: Union[str, Dict[str, Image]], saveImages: bool=True, saveDir: str="tiles/", zoom: List[int]=[]) -> List[Image]
 
    Merges tiles rendered by ``renderer.render()``.
 
@@ -49,7 +58,9 @@ Main
 
 Tools
 -----
-.. py:function:: renderer.tools.plaJson.findEnds(plaList: dict, nodeList: dict)
+.. py:currentmodule:: renderer.tools
+
+.. py:function:: plaJson.findEnds(plaList: dict, nodeList: dict) -> Tuple[RealNum, RealNum, RealNum, RealNum]
 
    Finds the minimum and maximum X and Y values of a JSON or dictionary of PLAs.
    
@@ -63,7 +74,7 @@ Tools
    * **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
    
 
-.. py:function:: renderer.tools.plaJson.renderedIn(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int)
+.. py:function:: plaJson.renderedIn(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int) -> List[TileCoord]
    
    Like ``renderer.tools.lineToTiles()``, but for a JSON or dictionary of PLAs.
 
@@ -79,7 +90,7 @@ Tools
 
    * **list[tuple]** A list of tile coordinates
 
-.. py:function:: renderer.tools.plaJson.toGeoJson(plaList: dict, nodeList: dict, skinJson: dict):
+.. py:function:: plaJson.toGeoJson(plaList: dict, nodeList: dict, skinJson: dict) -> dict
 
    Converts PLA Json into GeoJson (with nodes and skin).
 
@@ -92,7 +103,7 @@ Tools
 
    * **dict** A GeoJson dictionary
 
-.. py:function:: renderer.tools.geoJson.toNodePlaJson(geoJson: dict)
+.. py:function:: geoJson.toNodePlaJson(geoJson: dict) -> Tuple[dict, dict]
 
    Converts GeoJson to PLA and Node JSONs.
 
@@ -103,7 +114,7 @@ Tools
    **Returns**
    * **tuple[dict]** Given in ``plaJson, nodeJson``
 
-.. py:function:: renderer.tools.tile.findEnds(coords: list)
+.. py:function:: tile.findEnds(coords: List[TileCoord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]
 
    Find the minimum and maximum x/y values of a set of tiles coords.
 
@@ -115,7 +126,7 @@ Tools
 
    * **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
 
-.. py:function:: renderer.tools.line.findEnds(coords: list)
+.. py:function:: line.findEnds(coords: List[Coord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]
 
    Find the minimum and maximum x/y values of a set of coords.
 
@@ -127,7 +138,7 @@ Tools
 
    * **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
 
-.. py:function:: renderer.tools.line.toTiles(coords: list, minZoom: int, maxZoom: int, maxZoomRange: int)
+.. py:function:: line.toTiles(coords: List[Coord], minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> TileCoord
 
    Generates tile coordinates from list of regular coordinates using ``renderer.tools.coordToTiles()``. Mainly for rendering whole PLAs.
 
@@ -142,7 +153,7 @@ Tools
 
    * **list[tuple]** A list of tile coordinates
 
-.. py:function:: renderer.tools.nodes.findPlasAttached(nodeId: str, plaList: dict)
+.. py:function:: nodes.findPlasAttached(nodeId: str, plaList: dict) -> List[Tuple[str, int]]
 
    Finds which PLAs attach to a node.
    
@@ -155,7 +166,7 @@ Tools
 
    * **list[tuple]** A tuple in the form of (plaId, posInNodeList)
 
-.. py:function:: renderer.tools.nodes.toCoords(nodes: list, nodeList: dict)
+.. py:function:: nodes.toCoords(nodes: List[str], nodeList: dict) -> List[Coord]
    
    Converts a list of nodes IDs into a list of coordinates with a node dictionary/JSON as its reference.
    
@@ -168,7 +179,7 @@ Tools
 
    * **list[tuple]** A list of coordinates
 
-.. py:function:: renderer.tools.coord.toTiles(coord: Union[list, tuple], minZoom: int, maxZoom: int, maxZoomRange: int)
+.. py:function:: coord.toTiles(coord: Coord, minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]
 
    Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
 
@@ -185,7 +196,9 @@ Tools
 
 Math Tools
 ----------
-.. py:function:: renderer.mathtools.midpoint(x1, y1, x2, y2, o[, n=1, returnBoth=False])
+.. py:currentmodule:: renderer.mathtools
+
+.. py:function:: midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: int=1, returnBoth: bool=False) -> List[Tuple[RealNum, RealNum, RealNum]]
 
    Calculates the midpoint of two lines, offsets the distance away from the line, and calculates the rotation of the line.
    
@@ -201,7 +214,7 @@ Math Tools
    * *returnBoth=False* **tuple** A list of tuples in the form of (x, y, rot)
    * *returnBoth=True* **list[tuple]** A list of lists of two tuples in the form of (x, y, rot)
    
-.. py:function:: renderer.mathtools.linesIntersect(x1: Union[int,float], y1: Union[int,float], x2: Union[int,float], y2: Union[int,float], x3: Union[int,float], y3: Union[int,float], x4: Union[int,float], y4: Union[int,float])
+.. py:function:: linesIntersect(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, x3: RealNum, y3: RealNum, x4: RealNum, y4: RealNum) -> bool:
    
    Finds if two segments intersect.
    
@@ -214,7 +227,7 @@ Math Tools
    
    * **bool** Whether the two segments intersect.
    
-.. py:function:: renderer.mathtools.pointInPoly(xp: Union[int,float], yp: Union[int,float], coords: list)
+.. py:function:: pointInPoly(xp: RealNum, yp: RealNum, coords: List[Coord]) -> bool
    
    Finds if a point is in a polygon.
    
@@ -227,7 +240,7 @@ Math Tools
    
    * **bool** Whether the point is inside the polygon.
    
-.. py:function:: renderer.mathtools.polyCenter(coords: list)
+.. py:function:: polyCenter(coords: List[Coord]) -> Coord
 
    Finds the center point of a polygon.
    
@@ -239,7 +252,7 @@ Math Tools
    
    * **tuple** The center of the polygon, given in (x,y)
    
-.. py:function:: renderer.mathtools.lineInBox(line: list, top: Union[int, float], bottom: Union[int, float], left: Union[int, float], right: Union[int, float])
+.. py:function:: lineInBox(line: List[Coord], top: RealNum, bottom: RealNum, left: RealNum, right: RealNum) -> bool
    
    Finds if any nodes of a line go within the box.
    
@@ -252,7 +265,7 @@ Math Tools
    
    * **bool** Whether any nodes of a line go within the box.
    
-.. py:function:: renderer.mathtools.dash(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], d: Union[int, float], g: Union[int, float] [, o=0, emptyStart=False])
+.. py:function:: dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: RealNum, o: RealNum=0, emptyStart: bool=False) -> List[List[Coord]]
    
    Finds points along a segment that are a specified distance apart.
    
@@ -268,7 +281,7 @@ Math Tools
    
    * **list[list[tuple]]** A list of points along the segment, given in [[(x1, y1), (x2, y2)], etc]
 
-.. py:function:: renderer.mathtools.dashOffset(coords: list, d: Union[int, float], g: Union[int, float])
+.. py:function:: dashOffset(coords: List[Coord], d: RealNum, g: RealNum) -> Tuple[RealNum, bool]
 
    Calculates the offsets on each coord of a line for a smoother dashing sequence.
 
@@ -282,7 +295,7 @@ Math Tools
 
    * **list[tuple]** The offsets of each coordinate, and whether to start the next segment with emptyStart, given in (offset, emptyStart)
 
-.. py:function:: renderer.mathtools.rotateAroundPivot(x: Union[int, float], y: Union[int, float], px: Union[int, float], py: Union[int, float], theta: Union[int, float])
+.. py:function:: rotateAroundPivot(x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta: RealNum) -> Coord
 
    Rotates a set of coordinates around a pivot point.
 
@@ -296,7 +309,7 @@ Math Tools
 
    * **tuple** The rotated coordinates, given in (x,y)
 
-.. py:function:: renderer.mathtools.pointsAway(x: Union[int, float], y: Union[int, float], d: Union[int, float], m: Union[int, float])
+.. py:function:: pointsAway(x: RealNum, y: RealNum, d: RealNum, m: RealNum) -> List[Coord]
 
    Finds two points that are a specified distance away from a specified point, all on a straight line.
 
@@ -310,8 +323,9 @@ Math Tools
 
 Validate
 --------
+.. py:currentmodule:: renderer.validate
 
-.. py:function:: renderer.validate.vCoords(coords: list)
+.. py:function:: vCoords(coords: List[Coord]) -> True
 
    Validates a list of coordinates.
    
@@ -323,7 +337,7 @@ Validate
    
    * **bool** Returns True if no errors
 
-.. py:function:: renderer.validate.vTileCoords(tiles: list, minZoom: int, maxZoom: int)
+.. py:function:: vTileCoords(tiles: List[TileCoord], minZoom: int, maxZoom: int) -> True
 
    Validates a list of tile coordinates.
    
@@ -337,7 +351,7 @@ Validate
    
    * **bool** Returns True if no errors
 
-.. py:function:: renderer.validate.vNodeList(nodes: list, nodeList: dict)
+.. py:function:: vNodeList(nodes: List[str], nodeList: dict) -> True
 
    Validates a list of node IDs.
    
@@ -350,7 +364,7 @@ Validate
    
    * **bool** Returns True if no errors
 
-.. py:function:: renderer.validate.vNodeJson(nodeList: dict)
+.. py:function:: vNodeJson(nodeList: dict) -> True
 
    Validates a dictionary/JSON of nodes.
    
@@ -362,7 +376,7 @@ Validate
    
    * **bool** Returns True if no errors
 
-.. py:function:: renderer.validate.vPlaJson(plaList: dict, nodeList: dict)
+.. py:function:: vPlaJson(plaList: dict, nodeList: dict) -> True
 
    Validates a dictionary/JSON of PLAs.
    
@@ -375,7 +389,7 @@ Validate
    
    * **bool** Returns True if no errors
 
-.. py:function:: renderer.validate.vSkinJson(skinJson: dict)
+.. py:function:: vSkinJson(skinJson: dict) -> True
    
    Validates a skin JSON file.
 
@@ -387,7 +401,7 @@ Validate
    
    * **bool** Returns True if no errors
 
-.. py:function:: renderer.validate.vGeoJson(geoJson: dict)
+.. py:function:: vGeoJson(geoJson: dict) -> True
    
    Validates a GeoJson file.
 
@@ -401,8 +415,9 @@ Validate
 
 Misc
 ----
+.. py:currentmodule:: renderer.misc
 
-.. py:function:: renderer.misc.getSkin(sname: str)
+.. py:function:: getSkin(name: str) -> dict
    
    Gets a skin from inside the package.
 
