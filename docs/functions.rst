@@ -31,7 +31,7 @@ Main
    :param int saveImages: whether to save the tile images in a folder or not
    :param str saveDir: the directory to save tiles in
    :param str assetsDir: the asset directory for the skin
-   :param int processes** The amount of processes to run for rendering
+   :param int processes: The amount of processes to run for rendering
    :param Optional[List[TileCoord]] tiles: a list of tiles to render, given in tuples of ``(z,x,y)`` where z = zoom and x,y = tile coordinates
    :param Tuple[RealNum, RealNum] offset: the offset to shift all node coordinates by, given as ``(x,y)``
 
@@ -44,7 +44,7 @@ Main
 
    Merges tiles rendered by ``renderer.render()``.
 
-   :param Union[str, Dict[str, Image]] images** Give in the form of ``"(tile coord)": (PIL Image)``, like the return value of ``renderer.render()``, or as a path to a directory.
+   :param Union[str, Dict[str, Image]] images: Give in the form of ``"(tile coord)": (PIL Image)``, like the return value of ``renderer.render()``, or as a path to a directory.
    :param bool saveImages: whether to save the tile imaegs in a folder or not
    :param str saveDir: the directory to save tiles in
    :param List[int] zoom: if left empty, automatically calculates all zoom values based on tiles; otherwise, the layers of zoom to merge.
@@ -98,7 +98,7 @@ Tools
 
    Converts GeoJson to PLA and Node JSONs.
 
-   :param dict geoJson** a GeoJson dictionary
+   :param dict geoJson: a GeoJson dictionary
 
    :returns: Given in ``plaJson, nodeJson``
    :rtype: Tuple[dict, dict]
@@ -129,7 +129,7 @@ Tools
 
    Generates tile coordinates from list of regular coordinates using ``renderer.tools.coordToTiles()``. Mainly for rendering whole PLAs.
 
-   :param List[Coord] coords** of coordinates in tuples of ``(x,y)``
+   :param List[Coord] coords: of coordinates in tuples of ``(x,y)``
    :param int minZoom: minimum zoom value
    :param int maxZoom: maximum zoom value
    :param RealNum maxZoomRange: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
