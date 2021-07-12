@@ -10,9 +10,15 @@ All Functions
   *  Coord = Tuple[RealNum, RealNum]
   *  TileCoord = Tuple[int, int, int]
 
+.. py:currentmodule:: renderer
+
+.. py:attribute:: __version__
+   :type: str
+
+   The version.
+
 Main
 ----
-.. py:currentmodule:: renderer
 
 .. py:function:: render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: RealNum, saveImages: bool=True, saveDir: str="", assetsDir: str=os.path.dirname(__file__)+"/skins/assets/", \
                  processes: int=1, tiles: Optional[List[TileCoord]]=None, offset: Tuple[RealNum, RealNum]=(0,0)) -> Dict[str, Image]
