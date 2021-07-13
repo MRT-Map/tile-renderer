@@ -1,5 +1,5 @@
 from typing import Union, List, Dict, Tuple, Optional
-from PIL import Image
+from PIL.Image import Image
 import time
 import glob
 import re
