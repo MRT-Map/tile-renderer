@@ -5,3 +5,4 @@ schema
 blessed
 pillow
 click
+tile-renderer
