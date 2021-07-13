@@ -4,412 +4,382 @@ All Functions
 **Useful information**
 
 * PLA = Points, Lines and Areas
+* Type aliases:
+
+  *  RealNum = Union[int, float]
+  *  Coord = Tuple[RealNum, RealNum]
+  *  TileCoord = Tuple[int, int, int]
+
+.. py:currentmodule:: renderer
+
+.. py:attribute:: __version__
+   :type: str
+
+   The version.
 
 Main
 ----
-.. py:function:: renderer.render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: int[, saveImages=True, saveDir="tiles/", assetsDir="skins/assets/", processes=1, tiles: list, offset=(0,0)])
+
+.. py:function:: render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: RealNum, saveImages: bool=True, saveDir: str="", assetsDir: str=os.path.dirname(__file__)+"/skins/assets/", \
+                 processes: int=1, tiles: Optional[List[TileCoord]]=None, offset: Tuple[RealNum, RealNum]=(0,0)) -> Dict[str, Image]
 
    Renders tiles from given coordinates and zoom values.
 
-   **Important:** Run this function under ``if __name__ == "__main__"``, or else there would be a lot of multiprocessing RuntimeErrors.
+   .. warning::
+      Run this function under ``if __name__ == "__main__"``, or else there would be a lot of multiprocessing RuntimeErrors.
 
-   **Parameters**
+   :param dict plaList: a dictionary of PLAs (see :ref:`formats`)
+   :param dict nodeList: a dictionary of nodes (see :ref:`formats`)
+   :param dict skinJson: a JSON of the skin used to render tiles (see :ref:`formats`)
+   :param int minZoom: minimum zoom value
+   :param int maxZoom: maximum zoom value
+   :param RealNum maxZoomRange: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
+   :param int saveImages: whether to save the tile images in a folder or not
+   :param str saveDir: the directory to save tiles in
+   :param str assetsDir: the asset directory for the skin
+   :param int processes: The amount of processes to run for rendering
+   :param Optional[List[TileCoord]] tiles: a list of tiles to render, given in tuples of ``(z,x,y)`` where z = zoom and x,y = tile coordinates
+   :param Tuple[RealNum, RealNum] offset: the offset to shift all node coordinates by, given as ``(x,y)``
 
-   * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
-   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
-   * dict **skinJson**: a JSON of the skin used to render tiles (see :ref:`formats`)
-   * int **minZoom**: minimum zoom value
-   * int **maxZoom**: maximum zoom value
-   * int **maxZoomRange**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
-   * int **saveImages** *(default: True)*: whether to save the tile images in a folder or not
-   * str **saveDir** *(default: "")*: the directory to save tiles in
-   * str **assetsDir** *(default: "renderer/skins/assets/")*: the asset directory for the skin
-   * int **processes** The amount of processes to run for rendering
-   * list[tuple] **tiles** *(default: None)*: a list of tiles to render, given in tuples of ``(z,x,y)`` where z = zoom and x,y = tile coordinates
-   * tuple[int/float] **offset** *(default: (0, 0))*: the offset to shift all node coordinates by, given as ``(x,y)``
+   :returns: Given in the form of ``"(tile coord)": (PIL Image)``
+   :rtype: Dict[str, Image]
 
-   **Returns**
+   :raises ValueError: if maxZoom < minZoom
 
-   * **dict** Given in the form of ``"(tile coord)": (PIL Image)``
-
-.. py:function:: renderer.tileMerge(images: Union[str, dict] [, saveImages=True, saveDir="tiles/", zoom=[]])
+.. py:function:: tileMerge(images: Union[str, Dict[str, Image]], saveImages: bool=True, saveDir: str="tiles/", zoom: List[int]=[]) -> List[Image]
 
    Merges tiles rendered by ``renderer.render()``.
 
-   **Parameters**
+   :param Union[str, Dict[str, Image]] images: Give in the form of ``"(tile coord)": (PIL Image)``, like the return value of ``renderer.render()``, or as a path to a directory.
+   :param bool saveImages: whether to save the tile imaegs in a folder or not
+   :param str saveDir: the directory to save tiles in
+   :param List[int] zoom: if left empty, automatically calculates all zoom values based on tiles; otherwise, the layers of zoom to merge.
 
-   * dict **images** Give in the form of ``"(tile coord)": (PIL Image)``, like the return value of ``renderer.render()``
-   * int **saveImages** *(default: True)*: whether to save the tile imaegs in a folder or not
-   * str **saveDir** *(default: "")*: the directory to save tiles in
-   * list **zoom** *(default: [])*: if left empty, automatically calculates all zoom values based on tiles; otherwise, the layers of zoom to merge.
-
-   **Returns**
-
-   * **dict** Given in the form of ``"(Zoom)": (PIL Image)``
+   :returns: Given in the form of ``"(Zoom)": (PIL Image)``
+   :rtype: List[Image]
 
 Tools
 -----
-.. py:function:: renderer.tools.plaJson.findEnds(plaList: dict, nodeList: dict)
+.. py:currentmodule:: renderer.tools.plaJson
+
+.. py:function:: findEnds(plaList: dict, nodeList: dict) -> Tuple[RealNum, RealNum, RealNum, RealNum]
 
    Finds the minimum and maximum X and Y values of a JSON or dictionary of PLAs.
    
-   **Parameters**
-
-   * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
-   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
+   :param dict plaList: a dictionary of PLAs (see :ref:`formats`)
+   :param dict nodeList: a dictionary of nodes (see :ref:`formats`)
    
-   **Returns**
-
-   * **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
+   :returns: Returns in the form `(xMax, xMin, yMax, yMin)`
+   :rtype: Tuple[RealNum, RealNum, RealNum, RealNum]
    
 
-.. py:function:: renderer.tools.plaJson.renderedIn(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: int)
+.. py:function:: renderedIn(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]
    
    Like ``renderer.tools.lineToTiles()``, but for a JSON or dictionary of PLAs.
 
-   **Parameters**
+   :param dict plaList: a dictionary of PLAs (see :ref:`formats`)
+   :param dict nodeList: a dictionary of nodes (see :ref:`formats`)
+   :param int minZoom: minimum zoom value
+   :param int maxZoom: maximum zoom value
+   :param RealNum maxZoomRange: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
 
-   * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
-   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
-   * int **minZoom**: minimum zoom value
-   * int **maxZoom**: maximum zoom value
-   * int **maxZoomValue**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
+   :returns: A list of tile coordinates
+   :rtype: List[TileCoord]
 
-   **Returns**
+   :raises ValueError: if maxZoom < minZoom
 
-   * **list[tuple]** A list of tile coordinates
-
-.. py:function:: renderer.tools.plaJson.toGeoJson(plaList: dict, nodeList: dict, skinJson: dict):
+.. py:function:: toGeoJson(plaList: dict, nodeList: dict, skinJson: dict) -> dict
 
    Converts PLA Json into GeoJson (with nodes and skin).
+   :param dict plaList: a dictionary of PLAs (see :ref:`formats`)
+   :param dict nodeList: a dictionary of nodes (see :ref:`formats`)
+   :param dict skinJson: a JSON of the skin (see :ref:`formats`)
 
-   **Parameters**
-   * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
-   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
-   * dict **skinJson**: a JSON of the skin (see :ref:`formats`)
+   :returns: A GeoJson dictionary
+   :rtype: dict
 
-   **Returns**
+.. py:currentmodule:: renderer.tools.geoJson
 
-   * **dict** A GeoJson dictionary
-
-.. py:function:: renderer.tools.geoJson.toNodePlaJson(geoJson: dict)
+.. py:function:: toNodePlaJson(geoJson: dict) -> Tuple[dict, dict]
 
    Converts GeoJson to PLA and Node JSONs.
 
-   **Parameters**
+   :param dict geoJson: a GeoJson dictionary
 
-   * dict **geoJson** a GeoJson dictionary
+   :returns: Given in ``plaJson, nodeJson``
+   :rtype: Tuple[dict, dict]
 
-   **Returns**
-   * **tuple[dict]** Given in ``plaJson, nodeJson``
+.. py:currentmodule:: renderer.tools.tile
 
-.. py:function:: renderer.tools.tile.findEnds(coords: list)
+.. py:function:: findEnds(coords: List[TileCoord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]
 
    Find the minimum and maximum x/y values of a set of tiles coords.
 
-   **Parameters**
+   :param List[TileCoord] coords: a list of tile coordinates, provide in a tuple of (z,x,y)
 
-   * list **coords**: a list of tile coordinates, provide in a tuple of (z,x,y)
+   :returns: Returns in the form `(xMax, xMin, yMax, yMin)`
+   :rtype: Tuple[RealNum, RealNum, RealNum, RealNum]
 
-   **Return**
+.. py:currentmodule:: renderer.tools.line
 
-   * **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
-
-.. py:function:: renderer.tools.line.findEnds(coords: list)
+.. py:function:: findEnds(coords: List[Coord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]
 
    Find the minimum and maximum x/y values of a set of coords.
 
-   **Parameters**
+   :param List[Coord] coords: a list of coordinates, provide in a tuple of (x,y)
 
-   * list **coords**: a list of coordinates, provide in a tuple of (x,y)
+   :returns: Returns in the form `(xMax, xMin, yMax, yMin)`
+   :rtype: Tuple[RealNum, RealNum, RealNum, RealNum]
 
-   **Return**
-
-   * **tuple** Returns in the form `(xMax, xMin, yMax, yMin)`
-
-.. py:function:: renderer.tools.line.toTiles(coords: list, minZoom: int, maxZoom: int, maxZoomRange: int)
+.. py:function:: toTiles(coords: List[Coord], minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]
 
    Generates tile coordinates from list of regular coordinates using ``renderer.tools.coordToTiles()``. Mainly for rendering whole PLAs.
 
-   **Parameters**
+   :param List[Coord] coords: of coordinates in tuples of ``(x,y)``
+   :param int minZoom: minimum zoom value
+   :param int maxZoom: maximum zoom value
+   :param RealNum maxZoomRange: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
 
-   * list[tuple] **coords** of coordinates in tuples of ``(x,y)``
-   * int **minZoom**: minimum zoom value
-   * int **maxZoom**: maximum zoom value
-   * int **maxZoomValue**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
+   :returns: A list of tile coordinates
+   :rtype: List[TileCoord]
 
-   **Returns**
+   :raises ValueError: if maxZoom < minZoom
+   :raises ValueError: if empty list of coords given
 
-   * **list[tuple]** A list of tile coordinates
+.. py:currentmodule:: renderer.tools.node
 
-.. py:function:: renderer.tools.nodes.findPlasAttached(nodeId: str, plaList: dict)
+.. py:function:: findPlasAttached(nodeId: str, plaList: dict) -> List[Tuple[str, int]]
 
    Finds which PLAs attach to a node.
    
-   **Parameters**
-
-   * str **nodeId**: the node to search for
-   * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
+   :param str nodeId: the node to search for
+   :param dict plaList: a dictionary of PLAs (see :ref:`formats`)
    
-   **Returns**
+   :returns: A tuple in the form of ``(plaId, posInNodeList)``
+   :rtype: List[Tuple[str, int]]
 
-   * **list[tuple]** A tuple in the form of (plaId, posInNodeList)
-
-.. py:function:: renderer.tools.nodes.toCoords(nodes: list, nodeList: dict)
+.. py:function:: toCoords(nodes: List[str], nodeList: dict) -> List[Coord]
    
    Converts a list of nodes IDs into a list of coordinates with a node dictionary/JSON as its reference.
    
-   **Parameters**
-
-   * list **nodes**: a list of node IDs
-   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
+   :param list nodes: a list of node IDs
+   :param dict nodeList: a dictionary of nodes (see :ref:`formats`)
    
-   **Returns**
+   :returns: A list of coordinates
+   :rtype: List[Coord]
 
-   * **list[tuple]** A list of coordinates
+   :raises KeyError: if a node does not exist
 
-.. py:function:: renderer.tools.coord.toTiles(coord: Union[list, tuple], minZoom: int, maxZoom: int, maxZoomRange: int)
+.. py:currentmodule:: renderer.tools.coord
+
+.. py:function:: toTiles(coord: Coord, minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]
 
    Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
 
-   **Parameters**
+   :param Coord coord: Coordinates provided in the form ``(x,y)``
+   :param int minZoom: minimum zoom value
+   :param int maxZoom: maximum zoom value
+   :param RealNum maxZoomRange: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
 
-   * list[int/float] **coord**: Coordinates provided in the form ``[x,y]``
-   * int **minZoom**: minimum zoom value
-   * int **maxZoom**: maximum zoom value
-   * int **maxZoomValue**: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``maxZoom`` of 5 and a ``maxZoomValue`` of 8 will make a 5-zoom tile cover 8 units
+   :returns: A list of tile coordinates
+   :rtype: List[TileCoord]
 
-   **Returns**
-
-   * **list[tuple]** A list of tile coordinates
+   :raises ValueError: if maxZoom < minZoom
 
 Math Tools
 ----------
-.. py:function:: renderer.mathtools.midpoint(x1, y1, x2, y2, o[, n=1, returnBoth=False])
+.. py:currentmodule:: renderer.mathtools
+
+.. py:function:: midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: int=1, returnBoth: bool=False) -> Union[List[Tuple[RealNum, RealNum, RealNum]], List[List[Tuple[RealNum, RealNum, RealNum]]]]
 
    Calculates the midpoint of two lines, offsets the distance away from the line, and calculates the rotation of the line.
+      
+   :param RealNum x1: the x-coordinate of the 1st point
+   :param RealNum y1: the y-coordinate of the 1st point
+   :param RealNum x2: the x-coordinate of the 2nd point
+   :param RealNum y2: the y-coordinate of the 2nd point
+   :param RealNum o: the offset from the line. If positive, the point above the line is returned; if negative, the point below the line is returned
+   :param int n: the number of midpoints on a single segment
+   :param bool returnBoth: if True, it will return both possible points.
+      
+   :return: A list of *(lists of, when returnBoth=True)* tuples in the form of (x, y, rot)
+   :rtype: List[Tuple[RealNum, RealNum, RealNum]] *when returnBoth=False,* List[List[Tuple[RealNum, RealNum, RealNum]]] *when returnBoth=True*
    
-   **Parameters**
-   
-   * int/float **x1, y1, x2, y2**: the coordinates of two points
-   * int/float **o**: the offset from the line. If positive, the point above the line is returned; if negative, the point below the line is returned
-   * int/float **n** *(default=1)*: the number of midpoints on a single segment
-   * bool **returnBoth** *(default=False)*: if True, it will return both possible points.
-   
-   **Returns**
-   
-   * *returnBoth=False* **tuple** A list of tuples in the form of (x, y, rot)
-   * *returnBoth=True* **list[tuple]** A list of lists of two tuples in the form of (x, y, rot)
-   
-.. py:function:: renderer.mathtools.linesIntersect(x1: Union[int,float], y1: Union[int,float], x2: Union[int,float], y2: Union[int,float], x3: Union[int,float], y3: Union[int,float], x4: Union[int,float], y4: Union[int,float])
+.. py:function:: linesIntersect(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, x3: RealNum, y3: RealNum, x4: RealNum, y4: RealNum) -> bool:
    
    Finds if two segments intersect.
+    
+   :param RealNum x1: the x-coordinate of the 1st point of the 1st segment.
+   :param RealNum y1: the y-coordinate of the 1st point of the 1st segment.
+   :param RealNum x2: the x-coordinate of the 2nd point of the 1st segment.
+   :param RealNum y2: the y-coordinate of the 2nd point of the 1st segment.
+   :param RealNum x3: the x-coordinate of the 1st point of the 2nd segment.
+   :param RealNum y3: the y-coordinate of the 1st point of the 2nd segment.
+   :param RealNum x4: the x-coordinate of the 2nd point of the 2nd segment.
+   :param RealNum y4: the y-coordinate of the 2nd point of the 2nd segment.
+      
+   :returns: Whether the two segments intersect.
+   :rtype: bool
    
-   **Parameters**
-   
-   * int/float **x1, y1, x2, y2**: the coordinates of two points of the first segment.
-   * int/float **x3, y3, x4, y4**: the coordinates of two points of the second segment.
-   
-   **Returns**
-   
-   * **bool** Whether the two segments intersect.
-   
-.. py:function:: renderer.mathtools.pointInPoly(xp: Union[int,float], yp: Union[int,float], coords: list)
+.. py:function:: pointInPoly(xp: RealNum, yp: RealNum, coords: List[Coord]) -> bool
    
    Finds if a point is in a polygon.
+      
+   :param RealNum xp: the x-coordinate of the point.
+   :param RealNum yp: the y-coordinate of the point.
+   :param list List[Coord]: the coordinates of the polygon; give in (x,y)
+      
+   :returns: Whether the point is inside the polygon.
+   :rtype: bool
    
-   **Parameters**
-   
-   * int/float **xp, yp**: the coordinates of the point.
-   * list **coords**: the coordinates of the polygon; give in (x,y)
-   
-   **Returns**
-   
-   * **bool** Whether the point is inside the polygon.
-   
-.. py:function:: renderer.mathtools.polyCenter(coords: list)
+.. py:function:: polyCenter(coords: List[Coord]) -> Coord
 
    Finds the center point of a polygon.
+      
+   :param List[Coord] coords: the coordinates of the polygon; give in ``(x,y)``
+      
+   :returns: The center of the polygon, given in ``(x,y)``
+   :rtype: Coord
    
-   **Parameters**
-   
-   * list **coords**: the coordinates of the polygon; give in (x,y)
-   
-   **Returns**
-   
-   * **tuple** The center of the polygon, given in (x,y)
-   
-.. py:function:: renderer.mathtools.lineInBox(line: list, top: Union[int, float], bottom: Union[int, float], left: Union[int, float], right: Union[int, float])
+.. py:function:: lineInBox(line: List[Coord], top: RealNum, bottom: RealNum, left: RealNum, right: RealNum) -> bool
    
    Finds if any nodes of a line go within the box.
+      
+   :param List[Coord] line: the line to check for
+   :param RealNum top: the bounds of the box
+   :param RealNum bottom: the bounds of the box
+   :param RealNum left: the bounds of the box
+   :param RealNum right: the bounds of the box
+      
+   :returns: Whether any nodes of a line go within the box.
+   :rtype: bool
    
-   **Parameters**
-   
-   * list **line**: the line to check for
-   * int/float **top, bottom, left, right**: the bounds of the box
-   
-   **Returns**
-   
-   * **bool** Whether any nodes of a line go within the box.
-   
-.. py:function:: renderer.mathtools.dash(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], d: Union[int, float], g: Union[int, float] [, o=0, emptyStart=False])
+.. py:function:: dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: RealNum, o: RealNum=0, emptyStart: bool=False) -> List[List[Coord]]
    
    Finds points along a segment that are a specified distance apart.
-   
-   **Parameters**
-   
-   * int/float **x1, y1, x2, y2**: the coordinates of two points of the segment
-   * int/float **d**: the length of a single dash
-   * int/float **g**: the length of the gap between dashes
-   * int/float **o** *(default=0)*: the offset from (x1,y1) towards (x2,y2) before dashes are calculated
-   * bool **emptyStart** *(default=False)*: Whether to start the line from (x1,y1) empty before the start of the next dash
-   
-   **Returns**
-   
-   * **list[list[tuple]]** A list of points along the segment, given in [[(x1, y1), (x2, y2)], etc]
+      
+   :param RealNum x1: the x-coordinate of the 1st point
+   :param RealNum y1: the y-coordinate of the 1st point
+   :param RealNum x2: the x-coordinate of the 2nd point
+   :param RealNum y2: the y-coordinate of the 2nd point
+   :param RealNum d: the length of a single dash
+   :param RealNum g: the length of the gap between dashes
+   :param RealNum o: the offset from (x1,y1) towards (x2,y2) before dashes are calculated
+   :param bool emptyStart: Whether to start the line from (x1,y1) empty before the start of the next dash
+      
+   :returns: A list of points along the segment, given in [[(x1, y1), (x2, y2)], etc]
+   :rtype: List[List[Coord]]
 
-.. py:function:: renderer.mathtools.dashOffset(coords: list, d: Union[int, float], g: Union[int, float])
+.. py:function:: dashOffset(coords: List[Coord], d: RealNum, g: RealNum) -> Tuple[RealNum, bool]
 
    Calculates the offsets on each coord of a line for a smoother dashing sequence.
 
-   **Parameters**
+   :param List[Coord] coords: the coords of the line
+   :param RealNum d: the length of a single dash
+   :param RealNum g: the length of the gap between dashes
 
-   * list **coords**: the coords of the line
-   * int/float **d**: the length of a single dash
-   * int/float **g**: the length of the gap between dashes
+   :returns: The offsets of each coordinate, and whether to start the next segment with emptyStart, given in (offset, emptyStart)
+   :rtype: Tuple[RealNum, bool]
 
-   **Returns**
-
-   * **list[tuple]** The offsets of each coordinate, and whether to start the next segment with emptyStart, given in (offset, emptyStart)
-
-.. py:function:: renderer.mathtools.rotateAroundPivot(x: Union[int, float], y: Union[int, float], px: Union[int, float], py: Union[int, float], theta: Union[int, float])
+.. py:function:: rotateAroundPivot(x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta: RealNum) -> Coord
 
    Rotates a set of coordinates around a pivot point.
 
-   **Parameters**
+   :param RealNum x: the x-coordinate to be rotated
+   :param RealNum y: the y-coordinate to be rotated
+   :param RealNum px: the x-coordinate of the pivot
+   :param RealNum py: the y-coordinate of the pivot
+   :param RealNum theta: how many **degrees** to rotate
 
-   * int/float **x, y**: the coordinates to be rotated
-   * int/float **px, py**: the coordinates of the pivot
-   * int/float **theta**: how many **degrees** to rotate
+   :returns: The rotated coordinates, given in (x,y)
+   :rtype: Coord
 
-   **Returns**
-
-   * **tuple** The rotated coordinates, given in (x,y)
-
-.. py:function:: renderer.mathtools.pointsAway(x: Union[int, float], y: Union[int, float], d: Union[int, float], m: Union[int, float])
+.. py:function:: pointsAway(x: RealNum, y: RealNum, d: RealNum, m: RealNum) -> List[Coord]
 
    Finds two points that are a specified distance away from a specified point, all on a straight line.
 
-   **Parameters**
-   * int/float **x, y**: the coordinates of the original point
-   * int/float **d**: the distance the two points from the original point
-   * int/float **m**: the gradient of the line. Give ``None`` for a gradient of undefined.
+   :param RealNum x, y: the coordinates of the original point
+   :param RealNum d: the distance the two points from the original point
+   :param RealNum m: the gradient of the line. Give ``None`` for a gradient of undefined.
 
-   **Returns**
-   * **list[tuple]** Given in [(x1, y1), (x2, y2)]
+   :returns: Given in [(x1, y1), (x2, y2)]
+   :rtype: List[Coord]
 
 Validate
 --------
+.. py:currentmodule:: renderer.validate
 
-.. py:function:: renderer.validate.vCoords(coords: list)
+.. py:function:: vCoords(coords: List[Coord]) -> True
 
    Validates a list of coordinates.
-   
-   **Parameters**
-   
-   * list **coords**: a list of coordinates.
-   
-   **Returns**
-   
-   * **bool** Returns True if no errors
+      
+   :param List[Coord] coords: a list of coordinates.
+      
+   :returns: Returns True if no errors
 
-.. py:function:: renderer.validate.vTileCoords(tiles: list, minZoom: int, maxZoom: int)
+.. py:function:: vTileCoords(tiles: List[TileCoord], minZoom: int, maxZoom: int) -> True
 
    Validates a list of tile coordinates.
-   
-   **Parameters**
-   
-   * list **tiles**: a list of tile coordinates.
-   * int **minZoom**: minimum zoom value
-   * int **maxZoom**: maximum zoom value
-   
-   **Returns**
-   
-   * **bool** Returns True if no errors
+      
+   :param List[TileCoord] tiles: a list of tile coordinates.
+   :param int minZoom: minimum zoom value
+   :param int maxZoom: maximum zoom value
+      
+   :returns: Returns True if no errors
 
-.. py:function:: renderer.validate.vNodeList(nodes: list, nodeList: dict)
+.. py:function:: vNodeList(nodes: List[str], nodeList: dict) -> True
 
    Validates a list of node IDs.
-   
-   **Parameters**
-   
-   * list **nodes**: a list of node IDs.
-   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
-   
-   **Returns**
-   
-   * **bool** Returns True if no errors
+      
+   :param List[str] nodes: a list of node IDs.
+   :param dict nodeList: a dictionary of nodes (see :ref:`formats`)
+      
+   :returns: Returns True if no errors
 
-.. py:function:: renderer.validate.vNodeJson(nodeList: dict)
+.. py:function:: vNodeJson(nodeList: dict) -> True
 
    Validates a dictionary/JSON of nodes.
-   
-   **Parameters**
-   
-   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
-   
-   **Returns**
-   
-   * **bool** Returns True if no errors
+      
+   :param dict nodeList: a dictionary of nodes (see :ref:`formats`)
+      
+   :returns: Returns True if no errors
 
-.. py:function:: renderer.validate.vPlaJson(plaList: dict, nodeList: dict)
+.. py:function:: vPlaJson(plaList: dict, nodeList: dict) -> True
 
    Validates a dictionary/JSON of PLAs.
-   
-   **Parameters**
-   
-   * dict **plaList**: a dictionary of PLAs (see :ref:`formats`)
-   * dict **nodeList**: a dictionary of nodes (see :ref:`formats`)
-   
-   **Returns**
-   
-   * **bool** Returns True if no errors
+      
+   :param dict plaList: a dictionary of PLAs (see :ref:`formats`)
+   :param dict nodeList: a dictionary of nodes (see :ref:`formats`)
+      
+   :returns: Returns True if no errors
 
-.. py:function:: renderer.validate.vSkinJson(skinJson: dict)
+.. py:function:: vSkinJson(skinJson: dict) -> True
    
    Validates a skin JSON file.
 
-   **Parameters**
-
-   * dict **skinJson**: the skin JSON file
-
-   **Returns**
+   :param dict skinJson: the skin JSON file
    
-   * **bool** Returns True if no errors
+   :returns: Returns True if no errors
 
-.. py:function:: renderer.validate.vGeoJson(geoJson: dict)
+.. py:function:: vGeoJson(geoJson: dict) -> True
    
    Validates a GeoJson file.
 
-   **Parameters**
-
-   * dict **geoJson**: the GeoJson file
-
-   **Returns**
+   :param dict geoJson: the GeoJson file
    
-   * **bool** Returns True if no errors
+   :returns: Returns True if no errors
 
 Misc
 ----
+.. py:currentmodule:: renderer.misc
 
-.. py:function:: renderer.misc.getSkin(sname: str)
+.. py:function:: getSkin(name: str) -> dict
    
    Gets a skin from inside the package.
 
-   **Parameters**
-
-   * str **name**: the name of the skin
-
-   **Returns**
+   :param str name: the name of the skin
    
-   * **dict** The skin JSON
+   :returns: The skin JSON
+   :rtype: dict
+
+   :raises FileNotFoundError: if skin does not exist

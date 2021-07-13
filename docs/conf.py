@@ -22,7 +22,7 @@ copyright = '2021, The MRT Mapping Team'
 author = '7d'
 
 # The full version, including alpha/beta/rc tags
-release = "v1.3"
+release = "v1.3.1"
 
 # -- General configuration ---------------------------------------------------
 
@@ -30,7 +30,8 @@ release = "v1.3"
 # extensions coming with Sphinx (named 'sphinx.ext.*') or your custom
 # ones.
 extensions = [
-    "sphinx_rtd_theme"
+    "sphinx_rtd_theme",
+    "sphinxcontrib.programoutput"
 ]
 
 # Add any paths that contain templates here, relative to this directory.

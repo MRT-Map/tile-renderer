@@ -1,12 +1,17 @@
 import blessed
 from schema import Schema, And, Or, Regex, Optional
+from typing import Union, List, Tuple
 
 import renderer.internals.internal as internal # type: ignore
 import renderer.tools as tools
 import renderer.mathtools as mathtools
 import renderer.misc as misc
 
-def vCoords(coords: list):
+RealNum = Union[int, float]
+Coord = Tuple[RealNum, RealNum]
+TileCoord = Tuple[int, int, int]
+
+def vCoords(coords: List[Coord]) -> True:
     """
     Validates a list of coordinates.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.coords
@@ -21,7 +26,7 @@ def vCoords(coords: list):
                 raise TypeError(f"Coordinate {n} is not type 'int/float'")
     return True
 
-def vTileCoords(tiles: list, minZoom: int, maxZoom: int):
+def vTileCoords(tiles: List[TileCoord], minZoom: int, maxZoom: int) -> True:
     """
     Validates a list of tile coordinates.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.tileCoords
@@ -40,7 +45,7 @@ def vTileCoords(tiles: list, minZoom: int, maxZoom: int):
             raise TypeError(f"Zoom value {item[0]} is not an integer")
     return True
 
-def vNodeList(nodes: list, nodeList: dict):
+def vNodeList(nodes: List[str], nodeList: dict) -> True:
     """
     Validates a list of node IDs.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.nodeList
@@ -51,7 +56,7 @@ def vNodeList(nodes: list, nodeList: dict):
 
     return True
 
-def vNodeJson(nodeList: dict):
+def vNodeJson(nodeList: dict) -> True:
     """
     Validates a dictionary/JSON of nodes.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.nodeJson
@@ -66,7 +71,7 @@ def vNodeJson(nodeList: dict):
     schema.validate(nodeList)
     return True
 
-def vPlaJson(plaList: dict, nodeList: dict):
+def vPlaJson(plaList: dict, nodeList: dict) -> True:
     """
     Validates a dictionary/JSON of PLAs.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.plaJson
@@ -85,7 +90,7 @@ def vPlaJson(plaList: dict, nodeList: dict):
     schema.validate(plaList)
     return True
             
-def vSkinJson(skinJson: dict):
+def vSkinJson(skinJson: dict) -> True:
     """
     Validates a skin JSON file.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.skinJson
@@ -213,7 +218,7 @@ def vSkinJson(skinJson: dict):
                         print(term.red(f"Type {n}, range {z}, step {step['layer']}"))
                         raise e
 
-def vGeoJson(geoJson: dict):
+def vGeoJson(geoJson: dict) -> True:
     mainSchema = Schema({
         "type": "FeatureCollection", 
         "features": [{

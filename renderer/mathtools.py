@@ -1,6 +1,6 @@
 import math
 import sympy as sym
-from typing import Union
+from typing import Union, List, Dict, Tuple
 import numpy as np
 
 import renderer.internals.internal as internal # type: ignore
@@ -8,7 +8,11 @@ import renderer.tools as tools
 import renderer.validate as validate
 import renderer.misc as misc
 
-def midpoint(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], o: Union[int, float], n=1, returnBoth=False):
+RealNum = Union[int, float]
+Coord = Tuple[RealNum, RealNum]
+TileCoord = Tuple[int, int, int]
+
+def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: int=1, returnBoth: bool=False) -> Union[List[Tuple[RealNum, RealNum, RealNum]], List[List[Tuple[RealNum, RealNum, RealNum]]]]:
     """
     Calculates the midpoint of two lines, offsets the distance away from the line, and calculates the rotation of the line.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.midpoint
@@ -53,7 +57,7 @@ def midpoint(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float]
             points.append((x4, y4, rot))
     return points
 
-def linesIntersect(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], x3: Union[int, float], y3: Union[int, float], x4: Union[int, float], y4: Union[int, float]):
+def linesIntersect(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, x3: RealNum, y3: RealNum, x4: RealNum, y4: RealNum) -> bool:
     """
     Finds if two segments intersect.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.linesIntersect
@@ -95,7 +99,7 @@ def linesIntersect(x1: Union[int, float], y1: Union[int, float], x2: Union[int, 
     y1 = round(y1, 10); y2 = round(y2, 10); y3 = round(y3, 10); y4 = round(y4, 10); y5 = round(y5, 10)
     return False if (x5>max(x1,x2) or x5<min(x1,x2) or y5>max(y1,y2) or y5<min(y1,y2) or x5>max(x3,x4) or x5<min(x3,x4) or y5>max(y3,y4) or y5<min(y3,y4)) else True
 
-def pointInPoly(xp: Union[int, float], yp: Union[int, float], coords: list):
+def pointInPoly(xp: RealNum, yp: RealNum, coords: List[Coord]) -> bool:
     """
     Finds if a point is in a polygon. WARNING: If your polygon has a lot of corners, this will take very long.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.pointInPoly
@@ -119,7 +123,7 @@ def pointInPoly(xp: Union[int, float], yp: Union[int, float], coords: list):
                 cross += 1
     return cross % 2 == 1
             
-def polyCenter(coords: list):
+def polyCenter(coords: List[Coord]) -> Coord:
     """
     Finds the center point of a polygon.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.polyCenter
@@ -133,7 +137,7 @@ def polyCenter(coords: list):
             my.append(y3)
     return sum(mx)/len(mx), sum(my)/len(my)
 
-def lineInBox(line: list, top: Union[int, float], bottom: Union[int, float], left: Union[int, float], right: Union[int, float]):
+def lineInBox(line: List[Coord], top: RealNum, bottom: RealNum, left: RealNum, right: RealNum) -> bool:
     """
     Finds if any nodes of a line go within the box.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.lineInBox
@@ -149,7 +153,7 @@ def lineInBox(line: list, top: Union[int, float], bottom: Union[int, float], lef
             return True
     return False
 
-def dash(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2: Union[int, float], d: Union[int, float], g: Union[int, float], o=0, emptyStart=False):
+def dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: RealNum, o: RealNum=0, emptyStart: bool=False) -> List[List[Coord]]:
     """
     Finds points along a segment that are a specified distance apart.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.dash
@@ -208,7 +212,7 @@ def dash(x1: Union[int, float], y1: Union[int, float], x2: Union[int, float], y2
 
     return dash
 
-def dashOffset(coords: list, d: Union[int, float], g: Union[int, float]):
+def dashOffset(coords: List[Coord], d: RealNum, g: RealNum) -> Tuple[RealNum, bool]:
     """
     Calculates the offsets on each coord of a line for a smoother dashing sequence.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.dashOffset
@@ -254,7 +258,7 @@ def dashOffset(coords: list, d: Union[int, float], g: Union[int, float]):
         offsets.append((round(o, 2), emptyStart))
     return offsets
 
-def rotateAroundPivot(x: Union[int, float], y: Union[int, float], px: Union[int, float], py: Union[int, float], theta: Union[int, float]):
+def rotateAroundPivot(x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta: RealNum) -> Coord:
     """
     Rotates a set of coordinates around a pivot point.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.rotateAroundPivot
@@ -269,7 +273,7 @@ def rotateAroundPivot(x: Union[int, float], y: Union[int, float], px: Union[int,
     ny += py
     return nx, ny
 
-def pointsAway(x: Union[int, float], y: Union[int, float], d: Union[int, float], m: Union[int, float]):
+def pointsAway(x: RealNum, y: RealNum, d: RealNum, m: RealNum) -> List[Coord]:
     """
     Finds two points that are a specified distance away from a specified point, all on a straight line.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.pointsAway

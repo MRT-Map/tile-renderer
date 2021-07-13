@@ -7,7 +7,7 @@ with open("README.md", "r", encoding="utf-8") as fh:
 setup(
   name = 'tile-renderer',
   packages = ['renderer'],
-  version = renderer.__version__+".0.5",
+  version = renderer.__version__+".1",
   license ='gpl-3.0',
   description = 'Leaflet.js streetmap tile renderer',
   long_description=long_description,
@@ -39,4 +39,7 @@ setup(
     'Programming Language :: Python :: 3.8',
     'Programming Language :: Python :: 3.9',
   ],
+  entry_points = {
+    'console_scripts': ['renderer=renderer.__main__:args'],
+  }
 )

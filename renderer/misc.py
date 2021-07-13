@@ -5,7 +5,7 @@ import renderer.tools as tools
 import renderer.validate as validate
 import renderer.mathtools as mathtools
 
-def getSkin(name: str):
+def getSkin(name: str) -> dict:
     """
     Gets the skin JSON, given the name.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.misc.getSkin

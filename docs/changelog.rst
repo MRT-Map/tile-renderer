@@ -1,6 +1,13 @@
 Changelog
 =========
 
+* v1.3.1 (13/7/21)
+
+  * Super small bugfixes that you probably won't notice
+  * Added type hints to all functions
+  * Redid the documentation
+  * The renderer CLI can now be accessed as just ``renderer`` instead of ``python -m renderer``
+
 * **v1.3 (26/6/21)**
 
   * New subcommands in CLI:
