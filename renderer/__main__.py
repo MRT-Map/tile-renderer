@@ -1,10 +1,10 @@
 import argparse
 import glob
-import renderer
 import blessed
 import os
 
 def args():
+    import renderer
     term = blessed.Terminal()
 
     parser = argparse.ArgumentParser()

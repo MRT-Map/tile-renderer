@@ -1,5 +1,5 @@
 from typing import Union, List, Dict, Tuple, Optional
-from PIL.Image import Image
+from PIL import Image
 import time
 import glob
 import re
@@ -19,7 +19,7 @@ RealNum = Union[int, float]
 Coord = Tuple[RealNum, RealNum]
 TileCoord = Tuple[int, int, int]
 
-def tileMerge(images: Union[str, Dict[str, Image]], saveImages: bool=True, saveDir: str="tiles/", zoom: List[int]=[]) -> List[Image]:
+def tileMerge(images: Union[str, Dict[str, Image.Image]], saveImages: bool=True, saveDir: str="tiles/", zoom: List[int]=[]) -> List[Image.Image]:
     """
     Merges tiles rendered by renderer.render().
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#tileMerge
@@ -84,7 +84,7 @@ def tileMerge(images: Union[str, Dict[str, Image]], saveImages: bool=True, saveD
     return tileReturn
 
 def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: RealNum, saveImages: bool=True, saveDir: str="", assetsDir: str=os.path.dirname(__file__)+"/skins/assets/", \
-    processes: int=1, tiles: Optional[List[TileCoord]]=None, offset: Tuple[RealNum, RealNum]=(0,0)) -> Dict[str, Image]:
+    processes: int=1, tiles: Optional[List[TileCoord]]=None, offset: Tuple[RealNum, RealNum]=(0,0)) -> Dict[str, Image.Image]:
     """
     Renders tiles from given coordinates and zoom values.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.render
