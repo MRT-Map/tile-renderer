@@ -19,219 +19,228 @@ RealNum = Union[int, float]
 Coord = Tuple[RealNum, RealNum]
 TileCoord = Tuple[int, int, int]
 
-def tileMerge(images: Union[str, Dict[str, Image.Image]], saveImages: bool=True, saveDir: str="tiles/", zoom: List[int]=[]) -> List[Image.Image]:
+def tile_merge(images: Union[str, Dict[str, Image.Image]], save_images: bool=True, save_dir: str="tiles/",
+               zoom: Optional[List[int]]=None) -> Dict[str, Image.Image]:
     """
     Merges tiles rendered by renderer.render().
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#tileMerge
     """
+    if zoom is None: zoom = []
     term = blessed.Terminal()
-    imageDict = {}
-    tileReturn = {}
+    image_dict = {}
+    tile_return = {}
     if isinstance(images, str):
         print(term.green("Retrieving images..."), end="\r")
         for d in glob.glob(glob.escape(images)+"*.png"):
             regex = re.search(r"(-?\d+, -?\d+, -?\d+)\.png$", d) # pylint: disable=anomalous-backslash-in-string
-            if regex == None:
+            if regex is None:
                 continue
             coord = regex.group(1)
             i = Image.open(d)
-            imageDict[coord] = i
+            image_dict[coord] = i
             with term.location(): print(term.green("Retrieving images... ") + f"Retrieved {coord}", end=term.clear_eos+"\r")
     else:
-        imageDict = images
+        image_dict = images
     print(term.green("\nAll images retrieved"))
     print(term.green("Determined zoom levels..."), end=" ")
-    if zoom == []:
-        for c in imageDict.keys():
-            z = internal.strToTuple(c)[0]
-            if not z in zoom:
+    if not zoom:
+        for c in image_dict.keys():
+            z = internal._str_to_tuple(c)[0]
+            if z not in zoom:
                 zoom.append(z)
     print(term.green("determined"))
     for z in zoom:
         print(term.green(f"Zoom {z}: ") + "Determining tiles to be merged", end=term.clear_eos+"\r")
-        toMerge = {}
-        for c, i in imageDict.items():
-            #i = imageDict[c]
-            if internal.strToTuple(c)[0] == z:
-                toMerge[c] = i
+        to_merge = {}
+        for c, i in image_dict.items():
+            if internal._str_to_tuple(c)[0] == z:
+                to_merge[c] = i
 
-        tileCoords = [internal.strToTuple(s) for s in toMerge.keys()]
-        #print(tileCoords)
-        xMax, xMin, yMax, yMin = tools.tile.findEnds(tileCoords)
-        #print(imageDict.values())
-        tileSize = list(imageDict.values())[0].size[0]
-        i = Image.new('RGBA', (tileSize*(xMax-xMin+1), tileSize*(yMax-yMin+1)), (0, 0, 0, 0))
+        tile_coords = [internal._str_to_tuple(s) for s in to_merge.keys()]
+        x_max, x_min, y_max, y_min = tools.tile.find_ends(tile_coords)
+        tile_size = list(image_dict.values())[0].size[0]
+        i = Image.new('RGBA', (tile_size*(x_max-x_min+1), tile_size*(y_max-y_min+1)), (0, 0, 0, 0))
         px = 0
         py = 0
         merged = 0
         start = time.time() * 1000
-        for x in range(xMin, xMax+1):
-            for y in range(yMin, yMax+1):
-                if f"{z}, {x}, {y}" in toMerge.keys():
-                    i.paste(toMerge[f"{z}, {x}, {y}"], (px, py))
+        for x in range(x_min, x_max+1):
+            for y in range(y_min, y_max+1):
+                if f"{z}, {x}, {y}" in to_merge.keys():
+                    i.paste(to_merge[f"{z}, {x}, {y}"], (px, py))
                     merged += 1
-                    with term.location(): print(term.green(f"Zoom {z}: ") + f"{internal.percentage(merged, len(toMerge.keys()))}% | {internal.msToTime(internal.timeRemaining(start, merged, len(toMerge.keys())))} left | " + term.bright_black(f"Pasted {z}, {x}, {y}"), end=term.clear_eos+"\r")
-                py += tileSize
-            px += tileSize
+                    with term.location(): print(term.green(f"Zoom {z}: ")
+                                                + f"{internal._percentage(merged, len(to_merge.keys()))}% |"
+                                                + f"{internal.ms_to_time(internal._time_remaining(start, merged, len(to_merge.keys())))} left | "
+                                                + term.bright_black(f"Pasted {z}, {x}, {y}"), end=term.clear_eos+"\r")
+                py += tile_size
+            px += tile_size
             py = 0
-        #tileReturn[tilePlas] = im
-        if saveImages:
+        #tile_return[tile_components] = im
+        if save_images:
             print(term.green(f"Zoom {z}: ") + "Saving image", end=term.clear_eos+"\r")
-            i.save(f'{saveDir}merge_{z}.png', 'PNG')
-        tileReturn[str(z)] = i
-        
-    print(term.green("\nAll merges complete"))
-    return tileReturn
+            i.save(f'{save_dir}merge_{z}.png', 'PNG')
+        tile_return[str(z)] = i
 
-def render(plaList: dict, nodeList: dict, skinJson: dict, minZoom: int, maxZoom: int, maxZoomRange: RealNum, saveImages: bool=True, saveDir: str="", assetsDir: str=os.path.dirname(__file__)+"/skins/assets/", \
-    processes: int=1, tiles: Optional[List[TileCoord]]=None, offset: Tuple[RealNum, RealNum]=(0,0)) -> Dict[str, Image.Image]:
+    print(term.green("\nAll merges complete"))
+    return tile_return
+
+def render(component_json: dict, node_json: dict, skin_json: dict, min_zoom: int, max_zoom: int, max_zoom_range: RealNum,
+           save_images: bool=True, save_dir: str= "", assets_dir: str= os.path.dirname(__file__) + "/skins/assets/",
+           processes: int=1, tiles: Optional[List[TileCoord]]=None, offset: Tuple[RealNum, RealNum]=(0, 0)) -> Dict[str, Image.Image]:
     """
     Renders tiles from given coordinates and zoom values.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.render
     """
-    if maxZoom < minZoom:
+    if max_zoom < min_zoom:
         raise ValueError("Max zoom value is greater than min zoom value")
     term = blessed.Terminal()
 
     # validation
     print(term.green("Validating skin..."), end=" ")
-    validate.vSkinJson(skinJson)
+    validate.v_skin_json(skin_json)
     print(term.green("validated\nValidating nodes..."), end=" ")
-    validate.vNodeJson(nodeList)
-    print(term.green("validated\nValidating PLAs..."), end=" ")
-    validate.vPlaJson(plaList, nodeList)
-    
+    validate.v_node_json(node_json)
+    print(term.green("validated\nValidating components..."), end=" ")
+    validate.v_component_json(component_json, node_json)
 
     # offset
-    for node in nodeList.keys():
-        nodeList[node]['x'] += offset[0]
-        nodeList[node]['y'] += offset[1]
+    for node in node_json.keys():
+        node_json[node]['x'] += offset[0]
+        node_json[node]['y'] += offset[1]
 
     print(term.green("validated\nFinding tiles..."), end=" ")
     #finds which tiles to render
-    if tiles != None:
-        validate.vTileCoords(tiles, minZoom, maxZoom)
+    if tiles is not None:
+        validate.v_tile_coords(tiles, min_zoom, max_zoom)
     else: #finds box of tiles
-        tiles = tools.plaJson.renderedIn(plaList, nodeList, minZoom, maxZoom, maxZoomRange)
+        tiles = tools.component_json.rendered_in(component_json, node_json, min_zoom, max_zoom, max_zoom_range)
 
-    print(term.green("found\nRemoving PLAs with unknown type..."), end=" ")
-    # remove PLAs whose type is not in skin
-    removeList = []
-    for pla in plaList.keys():
-        if not plaList[pla]['type'].split(' ')[0] in skinJson['order']:
-            removeList.append(pla)
-    for pla in removeList:
-        del plaList[pla]
+    print(term.green("found\nRemoving components with unknown type..."), end=" ")
+    # remove components whose type is not in skin
+    remove_list = []
+    for component in component_json.keys():
+        if not component_json[component]['type'].split(' ')[0] in skin_json['order']:
+            remove_list.append(component)
+    for component in remove_list:
+        del component_json[component]
     print(term.green("removed"))
-    if removeList != []:
-        print(term.yellow('The following PLAs were removed:'))
-        print(term.yellow(" | ".join(removeList)))
+    if remove_list:
+        print(term.yellow('The following components were removed:'))
+        print(term.yellow(" | ".join(remove_list)))
 
-    print(term.green("Sorting PLA by tiles..."), end=" ")
-    #sort PLAs by tiles
-    tileList = {}
+    print(term.green("Sorting components by tiles..."), end=" ")
+    #sort components by tiles
+    tile_list = {}
     for tile in tiles:
-        tileList[internal.tupleToStr(tile)] = {}
-    for pla in plaList.keys():
-        coords = tools.nodes.toCoords(plaList[pla]['nodes'], nodeList)
-        renderedIn = tools.line.toTiles(coords, minZoom, maxZoom, maxZoomRange)
-        for tile in renderedIn:
-            if internal.tupleToStr(tile) in tileList.keys():
-                tileList[internal.tupleToStr(tile)][pla] = plaList[pla]
-    
-    processStart = time.time() * 1000
+        tile_list[internal._tuple_to_str(tile)] = {}
+    for component in component_json.keys():
+        coords = tools.nodes.to_coords(component_json[component]['nodes'], node_json)
+        rendered_in = tools.line.to_tiles(coords, min_zoom, max_zoom, max_zoom_range)
+        for tile in rendered_in:
+            if internal._tuple_to_str(tile) in tile_list.keys():
+                tile_list[internal._tuple_to_str(tile)][component] = component_json[component]
+
+    process_start = time.time() * 1000
     processed = 0
     timeLeft = 0.0
-    l = lambda processed, timeLeft, tilePlas, msg: term.green(f"{internal.percentage(processed, len(tileList))}% | {internal.msToTime(timeLeft)} left | ") + f"{tilePlas}: " + term.bright_black(msg) + term.clear_eos
+    l = lambda processed_count, time_left, tile_components_, msg: \
+        term.green(f"{internal._percentage(processed_count, len(tile_list))}% | {internal.ms_to_time(time_left)} left | ") \
+        + f"{tile_components_}: " + term.bright_black(msg) + term.clear_eos
     print(term.green("sorted\n")+term.bright_green("Starting processing"))
-    for tilePlas in tileList.keys():
-        #sort PLAs in tiles by layer
-        newTilePlas = {}
-        for pla in tileList[tilePlas].keys():
-            if not str(float(tileList[tilePlas][pla]['layer'])) in newTilePlas.keys():
-                newTilePlas[str(float(tileList[tilePlas][pla]['layer']))] = {}
-            newTilePlas[str(float(tileList[tilePlas][pla]['layer']))][pla] = tileList[tilePlas][pla]
-        with term.location(): print(l(processed, timeLeft, tilePlas, "Sorted PLA by layer"), end="\r")
-        
+    for tile_components in tile_list.keys():
+        #sort components in tiles by layer
+        new_tile_components = {}
+        for component in tile_list[tile_components].keys():
+            if not str(float(tile_list[tile_components][component]['layer'])) in new_tile_components.keys():
+                new_tile_components[str(float(tile_list[tile_components][component]['layer']))] = {}
+            new_tile_components[str(float(tile_list[tile_components][component]['layer']))][component] = tile_list[tile_components][component]
+        with term.location(): print(l(processed, timeLeft, tile_components, "Sorted component by layer"), end="\r")
 
-        #sort PLAs in layers in files by type
-        for layer in newTilePlas.keys():
-            #print(newTilePlas[layer].items())
-            newTilePlas[layer] = {k: v for k, v in sorted(newTilePlas[layer].items(), key=lambda x: skinJson['order'].index(x[1]['type'].split(' ')[0]))}
-        with term.location(): print(l(processed, timeLeft, tilePlas, "Sorted PLA by type"), end="\r")
-        
+        #sort components in layers in files by type
+        for layer in new_tile_components.keys():
+            #print(new_tile_components[layer].items())
+            new_tile_components[layer] = {k: v for k, v in sorted(new_tile_components[layer].items(),
+                                                                  key=lambda x: skin_json['order'].index(x[1]['type'].split(' ')[0]))}
+        with term.location(): print(l(processed, timeLeft, tile_components, "Sorted component by type"), end="\r")
+
         #merge layers
-        tileList[tilePlas] = {}
-        layers = sorted(newTilePlas.keys(), key=lambda x: float(x))
+        tile_list[tile_components] = {}
+        layers = sorted(new_tile_components.keys(), key=lambda x: float(x))
         for layer in layers:
-            for key, pla in newTilePlas[layer].items():
-                tileList[tilePlas][key] = pla
-        with term.location(): print(l(processed, timeLeft, tilePlas, "Merged layers"), end="\r")
+            for key, component in new_tile_components[layer].items():
+                tile_list[tile_components][key] = component
+        with term.location(): print(l(processed, timeLeft, tile_components, "Merged layers"), end="\r")
 
-        #groups PLAs of the same type if "road" tag present
-        newerTilePlas = [{}]
-        keys = list(tileList[tilePlas].keys())
-        for i in range(len(tileList[tilePlas])):
-            newerTilePlas[-1][keys[i]] = tileList[tilePlas][keys[i]]
-            if i != len(keys)-1 and (tileList[tilePlas][keys[i+1]]['type'].split(' ')[0] != tileList[tilePlas][keys[i]]['type'].split(' ')[0] or not "road" in skinJson['types'][tileList[tilePlas][keys[i]]['type'].split(' ')[0]]['tags']):
-                newerTilePlas.append({})
-        tileList[tilePlas] = newerTilePlas
-        with term.location(): print(l(processed, timeLeft, tilePlas, "PLAs grouped"), end="\r")
+        #groups components of the same type if "road" tag present
+        newer_tile_components = [{}]
+        keys = list(tile_list[tile_components].keys())
+        for i in range(len(tile_list[tile_components])):
+            newer_tile_components[-1][keys[i]] = tile_list[tile_components][keys[i]]
+            if i != len(keys)-1 \
+               and (tile_list[tile_components][keys[i + 1]]['type'].split(' ')[0] != tile_list[tile_components][keys[i]]['type'].split(' ')[0]
+               or "road" not in skin_json['types'][tile_list[tile_components][keys[i]]['type'].split(' ')[0]]['tags']):
+                newer_tile_components.append({})
+        tile_list[tile_components] = newer_tile_components
+        with term.location(): print(l(processed, timeLeft, tile_components, "Components grouped"), end="\r")
 
         processed += 1
-        timeLeft = internal.timeRemaining(processStart, processed, len(tileList))
-        #timeLeft = round(((int(round(time.time() * 1000)) - processStart) / processed * (len(tileList) - processed)), 2)
-    
+        timeLeft = internal._time_remaining(process_start, processed, len(tile_list))
+        #time_left = round(((int(round(time.time() * 1000)) - process_start) / processed * (len(tile_list) - processed)), 2)
+
     print(term.green("100.00% | 0.0s left | ") + "Processing complete" + term.clear_eos)
 
     #count # of rendering operations
     print(term.bright_green("Counting no. of operations"))
     operations = 0
-    opTiles = {}
-    tileOperations = 0
-    for tilePlas in tileList.keys():
-        if tileList[tilePlas] == [{}]:
-            opTiles[tilePlas] = 0
+    op_tiles = {}
+    tile_operations = 0
+    for tile_components in tile_list.keys():
+        if tile_list[tile_components] == [{}]:
+            op_tiles[tile_components] = 0
             continue
 
-        for group in tileList[tilePlas]:
-            info = skinJson['types'][list(group.values())[0]['type'].split(" ")[0]]
+        for group in tile_list[tile_components]:
+            info = skin_json['types'][list(group.values())[0]['type'].split(" ")[0]]
             style = []
             for zoom in info['style'].keys():
-                if maxZoom-internal.strToTuple(zoom)[1] <= internal.strToTuple(tilePlas)[0] <= maxZoom-internal.strToTuple(zoom)[0]:
+                if max_zoom-internal._str_to_tuple(zoom)[1] <= internal._str_to_tuple(tile_components)[0] <= max_zoom-internal._str_to_tuple(zoom)[0]:
                     style = info['style'][zoom]
                     break
             for step in style:
-                for _, pla in group.items():
-                    operations += 1; tileOperations += 1
+                for _, component in group.items():
+                    operations += 1
+                    tile_operations += 1
                 if info['type'] == "line" and "road" in info['tags'] and step['layer'] == "back":
-                    operations += 1; tileOperations += 1
-        operations += 1; tileOperations += 1 #text
+                    operations += 1
+                    tile_operations += 1
+        operations += 2
+        tile_operations += 2 #text
 
-        opTiles[tilePlas] = tileOperations
-        tileOperations = 0
-        print(f"Counted {tilePlas}", end=term.clear_eos+"\r")
-    
+        op_tiles[tile_components] = tile_operations
+        tile_operations = 0
+        print(f"Counted {tile_components}", end=term.clear_eos + "\r")
+
     #render
-    renderStart = time.time() * 1000
+    render_start = time.time() * 1000
     print(term.bright_green("\nStarting render"))
     if __name__ == 'renderer.base':
         m = multiprocessing.Manager()
         operated = m.Value('i', 0)
         lock = m.Lock() # pylint: disable=no-member
 
-        input = []
-        for i in tileList.keys():
-            input.append((lock, operated, renderStart, i, tileList[i], operations, plaList, nodeList, skinJson, minZoom, maxZoom, maxZoomRange, saveImages, saveDir, assetsDir))
+        input_ = []
+        for i in tile_list.keys():
+            input_.append((lock, operated, render_start, i, tile_list[i], operations, component_json, node_json, skin_json, min_zoom, max_zoom, max_zoom_range, save_images, save_dir, assets_dir))
         p = multiprocessing.Pool(processes)
         try:
-            preresult = p.map(rendering.tiles, input)
+            preresult = p.map(rendering.tiles, input_)
         except KeyboardInterrupt:
             p.terminate()
             sys.exit()
         result = {}
         for i in preresult:
-            if i == None:
+            if i is None:
                 continue
             k, v = list(i.items())[0]
             result[k] = v

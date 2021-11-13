@@ -46,7 +46,7 @@ Main
 
    :raises ValueError: if maxZoom < minZoom
 
-.. py:function:: tileMerge(images: Union[str, Dict[str, Image]], saveImages: bool=True, saveDir: str="tiles/", zoom: List[int]=[]) -> List[Image]
+.. py:function:: tile_merge(images: Union[str, Dict[str, Image]], saveImages: bool=True, saveDir: str="tiles/", zoom: List[int]=[]) -> List[Image]
 
    Merges tiles rendered by ``renderer.render()``.
 
@@ -62,7 +62,7 @@ Tools
 -----
 .. py:currentmodule:: renderer.tools.plaJson
 
-.. py:function:: findEnds(plaList: dict, nodeList: dict) -> Tuple[RealNum, RealNum, RealNum, RealNum]
+.. py:function:: find_ends(plaList: dict, nodeList: dict) -> Tuple[RealNum, RealNum, RealNum, RealNum]
 
    Finds the minimum and maximum X and Y values of a JSON or dictionary of PLAs.
    
@@ -73,7 +73,7 @@ Tools
    :rtype: Tuple[RealNum, RealNum, RealNum, RealNum]
    
 
-.. py:function:: renderedIn(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]
+.. py:function:: rendered_in(plaList: dict, nodeList: dict, minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]
    
    Like ``renderer.tools.lineToTiles()``, but for a JSON or dictionary of PLAs.
 
@@ -88,7 +88,7 @@ Tools
 
    :raises ValueError: if maxZoom < minZoom
 
-.. py:function:: toGeoJson(plaList: dict, nodeList: dict, skinJson: dict) -> dict
+.. py:function:: to_geo_json(plaList: dict, nodeList: dict, skinJson: dict) -> dict
 
    Converts PLA Json into GeoJson (with nodes and skin).
    :param dict plaList: a dictionary of PLAs (see :ref:`formats`)
@@ -100,7 +100,7 @@ Tools
 
 .. py:currentmodule:: renderer.tools.geoJson
 
-.. py:function:: toNodePlaJson(geoJson: dict) -> Tuple[dict, dict]
+.. py:function:: to_component_node_json(geoJson: dict) -> Tuple[dict, dict]
 
    Converts GeoJson to PLA and Node JSONs.
 
@@ -111,7 +111,7 @@ Tools
 
 .. py:currentmodule:: renderer.tools.tile
 
-.. py:function:: findEnds(coords: List[TileCoord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]
+.. py:function:: find_ends(coords: List[TileCoord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]
 
    Find the minimum and maximum x/y values of a set of tiles coords.
 
@@ -122,7 +122,7 @@ Tools
 
 .. py:currentmodule:: renderer.tools.line
 
-.. py:function:: findEnds(coords: List[Coord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]
+.. py:function:: find_ends(coords: List[Coord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]
 
    Find the minimum and maximum x/y values of a set of coords.
 
@@ -131,7 +131,7 @@ Tools
    :returns: Returns in the form `(xMax, xMin, yMax, yMin)`
    :rtype: Tuple[RealNum, RealNum, RealNum, RealNum]
 
-.. py:function:: toTiles(coords: List[Coord], minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]
+.. py:function:: to_tiles(coords: List[Coord], minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]
 
    Generates tile coordinates from list of regular coordinates using ``renderer.tools.coordToTiles()``. Mainly for rendering whole PLAs.
 
@@ -148,7 +148,7 @@ Tools
 
 .. py:currentmodule:: renderer.tools.node
 
-.. py:function:: findPlasAttached(nodeId: str, plaList: dict) -> List[Tuple[str, int]]
+.. py:function:: find_components_attached(nodeId: str, plaList: dict) -> List[Tuple[str, int]]
 
    Finds which PLAs attach to a node.
    
@@ -158,7 +158,7 @@ Tools
    :returns: A tuple in the form of ``(plaId, posInNodeList)``
    :rtype: List[Tuple[str, int]]
 
-.. py:function:: toCoords(nodes: List[str], nodeList: dict) -> List[Coord]
+.. py:function:: to_coords(nodes: List[str], nodeList: dict) -> List[Coord]
    
    Converts a list of nodes IDs into a list of coordinates with a node dictionary/JSON as its reference.
    
@@ -172,7 +172,7 @@ Tools
 
 .. py:currentmodule:: renderer.tools.coord
 
-.. py:function:: toTiles(coord: Coord, minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]
+.. py:function:: to_tiles(coord: Coord, minZoom: int, maxZoom: int, maxZoomRange: RealNum) -> List[TileCoord]
 
    Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
 
@@ -205,7 +205,7 @@ Math Tools
    :return: A list of *(lists of, when returnBoth=True)* tuples in the form of (x, y, rot)
    :rtype: List[Tuple[RealNum, RealNum, RealNum]] *when returnBoth=False,* List[List[Tuple[RealNum, RealNum, RealNum]]] *when returnBoth=True*
    
-.. py:function:: linesIntersect(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, x3: RealNum, y3: RealNum, x4: RealNum, y4: RealNum) -> bool:
+.. py:function:: lines_intersect(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, x3: RealNum, y3: RealNum, x4: RealNum, y4: RealNum) -> bool:
    
    Finds if two segments intersect.
     
@@ -221,7 +221,7 @@ Math Tools
    :returns: Whether the two segments intersect.
    :rtype: bool
    
-.. py:function:: pointInPoly(xp: RealNum, yp: RealNum, coords: List[Coord]) -> bool
+.. py:function:: point_in_poly(xp: RealNum, yp: RealNum, coords: List[Coord]) -> bool
    
    Finds if a point is in a polygon.
       
@@ -232,7 +232,7 @@ Math Tools
    :returns: Whether the point is inside the polygon.
    :rtype: bool
    
-.. py:function:: polyCenter(coords: List[Coord]) -> Coord
+.. py:function:: poly_center(coords: List[Coord]) -> Coord
 
    Finds the center point of a polygon.
       
@@ -241,7 +241,7 @@ Math Tools
    :returns: The center of the polygon, given in ``(x,y)``
    :rtype: Coord
    
-.. py:function:: lineInBox(line: List[Coord], top: RealNum, bottom: RealNum, left: RealNum, right: RealNum) -> bool
+.. py:function:: line_in_box(line: List[Coord], top: RealNum, bottom: RealNum, left: RealNum, right: RealNum) -> bool
    
    Finds if any nodes of a line go within the box.
       
@@ -270,7 +270,7 @@ Math Tools
    :returns: A list of points along the segment, given in [[(x1, y1), (x2, y2)], etc]
    :rtype: List[List[Coord]]
 
-.. py:function:: dashOffset(coords: List[Coord], d: RealNum, g: RealNum) -> Tuple[RealNum, bool]
+.. py:function:: dash_offset(coords: List[Coord], d: RealNum, g: RealNum) -> Tuple[RealNum, bool]
 
    Calculates the offsets on each coord of a line for a smoother dashing sequence.
 
@@ -281,7 +281,7 @@ Math Tools
    :returns: The offsets of each coordinate, and whether to start the next segment with emptyStart, given in (offset, emptyStart)
    :rtype: Tuple[RealNum, bool]
 
-.. py:function:: rotateAroundPivot(x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta: RealNum) -> Coord
+.. py:function:: rotate_around_pivot(x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta: RealNum) -> Coord
 
    Rotates a set of coordinates around a pivot point.
 
@@ -309,7 +309,7 @@ Validate
 --------
 .. py:currentmodule:: renderer.validate
 
-.. py:function:: vCoords(coords: List[Coord]) -> True
+.. py:function:: v_coords(coords: List[Coord]) -> True
 
    Validates a list of coordinates.
       
@@ -317,7 +317,7 @@ Validate
       
    :returns: Returns True if no errors
 
-.. py:function:: vTileCoords(tiles: List[TileCoord], minZoom: int, maxZoom: int) -> True
+.. py:function:: v_tile_coords(tiles: List[TileCoord], minZoom: int, maxZoom: int) -> True
 
    Validates a list of tile coordinates.
       
@@ -327,7 +327,7 @@ Validate
       
    :returns: Returns True if no errors
 
-.. py:function:: vNodeList(nodes: List[str], nodeList: dict) -> True
+.. py:function:: v_node_list(nodes: List[str], nodeList: dict) -> True
 
    Validates a list of node IDs.
       
@@ -336,7 +336,7 @@ Validate
       
    :returns: Returns True if no errors
 
-.. py:function:: vNodeJson(nodeList: dict) -> True
+.. py:function:: v_node_json(nodeList: dict) -> True
 
    Validates a dictionary/JSON of nodes.
       
@@ -344,7 +344,7 @@ Validate
       
    :returns: Returns True if no errors
 
-.. py:function:: vPlaJson(plaList: dict, nodeList: dict) -> True
+.. py:function:: v_component_json(plaList: dict, nodeList: dict) -> True
 
    Validates a dictionary/JSON of PLAs.
       
@@ -353,7 +353,7 @@ Validate
       
    :returns: Returns True if no errors
 
-.. py:function:: vSkinJson(skinJson: dict) -> True
+.. py:function:: v_skin_json(skinJson: dict) -> True
    
    Validates a skin JSON file.
 
@@ -361,7 +361,7 @@ Validate
    
    :returns: Returns True if no errors
 
-.. py:function:: vGeoJson(geoJson: dict) -> True
+.. py:function:: v_geo_json(geoJson: dict) -> True
    
    Validates a GeoJson file.
 

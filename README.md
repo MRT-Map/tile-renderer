@@ -53,7 +53,7 @@ skin = renderer.misc.getSkin("default")
 if __name__ == "__main__": renderer.render(pla, nodes, skin, 1, 2, 8)
 # renders tiles at zoom levels 1 and 2 with the max zoom tile covering 8 units
 # Don't like clogging the main directory? Create a new folder and use this instead:
-# if __name__ == "__main__": renderer.render(pla, nodes, skin, 1, 2, 8, saveDir="your_folder_name/")
+# if __name__ == "__main__": renderer.render(pla, nodes, skin, 1, 2, 8, save_dir="your_folder_name/")
 # Too slow? Increase the number of processes
 # if __name__ == "__main__": renderer.render(pla, nodes, skin, 1, 2, 8, processes=5)
 ```

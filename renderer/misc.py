@@ -11,6 +11,6 @@ def getSkin(name: str) -> dict:
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.misc.getSkin
     """
     try:
-        return internal.readJson(os.path.dirname(__file__)+"/skins/"+name+".json")
+        return internal._read_json(os.path.dirname(__file__) + "/skins/" + name + ".json")
     except FileNotFoundError:
         raise FileNotFoundError(f"Skin '{name}' not found")

@@ -19,6 +19,6 @@ def skinFileRead():
         f.close()
         return data
 import os
-renderer.tileMerge(os.getcwd()+"\\tiles\\", saveDir="tiles/")
+renderer.tile_merge(os.getcwd() + "\\tiles\\", save_dir="tiles/")
 
-#if __name__ == "__main__": print(renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 0, 8, 32, saveDir="tiles/", saveImages=False, processes=10))
+#if __name__ == "__main__": print(renderer.render(exampleplaRead(), examplenodesRead(), skinFileRead(), 0, 8, 32, save_dir="tiles/", save_images=False, processes=10))

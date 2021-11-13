@@ -25,24 +25,24 @@ Changelog
 
   * ``renderer.render()`` now ignores PLAs if their type is not specified in the skin Json
   * Hollows are now supported in areas
-  * New function, ``renderer.validate.vGeoJson()``
+  * New function, ``renderer.validate.v_geo_json()``
 
-    * ``renderer.validate.vCoords()`` now supports lists along with tuples
+    * ``renderer.validate.v_coords()`` now supports lists along with tuples
 
   * The renderer now has a CLI, to show the help page do ``python -m renderer -h``
   * ``renderer.render()`` now supports float maxZoomRanges
-  * New functions: ``renderer.tools.plaJson.toGeoJson()`` and ``renderer.tools.geoJson.toNodePlaJson()``
+  * New functions: ``renderer.tools.plaJson.to_geo_json()`` and ``renderer.tools.geoJson.to_component_node_json()``
 
     * these are for translating our custom format of storing geographical format to geoJson
     * (btw why we're not using geoJson is because its harder to store nodes)
 
   * internal-use files have been moved to ``renderer/internals/``
-  * removed ``renderer.tools.plaJson.toTiles()`` as it's a duplicate of ``renderer.tools.plaJson.renderedIn()``
-  * ``renderer.tools.coord.toTiles()`` now supports tuples as ``coords`` parameter
+  * removed ``renderer.tools.plaJson.to_tiles()`` as it's a duplicate of ``renderer.tools.plaJson.rendered_in()``
+  * ``renderer.tools.coord.to_tiles()`` now supports tuples as ``coords`` parameter
 
 * **v1.1 (2/5/21)**
 
-  * Added log prefixes to ``renderer.render()`` and ``renderer.tileMerge()``
+  * Added log prefixes to ``renderer.render()`` and ``renderer.tile_merge()``
   * Improved curved line drawing
   * ``renderer.py`` is now split into a package
 
@@ -68,10 +68,10 @@ Changelog
     * **REJECT SYMPY, EMBRACE TRIGONOMETRY, ALL HAIL TRIGO**
 
   * added a few more level 2 logs to ``renderer.render()``
-  * new function: ``renderer.tileMerge()``, used to merge tiles
+  * new function: ``renderer.tile_merge()``, used to merge tiles
   * changed output of ``renderer.render()`` from list to dict
   * in counting of rendering operations in ``renderer.render()``, added 1 to each tilePlas to account for text
-  * rewrote ``renderer.mathtools.dash()`` and ``renderer.mathtools.dashOffset()``, they're no longer broken :D
+  * rewrote ``renderer.mathtools.dash()`` and ``renderer.mathtools.dash_offset()``, they're no longer broken :D
   * we've gone out of v0 versions woo
 
 * **v0.8 (7/4/21)**
@@ -93,7 +93,7 @@ Changelog
   * fixed oneway roads showing too many arrows
   * added support for lines with unrounded ends through ``unroundedEnds`` tag
   * updated ``renderer.mathtools.dash()`` to support offset
-  * added ``renderer.mathtools.dashOffset()``
+  * added ``renderer.mathtools.dash_offset()``
   * fixed dashed roads
   * bounding boxes on texts so they don't overlap
   * new logging function (``renderer.internal.log()``)
@@ -106,8 +106,8 @@ Changelog
 
   * added loads of PLAs to the default skin; there are now about 90 different PLA types :))
   * tweaked ``renderer.mathtools.midpoint()`` a bit
-  * new functions: ``renderer.mathtools.polyCenter()``, ``renderer.mathtools.dash()``
-  * Moved ``renderer.tools.lineInBox()`` to ``renderer.mathtools.lineInBox()``
+  * new functions: ``renderer.mathtools.poly_center()``, ``renderer.mathtools.dash()``
+  * Moved ``renderer.tools.line_in_box()`` to ``renderer.mathtools.line_in_box()``
   * fixed layers
   * image size is now customisable
 
@@ -124,7 +124,7 @@ Changelog
   * "shape" key in PLA structure removed
   * A Roads, B Roads, local main roads, and simplePoint added to default skin
   * New font for renders (Clear Sans), will be customisable later on
-  * Added functions ``renderer.mathtools.midpoint()``, ``renderer.mathtools.linesIntersect()``, ``renderer.mathtools.pointInPoly()``, ``renderer.tools.lineInBox()``, ``renderer.tools.lineInBox()``, ``findPlasAttachedToNode()``
+  * Added functions ``renderer.mathtools.midpoint()``, ``renderer.mathtools.lines_intersect()``, ``renderer.mathtools.point_in_poly()``, ``renderer.tools.line_in_box()``, ``renderer.tools.line_in_box()``, ``findPlasAttachedToNode()``
   * Not every info printout is green now; some are white or gray
   * ``renderer.render()`` now able to render:
 
@@ -159,10 +159,10 @@ Changelog
     * ``renderer.utils.nodeJsonIntegrity()``
     * ``renderer.utils.plaJsonIntegrity()``
     * ``renderer.utils.nodeListIntegrity()``
-    * ``renderer.internal.tupleToStr()``
-    * ``renderer.internal.strToTuple()``
-    * ``renderer.internal.readJson()``
-    * ``renderer.internal.writeJson()``
+    * ``renderer.internal._tuple_to_str()``
+    * ``renderer.internal._str_to_tuple()``
+    * ``renderer.internal._read_json()``
+    * ``renderer.internal._write_json()``
     * ``renderer.tools.nodesToCoords()``
     * ``renderer.tools.plaJson_findEnds()``
     * ``renderer.tools,plaJson_calcRenderedIn()``

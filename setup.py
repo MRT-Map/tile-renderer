@@ -40,6 +40,6 @@ setup(
     'Programming Language :: Python :: 3.9',
   ],
   entry_points = {
-    'console_scripts': ['renderer=renderer.__main__:args'],
+    'console_scripts': ['renderer=renderer.__main__:cmd'],
   }
 )

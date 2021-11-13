@@ -11,7 +11,7 @@ RealNum = Union[int, float]
 Coord = Tuple[RealNum, RealNum]
 TileCoord = Tuple[int, int, int]
 
-def vCoords(coords: List[Coord]) -> True:
+def v_coords(coords: List[Coord]) -> True:
     """
     Validates a list of coordinates.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.coords
@@ -26,7 +26,7 @@ def vCoords(coords: List[Coord]) -> True:
                 raise TypeError(f"Coordinate {n} is not type 'int/float'")
     return True
 
-def vTileCoords(tiles: List[TileCoord], minZoom: int, maxZoom: int) -> True:
+def v_tile_coords(tiles: List[TileCoord], min_zoom: int, max_zoom: int) -> True:
     """
     Validates a list of tile coordinates.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.tileCoords
@@ -39,24 +39,24 @@ def vTileCoords(tiles: List[TileCoord], minZoom: int, maxZoom: int) -> True:
         for n in item:
             if not isinstance(n, (int, float)):
                 raise TypeError(f"Tile coordinate {n} is not type 'int/float'")
-        if not minZoom <= item[0] <= maxZoom:
-            raise ValueError(f"Zoom value {item[0]} is not in the range {minZoom} <= z <= {maxZoom}")
+        if not min_zoom <= item[0] <= max_zoom:
+            raise ValueError(f"Zoom value {item[0]} is not in the range {min_zoom} <= z <= {max_zoom}")
         elif not isinstance(item[0], int):
             raise TypeError(f"Zoom value {item[0]} is not an integer")
     return True
 
-def vNodeList(nodes: List[str], nodeList: dict) -> True:
+def v_node_list(nodes: List[str], node_list: dict) -> True:
     """
     Validates a list of node IDs.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.nodeList
     """
     for node in nodes:
-        if not node in nodeList.keys():
+        if node not in node_list.keys():
             raise ValueError(f"Node '{node}' does not exist")
 
     return True
 
-def vNodeJson(nodeList: dict) -> True:
+def v_node_json(node_json: dict) -> True:
     """
     Validates a dictionary/JSON of nodes.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.nodeJson
@@ -68,12 +68,12 @@ def vNodeJson(nodeList: dict) -> True:
             "connections": list
         }
     })
-    schema.validate(nodeList)
+    schema.validate(node_json)
     return True
 
-def vPlaJson(plaList: dict, nodeList: dict) -> True:
+def v_component_json(component_json: dict, node_json: dict) -> True:
     """
-    Validates a dictionary/JSON of PLAs.
+    Validates a dictionary/JSON of components.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.plaJson
     """
     schema = Schema({
@@ -82,15 +82,15 @@ def vPlaJson(plaList: dict, nodeList: dict) -> True:
             "displayname": str,
             "description": str,
             "layer": Or(int, float),
-            "nodes": And(list, lambda i: vNodeList(i, nodeList)),
-            Optional("hollows"): [And(list, lambda i: vNodeList(i, nodeList))],
+            "nodes": And(list, lambda i: v_node_list(i, node_json)),
+            Optional("hollows"): [And(list, lambda i: v_node_list(i, node_json))],
             "attrs": dict
         }
     })
-    schema.validate(plaList)
+    schema.validate(component_json)
     return True
             
-def vSkinJson(skinJson: dict) -> True:
+def v_skin_json(skin_json: dict) -> True:
     """
     Validates a skin JSON file.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.skinJson
@@ -104,13 +104,13 @@ def vSkinJson(skinJson: dict) -> True:
                 "i": str,
                 "bi": str
             },
-            "background": And([int], lambda l: len(l) == 3 and not False in [0 <= n <= 255 for n in l])
+            "background": And([int], lambda l: len(l) == 3 and False not in [0 <= n_ <= 255 for n_ in l])
         },
         "order": [str],
         "types": {
             str: {
                 "tags": list,
-                "type": lambda s: s in ['point', 'line', 'area'],
+                "type": lambda t_: t_ in ['point', 'line', 'area'],
                 "style": {
                     str: list
                 }
@@ -199,13 +199,13 @@ def vSkinJson(skinJson: dict) -> True:
         }
     }
 
-    mainSchema.validate(skinJson)
-    for n, t in skinJson['types'].items():
-        if not n in skinJson['order']:
+    mainSchema.validate(skin_json)
+    for n, t in skin_json['types'].items():
+        if n not in skin_json['order']:
             raise ValueError(f"Type {n} is not in order list")
         s = t['style']
         for z, steps in s.items():
-            if internal.strToTuple(z)[0] > internal.strToTuple(z)[1]:
+            if internal._str_to_tuple(z)[0] > internal._str_to_tuple(z)[1]:
                 raise ValueError(f"Invalid range '{z}'")
             for step in steps:
                 if not step["layer"] in schemas[t['type']]:
@@ -218,7 +218,7 @@ def vSkinJson(skinJson: dict) -> True:
                         print(term.red(f"Type {n}, range {z}, step {step['layer']}"))
                         raise e
 
-def vGeoJson(geoJson: dict) -> True:
+def v_geo_json(geo_json: dict) -> True:
     mainSchema = Schema({
         "type": "FeatureCollection", 
         "features": [{
@@ -230,32 +230,32 @@ def vGeoJson(geoJson: dict) -> True:
 
     point = Schema({
         "type": "Point",
-        "coordinates": And([int, float], lambda c: len(c)==2)
+        "coordinates": And([int, float], lambda c: len(c) == 2)
     }, ignore_extra_keys=True)
 
     lineString = Schema({
         "type": "LineString",
-        "coordinates": vCoords
+        "coordinates": v_coords
     }, ignore_extra_keys=True)
 
     polygon = Schema({
         "type": "Polygon",
-        "coordinates": lambda cs: all([vCoords(c) and c[0] == c[-1] for c in cs])
+        "coordinates": lambda cs: all([v_coords(c) and c[0] == c[-1] for c in cs])
     }, ignore_extra_keys=True)
 
     multiPoint = Schema({
         "type": "MultiPoint",
-        "coordinates": vCoords
+        "coordinates": v_coords
     }, ignore_extra_keys=True)
 
     multiLineString = Schema({
         "type": "MultiLineString",
-        "coordinates": lambda cs: all([vCoords(c) for c in cs])
+        "coordinates": lambda cs: all([v_coords(c) for c in cs])
     }, ignore_extra_keys=True)
 
     multiPolygon = Schema({
         "type": "MultiPolygon",
-        "coordinates": lambda css: all([all([vCoords(c) and c[0] == c[-1] for c in cs]) for cs in css])
+        "coordinates": lambda css: all([all([v_coords(c) and c[0] == c[-1] for c in cs]) for cs in css])
     }, ignore_extra_keys=True)
 
     def vGeometry(geo: dict):
@@ -269,15 +269,15 @@ def vGeoJson(geoJson: dict) -> True:
         }
 
         if geo['type'] == "GeometryCollection":
-            for sgeo in geo['geometries']:
-                vGeometry(sgeo)
+            for sub_geo in geo['geometries']:
+                vGeometry(sub_geo)
         elif geo['type'] in schemas.keys():
             schemas[geo['type']].validate(geo)
         else:
             raise ValueError(f"Invalid type {geo['type']}")
 
-    mainSchema.validate(geoJson)
-    for feature in geoJson['features']:
+    mainSchema.validate(geo_json)
+    for feature in geo_json['features']:
         vGeometry(feature['geometry'])
 
     return True

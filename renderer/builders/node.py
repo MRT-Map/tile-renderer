@@ -1,13 +1,13 @@
 import blessed
 import re
 import json
-term = blessed.Terminal()
 
 import renderer.internals.internal as internal
+term = blessed.Terminal()
 
-print(term.yellow("Welcome to the nodeJson builder!\n--------------------------------"))
+print(term.yellow("Welcome to the node JSON builder!\n--------------------------------"))
 
-nodes, filePath = internal.askFileName("Node") # pylint: disable=no-member
+nodes, filePath = internal._ask_file_name("Node") # pylint: disable=no-member
 
 print(term.yellow("Ingame, press F3+C once, and paste it here.\nType 'exit' to exit."))
 newNodes = {}
@@ -19,7 +19,7 @@ while not e:
         print(term.yellow("Exited"))
         continue
     groups = re.search(r"@s (\S+) \S+ (\S+)", pasted)
-    if groups == None:
+    if groups is None:
         print(term.red("Invalid paste"))
         continue
     x = int(float(groups.group(1)))

@@ -8,16 +8,16 @@ import blessed
 import difflib
 term = blessed.Terminal()
 
-def dictIndex(d: dict, v):
+def _dict_index(d: dict, v):
     return list(d.keys())[list(d.values()).index(v)]
 
-def readJson(file: str):
+def _read_json(file: str):
     with open(file, "r") as f:
         data = json.load(f)
         f.close()
         return data
 
-def writeJson(file: str, data: dict, pp=False):
+def _write_json(file: str, data: dict, pp=False):
     with open(file, "r+") as f:
         f.seek(0)
         f.truncate()
@@ -27,13 +27,13 @@ def writeJson(file: str, data: dict, pp=False):
             json.dump(data, f)
         f.close()
 
-def tupleToStr(t: tuple):
+def _tuple_to_str(t: tuple):
     return str(t)[1:-1]
 
-def strToTuple(s: str):
+def _str_to_tuple(s: str):
     return tuple([int(x) for x in s.split(", ")])
 
-def msToTime(ms: Union[int, float]):
+def ms_to_time(ms: Union[int, float]):
     if ms == 0:
         return "00.0s"
     s = round(ms / 1000, 1)
@@ -64,13 +64,13 @@ def msToTime(ms: Union[int, float]):
     #    res = res + pzero + str(ms) + szero + "ms "
     return res.strip()
 
-def percentage(c: Union[int, float], t: Union[int, float]):
+def _percentage(c: Union[int, float], t: Union[int, float]):
     res = round(c/t*100, 2)
     pzero = "0" if res < 10 else ""
     szero = "0" if len(str(res).split(".")[1]) == 1 else ""
     return pzero + str(res) + szero
 
-def timeRemaining(start: Union[int, float], c: Union[int, float], t: Union[int, float]):
+def _time_remaining(start: Union[int, float], c: Union[int, float], t: Union[int, float]):
     return round(((int(round(time.time() * 1000)) - start) / c * (t - c)), 2)
 
 def genId():
@@ -87,7 +87,7 @@ def genId():
     decimalId = int(time.time() * 10000000)
     return b10_b64(decimalId) + "-" + b10_b64(random.randint(1, 64**5))
 
-def askFileName(name: str):
+def _ask_file_name(name: str):
     fileConfirmed = False
     while not fileConfirmed:
         filePath = input(term.yellow(f"Which {name} JSON file are you writing to/referencing? "))
@@ -106,6 +106,6 @@ def askFileName(name: str):
 
     return data, filePath
 
-def similar(s, i):
+def _similar(s, i):
     if len(sim := difflib.get_close_matches(s, i)) != 0:
         print(term.bright_red(f"Perhaps you mean: {', '.join(sim)}"))

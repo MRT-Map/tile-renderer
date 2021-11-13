@@ -3,30 +3,31 @@ import re
 import json
 import click
 import difflib
-term = blessed.Terminal()
 
 import renderer.internals.internal as internal
 import renderer.misc as misc
 
-print(term.yellow("Welcome to the plaJson builder!\n-------------------------------"))
+term = blessed.Terminal()
 
-plas, plaFile = internal.askFileName("PLA") # pylint: disable=no-member
-nodes, _ = internal.askFileName("Node") # pylint: disable=no-member
+print(term.yellow("Welcome to the component JSON builder!\n-------------------------------"))
+
+components, plaFile = internal._ask_file_name("Component") # pylint: disable=no-member
+nodes, _ = internal._ask_file_name("Node") # pylint: disable=no-member
 skinName = input(term.yellow("Name of skin [blank for default]: "))
 try:
     skin = misc.getSkin(skinName if skinName != '' else 'default')
 except FileNotFoundError:
     skin = misc.getSkin('default')
 
-newPlas = {}
+new_components = {}
 e = False
 while not e:
     nameConfirmed = False
     while not nameConfirmed:
         name = input(term.yellow("Name of new PLA (type 'exit' to exit): "))
-        if name in plas.keys() or name in newPlas.keys():
+        if name in components.keys() or name in new_components.keys():
             print(term.red("PLA already exists; do you want to override its current value?"))
-            print(term.red(plas[name] if name in plas.keys() else newPlas[name]))
+            print(term.red(components[name] if name in components.keys() else new_components[name]))
             if input(term.red("Type 'y' to confirm: ")) != "y":
                 continue
         nameConfirmed = True
@@ -41,7 +42,7 @@ while not e:
         type_ = input(term.yellow(f"PLA type of {name}: "))
         if not type_.split(" ")[0] in skin['types'].keys():
             print(term.red(f"Type {type_.split(' ')[0]} does not exist"))
-            internal.similar(type_.split(' ')[0], skin['types'].keys()) # pylint: disable=no-member
+            internal._similar(type_.split(' ')[0], skin['types'].keys()) # pylint: disable=no-member
             continue
         typeConfirmed = True
     displayname = input(term.yellow(f"Display name of {name}: "))
@@ -58,7 +59,7 @@ while not e:
             node = input(term.yellow("Node attached: "))
             if node not in nodes.keys():
                 print(term.red("Node does not exist"))
-                internal.similar(node, nodes) # pylint: disable=no-member
+                internal._similar(node, nodes) # pylint: disable=no-member
                 continue
             nodeConfirmed = True
         newNodes = [node]
@@ -78,7 +79,7 @@ while not e:
             for n in nodes.keys():
                 if ss := re.search(fr"{name}(\d*)\d", n):
                     index.append((ss.group(1) if ss.group(1) != '' else 0, n))
-            preNodes = [n[1] for n in sorted(index, key=lambda a,b: a[0]-b[0])]
+            preNodes = [n[1] for n in sorted(index, key=lambda a, b: a[0]-b[0])]
         else:
             preNodes = []
         print(term.yellow("Your text editor will open; input a list of nodes, one node per line. ") + term.bright_yellow("Remember to save before closing."))
@@ -90,15 +91,15 @@ while not e:
                 print(term.red("No nodes given"))
                 continue
 
-            class exiter(Exception):
+            class Exiter(Exception):
                 pass
             try:
                 for n in nodeList.split('\n'):
                     if n not in nodes.keys():
                         print(term.red(f"Node {n} does not exist"))
-                        internal.similar(n, nodes.keys()) # pylint: disable=no-member
-                        raise exiter
-            except exiter:
+                        internal._similar(n, nodes.keys()) # pylint: disable=no-member
+                        raise Exiter
+            except Exiter:
                 preNodes = nodeList.split('\n')
                 continue
             newNodes = nodeList.split('\n')
@@ -120,11 +121,11 @@ while not e:
     if res == 'c':
         print(term.yellow("Cancelled"))
         continue
-    newPlas.update(newPla)
+    new_components.update(newPla)
 
 with open(plaFile, "r+") as f:
     d = json.load(f)
-    d.update(newPlas)
+    d.update(new_components)
     f.seek(0)
     f.truncate()
     json.dump(d, f, indent=4)
