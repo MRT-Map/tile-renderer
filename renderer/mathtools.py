@@ -1,16 +1,8 @@
 import math
 import sympy as sym
-from typing import Union, List, Dict, Tuple
 import numpy as np
 
-import renderer.internals.internal as internal # type: ignore
-import renderer.tools as tools
-import renderer.validate as validate
-import renderer.misc as misc
-
-RealNum = Union[int, float]
-Coord = Tuple[RealNum, RealNum]
-TileCoord = Tuple[int, int, int]
+from renderer.types import *
 
 def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: int=1, return_both: bool=False) -> Union[List[Tuple[RealNum, RealNum, RealNum]], List[List[Tuple[RealNum, RealNum, RealNum]]]]:
     """

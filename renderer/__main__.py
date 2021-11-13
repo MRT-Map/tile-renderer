@@ -58,7 +58,7 @@ def cmd():
     elif args.task == "render" and __name__ == '__main__':
         renderer.render(renderer.internals.internal._read_json(args.components),
                         renderer.internals.internal._read_json(args.node),
-                        renderer.misc.getSkin(args.skin), args.min_zoom,
+                        renderer.misc.get_skin(args.skin), args.min_zoom,
                         args.max_zoom, args.max_zoom_range,
                         save_dir=args.save_dir,
                         processes=args.processes,

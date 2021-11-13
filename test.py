@@ -19,10 +19,10 @@ def test_pytest():
     if __name__ == "__main__":
         p = exampleplaRead()
         n = examplenodesRead()
-        s = renderer.misc.getSkin("default")
+        s = renderer.misc.get_skin()
 
         #base
-        a = renderer.render(p, n, s, 8, 8, 8, save_dir="tiles/", processes=10)
+        a = renderer.render(p, n, 8, 8, 8, save_dir="tiles/", processes=10)
         renderer.tile_merge(a, save_images=False)
         
         #tools
@@ -60,7 +60,7 @@ def test_pytest():
         renderer.validate.v_geo_json(g)
 
         #misc
-        renderer.misc.getSkin('default')
+        renderer.misc.get_skin('default')
 
         print("complete")
         

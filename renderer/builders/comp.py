@@ -2,7 +2,6 @@ import blessed
 import re
 import json
 import click
-import difflib
 
 import renderer.internals.internal as internal
 import renderer.misc as misc
@@ -15,9 +14,9 @@ components, plaFile = internal._ask_file_name("Component") # pylint: disable=no-
 nodes, _ = internal._ask_file_name("Node") # pylint: disable=no-member
 skinName = input(term.yellow("Name of skin [blank for default]: "))
 try:
-    skin = misc.getSkin(skinName if skinName != '' else 'default')
+    skin = misc.get_skin(skinName if skinName != '' else 'default')
 except FileNotFoundError:
-    skin = misc.getSkin('default')
+    skin = misc.get_skin('default')
 
 new_components = {}
 e = False

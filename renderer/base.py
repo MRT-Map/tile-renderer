@@ -1,4 +1,4 @@
-from typing import Union, List, Dict, Tuple, Optional
+from typing import Optional
 from PIL import Image
 import time
 import glob
@@ -8,16 +8,17 @@ import sys
 import blessed
 import os
 
-import renderer.internals.internal as internal # type: ignore
-import renderer.tools as tools
+import renderer.internals.internal as internal
 import renderer.validate as validate
-import renderer.mathtools as mathtools
-import renderer.internals.rendering as rendering # type: ignore
+import renderer.internals.rendering as rendering
 import renderer.misc as misc
+from renderer.types import *
 
-RealNum = Union[int, float]
-Coord = Tuple[RealNum, RealNum]
-TileCoord = Tuple[int, int, int]
+import renderer.tools.component_json as tools_component_json
+import renderer.tools.line as tools_line
+import renderer.tools.nodes as tools_nodes
+import renderer.tools.tile as tools_tile
+import renderer.tools.geo_json as tools_geo_json
 
 def tile_merge(images: Union[str, Dict[str, Image.Image]], save_images: bool=True, save_dir: str="tiles/",
                zoom: Optional[List[int]]=None) -> Dict[str, Image.Image]:
@@ -57,7 +58,7 @@ def tile_merge(images: Union[str, Dict[str, Image.Image]], save_images: bool=Tru
                 to_merge[c] = i
 
         tile_coords = [internal._str_to_tuple(s) for s in to_merge.keys()]
-        x_max, x_min, y_max, y_min = tools.tile.find_ends(tile_coords)
+        x_max, x_min, y_max, y_min = tools_tile.find_ends(tile_coords)
         tile_size = list(image_dict.values())[0].size[0]
         i = Image.new('RGBA', (tile_size*(x_max-x_min+1), tile_size*(y_max-y_min+1)), (0, 0, 0, 0))
         px = 0
@@ -85,8 +86,8 @@ def tile_merge(images: Union[str, Dict[str, Image.Image]], save_images: bool=Tru
     print(term.green("\nAll merges complete"))
     return tile_return
 
-def render(component_json: dict, node_json: dict, skin_json: dict, min_zoom: int, max_zoom: int, max_zoom_range: RealNum,
-           save_images: bool=True, save_dir: str= "", assets_dir: str= os.path.dirname(__file__) + "/skins/assets/",
+def render(component_json: ComponentJson, node_json: NodeJson, min_zoom: int, max_zoom: int, max_zoom_range: RealNum,
+           skin: str='default', save_images: bool=True, save_dir: str= "", assets_dir: str= os.path.dirname(__file__) + "/skins/assets/",
            processes: int=1, tiles: Optional[List[TileCoord]]=None, offset: Tuple[RealNum, RealNum]=(0, 0)) -> Dict[str, Image.Image]:
     """
     Renders tiles from given coordinates and zoom values.
@@ -95,6 +96,8 @@ def render(component_json: dict, node_json: dict, skin_json: dict, min_zoom: int
     if max_zoom < min_zoom:
         raise ValueError("Max zoom value is greater than min zoom value")
     term = blessed.Terminal()
+
+    skin_json = misc.get_skin(skin)
 
     # validation
     print(term.green("Validating skin..."), end=" ")
@@ -114,7 +117,7 @@ def render(component_json: dict, node_json: dict, skin_json: dict, min_zoom: int
     if tiles is not None:
         validate.v_tile_coords(tiles, min_zoom, max_zoom)
     else: #finds box of tiles
-        tiles = tools.component_json.rendered_in(component_json, node_json, min_zoom, max_zoom, max_zoom_range)
+        tiles = tools_component_json.rendered_in(component_json, node_json, min_zoom, max_zoom, max_zoom_range)
 
     print(term.green("found\nRemoving components with unknown type..."), end=" ")
     # remove components whose type is not in skin
@@ -135,8 +138,8 @@ def render(component_json: dict, node_json: dict, skin_json: dict, min_zoom: int
     for tile in tiles:
         tile_list[internal._tuple_to_str(tile)] = {}
     for component in component_json.keys():
-        coords = tools.nodes.to_coords(component_json[component]['nodes'], node_json)
-        rendered_in = tools.line.to_tiles(coords, min_zoom, max_zoom, max_zoom_range)
+        coords = tools_nodes.to_coords(component_json[component]['nodes'], node_json)
+        rendered_in = tools_line.to_tiles(coords, min_zoom, max_zoom, max_zoom_range)
         for tile in rendered_in:
             if internal._tuple_to_str(tile) in tile_list.keys():
                 tile_list[internal._tuple_to_str(tile)][component] = component_json[component]

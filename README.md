@@ -36,19 +36,22 @@ Leaflet.js streetmap tile renderer, made by 7d
 1. Download or clone this repo; or run `pip install tile-renderer`
 2. Write a node JSON file and a PLA JSON file. (Tutorial coming soon) Or, use the example files provided in `data`.
 3. In your file, run the renderer. Here is an example code:
+
 ```python
-import renderer # important!!
+import renderer  # important!!
 import json
 
-def readFile(dir): # extract from JSON as dict
-    with open(dir, "r") as f:
-        data = json.load(f)
-        f.close()
-        return data
+
+def readFile(dir):  # extract from JSON as dict
+  with open(dir, "r") as f:
+    data = json.load(f)
+    f.close()
+    return data
+
 
 pla = readFile("path_to_your_PLA_file/pla.json")
 nodes = readFile("path_to_your_nodes_file/nodes.json")
-skin = renderer.misc.getSkin("default")
+skin = renderer.misc.get_skin("default")
 
 if __name__ == "__main__": renderer.render(pla, nodes, skin, 1, 2, 8)
 # renders tiles at zoom levels 1 and 2 with the max zoom tile covering 8 units

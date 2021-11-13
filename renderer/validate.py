@@ -1,17 +1,12 @@
+import math
+
 import blessed
 from schema import Schema, And, Or, Regex, Optional
-from typing import Union, List, Tuple
 
-import renderer.internals.internal as internal # type: ignore
-import renderer.tools as tools
-import renderer.mathtools as mathtools
-import renderer.misc as misc
+import renderer.internals.internal as internal
+from renderer.types import *
 
-RealNum = Union[int, float]
-Coord = Tuple[RealNum, RealNum]
-TileCoord = Tuple[int, int, int]
-
-def v_coords(coords: List[Coord]) -> True:
+def v_coords(coords: List[Coord]) -> Literal[True]:
     """
     Validates a list of coordinates.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.coords
@@ -26,7 +21,7 @@ def v_coords(coords: List[Coord]) -> True:
                 raise TypeError(f"Coordinate {n} is not type 'int/float'")
     return True
 
-def v_tile_coords(tiles: List[TileCoord], min_zoom: int, max_zoom: int) -> True:
+def v_tile_coords(tiles: List[TileCoord], min_zoom: Union[int, Literal[math.inf]], max_zoom: Union[int, Literal[math.inf]]) -> Literal[True]:
     """
     Validates a list of tile coordinates.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.tileCoords
@@ -45,18 +40,18 @@ def v_tile_coords(tiles: List[TileCoord], min_zoom: int, max_zoom: int) -> True:
             raise TypeError(f"Zoom value {item[0]} is not an integer")
     return True
 
-def v_node_list(nodes: List[str], node_list: dict) -> True:
+def v_node_list(nodes: List[str], node_json: NodeJson) -> Literal[True]:
     """
     Validates a list of node IDs.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.nodeList
     """
     for node in nodes:
-        if node not in node_list.keys():
+        if node not in node_json.keys():
             raise ValueError(f"Node '{node}' does not exist")
 
     return True
 
-def v_node_json(node_json: dict) -> True:
+def v_node_json(node_json: NodeJson) -> Literal[True]:
     """
     Validates a dictionary/JSON of nodes.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.nodeJson
@@ -71,7 +66,7 @@ def v_node_json(node_json: dict) -> True:
     schema.validate(node_json)
     return True
 
-def v_component_json(component_json: dict, node_json: dict) -> True:
+def v_component_json(component_json: ComponentJson, node_json: NodeJson) -> Literal[True]:
     """
     Validates a dictionary/JSON of components.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.plaJson
@@ -90,7 +85,7 @@ def v_component_json(component_json: dict, node_json: dict) -> True:
     schema.validate(component_json)
     return True
             
-def v_skin_json(skin_json: dict) -> True:
+def v_skin_json(skin_json: SkinJson) -> Literal[True]:
     """
     Validates a skin JSON file.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.skinJson
@@ -217,8 +212,9 @@ def v_skin_json(skin_json: dict) -> True:
                         term = blessed.Terminal()
                         print(term.red(f"Type {n}, range {z}, step {step['layer']}"))
                         raise e
+    return True
 
-def v_geo_json(geo_json: dict) -> True:
+def v_geo_json(geo_json: dict) -> Literal[True]:
     mainSchema = Schema({
         "type": "FeatureCollection", 
         "features": [{

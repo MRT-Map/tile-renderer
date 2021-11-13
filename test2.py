@@ -17,7 +17,7 @@ def examplenodesRead():
 
 p = exampleplaRead()
 n = examplenodesRead()
-s = renderer.misc.getSkin("default")
+s = renderer.misc.get_skin("default")
 
 #if __name__ == "__main__": a = renderer.render(p, n, s, 8, 8, 16, save_dir="tiles/")
 

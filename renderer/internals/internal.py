@@ -3,7 +3,6 @@ import json
 from typing import Union
 import time
 import random
-import os
 import blessed
 import difflib
 term = blessed.Terminal()

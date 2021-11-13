@@ -1,11 +1,9 @@
 import os
 
-import renderer.internals.internal as internal # type: ignore
-import renderer.tools as tools
-import renderer.validate as validate
-import renderer.mathtools as mathtools
+import renderer.internals.internal as internal
+from renderer.types import *
 
-def getSkin(name: str) -> dict:
+def get_skin(name: str= 'default') -> SkinJson:
     """
     Gets the skin JSON, given the name.
     More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.misc.getSkin

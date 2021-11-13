@@ -1,16 +1,13 @@
 import math
 from PIL import Image, ImageDraw, ImageFont
-import time
 import blessed
 import multiprocessing
 import re
 import itertools
 
-import renderer.internals.internal as internal #pylint: disable=import-error
-import renderer.tools as tools #pylint: disable=import-error
-import renderer.validate as validate #pylint: disable=import-error
-import renderer.mathtools as mathtools #pylint: disable=import-error
-import renderer.misc as misc #pylint: disable=import-error
+import renderer.internals.internal as internal
+import renderer.tools as tools
+import renderer.mathtools as mathtools
 term = blessed.Terminal()
 
 def tiles(args):
@@ -62,10 +59,10 @@ def tiles(args):
 
                 def point_text():
                     font = getFont("", step['size'])
-                    textLength = int(img.textlength(component['displayname'], font))
-                    i = Image.new('RGBA', (2*textLength, 2*(step['size']+4)), (0, 0, 0, 0))
+                    text_length = int(img.textlength(component['displayname'], font))
+                    i = Image.new('RGBA', (2*text_length, 2*(step['size']+4)), (0, 0, 0, 0))
                     d = ImageDraw.Draw(i)
-                    d.text((textLength, step['size']+4), component["displayname"], fill=step['colour'], font=font, anchor="mm")
+                    d.text((text_length, step['size']+4), component["displayname"], fill=step['colour'], font=font, anchor="mm")
                     tw, th = i.size
                     points_text_list.append((i, coords[0][0]+step['offset'][0], coords[0][1]+step['offset'][1], tw, th, 0))
                     # font = getFont("", step['size'])

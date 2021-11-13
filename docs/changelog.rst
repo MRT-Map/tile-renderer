@@ -50,11 +50,11 @@ Changelog
     * all functions of ``renderer.tools`` and ``renderer.validate`` renamed
     * method descriptions added to all functions except those in ``renderer.internal``
 
-  * New function: ``renderer.misc.getSkin()``
+  * New function: ``renderer.misc.get_skin()``
   * New logging system that does not clog your terminal
   * changed colour library from ``colorama`` to ``blessed``
   * fixed ``renderer.mergeTiles()``, especially in determining which zooms to merge and retrieving images
-  * fixed ``renderer.misc.getSkin()``
+  * fixed ``renderer.misc.get_skin()``
 
 * **v1.0 (13/4/21)**
 

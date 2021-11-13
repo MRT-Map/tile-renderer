@@ -373,7 +373,7 @@ Misc
 ----
 .. py:currentmodule:: renderer.misc
 
-.. py:function:: getSkin(name: str) -> dict
+.. py:function:: get_skin(name: str) -> dict
    
    Gets a skin from inside the package.
 
