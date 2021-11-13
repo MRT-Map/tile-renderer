@@ -9,8 +9,12 @@ term = blessed.Terminal()
 
 def find_ends(coords: List[TileCoord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]:
     """
-    Find the minimum and maximum x/y values of a set of tiles coords.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.tile.findEnds
+    Find the minimum and maximum x/y values of a set of TileCoords.
+
+    :param List[TileCoord] coords: a list of tile coordinates, provide in a tuple of ``(z,x,y)``
+
+    :returns: Returns in the form ``(x_max, x_min, y_max, y_min)``
+    :rtype: Tuple[RealNum, RealNum, RealNum, RealNum]
     """
     validate.v_tile_coords(coords, -math.inf, math.inf)
     x_max = -math.inf

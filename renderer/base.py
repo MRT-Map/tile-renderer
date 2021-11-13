@@ -20,11 +20,19 @@ import renderer.tools.nodes as tools_nodes
 import renderer.tools.tile as tools_tile
 import renderer.tools.geo_json as tools_geo_json
 
-def tile_merge(images: Union[str, Dict[str, Image.Image]], save_images: bool=True, save_dir: str="tiles/",
+def merge_tiles(images: Union[str, Dict[str, Image.Image]], save_images: bool=True, save_dir: str="tiles/",
                zoom: Optional[List[int]]=None) -> Dict[str, Image.Image]:
     """
-    Merges tiles rendered by renderer.render().
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#tileMerge
+    Merges tiles rendered by :py:func:`render`.
+
+    :param images: Give in the form of ``"(tile coord)": (PIL Image)``, like the return value of :py:func:`render`, or as a path to a directory.
+    :type images: str or Dict[str, Image] 
+    :param bool save_images: whether to save the tile imaegs in a folder or not
+    :param str save_dir: the directory to save tiles in
+    :param Optional[List[int]] zoom: if left empty, automatically calculates all zoom values based on tiles; otherwise, the layers of zoom to merge.
+
+    :returns: Given in the form of ``"(Zoom)": (PIL Image)``
+    :rtype: List[Image]
     """
     if zoom is None: zoom = []
     term = blessed.Terminal()
@@ -71,7 +79,7 @@ def tile_merge(images: Union[str, Dict[str, Image.Image]], save_images: bool=Tru
                     i.paste(to_merge[f"{z}, {x}, {y}"], (px, py))
                     merged += 1
                     with term.location(): print(term.green(f"Zoom {z}: ")
-                                                + f"{internal._percentage(merged, len(to_merge.keys()))}% |"
+                                                + f"{internal._percentage(merged, len(to_merge.keys()))}% | "
                                                 + f"{internal.ms_to_time(internal._time_remaining(start, merged, len(to_merge.keys())))} left | "
                                                 + term.bright_black(f"Pasted {z}, {x}, {y}"), end=term.clear_eos+"\r")
                 py += tile_size
@@ -91,7 +99,28 @@ def render(component_json: ComponentJson, node_json: NodeJson, min_zoom: int, ma
            processes: int=1, tiles: Optional[List[TileCoord]]=None, offset: Tuple[RealNum, RealNum]=(0, 0)) -> Dict[str, Image.Image]:
     """
     Renders tiles from given coordinates and zoom values.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.render
+
+    .. warning::
+        Run this function under ``if __name__ == "__main__"``, or else there would be a lot of multiprocessing RuntimeErrors.
+
+    :param ComponentJson component_json: a JSON of components
+    :param NodeJson node_json: a JSON of nodes
+    :param int min_zoom: minimum zoom value
+    :param int max_zoom: maximum zoom value
+    :param RealNum max_zoom_range: actual distance covered by a tile in the maximum zoom
+    :param str skin: The skin to use for rendering the tiles
+    :param int save_images: whether to save the tile images in a folder or not
+    :param str save_dir: the directory to save tiles in
+    :param str assets_dir: the asset directory for the skin
+    :param int processes: The amount of processes to run for rendering
+    :param Optional[List[TileCoord]] tiles: a list of tiles to render, given in tuples of ``(z,x,y)`` where z = zoom and x,y = tile coordinates
+    :param offset: the offset to shift all node coordinates by, given as ``(x,y)``
+    :type offset: Tuple[RealNum, RealNum]
+
+    :returns: Given in the form of ``(tile coord): (PIL Image)``
+    :rtype: Dict[str, Image]
+
+    :raises ValueError: if max_zoom < min_zoom
     """
     if max_zoom < min_zoom:
         raise ValueError("Max zoom value is greater than min zoom value")

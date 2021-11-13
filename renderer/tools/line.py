@@ -10,8 +10,11 @@ term = blessed.Terminal()
 def find_ends(coords: List[Coord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]:
     """
     Find the minimum and maximum x/y values of a set of coords.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.line.findEnds
-    """
+
+    :param List[Coord] coords: a list of coordinates, provide in a tuple of ``(x,y)``
+
+    :returns: Returns in the form ``(x_max, x_min, y_max, y_min)``
+    :rtype: Tuple[RealNum, RealNum, RealNum, RealNum]"""
     validate.v_coords(coords)
     x_max = -math.inf
     x_min = math.inf
@@ -26,8 +29,18 @@ def find_ends(coords: List[Coord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]:
 
 def to_tiles(coords: List[Coord], min_zoom: int, max_zoom: int, max_zoom_range: RealNum) -> List[TileCoord]:
     """
-    Generates tile coordinates from list of regular coordinates using renderer.tools.coordToTiles().
-    More info: Mainly for rendering whole components. https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.line.toTiles
+    Generates tile coordinates from list of regular coordinates using :py:func:`tools.coord.to_tiles()`. Mainly for rendering whole components.
+
+    :param List[Coord] coords: of coordinates in tuples of ``(x,y)``
+    :param int min_zoom: minimum zoom value
+    :param int max_zoom: maximum zoom value
+    :param RealNum max_zoom_range: range of coordinates covered by a tile in the maximum zoom (how do I phrase this?) For example, a ``max_zoom`` of 5 and a ``max_zoomValue`` of 8 will make a 5-zoom tile cover 8 units
+
+    :returns: A list of tile coordinates
+    :rtype: List[TileCoord]
+
+    :raises ValueError: if max_zoom < min_zoom
+    :raises ValueError: if empty list of coords given
     """
     validate.v_coords(coords)
     if len(coords) == 0:

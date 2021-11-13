@@ -10,9 +10,14 @@ term = blessed.Terminal()
 
 def find_ends(component_json: ComponentJson, node_json: NodeJson) -> Tuple[RealNum, RealNum, RealNum, RealNum]:
     """
-    Finds the minimum and maximum X and Y values of a JSON or dictionary of components
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.plaJson.findEnds
-    """
+    Finds the minimum and maximum X and Y values of a JSON of components
+    
+    :param ComponentJson component_json: a JSON of components
+    :param NodeJson node_json: a JSON of nodes
+    
+    :returns: Returns in the form `(x_max, x_min, y_max, y_min)`
+    :rtype: Tuple[RealNum, RealNum, RealNum, RealNum]
+   """
     validate.v_component_json(component_json, node_json)
     validate.v_node_json(node_json)
     x_max = -math.inf
@@ -31,8 +36,18 @@ def find_ends(component_json: ComponentJson, node_json: NodeJson) -> Tuple[RealN
 
 def rendered_in(component_json: ComponentJson, node_json: NodeJson, min_zoom: int, max_zoom: int, max_zoom_range: RealNum) -> List[TileCoord]:
     """
-    Like renderer.tools.lineToTiles(), but for a JSON or dictionary of components.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.plaJson.renderedIn
+    Like :py:func:`tools.line.to_tiles`, but for a JSON of components.
+
+    :param ComponentJson component_json: a JSON of components
+    :param NodeJson node_json: a JSON of nodes
+    :param int min_zoom: minimum zoom value
+    :param int max_zoom: maximum zoom value
+    :param RealNum max_zoom_range: actual distance covered by a tile in the maximum zoom
+
+    :returns: A list of tile coordinates
+    :rtype: List[TileCoord]
+
+    :raises ValueError: if max_zoom < min_zoom
     """
     validate.v_component_json(component_json, node_json)
     validate.v_node_json(node_json)
@@ -49,8 +64,14 @@ def rendered_in(component_json: ComponentJson, node_json: NodeJson, min_zoom: in
 
 def to_geo_json(component_json: ComponentJson, node_json: NodeJson, skin_json: SkinJson) -> dict:
     """
-    Converts component Json into GeoJson (with nodes and skin).
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.plaJson.toGeoJson
+    Converts component JSON into GeoJson (with nodes and skin).
+   
+    :param ComponentJson component_json: a JSON of components
+    :param NodeJson node_json: a JSON of nodes
+    :param SkinJson skin_json: a JSON of the skin
+
+    :returns: A GeoJson dictionary
+    :rtype: dict
     """
     validate.v_component_json(component_json, node_json)
     validate.v_node_json(node_json)

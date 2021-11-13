@@ -23,11 +23,6 @@ Component: TypedDict = TypedDict('Component', {
 })
 ComponentJson: TypeAlias = Dict[str, Component]
 
-class _Info(TypedDict):
-    size: int
-    font: Dict[str, str]
-    background: List[int]
-
 SkinInfo: TypedDict = TypedDict('SkinInfo', {
     'size': int,
     'font': Dict[str, str],

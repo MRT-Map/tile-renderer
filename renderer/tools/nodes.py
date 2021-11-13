@@ -9,7 +9,12 @@ term = blessed.Terminal()
 def find_components_attached(node_id: str, component_json: ComponentJson) -> List[Tuple[str, int]]:
     """
     Finds which components attach to a node.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.nodes.findPLAsAttached
+   
+    :param str node_id: the node to search for
+    :param ComponentJson component_json: a JSON of components
+    
+    :returns: A list of tuples in the form of ``(component_id, index)``
+    :rtype: List[Tuple[str, int]]
     """
     components = []
     for component_id, component in component_json.items():
@@ -20,9 +25,15 @@ def find_components_attached(node_id: str, component_json: ComponentJson) -> Lis
 
 def to_coords(nodes: List[str], node_json: NodeJson) -> List[Coord]:
     """
-    Converts a list of nodes IDs into a list of coordinates with a node dictionary/JSON as its reference.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.nodes.toCoords
-    """
+    Converts a list of nodes IDs into a list of coordinates with a JSON of nodes as its reference.
+   
+   :param List[str] nodes: a list of node IDs
+   :param NodeJson node_json: a JSON of nodes
+   
+   :returns: A list of coordinates
+   :rtype: List[Coord]
+
+   :raises KeyError: if a node does not exist"""
     validate.v_node_json(node_json)
     validate.v_node_list(nodes, node_json)
     coords = []

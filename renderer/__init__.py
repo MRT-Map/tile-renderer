@@ -1,4 +1,4 @@
-from renderer.base import *
+from renderer.base import merge_tiles, render
 import renderer.mathtools
 import renderer.validate
 import renderer.misc

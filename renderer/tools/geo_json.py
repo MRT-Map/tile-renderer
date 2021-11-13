@@ -9,7 +9,11 @@ term = blessed.Terminal()
 def to_component_node_json(geo_json: dict) -> Tuple[ComponentJson, NodeJson]:
     """
     Converts GeoJson to component and node JSONs.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.geoJson.toNodePlaJson
+
+    :param dict geoJson: a GeoJson dictionary
+
+    :returns: Components and nodes
+    :rtype: Tuple[ComponentJson, NodeJson]
     """
     validate.v_geo_json(geo_json)
     component_json = {}

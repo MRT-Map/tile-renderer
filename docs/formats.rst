@@ -8,7 +8,7 @@ PLAs
   {
     "(nameid)": {
       "type": "(type)",
-      "displayname": "(displayname)",
+      "displayname": "(disp>layname)",
       "description": "(description)".
       "layer": layer_no,
       "nodes": [nodeid, nodeid, nodeid],

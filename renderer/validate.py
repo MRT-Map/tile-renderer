@@ -9,7 +9,10 @@ from renderer.types import *
 def v_coords(coords: List[Coord]) -> Literal[True]:
     """
     Validates a list of coordinates.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.coords
+      
+    :param List[Coord] coords: a list of coordinates.
+        
+    :returns: Returns True if dictionaryno errors
     """
     for item in coords:
         if not isinstance(item, (tuple, list)):
@@ -24,7 +27,12 @@ def v_coords(coords: List[Coord]) -> Literal[True]:
 def v_tile_coords(tiles: List[TileCoord], min_zoom: Union[int, Literal[math.inf]], max_zoom: Union[int, Literal[math.inf]]) -> Literal[True]:
     """
     Validates a list of tile coordinates.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.tileCoords
+      
+    :param List[TileCoord] tiles: a list of tile coordinates.
+    :param int min_zoom: minimum zoom value
+    :param int max_zoom: maximum zoom value
+        
+    :returns: Returns True if no errors
     """
     for item in tiles:
         if not isinstance(item, tuple):
@@ -43,7 +51,11 @@ def v_tile_coords(tiles: List[TileCoord], min_zoom: Union[int, Literal[math.inf]
 def v_node_list(nodes: List[str], node_json: NodeJson) -> Literal[True]:
     """
     Validates a list of node IDs.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.nodeList
+      
+    :param List[str] nodes: a list of node IDs.
+    :param NodeJson node_json: a dictionary of nodes
+        
+    :returns: Returns True if no errors
     """
     for node in nodes:
         if node not in node_json.keys():
@@ -53,8 +65,11 @@ def v_node_list(nodes: List[str], node_json: NodeJson) -> Literal[True]:
 
 def v_node_json(node_json: NodeJson) -> Literal[True]:
     """
-    Validates a dictionary/JSON of nodes.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.nodeJson
+    Validates a JSON of nodes.
+        
+    :param NodeJson node_json: a dictionary of nodes
+        
+    :returns: Returns True if no errors
     """
     schema = Schema({
         str: {
@@ -68,8 +83,12 @@ def v_node_json(node_json: NodeJson) -> Literal[True]:
 
 def v_component_json(component_json: ComponentJson, node_json: NodeJson) -> Literal[True]:
     """
-    Validates a dictionary/JSON of components.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.plaJson
+    Validates a JSON of components.
+      
+    :param ComponentJson component_json: a dictionary of components
+    :param NodeJson node_json: a dictionary of nodes
+        
+    :returns: Returns True if no errors
     """
     schema = Schema({
         str: {
@@ -88,7 +107,10 @@ def v_component_json(component_json: ComponentJson, node_json: NodeJson) -> Lite
 def v_skin_json(skin_json: SkinJson) -> Literal[True]:
     """
     Validates a skin JSON file.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.validate.skinJson
+
+    :param SkinJson skin_json: the skin JSON file
+    
+    :returns: Returns True if no errors
     """
     mainSchema = Schema({
         "info": {
@@ -215,6 +237,13 @@ def v_skin_json(skin_json: SkinJson) -> Literal[True]:
     return True
 
 def v_geo_json(geo_json: dict) -> Literal[True]:
+    """
+    Validates a GeoJson file.
+
+    :param dict geoJson: the GeoJson file
+    
+    :returns: Returns True if no errors
+    """
     mainSchema = Schema({
         "type": "FeatureCollection", 
         "features": [{

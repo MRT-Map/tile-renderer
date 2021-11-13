@@ -9,7 +9,16 @@ term = blessed.Terminal()
 def to_tiles(coord: Coord, min_zoom: int, max_zoom: int, max_zoom_range: RealNum) -> List[TileCoord]:
     """
     Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.tools.coord.toTiles
+
+    :param Coord coord: Coordinates provided in the form ``(x,y)``
+    :param int min_zoom: minimum zoom value
+    :param int max_zoom: maximum zoom value
+    :param RealNum max_zoom_range: actual distance covered by a tile in the maximum zoom
+
+    :returns: A list of tile coordinates
+    :rtype: List[TileCoord]
+
+    :raises ValueError: if max_zoom < min_zoom
     """
     if max_zoom < min_zoom:
         raise ValueError("Max zoom value is lesser than min zoom value")

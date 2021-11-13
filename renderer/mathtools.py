@@ -3,11 +3,22 @@ import sympy as sym
 import numpy as np
 
 from renderer.types import *
+from typing import Optional
 
 def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: int=1, return_both: bool=False) -> Union[List[Tuple[RealNum, RealNum, RealNum]], List[List[Tuple[RealNum, RealNum, RealNum]]]]:
     """
     Calculates the midpoint of two lines, offsets the distance away from the line, and calculates the rotation of the line.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.midpoint
+      
+    :param RealNum x1: the x-coordinate of the 1st point
+    :param RealNum y1: the y-coordinate of the 1st point
+    :param RealNum x2: the x-coordinate of the 2nd point
+    :param RealNum y2: the y-coordinate of the 2nd point
+    :param RealNum o: the offset from the line. If positive, the point above the line is returned; if negative, the point below the line is returned
+    :param int n: the number of midpoints on a single segment
+    :param bool return_both: if True, it will return both possible points.
+        
+    :return: A list of *(lists of, when return_both=True)* tuples in the form of (x, y, rot)
+    :rtype: List[Tuple[RealNum, RealNum, RealNum]] *when return_both=False,* List[List[Tuple[RealNum, RealNum, RealNum]]] *when return_both=True*
     """
     #print(x1, y1, x2, y2, o, n)
     points = []
@@ -52,7 +63,18 @@ def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: 
 def lines_intersect(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, x3: RealNum, y3: RealNum, x4: RealNum, y4: RealNum) -> bool:
     """
     Finds if two segments intersect.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.linesIntersect
+    
+    :param RealNum x1: the x-coordinate of the 1st point of the 1st segment.
+    :param RealNum y1: the y-coordinate of the 1st point of the 1st segment.
+    :param RealNum x2: the x-coordinate of the 2nd point of the 1st segment.
+    :param RealNum y2: the y-coordinate of the 2nd point of the 1st segment.
+    :param RealNum x3: the x-coordinate of the 1st point of the 2nd segment.
+    :param RealNum y3: the y-coordinate of the 1st point of the 2nd segment.
+    :param RealNum x4: the x-coordinate of the 2nd point of the 2nd segment.
+    :param RealNum y4: the y-coordinate of the 2nd point of the 2nd segment.
+        
+    :returns: Whether the two segments intersect.
+    :rtype: bool
     """
     xv, yv = sym.symbols('xv,yv')
     if x1 == x2:
@@ -107,8 +129,14 @@ def lines_intersect(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, x3: Real
 
 def point_in_poly(xp: RealNum, yp: RealNum, coords: List[Coord]) -> bool:
     """
-    Finds if a point is in a polygon. WARNING: If your polygon has a lot of corners, this will take very long.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.pointInPoly
+    Finds if a point is in a polygon.
+        
+    :param RealNum xp: the x-coordinate of the point.
+    :param RealNum yp: the y-coordinate of the point.
+    :param List[Coord] list: the coordinates of the polygon; give in ``(x,y)``
+        
+    :returns: Whether the point is inside the polygon.
+    :rtype: bool
     """
     r = -math.inf
     for x, _ in coords:
@@ -132,7 +160,11 @@ def point_in_poly(xp: RealNum, yp: RealNum, coords: List[Coord]) -> bool:
 def poly_center(coords: List[Coord]) -> Coord:
     """
     Finds the center point of a polygon.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.polyCenter
+      
+    :param List[Coord] coords: the coordinates of the polygon; give in ``(x,y)``
+        
+    :returns: The center of the polygon, given in ``(x,y)``
+    :rtype: Coord
     """
     mx = []
     my = []
@@ -146,7 +178,15 @@ def poly_center(coords: List[Coord]) -> Coord:
 def line_in_box(line: List[Coord], top: RealNum, bottom: RealNum, left: RealNum, right: RealNum) -> bool:
     """
     Finds if any nodes of a line go within the box.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.lineInBox
+      
+    :param List[Coord] line: the line to check for
+    :param RealNum top: the bounds of the box
+    :param RealNum bottom: the bounds of the box
+    :param RealNum left: the bounds of the box
+    :param RealNum right: the bounds of the box
+        
+    :returns: Whether any nodes of a line go within the box.
+    :rtype: bool
     """
     for i in range(len(line)-1):
         x1, y1 = line[i]
@@ -165,7 +205,18 @@ def line_in_box(line: List[Coord], top: RealNum, bottom: RealNum, left: RealNum,
 def dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: RealNum, o: RealNum=0, empty_start: bool=False) -> List[List[Coord]]:
     """
     Finds points along a segment that are a specified distance apart.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.dash
+      
+    :param RealNum x1: the x-coordinate of the 1st point
+    :param RealNum y1: the y-coordinate of the 1st point
+    :param RealNum x2: the x-coordinate of the 2nd point
+    :param RealNum y2: the y-coordinate of the 2nd point
+    :param RealNum d: the length of a single dash
+    :param RealNum g: the length of the gap between dashes
+    :param RealNum o: the offset from (x1,y1) towards (x2,y2) before dashes are calculated
+    :param bool empty_start: Whether to start the line from (x1,y1) empty before the start of the next dash
+        
+    :returns: A list of points along the segment, given in [[(x1, y1), (x2, y2)], etc]
+    :rtype: List[List[Coord]]
     """
     if d <= 0 or g <= 0:
         raise ValueError("dash or gap length cannot be <= 0")
@@ -226,8 +277,14 @@ def dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: Real
 def dash_offset(coords: List[Coord], d: RealNum, g: RealNum) -> List[Tuple[RealNum, bool]]:
     """
     Calculates the offsets on each coord of a line for a smoother dashing sequence.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.dashOffset
-    """
+
+    :param List[Coord] coords: the coords of the line
+    :param RealNum d: the length of a single dash
+    :param RealNum g: the length of the gap between dashes
+
+    :returns: The offsets of each coordinate, and whether to start the next segment with empty_start, given in (offset, empty_start)
+    :rtype: Tuple[RealNum, bool]
+   """
     o = 0
     offsets = [(0, False)]
     empty_start = False
@@ -272,8 +329,16 @@ def dash_offset(coords: List[Coord], d: RealNum, g: RealNum) -> List[Tuple[RealN
 def rotate_around_pivot(x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta: RealNum) -> Coord:
     """
     Rotates a set of coordinates around a pivot point.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.rotateAroundPivot
-    """
+
+    :param RealNum x: the x-coordinate to be rotated
+    :param RealNum y: the y-coordinate to be rotated
+    :param RealNum px: the x-coordinate of the pivot
+    :param RealNum py: the y-coordinate of the pivot
+    :param RealNum theta: how many **degrees** to rotate
+
+    :returns: The rotated coordinates, given in ``(x,y)``
+    :rtype: Coord
+   """
     #provide θ in degrees
     theta = math.radians(theta)
     x -= px
@@ -284,10 +349,17 @@ def rotate_around_pivot(x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta:
     ny += py
     return nx, ny
 
-def pointsAway(x: RealNum, y: RealNum, d: RealNum, m: RealNum) -> List[Coord]:
+def pointsAway(x: RealNum, y: RealNum, d: RealNum, m: Optional[RealNum]) -> List[Coord]:
     """
     Finds two points that are a specified distance away from a specified point, all on a straight line.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.pointsAway
+
+    :param RealNum x: the x-coordinate of the original point
+    :param RealNum y: the y-coordinate of the original point
+    :param RealNum d: the distance the two points from the original point
+    :param Optional[RealNum] m: the gradient of the line. Give ``None`` for a gradient of undefined.
+
+    :returns: Given in ``[(x1, y1), (x2, y2)]``
+    :rtype: List[Coord]
     """
     theta = math.atan(m) if m is not None else math.pi / 2
     dx = round(d*math.cos(theta), 10)

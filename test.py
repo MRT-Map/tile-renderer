@@ -2,6 +2,7 @@ import renderer
 import json
 import time
 import pytest
+import multiprocessing
 
 def exampleplaRead():
     with open("data/examplepla.json", "r") as f:
@@ -22,8 +23,8 @@ def test_pytest():
         s = renderer.misc.get_skin()
 
         #base
-        a = renderer.render(p, n, 8, 8, 8, save_dir="tiles/", processes=10)
-        renderer.tile_merge(a, save_images=False)
+        a = renderer.render(p, n, 8, 8, 8, save_dir="tiles/", processes=8)
+        renderer.merge_tiles(a, save_images=False)
         
         #tools
         renderer.tools.component_json.find_ends(p, n)

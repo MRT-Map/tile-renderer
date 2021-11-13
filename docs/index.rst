@@ -8,7 +8,7 @@ Leaflet.js streetmap tile renderer, made by 7d. `Git repo here <https://github.c
    :caption: Contents:
    
    changelog
-   functions
+   reference
    cli
    formats
    tutorials

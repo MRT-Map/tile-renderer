@@ -93,7 +93,7 @@ def cmd():
         print(term.green("Validated"))
     elif args.task == "merge":
         if not args.image_dir.endswith("/") and args.image_dir != "": args.image_dir += '/'
-        renderer.tile_merge(args.image_dir, save_dir=args.save_dir, zoom=args.zoom)
+        renderer.merge_tiles(args.image_dir, save_dir=args.save_dir, zoom=args.zoom)
     else:
         parser.print_help()
 
