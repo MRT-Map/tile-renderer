@@ -21,17 +21,17 @@ import renderer.tools.tile as tools_tile
 import renderer.tools.geo_json as tools_geo_json
 
 def merge_tiles(images: Union[str, Dict[str, Image.Image]], save_images: bool=True, save_dir: str="tiles/",
-               zoom: Optional[List[int]]=None) -> Dict[str, Image.Image]:
+                zoom: Optional[List[int]]=None) -> Dict[str, Image.Image]:
     """
     Merges tiles rendered by :py:func:`render`.
 
-    :param images: Give in the form of ``"(tile coord)": (PIL Image)``, like the return value of :py:func:`render`, or as a path to a directory.
+    :param images: Give in the form of ``(tile coord): (PIL Image)``, like the return value of :py:func:`render`, or as a path to a directory.
     :type images: str or Dict[str, Image] 
-    :param bool save_images: whether to save the tile imaegs in a folder or not
+    :param bool save_images: whether to save the tile images in a folder or not
     :param str save_dir: the directory to save tiles in
     :param Optional[List[int]] zoom: if left empty, automatically calculates all zoom values based on tiles; otherwise, the layers of zoom to merge.
 
-    :returns: Given in the form of ``"(Zoom)": (PIL Image)``
+    :returns: Given in the form of ``(Zoom): (PIL Image)``
     :rtype: List[Image]
     """
     if zoom is None: zoom = []

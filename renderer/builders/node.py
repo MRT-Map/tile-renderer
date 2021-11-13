@@ -7,10 +7,10 @@ term = blessed.Terminal()
 
 print(term.yellow("Welcome to the node JSON builder!\n--------------------------------"))
 
-nodes, filePath = internal._ask_file_name("Node") # pylint: disable=no-member
+nodes, file_path = internal._ask_file_name("Node") # pylint: disable=no-member
 
 print(term.yellow("Ingame, press F3+C once, and paste it here.\nType 'exit' to exit."))
-newNodes = {}
+new_nodes = {}
 e = False
 while not e:
     pasted = input(term.yellow("Paste: "))
@@ -25,24 +25,24 @@ while not e:
     x = int(float(groups.group(1)))
     y = int(float(groups.group(2)))
 
-    nameConfirmed = False
-    while not nameConfirmed:
+    name_confirmed = False
+    while not name_confirmed:
         name = input(term.yellow("Node name: "))
-        if name in nodes.keys() or name in newNodes.keys():
+        if name in nodes.keys() or name in new_nodes.keys():
             print(term.red("Node already exists; do you want to override its current value?"))
-            print(term.red(nodes[name] if name in nodes.keys() else newNodes[name]))
+            print(term.red(nodes[name] if name in nodes.keys() else new_nodes[name]))
             if input(term.red("Type 'y' to confirm: ")) != "y":
                 continue
-        nameConfirmed = True
+        name_confirmed = True
 
-    newNodes[name] = {"x": x, "y": y, "connections": []}
+    new_nodes[name] = {"x": x, "y": y, "connections": []}
 
-with open(filePath, "r+") as f:
+with open(file_path, "r+") as f:
     d = json.load(f)
-    d.update(newNodes)
+    d.update(new_nodes)
     f.seek(0)
     f.truncate()
     json.dump(d, f, indent=4)
     f.close()
 
-print(term.yellow("Written to " + filePath))
+print(term.yellow("Written to " + file_path))

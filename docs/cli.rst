@@ -13,11 +13,11 @@ For more help, run ``renderer <task> -h``
    .. program-output:: python -m renderer nodebuilder -h
       :cwd: ..
 
-.. describe:: renderer plabuilder
+.. describe:: renderer compbuilder
 
-   Run the PLA builder for nodes.
+   Run the component builder for nodes.
 
-    .. program-output:: python -m renderer plabuilder -h
+    .. program-output:: python -m renderer compbuilder -h
        :cwd: ..
 
 .. describe:: renderer validate
@@ -47,4 +47,3 @@ For more help, run ``renderer <task> -h``
 
     .. program-output:: python -m renderer merge -h
        :cwd: ..
-

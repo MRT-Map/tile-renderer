@@ -42,23 +42,22 @@ import renderer  # important!!
 import json
 
 
-def readFile(dir):  # extract from JSON as dict
-  with open(dir, "r") as f:
-    data = json.load(f)
-    f.close()
-    return data
+def readFile(path):  # extract from JSON as dict
+    with open(path, "r") as f:
+        data = json.load(f)
+        f.close()
+        return data
 
 
-pla = readFile("path_to_your_PLA_file/pla.json")
+pla = readFile("path_to_your_components_file/components.json")
 nodes = readFile("path_to_your_nodes_file/nodes.json")
-skin = renderer.misc.get_skin("default")
 
-if __name__ == "__main__": renderer.render(pla, nodes, skin, 1, 2, 8)
+if __name__ == "__main__": renderer.render(pla, nodes, 1, 2, 8)
 # renders tiles at zoom levels 1 and 2 with the max zoom tile covering 8 units
 # Don't like clogging the main directory? Create a new folder and use this instead:
-# if __name__ == "__main__": renderer.render(pla, nodes, skin, 1, 2, 8, save_dir="your_folder_name/")
+# if __name__ == "__main__": renderer.render(pla, nodes, 1, 2, 8, save_dir="your_folder_name/")
 # Too slow? Increase the number of processes
-# if __name__ == "__main__": renderer.render(pla, nodes, skin, 1, 2, 8, processes=5)
+# if __name__ == "__main__": renderer.render(pla, nodes, 1, 2, 8, processes=5)
 ```
 
 <!--

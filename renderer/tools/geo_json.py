@@ -10,7 +10,7 @@ def to_component_node_json(geo_json: dict) -> Tuple[ComponentJson, NodeJson]:
     """
     Converts GeoJson to component and node JSONs.
 
-    :param dict geoJson: a GeoJson dictionary
+    :param dict geo_json: a GeoJson dictionary
 
     :returns: Components and nodes
     :rtype: Tuple[ComponentJson, NodeJson]
@@ -78,6 +78,6 @@ def to_component_node_json(geo_json: dict) -> Tuple[ComponentJson, NodeJson]:
         else:
             single_geometry(feature['geometry'], feature['properties'])
 
-    for feature in geo_json['features']:
-        single_feature(feature)
+    for f in geo_json['features']:
+        single_feature(f)
     return component_json, node_json

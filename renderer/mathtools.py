@@ -133,7 +133,7 @@ def point_in_poly(xp: RealNum, yp: RealNum, coords: List[Coord]) -> bool:
         
     :param RealNum xp: the x-coordinate of the point.
     :param RealNum yp: the y-coordinate of the point.
-    :param List[Coord] list: the coordinates of the polygon; give in ``(x,y)``
+    :param List[Coord] coords: the coordinates of the polygon; give in ``(x,y)``
         
     :returns: Whether the point is inside the polygon.
     :rtype: bool

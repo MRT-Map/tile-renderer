@@ -12,7 +12,7 @@ def v_coords(coords: List[Coord]) -> Literal[True]:
       
     :param List[Coord] coords: a list of coordinates.
         
-    :returns: Returns True if dictionaryno errors
+    :returns: Returns True if no errors
     """
     for item in coords:
         if not isinstance(item, (tuple, list)):
@@ -240,7 +240,7 @@ def v_geo_json(geo_json: dict) -> Literal[True]:
     """
     Validates a GeoJson file.
 
-    :param dict geoJson: the GeoJson file
+    :param dict geo_json: the GeoJson file
     
     :returns: Returns True if no errors
     """
