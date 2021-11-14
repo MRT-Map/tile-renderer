@@ -266,7 +266,7 @@ def render(component_json: ComponentJson, node_json: NodeJson, min_zoom: int, ma
             input_.append((lock, operated, render_start, i, tile_list[i], operations, component_json, node_json, skin_json, min_zoom, max_zoom, max_zoom_range, save_images, save_dir, assets_dir))
         p = multiprocessing.Pool(processes)
         try:
-            preresult = p.map(rendering.tiles, input_)
+            preresult = p.map(rendering._tile, input_)
         except KeyboardInterrupt:
             p.terminate()
             sys.exit()

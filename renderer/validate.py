@@ -24,7 +24,7 @@ def v_coords(coords: List[Coord]) -> Literal[True]:
                 raise TypeError(f"Coordinate {n} is not type 'int/float'")
     return True
 
-def v_tile_coords(tiles: List[TileCoord], min_zoom: Union[int, Literal[math.inf]], max_zoom: Union[int, Literal[math.inf]]) -> Literal[True]:
+def v_tile_coords(tiles: List[TileCoord], min_zoom: int, max_zoom: int) -> Literal[True]:
     """
     Validates a list of tile coordinates.
       

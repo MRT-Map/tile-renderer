@@ -8,10 +8,23 @@ import itertools
 import renderer.internals.internal as internal
 import renderer.tools as tools
 import renderer.mathtools as mathtools
+from renderer.types import *
 term = blessed.Terminal()
 
-def tiles(args):
-    lock, operated, start, tile_coords, tile_components, operations, component_json, node_json, skin_json, _, max_zoom, max_zoom_range, save_images, save_dir, assets_dir = args # _ is min_zoom
+def _node_list_to_image_coords(node_list: List[str], node_json: NodeJson, skin_json: SkinJson, tile_coords: TileCoord, size: RealNum) -> List[Coord]:
+    image_coords = []
+    for x, y in tools.nodes.to_coords(node_list, node_json):
+        xc = x - internal._str_to_tuple(tile_coords)[1] * size
+        yc = y - internal._str_to_tuple(tile_coords)[2] * size
+        xs = int(skin_json['info']['size'] / size * xc)
+        ys = int(skin_json['info']['size'] / size * yc)
+	image_coords.append(xs, ys)
+    return image_coords
+
+
+def _tile(args):
+    lock, operated, start, tile_coords, tile_components, operations, component_json, \
+    node_json, skin_json, _, max_zoom, max_zoom_range, save_images, save_dir, assets_dir = args # _ is min_zoom
     #print(operations)
     pid = multiprocessing.current_process()._identity[0] - 1
     
@@ -20,7 +33,9 @@ def tiles(args):
         lock.acquire()
         with term.location():
             if operated.value != 0 and operations != 0:
-                print(term.green(f"{internal._percentage(operated.value, operations)}% | {internal._ms_to_time(internal._time_remaining(start, operated.value, operations))} left | ") + f"{pid} | {tile_coords}: " + term.bright_black(msg), end=term.clear_eos + "\r")
+                print(term.green(f"{internal._percentage(operated.value, operations)}% | " +
+                f"{internal._ms_to_time(internal._time_remaining(start, operated.value, operations))} left | ") +
+                f"{pid} | {tile_coords}: " + term.bright_black(msg), end=term.clear_eos + "\r")
             else:
                 print(term.green(f"00.0% | 0.0s left | ") + f"{pid} | {tile_coords}: " + term.bright_black(msg), end=term.clear_eos+"\r")
         lock.release()
@@ -32,34 +47,34 @@ def tiles(args):
     
     p_log("Initialising canvas")
     size = max_zoom_range*2**(max_zoom - internal._str_to_tuple(tile_coords)[0])
-    im = Image.new(mode="RGBA", size=(skin_json['info']['size'], skin_json['info']['size']), color=tuple(skin_json['info']['background']))
-    img = ImageDraw.Draw(im)
+    img = Image.new(mode="RGBA", size=(skin_json['info']['size'], skin_json['info']['size']), color=tuple(skin_json['info']['background']))
+    imd = ImageDraw.Draw(img)
     text_list = []
     points_text_list = []
 
-    def getFont(f: str, s: int):
-        if f in skin_json['info']['font'].keys():
-            return ImageFont.truetype(assets_dir+skin_json['info']['font'][f], s)
+    def getFont(style: str, size: int):
+        if style in skin_json['info']['font'].keys():
+            return ImageFont.truetype(assets_dir+skin_json['info']['font'][style], size)
         raise ValueError
 
     for group in tile_components:
-        info = skin_json['types'][list(group.values())[0]['type'].split(" ")[0]]
+        type_info = skin_json['types'][list(group.values())[0]['type'].split(" ")[0]]
         style = []
-        for zoom in info['style'].keys():
+        for zoom in type_info['style'].keys():
             if max_zoom-internal._str_to_tuple(zoom)[1] <= internal._str_to_tuple(tile_coords)[0] <= max_zoom-internal._str_to_tuple(zoom)[0]:
-                style = info['style'][zoom]
+                style = type_info['style'][zoom]
                 break
         for step in style:
             for component_id, component in group.items():
-                coords = [(x - internal._str_to_tuple(tile_coords)[1] * size, y - internal._str_to_tuple(tile_coords)[2] * size) for x, y in tools.nodes.to_coords(component['nodes'], node_json)]
-                coords = [(int(skin_json['info']['size'] / size * x), int(skin_json['info']['size'] / size * y)) for x, y in coords]
-                
+                coords = _node_list_to_image_coords(component['nodes'], node_json, skin_json, tile_coords, size)
+
                 def point_circle():
-                    img.ellipse([coords[0][0]-step['size']/2+1, coords[0][1]-step['size']/2+1, coords[0][0]+step['size']/2, coords[0][1]+step['size']/2], fill=step['colour'], outline=step['outline'], width=step['width'])
+                    imd.ellipse([coords[0][0]-step['size']/2+1, coords[0][1]-step['size']/2+1, coords[0][0]+step['size']/2, coords[0][1]+step['size']/2],
+                                fill=step['colour'], outline=step['outline'], width=step['width'])
 
                 def point_text():
                     font = getFont("", step['size'])
-                    text_length = int(img.textlength(component['displayname'], font))
+                    text_length = int(imd.textlength(component['displayname'], font))
                     i = Image.new('RGBA', (2*text_length, 2*(step['size']+4)), (0, 0, 0, 0))
                     d = ImageDraw.Draw(i)
                     d.text((text_length, step['size']+4), component["displayname"], fill=step['colour'], font=font, anchor="mm")
@@ -69,24 +84,26 @@ def tiles(args):
                     # img.text((coords[0][0]+step['offset'][0], coords[0][1]+step['offset'][1]), component['displayname'], fill=step['colour'], font=font, anchor=step['anchor'])
 
                 def point_square():
-                    img.rectangle([coords[0][0]-step['size']/2+1, coords[0][1]-step['size']/2+1, coords[0][0]+step['size']/2, coords[0][1]+step['size']/2], fill=step['colour'], outline=step['outline'], width=step['width'])
+                    imd.rectangle([coords[0][0]-step['size']/2+1, coords[0][1]-step['size']/2+1, coords[0][0]+step['size']/2, coords[0][1]+step['size']/2],
+                                  fill=step['colour'], outline=step['outline'], width=step['width'])
 
                 def point_image():
                     icon = Image.open(assets_dir+step['file'])
-                    im.paste(icon, (int(coords[0][0]-icon.width/2+step['offset'][0]), int(coords[0][1]-icon.height/2+step['offset'][1])), icon)
+                    img.paste(icon, (int(coords[0][0]-icon.width/2+step['offset'][0]), int(coords[0][1]-icon.height/2+step['offset'][1])), icon)
 
                 def line_text():
                     p_log(f"{style.index(step)+1}/{len(style)} {component_id}: Calculating text length")
                     font = getFont("", step['size'])
-                    text_length = int(img.textlength(component['displayname'], font))
+                    text_length = int(imd.textlength(component['displayname'], font))
                     if text_length == 0:
-                        text_length = int(img.textlength("----------", font))
+                        text_length = int(imd.textlength("----------", font))
                     for c in range(len(coords)-1):
                         #print(coords)
                         #print(mathtools.line_in_box(coords, 0, skin_json['info']['size'], 0, skin_json['info']['size']))
                         t = math.floor(math.dist(coords[c], coords[c+1])/(4*text_length))
                         t = 1 if t == 0 else t
-                        if mathtools.line_in_box(coords, 0, skin_json['info']['size'], 0, skin_json['info']['size']) and 2*text_length <= math.dist(coords[c], coords[c + 1]):
+                        if mathtools.line_in_box(coords, 0, skin_json['info']['size'], 0, skin_json['info']['size']) \
+                           and 2*text_length <= math.dist(coords[c], coords[c + 1]):
                             #print(mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset']))     
                             p_log(f"{style.index(step)+1}/{len(style)} {component_id}: Generating name text")
                             for tx, ty, trot in mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset'], n=t):
@@ -117,10 +134,12 @@ def tiles(args):
                 def line_backfore():
                     if "dash" not in step.keys():
                         p_log(f"{style.index(step)+1}/{len(style)} {component_id}: Drawing line")
-                        img.line(coords, fill=step['colour'], width=step['width'], joint="curve")
-                        if "unroundedEnds" not in info['tags']:
-                            img.ellipse([coords[0][0]-step['width']/2+1, coords[0][1]-step['width']/2+1, coords[0][0]+step['width']/2, coords[0][1]+step['width']/2], fill=step['colour'])
-                            img.ellipse([coords[-1][0]-step['width']/2+1, coords[-1][1]-step['width']/2+1, coords[-1][0]+step['width']/2, coords[-1][1]+step['width']/2], fill=step['colour'])
+                        imd.line(coords, fill=step['colour'], width=step['width'], joint="curve")
+                        if "unroundedEnds" not in type_info['tags']:
+                            imd.ellipse([coords[0][0]-step['width']/2+1, coords[0][1]-step['width']/2+1, coords[0][0]+step['width']/2, coords[0][1]+step['width']/2],
+                                        fill=step['colour'])
+                            imd.ellipse([coords[-1][0]-step['width']/2+1, coords[-1][1]-step['width']/2+1, coords[-1][0]+step['width']/2, coords[-1][1]+step['width']/2],
+                                        fill=step['colour'])
                     else:
                         offset_info = mathtools.dash_offset(coords, step['dash'][0], step['dash'][1])
                         #print(offset_info)
@@ -129,12 +148,12 @@ def tiles(args):
                             o, empty_start = offset_info[c]
                             for dash_coords in mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['dash'][0], step['dash'][1], o, empty_start):
                                 #print(dash_coords)
-                                img.line(dash_coords, fill=step['colour'], width=step['width'])
+                                imd.line(dash_coords, fill=step['colour'], width=step['width'])
 
                 def area_bordertext():
                     p_log(f"{style.index(step)+1}/{len(style)} {component_id}: Calculating text length")
                     font = getFont("", step['size'])
-                    textLength = int(img.textlength(component['displayname'].replace('\n', ''), font))
+                    textLength = int(imd.textlength(component['displayname'].replace('\n', ''), font))
                     for c1 in range(len(coords)):
                         c2 = c1+1 if c1 != len(coords)-1 else 0
                         if mathtools.line_in_box(coords, 0, skin_json['info']['size'], 0, skin_json['info']['size']) and 2*textLength <= math.dist(coords[c1], coords[c2]):
@@ -144,7 +163,8 @@ def tiles(args):
                             t = 1 if t == 0 else t
                             allPoints = mathtools.midpoint(coords[c1][0], coords[c1][1], coords[c2][0], coords[c2][1], step['offset'], n=t, return_both=True)
                             for n in range(0, len(allPoints), 2):
-                                p_log(f"{style.index(step)+1}/{len(style)} {component_id}: {component_id}: Generating text {n + 1} of {len(allPoints)} in section {c1} of {len(coords) + 1}")
+                                p_log(f"{style.index(step)+1}/{len(style)} {component_id}: {component_id}: " +
+                                      f"Generating text {n + 1} of {len(allPoints)} in section {c1} of {len(coords) + 1}")
                                 points = [allPoints[n], allPoints[n+1]]
                                 if step['offset'] < 0:
                                     tx, ty, trot = points[0] if not mathtools.point_in_poly(points[0][0], points[0][1], coords) else points[1]
@@ -154,7 +174,8 @@ def tiles(args):
                                     tx, ty, trot = points[0] if mathtools.point_in_poly(points[0][0], points[0][1], coords) else points[1]
                                 i = Image.new('RGBA', (2*textLength, 2*(step['size']+4)), (0, 0, 0, 0))
                                 d = ImageDraw.Draw(i)
-                                d.text((textLength, step['size']+4), component["displayname"].replace('\n', ''), fill=step['colour'], font=font, anchor="mm")
+                                d.text((textLength, step['size']+4), component["displayname"].replace('\n', ''),
+                                       fill=step['colour'], font=font, anchor="mm")
                                 tw, th = i.size[:]
                                 i = i.rotate(trot, expand=True)
                                 text_list.append((i, tx, ty, tw, th, trot))
@@ -165,7 +186,7 @@ def tiles(args):
                     cx += step['offset'][0]
                     cy += step['offset'][1]
                     font = getFont("", step['size'])
-                    text_length = int(min(img.textlength(x, font) for x in component['displayname'].split('\n')))
+                    text_length = int(min(imd.textlength(x, font) for x in component['displayname'].split('\n')))
 
                     left = min(c[0] for c in coords)
                     right = max(c[0] for c in coords)
@@ -178,12 +199,12 @@ def tiles(args):
                         for token, ws in list(itertools.zip_longest(tokens, wss, fillvalue='')):
                             temp_text = text[:]
                             temp_text += token
-                            if int(img.textlength(temp_text.split('\n')[-1], font)) > dist:
+                            if int(imd.textlength(temp_text.split('\n')[-1], font)) > dist:
                                 text += '\n'+token+ws
                             else:
                                 text += token+ws
-                        text_length = int(max(img.textlength(x, font) for x in text.split("\n")))
-                        size = int(img.textsize(text, font)[1]+4)
+                        text_length = int(max(imd.textlength(x, font) for x in text.split("\n")))
+                        size = int(imd.textsize(text, font)[1]+4)
                     else:
                         text = component['displayname']
                         size = step['size']+4
@@ -224,10 +245,9 @@ def tiles(args):
 
                     if 'hollows' in component.keys():
                         for n in component['hollows']:
-                            nCoords = [(x - internal._str_to_tuple(tile_coords)[1] * size, y - internal._str_to_tuple(tile_coords)[2] * size) for x, y in tools.nodes.to_coords(n, node_json)]
-                            nCoords = [(int(skin_json['info']['size'] / size * x), int(skin_json['info']['size'] / size * y)) for x, y in nCoords]
-                            ad.polygon(nCoords, fill=(0, 0, 0, 0))
-                    im.paste(ai, (0, 0), ai)
+                            n_coords = _node_list_to_image_coords(n, node_json, skin_json, tile_coords, size)
+                            ad.polygon(n_coords, fill=(0, 0, 0, 0))
+                    img.paste(ai, (0, 0), ai)
 
                     if step['outline'] is not None:
                         p_log(f"{style.index(step)+1}/{len(style)} {component_id}: Drawing outline")
@@ -236,19 +256,18 @@ def tiles(args):
                         outlines = [exterior_outline]
                         if 'hollows' in component.keys():
                             for n in component['hollows']:
-                                nCoords = [(x - internal._str_to_tuple(tile_coords)[1] * size, y - internal._str_to_tuple(tile_coords)[2] * size) for x, y in tools.nodes.to_coords(n, node_json)]
-                                nCoords = [(int(skin_json['info']['size'] / size * x), int(skin_json['info']['size'] / size * y)) for x, y in nCoords]
-                                nCoords.append(nCoords[0])
-                                outlines.append(nCoords)
+                                n_coords = _node_list_to_image_coords(n, node_json, skin_json, tile_coords, size)
+                                n_coords.append(n_coords[0])
+                                outlines.append(n_coords)
                         for o_coords in outlines:
-                            img.line(o_coords, fill=step['outline'], width=2, joint="curve")
-                            if "unroundedEnds" not in info['tags']:
-                                img.ellipse([o_coords[0][0]-2/2+1, o_coords[0][1]-2/2+1, o_coords[0][0]+2/2, o_coords[0][1]+2/2], fill=step['outline'])
+                            imd.line(o_coords, fill=step['outline'], width=2, joint="curve")
+                            if "unroundedEnds" not in type_info['tags']:
+                                imd.ellipse([o_coords[0][0]-2/2+1, o_coords[0][1]-2/2+1, o_coords[0][0]+2/2, o_coords[0][1]+2/2], fill=step['outline'])
 
                 def area_centerimage():
                     x, y = mathtools.poly_center(coords)
                     icon = Image.open(assets_dir+step['file'])
-                    im.paste(i, (x+step['offset'][0], y+step['offset'][1]), icon)
+                    img.paste(i, (x+step['offset'][0], y+step['offset'][1]), icon)
 
                 funcs = {
                     "point": {
@@ -270,14 +289,14 @@ def tiles(args):
                     }
                 }
 
-                if step['layer'] not in funcs[info['type']].keys():
+                if step['layer'] not in funcs[type_info['type']].keys():
                     raise KeyError(f"{step['layer']} is not a valid layer")
                 p_log(f"{style.index(step)+1}/{len(style)} {component_id}: ")
-                funcs[info['type']][step['layer']]()
+                funcs[type_info['type']][step['layer']]()
 
                 operated.value += 1
 
-            if info['type'] == "line" and "road" in info['tags'] and step['layer'] == "back":
+            if type_info['type'] == "line" and "road" in type_info['tags'] and step['layer'] == "back":
                 p_log("Studs: Finding connected lines")
                 nodes = []
                 for component in group.values():
@@ -300,9 +319,8 @@ def tiles(args):
                             continue
                         
                         p_log("Studs: Extracting coords")
-                        con_coords = [(x - internal._str_to_tuple(tile_coords)[1] * size, y - internal._str_to_tuple(tile_coords)[2] * size) for x, y in tools.nodes.to_coords(component_json[con_component]['nodes'], node_json)]
-                        con_coords = [(int(skin_json['info']['size']/size*x), int(skin_json['info']['size']/size*y)) for x, y in con_coords]
-                        preConCoords = con_coords[:]
+                        con_coords = _node_list_to_image_coords(component_json[con_component]['nodes'], node_json, skin_json, tile_coords, size)
+                        pre_con_coords = con_coords[:]
                         
                         p_log("Studs: Coords processed")
                         if index == 0:
@@ -320,20 +338,20 @@ def tiles(args):
                                 con_coords[2] = ((con_coords[2][0]+con_coords[1][0])/2, (con_coords[2][1]+con_coords[1][1])/2)
                         p_log("Studs: Segment drawn")
                         if "dash" not in con_step.keys():
-                            img.line(con_coords, fill=con_step['colour'], width=con_step['width'], joint="curve")
-                            img.ellipse([con_coords[0][0]-con_step['width']/2+1, con_coords[0][1]-con_step['width']/2+1, con_coords[0][0]+con_step['width']/2, con_coords[0][1]+con_step['width']/2], fill=con_step['colour'])
-                            img.ellipse([con_coords[-1][0]-con_step['width']/2+1, con_coords[-1][1]-con_step['width']/2+1, con_coords[-1][0]+con_step['width']/2, con_coords[-1][1]+con_step['width']/2], fill=con_step['colour'])
+                            imd.line(con_coords, fill=con_step['colour'], width=con_step['width'], joint="curve")
+                            imd.ellipse([con_coords[0][0]-con_step['width']/2+1, con_coords[0][1]-con_step['width']/2+1, con_coords[0][0]+con_step['width']/2, con_coords[0][1]+con_step['width']/2], fill=con_step['colour'])
+                            imd.ellipse([con_coords[-1][0]-con_step['width']/2+1, con_coords[-1][1]-con_step['width']/2+1, con_coords[-1][0]+con_step['width']/2, con_coords[-1][1]+con_step['width']/2], fill=con_step['colour'])
 
                         else:
-                            offset_info = mathtools.dash_offset(preConCoords, con_step['dash'][0], con_step['dash'][1])[index:]
+                            offset_info = mathtools.dash_offset(pre_con_coords, con_step['dash'][0], con_step['dash'][1])[index:]
                             #print(offset_info)
                             for c in range(len(con_coords)-1):
                                 #print(offset_info)
                                 #print(c)
                                 o, empty_start = offset_info[c]
-                                for dashCoords in mathtools.dash(con_coords[c][0], con_coords[c][1], con_coords[c+1][0], con_coords[c+1][1], con_step['dash'][0], con_step['dash'][1], o, empty_start):
+                                for dash_coords in mathtools.dash(con_coords[c][0], con_coords[c][1], con_coords[c+1][0], con_coords[c+1][1], con_step['dash'][0], con_step['dash'][1], o, empty_start):
                                     #print(dash_coords)
-                                    img.line(dashCoords, fill=con_step['colour'], width=con_step['width'])
+                                    imd.line(dash_coords, fill=con_step['colour'], width=con_step['width'])
                 operated.value += 1
 
     text_list += points_text_list
@@ -366,7 +384,7 @@ def tiles(args):
         processed += 1
         if can_print:
             p_log(f"Text {processed}/{len(text_list)} pasted")
-            im.paste(i, (int(x-i.width/2), int(y-i.height/2)), i)
+            img.paste(i, (int(x-i.width/2), int(y-i.height/2)), i)
         else:
             p_log(f"Text {processed}/{len(text_list)} skipped")
         dont_cross.append(current_box_coords)
@@ -374,8 +392,8 @@ def tiles(args):
     
     #tileReturn[tile_coords] = im
     if save_images:
-        im.save(f'{save_dir}{tile_coords}.png', 'PNG')
+        img.save(f'{save_dir}{tile_coords}.png', 'PNG')
 
     p_log("Rendered")
 
-    return {tile_coords: im}
+    return {tile_coords: img}
