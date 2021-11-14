@@ -23,7 +23,7 @@ def to_component_node_json(geo_json: dict) -> Tuple[ComponentJson, NodeJson]:
         for k, v in node_json.items():
             if v['x'] == x and v['y'] == y:
                 return k
-        k = internal.genId()
+        k = internal._gen_id()
         node_json[k] = {
             "x": x,
             "y": y,
@@ -36,7 +36,7 @@ def to_component_node_json(geo_json: dict) -> Tuple[ComponentJson, NodeJson]:
             if 'name' in properties.keys():
                 name = properties['name']
             else:
-                name = internal.genId()
+                name = internal._gen_id()
         component_type = properties['component_type'] if "component_type" in properties else "UNKNOWN"
         displayname = properties['displayname'] if "displayname" in properties else ""
         description = properties['description'] if "description" in properties else ""
@@ -67,7 +67,7 @@ def to_component_node_json(geo_json: dict) -> Tuple[ComponentJson, NodeJson]:
         if hollows: component_json[name]['hollows'] = hollows
 
     def single_feature(feature: dict):
-        name = feature['properties']['name'] if 'name' in feature['properties'].keys() else internal.genId()
+        name = feature['properties']['name'] if 'name' in feature['properties'].keys() else internal._gen_id()
         if feature['geometry']['type'] == "GeometryCollection":
             for itemNo, sub_geo in enumerate(feature['geometry']['geometries']):
                 single_geometry(sub_geo, feature['properties'], name=name + "_" + itemNo)

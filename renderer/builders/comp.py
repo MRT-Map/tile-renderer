@@ -23,7 +23,7 @@ e = False
 while not e:
     name_confirmed = False
     while not name_confirmed:
-        name = input(term.yellow("Name of new component (type 'exit' to exit): "))
+        name = input(term.yellow("Name of new component (type '.exit' to exit): "))
         if name in components.keys() or name in new_components.keys():
             print(term.red("component already exists; do you want to override its current value?"))
             print(term.red(components[name] if name in components.keys() else new_components[name]))
@@ -31,7 +31,7 @@ while not e:
                 continue
         name_confirmed = True
     
-    if name == "exit":
+    if name == ".exit":
         e = True
         print(term.yellow("Exited"))
         continue
@@ -76,9 +76,9 @@ while not e:
         elif option == 'n':
             index = []
             for n in nodes.keys():
-                if ss := re.search(fr"{name}(\d*)\D", n):
+                if ss := re.search(fr"{name}(\d*)\D", n+' '):
                     index.append((ss.group(1) if ss.group(1) != '' else 0, n))
-            pre_nodes = [n[1] for n in sorted(index, key=lambda a, b: a[0] - b[0])]
+            pre_nodes = [n[1] for n in sorted(index, key=lambda a: int(a[0]))]
         else:
             pre_nodes = []
         print(term.yellow("Your text editor will open; input a list of nodes, one node per line. ") + term.bright_yellow("Remember to save before closing."))

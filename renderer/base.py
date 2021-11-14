@@ -80,7 +80,7 @@ def merge_tiles(images: Union[str, Dict[str, Image.Image]], save_images: bool=Tr
                     merged += 1
                     with term.location(): print(term.green(f"Zoom {z}: ")
                                                 + f"{internal._percentage(merged, len(to_merge.keys()))}% | "
-                                                + f"{internal.ms_to_time(internal._time_remaining(start, merged, len(to_merge.keys())))} left | "
+                                                + f"{internal._ms_to_time(internal._time_remaining(start, merged, len(to_merge.keys())))} left | "
                                                 + term.bright_black(f"Pasted {z}, {x}, {y}"), end=term.clear_eos+"\r")
                 py += tile_size
             px += tile_size
@@ -177,7 +177,7 @@ def render(component_json: ComponentJson, node_json: NodeJson, min_zoom: int, ma
     processed = 0
     timeLeft = 0.0
     l = lambda processed_count, time_left, tile_components_, msg: \
-        term.green(f"{internal._percentage(processed_count, len(tile_list))}% | {internal.ms_to_time(time_left)} left | ") \
+        term.green(f"{internal._percentage(processed_count, len(tile_list))}% | {internal._ms_to_time(time_left)} left | ") \
         + f"{tile_components_}: " + term.bright_black(msg) + term.clear_eos
     print(term.green("sorted\n")+term.bright_green("Starting processing"))
     for tile_components in tile_list.keys():

@@ -5,7 +5,11 @@ import time
 import random
 import blessed
 import difflib
+import re
 term = blessed.Terminal()
+
+def _dedent(text):
+    return re.sub('\n ', '\n', re.sub(' +', ' ', text))
 
 def _dict_index(d: dict, v):
     return list(d.keys())[list(d.values()).index(v)]
@@ -32,7 +36,7 @@ def _tuple_to_str(t: tuple):
 def _str_to_tuple(s: str):
     return tuple([int(x) for x in s.split(", ")])
 
-def ms_to_time(ms: Union[int, float]):
+def _ms_to_time(ms: Union[int, float]):
     if ms == 0:
         return "00.0s"
     s = round(ms / 1000, 1)
@@ -72,7 +76,7 @@ def _percentage(c: Union[int, float], t: Union[int, float]):
 def _time_remaining(start: Union[int, float], c: Union[int, float], t: Union[int, float]):
     return round(((int(round(time.time() * 1000)) - start) / c * (t - c)), 2)
 
-def genId():
+def _gen_id():
     def b10_b64(n: int):
         BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
         q = n

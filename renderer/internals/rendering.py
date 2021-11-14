@@ -20,7 +20,7 @@ def tiles(args):
         lock.acquire()
         with term.location():
             if operated.value != 0 and operations != 0:
-                print(term.green(f"{internal._percentage(operated.value, operations)}% | {internal.ms_to_time(internal._time_remaining(start, operated.value, operations))} left | ") + f"{pid} | {tile_coords}: " + term.bright_black(msg), end=term.clear_eos + "\r")
+                print(term.green(f"{internal._percentage(operated.value, operations)}% | {internal._ms_to_time(internal._time_remaining(start, operated.value, operations))} left | ") + f"{pid} | {tile_coords}: " + term.bright_black(msg), end=term.clear_eos + "\r")
             else:
                 print(term.green(f"00.0% | 0.0s left | ") + f"{pid} | {tile_coords}: " + term.bright_black(msg), end=term.clear_eos+"\r")
         lock.release()
