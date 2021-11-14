@@ -11,20 +11,19 @@ import renderer.mathtools as mathtools
 from renderer.types import *
 term = blessed.Terminal()
 
-def _node_list_to_image_coords(node_list: List[str], node_json: NodeJson, skin_json: SkinJson, tile_coords: TileCoord, size: RealNum) -> List[Coord]:
+def _node_list_to_image_coords(node_list: List[str], node_json: NodeJson, skin_json: SkinJson, tile_coords: str, size: RealNum) -> List[Coord]:
     image_coords = []
     for x, y in tools.nodes.to_coords(node_list, node_json):
         xc = x - internal._str_to_tuple(tile_coords)[1] * size
         yc = y - internal._str_to_tuple(tile_coords)[2] * size
         xs = int(skin_json['info']['size'] / size * xc)
         ys = int(skin_json['info']['size'] / size * yc)
-	image_coords.append(xs, ys)
+        image_coords.append((xs, ys))
     return image_coords
 
 
 def _tile(args):
-    lock, operated, start, tile_coords, tile_components, operations, component_json, \
-    node_json, skin_json, _, max_zoom, max_zoom_range, save_images, save_dir, assets_dir = args # _ is min_zoom
+    lock, operated, start, tile_coords, tile_components, operations, component_json, node_json, skin_json, _, max_zoom, max_zoom_range, save_images, save_dir, assets_dir = args # _ is min_zoom
     #print(operations)
     pid = multiprocessing.current_process()._identity[0] - 1
     
@@ -34,8 +33,8 @@ def _tile(args):
         with term.location():
             if operated.value != 0 and operations != 0:
                 print(term.green(f"{internal._percentage(operated.value, operations)}% | " +
-                f"{internal._ms_to_time(internal._time_remaining(start, operated.value, operations))} left | ") +
-                f"{pid} | {tile_coords}: " + term.bright_black(msg), end=term.clear_eos + "\r")
+                                 f"{internal._ms_to_time(internal._time_remaining(start, operated.value, operations))} left | ") +
+                      f"{pid} | {tile_coords}: " + term.bright_black(msg), end=term.clear_eos + "\r")
             else:
                 print(term.green(f"00.0% | 0.0s left | ") + f"{pid} | {tile_coords}: " + term.bright_black(msg), end=term.clear_eos+"\r")
         lock.release()
@@ -52,9 +51,9 @@ def _tile(args):
     text_list = []
     points_text_list = []
 
-    def getFont(style: str, size: int):
-        if style in skin_json['info']['font'].keys():
-            return ImageFont.truetype(assets_dir+skin_json['info']['font'][style], size)
+    def get_font(style_: str, size_: int) -> ImageFont.FreeTypeFont:
+        if style_ in skin_json['info']['font'].keys():
+            return ImageFont.truetype(assets_dir+skin_json['info']['font'][style_], size_)
         raise ValueError
 
     for group in tile_components:
@@ -73,14 +72,14 @@ def _tile(args):
                                 fill=step['colour'], outline=step['outline'], width=step['width'])
 
                 def point_text():
-                    font = getFont("", step['size'])
+                    font = get_font("", step['size'])
                     text_length = int(imd.textlength(component['displayname'], font))
-                    i = Image.new('RGBA', (2*text_length, 2*(step['size']+4)), (0, 0, 0, 0))
-                    d = ImageDraw.Draw(i)
-                    d.text((text_length, step['size']+4), component["displayname"], fill=step['colour'], font=font, anchor="mm")
-                    tw, th = i.size
-                    points_text_list.append((i, coords[0][0]+step['offset'][0], coords[0][1]+step['offset'][1], tw, th, 0))
-                    # font = getFont("", step['size'])
+                    pt_i = Image.new('RGBA', (2 * text_length, 2 * (step['size'] + 4)), (0, 0, 0, 0))
+                    pt_d = ImageDraw.Draw(pt_i)
+                    pt_d.text((text_length, step['size'] + 4), component["displayname"], fill=step['colour'], font=font, anchor="mm")
+                    tw, th = pt_i.size
+                    points_text_list.append((pt_i, coords[0][0] + step['offset'][0], coords[0][1] + step['offset'][1], tw, th, 0))
+                    # font = get_font("", step['size'])
                     # img.text((coords[0][0]+step['offset'][0], coords[0][1]+step['offset'][1]), component['displayname'], fill=step['colour'], font=font, anchor=step['anchor'])
 
                 def point_square():
@@ -93,7 +92,7 @@ def _tile(args):
 
                 def line_text():
                     p_log(f"{style.index(step)+1}/{len(style)} {component_id}: Calculating text length")
-                    font = getFont("", step['size'])
+                    font = get_font("", step['size'])
                     text_length = int(imd.textlength(component['displayname'], font))
                     if text_length == 0:
                         text_length = int(imd.textlength("----------", font))
@@ -107,15 +106,15 @@ def _tile(args):
                             #print(mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset']))     
                             p_log(f"{style.index(step)+1}/{len(style)} {component_id}: Generating name text")
                             for tx, ty, trot in mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset'], n=t):
-                                i = Image.new('RGBA', (2*text_length, 2*(step['size']+4)), (0, 0, 0, 0))
-                                d = ImageDraw.Draw(i)
-                                d.text((text_length, step['size']+4), component["displayname"], fill=step['colour'], font=font, anchor="mm")
-                                tw, th = i.size[:]
-                                i = i.rotate(trot, expand=True)
-                                text_list.append((i, tx, ty, tw, th, trot))
+                                lt_i = Image.new('RGBA', (2 * text_length, 2 * (step['size'] + 4)), (0, 0, 0, 0))
+                                lt_d = ImageDraw.Draw(lt_i)
+                                lt_d.text((text_length, step['size'] + 4), component["displayname"], fill=step['colour'], font=font, anchor="mm")
+                                tw, th = lt_i.size[:]
+                                lt_i = lt_i.rotate(trot, expand=True)
+                                text_list.append((lt_i, tx, ty, tw, th, trot))
                         if "oneWay" in component['type'].split(" ")[1:] and text_length <= math.dist(coords[c], coords[c + 1]):
                             p_log(f"{style.index(step)+1}/{len(style)} {component_id}: Generating oneway arrows")
-                            getFont("b", step['size'])
+                            get_font("b", step['size'])
                             counter = 0
                             t = math.floor(math.dist(coords[c], coords[c+1])/(4*text_length))
                             for tx, ty, _ in mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset'], n=2*t+1):
@@ -123,12 +122,12 @@ def _tile(args):
                                     counter += 1
                                     continue
                                 trot = math.degrees(math.atan2(coords[c+1][0]-coords[c][0], coords[c+1][1]-coords[c][1]))
-                                i = Image.new('RGBA', (2*text_length, 2*(step['size']+4)), (0, 0, 0, 0))
-                                d = ImageDraw.Draw(i)
-                                d.text((text_length, step['size']+4), "↓", fill=step['colour'], font=font, anchor="mm")
-                                tw, th = i.size[:]
-                                i = i.rotate(trot, expand=True)
-                                text_list.append((i, tx, ty, tw, th, trot))
+                                lt_i = Image.new('RGBA', (2 * text_length, 2 * (step['size'] + 4)), (0, 0, 0, 0))
+                                lt_d = ImageDraw.Draw(lt_i)
+                                lt_d.text((text_length, step['size'] + 4), "↓", fill=step['colour'], font=font, anchor="mm")
+                                tw, th = lt_i.size[:]
+                                lt_i = lt_i.rotate(trot, expand=True)
+                                text_list.append((lt_i, tx, ty, tw, th, trot))
                                 counter += 1
                             
                 def line_backfore():
@@ -152,7 +151,7 @@ def _tile(args):
 
                 def area_bordertext():
                     p_log(f"{style.index(step)+1}/{len(style)} {component_id}: Calculating text length")
-                    font = getFont("", step['size'])
+                    font = get_font("", step['size'])
                     textLength = int(imd.textlength(component['displayname'].replace('\n', ''), font))
                     for c1 in range(len(coords)):
                         c2 = c1+1 if c1 != len(coords)-1 else 0
@@ -172,26 +171,26 @@ def _tile(args):
                                     #print(points[0][0], points[0][1], coords)
                                     #print(mathtools.point_in_poly(points[0][0], points[0][1], coords))
                                     tx, ty, trot = points[0] if mathtools.point_in_poly(points[0][0], points[0][1], coords) else points[1]
-                                i = Image.new('RGBA', (2*textLength, 2*(step['size']+4)), (0, 0, 0, 0))
-                                d = ImageDraw.Draw(i)
-                                d.text((textLength, step['size']+4), component["displayname"].replace('\n', ''),
-                                       fill=step['colour'], font=font, anchor="mm")
-                                tw, th = i.size[:]
-                                i = i.rotate(trot, expand=True)
-                                text_list.append((i, tx, ty, tw, th, trot))
+                                abt_i = Image.new('RGBA', (2*textLength, 2*(step['size']+4)), (0, 0, 0, 0))
+                                abt_d = ImageDraw.Draw(abt_i)
+                                abt_d.text((textLength, step['size']+4), component["displayname"].replace('\n', ''),
+                                           fill=step['colour'], font=font, anchor="mm")
+                                tw, th = abt_i.size[:]
+                                abt_i = abt_i.rotate(trot, expand=True)
+                                text_list.append((abt_i, tx, ty, tw, th, trot))
 
                 def area_centertext():
                     p_log(f"{style.index(step)+1}/{len(style)} {component_id}: Calculating center")
                     cx, cy = mathtools.poly_center(coords)
                     cx += step['offset'][0]
                     cy += step['offset'][1]
-                    font = getFont("", step['size'])
+                    font = get_font("", step['size'])
                     text_length = int(min(imd.textlength(x, font) for x in component['displayname'].split('\n')))
 
                     left = min(c[0] for c in coords)
                     right = max(c[0] for c in coords)
-                    dist = right - left
-                    if text_length > dist:
+                    delta = right - left
+                    if text_length > delta:
                         p_log(f"{style.index(step)+1}/{len(style)} {component_id}: Breaking up string")
                         tokens = component['displayname'].split()
                         wss = re.findall(r"\s+", component['displayname'])
@@ -199,21 +198,21 @@ def _tile(args):
                         for token, ws in list(itertools.zip_longest(tokens, wss, fillvalue='')):
                             temp_text = text[:]
                             temp_text += token
-                            if int(imd.textlength(temp_text.split('\n')[-1], font)) > dist:
+                            if int(imd.textlength(temp_text.split('\n')[-1], font)) > delta:
                                 text += '\n'+token+ws
                             else:
                                 text += token+ws
                         text_length = int(max(imd.textlength(x, font) for x in text.split("\n")))
-                        size = int(imd.textsize(text, font)[1]+4)
+                        text_size = int(imd.textsize(text, font)[1]+4)
                     else:
                         text = component['displayname']
-                        size = step['size']+4
+                        text_size = step['size']+4
 
-                    i = Image.new('RGBA', (2*text_length, 2*size), (0, 0, 0, 0))
-                    d = ImageDraw.Draw(i)
-                    cw, ch = i.size
-                    d.text((text_length, size), component["displayname"], fill=step['colour'], font=font, anchor="mm")
-                    text_list.append((i, cx, cy, cw, ch, 0))
+                    act_i = Image.new('RGBA', (2*text_length, 2*text_size), (0, 0, 0, 0))
+                    act_d = ImageDraw.Draw(act_i)
+                    cw, ch = act_i.size
+                    act_d.text((text_length, text_size), text, fill=step['colour'], font=font, anchor="mm")
+                    text_list.append((act_i, cx, cy, cw, ch, 0))
 
                 def area_fill():
                     ai = Image.new("RGBA", (skin_json['info']['size'], skin_json['info']['size']), (0, 0, 0, 0))
@@ -226,18 +225,18 @@ def _tile(args):
                         x_min -= y_max-y_min
                         y_max += x_max-x_min
                         y_min -= y_max-y_min
-                        i = Image.new("RGBA", (skin_json['info']['size'], skin_json['info']['size']), (0, 0, 0, 0))
-                        d = ImageDraw.Draw(i)
+                        af_i = Image.new("RGBA", (skin_json['info']['size'], skin_json['info']['size']), (0, 0, 0, 0))
+                        af_d = ImageDraw.Draw(af_i)
                         tlx = x_min-1
                         while tlx <= x_max:
-                            d.polygon([(tlx, y_min), (tlx+step['stripe'][0], y_min), (tlx+step['stripe'][0], y_max), (tlx, y_max)], fill=step['colour'])
+                            af_d.polygon([(tlx, y_min), (tlx+step['stripe'][0], y_min), (tlx+step['stripe'][0], y_max), (tlx, y_max)], fill=step['colour'])
                             tlx += step['stripe'][0]+step['stripe'][1]
-                        i = i.rotate(step['stripe'][2], center=mathtools.poly_center(coords))
+                        af_i = af_i.rotate(step['stripe'][2], center=mathtools.poly_center(coords))
                         mi = Image.new("RGBA", (skin_json['info']['size'], skin_json['info']['size']), (0, 0, 0, 0))
                         md = ImageDraw.Draw(mi)
                         md.polygon(coords, fill=step['colour'])
                         pi = Image.new("RGBA", (skin_json['info']['size'], skin_json['info']['size']), (0, 0, 0, 0))
-                        pi.paste(i, (0, 0), mi)
+                        pi.paste(af_i, (0, 0), mi)
                         ai.paste(pi, (0, 0), pi)
                     else:
                         p_log(f"{style.index(step)+1}/{len(style)} {component_id}: Filling area")
@@ -265,9 +264,9 @@ def _tile(args):
                                 imd.ellipse([o_coords[0][0]-2/2+1, o_coords[0][1]-2/2+1, o_coords[0][0]+2/2, o_coords[0][1]+2/2], fill=step['outline'])
 
                 def area_centerimage():
-                    x, y = mathtools.poly_center(coords)
+                    cx, cy = mathtools.poly_center(coords)
                     icon = Image.open(assets_dir+step['file'])
-                    img.paste(i, (x+step['offset'][0], y+step['offset'][1]), icon)
+                    img.paste(i, (cx+step['offset'][0], cy+step['offset'][1]), icon)
 
                 funcs = {
                     "point": {
@@ -343,15 +342,15 @@ def _tile(args):
                             imd.ellipse([con_coords[-1][0]-con_step['width']/2+1, con_coords[-1][1]-con_step['width']/2+1, con_coords[-1][0]+con_step['width']/2, con_coords[-1][1]+con_step['width']/2], fill=con_step['colour'])
 
                         else:
-                            offset_info = mathtools.dash_offset(pre_con_coords, con_step['dash'][0], con_step['dash'][1])[index:]
+                            con_offset_info = mathtools.dash_offset(pre_con_coords, con_step['dash'][0], con_step['dash'][1])[index:]
                             #print(offset_info)
                             for c in range(len(con_coords)-1):
                                 #print(offset_info)
                                 #print(c)
-                                o, empty_start = offset_info[c]
-                                for dash_coords in mathtools.dash(con_coords[c][0], con_coords[c][1], con_coords[c+1][0], con_coords[c+1][1], con_step['dash'][0], con_step['dash'][1], o, empty_start):
+                                con_o, con_empty_start = con_offset_info[c]
+                                for con_dash_coords in mathtools.dash(con_coords[c][0], con_coords[c][1], con_coords[c+1][0], con_coords[c+1][1], con_step['dash'][0], con_step['dash'][1], con_o, con_empty_start):
                                     #print(dash_coords)
-                                    imd.line(dash_coords, fill=con_step['colour'], width=con_step['width'])
+                                    imd.line(con_dash_coords, fill=con_step['colour'], width=con_step['width'])
                 operated.value += 1
 
     text_list += points_text_list
