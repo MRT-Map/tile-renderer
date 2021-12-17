@@ -1,7 +1,7 @@
 import os
 
 import renderer.internals.internal as internal
-from renderer.types import *
+from renderer.old_types import *
 
 def get_skin(name: str= 'default') -> SkinJson:
     """

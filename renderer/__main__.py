@@ -3,6 +3,9 @@ import glob
 import blessed
 import os
 
+import psutil
+
+
 def cmd():
     import renderer
     term = blessed.Terminal()
@@ -29,12 +32,12 @@ def cmd():
     p_render = subparsers.add_parser('render', help='render tiles', formatter_class=argparse.MetavarTypeHelpFormatter)
     p_render.add_argument('-c', '--components', required=True, type=str, help='the component JSON file directory')
     p_render.add_argument('-n', '--nodes', required=True, type=str, help='the node JSON file directory')
-    p_render.add_argument('-s', '--skin', type=str, help='the name of the skin to use', default='default')
     p_render.add_argument('-min', '--min_zoom', type=int, required=True, help="minimum zoom value")
     p_render.add_argument('-max', '--max_zoom', type=int, required=True, help="maximum zoom value")
     p_render.add_argument('-r', '--max_zoom_range', type=float, required=True, help="range of coordinates covered by a tile in the maximum zoom")
+    p_render.add_argument('-s', '--skin', type=str, help='the name of the skin to use', default='default')
     p_render.add_argument('-d', '--save_dir', type=str, help="the directory to save tiles in", default='')
-    p_render.add_argument('-m', '--processes', type=int, help="the amount of processes to run for rendering", default=1)
+    p_render.add_argument('-m', '--processes', type=int, help="the amount of processes to run for rendering", default=psutil.cpu_count())
     p_render.add_argument('-t', '--tiles', type=list, help="a list of tiles to render, given in tuples of (z,x,y)")
     p_render.add_argument('-o', '--offset', type=tuple, help="the offset of node coordinates, given as (x,y)", default=[0, 0])
 

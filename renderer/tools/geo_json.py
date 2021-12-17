@@ -2,7 +2,7 @@ import blessed
 
 import renderer.internals.internal as internal
 import renderer.validate as validate
-from renderer.types import *
+from renderer.old_types import *
 
 term = blessed.Terminal()
 

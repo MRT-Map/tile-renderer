@@ -12,13 +12,12 @@ import renderer.internals.internal as internal
 import renderer.validate as validate
 import renderer.internals.rendering as rendering
 import renderer.misc as misc
-from renderer.types import *
+from renderer.old_types import *
 
 import renderer.tools.component_json as tools_component_json
 import renderer.tools.line as tools_line
 import renderer.tools.nodes as tools_nodes
 import renderer.tools.tile as tools_tile
-import renderer.tools.geo_json as tools_geo_json
 
 def merge_tiles(images: Union[str, Dict[str, Image.Image]], save_images: bool=True, save_dir: str="tiles/",
                 zoom: Optional[List[int]]=None) -> Dict[str, Image.Image]:
@@ -96,7 +95,7 @@ def merge_tiles(images: Union[str, Dict[str, Image.Image]], save_images: bool=Tr
 
 def render(component_json: ComponentJson, node_json: NodeJson, min_zoom: int, max_zoom: int, max_zoom_range: RealNum,
            skin: str='default', save_images: bool=True, save_dir: str= "", assets_dir: str= os.path.dirname(__file__) + "/skins/assets/",
-           processes: int=1, tiles: Optional[List[TileCoord]]=None, offset: Tuple[RealNum, RealNum]=(0, 0)) -> Dict[str, Image.Image]:
+           processes: int=1, tiles: Optional[List[TileCoord]]=None, offset: Tuple[RealNum, RealNum]=(0, 0), use_ray: bool=True) -> Dict[str, Image.Image]:
     """
     Renders tiles from given coordinates and zoom values.
 
@@ -116,6 +115,7 @@ def render(component_json: ComponentJson, node_json: NodeJson, min_zoom: int, ma
     :param Optional[List[TileCoord]] tiles: a list of tiles to render, given in tuples of ``(z,x,y)`` where z = zoom and x,y = tile coordinates
     :param offset: the offset to shift all node coordinates by, given as ``(x,y)``
     :type offset: Tuple[RealNum, RealNum]
+    :param bool use_ray: Whether to use Ray multiprocessing instead of the internal multiprocessing module.
 
     :returns: Given in the form of ``(tile coord): (PIL Image)``
     :rtype: Dict[str, Image]
@@ -256,26 +256,72 @@ def render(component_json: ComponentJson, node_json: NodeJson, min_zoom: int, ma
     #render
     render_start = time.time() * 1000
     print(term.bright_green("\nStarting render"))
-    if __name__ == 'renderer.base':
-        m = multiprocessing.Manager()
-        operated = m.Value('i', 0)
-        lock = m.Lock() # pylint: disable=no-member
+    if use_ray:
+        try: # noinspection PyPackageRequirements
+            import ray
+        except ModuleNotFoundError:
+            use_ray = False
+
+    if use_ray:
+        ray.init(num_cpus=processes)
+
+        @ray.remote
+        class OperatedHandler:
+            def __init__(self):
+                self.tally = []
+
+            def get(self):
+                return len(self.tally)
+
+            def count(self):
+                self.tally.append(1)
+
+        operated = OperatedHandler.remote()
 
         input_ = []
         for i in tile_list.keys():
-            input_.append((lock, operated, render_start, i, tile_list[i], operations, component_json, node_json, skin_json, min_zoom, max_zoom, max_zoom_range, save_images, save_dir, assets_dir))
-        p = multiprocessing.Pool(processes)
-        try:
-            preresult = p.map(rendering._tile, input_)
-        except KeyboardInterrupt:
-            p.terminate()
-            sys.exit()
+            input_.append((None, operated, render_start, i, tile_list[i], operations, component_json, node_json,
+                           skin_json, min_zoom, max_zoom, max_zoom_range, save_images, save_dir, assets_dir))
+        futures = [ray.remote(rendering._tile).remote(input_[i], True) for i in range(len(input_))]
+        preresult = ray.get(futures)
         result = {}
         for i in preresult:
             if i is None:
                 continue
             k, v = list(i.items())[0]
             result[k] = v
+
+    else:
+        if __name__ == 'renderer.base':
+            class OperatedHander:
+                def __init__(self):
+                    self.m = multiprocessing.Manager()
+                    self.operated = self.m.Value('i', 0)
+
+                def get(self):
+                    return self.operated.value
+
+                def count(self):
+                    self.operated.value += 1
+
+            operated = OperatedHander()
+
+            input_ = []
+            for i in tile_list.keys():
+                input_.append((None, operated, render_start, i, tile_list[i], operations, component_json, node_json,
+                               skin_json, min_zoom, max_zoom, max_zoom_range, save_images, save_dir, assets_dir))
+            p = multiprocessing.Pool(processes)
+            try:
+                preresult = p.map(rendering._tile, input_)
+            except KeyboardInterrupt:
+                p.terminate()
+                sys.exit()
+            result = {}
+            for i in preresult:
+                if i is None:
+                    continue
+                k, v = list(i.items())[0]
+                result[k] = v
 
         print(term.green("100.00% | 0.0s left | ") + "Rendering complete" + term.clear_eos)
     print(term.bright_green("Render complete"))

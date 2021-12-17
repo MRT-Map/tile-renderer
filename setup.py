@@ -27,7 +27,8 @@ setup(
     'sympy',
     'schema',
     'numpy',
-    'click'
+    'click',
+    'psutil'
   ],
   classifiers=[
     'Development Status :: 5 - Production/Stable',
