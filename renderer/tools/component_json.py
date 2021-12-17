@@ -4,28 +4,28 @@ import blessed
 import renderer.internals.internal as internal # type: ignore
 import renderer.validate as validate
 import renderer.tools as tools
-from renderer.old_types import *
+from renderer.objects.components import ComponentList
+from renderer.objects.nodes import NodeList
+from renderer.types import *
 
 term = blessed.Terminal()
 
-def find_ends(component_json: ComponentJson, node_json: NodeJson) -> Tuple[RealNum, RealNum, RealNum, RealNum]:
+def find_ends(components: ComponentList, nodes: NodeList) -> Tuple[RealNum, RealNum, RealNum, RealNum]:
     """
     Finds the minimum and maximum X and Y values of a JSON of components
     
-    :param ComponentJson component_json: a JSON of components
-    :param NodeJson node_json: a JSON of nodes
+    :param ComponentList components: a JSON of components
+    :param NodeList nodes: a JSON of nodes
     
     :returns: Returns in the form `(x_max, x_min, y_max, y_min)`
     :rtype: Tuple[RealNum, RealNum, RealNum, RealNum]
    """
-    validate.v_component_json(component_json, node_json)
-    validate.v_node_json(node_json)
     x_max = -math.inf
     x_min = math.inf
     y_max = -math.inf
     y_min = math.inf
-    for component in component_json.keys():
-        coords = tools.nodes.to_coords(component_json[component]['nodes'], node_json)
+    for component in components.component_values():
+        coords = tools.nodes.to_coords(component.nodes, nodes)
         for x, y in coords:
             x_max = x if x > x_max else x_max
             x_min = x if x < x_min else x_min
@@ -34,12 +34,12 @@ def find_ends(component_json: ComponentJson, node_json: NodeJson) -> Tuple[RealN
     return x_max, x_min, y_max, y_min
 
 
-def rendered_in(component_json: ComponentJson, node_json: NodeJson, min_zoom: int, max_zoom: int, max_zoom_range: RealNum) -> List[TileCoord]:
+def rendered_in(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: int, max_zoom_range: RealNum) -> List[TileCoord]:
     """
     Like :py:func:`tools.line.to_tiles`, but for a JSON of components.
 
-    :param ComponentJson component_json: a JSON of components
-    :param NodeJson node_json: a JSON of nodes
+    :param ComponentList components: a JSON of components
+    :param NodeList nodes: a JSON of nodes
     :param int min_zoom: minimum zoom value
     :param int max_zoom: maximum zoom value
     :param RealNum max_zoom_range: actual distance covered by a tile in the maximum zoom
@@ -49,14 +49,12 @@ def rendered_in(component_json: ComponentJson, node_json: NodeJson, min_zoom: in
 
     :raises ValueError: if max_zoom < min_zoom
     """
-    validate.v_component_json(component_json, node_json)
-    validate.v_node_json(node_json)
     if max_zoom < min_zoom:
         raise ValueError("Max zoom value is lesser than min zoom value")
 
     tiles = []
-    for component in component_json.keys():
-        coords = tools.nodes.to_coords(component_json[component]['nodes'], node_json)
+    for component in components.component_values():
+        coords = tools.nodes.to_coords(component.nodes, nodes)
         tiles.extend(tools.line.to_tiles(coords, min_zoom, max_zoom, max_zoom_range))
 
     return tiles

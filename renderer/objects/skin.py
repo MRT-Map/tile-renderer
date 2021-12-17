@@ -1,13 +1,17 @@
 from __future__ import annotations
-from typing import Literal, Dict, Tuple, List
+from typing import Literal, Dict, Tuple, List, Union
 from pathlib import Path
 
+import blessed
+from PIL import ImageFont
 from schema import Schema, And, Or, Regex, Optional
 
 import renderer.internals.internal as internal
+from renderer.types import RealNum, SkinJson
+
 
 class Skin:
-    def __init__(self, json: dict):
+    def __init__(self, json: SkinJson):
         self.validate_json(json)
         self.tile_size: int = json['info']['size']
         self.fonts: Dict[str, Path] = {name: Path(path) for name, path in json['info']['fonts'].items()}
@@ -17,31 +21,61 @@ class Skin:
         self.types: Dict[str, Skin.ComponentTypeInfo] \
             = {name: self.ComponentTypeInfo(name, value, self.order) for name, value in json['types'].items()}
 
-    def __getitem__(type_name: str) -> Skin.ComponentTypeInfo:
+    def __getitem__(self, type_name: str) -> ComponentTypeInfo:
         return self.types[type_name]
-    
+
+    def get_font(self, style: str, size: int, assets_dir: Path) -> ImageFont.FreeTypeFont:
+        if style in self.fonts.keys():
+            return ImageFont.truetype(str(assets_dir/self.fonts[style]), size)
+        raise ValueError
+
     class ComponentTypeInfo:
         def __init__(self, name: str, json: dict, order: List[str]):
             self.name: str = name
             self.tags: List[str] = json['tags']
             self.shape = json['type']
+            self.order = order
             self.styles: Dict[Tuple[int, int], List[Skin.ComponentTypeInfo.ComponentStyle]] \
                 = {internal._str_to_tuple(range_): [self.ComponentStyle(v) for v in value] for range_, value in json['styles'].items()}
 
-        def __getitem__(zoom: int) -> Skin.ComponentTypeInfo.ComponentStyle:
-            pass
+        def __getitem__(self, zoom_level: int) -> List[ComponentStyle]:
+            for (max_level, min_level), styles in self.styles.items():
+                if max_level <= zoom_level <= min_level:
+                    return styles
+            else:
+                return []
         
         class ComponentStyle:
             def __init__(self, json: dict):
                 self.layer: str = json['layer']
                 self.colour: str = None if "colour" not in json else json['colour']
                 self.outline: str = None if "outline" not in json else json['outline']
-                self.offset: Union[RealNum, Tuple[RealNum, RealNum]] = None if "offset" not in json else tuple(json['offset']) if issubclass(json['offset'], list) else json['offset']
+                self.offset: Union[RealNum, Tuple[RealNum, RealNum]]\
+                    = None if "offset" not in json else tuple(json['offset']) if issubclass(json['offset'], list) else json['offset']
                 self.size: int = None if "size" not in json else json['size']
                 self.anchor: str = None if "anchor" not in json else json['anchor']
                 self.file: Path = None if "file" not in json else Path(json['file'])
                 self.width: int = None if "width" not in json else json['width']
-    
+                self.stripe: Tuple[RealNum, RealNum, RealNum] = None if "stripe" not in json else tuple(json['stripe'])
+                self.dash: Tuple[RealNum, RealNum] = None if "dash" not in json else tuple(json['dash'])
+
+    @classmethod
+    def from_name(cls, name: str='default') -> Skin:
+        """
+        Gets a skin from inside the package.
+
+        :param str name: the name of the skin
+
+        :returns: The skin
+        :rtype: Skin
+
+        :raises FileNotFoundError: if skin does not exist
+        """
+        try:
+            return cls(internal._read_json(Path(__file__)/"skins"/(name+".json")))
+        except FileNotFoundError:
+            raise FileNotFoundError(f"Skin '{name}' not found")
+
     @staticmethod
     def validate_json(json: dict) -> Literal[True]:
         """
@@ -155,9 +189,9 @@ class Skin:
             }
         }
     
-        mainSchema.validate(skin_json)
-        for n, t in skin_json['types'].items():
-            if n not in skin_json['order']:
+        mainSchema.validate(json)
+        for n, t in json['types'].items():
+            if n not in json['order']:
                 raise ValueError(f"Type {n} is not in order list")
             s = t['style']
             for z, steps in s.items():

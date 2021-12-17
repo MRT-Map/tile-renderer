@@ -2,7 +2,7 @@ import math
 import sympy as sym
 import numpy as np
 
-from renderer.old_types import *
+from renderer.types import *
 from typing import Optional
 
 def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: int=1, return_both: bool=False) -> Union[List[Tuple[RealNum, RealNum, RealNum]], List[List[Tuple[RealNum, RealNum, RealNum]]]]:

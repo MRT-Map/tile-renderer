@@ -1,5 +1,6 @@
 import math
 import json
+from pathlib import Path
 from typing import Union
 import time
 import random
@@ -14,13 +15,13 @@ def _dedent(text):
 def _dict_index(d: dict, v):
     return list(d.keys())[list(d.values()).index(v)]
 
-def _read_json(file: str):
+def _read_json(file: Union[Path, str]):
     with open(file, "r") as f:
         data = json.load(f)
         f.close()
         return data
 
-def _write_json(file: str, data: dict, pp=False):
+def _write_json(file: Union[Path, str], data: dict, pp=False):
     with open(file, "r+") as f:
         f.seek(0)
         f.truncate()

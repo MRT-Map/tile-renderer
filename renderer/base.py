@@ -1,4 +1,7 @@
-from typing import Optional
+from pathlib import Path
+from typing import Optional, Dict, Union, List
+
+import psutil
 from PIL import Image
 import time
 import glob
@@ -6,13 +9,14 @@ import re
 import multiprocessing
 import sys
 import blessed
-import os
 
 import renderer.internals.internal as internal
 import renderer.validate as validate
 import renderer.internals.rendering as rendering
-import renderer.misc as misc
-from renderer.old_types import *
+from renderer.objects.components import ComponentList, Component
+from renderer.objects.nodes import NodeList
+from renderer.objects.skin import Skin
+from renderer.types import RealNum, TileCoord
 
 import renderer.tools.component_json as tools_component_json
 import renderer.tools.line as tools_line
@@ -93,69 +97,61 @@ def merge_tiles(images: Union[str, Dict[str, Image.Image]], save_images: bool=Tr
     print(term.green("\nAll merges complete"))
     return tile_return
 
-def render(component_json: ComponentJson, node_json: NodeJson, min_zoom: int, max_zoom: int, max_zoom_range: RealNum,
-           skin: str='default', save_images: bool=True, save_dir: str= "", assets_dir: str= os.path.dirname(__file__) + "/skins/assets/",
-           processes: int=1, tiles: Optional[List[TileCoord]]=None, offset: Tuple[RealNum, RealNum]=(0, 0), use_ray: bool=True) -> Dict[str, Image.Image]:
+def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: int, max_zoom_range: RealNum,
+           skin: Skin=Skin.from_name("default"), save_images: bool=True, save_dir: Path= Path.cwd(), assets_dir: Path= Path(__file__)/"skins"/"assets",
+           processes: int=psutil.cpu_count(), tiles: Optional[List[TileCoord]]=None, offset: Tuple[RealNum, RealNum]=(0, 0), use_ray: bool=True) -> Dict[str, Image.Image]:
+    # noinspection GrazieInspection
     """
-    Renders tiles from given coordinates and zoom values.
+        Renders tiles from given coordinates and zoom values.
 
-    .. warning::
-        Run this function under ``if __name__ == "__main__"``, or else there would be a lot of multiprocessing RuntimeErrors.
+        .. warning::
+            Run this function under ``if __name__ == "__main__"``, or else there would be a lot of multiprocessing RuntimeErrors.
 
-    :param ComponentJson component_json: a JSON of components
-    :param NodeJson node_json: a JSON of nodes
-    :param int min_zoom: minimum zoom value
-    :param int max_zoom: maximum zoom value
-    :param RealNum max_zoom_range: actual distance covered by a tile in the maximum zoom
-    :param str skin: The skin to use for rendering the tiles
-    :param int save_images: whether to save the tile images in a folder or not
-    :param str save_dir: the directory to save tiles in
-    :param str assets_dir: the asset directory for the skin
-    :param int processes: The amount of processes to run for rendering
-    :param Optional[List[TileCoord]] tiles: a list of tiles to render, given in tuples of ``(z,x,y)`` where z = zoom and x,y = tile coordinates
-    :param offset: the offset to shift all node coordinates by, given as ``(x,y)``
-    :type offset: Tuple[RealNum, RealNum]
-    :param bool use_ray: Whether to use Ray multiprocessing instead of the internal multiprocessing module.
+        :param ComponentList components: a JSON of components
+        :param NodeList nodes: a JSON of nodes
+        :param int min_zoom: minimum zoom value
+        :param int max_zoom: maximum zoom value
+        :param RealNum max_zoom_range: actual distance covered by a tile in the maximum zoom
+        :param Skin skin: The skin to use for rendering the tiles
+        :param int save_images: whether to save the tile images in a folder or not
+        :param Path save_dir: the directory to save tiles in
+        :param Path assets_dir: the asset directory for the skin
+        :param int processes: The amount of processes to run for rendering
+        :param Optional[List[TileCoord]] tiles: a list of tiles to render, given in tuples of ``(z,x,y)`` where z = zoom and x,y = tile coordinates
+        :param offset: the offset to shift all node coordinates by, given as ``(x,y)``
+        :type offset: Tuple[RealNum, RealNum]
+        :param bool use_ray: Whether to use Ray multiprocessing instead of the internal multiprocessing module.
 
-    :returns: Given in the form of ``(tile coord): (PIL Image)``
-    :rtype: Dict[str, Image]
+        :returns: Given in the form of ``(tile coord): (PIL Image)``
+        :rtype: Dict[str, Image]
 
-    :raises ValueError: if max_zoom < min_zoom
-    """
+        :raises ValueError: if max_zoom < min_zoom
+        """
+
     if max_zoom < min_zoom:
         raise ValueError("Max zoom value is greater than min zoom value")
     term = blessed.Terminal()
 
-    skin_json = misc.get_skin(skin)
-
-    # validation
-    print(term.green("Validating skin..."), end=" ")
-    validate.v_skin_json(skin_json)
-    print(term.green("validated\nValidating nodes..."), end=" ")
-    validate.v_node_json(node_json)
-    print(term.green("validated\nValidating components..."), end=" ")
-    validate.v_component_json(component_json, node_json)
-
     # offset
-    for node in node_json.keys():
-        node_json[node]['x'] += offset[0]
-        node_json[node]['y'] += offset[1]
+    for node in nodes.node_values():
+        node.x += offset[0]
+        node.y += offset[1]
 
-    print(term.green("validated\nFinding tiles..."), end=" ")
+    print(term.green("Finding tiles..."), end=" ")
     #finds which tiles to render
     if tiles is not None:
         validate.v_tile_coords(tiles, min_zoom, max_zoom)
     else: #finds box of tiles
-        tiles = tools_component_json.rendered_in(component_json, node_json, min_zoom, max_zoom, max_zoom_range)
+        tiles = tools_component_json.rendered_in(components, nodes, min_zoom, max_zoom, max_zoom_range)
 
     print(term.green("found\nRemoving components with unknown type..."), end=" ")
     # remove components whose type is not in skin
-    remove_list = []
-    for component in component_json.keys():
-        if not component_json[component]['type'].split(' ')[0] in skin_json['order']:
-            remove_list.append(component)
-    for component in remove_list:
-        del component_json[component]
+    remove_list: List[str] = []
+    for component in components.component_values():
+        if component.type not in skin.order:
+            remove_list.append(component.name)
+    for component_name in remove_list:
+        del components.components[component_name]
     print(term.green("removed"))
     if remove_list:
         print(term.yellow('The following components were removed:'))
@@ -163,15 +159,15 @@ def render(component_json: ComponentJson, node_json: NodeJson, min_zoom: int, ma
 
     print(term.green("Sorting components by tiles..."), end=" ")
     #sort components by tiles
-    tile_list = {}
+    tile_list: Dict[TileCoord, List[Component]] = {}
     for tile in tiles:
-        tile_list[internal._tuple_to_str(tile)] = {}
-    for component in component_json.keys():
-        coords = tools_nodes.to_coords(component_json[component]['nodes'], node_json)
+        tile_list[tile] = []
+    for component in components.component_values():
+        coords = tools_nodes.to_coords(component.nodes, nodes)
         rendered_in = tools_line.to_tiles(coords, min_zoom, max_zoom, max_zoom_range)
         for tile in rendered_in:
-            if internal._tuple_to_str(tile) in tile_list.keys():
-                tile_list[internal._tuple_to_str(tile)][component] = component_json[component]
+            if tile in tile_list.keys():
+                tile_list[tile].append(component)
 
     process_start = time.time() * 1000
     processed = 0
@@ -180,40 +176,41 @@ def render(component_json: ComponentJson, node_json: NodeJson, min_zoom: int, ma
         term.green(f"{internal._percentage(processed_count, len(tile_list))}% | {internal._ms_to_time(time_left)} left | ") \
         + f"{tile_components_}: " + term.bright_black(msg) + term.clear_eos
     print(term.green("sorted\n")+term.bright_green("Starting processing"))
-    for tile_components in tile_list.keys():
+    grouped_tile_list: Dict[TileCoord, List[List[Component]]] = {}
+    for tile_coord, tile_components in tile_list.items():
         #sort components in tiles by layer
-        new_tile_components = {}
-        for component in tile_list[tile_components].keys():
-            if not str(float(tile_list[tile_components][component]['layer'])) in new_tile_components.keys():
-                new_tile_components[str(float(tile_list[tile_components][component]['layer']))] = {}
-            new_tile_components[str(float(tile_list[tile_components][component]['layer']))][component] = tile_list[tile_components][component]
+        new_tile_components: Dict[float, List[Component]] = {}
+        for component in tile_components:
+            if component.layer not in new_tile_components.keys():
+                new_tile_components[component.layer] = []
+            new_tile_components[component.layer].append(component)
         with term.location(): print(l(processed, timeLeft, tile_components, "Sorted component by layer"), end="\r")
 
         #sort components in layers in files by type
-        for layer in new_tile_components.keys():
-            #print(new_tile_components[layer].items())
-            new_tile_components[layer] = {k: v for k, v in sorted(new_tile_components[layer].items(),
-                                                                  key=lambda x: skin_json['order'].index(x[1]['type'].split(' ')[0]))}
+        new_tile_components = {layer: sorted(component_list, key=lambda x: skin.order.index(x.type))
+                               for layer, component_list in new_tile_components.items()}
         with term.location(): print(l(processed, timeLeft, tile_components, "Sorted component by type"), end="\r")
 
         #merge layers
-        tile_list[tile_components] = {}
-        layers = sorted(new_tile_components.keys(), key=lambda x: float(x))
+        tile_components = []
+        layers = sorted(new_tile_components.keys())
         for layer in layers:
-            for key, component in new_tile_components[layer].items():
-                tile_list[tile_components][key] = component
+            for component in new_tile_components[layer]:
+                tile_components.append(component)
         with term.location(): print(l(processed, timeLeft, tile_components, "Merged layers"), end="\r")
 
         #groups components of the same type if "road" tag present
-        newer_tile_components = [{}]
-        keys = list(tile_list[tile_components].keys())
-        for i in range(len(tile_list[tile_components])):
-            newer_tile_components[-1][keys[i]] = tile_list[tile_components][keys[i]]
-            if i != len(keys)-1 \
-               and (tile_list[tile_components][keys[i + 1]]['type'].split(' ')[0] != tile_list[tile_components][keys[i]]['type'].split(' ')[0]
-               or "road" not in skin_json['types'][tile_list[tile_components][keys[i]]['type'].split(' ')[0]]['tags']):
-                newer_tile_components.append({})
-        tile_list[tile_components] = newer_tile_components
+        newer_tile_components: List[List[Component]] = [[]]
+        # keys = list(tile_list[tile_components].keys())
+        # for i in range(len(tile_list[tile_components])):
+        for i, component in enumerate(tile_components):
+            newer_tile_components[-1].append(component)
+            if i != len(tile_components)-1 \
+               and (tile_components[i + 1].type != component.type
+               or "road" not in skin[component.type].tags):
+                newer_tile_components.append([])
+
+        grouped_tile_list[tile_coord] = newer_tile_components
         with term.location(): print(l(processed, timeLeft, tile_components, "Components grouped"), end="\r")
 
         processed += 1
@@ -227,23 +224,17 @@ def render(component_json: ComponentJson, node_json: NodeJson, min_zoom: int, ma
     operations = 0
     op_tiles = {}
     tile_operations = 0
-    for tile_components in tile_list.keys():
-        if tile_list[tile_components] == [{}]:
+    for tile_coord, tile_components in grouped_tile_list.items():
+        if not tile_components:
             op_tiles[tile_components] = 0
             continue
 
-        for group in tile_list[tile_components]:
-            info = skin_json['types'][list(group.values())[0]['type'].split(" ")[0]]
-            style = []
-            for zoom in info['style'].keys():
-                if max_zoom-internal._str_to_tuple(zoom)[1] <= internal._str_to_tuple(tile_components)[0] <= max_zoom-internal._str_to_tuple(zoom)[0]:
-                    style = info['style'][zoom]
-                    break
-            for step in style:
-                for _, component in group.items():
-                    operations += 1
-                    tile_operations += 1
-                if info['type'] == "line" and "road" in info['tags'] and step['layer'] == "back":
+        for group in tile_components:
+            info = skin.types[group[0].type]
+            for step in info[max_zoom-tile_coord[0]]:
+                operations += len(group)
+                tile_operations += len(group)
+                if info.shape == "line" and "road" in info.tags and step.layer == "back":
                     operations += 1
                     tile_operations += 1
         operations += 2
@@ -279,9 +270,9 @@ def render(component_json: ComponentJson, node_json: NodeJson, min_zoom: int, ma
         operated = OperatedHandler.remote()
 
         input_ = []
-        for i in tile_list.keys():
-            input_.append((None, operated, render_start, i, tile_list[i], operations, component_json, node_json,
-                           skin_json, min_zoom, max_zoom, max_zoom_range, save_images, save_dir, assets_dir))
+        for i in grouped_tile_list.keys():
+            input_.append((None, operated, render_start, i, grouped_tile_list[i], operations, components, nodes,
+                           skin, min_zoom, max_zoom, max_zoom_range, save_images, save_dir, assets_dir))
         futures = [ray.remote(rendering._tile).remote(input_[i], True) for i in range(len(input_))]
         preresult = ray.get(futures)
         result = {}
@@ -307,9 +298,9 @@ def render(component_json: ComponentJson, node_json: NodeJson, min_zoom: int, ma
             operated = OperatedHander()
 
             input_ = []
-            for i in tile_list.keys():
-                input_.append((None, operated, render_start, i, tile_list[i], operations, component_json, node_json,
-                               skin_json, min_zoom, max_zoom, max_zoom_range, save_images, save_dir, assets_dir))
+            for tile_coord, component_group in grouped_tile_list.items():
+                input_.append((None, operated, render_start, tile_coord, component_group, operations, components, nodes,
+                               skin, min_zoom, max_zoom, max_zoom_range, save_images, save_dir, assets_dir))
             p = multiprocessing.Pool(processes)
             try:
                 preresult = p.map(rendering._tile, input_)

@@ -3,7 +3,7 @@ import blessed
 
 import renderer.validate as validate
 import renderer.tools.coord as tools_coord
-from renderer.old_types import *
+from renderer.types import *
 
 term = blessed.Terminal()
 

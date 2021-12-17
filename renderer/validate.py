@@ -4,7 +4,7 @@ import blessed
 from schema import Schema, And, Or, Regex, Optional
 
 import renderer.internals.internal as internal
-from renderer.old_types import *
+from renderer.types import *
 
 def v_coords(coords: List[Coord]) -> Literal[True]:
     """
