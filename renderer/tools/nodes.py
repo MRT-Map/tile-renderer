@@ -8,7 +8,7 @@ from renderer.types import *
 
 term = blessed.Terminal()
 
-def find_components_attached(node_id: str, components: ComponentList) -> List[Tuple[str, int]]:
+def find_components_attached(node_id: str, components: ComponentList) -> List[Tuple[Component, int]]:
     """
     Finds which components attach to a node.
    
@@ -22,7 +22,7 @@ def find_components_attached(node_id: str, components: ComponentList) -> List[Tu
     for component in components.component_values():
         #print(component_id)
         if node_id in component.nodes:
-            attached_components.append((component.name, component.nodes.index(node_id)))
+            attached_components.append((component, component.nodes.index(node_id)))
     return attached_components
 
 def to_coords(nodes: List[str], node_list: NodeList) -> List[Coord]:

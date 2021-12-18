@@ -1,31 +1,38 @@
+from pathlib import Path
+
 import renderer
 import json
 import time
 import pytest
 import multiprocessing
 
-def exampleplaRead():
+from renderer.objects.skin import Skin
+
+
+def exampleplaRead(nodes):
     with open("data/examplepla.json", "r") as f:
-        data = json.load(f)
+        data = renderer.ComponentList(json.load(f), nodes)
         f.close()
         return data
 
 def examplenodesRead():
     with open("data/examplenodes.json", "r") as f:
-        data = json.load(f)
+        data = renderer.NodeList(json.load(f))
         f.close()
         return data
 
 def test_pytest():
     if __name__ == "__main__":
-        p = exampleplaRead()
+        print("Loading nodes")
         n = examplenodesRead()
-        s = renderer.misc.get_skin()
+        print("Loading components")
+        p = exampleplaRead(n)
+        s = Skin.from_name("default")
 
         #base
-        a = renderer.render(p, n, 8, 8, 8, save_dir="tiles/", processes=8)
+        a = renderer.render(p, n, 8, 8, 8, save_dir=Path("tiles/"), processes=8)
         renderer.merge_tiles(a, save_images=False)
-        
+        return
         #tools
         renderer.tools.component_json.find_ends(p, n)
         t = renderer.tools.component_json.rendered_in(p, n, 8, 8, 16)

@@ -3,6 +3,8 @@ import renderer.mathtools
 import renderer.validate
 import renderer.misc
 import renderer.types
-import renderer.tools
+from renderer.objects.nodes import *
+from renderer.objects.components import *
+from renderer.objects.skin import *
 
 __version__ = '2.0'

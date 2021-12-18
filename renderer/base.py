@@ -1,5 +1,5 @@
 from pathlib import Path
-from typing import Optional, Dict, Union, List
+from typing import Optional, Dict, Union, List, Tuple
 
 import psutil
 from PIL import Image
@@ -23,19 +23,19 @@ import renderer.tools.line as tools_line
 import renderer.tools.nodes as tools_nodes
 import renderer.tools.tile as tools_tile
 
-def merge_tiles(images: Union[str, Dict[str, Image.Image]], save_images: bool=True, save_dir: str="tiles/",
-                zoom: Optional[List[int]]=None) -> Dict[str, Image.Image]:
+def merge_tiles(images: Union[str, Dict[TileCoord, Image.Image]], save_images: bool=True, save_dir: Path=Path.cwd(),
+                zoom: Optional[List[int]]=None) -> Dict[int, Image.Image]:
     """
     Merges tiles rendered by :py:func:`render`.
 
     :param images: Give in the form of ``(tile coord): (PIL Image)``, like the return value of :py:func:`render`, or as a path to a directory.
-    :type images: str or Dict[str, Image] 
+    :type images: str or Dict[TileCoord, Image]
     :param bool save_images: whether to save the tile images in a folder or not
     :param str save_dir: the directory to save tiles in
     :param Optional[List[int]] zoom: if left empty, automatically calculates all zoom values based on tiles; otherwise, the layers of zoom to merge.
 
     :returns: Given in the form of ``(Zoom): (PIL Image)``
-    :rtype: List[Image]
+    :rtype: Dict[int, PIL.Image.Image]
     """
     if zoom is None: zoom = []
     term = blessed.Terminal()
@@ -47,7 +47,7 @@ def merge_tiles(images: Union[str, Dict[str, Image.Image]], save_images: bool=Tr
             regex = re.search(r"(-?\d+, -?\d+, -?\d+)\.png$", d) # pylint: disable=anomalous-backslash-in-string
             if regex is None:
                 continue
-            coord = regex.group(1)
+            coord = internal._str_to_tuple(regex.group(1))
             i = Image.open(d)
             image_dict[coord] = i
             with term.location(): print(term.green("Retrieving images... ") + f"Retrieved {coord}", end=term.clear_eos+"\r")
@@ -57,18 +57,17 @@ def merge_tiles(images: Union[str, Dict[str, Image.Image]], save_images: bool=Tr
     print(term.green("Determined zoom levels..."), end=" ")
     if not zoom:
         for c in image_dict.keys():
-            z = internal._str_to_tuple(c)[0]
-            if z not in zoom:
-                zoom.append(z)
+            if c not in zoom:
+                zoom.append(c[0])
     print(term.green("determined"))
     for z in zoom:
         print(term.green(f"Zoom {z}: ") + "Determining tiles to be merged", end=term.clear_eos+"\r")
         to_merge = {}
         for c, i in image_dict.items():
-            if internal._str_to_tuple(c)[0] == z:
+            if c[0] == z:
                 to_merge[c] = i
 
-        tile_coords = [internal._str_to_tuple(s) for s in to_merge.keys()]
+        tile_coords = list(to_merge.keys())
         x_max, x_min, y_max, y_min = tools_tile.find_ends(tile_coords)
         tile_size = list(image_dict.values())[0].size[0]
         i = Image.new('RGBA', (tile_size*(x_max-x_min+1), tile_size*(y_max-y_min+1)), (0, 0, 0, 0))
@@ -78,8 +77,8 @@ def merge_tiles(images: Union[str, Dict[str, Image.Image]], save_images: bool=Tr
         start = time.time() * 1000
         for x in range(x_min, x_max+1):
             for y in range(y_min, y_max+1):
-                if f"{z}, {x}, {y}" in to_merge.keys():
-                    i.paste(to_merge[f"{z}, {x}, {y}"], (px, py))
+                if (z, x, y) in to_merge.keys():
+                    i.paste(to_merge[z, x, y], (px, py))
                     merged += 1
                     with term.location(): print(term.green(f"Zoom {z}: ")
                                                 + f"{internal._percentage(merged, len(to_merge.keys()))}% | "
@@ -92,14 +91,14 @@ def merge_tiles(images: Union[str, Dict[str, Image.Image]], save_images: bool=Tr
         if save_images:
             print(term.green(f"Zoom {z}: ") + "Saving image", end=term.clear_eos+"\r")
             i.save(f'{save_dir}merge_{z}.png', 'PNG')
-        tile_return[str(z)] = i
+        tile_return[z] = i
 
     print(term.green("\nAll merges complete"))
     return tile_return
 
 def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: int, max_zoom_range: RealNum,
-           skin: Skin=Skin.from_name("default"), save_images: bool=True, save_dir: Path= Path.cwd(), assets_dir: Path= Path(__file__)/"skins"/"assets",
-           processes: int=psutil.cpu_count(), tiles: Optional[List[TileCoord]]=None, offset: Tuple[RealNum, RealNum]=(0, 0), use_ray: bool=True) -> Dict[str, Image.Image]:
+           skin: Skin=Skin.from_name("default"), save_images: bool=True, save_dir: Path= Path.cwd(), assets_dir: Path=Path(__file__).parent/"skins"/"assets",
+           processes: int=psutil.cpu_count(), tiles: Optional[List[TileCoord]]=None, offset: Tuple[RealNum, RealNum]=(0, 0), use_ray: bool=True) -> Dict[TileCoord, Image.Image]:
     # noinspection GrazieInspection
     """
         Renders tiles from given coordinates and zoom values.
@@ -123,7 +122,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
         :param bool use_ray: Whether to use Ray multiprocessing instead of the internal multiprocessing module.
 
         :returns: Given in the form of ``(tile coord): (PIL Image)``
-        :rtype: Dict[str, Image]
+        :rtype: Dict[TileCoord, Image]
 
         :raises ValueError: if max_zoom < min_zoom
         """
@@ -226,7 +225,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
     tile_operations = 0
     for tile_coord, tile_components in grouped_tile_list.items():
         if not tile_components:
-            op_tiles[tile_components] = 0
+            op_tiles[tile_coord] = 0
             continue
 
         for group in tile_components:
@@ -240,9 +239,9 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
         operations += 2
         tile_operations += 2 #text
 
-        op_tiles[tile_components] = tile_operations
+        op_tiles[tile_coord] = tile_operations
         tile_operations = 0
-        print(f"Counted {tile_components}", end=term.clear_eos + "\r")
+        print(f"Counted {tile_coord}", end=term.clear_eos + "\r")
 
     #render
     render_start = time.time() * 1000
@@ -270,10 +269,10 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
         operated = OperatedHandler.remote()
 
         input_ = []
-        for i in grouped_tile_list.keys():
-            input_.append((None, operated, render_start, i, grouped_tile_list[i], operations, components, nodes,
-                           skin, min_zoom, max_zoom, max_zoom_range, save_images, save_dir, assets_dir))
-        futures = [ray.remote(rendering._tile).remote(input_[i], True) for i in range(len(input_))]
+        for tile_coord, component_group in grouped_tile_list.items():
+            input_.append((operated, operations, render_start, tile_coord, component_group, components, nodes,
+                           skin, max_zoom, max_zoom_range, assets_dir, True))
+        futures = [ray.remote(rendering._draw_components).remote(*input_[i]) for i in range(len(input_))]
         preresult = ray.get(futures)
         result = {}
         for i in preresult:
@@ -299,19 +298,20 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
 
             input_ = []
             for tile_coord, component_group in grouped_tile_list.items():
-                input_.append((None, operated, render_start, tile_coord, component_group, operations, components, nodes,
-                               skin, min_zoom, max_zoom, max_zoom_range, save_images, save_dir, assets_dir))
+                input_.append((operated, operations, render_start, tile_coord, component_group, components, nodes,
+                               skin, max_zoom, max_zoom_range, assets_dir))
             p = multiprocessing.Pool(processes)
             try:
-                preresult = p.map(rendering._tile, input_)
+                preresult = p.starmap(rendering._draw_components, input_)
             except KeyboardInterrupt:
                 p.terminate()
                 sys.exit()
             result = {}
             for i in preresult:
-                if i is None:
+                if i == {}:
                     continue
-                k, v = list(i.items())[0]
+                k = list(i.keys())[0]
+                v = i[k]
                 result[k] = v
 
         print(term.green("100.00% | 0.0s left | ") + "Rendering complete" + term.clear_eos)

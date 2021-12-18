@@ -4,6 +4,7 @@ import blessed
 from schema import Schema, And, Or, Regex, Optional
 
 import renderer.internals.internal as internal
+from renderer.objects.nodes import NodeList
 from renderer.types import *
 
 def v_coords(coords: List[Coord]) -> Literal[True]:
@@ -48,192 +49,19 @@ def v_tile_coords(tiles: List[TileCoord], min_zoom: int, max_zoom: int) -> Liter
             raise TypeError(f"Zoom value {item[0]} is not an integer")
     return True
 
-def v_node_list(nodes: List[str], node_json: NodeJson) -> Literal[True]:
+def v_node_list(nodes: List[str], all_nodes: NodeList) -> Literal[True]:
     """
     Validates a list of node IDs.
       
     :param List[str] nodes: a list of node IDs.
-    :param NodeJson node_json: a dictionary of nodes
+    :param NodeList all_nodes: a dictionary of nodes
         
     :returns: Returns True if no errors
     """
     for node in nodes:
-        if node not in node_json.keys():
+        if node not in all_nodes.node_ids():
             raise ValueError(f"Node '{node}' does not exist")
 
-    return True
-
-def v_node_json(node_json: NodeJson) -> Literal[True]:
-    """
-    Validates a JSON of nodes.
-        
-    :param NodeJson node_json: a dictionary of nodes
-        
-    :returns: Returns True if no errors
-    """
-    schema = Schema({
-        str: {
-            "x": Or(int, float),
-            "y": Or(int, float),
-            "connections": list
-        }
-    })
-    schema.validate(node_json)
-    return True
-
-def v_component_json(component_json: ComponentJson, node_json: NodeJson) -> Literal[True]:
-    """
-    Validates a JSON of components.
-      
-    :param ComponentJson component_json: a dictionary of components
-    :param NodeJson node_json: a dictionary of nodes
-        
-    :returns: Returns True if no errors
-    """
-    schema = Schema({
-        str: {
-            "type": str,
-            "displayname": str,
-            "description": str,
-            "layer": Or(int, float),
-            "nodes": And(list, lambda i: v_node_list(i, node_json)),
-            Optional("hollows"): [And(list, lambda i: v_node_list(i, node_json))],
-            "attrs": dict
-        }
-    })
-    schema.validate(component_json)
-    return True
-            
-def v_skin_json(skin_json: SkinJson) -> Literal[True]:
-    """
-    Validates a skin JSON file.
-
-    :param SkinJson skin_json: the skin JSON file
-    
-    :returns: Returns True if no errors
-    """
-    mainSchema = Schema({
-        "info": {
-            "size": int,
-            "font": {
-                "": str,
-                "b": str,
-                "i": str,
-                "bi": str
-            },
-            "background": And([int], lambda l: len(l) == 3 and False not in [0 <= n_ <= 255 for n_ in l])
-        },
-        "order": [str],
-        "types": {
-            str: {
-                "tags": list,
-                "type": lambda t_: t_ in ['point', 'line', 'area'],
-                "style": {
-                    str: list
-                }
-            }
-        }
-    })
-    point_circle = Schema({
-        "layer": "circle",
-        "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
-        "outline": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
-        "size": int,
-        "width": int
-    })
-    point_text = Schema({
-        "layer": "text",
-        "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
-        "offset": And([int], lambda o: len(o) == 2),
-        "size": int,
-        "anchor": Or(None, str)
-    })
-    point_square = Schema({
-        "layer": "square",
-        "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
-        "outline": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
-        "size": int,
-        "width": int
-    })
-    point_image = Schema({
-        "layer": "image",
-        "file": str,
-        "offset": And([int], lambda o: len(o) == 2)
-    })
-    line_backfore = Schema({
-        "layer": Or("back", "fore"),
-        "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
-        "width": int,
-        Optional("dash"): And([int], lambda l: len(l) == 2)
-    })
-    line_text = Schema({
-        "layer": "text",
-        "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
-        "size": int,
-        "offset": int
-    })
-    area_fill = Schema({
-        "layer": "fill",
-        "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
-        "outline": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
-        Optional("stripe"): And([int], lambda l: len(l) == 3)
-    })
-    area_bordertext = Schema({
-        "layer": "bordertext",
-        "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
-        "offset": int,
-        "size": int
-    })
-    area_centertext = Schema({
-        "layer": "centertext",
-        "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
-        "size": int,
-        "offset": And(And(list, [int]), lambda o: len(o) == 2)
-    })
-    area_centerimage = Schema({
-        "layer": "image",
-        "file": str,
-        "offset": And(And(list, [int]), lambda o: len(o) == 2)
-    })
-
-    schemas = {
-        "point": {
-            "circle": point_circle,
-            "text": point_text,
-            "square": point_square,
-            "image": point_image
-        },
-        "line": {
-            "text": line_text,
-            "back": line_backfore,
-            "fore": line_backfore
-        },
-        "area": {
-            "bordertext": area_bordertext,
-            "centertext": area_centertext,
-            "fill": area_fill,
-            "centerimage": area_centerimage
-        }
-    }
-
-    mainSchema.validate(skin_json)
-    for n, t in skin_json['types'].items():
-        if n not in skin_json['order']:
-            raise ValueError(f"Type {n} is not in order list")
-        s = t['style']
-        for z, steps in s.items():
-            if internal._str_to_tuple(z)[0] > internal._str_to_tuple(z)[1]:
-                raise ValueError(f"Invalid range '{z}'")
-            for step in steps:
-                if not step["layer"] in schemas[t['type']]:
-                    raise ValueError(f"Invalid layer '{step}'")
-                else:
-                    try:
-                        schemas[t['type']][step['layer']].validate(step)
-                    except Exception as e:
-                        term = blessed.Terminal()
-                        print(term.red(f"Type {n}, range {z}, step {step['layer']}"))
-                        raise e
     return True
 
 def v_geo_json(geo_json: dict) -> Literal[True]:

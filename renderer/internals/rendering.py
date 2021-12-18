@@ -1,11 +1,13 @@
 import math
 from pathlib import Path
-from typing import List
+from typing import List, Tuple, Dict
 
 from PIL import Image, ImageDraw
 import blessed
 import re
 import itertools
+
+from typing_extensions import TypeAlias
 
 import renderer.internals.internal as internal
 import renderer.tools as tools
@@ -48,20 +50,22 @@ def _node_list_to_image_coords(node_list: List[str], nodes: NodeList, skin: Skin
         image_coords.append((xs, ys))
     return image_coords
 
+_TextList: TypeAlias = List[Tuple[Image.Image, RealNum, RealNum, RealNum, RealNum, RealNum]]
+
 def _draw_components(operated, operations: int, start: RealNum, tile_coord: TileCoord, tile_components: List[List[Component]],
                      all_components: ComponentList, nodes: NodeList, skin: Skin, max_zoom: int, max_zoom_range: RealNum,
-                     assets_dir: Path, using_ray: bool=False):
+                     assets_dir: Path, using_ray: bool=False) -> Dict[TileCoord, _TextList]:
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
     if tile_components == [[]]:
         logger.log("render complete")
-        return None
+        return {}
 
     logger.log("Initialising canvas")
     size = max_zoom_range * 2 ** (max_zoom - tile_coord[0])
     img = Image.new(mode="RGBA", size=(skin.tile_size,)*2, color=skin.background)
     imd = ImageDraw.Draw(img)
-    text_list = []
-    points_text_list = []
+    text_list: _TextList = []
+    points_text_list: _TextList = []
 
     for group in tile_components:
         type_info = skin[group[0].type]
@@ -82,7 +86,7 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                     text_length = int(imd.textlength(component.displayname, font))
                     pt_i = Image.new('RGBA', (2 * text_length, 2 * (step.size + 4)), (0, 0, 0, 0))
                     pt_d = ImageDraw.Draw(pt_i)
-                    pt_d.text((text_length, step.size + 4), component.displayname, fill=step.color, font=font,
+                    pt_d.text((text_length, step.size + 4), component.displayname, fill=step.colour, font=font,
                               anchor="mm")
                     tw, th = pt_i.size
                     points_text_list.append(
@@ -288,7 +292,7 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                                 outlines.append(n_coords)
                         for o_coords in outlines:
                             imd.line(o_coords, fill=step.outline, width=2, joint="curve")
-                            if "unroundedEnds" not in type_info['tags']:
+                            if "unroundedEnds" not in type_info.tags:
                                 imd.ellipse(
                                     [o_coords[0][0] - 2 / 2 + 1, o_coords[0][1] - 2 / 2 + 1, o_coords[0][0] + 2 / 2,
                                      o_coords[0][1] + 2 / 2], fill=step.outline)
@@ -328,48 +332,44 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                 else:
                     operated.count()
 
-            if type_info.shape == "line" and "road" in type_info['tags'] and step.layer == "back":
+            if type_info.shape == "line" and "road" in type_info.tags and step.layer == "back":
                 logger.log("Studs: Finding connected lines")
-                con_nodes = []
+                con_nodes: List[str] = []
                 for component in group:
                     con_nodes += component.nodes
                 connected_pre = [tools.nodes.find_components_attached(x, all_components) for x in con_nodes]
-                connected = []
+                connected: List[Tuple[Component, int]] = []
                 for i in connected_pre:
                     connected += i
                 for con_component, index in connected:
-                    if "road" not in skin[all_components[con_component].type].tags:
+                    if "road" not in skin[con_component.type].tags:
                         continue
-                    con_info = skin[all_components[con_component].type]
+                    con_info = skin[con_component.type]
                     for con_step in con_info[max_zoom-tile_coord[0]]:
                         if con_step.layer in ["back", "text"]:
                             continue
 
                         logger.log("Studs: Extracting coords")
-                        con_coords = _node_list_to_image_coords(all_components[con_component].nodes, nodes,
+                        con_coords = _node_list_to_image_coords(con_component.nodes, nodes,
                                                                 skin, tile_coord, size)
                         pre_con_coords = con_coords[:]
 
                         logger.log("Studs: Coords processed")
                         if index == 0:
                             con_coords = [con_coords[0], con_coords[1]]
-                            if "dash" not in con_step.keys():
-                                con_coords[1] = (
-                                (con_coords[0][0] + con_coords[1][0]) / 2, (con_coords[0][1] + con_coords[1][1]) / 2)
+                            if con_step.dash is None:
+                                con_coords[1] = ((con_coords[0][0] + con_coords[1][0]) / 2, (con_coords[0][1] + con_coords[1][1]) / 2)
                         elif index == len(con_coords) - 1:
                             con_coords = [con_coords[index - 1], con_coords[index]]
-                            if "dash" not in con_step.keys():
-                                con_coords[0] = (
-                                (con_coords[0][0] + con_coords[1][0]) / 2, (con_coords[0][1] + con_coords[1][1]) / 2)
+                            if con_step.dash is None:
+                                con_coords[0] = ((con_coords[0][0] + con_coords[1][0]) / 2, (con_coords[0][1] + con_coords[1][1]) / 2)
                         else:
                             con_coords = [con_coords[index - 1], con_coords[index], con_coords[index + 1]]
-                            if "dash" not in con_step.keys():
-                                con_coords[0] = (
-                                (con_coords[0][0] + con_coords[1][0]) / 2, (con_coords[0][1] + con_coords[1][1]) / 2)
-                                con_coords[2] = (
-                                (con_coords[2][0] + con_coords[1][0]) / 2, (con_coords[2][1] + con_coords[1][1]) / 2)
+                            if con_step.dash is None:
+                                con_coords[0] = ((con_coords[0][0] + con_coords[1][0]) / 2, (con_coords[0][1] + con_coords[1][1]) / 2)
+                                con_coords[2] = ((con_coords[2][0] + con_coords[1][0]) / 2, (con_coords[2][1] + con_coords[1][1]) / 2)
                         logger.log("Studs: Segment drawn")
-                        if "dash" not in con_step.keys():
+                        if con_step.dash is None:
                             imd.line(con_coords, fill=con_step.colour, width=con_step.width, joint="curve")
                             imd.ellipse([con_coords[0][0] - con_step.width / 2 + 1,
                                          con_coords[0][1] - con_step.width / 2 + 1,
@@ -399,11 +399,13 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                 else:
                     operated.count()
 
-    return {tile_coord: img} # TODO return text as well
-
-
-""" text_list += points_text_list
+    text_list += points_text_list
     text_list.reverse()
+    return {tile_coord: (img, text_list)} # TODO return text as well
+
+def _draw_text(operated, operations: int, start: RealNum, tile_coord: TileCoord,
+               tile_components: List[List[Component]], text_list: _TextList, using_ray: bool=False) -> Dict[TileCoord, Image.Image]:
+    logger = _Logger(using_ray, operated, operations, start, tile_coord)
     dont_cross = []
     processed = 0
     #print(text_list)
@@ -431,10 +433,10 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                 break
         processed += 1
         if can_print:
-            p_log(f"Text {processed}/{len(text_list)} pasted")
+            logger.log(f"Text {processed}/{len(text_list)} pasted")
             img.paste(i, (int(x-i.width/2), int(y-i.height/2)), i)
         else:
-            p_log(f"Text {processed}/{len(text_list)} skipped")
+            logger.log(f"Text {processed}/{len(text_list)} skipped")
         dont_cross.append(current_box_coords)
     if using_ray: operated.count.remote()
     else: operated.count()
@@ -443,7 +445,6 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
     if save_images:
         img.save(f'{save_dir}{tile_coords}.png', 'PNG')
 
-    p_log("Rendered")
+    logger.log("Rendered")
 
     return {tile_coords: img}
-    """

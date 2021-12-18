@@ -14,7 +14,7 @@ class Node:
 class NodeList:
     def __init__(self, json: NodeJson):
         self.validate_json(json)
-        self.nodes: Dict[str, Node] = {name: Node(node) for name, node in json}
+        self.nodes: Dict[str, Node] = {name: Node(node) for name, node in json.items()}
 
     def __getitem__(self, name: str) -> Node:
         return self.nodes[name]

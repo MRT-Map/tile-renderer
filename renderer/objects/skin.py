@@ -14,8 +14,8 @@ class Skin:
     def __init__(self, json: SkinJson):
         self.validate_json(json)
         self.tile_size: int = json['info']['size']
-        self.fonts: Dict[str, Path] = {name: Path(path) for name, path in json['info']['fonts'].items()}
-        self.background: Tuple[int, int, int] = json['info']['background']
+        self.fonts: Dict[str, Path] = {name: Path(path) for name, path in json['info']['font'].items()}
+        self.background: Tuple[int, int, int] = tuple(json['info']['background'])
 
         self.order: List[str] = json['order']
         self.types: Dict[str, Skin.ComponentTypeInfo] \
@@ -36,7 +36,7 @@ class Skin:
             self.shape = json['type']
             self.order = order
             self.styles: Dict[Tuple[int, int], List[Skin.ComponentTypeInfo.ComponentStyle]] \
-                = {internal._str_to_tuple(range_): [self.ComponentStyle(v) for v in value] for range_, value in json['styles'].items()}
+                = {internal._str_to_tuple(range_): [self.ComponentStyle(v) for v in value] for range_, value in json['style'].items()}
 
         def __getitem__(self, zoom_level: int) -> List[ComponentStyle]:
             for (max_level, min_level), styles in self.styles.items():
@@ -51,7 +51,7 @@ class Skin:
                 self.colour: str = None if "colour" not in json else json['colour']
                 self.outline: str = None if "outline" not in json else json['outline']
                 self.offset: Union[RealNum, Tuple[RealNum, RealNum]]\
-                    = None if "offset" not in json else tuple(json['offset']) if issubclass(json['offset'], list) else json['offset']
+                    = None if "offset" not in json else tuple(json['offset']) if isinstance(json['offset'], list) else json['offset']
                 self.size: int = None if "size" not in json else json['size']
                 self.anchor: str = None if "anchor" not in json else json['anchor']
                 self.file: Path = None if "file" not in json else Path(json['file'])
@@ -72,7 +72,7 @@ class Skin:
         :raises FileNotFoundError: if skin does not exist
         """
         try:
-            return cls(internal._read_json(Path(__file__)/"skins"/(name+".json")))
+            return cls(internal._read_json(Path(__file__).parent.parent/"skins"/(name+".json")))
         except FileNotFoundError:
             raise FileNotFoundError(f"Skin '{name}' not found")
 
