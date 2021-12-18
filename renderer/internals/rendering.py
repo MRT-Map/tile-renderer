@@ -7,8 +7,6 @@ import blessed
 import re
 import itertools
 
-from typing_extensions import TypeAlias
-
 import renderer.internals.internal as internal
 import renderer.tools as tools
 import renderer.mathtools as mathtools
@@ -40,6 +38,15 @@ class _Logger:
         else:
             print(term.green(f"00.0% | 0.0s left | ") + f"{self.tile_coords}: " + term.bright_black(msg), flush=True)
 
+class _TextObject:
+    def __init__(self, image: Image.Image, x: RealNum, y: RealNum, w: RealNum, h: RealNum, rot: RealNum):
+        self.image = image
+        self.x = x
+        self.y = y
+        self.w = w
+        self.h = h
+        self.rot = rot
+
 def _node_list_to_image_coords(node_list: List[str], nodes: NodeList, skin: Skin, tile_coord: TileCoord, size: RealNum) -> List[Coord]:
     image_coords = []
     for x, y in tools.nodes.to_coords(node_list, nodes):
@@ -50,11 +57,9 @@ def _node_list_to_image_coords(node_list: List[str], nodes: NodeList, skin: Skin
         image_coords.append((xs, ys))
     return image_coords
 
-_TextList: TypeAlias = List[Tuple[Image.Image, RealNum, RealNum, RealNum, RealNum, RealNum]]
-
 def _draw_components(operated, operations: int, start: RealNum, tile_coord: TileCoord, tile_components: List[List[Component]],
                      all_components: ComponentList, nodes: NodeList, skin: Skin, max_zoom: int, max_zoom_range: RealNum,
-                     assets_dir: Path, using_ray: bool=False) -> Dict[TileCoord, _TextList]:
+                     assets_dir: Path, using_ray: bool=False) -> Dict[TileCoord, Tuple[Image.Image, List[_TextObject]]]:
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
     if tile_components == [[]]:
         logger.log("render complete")
@@ -64,8 +69,8 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
     size = max_zoom_range * 2 ** (max_zoom - tile_coord[0])
     img = Image.new(mode="RGBA", size=(skin.tile_size,)*2, color=skin.background)
     imd = ImageDraw.Draw(img)
-    text_list: _TextList = []
-    points_text_list: _TextList = []
+    text_list: List[_TextObject] = []
+    points_text_list: List[_TextObject] = []
 
     for group in tile_components:
         type_info = skin[group[0].type]
@@ -89,8 +94,7 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                     pt_d.text((text_length, step.size + 4), component.displayname, fill=step.colour, font=font,
                               anchor="mm")
                     tw, th = pt_i.size
-                    points_text_list.append(
-                        (pt_i, coords[0][0] + step.offset[0], coords[0][1] + step.offset[1], tw, th, 0))
+                    points_text_list.append(_TextObject(pt_i, coords[0][0] + step.offset[0], coords[0][1] + step.offset[1], tw, th, 0))
                     # font = get_font("", step.size)
                     # img.text((coords[0][0]+step.offset[0], coords[0][1]+step.offset[1]), component.displayname, fill=step.colour, font=font, anchor=step['anchor'])
 
@@ -129,7 +133,7 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                                           fill=step.colour, font=font, anchor="mm")
                                 tw, th = lt_i.size[:]
                                 lt_i = lt_i.rotate(trot, expand=True)
-                                text_list.append((lt_i, tx, ty, tw, th, trot))
+                                text_list.append(_TextObject(lt_i, tx, ty, tw, th, trot))
                         if "oneWay" in component.tags and text_length <= math.dist(coords[c], coords[c + 1]):
                             logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Generating oneway arrows")
                             font = skin.get_font("b", step.size, assets_dir)
@@ -148,7 +152,7 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                                           anchor="mm")
                                 tw, th = lt_i.size[:]
                                 lt_i = lt_i.rotate(trot, expand=True)
-                                text_list.append((lt_i, tx, ty, tw, th, trot))
+                                text_list.append(_TextObject(lt_i, tx, ty, tw, th, trot))
                                 counter += 1
 
                 def line_backfore():
@@ -207,7 +211,7 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                                            fill=step.colour, font=font, anchor="mm")
                                 tw, th = abt_i.size[:]
                                 abt_i = abt_i.rotate(trot, expand=True)
-                                text_list.append((abt_i, tx, ty, tw, th, trot))
+                                text_list.append(_TextObject(abt_i, tx, ty, tw, th, trot))
 
                 def area_centertext():
                     logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating center")
@@ -242,7 +246,7 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                     act_d = ImageDraw.Draw(act_i)
                     cw, ch = act_i.size
                     act_d.text((text_length, text_size), text, fill=step.colour, font=font, anchor="mm")
-                    text_list.append((act_i, cx, cy, cw, ch, 0))
+                    text_list.append(_TextObject(act_i, cx, cy, cw, ch, 0))
 
                 def area_fill():
                     ai = Image.new("RGBA", (skin.tile_size, skin.tile_size), (0, 0, 0, 0))
@@ -403,18 +407,20 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
     text_list.reverse()
     return {tile_coord: (img, text_list)} # TODO return text as well
 
-def _draw_text(operated, operations: int, start: RealNum, tile_coord: TileCoord,
-               tile_components: List[List[Component]], text_list: _TextList, using_ray: bool=False) -> Dict[TileCoord, Image.Image]:
+def _draw_text(operated, operations: int, start: RealNum, image: Image.Image, tile_coord: TileCoord, text_list: List[_TextObject],
+               save_images: bool, save_dir: Path, using_ray: bool=False) -> Dict[TileCoord, Image.Image]:
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
     dont_cross = []
     processed = 0
     #print(text_list)
-    for i, x, y, w, h, rot in text_list:
+    for text in text_list:
+        i = text.image; x = text.x; y = text.y; w = text.w; h = text.h; rot = text.rot
         r = lambda a, b: mathtools.rotate_around_pivot(a, b, x, y, rot)
         current_box_coords = [r(x-w/2, y-h/2), r(x-w/2, y+h/2), r(x+w/2, y+h/2), r(x+w/2, y-h/2), r(x-w/2, y-h/2)]
         can_print = True
         for box in dont_cross:
-            _, ox, oy, ow, oh, _ = text_list[dont_cross.index(box)]
+            o_text = text_list[dont_cross.index(box)]
+            ox = o_text.x; oy = o_text.y; ow = o_text.w; oh = o_text.h
             o_max_dist = ((ow/2)**2+(oh/2)**2)**0.5/2
             this_max_dist = ((w/2)**2+(h/2)**2)**0.5/2
             dist = ((x-ox)**2+(y-oy)**2)**0.5
@@ -434,7 +440,7 @@ def _draw_text(operated, operations: int, start: RealNum, tile_coord: TileCoord,
         processed += 1
         if can_print:
             logger.log(f"Text {processed}/{len(text_list)} pasted")
-            img.paste(i, (int(x-i.width/2), int(y-i.height/2)), i)
+            image.paste(i, (int(x-i.width/2), int(y-i.height/2)), i)
         else:
             logger.log(f"Text {processed}/{len(text_list)} skipped")
         dont_cross.append(current_box_coords)
@@ -443,8 +449,8 @@ def _draw_text(operated, operations: int, start: RealNum, tile_coord: TileCoord,
     
     #tileReturn[tile_coord] = im
     if save_images:
-        img.save(f'{save_dir}{tile_coords}.png', 'PNG')
+        image.save(save_dir/f'{internal._tuple_to_str(tile_coord)}.png', 'PNG')
 
     logger.log("Rendered")
 
-    return {tile_coords: img}
+    return {tile_coord: image}

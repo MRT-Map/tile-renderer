@@ -10,13 +10,13 @@ from renderer.objects.skin import Skin
 
 
 def exampleplaRead(nodes):
-    with open("data/examplepla.json", "r") as f:
+    with open("data/example.comps.pla", "r") as f:
         data = renderer.ComponentList(json.load(f), nodes)
         f.close()
         return data
 
 def examplenodesRead():
-    with open("data/examplenodes.json", "r") as f:
+    with open("data/example.nodes.pla", "r") as f:
         data = renderer.NodeList(json.load(f))
         f.close()
         return data

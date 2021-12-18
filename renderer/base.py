@@ -183,12 +183,12 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
             if component.layer not in new_tile_components.keys():
                 new_tile_components[component.layer] = []
             new_tile_components[component.layer].append(component)
-        with term.location(): print(l(processed, timeLeft, tile_components, "Sorted component by layer"), end="\r")
+        with term.location(): print(l(processed, timeLeft, tile_coord, "Sorted component by layer"), end="\r")
 
         #sort components in layers in files by type
         new_tile_components = {layer: sorted(component_list, key=lambda x: skin.order.index(x.type))
                                for layer, component_list in new_tile_components.items()}
-        with term.location(): print(l(processed, timeLeft, tile_components, "Sorted component by type"), end="\r")
+        with term.location(): print(l(processed, timeLeft, tile_coord, "Sorted component by type"), end="\r")
 
         #merge layers
         tile_components = []
@@ -196,7 +196,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
         for layer in layers:
             for component in new_tile_components[layer]:
                 tile_components.append(component)
-        with term.location(): print(l(processed, timeLeft, tile_components, "Merged layers"), end="\r")
+        with term.location(): print(l(processed, timeLeft, tile_coord, "Merged layers"), end="\r")
 
         #groups components of the same type if "road" tag present
         newer_tile_components: List[List[Component]] = [[]]
@@ -210,7 +210,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
                 newer_tile_components.append([])
 
         grouped_tile_list[tile_coord] = newer_tile_components
-        with term.location(): print(l(processed, timeLeft, tile_components, "Components grouped"), end="\r")
+        with term.location(): print(l(processed, timeLeft, tile_coord, "Components grouped"), end="\r")
 
         processed += 1
         timeLeft = internal._time_remaining(process_start, processed, len(tile_list))
@@ -273,6 +273,13 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
             input_.append((operated, operations, render_start, tile_coord, component_group, components, nodes,
                            skin, max_zoom, max_zoom_range, assets_dir, True))
         futures = [ray.remote(rendering._draw_components).remote(*input_[i]) for i in range(len(input_))]
+        prepreresult = ray.get(futures)
+        input_ = []
+        for i in prepreresult:
+            tile_coord, (image, text_list) = list(i.items())[0]
+            input_.append((operated, operations, render_start, image, tile_coord, text_list,
+                           save_images, save_dir, True))
+        futures = [ray.remote(rendering._draw_text).remote(*input_[i]) for i in range(len(input_))]
         preresult = ray.get(futures)
         result = {}
         for i in preresult:
@@ -302,7 +309,18 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
                                skin, max_zoom, max_zoom_range, assets_dir))
             p = multiprocessing.Pool(processes)
             try:
-                preresult = p.starmap(rendering._draw_components, input_)
+                prepreresult = p.starmap(rendering._draw_components, input_)
+            except KeyboardInterrupt:
+                p.terminate()
+                sys.exit()
+            input_ = []
+            for i in prepreresult:
+                tile_coord = list(i.keys())[0]
+                image, text_list = i[tile_coord]
+                input_.append((operated, operations, render_start, image, tile_coord, text_list,
+                               save_images, save_dir))
+            try:
+                preresult = p.starmap(rendering._draw_text, input_)
             except KeyboardInterrupt:
                 p.terminate()
                 sys.exit()

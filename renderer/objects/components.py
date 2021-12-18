@@ -3,6 +3,7 @@ from typing import List, Dict
 from schema import Schema, Or, And, Optional
 
 from renderer import validate
+from renderer.objects.nodes import NodeList
 from renderer.types import RealNum, ComponentJson, NodeJson
 
 
@@ -51,8 +52,8 @@ class ComponentList:
                 "displayname": str,
                 "description": str,
                 "layer": Or(int, float),
-                "nodes": And(list, lambda i: validate.v_node_list(i, node_json)),
-                Optional("hollows"): [And(list, lambda i: validate.v_node_list(i, node_json))],
+                "nodes": And(list, lambda i: validate.v_node_list(i, NodeList(node_json))),
+                Optional("hollows"): [And(list, lambda i: validate.v_node_list(i, NodeList(node_json)))],
                 "attrs": dict
             }
         })
