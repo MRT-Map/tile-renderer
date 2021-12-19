@@ -287,7 +287,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
                 continue
             k, v = list(i.items())[0]
             result[k] = v
-
+        ray.shutdown()
     else:
         if __name__ == 'renderer.base':
             class OperatedHander:

@@ -62,7 +62,7 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                      assets_dir: Path, using_ray: bool=False) -> Dict[TileCoord, Tuple[Image.Image, List[_TextObject]]]:
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
     if tile_components == [[]]:
-        logger.log("render complete")
+        logger.log("Render complete")
         return {}
 
     logger.log("Initialising canvas")
@@ -95,8 +95,8 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                               anchor="mm")
                     tw, th = pt_i.size
                     points_text_list.append(_TextObject(pt_i, coords[0][0] + step.offset[0], coords[0][1] + step.offset[1], tw, th, 0))
-                    # font = get_font("", step.size)
-                    # img.text((coords[0][0]+step.offset[0], coords[0][1]+step.offset[1]), component.displayname, fill=step.colour, font=font, anchor=step['anchor'])
+                    #font = skin.get_font("", step.size)
+                    #img.text((coords[0][0]+step.offset[0], coords[0][1]+step.offset[1]), component.displayname, fill=step.colour, font=font, anchor=step['anchor'])
 
                 def point_square():
                     imd.rectangle((coords[0][0] - step.size / 2 + 1,
@@ -146,6 +146,7 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                                     continue
                                 trot = math.degrees(
                                     math.atan2(coords[c + 1][0] - coords[c][0], coords[c + 1][1] - coords[c][1]))
+                                text_length = int(imd.textlength("↓", font))
                                 lt_i = Image.new('RGBA', (2 * text_length, 2 * (step.size + 4)), (0, 0, 0, 0))
                                 lt_d = ImageDraw.Draw(lt_i)
                                 lt_d.text((text_length, step.size + 4), "↓", fill=step.colour, font=font,
@@ -405,7 +406,7 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
 
     text_list += points_text_list
     text_list.reverse()
-    return {tile_coord: (img, text_list)} # TODO return text as well
+    return {tile_coord: (img, text_list)}
 
 def _draw_text(operated, operations: int, start: RealNum, image: Image.Image, tile_coord: TileCoord, text_list: List[_TextObject],
                save_images: bool, save_dir: Path, using_ray: bool=False) -> Dict[TileCoord, Image.Image]:
