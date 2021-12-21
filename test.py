@@ -51,7 +51,7 @@ def test_pytest():
         renderer.tools.coord.to_tiles((342, 552), 8, 8, 16)
         
         #mathtools
-        renderer.mathtools.midpoint(0, 1, 2, 3, 5, n=5) #incl pointsAway
+        renderer.mathtools.midpoint(0, 1, 2, 3, 5, n=5) #incl points_away
         renderer.mathtools.point_in_poly(0, 0, l) #incl lines_intersect
         renderer.mathtools.poly_center(l)
         renderer.mathtools.line_in_box(l, 1, -1, -1, 1)

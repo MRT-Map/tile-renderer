@@ -1,6 +1,7 @@
 import math
+from dataclasses import dataclass
 from pathlib import Path
-from typing import List, Tuple, Dict
+from typing import List, Tuple, Dict, Any
 
 from PIL import Image, ImageDraw
 import blessed
@@ -20,13 +21,13 @@ term = blessed.Terminal()
 try: import ray
 except ModuleNotFoundError: pass
 
+@dataclass
 class _Logger:
-    def __init__(self, using_ray: bool, operated, operations: int, start: RealNum, tile_coords: TileCoord):
-        self.using_ray = using_ray
-        self.operated = operated
-        self.operations = operations
-        self.start = start
-        self.tile_coords = tile_coords
+    using_ray: bool
+    operated: Any
+    operations: int
+    start: RealNum
+    tile_coords: TileCoord
 
     def log(self, msg):
         if self.using_ray: ops = ray.get(self.operated.get.remote())
@@ -38,14 +39,15 @@ class _Logger:
         else:
             print(term.green(f"00.0% | 0.0s left | ") + f"{self.tile_coords}: " + term.bright_black(msg), flush=True)
 
+
+@dataclass
 class _TextObject:
-    def __init__(self, image: Image.Image, x: RealNum, y: RealNum, w: RealNum, h: RealNum, rot: RealNum):
-        self.image = image
-        self.x = x
-        self.y = y
-        self.w = w
-        self.h = h
-        self.rot = rot
+    image: Image.Image
+    x: RealNum
+    y: RealNum
+    w: RealNum
+    h: RealNum
+    rot: RealNum
 
 def _node_list_to_image_coords(node_list: List[str], nodes: NodeList, skin: Skin, tile_coord: TileCoord, size: RealNum) -> List[Coord]:
     image_coords = []
@@ -183,21 +185,21 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                 def area_bordertext():
                     logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating text length")
                     font = skin.get_font("", step.size, assets_dir)
-                    textLength = int(imd.textlength(component.displayname.replace('\n', ''), font))
+                    text_length = int(imd.textlength(component.displayname.replace('\n', ''), font))
                     for c1 in range(len(coords)):
                         c2 = c1 + 1 if c1 != len(coords) - 1 else 0
                         if mathtools.line_in_box(coords, 0, skin.tile_size, 0,
-                                                 skin.tile_size) and 2 * textLength <= math.dist(coords[c1], coords[c2]):
+                                                 skin.tile_size) and 2 * text_length <= math.dist(coords[c1], coords[c2]):
                             # coords[c]
                             logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Midpoints calculated")
-                            t = math.floor(math.dist(coords[c1], coords[c2]) / (4 * textLength))
+                            t = math.floor(math.dist(coords[c1], coords[c2]) / (4 * text_length))
                             t = 1 if t == 0 else t
-                            allPoints = mathtools.midpoint(coords[c1][0], coords[c1][1], coords[c2][0], coords[c2][1],
+                            all_points = mathtools.midpoint(coords[c1][0], coords[c1][1], coords[c2][0], coords[c2][1],
                                                            step.offset, n=t, return_both=True)
-                            for n in range(0, len(allPoints), 2):
+                            for n in range(0, len(all_points), 2):
                                 logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: {component.name}: " +
-                                           f"Generating text {n + 1} of {len(allPoints)} in section {c1} of {len(coords) + 1}")
-                                points = [allPoints[n], allPoints[n + 1]]
+                                           f"Generating text {n + 1} of {len(all_points)} in section {c1} of {len(coords) + 1}")
+                                points = [all_points[n], all_points[n + 1]]
                                 if step.offset < 0:
                                     tx, ty, trot = points[0] if not mathtools.point_in_poly(points[0][0], points[0][1],
                                                                                             coords) else points[1]
@@ -206,13 +208,13 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                                     # print(mathtools.point_in_poly(points[0][0], points[0][1], coords))
                                     tx, ty, trot = points[0] if mathtools.point_in_poly(points[0][0], points[0][1],
                                                                                         coords) else points[1]
-                                abt_i = Image.new('RGBA', (2 * textLength, 2 * (step.size + 4)), (0, 0, 0, 0))
+                                abt_i = Image.new('RGBA', (2 * text_length, 2 * (step.size + 4)), (0, 0, 0, 0))
                                 abt_d = ImageDraw.Draw(abt_i)
-                                abt_d.text((textLength, step.size + 4), component.displayname.replace('\n', ''),
+                                abt_d.text((text_length, step.size + 4), component.displayname.replace('\n', ''),
                                            fill=step.colour, font=font, anchor="mm")
                                 tw, th = abt_i.size[:]
-                                abt_i = abt_i.rotate(trot, expand=True)
-                                text_list.append(_TextObject(abt_i, tx, ty, tw, th, trot))
+                                abt_ir = abt_i.rotate(trot, expand=True)
+                                text_list.append(_TextObject(abt_ir, tx, ty, tw, th, trot))
 
                 def area_centertext():
                     logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating center")
@@ -406,6 +408,8 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
 
     text_list += points_text_list
     text_list.reverse()
+    img = img.crop((0, 0, +img.width, img.height))
+    text_list = []
     return {tile_coord: (img, text_list)}
 
 def _draw_text(operated, operations: int, start: RealNum, image: Image.Image, tile_coord: TileCoord, text_list: List[_TextObject],

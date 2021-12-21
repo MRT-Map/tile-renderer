@@ -23,6 +23,16 @@ import renderer.tools.line as tools_line
 import renderer.tools.nodes as tools_nodes
 import renderer.tools.tile as tools_tile
 
+class _MultiprocessingOperatedHandler:
+    def __init__(self, m):
+        self.operated = m.Value('i', 0)
+
+    def get(self):
+        return self.operated.value
+
+    def count(self):
+        self.operated.value += 1
+
 def merge_tiles(images: Union[str, Dict[TileCoord, Image.Image]], save_images: bool=True, save_dir: Path=Path.cwd(),
                 zoom: Optional[List[int]]=None) -> Dict[int, Image.Image]:
     """
@@ -256,7 +266,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
         ray.init(num_cpus=processes)
 
         @ray.remote
-        class OperatedHandler:
+        class _RayOperatedHandler:
             def __init__(self):
                 self.tally = []
 
@@ -266,7 +276,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
             def count(self):
                 self.tally.append(1)
 
-        operated = OperatedHandler.remote()
+        operated = _RayOperatedHandler.remote()
 
         input_ = []
         for tile_coord, component_group in grouped_tile_list.items():
@@ -290,18 +300,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
         ray.shutdown()
     else:
         if __name__ == 'renderer.base':
-            class OperatedHander:
-                def __init__(self):
-                    self.m = multiprocessing.Manager()
-                    self.operated = self.m.Value('i', 0)
-
-                def get(self):
-                    return self.operated.value
-
-                def count(self):
-                    self.operated.value += 1
-
-            operated = OperatedHander()
+            operated = _MultiprocessingOperatedHandler(multiprocessing.Manager())
 
             input_ = []
             for tile_coord, component_group in grouped_tile_list.items():

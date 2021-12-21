@@ -35,7 +35,7 @@ def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: 
         else:
             m1 = (y2-y1)/(x2-x1)
             m2 = -1 / m1
-        results = pointsAway(x3, y3, o, m2)
+        results = points_away(x3, y3, o, m2)
         if return_both:
             #print(eq1, eq2)
             rot = 90 if x1 == x2 else math.degrees(-math.atan(m1))
@@ -60,7 +60,7 @@ def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: 
             points.append((x4, y4, rot))
     return points
 
-def lines_intersect(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, x3: RealNum, y3: RealNum, x4: RealNum, y4: RealNum) -> bool:
+def lines_intersect(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, x3: RealNum, y3: RealNum, x4: RealNum, y4: RealNum) -> bool: # TODO speed up
     """
     Finds if two segments intersect.
     
@@ -138,26 +138,17 @@ def point_in_poly(xp: RealNum, yp: RealNum, coords: List[Coord]) -> bool:
     :returns: Whether the point is inside the polygon.
     :rtype: bool
     """
-    r = -math.inf
-    for x, _ in coords:
-        if x > r:
-            r = x
-    r += 10
-    cross = 0
-    for i in range(len(coords)):
-        j = i + 1 if i != len(coords)-1 else 0
-        if lines_intersect(coords[i][0], coords[i][1], coords[j][0], coords[j][1], xp, yp, r, yp):
-            if coords[i][1] == yp:
-                h = i - 1 if i != 0 else len(coords)-1
-                cross += 0 if (coords[h][1] > yp and coords[i][1] > yp) or (coords[h][1] < yp and coords[i][1] < yp) else 0.5
-            elif coords[j][1] == yp:
-                k = j + 1 if j != len(coords)-1 else 0 
-                cross += 0 if (coords[j][1] > yp and coords[k][1] > yp) or (coords[j][1] < yp and coords[k][1] < yp) else 0.5
-            else:
-                cross += 1
-    return cross % 2 == 1
+    if (xp, yp) in coords: return True
+    coords = np.array(coords)
+    xs = coords[:, 0] - xp
+    ys = coords[:, 1] - yp
+    bearings = np.diff(np.arctan2(ys, xs))
+    bearings = np.where(bearings >= -math.pi, bearings, bearings + math.tau)
+    bearings = np.where(bearings <= math.pi, bearings, bearings - math.tau)
+    wind_num = round(bearings.sum()/math.tau)
+    return wind_num != 0
             
-def poly_center(coords: List[Coord]) -> Coord:
+def poly_center(coords: List[Coord]) -> Coord: # TODO speed up
     """
     Finds the center point of a polygon.
       
@@ -202,7 +193,7 @@ def line_in_box(line: List[Coord], top: RealNum, bottom: RealNum, left: RealNum,
             return True
     return False
 
-def dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: RealNum, o: RealNum=0, empty_start: bool=False) -> List[List[Coord]]:
+def dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: RealNum, o: RealNum=0, empty_start: bool=False) -> List[List[Coord]]: # TODO merge into one dashing thing
     """
     Finds points along a segment that are a specified distance apart.
       
@@ -227,7 +218,7 @@ def dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: Real
     if o == 0:
         x3, y3 = (x1, y1)
     else:
-        results = pointsAway(x1, y1, o, m)
+        results = points_away(x1, y1, o, m)
         x3, y3 = results[0] if min(x1, x2) <= results[0][0] <= max(x1, x2) and min(y1, y2) <= results[0][1] <= max(y1, y2) else results[1]
     if not empty_start and o != 0:
         dash_.append([(x1, y1), (x3, y3)])
@@ -237,7 +228,7 @@ def dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: Real
 
     while min(x1, x2) <= x3 <= max(x1, x2) and min(y1, y2) <= y3 <= max(y1, y2):
         if gap:
-            results = pointsAway(x3, y3, g, m)
+            results = points_away(x3, y3, g, m)
             if np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1):
                 if math.dist(results[0], (x1, y1)) > math.dist(results[1], (x1, y1)):
                     x3, y3 = results[0]
@@ -249,7 +240,7 @@ def dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: Real
             dash_.append([(x3, y3)])
             gap = False
         else:
-            results = pointsAway(x3, y3, d, m)
+            results = points_away(x3, y3, d, m)
             #print(results)
             #print(np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1))
             if np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1):
@@ -349,7 +340,7 @@ def rotate_around_pivot(x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta:
     ny += py
     return nx, ny
 
-def pointsAway(x: RealNum, y: RealNum, d: RealNum, m: Optional[RealNum]) -> List[Coord]:
+def points_away(x: RealNum, y: RealNum, d: RealNum, m: Optional[RealNum]) -> List[Coord]:
     """
     Finds two points that are a specified distance away from a specified point, all on a straight line.
 

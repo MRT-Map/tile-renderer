@@ -61,7 +61,7 @@ Changelog
   * added stripes for areas
   * added offset for image centertext
   * new function: ``renderer.tools.line_findEnds()``
-  * new function: ``renderer.mathtools.pointsAway()``
+  * new function: ``renderer.mathtools.points_away()``
 
     * replaces the messy and unresponsive find-two-points-n-units-away-from-a-point-on-a-straight-line calculations of sympy using trigo
     * rendering should be faster now (``renderer.render.midpoint()``'s speed is now 0-1% of the original speed)
