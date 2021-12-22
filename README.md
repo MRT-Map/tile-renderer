@@ -22,19 +22,37 @@ Leaflet.js streetmap tile renderer, made by 7d
 **Documentation: https://tile-renderer.readthedocs.io/en/latest/**
 
 ## Current version: v2.0
-* **v1.3 (26/6/21)**
-  * New subcommands in CLI:
-    * `validate` and `vdir`, to validate JSON files
-    * `merge` to merge 
-    * `plabuilder` for the new PLA builder
-  * Area centertext will now break up into multiple lines
-  * New PLA builder
-    * additionally, builders now have their own submodule
+* **v2.0 (23/12/21)**
+  * "PLA" is no longer defined as "a set of components" but a file type (`.pla`)
+    * Components are called... Components
+    * Component JSON files have a `.comps.pla` suffix
+    * Node JSON files have a `.nodes.pla` suffix
+  * The CLI format has changed substantially to follow PEP8 naming conventions
+  * The entire codebase has been reformatted to follow PEP8 naming conventions
+  * Skins, components and nodes (& their list counterparts) now have their own classes, to make the code cleaner
+  * Coords and TileCoords are now NamedTuples
+  * `pathlib.Path` is now being used instead of raw strings
+  * Ray multiprocessing integration (3.8 and 3.9 only)
+  * Text rendering is now separated from the main rendering task
+  * Rendering logs will no longer use the same line but rather will output one log per line
+  * Builders:
+    * Default IDs can now be set
+      * PyAutoGUI is now used to automatically write the default ID
+    * Commands now start with "."
+    * ... and many more I probably forgot lol
+  * `internals.internal` is now typed
+  * Loggers and texts (for later rendering) now have their own private classes
+  * Several functions in `mathtools` (`lines_intersect`, `point_in_poly`, `poly_center`) are now quicker to run (mostly using NumPy)
+    * SymPy is no longer a dependency (yey)
+  * `misc` no longer exists (`misc.getSkin` is now `Skin.from_name`)
+  * `tools` is now split up into 6 files
+  * Many functions in `validate` are now in their respective object classes
+  * Made the CLI actually work (:P)
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)
-1. Download or clone this repo; or run `pip install tile-renderer`
-2. Write a node JSON file and a PLA JSON file. (Tutorial coming soon) Or, use the example files provided in `data`.
+1. Download or clone this repo; or run `pip install tile-renderer` (For ray functionality do `pip install ray`)
+2. Write a node JSON file and a component JSON file. (Tutorial coming soon) Or, use the example files provided in `data`.
 3. In your file, run the renderer. Here is an example code:
 
 ```python
@@ -42,22 +60,22 @@ import renderer  # important!!
 import json
 
 
-def readFile(path):  # extract from JSON as dict
+def read_file(path):  # extract from JSON as dict
     with open(path, "r") as f:
         data = json.load(f)
         f.close()
         return data
+    
+nodes = renderer.NodeList(read_file("path_to_your_nodes_file/blah.nodes.pla"))
+comps = renderer.ComponentList(read_file("path_to_your_components_file/blah.comps.pla"),
+                               read_file("path_to_your_nodes_file/blah.nodes.pla"))
 
-
-pla = readFile("path_to_your_components_file/components.json")
-nodes = readFile("path_to_your_nodes_file/nodes.json")
-
-if __name__ == "__main__": renderer.render(pla, nodes, 1, 2, 8)
+if __name__ == "__main__": renderer.render(comps, nodes, 1, 2, 8)
 # renders tiles at zoom levels 1 and 2 with the max zoom tile covering 8 units
 # Don't like clogging the main directory? Create a new folder and use this instead:
-# if __name__ == "__main__": renderer.render(pla, nodes, 1, 2, 8, save_dir="your_folder_name/")
+# if __name__ == "__main__": renderer.render(comps, nodes, 1, 2, 8, save_dir=Path("your_folder_name/"))
 # Too slow? Increase the number of processes
-# if __name__ == "__main__": renderer.render(pla, nodes, 1, 2, 8, processes=5)
+# if __name__ == "__main__": renderer.render(comps, nodes, 1, 2, 8, processes=5)
 ```
 
 <!--

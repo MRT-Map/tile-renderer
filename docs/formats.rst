@@ -2,14 +2,14 @@ Formats
 =======
 .. _formats:
 
-Componemts
+Components
 ----
 .. code-block:: javascript
 
   {
     "(nameid)": {
       "type": "(type)",
-      "displayname": "(disp>layname)",
+      "displayname": "(displayname)",
       "description": "(description)".
       "layer": layer_no,
       "nodes": [nodeid, nodeid, nodeid],
