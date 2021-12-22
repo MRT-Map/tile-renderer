@@ -105,7 +105,7 @@ def _ask_file_name(name: str) -> Tuple[dict, str]:
                 print(term.red("File is not a JSON file"))
         except FileNotFoundError:
             print(term.red("File does not exist"))
-    
+
     with open(filePath, "r") as f:
         data = json.load(f)
         f.close()

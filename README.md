@@ -21,7 +21,7 @@ Leaflet.js streetmap tile renderer, made by 7d
 
 **Documentation: https://tile-renderer.readthedocs.io/en/latest/**
 
-## Current version: v1.3
+## Current version: v2.0
 * **v1.3 (26/6/21)**
   * New subcommands in CLI:
     * `validate` and `vdir`, to validate JSON files
