@@ -69,9 +69,6 @@ def test_pytest():
         renderer.validate.v_skin_json(s)
         renderer.validate.v_geo_json(g)
 
-        #misc
-        renderer.misc.get_skin('default')
-
         print("complete")
         
 test_pytest()

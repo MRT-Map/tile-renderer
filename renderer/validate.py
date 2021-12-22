@@ -2,17 +2,13 @@ from schema import Schema, And
 
 from renderer.objects.nodes import NodeList
 from renderer.types import *
-from schema import Schema, And
-
-from renderer.objects.nodes import NodeList
-from renderer.types import *
 
 
 def v_coords(coords: List[Coord]) -> Literal[True]:
     """
     Validates a list of coordinates.
       
-    :param List[Coord] coords: a list of coordinates.
+    :param list[Coord] coords: a list of coordinates.
         
     :returns: Returns True if no errors
     """
@@ -30,7 +26,7 @@ def v_tile_coords(tiles: List[TileCoord], min_zoom: int, max_zoom: int) -> Liter
     """
     Validates a list of tile coordinates.
       
-    :param List[TileCoord] tiles: a list of tile coordinates.
+    :param list[TileCoord] tiles: a list of tile coordinates.
     :param int min_zoom: minimum zoom value
     :param int max_zoom: maximum zoom value
         
@@ -54,7 +50,7 @@ def v_node_list(nodes: List[str], all_nodes: NodeList) -> Literal[True]:
     """
     Validates a list of node IDs.
       
-    :param List[str] nodes: a list of node IDs.
+    :param list[str] nodes: a list of node IDs.
     :param NodeList all_nodes: a dictionary of nodes
         
     :returns: Returns True if no errors

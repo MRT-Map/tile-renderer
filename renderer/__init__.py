@@ -1,7 +1,6 @@
 from renderer.base import merge_tiles, render
 import renderer.mathtools
 import renderer.validate
-import renderer.misc
 import renderer.types
 from renderer.objects.nodes import *
 from renderer.objects.components import *

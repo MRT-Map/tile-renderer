@@ -6,8 +6,10 @@ try: from typing import TypeAlias
 except ImportError: TypeAlias = type
 
 RealNum: TypeAlias = Union[int, float]
+"""Represents a real number, either an integer or float."""
 
 class Coord(NamedTuple):
+    """Represents a coordinate in the form ``(x, y)``."""
     x: RealNum
     y: RealNum
 
@@ -16,6 +18,7 @@ class Coord(NamedTuple):
 
 
 class TileCoord(NamedTuple):
+    """Represents a tile coordinate in the form ``(z, x, y)``."""
     z: int
     x: int
     y: int
@@ -28,7 +31,9 @@ NodeJson = TypedDict('NodeJson', {
     'y': int,
     'connections': list
 })
+"""Represents a node JSON object."""
 NodeListJson: TypeAlias = Dict[str, NodeJson]
+"""Represents a node list JSON."""
 
 ComponentJson = TypedDict('ComponentJson', {
     'type': str,
@@ -39,20 +44,25 @@ ComponentJson = TypedDict('ComponentJson', {
     'attrs': Dict[str, Any],
     'hollows': List[List[str]]
 }, total=False)
+"""Represents a component JSON object."""
 ComponentListJson: TypeAlias = Dict[str, ComponentJson]
+"""Represents a component list JSON."""
 
 SkinInfo = TypedDict('SkinInfo', {
     'size': int,
     'font': Dict[str, str],
     'background': List[int]
 })
+"""Represents the ``info`` portion of a skin JSON."""
 SkinType = TypedDict('SkinType', {
     'tags': List[str],
     'type': Literal['point', 'line', 'area'],
     'style': Dict[str, dict]
 })
+"""Represents a component type in the ``types`` portion of a skin JSON."""
 SkinJson = TypedDict('SkinJson', {
     'info': SkinInfo,
     'order': List[str],
     'types': Dict[str, SkinType]
 })
+"""Represents a skin JSON."""

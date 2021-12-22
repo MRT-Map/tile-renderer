@@ -18,7 +18,7 @@ from renderer.objects.nodes import NodeList
 from renderer.objects.skin import Skin
 from renderer.types import RealNum, TileCoord
 
-import renderer.tools.component_json as tools_component_json
+import renderer.tools.components as tools_component_json
 import renderer.tools.line as tools_line
 import renderer.tools.nodes as tools_nodes
 import renderer.tools.tile as tools_tile
@@ -39,13 +39,14 @@ def merge_tiles(images: Union[str, Dict[TileCoord, Image.Image]], save_images: b
     Merges tiles rendered by :py:func:`render`.
 
     :param images: Give in the form of ``(tile coord): (PIL Image)``, like the return value of :py:func:`render`, or as a path to a directory.
-    :type images: str or Dict[TileCoord, Image]
+    :type images: str | dict[TileCoord, Image]
     :param bool save_images: whether to save the tile images in a folder or not
-    :param str save_dir: the directory to save tiles in
-    :param Optional[List[int]] zoom: if left empty, automatically calculates all zoom values based on tiles; otherwise, the layers of zoom to merge.
+    :param Path save_dir: the directory to save tiles in
+    :param zoom: if left empty, automatically calculates all zoom values based on tiles; otherwise, the layers of zoom to merge.
+    :type zoom: list[int] | None
 
     :returns: Given in the form of ``(Zoom): (PIL Image)``
-    :rtype: Dict[int, PIL.Image.Image]
+    :rtype: dict[int, Image.Image]
     """
     if zoom is None: zoom = []
     term = blessed.Terminal()
@@ -114,7 +115,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
         Renders tiles from given coordinates and zoom values.
 
         .. warning::
-            Run this function under ``if __name__ == "__main__"``, or else there would be a lot of multiprocessing RuntimeErrors.
+            Run this function under ``if __name__ == "__main__"`` if ``use_ray`` is False, or else there would be a lot of multiprocessing RuntimeErrors.
 
         :param ComponentList components: a JSON of components
         :param NodeList nodes: a JSON of nodes
@@ -126,13 +127,14 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
         :param Path save_dir: the directory to save tiles in
         :param Path assets_dir: the asset directory for the skin
         :param int processes: The amount of processes to run for rendering
-        :param Optional[List[TileCoord]] tiles: a list of tiles to render, given in tuples of ``(z,x,y)`` where z = zoom and x,y = tile coordinates
+        :param tiles: a list of tiles to render
+        :type tiles: list[TileCoord] | None
         :param offset: the offset to shift all node coordinates by, given as ``(x,y)``
-        :type offset: Tuple[RealNum, RealNum]
+        :type offset: tuple[RealNum, RealNum]
         :param bool use_ray: Whether to use Ray multiprocessing instead of the internal multiprocessing module.
 
-        :returns: Given in the form of ``(tile coord): (PIL Image)``
-        :rtype: Dict[TileCoord, Image]
+        :returns: Given in the form of ``{tile_coord: image}``
+        :rtype: dict[TileCoord, Image.Image]
 
         :raises ValueError: if max_zoom < min_zoom
         """

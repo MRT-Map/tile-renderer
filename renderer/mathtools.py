@@ -18,7 +18,7 @@ def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: 
     :param bool return_both: if True, it will return both possible points.
         
     :return: A list of *(lists of, when return_both=True)* tuples in the form of (x, y, rot)
-    :rtype: List[Tuple[RealNum, RealNum, RealNum]] *when return_both=False,* List[List[Tuple[RealNum, RealNum, RealNum]]] *when return_both=True*
+    :rtype: list[tuple[Coord, RealNum]] *when return_both=False,* list[list[tuple[Coord, RealNum]]] *when return_both=True*
     """
     #print(x1, y1, x2, y2, o, n)
     points = []
@@ -88,7 +88,7 @@ def point_in_poly(xp: RealNum, yp: RealNum, coords: List[Coord]) -> bool:
         
     :param RealNum xp: the x-coordinate of the point.
     :param RealNum yp: the y-coordinate of the point.
-    :param List[Coord] coords: the coordinates of the polygon; give in ``(x,y)``
+    :param list[Coord] coords: the coordinates of the polygon; give in ``(x,y)``
         
     :returns: Whether the point is inside the polygon.
     :rtype: bool
@@ -107,7 +107,7 @@ def poly_center(coords: List[Coord]) -> Coord:
     """
     Finds the center point of a polygon.
       
-    :param List[Coord] coords: the coordinates of the polygon; give in ``(x,y)``
+    :param list[Coord] coords: the coordinates of the polygon; give in ``(x,y)``
         
     :returns: The center of the polygon, given in ``(x,y)``
     :rtype: Coord
@@ -123,7 +123,7 @@ def line_in_box(line: List[Coord], top: RealNum, bottom: RealNum, left: RealNum,
     """
     Finds if any nodes of a line go within the box.
       
-    :param List[Coord] line: the line to check for
+    :param list[Coord] line: the line to check for
     :param RealNum top: the bounds of the box
     :param RealNum bottom: the bounds of the box
     :param RealNum left: the bounds of the box
@@ -160,7 +160,7 @@ def dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: Real
     :param bool empty_start: Whether to start the line from (x1,y1) empty before the start of the next dash
         
     :returns: A list of points along the segment, given in [[(x1, y1), (x2, y2)], etc]
-    :rtype: List[List[Coord]]
+    :rtype: list[list[Coord]]
     """
     if d <= 0 or g <= 0:
         raise ValueError("dash or gap length cannot be <= 0")
@@ -227,7 +227,7 @@ def dash_offset(coords: List[Coord], d: RealNum, g: RealNum) -> List[Tuple[RealN
     :param RealNum g: the length of the gap between dashes
 
     :returns: The offsets of each coordinate, and whether to start the next segment with empty_start, given in (offset, empty_start)
-    :rtype: Tuple[RealNum, bool]
+    :rtype: list[tuple[RealNum, bool]]
    """
     o = 0
     offsets = [(0, False)]
@@ -300,10 +300,11 @@ def points_away(x: RealNum, y: RealNum, d: RealNum, m: Optional[RealNum]) -> Lis
     :param RealNum x: the x-coordinate of the original point
     :param RealNum y: the y-coordinate of the original point
     :param RealNum d: the distance the two points from the original point
-    :param Optional[RealNum] m: the gradient of the line. Give ``None`` for a gradient of undefined.
+    :param m: the gradient of the line. Give ``None`` for a gradient of undefined.
+    :type m: RealNum | None
 
     :returns: Given in ``[(x1, y1), (x2, y2)]``
-    :rtype: List[Coord]
+    :rtype: list[Coord]
     """
     theta = math.atan(m) if m is not None else math.pi / 2
     dx = round(d*math.cos(theta), 10)

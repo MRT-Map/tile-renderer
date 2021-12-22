@@ -7,10 +7,13 @@ from PIL import ImageFont
 from schema import Schema, And, Or, Regex, Optional
 
 import renderer.internals.internal as internal
-from renderer.types import RealNum, SkinJson
+from renderer.types import RealNum, SkinJson, SkinType
 
 
 class Skin:
+    """Represents a skin.
+
+    :param SkinJson json: The JSON of the skin."""
     def __init__(self, json: SkinJson):
         self.validate_json(json)
         self.tile_size: int = json['info']['size']
@@ -25,18 +28,35 @@ class Skin:
         return self.types[type_name]
 
     def get_font(self, style: str, size: int, assets_dir: Path) -> ImageFont.FreeTypeFont:
+        """Gets a font, given the style and size.
+
+        :param str style: The style of the font needed, eg. bold, italic etc
+        :param int size: The size of the font
+        :param Path assets_dir: Where the font is stored
+        :return: The font
+        :rtype: ImageFont.FreeTypeFont
+        :raises FileNotFoundError: if font is not found"""
         if style in self.fonts.keys():
             return ImageFont.truetype(str(assets_dir/self.fonts[style]), size)
-        raise ValueError
+        raise FileNotFoundError(f"Font for {style} not found")
 
     class ComponentTypeInfo:
-        def __init__(self, name: str, json: dict, order: List[str]):
+        """An object representing a component type in the ``types`` portion of a skin.
+
+        :param str name: Will set  ``name``
+        :param SkinType json: The JSON of the component type
+        :param List[str] order: Will set ``_order``"""
+        def __init__(self, name: str, json: SkinType, order: List[str]):
             self.name: str = name
+            """The name of the component."""
             self.tags: List[str] = json['tags']
-            self.shape = json['type']
-            self.order = order
+            """The list of tags attributed to the component."""
+            self.shape: Literal["point", "line", "area"] = json['type']
+            """The shape of the component, must be one of ``point``, ``line``, ``area``"""
+            self._order = order
             self.styles: Dict[Tuple[int, int], List[Skin.ComponentTypeInfo.ComponentStyle]] \
                 = {internal._str_to_tuple(range_): [self.ComponentStyle(v) for v in value] for range_, value in json['style'].items()}
+            """The styles of the object, denoted as ``{(max_zoom, min_zoom): [style, ...]}``"""
 
         def __getitem__(self, zoom_level: int) -> List[ComponentStyle]:
             for (max_level, min_level), styles in self.styles.items():
@@ -46,6 +66,9 @@ class Skin:
                 return []
         
         class ComponentStyle:
+            """Represents the ``styles`` portion of a ComponentTypeInfo.
+
+            :param dict json: The JSON of the styles"""
             def __init__(self, json: dict):
                 self.layer: str = json['layer']
                 self.colour: str = None if "colour" not in json else json['colour']

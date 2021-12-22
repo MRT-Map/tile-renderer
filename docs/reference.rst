@@ -15,7 +15,7 @@ Main
 
 Tools
 -----
-.. automodule:: renderer.tools.component_json
+.. automodule:: renderer.tools.components
    :members:
 
 .. automodule:: renderer.tools.coord
@@ -45,63 +45,17 @@ Validate
 
 Types
 -----
-.. py:attribute:: renderer.types.RealNum
-   :type: TypeAlias
-   :value: Union[int, float]
+.. automodule:: renderer.types
+   :members:
 
-   Represents a real number, either an integer or float.
+Objects
+-------
 
-.. py:attribute:: renderer.types.Coord
-   :type: TypeAlias
-   :value: Tuple[RealNum, RealNum]
+.. automodule:: renderer.objects.components
+   :members:
 
-   Represents a coordinate in the form ``(x, y)``.
+.. automodule:: renderer.objects.nodes
+   :members:
 
-.. py:attribute:: renderer.types.TileCoord
-   :type: TypeAlias
-   :value: Tuple[int, int, int]
-
-   Represents a tile coordinate in the form ``(z, x, y)``.
-
-.. py:attribute:: renderer.types.Node
-   :type: dict
-
-   Represents a node object.
-
-.. py:attribute:: renderer.types.NodeJson
-   :type: TypeAlias
-   :value: Dict[str, Node]
-
-   Represents a node JSON.
-
-.. py:attribute:: renderer.types.Component
-   :type: dict
-
-   Represents a component object.
-
-.. py:attribute:: renderer.types.ComponentJson
-   :type: TypeAlias
-   :value: Dict[str, Node]
-
-   Represents a component JSON.
-
-.. py:attribute:: renderer.types.SkinInfo
-   :type: dict
-
-   Represents the ``info`` portion of a skin JSON.
-
-.. py:attribute:: renderer.types.SkinType
-   :type: dict
-
-   Represents a component type in the ``types`` portion of a skin JSON.
-
-.. py:attribute:: renderer.types.SkinJson
-   :type: dict
-
-   Represents a skin JSON.
-
-Misc
-----
-
-.. automodule:: renderer.misc
+.. automodule:: renderer.objects.skin
    :members:
