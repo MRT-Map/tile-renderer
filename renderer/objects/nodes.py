@@ -2,7 +2,7 @@ from typing import Literal, Dict, List
 
 from schema import Schema, Or
 
-from renderer.types import RealNum, NodeJson
+from renderer.types import RealNum, NodeListJson
 
 
 class Node:
@@ -12,7 +12,7 @@ class Node:
         self.connections: list = json['connections']
 
 class NodeList:
-    def __init__(self, json: NodeJson):
+    def __init__(self, json: NodeListJson):
         self.validate_json(json)
         self.nodes: Dict[str, Node] = {name: Node(node) for name, node in json.items()}
 
@@ -30,7 +30,7 @@ class NodeList:
         """
         Validates a JSON of nodes.
 
-        :param NodeJson json: a dictionary of nodes
+        :param NodeListJson json: a dictionary of nodes
 
         :returns: Returns True if no errors
         """

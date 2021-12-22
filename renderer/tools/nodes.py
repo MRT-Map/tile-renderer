@@ -1,10 +1,11 @@
+from typing import Tuple, List
+
 import blessed
 
-import renderer.internals.internal as internal # type: ignore
-import renderer.validate as validate
-from renderer.objects.components import ComponentList
+import renderer.internals.internal as internal  # type: ignore
+from renderer.objects.components import ComponentList, Component
 from renderer.objects.nodes import NodeList
-from renderer.types import *
+from renderer.types import Coord
 
 term = blessed.Terminal()
 
@@ -40,5 +41,5 @@ def to_coords(nodes: List[str], node_list: NodeList) -> List[Coord]:
     for node_id in nodes:
         if node_id not in node_list.node_ids():
             raise KeyError(f"Node '{node_id}' does not exist")
-        coords.append((node_list[node_id].x, node_list[node_id].y))
+        coords.append(Coord(node_list[node_id].x, node_list[node_id].y))
     return coords

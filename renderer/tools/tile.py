@@ -1,4 +1,6 @@
 import math
+from typing import Tuple
+
 import blessed
 
 import renderer.internals.internal as internal # type: ignore

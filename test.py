@@ -9,24 +9,26 @@ import multiprocessing
 from renderer.objects.skin import Skin
 
 
-def exampleplaRead(nodes):
+def exampleplaRead() -> dict:
     with open("data/example.comps.pla", "r") as f:
-        data = renderer.ComponentList(json.load(f), nodes)
+        data = json.load(f)
         f.close()
         return data
 
-def examplenodesRead():
+def examplenodesRead() -> dict:
     with open("data/example.nodes.pla", "r") as f:
-        data = renderer.NodeList(json.load(f))
+        data = json.load(f)
         f.close()
         return data
 
 def test_pytest():
     if __name__ == "__main__":
         print("Loading nodes")
-        n = examplenodesRead()
+        rn = examplenodesRead()
         print("Loading components")
-        p = exampleplaRead(n)
+        rp = exampleplaRead()
+        n = renderer.NodeList(rn)
+        p = renderer.ComponentList(rp, rn)
         s = Skin.from_name("default")
 
         #base

@@ -1,7 +1,7 @@
 import math
 import json
 from pathlib import Path
-from typing import Union
+from typing import Union, TypeVar, Dict, Any, Tuple, List, Generator
 import time
 import random
 import blessed
@@ -9,19 +9,21 @@ import difflib
 import re
 term = blessed.Terminal()
 
-def _dedent(text):
+def _dedent(text: str) -> str:
     return re.sub('\n ', '\n', re.sub(' +', ' ', text))
 
-def _dict_index(d: dict, v):
+_K = TypeVar("_K")
+_V = TypeVar("_V")
+def _dict_index(d: Dict[_K, _V], v: _V) -> _K:
     return list(d.keys())[list(d.values()).index(v)]
 
-def _read_json(file: Union[Path, str]):
+def _read_json(file: Union[Path, str]) -> Any:
     with open(file, "r") as f:
         data = json.load(f)
         f.close()
         return data
 
-def _write_json(file: Union[Path, str], data: dict, pp=False):
+def _write_json(file: Union[Path, str], data: dict, pp: bool=False):
     with open(file, "r+") as f:
         f.seek(0)
         f.truncate()
@@ -31,13 +33,13 @@ def _write_json(file: Union[Path, str], data: dict, pp=False):
             json.dump(data, f)
         f.close()
 
-def _tuple_to_str(t: tuple):
+def _tuple_to_str(t: tuple) -> str:
     return str(t)[1:-1]
 
-def _str_to_tuple(s: str):
+def _str_to_tuple(s: str) -> tuple:
     return tuple([int(x) for x in s.split(", ")])
 
-def _ms_to_time(ms: Union[int, float]):
+def _ms_to_time(ms: Union[int, float]) -> str:
     if ms == 0:
         return "00.0s"
     s = round(ms / 1000, 1)
@@ -68,16 +70,16 @@ def _ms_to_time(ms: Union[int, float]):
     #    res = res + pzero + str(ms) + szero + "ms "
     return res.strip()
 
-def _percentage(c: Union[int, float], t: Union[int, float]):
+def _percentage(c: Union[int, float], t: Union[int, float]) -> str:
     res = round(c/t*100, 2)
     pzero = "0" if res < 10 else ""
     szero = "0" if len(str(res).split(".")[1]) == 1 else ""
     return pzero + str(res) + szero
 
-def _time_remaining(start: Union[int, float], c: Union[int, float], t: Union[int, float]):
+def _time_remaining(start: Union[int, float], c: Union[int, float], t: Union[int, float]) -> float:
     return round(((int(round(time.time() * 1000)) - start) / c * (t - c)), 2)
 
-def _gen_id():
+def _gen_id() -> str:
     def b10_b64(n: int):
         BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
         q = n
@@ -91,7 +93,7 @@ def _gen_id():
     decimalId = int(time.time() * 10000000)
     return b10_b64(decimalId) + "-" + b10_b64(random.randint(1, 64**5))
 
-def _ask_file_name(name: str):
+def _ask_file_name(name: str) -> Tuple[dict, str]:
     fileConfirmed = False
     while not fileConfirmed:
         filePath = input(term.yellow(f"Which {name} JSON file are you writing to/referencing? "))
@@ -110,6 +112,13 @@ def _ask_file_name(name: str):
 
     return data, filePath
 
-def _similar(s, i):
+_T = TypeVar("_T")
+def _similar(s: _T, i: List[_T]):
     if len(sim := difflib.get_close_matches(s, i)) != 0:
         print(term.bright_red(f"Perhaps you mean: {', '.join(sim)}"))
+
+def _with_next(l: List[_T]) -> Generator[Tuple[_T, _T], None, None]:
+    if len(l) > 1:
+        for i, a in enumerate(l[:-1]):
+            b = l[i+1]
+            yield a, b

@@ -4,7 +4,7 @@ from schema import Schema, Or, And, Optional
 
 from renderer import validate
 from renderer.objects.nodes import NodeList
-from renderer.types import RealNum, ComponentJson, NodeJson
+from renderer.types import RealNum, ComponentListJson, NodeListJson
 
 
 class Component:
@@ -23,7 +23,7 @@ class Component:
             self.tags: List[str] = []
 
 class ComponentList:
-    def __init__(self, component_json: ComponentJson, node_json: NodeJson):
+    def __init__(self, component_json: ComponentListJson, node_json: NodeListJson):
         self.validate_json(component_json, node_json)
         self.components: Dict[str, Component] = {name: Component(name, component) for name, component in component_json.items()}
 
@@ -41,8 +41,8 @@ class ComponentList:
         """
         Validates a JSON of components.
 
-        :param ComponentJson component_json: a dictionary of components
-        :param NodeJson node_json: a dictionary of nodes
+        :param ComponentListJson component_json: a dictionary of components
+        :param NodeListJson node_json: a dictionary of nodes
 
         :returns: Returns True if no errors
         """

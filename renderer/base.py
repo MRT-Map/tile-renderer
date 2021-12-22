@@ -57,7 +57,7 @@ def merge_tiles(images: Union[str, Dict[TileCoord, Image.Image]], save_images: b
             regex = re.search(r"(-?\d+, -?\d+, -?\d+)\.png$", d) # pylint: disable=anomalous-backslash-in-string
             if regex is None:
                 continue
-            coord = internal._str_to_tuple(regex.group(1))
+            coord = TileCoord(*internal._str_to_tuple(regex.group(1)))
             i = Image.open(d)
             image_dict[coord] = i
             with term.location(): print(term.green("Retrieving images... ") + f"Retrieved {coord}", end=term.clear_eos+"\r")
@@ -68,13 +68,13 @@ def merge_tiles(images: Union[str, Dict[TileCoord, Image.Image]], save_images: b
     if not zoom:
         for c in image_dict.keys():
             if c not in zoom:
-                zoom.append(c[0])
+                zoom.append(c.z)
     print(term.green("determined"))
     for z in zoom:
         print(term.green(f"Zoom {z}: ") + "Determining tiles to be merged", end=term.clear_eos+"\r")
         to_merge = {}
         for c, i in image_dict.items():
-            if c[0] == z:
+            if c.z == z:
                 to_merge[c] = i
 
         tile_coords = list(to_merge.keys())
@@ -87,8 +87,8 @@ def merge_tiles(images: Union[str, Dict[TileCoord, Image.Image]], save_images: b
         start = time.time() * 1000
         for x in range(x_min, x_max+1):
             for y in range(y_min, y_max+1):
-                if (z, x, y) in to_merge.keys():
-                    i.paste(to_merge[z, x, y], (px, py))
+                if TileCoord(z, x, y) in to_merge.keys():
+                    i.paste(to_merge[TileCoord(z, x, y)], (px, py))
                     merged += 1
                     with term.location(): print(term.green(f"Zoom {z}: ")
                                                 + f"{internal._percentage(merged, len(to_merge.keys()))}% | "
@@ -240,7 +240,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
 
         for group in tile_components:
             info = skin.types[group[0].type]
-            for step in info[max_zoom-tile_coord[0]]:
+            for step in info[max_zoom-tile_coord.z]:
                 operations += len(group)
                 tile_operations += len(group)
                 if info.shape == "line" and "road" in info.tags and step.layer == "back":

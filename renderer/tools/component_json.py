@@ -1,4 +1,6 @@
 import math
+from typing import Tuple
+
 import blessed
 
 import renderer.internals.internal as internal # type: ignore
@@ -6,6 +8,7 @@ import renderer.validate as validate
 import renderer.tools as tools
 from renderer.objects.components import ComponentList
 from renderer.objects.nodes import NodeList
+from renderer.objects.skin import Skin
 from renderer.types import *
 
 term = blessed.Terminal()
@@ -60,20 +63,20 @@ def rendered_in(components: ComponentList, nodes: NodeList, min_zoom: int, max_z
     return tiles
 
 
-def to_geo_json(component_json: ComponentJson, node_json: NodeJson, skin_json: SkinJson) -> dict:
+def to_geo_json(component_json: ComponentListJson, node_json: NodeListJson, skin_json: SkinJson) -> dict:
     """
     Converts component JSON into GeoJson (with nodes and skin).
    
-    :param ComponentJson component_json: a JSON of components
-    :param NodeJson node_json: a JSON of nodes
+    :param ComponentListJson component_json: a JSON of components
+    :param NodeListJson node_json: a JSON of nodes
     :param SkinJson skin_json: a JSON of the skin
 
     :returns: A GeoJson dictionary
     :rtype: dict
     """
-    validate.v_component_json(component_json, node_json)
-    validate.v_node_json(node_json)
-    validate.v_skin_json(skin_json)
+    ComponentList.validate_json(component_json, node_json)
+    NodeList.validate_json(node_json)
+    Skin.validate_json(skin_json)
     geo_json = {"type": "FeatureCollection", "features": []}
 
     for component_id, component in component_json.items():

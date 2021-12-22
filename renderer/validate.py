@@ -1,11 +1,12 @@
-import math
+from schema import Schema, And
 
-import blessed
-from schema import Schema, And, Or, Regex, Optional
-
-import renderer.internals.internal as internal
 from renderer.objects.nodes import NodeList
 from renderer.types import *
+from schema import Schema, And
+
+from renderer.objects.nodes import NodeList
+from renderer.types import *
+
 
 def v_coords(coords: List[Coord]) -> Literal[True]:
     """

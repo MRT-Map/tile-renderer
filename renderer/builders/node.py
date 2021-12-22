@@ -13,7 +13,7 @@ def input_default(msg: str, default: str):
 
 print(term.yellow("Welcome to the node JSON builder!\n--------------------------------"))
 
-nodes, file_path = internal._ask_file_name("Node") # pylint: disable=no-member
+nodes, file_path = internal._ask_file_name("NodeJson") # pylint: disable=no-member
 
 print(term.yellow("Ingame, press F3+C once, and paste it here.\n" +
                   "Type '.exit' to exit\n" +
@@ -45,7 +45,7 @@ while not e:
         else:
             to_delete = pasted.replace(".delete ", "")
             if to_delete not in new_nodes:
-                print(term.red(f"Node '{to_delete}' does not exist"))
+                print(term.red(f"NodeJson '{to_delete}' does not exist"))
             else:
                 print(term.red(f"Do you want to delete '{to_delete}'?"))
                 print(term.red(str(new_nodes[to_delete])))
@@ -62,9 +62,9 @@ while not e:
 
     name_confirmed = False
     while not name_confirmed:
-        name = input_default(term.yellow("Node name: "), default_name.replace("{num}", str(count)))
+        name = input_default(term.yellow("NodeJson name: "), default_name.replace("{num}", str(count)))
         if name in nodes.keys() or name in new_nodes.keys():
-            print(term.red("Node already exists; do you want to override its current value?"))
+            print(term.red("NodeJson already exists; do you want to override its current value?"))
             print(term.red(str(nodes[name] if name in nodes.keys() else new_nodes[name])))
             if input(term.red("Type 'y' to confirm: ")) != "y":
                 print(term.yellow("Overwritten"))

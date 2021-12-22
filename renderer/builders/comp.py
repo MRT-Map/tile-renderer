@@ -10,8 +10,8 @@ term = blessed.Terminal()
 
 print(term.yellow("Welcome to the component JSON builder!\n-------------------------------"))
 
-components, component_file = internal._ask_file_name("Component") # pylint: disable=no-member
-nodes, _ = internal._ask_file_name("Node") # pylint: disable=no-member
+components, component_file = internal._ask_file_name("ComponentJson") # pylint: disable=no-member
+nodes, _ = internal._ask_file_name("NodeJson") # pylint: disable=no-member
 skin_name = input(term.yellow("Name of skin [blank for default]: "))
 try:
     skin = misc.get_skin(skin_name if skin_name != '' else 'default')
@@ -55,9 +55,9 @@ while not e:
     if skin['types'][type_.split(" ")[0]]['type'] == "point":
         node_confirmed = False
         while not node_confirmed:
-            node = input(term.yellow("Node attached: "))
+            node = input(term.yellow("NodeJson attached: "))
             if node not in nodes.keys():
-                print(term.red("Node does not exist"))
+                print(term.red("NodeJson does not exist"))
                 internal._similar(node, nodes) # pylint: disable=no-member
                 continue
             node_confirmed = True
@@ -95,7 +95,7 @@ while not e:
             try:
                 for n in node_list.split('\n'):
                     if n not in nodes.keys():
-                        print(term.red(f"Node {n} does not exist"))
+                        print(term.red(f"NodeJson {n} does not exist"))
                         internal._similar(n, nodes.keys()) # pylint: disable=no-member
                         raise Exiter
             except Exiter:

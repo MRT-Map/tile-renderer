@@ -1,3 +1,5 @@
+from typing import Tuple
+
 import blessed
 
 import renderer.internals.internal as internal
@@ -6,14 +8,14 @@ from renderer.types import *
 
 term = blessed.Terminal()
 
-def to_component_node_json(geo_json: dict) -> Tuple[ComponentJson, NodeJson]:
+def to_component_node_json(geo_json: dict) -> Tuple[ComponentListJson, NodeListJson]:
     """
     Converts GeoJson to component and node JSONs.
 
     :param dict geo_json: a GeoJson dictionary
 
     :returns: Components and nodes
-    :rtype: Tuple[ComponentJson, NodeJson]
+    :rtype: Tuple[ComponentListJson, NodeListJson]
     """
     validate.v_geo_json(geo_json)
     component_json = {}

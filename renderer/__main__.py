@@ -3,7 +3,6 @@ import glob
 from pathlib import Path
 
 import blessed
-import os
 
 import psutil
 

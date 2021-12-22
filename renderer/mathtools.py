@@ -1,11 +1,11 @@
 import math
-import sympy as sym
 import numpy as np
 
 from renderer.types import *
-from typing import Optional
+from typing import Optional, Tuple
 
-def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: int=1, return_both: bool=False) -> Union[List[Tuple[RealNum, RealNum, RealNum]], List[List[Tuple[RealNum, RealNum, RealNum]]]]:
+
+def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: int=1, return_both: bool=False) -> Union[List[Tuple[Coord, RealNum]], List[List[Tuple[Coord, RealNum]]]]:
     """
     Calculates the midpoint of two lines, offsets the distance away from the line, and calculates the rotation of the line.
       
@@ -46,21 +46,21 @@ def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: 
         #print(results)
         elif x1 == x2:
             if o < 0:
-                x4, y4 = results[0] if results[0][0] < results[1][0] else results[1]
+                c = results[0] if results[0][0] < results[1][0] else results[1]
             else:
-                x4, y4 = results[0] if results[0][0] > results[1][0] else results[1]
+                c = results[0] if results[0][0] > results[1][0] else results[1]
             rot = 90
-            points.append((x4, y4, rot))
+            points.append((c, rot))
         else:
             if o < 0:
-                x4, y4 = results[0] if results[0][1] < results[1][1] else results[1]
+                c = results[0] if results[0][1] < results[1][1] else results[1]
             else:
-                x4, y4 = results[0] if results[0][1] > results[1][1] else results[1]
+                c = results[0] if results[0][1] > results[1][1] else results[1]
             rot = math.degrees(-math.atan(m1))
-            points.append((x4, y4, rot))
+            points.append((c, rot))
     return points
 
-def lines_intersect(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, x3: RealNum, y3: RealNum, x4: RealNum, y4: RealNum) -> bool: # TODO speed up
+def lines_intersect(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, x3: RealNum, y3: RealNum, x4: RealNum, y4: RealNum) -> bool:
     """
     Finds if two segments intersect.
     
@@ -76,56 +76,11 @@ def lines_intersect(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, x3: Real
     :returns: Whether the two segments intersect.
     :rtype: bool
     """
-    xv, yv = sym.symbols('xv,yv')
-    if x1 == x2:
-        m1 = None
-        eq1 = sym.Eq(xv, x1)
-        c1 = None if x1 != 0 else math.inf
-    else:
-        m1 = (y2-y1)/(x2-x1)
-        eq1 = sym.Eq(yv-y1, m1*(xv-x1))
-        c1 = y1-m1*x1
-    if x3 == x4:
-        m2 = None
-        eq2 = sym.Eq(xv, x3)
-        c2 = None if x3 != 0 else math.inf
-    else:
-        m2 = (y4-y3)/(x4-x3)
-        eq2 = sym.Eq(yv-y3, m2*(xv-x3))
-        c2 = y3-m2*x3
-    if m1 == m2 and c1 == c2: #same eq
-        if x1 == x2:
-            return False if (min(y1, y2) > max(y3, y4) and max(y1, x2) > min(y3, y4))\
-                            or (min(y3, y4) > max(y1, y2) and max(y3, y4) > min(y1, y2)) else True
-        else:
-            return False if (min(x1, x2) > max(x3, x4) and max(x1, x2) > min(x3, x4))\
-                            or (min(x3, x4) > max(x1, x2) and max(x3, x4) > min(x1, x2)) else True
-    elif m1 == m2: #parallel
-        return False
-    #print(eq1, eq2)
-    result = sym.solve([eq1, eq2], (xv, yv))
-    if isinstance(result, list) and result != []:
-        x5, y5 = result[0]
-    elif isinstance(result, dict):
-        x5 = result[xv]
-        y5 = result[yv]
-    else:
-        return False
-    x1 = round(x1, 10)
-    x2 = round(x2, 10)
-    x3 = round(x3, 10)
-    x4 = round(x4, 10)
-    x5 = round(x5, 10)
-    y1 = round(y1, 10)
-    y2 = round(y2, 10)
-    y3 = round(y3, 10)
-    y4 = round(y4, 10)
-    y5 = round(y5, 10)
-    return False if (
-            x5 > max(x1, x2) or x5 < min(x1, x2)
-            or y5 > max(y1, y2) or y5 < min(y1, y2)
-            or x5 > max(x3, x4) or x5 < min(x3, x4)
-            or y5 > max(y3, y4) or y5 < min(y3, y4)) else True
+    # https://stackoverflow.com/questions/20677795/how-do-i-compute-the-intersection-point-of-two-lines lol
+    xdiff = (x1 - x2, x3 - x4)
+    ydiff = (y1 - y2, y3 - y4)
+    det = lambda a, b: a[0] * b[1] - a[1] * b[0]
+    return det(xdiff, ydiff) != 0
 
 def point_in_poly(xp: RealNum, yp: RealNum, coords: List[Coord]) -> bool:
     """
@@ -148,7 +103,7 @@ def point_in_poly(xp: RealNum, yp: RealNum, coords: List[Coord]) -> bool:
     wind_num = round(bearings.sum()/math.tau)
     return wind_num != 0
             
-def poly_center(coords: List[Coord]) -> Coord: # TODO speed up
+def poly_center(coords: List[Coord]) -> Coord:
     """
     Finds the center point of a polygon.
       
@@ -157,14 +112,12 @@ def poly_center(coords: List[Coord]) -> Coord: # TODO speed up
     :returns: The center of the polygon, given in ``(x,y)``
     :rtype: Coord
     """
-    mx = []
-    my = []
-    for x1, y1 in coords:
-        for x2, y2 in coords:
-            x3, y3, _ = midpoint(x1, y1, x2, y2, 0)[0]
-            mx.append(x3)
-            my.append(y3)
-    return sum(mx)/len(mx), sum(my)/len(my)
+    coords = np.array(coords)
+    xs = np.array(np.meshgrid(coords[:, 0], coords[:, 0])).T.reshape(-1, 2)
+    ys = np.array(np.meshgrid(coords[:, 1], coords[:, 1])).T.reshape(-1, 2)
+    mx = (xs[:, 0]+xs[:, 1])/2
+    my = (ys[:, 0]+ys[:, 1])/2
+    return Coord(mx.sum()/len(mx), my.sum()/len(my))
 
 def line_in_box(line: List[Coord], top: RealNum, bottom: RealNum, left: RealNum, right: RealNum) -> bool:
     """
@@ -193,7 +146,7 @@ def line_in_box(line: List[Coord], top: RealNum, bottom: RealNum, left: RealNum,
             return True
     return False
 
-def dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: RealNum, o: RealNum=0, empty_start: bool=False) -> List[List[Coord]]: # TODO merge into one dashing thing
+def dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: RealNum, o: RealNum=0, empty_start: bool=False) -> List[List[Coord]]:
     """
     Finds points along a segment that are a specified distance apart.
       
@@ -221,10 +174,10 @@ def dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: Real
         results = points_away(x1, y1, o, m)
         x3, y3 = results[0] if min(x1, x2) <= results[0][0] <= max(x1, x2) and min(y1, y2) <= results[0][1] <= max(y1, y2) else results[1]
     if not empty_start and o != 0:
-        dash_.append([(x1, y1), (x3, y3)])
+        dash_.append([Coord(x1, y1), Coord(x3, y3)])
         gap = True
     else:
-        dash_.append([(x3, y3)])
+        dash_.append([Coord(x3, y3)])
 
     while min(x1, x2) <= x3 <= max(x1, x2) and min(y1, y2) <= y3 <= max(y1, y2):
         if gap:
@@ -237,7 +190,7 @@ def dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: Real
             else:
                 x3, y3 = results[1]
             #x3, y3 = results[0] if np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1) and math.dist(results[0], (x1,y1)) > math.dist(results[1], (x1,y1)) else results[1]
-            dash_.append([(x3, y3)])
+            dash_.append([Coord(x3, y3)])
             gap = False
         else:
             results = points_away(x3, y3, d, m)
@@ -253,13 +206,13 @@ def dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: Real
             else:
                 x3, y3 = results[1]
             #x3, y3 = results[0] if np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1) and math.dist(results[0], (x1,y1)) > math.dist(results[1], (x1,y1)) else results[1]
-            dash_[-1].append((x3, y3))
+            dash_[-1].append(Coord(x3, y3))
             gap = True
     
     if len(dash_[-1]) == 1: # last is gap
         dash_.pop()
     else: # last is dash
-        dash_[-1][1] = (x2, y2)
+        dash_[-1][1] = Coord(x2, y2)
         if dash_[-1][0] == dash_[-1][1]:
             dash_.pop()
 
@@ -338,7 +291,7 @@ def rotate_around_pivot(x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta:
     ny = y*math.cos(theta) + x*math.sin(theta)
     nx += px
     ny += py
-    return nx, ny
+    return Coord(nx, ny)
 
 def points_away(x: RealNum, y: RealNum, d: RealNum, m: Optional[RealNum]) -> List[Coord]:
     """
@@ -355,4 +308,4 @@ def points_away(x: RealNum, y: RealNum, d: RealNum, m: Optional[RealNum]) -> Lis
     theta = math.atan(m) if m is not None else math.pi / 2
     dx = round(d*math.cos(theta), 10)
     dy = round(d*math.sin(theta), 10)
-    return [(x+dx, y+dy), (x-dx, y-dy)]
+    return [Coord(x+dx, y+dy), Coord(x-dx, y-dy)]

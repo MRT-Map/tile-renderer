@@ -1,4 +1,6 @@
 import math
+from typing import Tuple
+
 import blessed
 
 import renderer.validate as validate
@@ -65,6 +67,6 @@ def to_tiles(coords: List[Coord], min_zoom: int, max_zoom: int, max_zoom_range: 
     yr.append(y_max + 1)
     for x in xr:
         for y in yr:
-            tiles.extend(tools_coord.to_tiles((x, y), min_zoom, max_zoom, max_zoom_range))
+            tiles.extend(tools_coord.to_tiles(Coord(x, y), min_zoom, max_zoom, max_zoom_range))
     tiles = list(dict.fromkeys(tiles))
     return tiles
