@@ -21,33 +21,9 @@ Leaflet.js streetmap tile renderer, made by 7d
 
 **Documentation: https://tile-renderer.readthedocs.io/en/latest/**
 
-## Current version: v2.0
-* **v2.0 (23/12/21)**
-  * "PLA" is no longer defined as "a set of components" but a file type (`.pla`)
-    * Components are called... Components
-    * Component JSON files have a `.comps.pla` suffix
-    * Node JSON files have a `.nodes.pla` suffix
-  * The CLI format has changed substantially to follow PEP8 naming conventions
-  * The entire codebase has been reformatted to follow PEP8 naming conventions
-  * Skins, components and nodes (& their list counterparts) now have their own classes, to make the code cleaner
-  * Coords and TileCoords are now NamedTuples
-  * `pathlib.Path` is now being used instead of raw strings
-  * Ray multiprocessing integration (3.8 and 3.9 only)
-  * Text rendering is now separated from the main rendering task
-  * Rendering logs will no longer use the same line but rather will output one log per line
-  * Builders:
-    * Default IDs can now be set
-      * PyAutoGUI is now used to automatically write the default ID
-    * Commands now start with "."
-    * ... and many more I probably forgot lol
-  * `internals.internal` is now typed
-  * Loggers and texts (for later rendering) now have their own private classes
-  * Several functions in `mathtools` (`lines_intersect`, `point_in_poly`, `poly_center`) are now quicker to run (mostly using NumPy)
-    * SymPy is no longer a dependency (yey)
-  * `misc` no longer exists (`misc.getSkin` is now `Skin.from_name`)
-  * `tools` is now split up into 6 files
-  * Many functions in `validate` are now in their respective object classes
-  * Made the CLI actually work (:P)
+## Current version: v2.1
+* **v2.1 (??/??/21)**
+  *
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)
