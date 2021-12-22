@@ -1,7 +1,9 @@
-from renderer.base import *
-import renderer.tools
+from renderer.base import merge_tiles, render
 import renderer.mathtools
 import renderer.validate
-import renderer.misc
+import renderer.types
+from renderer.objects.nodes import *
+from renderer.objects.components import *
+from renderer.objects.skin import *
 
-__version__ = '1.3.1'
+__version__ = '2.0'

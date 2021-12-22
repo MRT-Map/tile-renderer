@@ -1,26 +1,29 @@
 import math
-import sympy as sym
-from typing import Union, List, Dict, Tuple
 import numpy as np
 
-import renderer.internals.internal as internal # type: ignore
-import renderer.tools as tools
-import renderer.validate as validate
-import renderer.misc as misc
+from renderer.types import *
+from typing import Optional, Tuple
 
-RealNum = Union[int, float]
-Coord = Tuple[RealNum, RealNum]
-TileCoord = Tuple[int, int, int]
 
-def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: int=1, returnBoth: bool=False) -> Union[List[Tuple[RealNum, RealNum, RealNum]], List[List[Tuple[RealNum, RealNum, RealNum]]]]:
+def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: int=1, return_both: bool=False) -> Union[List[Tuple[Coord, RealNum]], List[List[Tuple[Coord, RealNum]]]]:
     """
     Calculates the midpoint of two lines, offsets the distance away from the line, and calculates the rotation of the line.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.midpoint
+      
+    :param RealNum x1: the x-coordinate of the 1st point
+    :param RealNum y1: the y-coordinate of the 1st point
+    :param RealNum x2: the x-coordinate of the 2nd point
+    :param RealNum y2: the y-coordinate of the 2nd point
+    :param RealNum o: the offset from the line. If positive, the point above the line is returned; if negative, the point below the line is returned
+    :param int n: the number of midpoints on a single segment
+    :param bool return_both: if True, it will return both possible points.
+        
+    :return: A list of *(lists of, when return_both=True)* tuples in the form of (x, y, rot)
+    :rtype: list[tuple[Coord, RealNum]] *when return_both=False,* list[list[tuple[Coord, RealNum]]] *when return_both=True*
     """
     #print(x1, y1, x2, y2, o, n)
     points = []
     for p in range(1, n+1):
-        x3, y3 = (x1+p*(x2-x1)/(n+1),y1+p*(y2-y1)/(n+1))
+        x3, y3 = (x1+p*(x2-x1)/(n+1), y1+p*(y2-y1)/(n+1))
         #print(x3, y3)
         #x3, y3 = ((x1+x2)/2, (y1+y2)/2)
         if x1 == x2:
@@ -32,8 +35,8 @@ def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: 
         else:
             m1 = (y2-y1)/(x2-x1)
             m2 = -1 / m1
-        results = pointsAway(x3, y3, o, m2)
-        if returnBoth:
+        results = points_away(x3, y3, o, m2)
+        if return_both:
             #print(eq1, eq2)
             rot = 90 if x1 == x2 else math.degrees(-math.atan(m1))
             try:
@@ -43,226 +46,243 @@ def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: 
         #print(results)
         elif x1 == x2:
             if o < 0:
-                x4, y4 = results[0] if results[0][0] < results[1][0] else results[1]
+                c = results[0] if results[0][0] < results[1][0] else results[1]
             else:
-                x4, y4 = results[0] if results[0][0] > results[1][0] else results[1]
+                c = results[0] if results[0][0] > results[1][0] else results[1]
             rot = 90
-            points.append((x4, y4, rot))
+            points.append((c, rot))
         else:
             if o < 0:
-                x4, y4 = results[0] if results[0][1] < results[1][1] else results[1]
+                c = results[0] if results[0][1] < results[1][1] else results[1]
             else:
-                x4, y4 = results[0] if results[0][1] > results[1][1] else results[1]
+                c = results[0] if results[0][1] > results[1][1] else results[1]
             rot = math.degrees(-math.atan(m1))
-            points.append((x4, y4, rot))
+            points.append((c, rot))
     return points
 
-def linesIntersect(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, x3: RealNum, y3: RealNum, x4: RealNum, y4: RealNum) -> bool:
+def lines_intersect(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, x3: RealNum, y3: RealNum, x4: RealNum, y4: RealNum) -> bool:
     """
     Finds if two segments intersect.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.linesIntersect
+    
+    :param RealNum x1: the x-coordinate of the 1st point of the 1st segment.
+    :param RealNum y1: the y-coordinate of the 1st point of the 1st segment.
+    :param RealNum x2: the x-coordinate of the 2nd point of the 1st segment.
+    :param RealNum y2: the y-coordinate of the 2nd point of the 1st segment.
+    :param RealNum x3: the x-coordinate of the 1st point of the 2nd segment.
+    :param RealNum y3: the y-coordinate of the 1st point of the 2nd segment.
+    :param RealNum x4: the x-coordinate of the 2nd point of the 2nd segment.
+    :param RealNum y4: the y-coordinate of the 2nd point of the 2nd segment.
+        
+    :returns: Whether the two segments intersect.
+    :rtype: bool
     """
-    xv, yv = sym.symbols('xv,yv')
-    if x1 == x2:
-        m1 = None
-        eq1 = sym.Eq(xv,x1)
-        c1 = None if x1 != 0 else math.inf
-    else:
-        m1 = (y2-y1)/(x2-x1)
-        eq1 = sym.Eq(yv-y1,m1*(xv-x1))
-        c1 = y1-m1*x1
-    if x3 == x4:
-        m2 = None
-        eq2 = sym.Eq(xv,x3)
-        c2 = None if x3 != 0 else math.inf
-    else:
-        m2 = (y4-y3)/(x4-x3)
-        eq2 = sym.Eq(yv-y3,m2*(xv-x3))
-        c2 = y3-m2*x3
-    if m1 == m2 and c1 == c2: #same eq
-        if x1 == x2:
-            return False if (min(y1,y2)>max(y3,y4) and max(y1,x2)>min(y3,y4)) or (min(y3,y4)>max(y1,y2) and max(y3,y4)>min(y1,y2)) else True
-        else:
-            return False if (min(x1,x2)>max(x3,x4) and max(x1,x2)>min(x3,x4)) or (min(x3,x4)>max(x1,x2) and max(x3,x4)>min(x1,x2)) else True
-    elif m1 == m2: #parallel
-        return False
-    #print(eq1, eq2)
-    result = sym.solve([eq1, eq2], (xv, yv))
-    if isinstance(result, list) and result != []:
-        x5, y5 = result[0]
-    elif isinstance(result, dict):
-        x5 = result[xv]
-        y5 = result[yv]
-    else:
-        return False
-    x1 = round(x1, 10); x2 = round(x2, 10); x3 = round(x3, 10); x4 = round(x4, 10); x5 = round(x5, 10)
-    y1 = round(y1, 10); y2 = round(y2, 10); y3 = round(y3, 10); y4 = round(y4, 10); y5 = round(y5, 10)
-    return False if (x5>max(x1,x2) or x5<min(x1,x2) or y5>max(y1,y2) or y5<min(y1,y2) or x5>max(x3,x4) or x5<min(x3,x4) or y5>max(y3,y4) or y5<min(y3,y4)) else True
+    # https://stackoverflow.com/questions/20677795/how-do-i-compute-the-intersection-point-of-two-lines lol
+    xdiff = (x1 - x2, x3 - x4)
+    ydiff = (y1 - y2, y3 - y4)
+    det = lambda a, b: a[0] * b[1] - a[1] * b[0]
+    return det(xdiff, ydiff) != 0
 
-def pointInPoly(xp: RealNum, yp: RealNum, coords: List[Coord]) -> bool:
+def point_in_poly(xp: RealNum, yp: RealNum, coords: List[Coord]) -> bool:
     """
-    Finds if a point is in a polygon. WARNING: If your polygon has a lot of corners, this will take very long.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.pointInPoly
+    Finds if a point is in a polygon.
+        
+    :param RealNum xp: the x-coordinate of the point.
+    :param RealNum yp: the y-coordinate of the point.
+    :param list[Coord] coords: the coordinates of the polygon; give in ``(x,y)``
+        
+    :returns: Whether the point is inside the polygon.
+    :rtype: bool
     """
-    r = -math.inf
-    for x, _ in coords:
-        if x > r:
-            r = x
-    r += 10
-    cross = 0
-    for i in range(len(coords)):
-        j = i + 1 if i != len(coords)-1 else 0
-        if linesIntersect(coords[i][0], coords[i][1], coords[j][0], coords[j][1], xp, yp, r, yp):
-            if coords[i][1] == yp:
-                h = i - 1 if i != 0 else len(coords)-1
-                cross += 0 if (coords[h][1]>yp and coords[i][1]>yp) or (coords[h][1]<yp and coords[i][1]<yp) else 0.5
-            elif coords[j][1] == yp:
-                k = j + 1 if j != len(coords)-1 else 0 
-                cross += 0 if (coords[j][1]>yp and coords[k][1]>yp) or (coords[j][1]<yp and coords[k][1]<yp) else 0.5
-            else:
-                cross += 1
-    return cross % 2 == 1
+    if (xp, yp) in coords: return True
+    coords = np.array(coords)
+    xs = coords[:, 0] - xp
+    ys = coords[:, 1] - yp
+    bearings = np.diff(np.arctan2(ys, xs))
+    bearings = np.where(bearings >= -math.pi, bearings, bearings + math.tau)
+    bearings = np.where(bearings <= math.pi, bearings, bearings - math.tau)
+    wind_num = round(bearings.sum()/math.tau)
+    return wind_num != 0
             
-def polyCenter(coords: List[Coord]) -> Coord:
+def poly_center(coords: List[Coord]) -> Coord:
     """
     Finds the center point of a polygon.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.polyCenter
+      
+    :param list[Coord] coords: the coordinates of the polygon; give in ``(x,y)``
+        
+    :returns: The center of the polygon, given in ``(x,y)``
+    :rtype: Coord
     """
-    mx = []
-    my = []
-    for x1, y1 in coords:
-        for x2, y2 in coords:
-            x3, y3, _ = midpoint(x1, y1, x2, y2, 0)[0]
-            mx.append(x3)
-            my.append(y3)
-    return sum(mx)/len(mx), sum(my)/len(my)
+    coords = np.array(coords)
+    xs = np.array(np.meshgrid(coords[:, 0], coords[:, 0])).T.reshape(-1, 2)
+    ys = np.array(np.meshgrid(coords[:, 1], coords[:, 1])).T.reshape(-1, 2)
+    mx = (xs[:, 0]+xs[:, 1])/2
+    my = (ys[:, 0]+ys[:, 1])/2
+    return Coord(mx.sum()/len(mx), my.sum()/len(my))
 
-def lineInBox(line: List[Coord], top: RealNum, bottom: RealNum, left: RealNum, right: RealNum) -> bool:
+def line_in_box(line: List[Coord], top: RealNum, bottom: RealNum, left: RealNum, right: RealNum) -> bool:
     """
     Finds if any nodes of a line go within the box.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.lineInBox
+      
+    :param list[Coord] line: the line to check for
+    :param RealNum top: the bounds of the box
+    :param RealNum bottom: the bounds of the box
+    :param RealNum left: the bounds of the box
+    :param RealNum right: the bounds of the box
+        
+    :returns: Whether any nodes of a line go within the box.
+    :rtype: bool
     """
     for i in range(len(line)-1):
         x1, y1 = line[i]
         x2, y2 = line[i+1]
-        for y3, x3, y4, x4 in [(top,left,bottom,left), (bottom,left,bottom,right), (bottom,right,top,right), (top,right,top,left)]:
-            if linesIntersect(x1, y1, x2, y2, x3, y3, x4, y4):
+        for y3, x3, y4, x4 in [(top, left, bottom, left),
+                               (bottom, left, bottom, right),
+                               (bottom, right, top, right),
+                               (top, right, top, left)]:
+            if lines_intersect(x1, y1, x2, y2, x3, y3, x4, y4):
                 return True
-    for x,y in line:
+    for x, y in line:
         if top < x < bottom or left < y < right:
             return True
     return False
 
-def dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: RealNum, o: RealNum=0, emptyStart: bool=False) -> List[List[Coord]]:
+def dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: RealNum, o: RealNum=0, empty_start: bool=False) -> List[List[Coord]]:
     """
     Finds points along a segment that are a specified distance apart.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.dash
+      
+    :param RealNum x1: the x-coordinate of the 1st point
+    :param RealNum y1: the y-coordinate of the 1st point
+    :param RealNum x2: the x-coordinate of the 2nd point
+    :param RealNum y2: the y-coordinate of the 2nd point
+    :param RealNum d: the length of a single dash
+    :param RealNum g: the length of the gap between dashes
+    :param RealNum o: the offset from (x1,y1) towards (x2,y2) before dashes are calculated
+    :param bool empty_start: Whether to start the line from (x1,y1) empty before the start of the next dash
+        
+    :returns: A list of points along the segment, given in [[(x1, y1), (x2, y2)], etc]
+    :rtype: list[list[Coord]]
     """
     if d <= 0 or g <= 0:
-        return ValueError("dash or gap length cannot be <= 0")
+        raise ValueError("dash or gap length cannot be <= 0")
     m = None if x1 == x2 else (y2-y1)/(x2-x1)
-    dash = []
+    dash_ = []
     gap = False
 
     if o == 0:
         x3, y3 = (x1, y1)
     else:
-        results = pointsAway(x1, y1, o, m)
-        x3, y3 = results[0] if min(x1,x2) <= results[0][0] <= max(x1,x2) and min(y1,y2) <= results[0][1] <= max(y1,y2) else results[1]
-    if not emptyStart and o != 0:
-        dash.append([(x1, y1), (x3, y3)])
+        results = points_away(x1, y1, o, m)
+        x3, y3 = results[0] if min(x1, x2) <= results[0][0] <= max(x1, x2) and min(y1, y2) <= results[0][1] <= max(y1, y2) else results[1]
+    if not empty_start and o != 0:
+        dash_.append([Coord(x1, y1), Coord(x3, y3)])
         gap = True
     else:
-        dash.append([(x3, y3)])
+        dash_.append([Coord(x3, y3)])
 
-    while min(x1,x2) <= x3 <= max(x1,x2) and min(y1,y2) <= y3 <= max(y1,y2):
+    while min(x1, x2) <= x3 <= max(x1, x2) and min(y1, y2) <= y3 <= max(y1, y2):
         if gap:
-            results = pointsAway(x3, y3, g, m)
+            results = points_away(x3, y3, g, m)
             if np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1):
-                if math.dist(results[0], (x1,y1)) > math.dist(results[1], (x1,y1)):
+                if math.dist(results[0], (x1, y1)) > math.dist(results[1], (x1, y1)):
                     x3, y3 = results[0]
                 else:
                     x3, y3 = results[1]
             else:
                 x3, y3 = results[1]
             #x3, y3 = results[0] if np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1) and math.dist(results[0], (x1,y1)) > math.dist(results[1], (x1,y1)) else results[1]
-            dash.append([(x3, y3)])
+            dash_.append([Coord(x3, y3)])
             gap = False
         else:
-            results = pointsAway(x3, y3, d, m)
+            results = points_away(x3, y3, d, m)
             #print(results)
             #print(np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1))
             if np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1):
-                if not (np.sign(x2-x1) == np.sign(results[1][0]-x1) and np.sign(y2-y1) == np.sign(results[1][1]-y1)) or math.dist(results[0], (x1,y1)) > math.dist(results[1], (x1,y1)):
+                if not (np.sign(x2-x1) == np.sign(results[1][0]-x1)
+                        and np.sign(y2-y1) == np.sign(results[1][1]-y1))\
+                        or math.dist(results[0], (x1, y1)) > math.dist(results[1], (x1, y1)):
                     x3, y3 = results[0]
                 else:
                     x3, y3 = results[1]
             else:
                 x3, y3 = results[1]
             #x3, y3 = results[0] if np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1) and math.dist(results[0], (x1,y1)) > math.dist(results[1], (x1,y1)) else results[1]
-            dash[-1].append((x3, y3))
+            dash_[-1].append(Coord(x3, y3))
             gap = True
     
-    if len(dash[-1]) == 1: # last is gap
-        dash.pop()
+    if len(dash_[-1]) == 1: # last is gap
+        dash_.pop()
     else: # last is dash
-        dash[-1][1] = (x2, y2)
-        if dash[-1][0] == dash[-1][1]:
-            dash.pop()
+        dash_[-1][1] = Coord(x2, y2)
+        if dash_[-1][0] == dash_[-1][1]:
+            dash_.pop()
 
-    return dash
+    return dash_
 
-def dashOffset(coords: List[Coord], d: RealNum, g: RealNum) -> Tuple[RealNum, bool]:
+def dash_offset(coords: List[Coord], d: RealNum, g: RealNum) -> List[Tuple[RealNum, bool]]:
     """
     Calculates the offsets on each coord of a line for a smoother dashing sequence.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.dashOffset
-    """
+
+    :param List[Coord] coords: the coords of the line
+    :param RealNum d: the length of a single dash
+    :param RealNum g: the length of the gap between dashes
+
+    :returns: The offsets of each coordinate, and whether to start the next segment with empty_start, given in (offset, empty_start)
+    :rtype: list[tuple[RealNum, bool]]
+   """
     o = 0
     offsets = [(0, False)]
-    emptyStart = False
+    empty_start = False
     left = None
     for c in range(len(coords)-1):
-        dashes = dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], d, g, o, emptyStart)
-        if dashes == []: #line has no dashes
-            prev = 0 if offsets == [] or left == None else left
+        dashes = dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], d, g, o, empty_start)
+        if not dashes: #line has no dashes
+            prev = 0 if offsets == [] or left is None else left
             remnant = math.dist(coords[c], coords[c+1])
             o = abs(g - prev - remnant)
             left = prev + remnant
-            emptyStart = True
+            empty_start = True
         elif dashes[0] == [coords[c], coords[c+1]]: #line is entirely dash
-            prev = 0 if offsets == [] or left == None else left
+            prev = 0 if offsets == [] or left is None else left
             remnant = math.dist(coords[c], coords[c+1])
             o = abs(d - prev - remnant)
             left = prev + remnant
-            emptyStart = False
+            empty_start = False
         else:
             lastCoord = dashes[-1][1]
             if lastCoord == coords[c+1]: #line ended with a dash
                 if round(remnant := math.dist(dashes[-1][0], lastCoord), 10) == d: #last dash is exactly d
                     left = 0
                     o = 0
-                    emptyStart = True
+                    empty_start = True
                 else:
                     left = remnant
                     o = d - remnant
-                    emptyStart = False
+                    empty_start = False
             else: #line ended with a gap
                 if round(remnant := math.dist(dashes[-1][0], coords[c+1]), 10) == g: #last gap is exactly g
                     left = 0
                     o = 0
-                    emptyStart = False
+                    empty_start = False
                 else:
                     o = g - remnant
                     left = remnant
-                    emptyStart = True
-        offsets.append((round(o, 2), emptyStart))
+                    empty_start = True
+        offsets.append((round(o, 2), empty_start))
     return offsets
 
-def rotateAroundPivot(x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta: RealNum) -> Coord:
+def rotate_around_pivot(x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta: RealNum) -> Coord:
     """
     Rotates a set of coordinates around a pivot point.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.rotateAroundPivot
-    """
+
+    :param RealNum x: the x-coordinate to be rotated
+    :param RealNum y: the y-coordinate to be rotated
+    :param RealNum px: the x-coordinate of the pivot
+    :param RealNum py: the y-coordinate of the pivot
+    :param RealNum theta: how many **degrees** to rotate
+
+    :returns: The rotated coordinates, given in ``(x,y)``
+    :rtype: Coord
+   """
     #provide θ in degrees
     theta = math.radians(theta)
     x -= px
@@ -271,14 +291,22 @@ def rotateAroundPivot(x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta: R
     ny = y*math.cos(theta) + x*math.sin(theta)
     nx += px
     ny += py
-    return nx, ny
+    return Coord(nx, ny)
 
-def pointsAway(x: RealNum, y: RealNum, d: RealNum, m: RealNum) -> List[Coord]:
+def points_away(x: RealNum, y: RealNum, d: RealNum, m: Optional[RealNum]) -> List[Coord]:
     """
     Finds two points that are a specified distance away from a specified point, all on a straight line.
-    More info: https://tile-renderer.readthedocs.io/en/latest/functions.html#renderer.mathtools.pointsAway
+
+    :param RealNum x: the x-coordinate of the original point
+    :param RealNum y: the y-coordinate of the original point
+    :param RealNum d: the distance the two points from the original point
+    :param m: the gradient of the line. Give ``None`` for a gradient of undefined.
+    :type m: RealNum | None
+
+    :returns: Given in ``[(x1, y1), (x2, y2)]``
+    :rtype: list[Coord]
     """
-    theta = math.atan(m) if m != None else math.pi/2
+    theta = math.atan(m) if m is not None else math.pi / 2
     dx = round(d*math.cos(theta), 10)
     dy = round(d*math.sin(theta), 10)
-    return [(x+dx, y+dy), (x-dx, y-dy)]
+    return [Coord(x+dx, y+dy), Coord(x-dx, y-dy)]

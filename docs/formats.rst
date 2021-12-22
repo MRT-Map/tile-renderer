@@ -1,7 +1,8 @@
 Formats
 =======
 .. _formats:
-PLAs
+
+Components
 ----
 .. code-block:: javascript
 

@@ -1,257 +1,309 @@
 import math
-from PIL import Image, ImageDraw, ImageFont
-import time
+from dataclasses import dataclass
+from pathlib import Path
+from typing import List, Tuple, Dict, Any
+
+from PIL import Image, ImageDraw
 import blessed
-import multiprocessing
 import re
 import itertools
+
+import renderer.internals.internal as internal
+import renderer.tools as tools
+import renderer.mathtools as mathtools
+from renderer.objects.components import ComponentList, Component
+from renderer.objects.nodes import NodeList
+from renderer.objects.skin import Skin
+from renderer.types import RealNum, TileCoord, Coord
+
 term = blessed.Terminal()
 
-import renderer.internals.internal as internal #pylint: disable=import-error
-import renderer.tools as tools #pylint: disable=import-error
-import renderer.validate as validate #pylint: disable=import-error
-import renderer.mathtools as mathtools #pylint: disable=import-error
-import renderer.misc as misc #pylint: disable=import-error
+try: import ray
+except ModuleNotFoundError: pass
 
-def tiles(args):
-    lock, operated, start, tileCoords, tilePlas, operations, plaList, nodeList, skinJson, _, maxZoom, maxZoomRange, saveImages, saveDir, assetsDir = args # _ is minZoom
-    #print(operations)
-    pid = multiprocessing.current_process()._identity[0] - 1
-    
-    def pLog(msg):
-        #print(term.move_up(processes - pid + 1), end="")
-        lock.acquire()
-        with term.location():
-            if operated.value != 0 and operations != 0:
-                print(term.green(f"{internal.percentage(operated.value, operations)}% | {internal.msToTime(internal.timeRemaining(start, operated.value, operations))} left | ") + f"{pid} | {tileCoords}: " + term.bright_black(msg), end=term.clear_eos+"\r")
-            else:
-                print(term.green(f"00.0% | 0.0s left | ") + f"{pid} | {tileCoords}: " + term.bright_black(msg), end=term.clear_eos+"\r")
-        lock.release()
-        #print(term.move_down(processes - pid + 1), end="")
+@dataclass
+class _Logger:
+    using_ray: bool
+    operated: Any
+    operations: int
+    start: RealNum
+    tile_coords: TileCoord
 
-    if tilePlas == [{}]:
-        pLog("rendered")
-        return None
-    
-    pLog("Initialising canvas")
-    size = maxZoomRange*2**(maxZoom-internal.strToTuple(tileCoords)[0])
-    im = Image.new(mode = "RGBA", size = (skinJson['info']['size'], skinJson['info']['size']), color = tuple(skinJson['info']['background']))
-    img = ImageDraw.Draw(im)
-    textList = []
-    pointsTextList = []
+    def log(self, msg):
+        if self.using_ray: ops = ray.get(self.operated.get.remote())
+        else: ops = self.operated.get()
+        if ops != 0 and self.operations != 0:
+            print(term.green(f"{internal._percentage(ops, self.operations)}% | " +
+                             f"{internal._ms_to_time(internal._time_remaining(self.start, ops, self.operations))} left | ") +
+                  f"{self.tile_coords}: " + term.bright_black(msg), flush=True)
+        else:
+            print(term.green(f"00.0% | 0.0s left | ") + f"{self.tile_coords}: " + term.bright_black(msg), flush=True)
 
-    def getFont(f: str, s: int):
-        if f in skinJson['info']['font'].keys():
-            return ImageFont.truetype(assetsDir+skinJson['info']['font'][f], s)
-        raise ValueError
 
-    for group in tilePlas:
-        info = skinJson['types'][list(group.values())[0]['type'].split(" ")[0]]
-        style = []
-        for zoom in info['style'].keys():
-            if maxZoom-internal.strToTuple(zoom)[1] <= internal.strToTuple(tileCoords)[0] <= maxZoom-internal.strToTuple(zoom)[0]:
-                style = info['style'][zoom]
-                break
+@dataclass
+class _TextObject:
+    image: Image.Image
+    x: RealNum
+    y: RealNum
+    w: RealNum
+    h: RealNum
+    rot: RealNum
+
+def _node_list_to_image_coords(node_list: List[str], nodes: NodeList, skin: Skin, tile_coord: TileCoord, size: RealNum) -> List[Coord]:
+    image_coords = []
+    for x, y in tools.nodes.to_coords(node_list, nodes):
+        xc = x - tile_coord.x * size
+        yc = y - tile_coord.y * size
+        xs = int(skin.tile_size / size * xc)
+        ys = int(skin.tile_size / size * yc)
+        image_coords.append(Coord(xs, ys))
+    return image_coords
+
+def _draw_components(operated, operations: int, start: RealNum, tile_coord: TileCoord, tile_components: List[List[Component]],
+                     all_components: ComponentList, nodes: NodeList, skin: Skin, max_zoom: int, max_zoom_range: RealNum,
+                     assets_dir: Path, using_ray: bool=False) -> Dict[TileCoord, Tuple[Image.Image, List[_TextObject]]]:
+    logger = _Logger(using_ray, operated, operations, start, tile_coord)
+    if tile_components == [[]]:
+        logger.log("Render complete")
+        return {}
+
+    logger.log("Initialising canvas")
+    size = max_zoom_range * 2 ** (max_zoom - tile_coord[0])
+    img = Image.new(mode="RGBA", size=(skin.tile_size,)*2, color=skin.background)
+    imd = ImageDraw.Draw(img)
+    text_list: List[_TextObject] = []
+    points_text_list: List[_TextObject] = []
+
+    for group in tile_components:
+        type_info = skin[group[0].type]
+        style = type_info[max_zoom-tile_coord[0]]
         for step in style:
-            for plaId, pla in group.items():
-                coords = [(x - internal.strToTuple(tileCoords)[1] * size, y - internal.strToTuple(tileCoords)[2] * size) for x, y in tools.nodes.toCoords(pla['nodes'], nodeList)]
-                coords = [(int(skinJson['info']['size'] / size * x), int(skinJson['info']['size'] / size * y)) for x, y in coords]
-                
+            for component in group:
+                coords = _node_list_to_image_coords(component.nodes, nodes, skin, tile_coord, size)
+
                 def point_circle():
-                    img.ellipse([coords[0][0]-step['size']/2+1, coords[0][1]-step['size']/2+1, coords[0][0]+step['size']/2, coords[0][1]+step['size']/2], fill=step['colour'], outline=step['outline'], width=step['width'])
+                    imd.ellipse((coords[0].x - step.size / 2 + 1,
+                                 coords[0].y - step.size / 2 + 1,
+                                 coords[0].x + step.size / 2,
+                                 coords[0].y + step.size / 2),
+                                fill=step.colour, outline=step.outline, width=step.width)
 
                 def point_text():
-                    font = getFont("", step['size'])
-                    textLength = int(img.textlength(pla['displayname'], font))
-                    i = Image.new('RGBA', (2*textLength,2*(step['size']+4)), (0, 0, 0, 0))
-                    d = ImageDraw.Draw(i)
-                    d.text((textLength, step['size']+4), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
-                    tw, th = i.size
-                    pointsTextList.append((i, coords[0][0]+step['offset'][0], coords[0][1]+step['offset'][1], tw, th, 0))
-                    # font = getFont("", step['size'])
-                    # img.text((coords[0][0]+step['offset'][0], coords[0][1]+step['offset'][1]), pla['displayname'], fill=step['colour'], font=font, anchor=step['anchor'])
+                    font = skin.get_font("", step.size, assets_dir)
+                    text_length = int(imd.textlength(component.displayname, font))
+                    pt_i = Image.new('RGBA', (2 * text_length, 2 * (step.size + 4)), (0, 0, 0, 0))
+                    pt_d = ImageDraw.Draw(pt_i)
+                    pt_d.text((text_length, step.size + 4), component.displayname, fill=step.colour, font=font,
+                              anchor="mm")
+                    tw, th = pt_i.size
+                    points_text_list.append(_TextObject(pt_i, coords[0].x + step.offset[0], coords[0].y + step.offset[1], tw, th, 0))
+                    #font = skin.get_font("", step.size)
+                    #img.text((coords[0][0]+step.offset[0], coords[0][1]+step.offset[1]), component.displayname, fill=step.colour, font=font, anchor=step['anchor'])
 
                 def point_square():
-                    img.rectangle([coords[0][0]-step['size']/2+1, coords[0][1]-step['size']/2+1, coords[0][0]+step['size']/2, coords[0][1]+step['size']/2], fill=step['colour'], outline=step['outline'], width=step['width'])
+                    imd.rectangle((coords[0].x - step.size / 2 + 1,
+                                   coords[0].y - step.size / 2 + 1,
+                                   coords[0].x + step.size / 2,
+                                   coords[0].y + step.size / 2),
+                                  fill=step.colour, outline=step.outline, width=step.width)
 
                 def point_image():
-                    icon = Image.open(assetsDir+step['file'])
-                    im.paste(icon, (int(coords[0][0]-icon.width/2+step['offset'][0]), int(coords[0][1]-icon.height/2+step['offset'][1])), icon)
+                    icon = Image.open(assets_dir/step.file)
+                    img.paste(icon, (int(coords[0].x - icon.width / 2 + step.offset[0]),
+                                     int(coords[0].y - icon.height / 2 + step.offset[1])), icon)
 
                 def line_text():
-                    pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Calculating text length")
-                    font = getFont("", step['size'])
-                    textLength = int(img.textlength(pla['displayname'], font))
-                    if textLength == 0:
-                        textLength = int(img.textlength("----------", font))
-                    for c in range(len(coords)-1):
-                        #print(coords)
-                        #print(mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']))
-                        t = math.floor(math.dist(coords[c], coords[c+1])/(4*textLength))
+                    logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating text length")
+                    font = skin.get_font("", step.size, assets_dir)
+                    text_length = int(imd.textlength(component.displayname, font))
+                    if text_length == 0:
+                        text_length = int(imd.textlength("----------", font))
+                    for c1, c2 in internal._with_next(coords):
+                        # print(coords)
+                        # print(mathtools.line_in_box(coords, 0, skin.tile_size, 0, skin.tile_size))
+                        t = math.floor(math.dist(c1, c2) / (4 * text_length))
                         t = 1 if t == 0 else t
-                        if mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']) and 2*textLength <= math.dist(coords[c], coords[c+1]):
-                            #print(mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset']))     
-                            pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Generating name text")
-                            for tx, ty, trot in mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset'], n=t):
-                                i = Image.new('RGBA', (2*textLength,2*(step['size']+4)), (0, 0, 0, 0))
-                                d = ImageDraw.Draw(i)
-                                d.text((textLength, step['size']+4), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
-                                tw, th = i.size[:]
-                                i = i.rotate(trot, expand=True)
-                                textList.append((i, tx, ty, tw, th, trot))
-                        if "oneWay" in pla['type'].split(" ")[1:] and textLength <= math.dist(coords[c], coords[c+1]):
-                            pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Generating oneway arrows")
-                            getFont("b", step['size'])
+                        if mathtools.line_in_box(coords, 0, skin.tile_size, 0, skin.tile_size) \
+                                and 2 * text_length <= math.dist(c1, c2):
+                            # print(mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step.offset))
+                            logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Generating name text")
+                            for (tx, ty), trot in mathtools.midpoint(c1.x, c1.y, c2.x, c2.y, step.offset, n=t):
+                                lt_i = Image.new('RGBA', (2 * text_length, 2 * (step.size + 4)), (0, 0, 0, 0))
+                                lt_d = ImageDraw.Draw(lt_i)
+                                lt_d.text((text_length, step.size + 4), component.displayname,
+                                          fill=step.colour, font=font, anchor="mm")
+                                tw, th = lt_i.size[:]
+                                lt_i = lt_i.rotate(trot, expand=True)
+                                text_list.append(_TextObject(lt_i, tx, ty, tw, th, trot))
+                        if "oneWay" in component.tags and text_length <= math.dist(c1, c2):
+                            logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Generating oneway arrows")
+                            font = skin.get_font("b", step.size, assets_dir)
                             counter = 0
-                            t = math.floor(math.dist(coords[c], coords[c+1])/(4*textLength))
-                            for tx, ty, _ in mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['offset'], n=2*t+1):
+                            t = math.floor(math.dist(c1, c2) / (4 * text_length))
+                            for (tx, ty), _ in mathtools.midpoint(c1.x, c1.y, c2.x, c2.y, step.offset, n=2 * t + 1):
                                 if counter % 2 == 1:
                                     counter += 1
                                     continue
-                                trot = math.degrees(math.atan2(coords[c+1][0]-coords[c][0], coords[c+1][1]-coords[c][1]))
-                                i = Image.new('RGBA', (2*textLength,2*(step['size']+4)), (0, 0, 0, 0))
-                                d = ImageDraw.Draw(i)
-                                d.text((textLength, step['size']+4), "↓", fill=step['colour'], font=font, anchor="mm")
-                                tw, th = i.size[:]
-                                i = i.rotate(trot, expand=True)
-                                textList.append((i, tx, ty, tw, th, trot))
+                                trot = math.degrees(
+                                    math.atan2(c2.x - c1.x, c2.y - c1.y))
+                                text_length = int(imd.textlength("↓", font))
+                                lt_i = Image.new('RGBA', (2 * text_length, 2 * (step.size + 4)), (0, 0, 0, 0))
+                                lt_d = ImageDraw.Draw(lt_i)
+                                lt_d.text((text_length, step.size + 4), "↓", fill=step.colour, font=font,
+                                          anchor="mm")
+                                tw, th = lt_i.size[:]
+                                lt_i = lt_i.rotate(trot, expand=True)
+                                text_list.append(_TextObject(lt_i, tx, ty, tw, th, trot))
                                 counter += 1
-                            
+
                 def line_backfore():
-                    if not "dash" in step.keys():
-                        pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Drawing line")
-                        img.line(coords, fill=step['colour'], width=step['width'], joint="curve")
-                        if not "unroundedEnds" in info['tags']:
-                            img.ellipse([coords[0][0]-step['width']/2+1, coords[0][1]-step['width']/2+1, coords[0][0]+step['width']/2, coords[0][1]+step['width']/2], fill=step['colour'])
-                            img.ellipse([coords[-1][0]-step['width']/2+1, coords[-1][1]-step['width']/2+1, coords[-1][0]+step['width']/2, coords[-1][1]+step['width']/2], fill=step['colour'])
+                    if step.dash is None:
+                        logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Drawing line")
+                        imd.line(coords, fill=step.colour, width=step.width, joint="curve")
+                        if "unroundedEnds" not in type_info.tags:
+                            imd.ellipse([coords[0].x - step.width / 2 + 1, coords[0].y - step.width / 2 + 1,
+                                         coords[0].x + step.width / 2, coords[0].y + step.width / 2],
+                                        fill=step.colour)
+                            imd.ellipse([coords[-1].x - step.width / 2 + 1, coords[-1].y - step.width / 2 + 1,
+                                         coords[-1].x + step.width / 2, coords[-1].y + step.width / 2],
+                                        fill=step.colour)
                     else:
-                        offsetInfo = mathtools.dashOffset(coords, step['dash'][0], step['dash'][1])
-                        #print(offsetInfo)
-                        for c in range(len(coords)-1):
-                            pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Drawing dashes for section {c+1} of {len(coords)}")
-                            o, emptyStart = offsetInfo[c]
-                            for dashCoords in mathtools.dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step['dash'][0], step['dash'][1], o, emptyStart):
-                                #print(dashCoords)
-                                img.line(dashCoords, fill=step['colour'], width=step['width'])                
+                        offset_info = mathtools.dash_offset(coords, step.dash[0], step.dash[1])
+                        # print(offset_info)
+                        for j, (c1, c2) in enumerate(internal._with_next(coords)):
+                            logger.log(
+                                f"{style.index(step) + 1}/{len(style)} {component.name}: Drawing dashes for section {j + 1} of {len(coords)}")
+                            o, empty_start = offset_info[j]
+                            for dash_coords in mathtools.dash(c1.x, c1.y, c2.x, c2.y, step.dash[0], step.dash[1], o,
+                                                              empty_start):
+                                # print(dash_coords)
+                                imd.line(dash_coords, fill=step.colour, width=step.width)
 
                 def area_bordertext():
-                    pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Calculating text length")
-                    font = getFont("", step['size'])
-                    textLength = int(img.textlength(pla['displayname'].replace('\n', ''), font))
-                    for c1 in range(len(coords)):
-                        c2 = c1+1 if c1 != len(coords)-1 else 0
-                        if mathtools.lineInBox(coords, 0, skinJson['info']['size'], 0, skinJson['info']['size']) and 2*textLength <= math.dist(coords[c1], coords[c2]):
-                            #coords[c]
-                            pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Midpoints calcuated")
-                            t = math.floor(math.dist(coords[c1], coords[c2])/(4*textLength))
+                    logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating text length")
+                    font = skin.get_font("", step.size, assets_dir)
+                    text_length = int(imd.textlength(component.displayname.replace('\n', ''), font))
+                    for c1, c2 in internal._with_next(coords):
+                        if mathtools.line_in_box(coords, 0, skin.tile_size, 0,
+                                                 skin.tile_size) and 2 * text_length <= math.dist(c1, c2):
+                            # coords[c]
+                            logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Midpoints calculated")
+                            t = math.floor(math.dist(c1, c2) / (4 * text_length))
                             t = 1 if t == 0 else t
-                            allPoints = mathtools.midpoint(coords[c1][0], coords[c1][1], coords[c2][0], coords[c2][1], step['offset'], n=t, returnBoth=True)
-                            for n in range(0, len(allPoints), 2):
-                                pLog(f"{style.index(step)+1}/{len(style)} {plaId}: {plaId}: Generating text {n+1} of {len(allPoints)} in section {c1} of {len(coords)+1}")
-                                points = [allPoints[n], allPoints[n+1]]
-                                if step['offset'] < 0:
-                                    tx, ty, trot = points[0] if not mathtools.pointInPoly(points[0][0], points[0][1], coords) else points[1]
+                            all_points: List[List[Tuple[Coord, RealNum]]]\
+                                = mathtools.midpoint(c1.x, c1.y, c2.x, c2.y, step.offset, n=t, return_both=True)
+                            for n in range(0, len(all_points), 2):
+                                logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: {component.name}: " +
+                                           f"Generating text {n + 1} of {len(all_points)} in section {coords.index(c1)} of {len(coords) + 1}")
+                                p1, p2 = all_points[n][0], all_points[n][1]
+                                if step.offset < 0:
+                                    (tx, ty), trot = p1 if not mathtools.point_in_poly(p1[0].x, p1[0].y,
+                                                                                       coords) else p2
                                 else:
-                                    #print(points[0][0], points[0][1], coords)
-                                    #print(mathtools.pointInPoly(points[0][0], points[0][1], coords))
-                                    tx, ty, trot = points[0] if mathtools.pointInPoly(points[0][0], points[0][1], coords) else points[1]
-                                i = Image.new('RGBA', (2*textLength,2*(step['size']+4)), (0, 0, 0, 0))
-                                d = ImageDraw.Draw(i)
-                                d.text((textLength, step['size']+4), pla["displayname"].replace('\n', ''), fill=step['colour'], font=font, anchor="mm")
-                                tw, th = i.size[:]
-                                i = i.rotate(trot, expand=True)
-                                textList.append((i, tx, ty, tw, th, trot))
+                                    # print(points[0][0], points[0][1], coords)
+                                    # print(mathtools.point_in_poly(points[0][0], points[0][1], coords))
+                                    (tx, ty), trot = p1 if mathtools.point_in_poly(p1[0].x, p1[0].y,
+                                                                                   coords) else p2
+                                abt_i = Image.new('RGBA', (2 * text_length, 2 * (step.size + 4)), (0, 0, 0, 0))
+                                abt_d = ImageDraw.Draw(abt_i)
+                                abt_d.text((text_length, step.size + 4), component.displayname.replace('\n', ''),
+                                           fill=step.colour, font=font, anchor="mm")
+                                tw, th = abt_i.size[:]
+                                abt_ir = abt_i.rotate(trot, expand=True)
+                                text_list.append(_TextObject(abt_ir, tx, ty, tw, th, trot))
 
                 def area_centertext():
-                    pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Calculating center")
-                    cx, cy = mathtools.polyCenter(coords)
-                    cx += step['offset'][0]
-                    cy += step['offset'][1]
-                    font = getFont("", step['size'])
-                    textLength = int(min(img.textlength(x, font) for x in pla['displayname'].split('\n')))
+                    logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating center")
+                    cx, cy = mathtools.poly_center(coords)
+                    cx += step.offset[0]
+                    cy += step.offset[1]
+                    font = skin.get_font("", step.size, assets_dir)
+                    text_length = int(min(imd.textlength(x, font) for x in component.displayname.split('\n')))
 
-                    left = min(c[0] for c in coords)
-                    right = max(c[0] for c in coords)
-                    dist = right - left
-                    if textLength > dist:
-                        pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Breaking up string")
-                        tokens = pla['displayname'].split()
-                        wss = re.findall(r"\s+", pla['displayname'])
+                    left = min(cl.x for cl in coords)
+                    right = max(cr.x for cr in coords)
+                    delta = right - left
+                    if text_length > delta:
+                        logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Breaking up string")
+                        tokens = component.displayname.split()
+                        wss = re.findall(r"\s+", component.displayname)
                         text = ""
                         for token, ws in list(itertools.zip_longest(tokens, wss, fillvalue='')):
-                            temptext = text[:]
-                            temptext += token
-                            if int(img.textlength(temptext.split('\n')[-1], font)) > dist:
-                                text += '\n'+token+ws
+                            temp_text = text[:]
+                            temp_text += token
+                            if int(imd.textlength(temp_text.split('\n')[-1], font)) > delta:
+                                text += '\n' + token + ws
                             else:
-                                text += token+ws
-                        textLength = int(max(img.textlength(x, font) for x in text.split("\n")))
-                        size = int(img.textsize(text, font)[1]+4)
+                                text += token + ws
+                        text_length = int(max(imd.textlength(x, font) for x in text.split("\n")))
+                        text_size = int(imd.textsize(text, font)[1] + 4)
                     else:
-                        text = pla['displayname']
-                        size = step['size']+4
+                        text = component.displayname
+                        text_size = step.size + 4
 
-                    i = Image.new('RGBA', (2*textLength,2*size), (0, 0, 0, 0))
-                    d = ImageDraw.Draw(i)
-                    cw, ch = i.size
-                    d.text((textLength, size), pla["displayname"], fill=step['colour'], font=font, anchor="mm")
-                    textList.append((i, cx, cy, cw, ch, 0))
+                    act_i = Image.new('RGBA', (2 * text_length, 2 * text_size), (0, 0, 0, 0))
+                    act_d = ImageDraw.Draw(act_i)
+                    cw, ch = act_i.size
+                    act_d.text((text_length, text_size), text, fill=step.colour, font=font, anchor="mm")
+                    text_list.append(_TextObject(act_i, cx, cy, cw, ch, 0))
 
                 def area_fill():
-                    ai = Image.new("RGBA", (skinJson['info']['size'], skinJson['info']['size']), (0, 0, 0, 0))
+                    ai = Image.new("RGBA", (skin.tile_size, skin.tile_size), (0, 0, 0, 0))
                     ad = ImageDraw.Draw(ai)
 
-                    if "stripe" in step.keys():
-                        pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Generating stripes")
-                        xMax, xMin, yMax, yMin = tools.line.findEnds(coords)
-                        xMax += xMax-xMin
-                        xMin -= yMax-yMin
-                        yMax += xMax-xMin
-                        yMin -= yMax-yMin
-                        i = Image.new("RGBA", (skinJson['info']['size'], skinJson['info']['size']), (0, 0, 0, 0))
-                        d = ImageDraw.Draw(i)
-                        tlx = xMin-1
-                        while tlx <= xMax:
-                            d.polygon([(tlx, yMin), (tlx+step['stripe'][0], yMin), (tlx+step['stripe'][0], yMax), (tlx, yMax)], fill=step['colour'])
-                            tlx += step['stripe'][0]+step['stripe'][1]
-                        i = i.rotate(step['stripe'][2], center=mathtools.polyCenter(coords))
-                        mi = Image.new("RGBA", (skinJson['info']['size'], skinJson['info']['size']), (0, 0, 0, 0))
+                    if step.stripe is not None:
+                        logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Generating stripes")
+                        x_max, x_min, y_max, y_min = tools.line.find_ends(coords)
+                        x_max += x_max - x_min
+                        x_min -= y_max - y_min
+                        y_max += x_max - x_min
+                        y_min -= y_max - y_min
+                        af_i = Image.new("RGBA", (skin.tile_size, skin.tile_size), (0, 0, 0, 0))
+                        af_d = ImageDraw.Draw(af_i)
+                        tlx = x_min - 1
+                        while tlx <= x_max:
+                            af_d.polygon(
+                                [(tlx, y_min), (tlx + step.stripe[0], y_min), (tlx + step.stripe[0], y_max),
+                                 (tlx, y_max)], fill=step.colour)
+                            tlx += step.stripe[0] + step.stripe[1]
+                        af_i = af_i.rotate(step.stripe[2], center=mathtools.poly_center(coords))
+                        mi = Image.new("RGBA", (skin.tile_size, skin.tile_size), (0, 0, 0, 0))
                         md = ImageDraw.Draw(mi)
-                        md.polygon(coords, fill=step['colour'])
-                        pi = Image.new("RGBA", (skinJson['info']['size'], skinJson['info']['size']), (0, 0, 0, 0))
-                        pi.paste(i, (0, 0), mi)
+                        md.polygon(coords, fill=step.colour)
+                        pi = Image.new("RGBA", (skin.tile_size, skin.tile_size), (0, 0, 0, 0))
+                        pi.paste(af_i, (0, 0), mi)
                         ai.paste(pi, (0, 0), pi)
                     else:
-                        pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Filling area")
-                        ad.polygon(coords, fill=step['colour'], outline=step['outline'])
+                        logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Filling area")
+                        ad.polygon(coords, fill=step.colour, outline=step.outline)
 
-                    if 'hollows' in pla.keys():
-                        for n in pla['hollows']:
-                            nCoords = [(x - internal.strToTuple(tileCoords)[1] * size, y - internal.strToTuple(tileCoords)[2] * size) for x, y in tools.nodes.toCoords(n, nodeList)]
-                            nCoords = [(int(skinJson['info']['size'] / size * x), int(skinJson['info']['size'] / size * y)) for x, y in nCoords]
-                            ad.polygon(nCoords, fill=(0, 0, 0, 0))
-                    im.paste(ai, (0, 0), ai)
+                    if component.hollows is not None:
+                        for n in component.hollows:
+                            n_coords = _node_list_to_image_coords([n], nodes, skin, tile_coord, size)
+                            ad.polygon(n_coords, fill=(0, 0, 0, 0))
+                    img.paste(ai, (0, 0), ai)
 
-                    if step['outline'] is not None:
-                        pLog(f"{style.index(step)+1}/{len(style)} {plaId}: Drawing outline")
-                        exteriorOutline = coords[:]
-                        exteriorOutline.append(exteriorOutline[0])
-                        outlines = [exteriorOutline]
-                        if 'hollows' in pla.keys():
-                            for n in pla['hollows']:
-                                nCoords = [(x - internal.strToTuple(tileCoords)[1] * size, y - internal.strToTuple(tileCoords)[2] * size) for x, y in tools.nodes.toCoords(n, nodeList)]
-                                nCoords = [(int(skinJson['info']['size'] / size * x), int(skinJson['info']['size'] / size * y)) for x, y in nCoords]
-                                nCoords.append(nCoords[0])
-                                outlines.append(nCoords)
-                        for oCoords in outlines:
-                            img.line(oCoords, fill=step['outline'], width=2, joint="curve")
-                            if not "unroundedEnds" in info['tags']:
-                                img.ellipse([oCoords[0][0]-2/2+1, oCoords[0][1]-2/2+1, oCoords[0][0]+2/2, oCoords[0][1]+2/2], fill=step['outline'])
+                    if step.outline is not None:
+                        logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Drawing outline")
+                        exterior_outline = coords[:]
+                        exterior_outline.append(exterior_outline[0])
+                        outlines = [exterior_outline]
+                        if component.hollows is not None:
+                            for n in component.hollows:
+                                n_coords = _node_list_to_image_coords([n], nodes, skin, tile_coord, size)
+                                n_coords.append(n_coords[0])
+                                outlines.append(n_coords)
+                        for o_coords in outlines:
+                            imd.line(o_coords, fill=step.outline, width=2, joint="curve")
+                            if "unroundedEnds" not in type_info.tags:
+                                imd.ellipse(
+                                    [o_coords[0].x - 2 / 2 + 1, o_coords[0].y - 2 / 2 + 1, o_coords[0].x + 2 / 2,
+                                     o_coords[0].y + 2 / 2], fill=step.outline)
 
                 def area_centerimage():
-                    x, y = mathtools.polyCenter(coords)
-                    icon = Image.open(assetsDir+step['file'])
-                    im.paste(i, (x+step['offset'][0], y+step['offset'][1]), icon)
+                    cx, cy = mathtools.poly_center(coords)
+                    icon = Image.open(assets_dir/step['file'])
+                    img.paste(icon, (cx + step.offset[0], cy + step.offset[1]), icon)
 
                 funcs = {
                     "point": {
@@ -273,112 +325,133 @@ def tiles(args):
                     }
                 }
 
-                if step['layer'] not in funcs[info['type']].keys():
-                    raise KeyError(f"{step['layer']} is not a valid layer")
-                pLog(f"{style.index(step)+1}/{len(style)} {plaId}: ")
-                funcs[info['type']][step['layer']]()
+                if step.layer not in funcs[type_info.shape].keys():
+                    raise KeyError(f"{step.layer} is not a valid layer")
+                logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: ")
+                funcs[type_info.shape][step.layer]()
 
-                operated.value += 1
+                if using_ray:
+                    operated.count.remote()
+                else:
+                    operated.count()
 
-            if info['type'] == "line" and "road" in info['tags'] and step['layer'] == "back":
-                pLog("Studs: Finding connected lines")
-                nodes = []
-                for pla in group.values():
-                    nodes += pla['nodes']
-                connectedPre = [tools.nodes.findPlasAttached(x, plaList) for x in nodes]
-                connected = []
-                for i in connectedPre:
+            if type_info.shape == "line" and "road" in type_info.tags and step.layer == "back":
+                logger.log("Studs: Finding connected lines")
+                con_nodes: List[str] = []
+                for component in group:
+                    con_nodes += component.nodes
+                connected_pre = [tools.nodes.find_components_attached(x, all_components) for x in con_nodes]
+                connected: List[Tuple[Component, int]] = []
+                for i in connected_pre:
                     connected += i
-                for conPla, index in connected:
-                    if not "road" in skinJson['types'][plaList[conPla]['type'].split(" ")[0]]['tags']:
+                for con_component, index in connected:
+                    if "road" not in skin[con_component.type].tags:
                         continue
-                    conInfo = skinJson['types'][plaList[conPla]['type'].split(" ")[0]]
-                    conStyle = []
-                    for zoom in conInfo['style'].keys():
-                        if maxZoom-internal.strToTuple(zoom)[1] <= internal.strToTuple(tileCoords)[0] <= maxZoom-internal.strToTuple(zoom)[0]:
-                            conStyle = conInfo['style'][zoom]
-                            break
-                    for conStep in conStyle:
-                        if conStep['layer'] in ["back", "text"]:
+                    con_info = skin[con_component.type]
+                    for con_step in con_info[max_zoom-tile_coord.z]:
+                        if con_step.layer in ["back", "text"]:
                             continue
-                        
-                        pLog("Studs: Extracting coords")
-                        conCoords = [(x-internal.strToTuple(tileCoords)[1]*size, y-internal.strToTuple(tileCoords)[2]*size) for x,y in tools.nodes.toCoords(plaList[conPla]['nodes'], nodeList)]
-                        conCoords = [(int(skinJson['info']['size']/size*x), int(skinJson['info']['size']/size*y)) for x,y in conCoords]
-                        preConCoords = conCoords[:]
-                        
-                        pLog("Studs: Coords processed")
+
+                        logger.log("Studs: Extracting coords")
+                        con_coords = _node_list_to_image_coords(con_component.nodes, nodes,
+                                                                skin, tile_coord, size)
+                        pre_con_coords = con_coords[:]
+
+                        logger.log("Studs: Coords processed")
                         if index == 0:
-                            conCoords = [conCoords[0], conCoords[1]]
-                            if not "dash" in conStep.keys():
-                                conCoords[1] = ((conCoords[0][0]+conCoords[1][0])/2, (conCoords[0][1]+conCoords[1][1])/2)
-                        elif index == len(conCoords)-1:
-                            conCoords = [conCoords[index-1], conCoords[index]]
-                            if not "dash" in conStep.keys():
-                                conCoords[0] = ((conCoords[0][0]+conCoords[1][0])/2, (conCoords[0][1]+conCoords[1][1])/2)
+                            con_coords = [con_coords[0], con_coords[1]]
+                            if con_step.dash is None:
+                                con_coords[1] = Coord((con_coords[0].x + con_coords[1].x) / 2, (con_coords[0].y + con_coords[1].y) / 2)
+                        elif index == len(con_coords) - 1:
+                            con_coords = [con_coords[index - 1], con_coords[index]]
+                            if con_step.dash is None:
+                                con_coords[0] = Coord((con_coords[0].x + con_coords[1].x) / 2, (con_coords[0].y + con_coords[1].y) / 2)
                         else:
-                            conCoords = [conCoords[index-1], conCoords[index], conCoords[index+1]]
-                            if not "dash" in conStep.keys():
-                                conCoords[0] = ((conCoords[0][0]+conCoords[1][0])/2, (conCoords[0][1]+conCoords[1][1])/2)
-                                conCoords[2] = ((conCoords[2][0]+conCoords[1][0])/2, (conCoords[2][1]+conCoords[1][1])/2)
-                        pLog("Studs: Segment drawn")
-                        if not "dash" in conStep.keys():
-                            img.line(conCoords, fill=conStep['colour'], width=conStep['width'], joint="curve")
-                            img.ellipse([conCoords[0][0]-conStep['width']/2+1, conCoords[0][1]-conStep['width']/2+1, conCoords[0][0]+conStep['width']/2, conCoords[0][1]+conStep['width']/2], fill=conStep['colour'])
-                            img.ellipse([conCoords[-1][0]-conStep['width']/2+1, conCoords[-1][1]-conStep['width']/2+1, conCoords[-1][0]+conStep['width']/2, conCoords[-1][1]+conStep['width']/2], fill=conStep['colour'])
+                            con_coords = [con_coords[index - 1], con_coords[index], con_coords[index + 1]]
+                            if con_step.dash is None:
+                                con_coords[0] = Coord((con_coords[0].x + con_coords[1].x) / 2, (con_coords[0].y + con_coords[1].y) / 2)
+                                con_coords[2] = Coord((con_coords[2].x + con_coords[1].x) / 2, (con_coords[2].y + con_coords[1].y) / 2)
+                        logger.log("Studs: Segment drawn")
+                        if con_step.dash is None:
+                            imd.line(con_coords, fill=con_step.colour, width=con_step.width, joint="curve")
+                            imd.ellipse([con_coords[0].x - con_step.width / 2 + 1,
+                                         con_coords[0].y - con_step.width / 2 + 1,
+                                         con_coords[0].x + con_step.width / 2,
+                                         con_coords[0].y + con_step.width / 2], fill=con_step.colour)
+                            imd.ellipse([con_coords[-1].x - con_step.width / 2 + 1,
+                                         con_coords[-1].y - con_step.width / 2 + 1,
+                                         con_coords[-1].x + con_step.width / 2,
+                                         con_coords[-1].y + con_step.width / 2], fill=con_step.colour)
 
                         else:
-                            offsetInfo = mathtools.dashOffset(preConCoords, conStep['dash'][0], conStep['dash'][1])[index:]
-                            #print(offsetInfo)
-                            for c in range(len(conCoords)-1):
-                                #print(offsetInfo)
-                                #print(c)
-                                o, emptyStart = offsetInfo[c]
-                                for dashCoords in mathtools.dash(conCoords[c][0], conCoords[c][1], conCoords[c+1][0], conCoords[c+1][1], conStep['dash'][0], conStep['dash'][1], o, emptyStart):
-                                    #print(dashCoords)
-                                    img.line(dashCoords, fill=conStep['colour'], width=conStep['width'])
-                operated.value += 1
+                            con_offset_info = mathtools.dash_offset(pre_con_coords, con_step.dash[0],
+                                                                    con_step.dash[1])[index:]
+                            # print(offset_info)
+                            for i, (c1, c2) in enumerate(internal._with_next(con_coords)):
+                                # print(offset_info)
+                                # print(c)
+                                con_o, con_empty_start = con_offset_info[i]
+                                for con_dash_coords in mathtools.dash(c1.x, c1.y, c2.x, c2.y,
+                                                                      con_step.dash[0], con_step.dash[1], con_o,
+                                                                      con_empty_start):
+                                    # print(dash_coords)
+                                    imd.line(con_dash_coords, fill=con_step.colour, width=con_step.width)
+                if using_ray:
+                    operated.count.remote()
+                else:
+                    operated.count()
 
-    textList += pointsTextList 
-    textList.reverse()
-    dontCross = []
+    text_list += points_text_list
+    text_list.reverse()
+    img = img.crop((0, 0, +img.width, img.height))
+    text_list = []
+    return {tile_coord: (img, text_list)}
+
+def _draw_text(operated, operations: int, start: RealNum, image: Image.Image, tile_coord: TileCoord, text_list: List[_TextObject],
+               save_images: bool, save_dir: Path, using_ray: bool=False) -> Dict[TileCoord, Image.Image]:
+    logger = _Logger(using_ray, operated, operations, start, tile_coord)
+    dont_cross = []
     processed = 0
-    #print(textList)
-    for i, x, y, w, h, rot in textList:
-        r = lambda a,b : mathtools.rotateAroundPivot(a, b, x, y, rot)
-        currentBoxCoords = [r(x-w/2, y-h/2), r(x-w/2, y+h/2), r(x+w/2, y+h/2), r(x+w/2, y-h/2), r(x-w/2, y-h/2)]
-        canPrint = True
-        for box in dontCross:
-            _, ox, oy, ow, oh, _ = textList[dontCross.index(box)]
-            oMaxDist = ((ow/2)**2+(oh/2)**2)**0.5/2
-            thisMaxDist = ((w/2)**2+(h/2)**2)**0.5/2
+    #print(text_list)
+    for text in text_list:
+        i = text.image; x = text.x; y = text.y; w = text.w; h = text.h; rot = text.rot
+        r = lambda a, b: mathtools.rotate_around_pivot(a, b, x, y, rot)
+        current_box_coords = [r(x-w/2, y-h/2), r(x-w/2, y+h/2), r(x+w/2, y+h/2), r(x+w/2, y-h/2), r(x-w/2, y-h/2)]
+        can_print = True
+        for box in dont_cross:
+            o_text = text_list[dont_cross.index(box)]
+            ox = o_text.x; oy = o_text.y; ow = o_text.w; oh = o_text.h
+            o_max_dist = ((ow/2)**2+(oh/2)**2)**0.5/2
+            this_max_dist = ((w/2)**2+(h/2)**2)**0.5/2
             dist = ((x-ox)**2+(y-oy)**2)**0.5
-            if dist > oMaxDist + thisMaxDist:
+            if dist > o_max_dist + this_max_dist:
                 continue
-            for c in range(len(box)-1):
-                for d in range(len(currentBoxCoords)-1):
-                    canPrint = False if mathtools.linesIntersect(box[c][0], box[c][1], box[c+1][0], box[c+1][1], currentBoxCoords[d][0], currentBoxCoords[d][1], currentBoxCoords[d+1][0], currentBoxCoords[d+1][1]) else canPrint
-                    if not canPrint:
+            for c1, c2 in internal._with_next(box):
+                for d1, d2 in internal._with_next(current_box_coords):
+                    can_print = False if mathtools.lines_intersect(c1.x, c1.y, c2.x, c2.y, d1.x, d1.y, d2.x, d2.y) else can_print
+                    if not can_print:
                         break
-                if not canPrint:
+                if not can_print:
                     break
-            if canPrint and mathtools.pointInPoly(currentBoxCoords[0][0], currentBoxCoords[0][1], box) or mathtools.pointInPoly(box[0][0], box[0][1], currentBoxCoords):
-                canPrint = False
-            if canPrint == False:
+            if can_print and mathtools.point_in_poly(current_box_coords[0].x, current_box_coords[0].y, box) or mathtools.point_in_poly(box[0].x, box[0].y, current_box_coords):
+                can_print = False
+            if not can_print:
                 break
         processed += 1
-        if canPrint:
-            pLog(f"Text {processed}/{len(textList)} pasted")
-            im.paste(i, (int(x-i.width/2), int(y-i.height/2)), i)
+        if can_print:
+            logger.log(f"Text {processed}/{len(text_list)} pasted")
+            image.paste(i, (int(x-i.width/2), int(y-i.height/2)), i)
         else:
-            pLog(f"Text {processed}/{len(textList)} skipped")
-        dontCross.append(currentBoxCoords)
-    operated.value += 1
+            logger.log(f"Text {processed}/{len(text_list)} skipped")
+        dont_cross.append(current_box_coords)
+    for _ in range(2):
+        if using_ray: operated.count.remote()
+        else: operated.count()
     
-    #tileReturn[tileCoords] = im
-    if saveImages:
-        im.save(f'{saveDir}{tileCoords}.png', 'PNG')
+    #tileReturn[tile_coord] = im
+    if save_images:
+        image.save(save_dir/f'{tile_coord}.png', 'PNG')
 
-    pLog("Rendered")
+    logger.log("Rendered")
 
-    return {tileCoords: im}
+    return {tile_coord: image}

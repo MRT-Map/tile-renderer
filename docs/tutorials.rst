@@ -159,4 +159,4 @@ The other functions
 -------------------
 
 Other than ``renderer.render()``, the renderer has other functions.
-For example, if you don't want leaflet.js tiles, ``renderer.tileMerge()`` is useful for merging tiles together.
+For example, if you don't want leaflet.js tiles, ``renderer.tile_merge()`` is useful for merging tiles together.
