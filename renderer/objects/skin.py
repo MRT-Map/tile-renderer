@@ -18,7 +18,7 @@ class Skin:
         self.validate_json(json)
         self.tile_size: int = json['info']['size']
         self.fonts: Dict[str, Path] = {name: Path(path) for name, path in json['info']['font'].items()}
-        self.background: Tuple[int, int, int] = tuple(json['info']['background'])
+        self.background: str = json['info']['background']
 
         self.order: List[str] = json['order']
         self.types: Dict[str, Skin.ComponentTypeInfo] \
@@ -117,7 +117,7 @@ class Skin:
                     "i": str,
                     "bi": str
                 },
-                "background": And([int], lambda l: len(l) == 3 and False not in [0 <= n_ <= 255 for n_ in l])
+                "background": And(str, Regex(r'^#[a-f,0-9]{3,6}$')),
             },
             "order": [str],
             "types": {
@@ -132,22 +132,22 @@ class Skin:
         })
         point_circle = Schema({
             "layer": "circle",
-            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
-            "outline": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{3,6}$'))),
+            "outline": Or(None, And(str, Regex(r'^#[a-f,0-9]{3,6}$'))),
             "size": int,
             "width": int
         })
         point_text = Schema({
             "layer": "text",
-            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{3,6}$'))),
             "offset": And([int], lambda o: len(o) == 2),
             "size": int,
             "anchor": Or(None, str)
         })
         point_square = Schema({
             "layer": "square",
-            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
-            "outline": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{3,6}$'))),
+            "outline": Or(None, And(str, Regex(r'^#[a-f,0-9]{3,6}$'))),
             "size": int,
             "width": int
         })
@@ -158,31 +158,31 @@ class Skin:
         })
         line_backfore = Schema({
             "layer": Or("back", "fore"),
-            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{3,6}$'))),
             "width": int,
             Optional("dash"): And([int], lambda l: len(l) == 2)
         })
         line_text = Schema({
             "layer": "text",
-            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{3,6}$'))),
             "size": int,
             "offset": int
         })
         area_fill = Schema({
             "layer": "fill",
-            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
-            "outline": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{3,6}$'))),
+            "outline": Or(None, And(str, Regex(r'^#[a-f,0-9]{3,6}$'))),
             Optional("stripe"): And([int], lambda l: len(l) == 3)
         })
         area_bordertext = Schema({
             "layer": "bordertext",
-            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{3,6}$'))),
             "offset": int,
             "size": int
         })
         area_centertext = Schema({
             "layer": "centertext",
-            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{6}$'))),
+            "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{3,6}$'))),
             "size": int,
             "offset": And(And(list, [int]), lambda o: len(o) == 2)
         })

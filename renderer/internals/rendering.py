@@ -158,7 +158,6 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
 
                 def line_backfore():
                     if step.dash is None:
-                        logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Drawing line")
                         imd.line(coords, fill=step.colour, width=step.width, joint="curve")
                         if "unroundedEnds" not in type_info.tags:
                             imd.ellipse([coords[0].x - step.width / 2 + 1, coords[0].y - step.width / 2 + 1,
@@ -180,7 +179,6 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                                 imd.line(dash_coords, fill=step.colour, width=step.width)
 
                 def area_bordertext():
-                    logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating text length")
                     font = skin.get_font("", step.size, assets_dir)
                     text_length = int(imd.textlength(component.displayname.replace('\n', ''), font))
                     for c1, c2 in internal._with_next(coords):
@@ -213,7 +211,6 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                                 text_list.append(_TextObject(abt_ir, tx, ty, tw, th, trot))
 
                 def area_centertext():
-                    logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating center")
                     cx, cy = mathtools.poly_center(coords)
                     cx += step.offset[0]
                     cy += step.offset[1]
@@ -327,7 +324,7 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
 
                 if step.layer not in funcs[type_info.shape].keys():
                     raise KeyError(f"{step.layer} is not a valid layer")
-                logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: ")
+                logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}")
                 funcs[type_info.shape][step.layer]()
 
                 if using_ray:
