@@ -4,6 +4,7 @@ from typing import Literal
 
 from renderer.types import Coord
 
+hex_to_colour = lambda h: "#"+hex(h)[2:]
 
 class SkinBuilder:
     tile_size: int
