@@ -7,7 +7,7 @@
             "i": "ClearSans-MediumItalic.ttf",
             "bi": "ClearSans-BoldItalic.ttf"
         },
-        "background": [221, 221, 221]
+        "background": "#ddd"
     },
     "order": [
         "residentialArea",

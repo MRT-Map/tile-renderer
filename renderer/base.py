@@ -33,13 +33,13 @@ class _MultiprocessingOperatedHandler:
     def count(self):
         self.operated.value += 1
 
-def merge_tiles(images: Union[str, Dict[TileCoord, Image.Image]], save_images: bool=True, save_dir: Path=Path.cwd(),
+def merge_tiles(images: Union[Path, Dict[TileCoord, Image.Image]], save_images: bool=True, save_dir: Path=Path.cwd(),
                 zoom: Optional[List[int]]=None) -> Dict[int, Image.Image]:
     """
     Merges tiles rendered by :py:func:`render`.
 
     :param images: Give in the form of ``(tile coord): (PIL Image)``, like the return value of :py:func:`render`, or as a path to a directory.
-    :type images: str | dict[TileCoord, Image]
+    :type images: Path | dict[TileCoord, Image]
     :param bool save_images: whether to save the tile images in a folder or not
     :param Path save_dir: the directory to save tiles in
     :param zoom: if left empty, automatically calculates all zoom values based on tiles; otherwise, the layers of zoom to merge.
@@ -52,9 +52,9 @@ def merge_tiles(images: Union[str, Dict[TileCoord, Image.Image]], save_images: b
     term = blessed.Terminal()
     image_dict = {}
     tile_return = {}
-    if isinstance(images, str):
+    if isinstance(images, Path):
         print(term.green("Retrieving images..."), end="\r")
-        for d in glob.glob(glob.escape(images)+"*.png"):
+        for d in glob.glob(str(images/"*.png")):
             regex = re.search(r"(-?\d+, -?\d+, -?\d+)\.png$", d) # pylint: disable=anomalous-backslash-in-string
             if regex is None:
                 continue

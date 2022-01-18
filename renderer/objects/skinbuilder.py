@@ -18,6 +18,17 @@ class SkinBuilder:
     def __setitem__(self, key: str, value: ComponentTypeInfo):
         self.types[key] = value
 
+    def json(self) -> dict:
+        return {
+            "info": {
+                "size": self.tile_size,
+                "font": self.fonts,
+                "background": self.background
+            },
+            "order": list(self.types.keys()),
+            "types": {k: v.json() for k, v in self.types.items()}
+        }
+
     class ComponentTypeInfo:
         shape: Literal["point", "line", "area"]
         tags: list[str]
@@ -28,6 +39,9 @@ class SkinBuilder:
 
         def __setitem__(self, key: slice, value: list[ComponentStyle]):
             self.style[key] = value
+
+        def json(self) -> dict:
+            return {f"{k.start}, {k.stop}": [vv.json for vv in v] for k, v in self.style.items()}
 
         class ComponentStyle:
             json: dict
@@ -56,7 +70,7 @@ class SkinBuilder:
                     "layer": "text",
                     "colour": colour,
                     "size": size,
-                    "offset": offset or Coord(0, 0),
+                    "offset": offset,
                     "anchor": anchor
                 }
                 return cs
@@ -95,7 +109,7 @@ class SkinBuilder:
                 cs.json = {
                     "layer": "text",
                     "colour": colour,
-                    "size": size
+                    "size": size,
                     "offset": offset
                 }
                 return cs
@@ -119,5 +133,55 @@ class SkinBuilder:
                     "layer": "fore",
                     "colour": colour,
                     "size": size
+                }
+                return cs
+
+            @classmethod
+            def area_bordertext(cls, *, colour: str | None = None,
+                                offset: int = 0,
+                                size: int = 1):
+                cs = cls()
+                cs.json = {
+                    "layer": "bordertext",
+                    "colour": colour,
+                    "offset": offset,
+                    "size": size
+                }
+                return cs
+
+            @classmethod
+            def area_centertext(cls, *, colour: str | None = None,
+                                size: int = 1,
+                                offset: Coord = Coord(0, 0)):
+                cs = cls()
+                cs.json = {
+                    "layer": "bordertext",
+                    "colour": colour,
+                    "offset": offset,
+                    "size": size
+                }
+                return cs
+
+            @classmethod
+            def area_fill(cls, *,
+                          colour: str | None = None,
+                          outline: str | None = None,
+                          stripe: tuple[int, int, int] | None = None):
+                cs = cls()
+                cs.json = {
+                    "layer": "fill",
+                    "colour": colour,
+                    "outline": outline,
+                    "stripe": stripe
+                }
+
+            @classmethod
+            def area_centerimage(cls, *, file: Path,
+                                 offset: Coord = Coord(0, 0)):
+                cs = cls()
+                cs.json = {
+                    "layer": "centerimage",
+                    "file": file,
+                    "offset": offset
                 }
                 return cs

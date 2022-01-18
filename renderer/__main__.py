@@ -31,8 +31,8 @@ def cmd():
     p_vdir.add_argument('-ns', '--nodes_suffix', type=str, help='The suffix for node files\' names', default='.nodes.pla')
 
     p_render = subparsers.add_parser('render', help='render tiles', formatter_class=argparse.MetavarTypeHelpFormatter)
-    p_render.add_argument('-c', '--components', required=True, type=str, help='the component JSON file directory')
-    p_render.add_argument('-n', '--nodes', required=True, type=str, help='the node JSON file directory')
+    p_render.add_argument('-c', '--components', required=True, type=Path, help='the component JSON file directory')
+    p_render.add_argument('-n', '--nodes', required=True, type=Path, help='the node JSON file directory')
     p_render.add_argument('-min', '--min_zoom', type=int, required=True, help="minimum zoom value")
     p_render.add_argument('-max', '--max_zoom', type=int, required=True, help="maximum zoom value")
     p_render.add_argument('-r', '--max_zoom_range', type=float, required=True, help="range of coordinates covered by a tile in the maximum zoom")
@@ -97,7 +97,6 @@ def cmd():
             renderer.NodeList.validate_json(nodes)
         print(term.green("Validated"))
     elif args.task == "merge":
-        if not args.image_dir.endswith("/") and args.image_dir != "": args.image_dir += '/'
         renderer.merge_tiles(args.image_dir, save_dir=args.save_dir, zoom=args.zoom)
     else:
         parser.print_help()
