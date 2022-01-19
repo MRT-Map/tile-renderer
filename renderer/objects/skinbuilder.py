@@ -4,7 +4,11 @@ from typing import Literal
 
 from renderer.types import Coord
 
-hex_to_colour = lambda h: None if h is None else "#"+(hex(h)[2:].zfill(6))
+def _hex_to_colour(h: int | None) -> str | None:
+    if h is None: return None
+    nh = hex(h)[2:]
+    if len(nh) != 3: h = h.zfill(6)
+    return "#"+h
 
 class SkinBuilder:
     tile_size: int
@@ -14,7 +18,7 @@ class SkinBuilder:
     def __init__(self, tile_size: int, fonts: dict[str, Path], background: int):
         self.tile_size = tile_size
         self.fonts = fonts
-        self.background = hex_to_colour(background)
+        self.background = _hex_to_colour(background)
         self.types = {}
 
     def __setitem__(self, key: str, value: ComponentTypeInfo):
@@ -60,8 +64,8 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "circle",
-                    "colour": hex_to_colour(colour),
-                    "outline": hex_to_colour(outline),
+                    "colour": _hex_to_colour(colour),
+                    "outline": _hex_to_colour(outline),
                     "size": size,
                     "width": width
                 }
@@ -75,7 +79,7 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "text",
-                    "colour": hex_to_colour(colour),
+                    "colour": _hex_to_colour(colour),
                     "size": size,
                     "offset": offset,
                     "anchor": anchor
@@ -90,8 +94,8 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "square",
-                    "colour": hex_to_colour(colour),
-                    "outline": hex_to_colour(outline),
+                    "colour": _hex_to_colour(colour),
+                    "outline": _hex_to_colour(outline),
                     "size": size,
                     "width": width
                 }
@@ -115,7 +119,7 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "text",
-                    "colour": hex_to_colour(colour),
+                    "colour": _hex_to_colour(colour),
                     "size": size,
                     "offset": offset
                 }
@@ -128,7 +132,7 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "back",
-                    "colour": hex_to_colour(colour),
+                    "colour": _hex_to_colour(colour),
                     "width": width,
                     "dash": dash
                 }
@@ -141,7 +145,7 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "fore",
-                    "colour": hex_to_colour(colour),
+                    "colour": _hex_to_colour(colour),
                     "width": width,
                     "dash": dash
                 }
@@ -154,7 +158,7 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "bordertext",
-                    "colour": hex_to_colour(colour),
+                    "colour": _hex_to_colour(colour),
                     "offset": offset,
                     "size": size
                 }
@@ -167,7 +171,7 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "centertext",
-                    "colour": hex_to_colour(colour),
+                    "colour": _hex_to_colour(colour),
                     "offset": offset,
                     "size": size
                 }
@@ -181,8 +185,8 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "fill",
-                    "colour": hex_to_colour(colour),
-                    "outline": hex_to_colour(outline),
+                    "colour": _hex_to_colour(colour),
+                    "outline": _hex_to_colour(outline),
                     "stripe": stripe
                 }
                 return cs
