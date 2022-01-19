@@ -51,7 +51,7 @@ ComponentListJson: TypeAlias = Dict[str, ComponentJson]
 SkinInfo = TypedDict('SkinInfo', {
     'size': int,
     'font': Dict[str, str],
-    'background': List[int]
+    'background': str
 })
 """Represents the ``info`` portion of a skin JSON."""
 SkinType = TypedDict('SkinType', {
