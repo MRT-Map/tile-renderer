@@ -79,8 +79,8 @@ class Skin:
                 self.anchor: str = None if "anchor" not in json else json['anchor']
                 self.file: Path = None if "file" not in json else Path(json['file'])
                 self.width: int = None if "width" not in json else json['width']
-                self.stripe: Tuple[RealNum, RealNum, RealNum] = None if "stripe" not in json else tuple(json['stripe'])
-                self.dash: Tuple[RealNum, RealNum] = None if "dash" not in json else tuple(json['dash'])
+                self.stripe: Tuple[RealNum, RealNum, RealNum] = None if "stripe" not in json or json['stripe'] is None else tuple(json['stripe'])
+                self.dash: Tuple[RealNum, RealNum] = None if "dash" not in json or json['dash'] is None else tuple(json['dash'])
 
     @classmethod
     def from_name(cls, name: str='default') -> Skin:
@@ -160,7 +160,7 @@ class Skin:
             "layer": Or("back", "fore"),
             "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{3,6}$'))),
             "width": int,
-            Optional("dash"): And([int], lambda l: len(l) == 2)
+            Optional("dash"): Or(None, And([int], lambda l: len(l) == 2))
         })
         line_text = Schema({
             "layer": "text",
@@ -172,7 +172,7 @@ class Skin:
             "layer": "fill",
             "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{3,6}$'))),
             "outline": Or(None, And(str, Regex(r'^#[a-f,0-9]{3,6}$'))),
-            Optional("stripe"): And([int], lambda l: len(l) == 3)
+            Optional("stripe"): Or(None, And([int], lambda l: len(l) == 3))
         })
         area_bordertext = Schema({
             "layer": "bordertext",

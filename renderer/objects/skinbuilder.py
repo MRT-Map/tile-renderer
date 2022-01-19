@@ -4,7 +4,7 @@ from typing import Literal
 
 from renderer.types import Coord
 
-hex_to_colour = lambda h: None if h is None else "#"+hex(h)[2:]
+hex_to_colour = lambda h: None if h is None else "#"+(hex(h)[2:].zfill(6))
 
 class SkinBuilder:
     tile_size: int
@@ -24,7 +24,7 @@ class SkinBuilder:
         return {
             "info": {
                 "size": self.tile_size,
-                "font": self.fonts,
+                "font": {k: str(v) for k, v in self.fonts.items()},
                 "background": self.background
             },
             "order": list(self.types.keys()),
@@ -34,17 +34,21 @@ class SkinBuilder:
     class ComponentTypeInfo:
         shape: Literal["point", "line", "area"]
         tags: list[str]
-        style: dict[slice, list[ComponentStyle]]
+        style: dict[str, list[ComponentStyle]]
         def __init__(self, shape: Literal["point", "line", "area"], tags: list[str] | None = None):
             self.shape = shape
             self.tags = tags or []
             self.style = {}
 
         def __setitem__(self, key: slice, value: list[ComponentStyle]):
-            self.style[key] = value
+            self.style[f"{key.start}, {key.stop or 1000}"] = value
 
         def json(self) -> dict:
-            return {f"{k.start}, {k.stop or 1000}": [vv.json for vv in v] for k, v in self.style.items()}
+            return {
+                "tags": self.tags,
+                "type": self.shape,
+                "style": {k: [vv.json for vv in v] for k, v in self.style.items()}
+            }
 
         class ComponentStyle:
             json: dict
@@ -99,7 +103,7 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "image",
-                    "file": file,
+                    "file": str(file),
                     "offset": offset
                 }
                 return cs
@@ -119,23 +123,27 @@ class SkinBuilder:
 
             @classmethod
             def line_back(cls, *, colour: int | None = None,
-                          size: int = 1):
+                          width: int = 1,
+                          dash: tuple[int, int] | None = None):
                 cs = cls()
                 cs.json = {
                     "layer": "back",
                     "colour": hex_to_colour(colour),
-                    "size": size
+                    "width": width,
+                    "dash": dash
                 }
                 return cs
 
             @classmethod
             def line_fore(cls, *, colour: int | None = None,
-                          size: int = 1):
+                          width: int = 1,
+                          dash: tuple[int, int] | None = None):
                 cs = cls()
                 cs.json = {
                     "layer": "fore",
                     "colour": hex_to_colour(colour),
-                    "size": size
+                    "width": width,
+                    "dash": dash
                 }
                 return cs
 
@@ -147,7 +155,7 @@ class SkinBuilder:
                 cs.json = {
                     "layer": "bordertext",
                     "colour": hex_to_colour(colour),
-                    "offset": hex_to_colour(offset),
+                    "offset": offset,
                     "size": size
                 }
                 return cs
@@ -158,7 +166,7 @@ class SkinBuilder:
                                 offset: Coord = Coord(0, 0)):
                 cs = cls()
                 cs.json = {
-                    "layer": "bordertext",
+                    "layer": "centertext",
                     "colour": hex_to_colour(colour),
                     "offset": offset,
                     "size": size
@@ -177,6 +185,7 @@ class SkinBuilder:
                     "outline": hex_to_colour(outline),
                     "stripe": stripe
                 }
+                return cs
 
             @classmethod
             def area_centerimage(cls, *, file: Path,
@@ -184,7 +193,7 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "centerimage",
-                    "file": file,
+                    "file": str(file),
                     "offset": offset
                 }
                 return cs
