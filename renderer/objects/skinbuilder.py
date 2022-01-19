@@ -4,17 +4,18 @@ from typing import Literal
 
 from renderer.types import Coord
 
-hex_to_colour = lambda h: "#"+hex(h)[2:]
+hex_to_colour = lambda h: None if h is None else "#"+hex(h)[2:]
 
 class SkinBuilder:
     tile_size: int
     fonts: dict[str, Path]
     background: str
     types: dict[str, ComponentTypeInfo]
-    def __init__(self, tile_size: int, fonts: dict[str, Path], background: str):
+    def __init__(self, tile_size: int, fonts: dict[str, Path], background: int):
         self.tile_size = tile_size
         self.fonts = fonts
-        self.background = background
+        self.background = hex_to_colour(background)
+        self.types = {}
 
     def __setitem__(self, key: str, value: ComponentTypeInfo):
         self.types[key] = value
@@ -37,39 +38,40 @@ class SkinBuilder:
         def __init__(self, shape: Literal["point", "line", "area"], tags: list[str] | None = None):
             self.shape = shape
             self.tags = tags or []
+            self.style = {}
 
         def __setitem__(self, key: slice, value: list[ComponentStyle]):
             self.style[key] = value
 
         def json(self) -> dict:
-            return {f"{k.start}, {k.stop}": [vv.json for vv in v] for k, v in self.style.items()}
+            return {f"{k.start}, {k.stop or 1000}": [vv.json for vv in v] for k, v in self.style.items()}
 
         class ComponentStyle:
             json: dict
             @classmethod
-            def point_circle(cls, *, colour: str | None = None,
-                             outline: str | None = None,
+            def point_circle(cls, *, colour: int | None = None,
+                             outline: int | None = None,
                              size: int = 1,
                              width: int = 1):
                 cs = cls()
                 cs.json = {
                     "layer": "circle",
-                    "colour": colour,
-                    "outline": outline,
+                    "colour": hex_to_colour(colour),
+                    "outline": hex_to_colour(outline),
                     "size": size,
                     "width": width
                 }
                 return cs
 
             @classmethod
-            def point_text(cls, *, colour: str | None = None,
+            def point_text(cls, *, colour: int | None = None,
                            offset: Coord = Coord(0, 0),
                            size: int = 10,
                            anchor: str | None = None):
                 cs = cls()
                 cs.json = {
                     "layer": "text",
-                    "colour": colour,
+                    "colour": hex_to_colour(colour),
                     "size": size,
                     "offset": offset,
                     "anchor": anchor
@@ -77,15 +79,15 @@ class SkinBuilder:
                 return cs
 
             @classmethod
-            def point_square(cls, *, colour: str | None = None,
-                             outline: str | None = None,
+            def point_square(cls, *, colour: int | None = None,
+                             outline: int | None = None,
                              size: int = 1,
                              width: int = 1):
                 cs = cls()
                 cs.json = {
                     "layer": "square",
-                    "colour": colour,
-                    "outline": outline,
+                    "colour": hex_to_colour(colour),
+                    "outline": hex_to_colour(outline),
                     "size": size,
                     "width": width
                 }
@@ -103,61 +105,61 @@ class SkinBuilder:
                 return cs
 
             @classmethod
-            def line_text(cls, *, colour: str | None = None,
+            def line_text(cls, *, colour: int | None = None,
                           size: int = 1,
                           offset: int = 0):
                 cs = cls()
                 cs.json = {
                     "layer": "text",
-                    "colour": colour,
+                    "colour": hex_to_colour(colour),
                     "size": size,
                     "offset": offset
                 }
                 return cs
 
             @classmethod
-            def line_back(cls, *, colour: str | None = None,
+            def line_back(cls, *, colour: int | None = None,
                           size: int = 1):
                 cs = cls()
                 cs.json = {
                     "layer": "back",
-                    "colour": colour,
+                    "colour": hex_to_colour(colour),
                     "size": size
                 }
                 return cs
 
             @classmethod
-            def line_fore(cls, *, colour: str | None = None,
+            def line_fore(cls, *, colour: int | None = None,
                           size: int = 1):
                 cs = cls()
                 cs.json = {
                     "layer": "fore",
-                    "colour": colour,
+                    "colour": hex_to_colour(colour),
                     "size": size
                 }
                 return cs
 
             @classmethod
-            def area_bordertext(cls, *, colour: str | None = None,
+            def area_bordertext(cls, *, colour: int | None = None,
                                 offset: int = 0,
                                 size: int = 1):
                 cs = cls()
                 cs.json = {
                     "layer": "bordertext",
-                    "colour": colour,
-                    "offset": offset,
+                    "colour": hex_to_colour(colour),
+                    "offset": hex_to_colour(offset),
                     "size": size
                 }
                 return cs
 
             @classmethod
-            def area_centertext(cls, *, colour: str | None = None,
+            def area_centertext(cls, *, colour: int | None = None,
                                 size: int = 1,
                                 offset: Coord = Coord(0, 0)):
                 cs = cls()
                 cs.json = {
                     "layer": "bordertext",
-                    "colour": colour,
+                    "colour": hex_to_colour(colour),
                     "offset": offset,
                     "size": size
                 }
@@ -165,14 +167,14 @@ class SkinBuilder:
 
             @classmethod
             def area_fill(cls, *,
-                          colour: str | None = None,
-                          outline: str | None = None,
+                          colour: int | None = None,
+                          outline: int | None = None,
                           stripe: tuple[int, int, int] | None = None):
                 cs = cls()
                 cs.json = {
                     "layer": "fill",
-                    "colour": colour,
-                    "outline": outline,
+                    "colour": hex_to_colour(colour),
+                    "outline": hex_to_colour(outline),
                     "stripe": stripe
                 }
 
@@ -186,3 +188,5 @@ class SkinBuilder:
                     "offset": offset
                 }
                 return cs
+CTI = SkinBuilder.ComponentTypeInfo
+CS = SkinBuilder.ComponentTypeInfo.ComponentStyle
