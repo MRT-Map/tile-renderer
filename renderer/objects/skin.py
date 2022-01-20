@@ -3,7 +3,7 @@ from typing import Literal, Dict, Tuple, List, Union
 from pathlib import Path
 
 import blessed
-from PIL import ImageFont
+from PIL import ImageFont, ImageDraw
 from schema import Schema, And, Or, Regex, Optional
 
 import renderer.internals.internal as internal
@@ -70,15 +70,39 @@ class Skin:
 
             :param dict json: The JSON of the styles"""
             def __new__(cls, json: dict, shape: Literal["point", "line", "area"]):
-               pass
-            # TODO this
+                if cls != Skin.ComponentTypeInfo.ComponentStyle: super().__new__(cls)
+                if shape == "point":
+                    if json['layer'] == "circle": return Skin.ComponentTypeInfo.PointCircle(Skin.ComponentTypeInfo.PointCircle, json)
+                    if json['layer'] == "text": return Skin.ComponentTypeInfo.PointText(Skin.ComponentTypeInfo.PointText, json)
+                    if json['layer'] == "square": return Skin.ComponentTypeInfo.PointSquare(Skin.ComponentTypeInfo.PointSquare, json)
+                    if json['layer'] == "image": return Skin.ComponentTypeInfo.PointImage(Skin.ComponentTypeInfo.PointImage, json)
+                elif shape == "line":
+                    if json['layer'] == "text": return Skin.ComponentTypeInfo.LineText(Skin.ComponentTypeInfo.LineText, json)
+                    if json['layer'] == "back": return Skin.ComponentTypeInfo.LineBack(Skin.ComponentTypeInfo.LineBack, json)
+                    if json['layer'] == "fore": return Skin.ComponentTypeInfo.LineFore(Skin.ComponentTypeInfo.LineFore, json)
+                elif shape == "area":
+                    if json['layer'] == "bordertext": return Skin.ComponentTypeInfo.AreaBorderText(Skin.ComponentTypeInfo.AreaBorderText, json)
+                    if json['layer'] == "centertext": return Skin.ComponentTypeInfo.AreaCenterText(Skin.ComponentTypeInfo.AreaCenterText, json)
+                    if json['layer'] == "fill": return Skin.ComponentTypeInfo.AreaFill(Skin.ComponentTypeInfo.AreaFill, json)
+                    if json['layer'] == "centerimage": return Skin.ComponentTypeInfo.AreaCenterImage(Skin.ComponentTypeInfo.AreaCenterImage, json)
+                raise ValueError(f"No layer in shape")
+            
+            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord]): pass
 
         class PointCircle(ComponentStyle):
             def __init__(self, json: dict):
                 self.colour: str | None = json['colour']
                 self.outline: str | None = json['outline']
                 self.size: int = json['size']
-                self.outline: int = json['outline']
+                self.width: int = json['width']
+                
+            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord]):
+                imd.ellipse((coords[0].x - self.size / 2 + 1,
+                             coords[0].y - self.size / 2 + 1,
+                             coords[0].x + self.size / 2,
+                             coords[0].y + self.size / 2),
+                            fill=self.colour, outline=self.outline, width=self.width)
+
 
         class PointText(ComponentStyle):
             def __init__(self, json: dict):
@@ -86,30 +110,64 @@ class Skin:
                 self.size: int = json['size']
                 self.offset: Coord = Coord(*json['offset'])
                 self.anchor: str = json['anchor']
+                
+            def render(self, imd: ImageDraw, coords: list[Coord], 
+                       displayname: str, skin: Skin, assets_dir: Path, points_text_list: list[_TextObject]):
+                font = skin.get_font("", self.size, assets_dir)
+                text_length = int(imd.textlength(displayname, font))
+                pt_i = Image.new('RGBA', (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0))
+                pt_d = ImageDraw.Draw(pt_i)
+                pt_d.text((text_length, self.size + 4), displayname, fill=self.colour, font=font,
+                          anchor="mm")
+                tw, th = pt_i.size
+                points_text_list.append(_TextObject(pt_i, coords[0].x + self.offset[0], coords[0].y + self.offset[1], tw, th, 0))
+                #font = skin.get_font("", step.size)
+                #img.text((coords[0][0]+step.offset[0], coords[0][1]+step.offset[1]), component.displayname, fill=step.colour, font=font, anchor=step['anchor'])
 
+            
         class PointSquare(ComponentStyle):
             def __init__(self, json: dict):
                 self.colour: str | None = json['colour']
                 self.outline: str | None = json['outline']
                 self.size: int = json['size']
                 self.width: int = json['width']
+                
+            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord]):
+                imd.rectangle((coords[0].x - self.size / 2 + 1,
+                               coords[0].y - self.size / 2 + 1,
+                               coords[0].x + self.size / 2,
+                               coords[0].y + self.size / 2),
+                              fill=self.colour, outline=self.outline, width=self.width)
+
 
         class PointImage(ComponentStyle):
             def __init__(self, json: dict):
                 self.file: Path = Path(json['file'])
                 self.offset: Coord = Coord(*json['offset'])
+                
+            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord],
+                       assets_dir: Path):
+                icon = Image.open(assets_dir/self.file)
+                img.paste(icon, (int(coords[0].x - icon.width / 2 + self.offset[0]),
+                                 int(coords[0].y - icon.height / 2 + self.offset[1])), icon)
+
 
         class LineText(ComponentStyle):
             def __init__(self, json: dict):
                 self.colour: str | None = json['colour']
                 self.size: int = json['size']
                 self.offset: int = json['offset']
-
+                
+            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord]):
+               
         class LineBack(ComponentStyle):
             def __init__(self, json: dict):
                 self.colour: str | None = json['colour']
                 self.width: int = json['width']
                 self.dash: tuple[int, int] = json['dash']
+                
+            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord]):
+                
         LineFront = LineBack
 
         class AreaBorderText(ComponentStyle):
@@ -117,23 +175,35 @@ class Skin:
                 self.colour: str | None = json['colour']
                 self.offset: int = json['offset']
                 self.size: int = json['size']
+                
+            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord]):
+                
 
         class AreaCenterText(ComponentStyle):
             def __init__(self, json: dict):
                 self.colour: str | None = json['colour']
                 self.offset: Coord = Coord(*json['offset'])
                 self.size: int = json['size']
+                
+            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord]):
+                
 
         class AreaFill(ComponentStyle):
             def __init__(self, json: dict):
                 self.colour: str | None = json['colour']
                 self.outline: str | None = json['outline']
                 self.stripe: tuple[int, int, int] = tuple(json['stripe'])
+                
+            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord]):
+                
 
         class AreaCenterImage(ComponentStyle):
             def __init__(self, json: dict):
                 self.file: Path = Path(json['file'])
                 self.offset: Coord = Coord(*json['offset'])
+                
+            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord]):
+                
 
     @classmethod
     def from_name(cls, name: str='default') -> Skin:
