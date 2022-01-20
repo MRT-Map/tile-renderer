@@ -7,7 +7,7 @@ from PIL import ImageFont
 from schema import Schema, And, Or, Regex, Optional
 
 import renderer.internals.internal as internal
-from renderer.types import RealNum, SkinJson, SkinType
+from renderer.types import RealNum, SkinJson, SkinType, Coord
 
 
 class Skin:
@@ -69,18 +69,71 @@ class Skin:
             """Represents the ``styles`` portion of a ComponentTypeInfo.
 
             :param dict json: The JSON of the styles"""
+            def __new__(cls, json: dict, shape: Literal["point", "line", "area"]):
+               pass
+            # TODO this
+
+        class PointCircle(ComponentStyle):
             def __init__(self, json: dict):
-                self.layer: str = json['layer']
-                self.colour: str = None if "colour" not in json else json['colour']
-                self.outline: str = None if "outline" not in json else json['outline']
-                self.offset: Union[RealNum, Tuple[RealNum, RealNum]]\
-                    = None if "offset" not in json else tuple(json['offset']) if isinstance(json['offset'], list) else json['offset']
-                self.size: int = None if "size" not in json else json['size']
-                self.anchor: str = None if "anchor" not in json else json['anchor']
-                self.file: Path = None if "file" not in json else Path(json['file'])
-                self.width: int = None if "width" not in json else json['width']
-                self.stripe: Tuple[RealNum, RealNum, RealNum] = None if "stripe" not in json or json['stripe'] is None else tuple(json['stripe'])
-                self.dash: Tuple[RealNum, RealNum] = None if "dash" not in json or json['dash'] is None else tuple(json['dash'])
+                self.colour: str | None = json['colour']
+                self.outline: str | None = json['outline']
+                self.size: int = json['size']
+                self.outline: int = json['outline']
+
+        class PointText(ComponentStyle):
+            def __init__(self, json: dict):
+                self.colour: str | None = json['colour']
+                self.size: int = json['size']
+                self.offset: Coord = Coord(*json['offset'])
+                self.anchor: str = json['anchor']
+
+        class PointSquare(ComponentStyle):
+            def __init__(self, json: dict):
+                self.colour: str | None = json['colour']
+                self.outline: str | None = json['outline']
+                self.size: int = json['size']
+                self.width: int = json['width']
+
+        class PointImage(ComponentStyle):
+            def __init__(self, json: dict):
+                self.file: Path = Path(json['file'])
+                self.offset: Coord = Coord(*json['offset'])
+
+        class LineText(ComponentStyle):
+            def __init__(self, json: dict):
+                self.colour: str | None = json['colour']
+                self.size: int = json['size']
+                self.offset: int = json['offset']
+
+        class LineBack(ComponentStyle):
+            def __init__(self, json: dict):
+                self.colour: str | None = json['colour']
+                self.width: int = json['width']
+                self.dash: tuple[int, int] = json['dash']
+        LineFront = LineBack
+
+        class AreaBorderText(ComponentStyle):
+            def __init__(self, json: dict):
+                self.colour: str | None = json['colour']
+                self.offset: int = json['offset']
+                self.size: int = json['size']
+
+        class AreaCenterText(ComponentStyle):
+            def __init__(self, json: dict):
+                self.colour: str | None = json['colour']
+                self.offset: Coord = Coord(*json['offset'])
+                self.size: int = json['size']
+
+        class AreaFill(ComponentStyle):
+            def __init__(self, json: dict):
+                self.colour: str | None = json['colour']
+                self.outline: str | None = json['outline']
+                self.stripe: tuple[int, int, int] = tuple(json['stripe'])
+
+        class AreaCenterImage(ComponentStyle):
+            def __init__(self, json: dict):
+                self.file: Path = Path(json['file'])
+                self.offset: Coord = Coord(*json['offset'])
 
     @classmethod
     def from_name(cls, name: str='default') -> Skin:
