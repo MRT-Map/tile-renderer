@@ -50,7 +50,7 @@ def main():
         CS.area_centertext(colour=0x669240,
                            size=30)
     ]
-    s['residentialOficeArea'] = residential_office_area
+    s['residentialOfficeArea'] = residential_office_area
 
     school_area = CTI("area")
     school_area[0:5] = [

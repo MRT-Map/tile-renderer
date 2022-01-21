@@ -57,7 +57,7 @@ SkinInfo = TypedDict('SkinInfo', {
 SkinType = TypedDict('SkinType', {
     'tags': List[str],
     'type': Literal['point', 'line', 'area'],
-    'style': Dict[str, dict]
+    'style': Dict[str, list]
 })
 """Represents a component type in the ``types`` portion of a skin JSON."""
 SkinJson = TypedDict('SkinJson', {
