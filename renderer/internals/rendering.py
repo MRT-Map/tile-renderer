@@ -1,4 +1,7 @@
+from __future__ import annotations
+
 from dataclasses import dataclass
+from itertools import chain
 from pathlib import Path
 from typing import List, Tuple, Dict, Any
 
@@ -37,14 +40,13 @@ class _Logger:
             print(term.green(f"00.0% | 0.0s left | ") + f"{self.tile_coords}: " + term.bright_black(msg), flush=True)
 
 
-
 def _draw_components(operated, operations: int, start: RealNum, tile_coord: TileCoord, tile_components: List[List[Component]],
                      all_components: ComponentList, nodes: NodeList, skin: Skin, max_zoom: int, max_zoom_range: RealNum,
-                     assets_dir: Path, using_ray: bool=False) -> Dict[TileCoord, Tuple[Image.Image, List[_TextObject]]]:
+                     assets_dir: Path, using_ray: bool=False) -> tuple[TileCoord, Image.Image, List[_TextObject]] | None:
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
     if tile_components == [[]]:
         logger.log("Render complete")
-        return {}
+        return None
 
     logger.log("Initialising canvas")
     size = max_zoom_range * 2 ** (max_zoom - tile_coord[0])
@@ -83,7 +85,7 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                 if step.layer not in args[type_info.shape].keys():
                     raise KeyError(f"{step.layer} is not a valid layer")
                 logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}")
-                step.render(*args)
+                step.render(*args[type_info.shape][step.layer])
 
                 if using_ray:
                     operated.count.remote()
@@ -91,14 +93,9 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                     operated.count()
 
             if type_info.shape == "line" and "road" in type_info.tags and step.layer == "back":
-                logger.log("Studs: Finding connected lines")
-                con_nodes: List[str] = []
-                for component in group:
-                    con_nodes += component.nodes
-                connected_pre = [tools.nodes.find_components_attached(x, all_components) for x in con_nodes]
-                connected: List[Tuple[Component, int]] = []
-                for i in connected_pre:
-                    connected += i
+                logger.log("Rendering studs")
+                con_nodes: List[str] = list(chain(*(component.nodes for component in group)))
+                connected: list[tuple[Component, int]] = list(chain(*(tools.nodes.find_components_attached(x, all_components) for x in con_nodes)))
                 for con_component, index in connected:
                     if "road" not in skin[con_component.type].tags:
                         continue
@@ -107,63 +104,26 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
                         if con_step.layer in ["back", "text"]:
                             continue
 
-                        logger.log("Studs: Extracting coords")
                         con_coords = _node_list_to_image_coords(con_component.nodes, nodes,
                                                                 skin, tile_coord, size)
-                        #pre_con_coords = con_coords[:]
 
                         con_img = Image.new("RGBA", (skin.tile_size,)*2, (0,)*4)
                         con_imd = ImageDraw.Draw(con_img)
                         con_step: Skin.ComponentTypeInfo.LineFore
-                        con_step.render(con_imd, coords)
+                        con_step.render(con_imd, con_coords)
 
                         con_mask_img = Image.new("RGBA", (skin.tile_size,)*2, (0,)*4)
-                        con_mask_imd = ImageDraw.Draw(con_img)
-                        con_mask_imd.ellipse((con_coords[0].x - con_step.size / 2 + 1,
-                                              con_coords[0].y - con_step.size / 2 + 1,
-                                              con_coords[0].x + con_step.size / 2,
-                                              con_coords[0].y + con_step.size / 2),
-                                             fill="#ffffff", width=con_step.width + 2)
-                        img.paste(con_img, (0, 0), con_mask_img)
+                        con_mask_imd = ImageDraw.Draw(con_mask_img)
+                        con_mask_imd.ellipse((con_coords[index].x - (max(con_step.width, step.width) + 2) / 2 + 1,
+                                              con_coords[index].y - (max(con_step.width, step.width) + 2) / 2 + 1,
+                                              con_coords[index].x + (max(con_step.width, step.width) + 2) / 2,
+                                              con_coords[index].y + (max(con_step.width, step.width) + 2) / 2),
+                                             fill="#000000")
 
-                        """if index == 0:
-                            con_coords = [con_coords[0], con_coords[1]]
-                            if con_step.dash is None:
-                                con_coords[1] = Coord((con_coords[0].x + con_coords[1].x) / 2, (con_coords[0].y + con_coords[1].y) / 2)
-                        elif index == len(con_coords) - 1:
-                            con_coords = [con_coords[index - 1], con_coords[index]]
-                            if con_step.dash is None:
-                                con_coords[0] = Coord((con_coords[0].x + con_coords[1].x) / 2, (con_coords[0].y + con_coords[1].y) / 2)
-                        else:
-                            con_coords = [con_coords[index - 1], con_coords[index], con_coords[index + 1]]
-                            if con_step.dash is None:
-                                con_coords[0] = Coord((con_coords[0].x + con_coords[1].x) / 2, (con_coords[0].y + con_coords[1].y) / 2)
-                                con_coords[2] = Coord((con_coords[2].x + con_coords[1].x) / 2, (con_coords[2].y + con_coords[1].y) / 2)
-                        logger.log("Studs: Segment drawn")
-                        if con_step.dash is None:
-                            imd.line(con_coords, fill=con_step.colour, width=con_step.width, joint="curve")
-                            imd.ellipse([con_coords[0].x - con_step.width / 2 + 1,
-                                         con_coords[0].y - con_step.width / 2 + 1,
-                                         con_coords[0].x + con_step.width / 2,
-                                         con_coords[0].y + con_step.width / 2], fill=con_step.colour)
-                            imd.ellipse([con_coords[-1].x - con_step.width / 2 + 1,
-                                         con_coords[-1].y - con_step.width / 2 + 1,
-                                         con_coords[-1].x + con_step.width / 2,
-                                         con_coords[-1].y + con_step.width / 2], fill=con_step.colour)
+                        inter = Image.new("RGBA", (skin.tile_size,)*2, (0,)*4)
+                        inter.paste(con_img, (0, 0), con_mask_img)
+                        img.paste(inter, (0, 0), inter)
 
-                        else:
-                            con_offset_info = mathtools.dash_offset(pre_con_coords, con_step.dash[0],
-                                                                    con_step.dash[1])[index:]
-                            # print(offset_info)
-                            for i, (c1, c2) in enumerate(internal._with_next(con_coords)):
-                                # print(offset_info)
-                                # print(c)
-                                con_o, con_empty_start = con_offset_info[i]
-                                for con_dash_coords in mathtools.dash(c1.x, c1.y, c2.x, c2.y,
-                                                                      con_step.dash[0], con_step.dash[1], con_o,
-                                                                      con_empty_start):
-                                    # print(dash_coords)
-                                    imd.line(con_dash_coords, fill=con_step.colour, width=con_step.width)"""
                 if using_ray:
                     operated.count.remote()
                 else:
@@ -173,7 +133,25 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
     text_list.reverse()
     img = img.crop((0, 0, +img.width, img.height))
     text_list = []
-    return {tile_coord: (img, text_list)}
+    return tile_coord, img, text_list
+
+def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, List[_TextObject]]]):
+    text_dict: dict[_TextObject, list[TileCoord]]
+    for tile_coord, _, text_objects in texts:
+        for text in text_objects:
+            if text_objects not in text_dict: text_dict[text] = []
+            text_dict[text].append(tile_coord)
+    no_intersect: list[tuple[Coord, Coord]] = []
+    for text, tile_coord in text_dict.copy():
+        r = lambda a, b: mathtools.rotate_around_pivot(a, b, text.x, text.y, text.rot)
+        current_box_coords = [
+            (r(text.x-text.w/2, text.y-text.h/2), r(text.x-text.w/2, text.y+text.h/2)),
+            (r(text.x-text.w/2, text.y+text.h/2), r(text.x+text.w/2, text.y+text.h/2)),
+            (r(text.x+text.w/2, text.y+text.h/2), r(text.x+text.w/2, text.y-text.h/2)),
+            (r(text.x+text.w/2, text.y-text.h/2), r(text.x-text.w/2, text.y-text.h/2))
+        ]
+
+
 
 def _draw_text(operated, operations: int, start: RealNum, image: Image.Image, tile_coord: TileCoord, text_list: List[_TextObject],
                save_images: bool, save_dir: Path, using_ray: bool=False) -> Dict[TileCoord, Image.Image]:

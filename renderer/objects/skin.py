@@ -19,7 +19,7 @@ from renderer.objects.nodes import NodeList
 from renderer.types import RealNum, SkinJson, SkinType, Coord, TileCoord
 
 
-@dataclass
+@dataclass(eq=True, frozen=True)
 class _TextObject:
     image: Image.Image
     x: RealNum
@@ -98,7 +98,7 @@ class Skin:
             """Represents the ``styles`` portion of a ComponentTypeInfo.
 
             :param dict json: The JSON of the styles"""
-            def __new__(cls, json: dict, type_info: Skin.ComponentTypeInfo, shape: Literal["point", "line", "area"] | None = None):
+            def __new__(cls, json: dict | None = None, type_info: Skin.ComponentTypeInfo | None = None, shape: Literal["point", "line", "area"] | None = None):
                 if cls != Skin.ComponentTypeInfo.ComponentStyle: return super().__new__(cls)
                 if shape == "point":
                     if json['layer'] == "circle": return Skin.ComponentTypeInfo.PointCircle.__new__(Skin.ComponentTypeInfo.PointCircle, json, type_info)
@@ -119,6 +119,7 @@ class Skin:
             def render(self, *args, **kwargs): pass
 
         class PointCircle(ComponentStyle):
+            # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info = type_info
                 self.layer = "circle"
@@ -135,6 +136,7 @@ class Skin:
                             fill=self.colour, outline=self.outline, width=self.width)
 
         class PointText(ComponentStyle):
+            # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info = type_info
                 self.layer = "text"
@@ -157,6 +159,7 @@ class Skin:
                 #img.text((coords[0][0]+step.offset[0], coords[0][1]+step.offset[1]), component.displayname, fill=step.colour, font=font, anchor=step['anchor'])
             
         class PointSquare(ComponentStyle):
+            # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info = type_info
                 self.layer = "square"
@@ -173,6 +176,7 @@ class Skin:
                               fill=self.colour, outline=self.outline, width=self.width)
 
         class PointImage(ComponentStyle):
+            # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info = type_info
                 self.layer = "image"
@@ -186,6 +190,7 @@ class Skin:
                                  int(coords[0].y - icon.height / 2 + self.offset[1])), icon)
 
         class LineText(ComponentStyle):
+            # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info: Skin.ComponentTypeInfo = type_info
                 self.layer = "text"
@@ -239,6 +244,7 @@ class Skin:
                             counter += 1
                
         class LineBack(ComponentStyle):
+            # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info = type_info
                 self.layer = "back"
@@ -269,11 +275,13 @@ class Skin:
                             imd.line(dash_coords, fill=self.colour, width=self.width)
                 
         class LineFore(LineBack):
+            # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 super().__init__(json, type_info)
                 self.layer = "fore"
 
         class AreaBorderText(ComponentStyle):
+            # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info = type_info
                 self.layer = "bordertext"
@@ -315,6 +323,7 @@ class Skin:
                             text_list.append(_TextObject(abt_ir, tx, ty, tw, th, trot))
 
         class AreaCenterText(ComponentStyle):
+            # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info = type_info
                 self.layer = "centertext"
@@ -358,6 +367,7 @@ class Skin:
                 text_list.append(_TextObject(act_i, cx, cy, cw, ch, 0))
 
         class AreaFill(ComponentStyle):
+            # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info = type_info
                 self.layer = "fill"
@@ -420,6 +430,7 @@ class Skin:
                                  o_coords[0].y + 2 / 2], fill=self.outline)
 
         class AreaCenterImage(ComponentStyle):
+            # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self.type_info: Skin.ComponentTypeInfo = type_info
                 self.layer = "centerimage"

@@ -7,8 +7,8 @@ from renderer.types import Coord
 def _hex_to_colour(h: int | None) -> str | None:
     if h is None: return None
     nh = hex(h)[2:]
-    if len(nh) != 3: h = h.zfill(6)
-    return "#"+h
+    if len(nh) != 6: nh = nh.zfill(6)
+    return "#"+nh
 
 class SkinBuilder:
     tile_size: int

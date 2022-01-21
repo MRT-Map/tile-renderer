@@ -15,7 +15,7 @@ import renderer.validate as validate
 import renderer.internals.rendering as rendering
 from renderer.objects.components import ComponentList, Component
 from renderer.objects.nodes import NodeList
-from renderer.objects.skin import Skin
+from renderer.objects.skin import Skin, _TextObject
 from renderer.types import RealNum, TileCoord
 
 import renderer.tools.components as tools_component_json
@@ -68,7 +68,7 @@ def merge_tiles(images: Union[Path, Dict[TileCoord, Image.Image]], save_images: 
     print(term.green("Determined zoom levels..."), end=" ")
     if not zoom:
         for c in image_dict.keys():
-            if c not in zoom:
+            if c.z not in zoom:
                 zoom.append(c.z)
     print(term.green("determined"))
     for z in zoom:
@@ -101,7 +101,7 @@ def merge_tiles(images: Union[Path, Dict[TileCoord, Image.Image]], save_images: 
         #tile_return[tile_components] = im
         if save_images:
             print(term.green(f"Zoom {z}: ") + "Saving image", end=term.clear_eos+"\r")
-            i.save(f'{save_dir}merge_{z}.png', 'PNG')
+            i.save(save_dir/f'merge_{z}.png', 'PNG')
         tile_return[z] = i
 
     print(term.green("\nAll merges complete"))
@@ -285,10 +285,11 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
             input_.append((operated, operations, render_start, tile_coord, component_group, components, nodes,
                            skin, max_zoom, max_zoom_range, assets_dir, True))
         futures = [ray.remote(rendering._draw_components).remote(*input_[i]) for i in range(len(input_))]
-        prepreresult = ray.get(futures)
+        prepreresult: list[tuple[TileCoord, Image.Image, List[_TextObject]]] = ray.get(futures)
         input_ = []
         for i in prepreresult:
-            tile_coord, (image, text_list) = list(i.items())[0]
+            if i is None: continue
+            tile_coord, image, text_list = i
             input_.append((operated, operations, render_start, image, tile_coord, text_list,
                            save_images, save_dir, True))
         futures = [ray.remote(rendering._draw_text).remote(*input_[i]) for i in range(len(input_))]
