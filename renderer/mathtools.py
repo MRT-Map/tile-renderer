@@ -1,4 +1,6 @@
 import math
+from itertools import product
+
 import numpy as np
 
 from renderer.types import *
@@ -102,6 +104,16 @@ def point_in_poly(xp: RealNum, yp: RealNum, coords: List[Coord]) -> bool:
     bearings = np.where(bearings <= math.pi, bearings, bearings - math.tau)
     wind_num = round(bearings.sum()/math.tau)
     return wind_num != 0
+
+def poly_intersect(poly1: list[Coord], poly2: list[Coord]) -> bool:
+    coords1 = [i for i in internal._with_next(poly1)]
+    coords2 = [i for i in internal._with_next(poly2)]
+    for (c1, c2), (c3, c4) in product(coords1, coords2):
+        if lines_intersect(*c1, *c2, *c3, *c4): return True
+    if all(point_in_poly(x, y, poly2) for x, y in poly1): return True
+    if all(point_in_poly(x, y, poly1) for x, y in poly2): return True
+    return False
+
             
 def poly_center(coords: List[Coord]) -> Coord:
     """

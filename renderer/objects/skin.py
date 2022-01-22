@@ -154,6 +154,7 @@ class Skin:
                 pt_d.text((text_length, self.size + 4), displayname, fill=self.colour, font=font,
                           anchor="mm")
                 tw, th = pt_i.size
+                pt_i = pt_i.crop((0, 0, pt_i.width, pt_i.height))
                 points_text_list.append(_TextObject(pt_i, coords[0].x + self.offset[0], coords[0].y + self.offset[1], tw, th, 0))
                 #font = skin.get_font("", step.size)
                 #img.text((coords[0][0]+step.offset[0], coords[0][1]+step.offset[1]), component.displayname, fill=step.colour, font=font, anchor=step['anchor'])
@@ -221,6 +222,7 @@ class Skin:
                                       fill=self.colour, font=font, anchor="mm")
                             tw, th = lt_i.size[:]
                             lt_i = lt_i.rotate(trot, expand=True)
+                            lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
                             text_list.append(_TextObject(lt_i, tx, ty, tw, th, trot))
                     if "oneWay" in component.tags and text_length <= math.dist(c1, c2):
                         #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Generating oneway arrows")
@@ -240,6 +242,7 @@ class Skin:
                                       anchor="mm")
                             tw, th = lt_i.size[:]
                             lt_i = lt_i.rotate(trot, expand=True)
+                            lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
                             text_list.append(_TextObject(lt_i, tx, ty, tw, th, trot))
                             counter += 1
                
@@ -320,6 +323,7 @@ class Skin:
                                        fill=self.colour, font=font, anchor="mm")
                             tw, th = abt_i.size[:]
                             abt_ir = abt_i.rotate(trot, expand=True)
+                            abt_ir = abt_ir.crop((0, 0, abt_ir.width, abt_ir.height))
                             text_list.append(_TextObject(abt_ir, tx, ty, tw, th, trot))
 
         class AreaCenterText(ComponentStyle):
@@ -362,9 +366,10 @@ class Skin:
 
                 act_i = Image.new('RGBA', (2 * text_length, 2 * text_size), (0, 0, 0, 0))
                 act_d = ImageDraw.Draw(act_i)
-                cw, ch = act_i.size
                 act_d.text((text_length, text_size), text, fill=self.colour, font=font, anchor="mm")
-                text_list.append(_TextObject(act_i, cx, cy, cw, ch, 0))
+                cw, ch = act_i.size[:]
+                act_i = act_i.crop((0, 0, act_i.width, act_i.height))
+                #text_list.append(_TextObject(act_i, cx, cy, cw, ch, 0))
 
         class AreaFill(ComponentStyle):
             # noinspection PyInitNewSignature

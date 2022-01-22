@@ -1,3 +1,5 @@
+from __future__ import annotations
+
 from pathlib import Path
 from typing import Optional, Dict, Union, List, Tuple
 
@@ -285,11 +287,10 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
             input_.append((operated, operations, render_start, tile_coord, component_group, components, nodes,
                            skin, max_zoom, max_zoom_range, assets_dir, True))
         futures = [ray.remote(rendering._draw_components).remote(*input_[i]) for i in range(len(input_))]
-        prepreresult: list[tuple[TileCoord, Image.Image, List[_TextObject]]] = ray.get(futures)
+        prepreresult: list[tuple[TileCoord, Image.Image, List[_TextObject]] | None] = ray.get(futures)
+        prepreresult = list(filter(lambda r: r is not None, prepreresult))
         input_ = []
-        for i in prepreresult:
-            if i is None: continue
-            tile_coord, image, text_list = i
+        for tile_coord, image, text_list in rendering._prevent_text_overlap(prepreresult):
             input_.append((operated, operations, render_start, image, tile_coord, text_list,
                            save_images, save_dir, True))
         futures = [ray.remote(rendering._draw_text).remote(*input_[i]) for i in range(len(input_))]

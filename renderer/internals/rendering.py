@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from itertools import chain
 from pathlib import Path
-from typing import List, Tuple, Dict, Any
+from typing import List, Dict, Any
 
 import blessed
 from PIL import Image, ImageDraw
@@ -131,36 +131,54 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
 
     text_list += points_text_list
     text_list.reverse()
-    img = img.crop((0, 0, +img.width, img.height))
-    text_list = []
     return tile_coord, img, text_list
 
-def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, List[_TextObject]]]):
-    text_dict: dict[_TextObject, list[TileCoord]]
-    for tile_coord, _, text_objects in texts:
-        for text in text_objects:
-            if text_objects not in text_dict: text_dict[text] = []
-            text_dict[text].append(tile_coord)
-    no_intersect: list[tuple[Coord, Coord]] = []
-    for text, tile_coord in text_dict.copy():
-        r = lambda a, b: mathtools.rotate_around_pivot(a, b, text.x, text.y, text.rot)
-        current_box_coords = [
-            (r(text.x-text.w/2, text.y-text.h/2), r(text.x-text.w/2, text.y+text.h/2)),
-            (r(text.x-text.w/2, text.y+text.h/2), r(text.x+text.w/2, text.y+text.h/2)),
-            (r(text.x+text.w/2, text.y+text.h/2), r(text.x+text.w/2, text.y-text.h/2)),
-            (r(text.x+text.w/2, text.y-text.h/2), r(text.x-text.w/2, text.y-text.h/2))
-        ]
-
+def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, List[_TextObject]]]) -> list[tuple[TileCoord, Image.Image, List[_TextObject]]]:
+    imgs: dict[TileCoord, Image.Image] = {tile_coord: img for tile_coord, img, _ in texts}
+    preout = {}
+    for z in list(set(c[0] for c in texts)):
+        text_dict: dict[_TextObject, list[TileCoord]] = {}
+        for tile_coord, _, text_objects in texts:
+            if tile_coord.z != z: continue
+            for text in text_objects:
+                if text_objects not in text_dict: text_dict[text] = []
+                text_dict[text].append(tile_coord)
+        no_intersect: list[list[Coord]] = []
+        is_rendered = True
+        for text in text_dict.copy().keys():
+            r = lambda a, b: mathtools.rotate_around_pivot(a, b, text.x, text.y, text.rot)
+            current_box_coords = [
+                r(text.x-text.w/2, text.y-text.h/2),
+                r(text.x-text.w/2, text.y+text.h/2),
+                r(text.x+text.w/2, text.y+text.h/2),
+                r(text.x+text.w/2, text.y-text.h/2),
+                r(text.x-text.w/2, text.y-text.h/2),
+            ]
+            for other in no_intersect:
+                if mathtools.poly_intersect(current_box_coords, other):
+                    is_rendered = False
+                    del text_dict[text]
+                    break
+            no_intersect.append(current_box_coords)
+            if not is_rendered: break
+        for text, tile_coords in text_dict.keys():
+            for tile_coord in tile_coords:
+                if tile_coord not in preout:
+                    preout[tile_coord] = (imgs[tile_coord], [])
+                preout[tile_coord][1].append(text)
+    for tile_coord, _, _ in texts:
+        if tile_coord not in preout: preout[tile_coord] = (imgs[tile_coord], [])
+    out = [(tile_coord, img, text_objects) for tile_coord, (img, text_objects) in preout.items()]
+    return out
 
 
 def _draw_text(operated, operations: int, start: RealNum, image: Image.Image, tile_coord: TileCoord, text_list: List[_TextObject],
                save_images: bool, save_dir: Path, using_ray: bool=False) -> Dict[TileCoord, Image.Image]:
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
-    dont_cross = []
     processed = 0
     #print(text_list)
     for text in text_list:
-        i = text.image; x = text.x; y = text.y; w = text.w; h = text.h; rot = text.rot
+        """i = text.image; x = text.x; y = text.y; w = text.w; h = text.h; rot = text.rot
         r = lambda a, b: mathtools.rotate_around_pivot(a, b, x, y, rot)
         current_box_coords = [r(x-w/2, y-h/2), r(x-w/2, y+h/2), r(x+w/2, y+h/2), r(x+w/2, y-h/2), r(x-w/2, y-h/2)]
         can_print = True
@@ -182,14 +200,10 @@ def _draw_text(operated, operations: int, start: RealNum, image: Image.Image, ti
             if can_print and mathtools.point_in_poly(current_box_coords[0].x, current_box_coords[0].y, box) or mathtools.point_in_poly(box[0].x, box[0].y, current_box_coords):
                 can_print = False
             if not can_print:
-                break
+                break"""
         processed += 1
-        if can_print:
-            logger.log(f"Text {processed}/{len(text_list)} pasted")
-            image.paste(i, (int(x-i.width/2), int(y-i.height/2)), i)
-        else:
-            logger.log(f"Text {processed}/{len(text_list)} skipped")
-        dont_cross.append(current_box_coords)
+        logger.log(f"Text {processed}/{len(text_list)} pasted")
+        image.paste(text.image, (int(text.x-text.image.width/2), int(text.y-text.image.height/2)), text.image)
     for _ in range(2):
         if using_ray: operated.count.remote()
         else: operated.count()
