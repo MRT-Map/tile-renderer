@@ -136,12 +136,12 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
 def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, List[_TextObject]]]) -> list[tuple[TileCoord, Image.Image, List[_TextObject]]]:
     imgs: dict[TileCoord, Image.Image] = {tile_coord: img for tile_coord, img, _ in texts}
     preout = {}
-    for z in list(set(c[0] for c in texts)):
+    for z in list(set(c[0].z for c in texts)):
         text_dict: dict[_TextObject, list[TileCoord]] = {}
         for tile_coord, _, text_objects in texts:
             if tile_coord.z != z: continue
             for text in text_objects:
-                if text_objects not in text_dict: text_dict[text] = []
+                if text not in text_dict: text_dict[text] = []
                 text_dict[text].append(tile_coord)
         no_intersect: list[list[Coord]] = []
         is_rendered = True
@@ -161,7 +161,7 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, List[_TextOb
                     break
             no_intersect.append(current_box_coords)
             if not is_rendered: break
-        for text, tile_coords in text_dict.keys():
+        for text, tile_coords in text_dict.items():
             for tile_coord in tile_coords:
                 if tile_coord not in preout:
                     preout[tile_coord] = (imgs[tile_coord], [])

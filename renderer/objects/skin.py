@@ -8,6 +8,7 @@ from typing import Literal, Dict, Tuple, List
 from pathlib import Path
 
 import blessed
+import imagehash as imagehash
 from PIL import ImageFont, ImageDraw, Image
 from schema import Schema, And, Or, Regex, Optional
 
@@ -18,6 +19,7 @@ from renderer.objects.components import Component
 from renderer.objects.nodes import NodeList
 from renderer.types import RealNum, SkinJson, SkinType, Coord, TileCoord
 
+Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=16)
 
 @dataclass(eq=True, frozen=True)
 class _TextObject:
@@ -147,6 +149,7 @@ class Skin:
                 
             def render(self, imd: ImageDraw, coords: list[Coord], 
                        displayname: str, assets_dir: Path, points_text_list: list[_TextObject]):
+                if len(displayname.strip()) == 0: return
                 font = self._type_info._skin.get_font("", self.size, assets_dir)
                 text_length = int(imd.textlength(displayname, font))
                 pt_i = Image.new('RGBA', (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0))
@@ -201,6 +204,7 @@ class Skin:
                 
             def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord],
                        assets_dir: Path, component: Component, text_list: list[_TextObject]):
+                if len(component.displayname) == 0: return
                 #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating text length")
                 font = self._type_info._skin.get_font("", self.size, assets_dir)
                 text_length = int(imd.textlength(component.displayname, font))
@@ -294,6 +298,7 @@ class Skin:
                 
             def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord], component: Component,
                        assets_dir: Path, text_list: list[_TextObject]):
+                if len(component.displayname.strip()) == 0: return
                 font = self._type_info._skin.get_font("", self.size, assets_dir)
                 text_length = int(imd.textlength(component.displayname.replace('\n', ''), font))
                 for c1, c2 in internal._with_next(coords):
@@ -337,6 +342,7 @@ class Skin:
                 
             def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord], component: Component,
                        assets_dir: Path, text_list: list[_TextObject]):
+                if len(component.displayname.strip()) == 0: return
                 cx, cy = mathtools.poly_center(coords)
                 cx += self.offset[0]
                 cy += self.offset[1]
@@ -369,7 +375,7 @@ class Skin:
                 act_d.text((text_length, text_size), text, fill=self.colour, font=font, anchor="mm")
                 cw, ch = act_i.size[:]
                 act_i = act_i.crop((0, 0, act_i.width, act_i.height))
-                #text_list.append(_TextObject(act_i, cx, cy, cw, ch, 0))
+                text_list.append(_TextObject(act_i, cx, cy, cw, ch, 0))
 
         class AreaFill(ComponentStyle):
             # noinspection PyInitNewSignature

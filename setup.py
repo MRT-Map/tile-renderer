@@ -28,7 +28,8 @@ setup(
         'schema',
         'numpy',
         'click',
-        'psutil'
+        'psutil',
+        'imagehash'
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
