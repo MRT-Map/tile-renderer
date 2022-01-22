@@ -432,7 +432,8 @@ def main():
                      width=8,
                      dash=(50, 25)),
         CS.line_text(colour=0x808080,
-                     size=4)
+                     offset=16,
+                     size=16)
     ]
     s['rail_underground'] = rail_underground
 
@@ -623,7 +624,8 @@ def main():
         CS.line_fore(colour=0x808080,
                      width=8),
         CS.line_text(colour=0x808080,
-                     size=4)
+                     offset=16,
+                     size=16)
     ]
     s['rail'] = rail
 
@@ -782,7 +784,8 @@ def main():
         CS.line_fore(colour=0x808080,
                      width=8),
         CS.line_text(colour=0x000000,
-                     size=40)
+                     offset=16,
+                     size=16)
     ]
     s['rail_elevated'] = rail_elevated
 

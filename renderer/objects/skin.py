@@ -97,9 +97,7 @@ class Skin:
                 return []
         
         class ComponentStyle:
-            """Represents the ``styles`` portion of a ComponentTypeInfo.
-
-            :param dict json: The JSON of the styles"""
+            """Represents the ``styles`` portion of a ComponentTypeInfo."""
             def __new__(cls, json: dict | None = None, type_info: Skin.ComponentTypeInfo | None = None, shape: Literal["point", "line", "area"] | None = None):
                 if cls != Skin.ComponentTypeInfo.ComponentStyle: return super().__new__(cls)
                 if shape == "point":
@@ -372,7 +370,7 @@ class Skin:
 
                 act_i = Image.new('RGBA', (2 * text_length, 2 * text_size), (0, 0, 0, 0))
                 act_d = ImageDraw.Draw(act_i)
-                act_d.text((text_length, text_size), text, fill=self.colour, font=font, anchor="mm")
+                act_d.multiline_text((text_length, text_size), text, fill=self.colour, font=font, anchor="mm")
                 cw, ch = act_i.size[:]
                 act_i = act_i.crop((0, 0, act_i.width, act_i.height))
                 text_list.append(_TextObject(act_i, cx, cy, cw, ch, 0))
