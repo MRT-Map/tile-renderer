@@ -1,20 +1,20 @@
+from __future__ import annotations
+
 import math
 from itertools import product
 
 import numpy as np
 
 from renderer.types import *
-from typing import Optional, Tuple
 
 
-def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: int=1, return_both: bool=False) -> Union[List[Tuple[Coord, RealNum]], List[List[Tuple[Coord, RealNum]]]]:
+def midpoint(c1: Coord, c2: Coord, o: RealNum, n: int = 1,
+             return_both: bool = False) -> list[tuple[Coord, RealNum]] | list[list[tuple[Coord, RealNum]]]:
     """
     Calculates the midpoint of two lines, offsets the distance away from the line, and calculates the rotation of the line.
       
-    :param RealNum x1: the x-coordinate of the 1st point
-    :param RealNum y1: the y-coordinate of the 1st point
-    :param RealNum x2: the x-coordinate of the 2nd point
-    :param RealNum y2: the y-coordinate of the 2nd point
+    :param RealNum c1: the 1st point
+    :param RealNum c2: the 2nd point
     :param RealNum o: the offset from the line. If positive, the point above the line is returned; if negative, the point below the line is returned
     :param int n: the number of midpoints on a single segment
     :param bool return_both: if True, it will return both possible points.
@@ -22,31 +22,31 @@ def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: 
     :return: A list of *(lists of, when return_both=True)* tuples in the form of (x, y, rot)
     :rtype: list[tuple[Coord, RealNum]] *when return_both=False,* list[list[tuple[Coord, RealNum]]] *when return_both=True*
     """
-    #print(x1, y1, x2, y2, o, n)
+    #print(c1.x, c1.y, c2.x, c2.y, o, n)
     points = []
     for p in range(1, n+1):
-        x3, y3 = (x1+p*(x2-x1)/(n+1), y1+p*(y2-y1)/(n+1))
-        #print(x3, y3)
-        #x3, y3 = ((x1+x2)/2, (y1+y2)/2)
-        if x1 == x2:
+        c3 = Coord(c1.x+p*(c2.x-c1.x)/(n+1), c1.y+p*(c2.y-c1.y)/(n+1))
+        #print(c3.x, c3.y)
+        #c3.x, c3.y = ((c1.x+c2.x)/2, (c1.y+c2.y)/2)
+        if c1.x == c2.x:
             m1 = None
             m2 = 0
-        elif y1 == y2:
+        elif c1.y == c2.y:
             m1 = 0
             m2 = None
         else:
-            m1 = (y2-y1)/(x2-x1)
+            m1 = (c2.y-c1.y)/(c2.x-c1.x)
             m2 = -1 / m1
-        results = points_away(x3, y3, o, m2)
+        results = points_away(c3.x, c3.y, o, m2)
         if return_both:
             #print(eq1, eq2)
-            rot = 90 if x1 == x2 else math.degrees(-math.atan(m1))
+            rot = 90 if c1.x == c2.x else math.degrees(-math.atan(m1))
             try:
                 points += [(results[0][0], results[0][1], rot), (results[1][0], results[1][1], rot)]
             except IndexError:
                 pass
         #print(results)
-        elif x1 == x2:
+        elif c1.x == c2.x:
             if o < 0:
                 c = results[0] if results[0][0] < results[1][0] else results[1]
             else:
@@ -62,25 +62,21 @@ def midpoint(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, o: RealNum, n: 
             points.append((c, rot))
     return points
 
-def lines_intersect(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, x3: RealNum, y3: RealNum, x4: RealNum, y4: RealNum) -> bool:
+def lines_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
     """
     Finds if two segments intersect.
     
-    :param RealNum x1: the x-coordinate of the 1st point of the 1st segment.
-    :param RealNum y1: the y-coordinate of the 1st point of the 1st segment.
-    :param RealNum x2: the x-coordinate of the 2nd point of the 1st segment.
-    :param RealNum y2: the y-coordinate of the 2nd point of the 1st segment.
-    :param RealNum x3: the x-coordinate of the 1st point of the 2nd segment.
-    :param RealNum y3: the y-coordinate of the 1st point of the 2nd segment.
-    :param RealNum x4: the x-coordinate of the 2nd point of the 2nd segment.
-    :param RealNum y4: the y-coordinate of the 2nd point of the 2nd segment.
+    :param RealNum c1:  the 1st point of the 1st segment.
+    :param RealNum c2:  the 2nd point of the 1st segment.
+    :param RealNum c3:  the 1st point of the 2nd segment.
+    :param RealNum c4:  the 2nd point of the 2nd segment.
         
     :returns: Whether the two segments intersect.
     :rtype: bool
     """
     # https://stackoverflow.com/questions/20677795/how-do-i-compute-the-intersection-point-of-two-lines lol
-    xdiff = (x1 - x2, x3 - x4)
-    ydiff = (y1 - y2, y3 - y4)
+    xdiff = (c1.x - c2.x, c3.x - c4.x)
+    ydiff = (c1.y - c2.y, c3.y - c4.y)
     det = lambda a, b: a[0] * b[1] - a[1] * b[0]
     return det(xdiff, ydiff) != 0
 
@@ -115,7 +111,7 @@ def poly_intersect(poly1: list[Coord], poly2: list[Coord]) -> bool:
     return False
 
             
-def poly_center(coords: List[Coord]) -> Coord:
+def poly_center(coords: list[Coord]) -> Coord:
     """
     Finds the center point of a polygon.
       
@@ -131,7 +127,7 @@ def poly_center(coords: List[Coord]) -> Coord:
     my = (ys[:, 0]+ys[:, 1])/2
     return Coord(mx.sum()/len(mx), my.sum()/len(my))
 
-def line_in_box(line: List[Coord], top: RealNum, bottom: RealNum, left: RealNum, right: RealNum) -> bool:
+def line_in_box(line: list[Coord], top: RealNum, bottom: RealNum, left: RealNum, right: RealNum) -> bool:
     """
     Finds if any nodes of a line go within the box.
       
@@ -145,92 +141,90 @@ def line_in_box(line: List[Coord], top: RealNum, bottom: RealNum, left: RealNum,
     :rtype: bool
     """
     for i in range(len(line)-1):
-        x1, y1 = line[i]
-        x2, y2 = line[i+1]
-        for y3, x3, y4, x4 in [(top, left, bottom, left),
-                               (bottom, left, bottom, right),
-                               (bottom, right, top, right),
-                               (top, right, top, left)]:
-            if lines_intersect(x1, y1, x2, y2, x3, y3, x4, y4):
+        c1 = line[i]
+        c2 = line[i+1]
+        for c3, c4 in [(Coord(top, left), Coord(bottom, left)),
+                       (Coord(bottom, left), Coord(bottom, right)),
+                       (Coord(bottom, right), Coord(top, right)),
+                       (Coord(top, right), Coord(top, left))]:
+            if lines_intersect(c1, c2, c3, c4):
                 return True
-    for x, y in line:
-        if top < x < bottom or left < y < right:
+    for c in line:
+        if top < c.x < bottom or left < c.y < right:
             return True
     return False
 
-def dash(x1: RealNum, y1: RealNum, x2: RealNum, y2: RealNum, d: RealNum, g: RealNum, o: RealNum=0, empty_start: bool=False) -> List[List[Coord]]:
+def dash(c1: Coord, c2: Coord, d: RealNum, g: RealNum, o: RealNum=0, empty_start: bool=False) -> List[List[Coord]]:
     """
     Finds points along a segment that are a specified distance apart.
-      
-    :param RealNum x1: the x-coordinate of the 1st point
-    :param RealNum y1: the y-coordinate of the 1st point
-    :param RealNum x2: the x-coordinate of the 2nd point
-    :param RealNum y2: the y-coordinate of the 2nd point
+
+    :param Coord c1: the 1st point
+    :param Coord c2: the 2nd point
     :param RealNum d: the length of a single dash
     :param RealNum g: the length of the gap between dashes
-    :param RealNum o: the offset from (x1,y1) towards (x2,y2) before dashes are calculated
-    :param bool empty_start: Whether to start the line from (x1,y1) empty before the start of the next dash
+    :param RealNum o: the offset from (c1.x,c1.y) towards (c2.x,c2.y) before dashes are calculated
+    :param bool empty_start: Whether to start the line from (c1.x,c1.y) empty before the start of the next dash
         
-    :returns: A list of points along the segment, given in [[(x1, y1), (x2, y2)], etc]
+    :returns: A list of points along the segment, given in [[(c1.x, c1.y), (c2.x, c2.y)], etc.]
     :rtype: list[list[Coord]]
     """
     if d <= 0 or g <= 0:
         raise ValueError("dash or gap length cannot be <= 0")
-    m = None if x1 == x2 else (y2-y1)/(x2-x1)
+    m = None if c1.x == c2.x else (c2.y-c1.y)/(c2.x-c1.x)
     dash_ = []
     gap = False
 
     if o == 0:
-        x3, y3 = (x1, y1)
+        c3 = c1
     else:
-        results = points_away(x1, y1, o, m)
-        x3, y3 = results[0] if min(x1, x2) <= results[0][0] <= max(x1, x2) and min(y1, y2) <= results[0][1] <= max(y1, y2) else results[1]
+        results = points_away(c1.x, c1.y, o, m)
+        c3 = results[0] if min(c1.x, c2.x) <= results[0][0] <= max(c1.x, c2.x) and min(c1.y, c2.y) <= results[0][1] <= max(c1.y, c2.y) else results[1]
     if not empty_start and o != 0:
-        dash_.append([Coord(x1, y1), Coord(x3, y3)])
+        dash_.append([Coord(c1.x, c1.y), Coord(c3.x, c3.y)])
         gap = True
     else:
-        dash_.append([Coord(x3, y3)])
+        dash_.append([Coord(c3.x, c3.y)])
 
-    while min(x1, x2) <= x3 <= max(x1, x2) and min(y1, y2) <= y3 <= max(y1, y2):
+    while min(c1.x, c2.x) <= c3.x <= max(c1.x, c2.x) and min(c1.y, c2.y) <= c3.y <= max(c1.y, c2.y):
         if gap:
-            results = points_away(x3, y3, g, m)
-            if np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1):
-                if math.dist(results[0], (x1, y1)) > math.dist(results[1], (x1, y1)):
-                    x3, y3 = results[0]
+            results = points_away(c3.x, c3.y, g, m)
+            if np.sign(c2.x-c1.x) == np.sign(results[0][0]-c1.x) and np.sign(c2.y-c1.y) == np.sign(results[0][1]-c1.y):
+                if math.dist(results[0], (c1.x, c1.y)) > math.dist(results[1], (c1.x, c1.y)):
+                    c3.x, c3.y = results[0]
                 else:
-                    x3, y3 = results[1]
+                    c3.x, c3.y = results[1]
             else:
-                x3, y3 = results[1]
-            #x3, y3 = results[0] if np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1) and math.dist(results[0], (x1,y1)) > math.dist(results[1], (x1,y1)) else results[1]
-            dash_.append([Coord(x3, y3)])
+                c3.x, c3.y = results[1]
+            #c3.x, c3.y = results[0] if np.sign(c2.x-c1.x) == np.sign(results[0][0]-c1.x) and np.sign(c2.y-c1.y) == np.sign(results[0][1]-c1.y) and math.dist(results[0], (c1.x,c1.y)) > math.dist(results[1], (c1.x,c1.y)) else results[1]
+            dash_.append([Coord(c3.x, c3.y)])
             gap = False
         else:
-            results = points_away(x3, y3, d, m)
+            results = points_away(c3.x, c3.y, d, m)
             #print(results)
-            #print(np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1))
-            if np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1):
-                if not (np.sign(x2-x1) == np.sign(results[1][0]-x1)
-                        and np.sign(y2-y1) == np.sign(results[1][1]-y1))\
-                        or math.dist(results[0], (x1, y1)) > math.dist(results[1], (x1, y1)):
-                    x3, y3 = results[0]
+            #print(np.sign(c2.x-c1.x) == np.sign(results[0][0]-c1.x) and np.sign(c2.y-c1.y) == np.sign(results[0][1]-c1.y))
+            if np.sign(c2.x-c1.x) == np.sign(results[0][0]-c1.x) and np.sign(c2.y-c1.y) == np.sign(results[0][1]-c1.y):
+                if not (np.sign(c2.x-c1.x) == np.sign(results[1][0]-c1.x)
+                        and np.sign(c2.y-c1.y) == np.sign(results[1][1]-c1.y))\
+                        or math.dist(results[0], (c1.x, c1.y)) > math.dist(results[1], (c1.x, c1.y)):
+                    c3.x, c3.y = results[0]
                 else:
-                    x3, y3 = results[1]
+                    c3.x, c3.y = results[1]
             else:
-                x3, y3 = results[1]
-            #x3, y3 = results[0] if np.sign(x2-x1) == np.sign(results[0][0]-x1) and np.sign(y2-y1) == np.sign(results[0][1]-y1) and math.dist(results[0], (x1,y1)) > math.dist(results[1], (x1,y1)) else results[1]
-            dash_[-1].append(Coord(x3, y3))
+                c3.x, c3.y = results[1]
+            #c3.x, c3.y = results[0] if np.sign(c2.x-c1.x) == np.sign(results[0][0]-c1.x) and np.sign(c2.y-c1.y) == np.sign(results[0][1]-c1.y) and math.dist(results[0], (c1.x,c1.y)) > math.dist(results[1], (c1.x,c1.y)) else results[1]
+            dash_[-1].append(Coord(c3.x, c3.y))
             gap = True
     
     if len(dash_[-1]) == 1: # last is gap
         dash_.pop()
     else: # last is dash
-        dash_[-1][1] = Coord(x2, y2)
+        dash_[-1][1] = Coord(c2.x, c2.y)
         if dash_[-1][0] == dash_[-1][1]:
             dash_.pop()
 
     return dash_
 
-def dash_offset(coords: List[Coord], d: RealNum, g: RealNum) -> List[Tuple[RealNum, bool]]:
+def dash_offset(coords: List[Coord], d: RealNum, g: RealNum) -> list[tuple[RealNum, bool]]:
     """
     Calculates the offsets on each coord of a line for a smoother dashing sequence.
 
@@ -246,7 +240,7 @@ def dash_offset(coords: List[Coord], d: RealNum, g: RealNum) -> List[Tuple[RealN
     empty_start = False
     left = None
     for c in range(len(coords)-1):
-        dashes = dash(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], d, g, o, empty_start)
+        dashes = dash(coords[c], coords[c+1], d, g, o, empty_start)
         if not dashes: #line has no dashes
             prev = 0 if offsets == [] or left is None else left
             remnant = math.dist(coords[c], coords[c+1])
@@ -305,7 +299,7 @@ def rotate_around_pivot(x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta:
     ny += py
     return Coord(nx, ny)
 
-def points_away(x: RealNum, y: RealNum, d: RealNum, m: Optional[RealNum]) -> List[Coord]:
+def points_away(x: RealNum, y: RealNum, d: RealNum, m: RealNum | None) -> List[Coord]:
     """
     Finds two points that are a specified distance away from a specified point, all on a straight line.
 
@@ -315,7 +309,7 @@ def points_away(x: RealNum, y: RealNum, d: RealNum, m: Optional[RealNum]) -> Lis
     :param m: the gradient of the line. Give ``None`` for a gradient of undefined.
     :type m: RealNum | None
 
-    :returns: Given in ``[(x1, y1), (x2, y2)]``
+    :returns: Given in ``[(c1.x, c1.y), (c2.x, c2.y)]``
     :rtype: list[Coord]
     """
     theta = math.atan(m) if m is not None else math.pi / 2

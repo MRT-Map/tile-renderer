@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from itertools import chain
 from pathlib import Path
-from typing import List, Dict, Any
+from typing import list, Dict, Any
 
 import blessed
 from PIL import Image, ImageDraw
@@ -40,9 +40,9 @@ class _Logger:
             print(term.green(f"00.0% | 0.0s left | ") + f"{self.tile_coords}: " + term.bright_black(msg), flush=True)
 
 
-def _draw_components(operated, operations: int, start: RealNum, tile_coord: TileCoord, tile_components: List[List[Component]],
+def _draw_components(operated, operations: int, start: RealNum, tile_coord: TileCoord, tile_components: list[list[Component]],
                      all_components: ComponentList, nodes: NodeList, skin: Skin, max_zoom: int, max_zoom_range: RealNum,
-                     assets_dir: Path, using_ray: bool=False) -> tuple[TileCoord, Image.Image, List[_TextObject]] | None:
+                     assets_dir: Path, using_ray: bool=False) -> tuple[TileCoord, Image.Image, list[_TextObject]] | None:
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
     if tile_components == [[]]:
         logger.log("Render complete")
@@ -52,8 +52,8 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
     size = max_zoom_range * 2 ** (max_zoom - tile_coord[0])
     img = Image.new(mode="RGBA", size=(skin.tile_size,)*2, color=skin.background)
     imd = ImageDraw.Draw(img)
-    text_list: List[_TextObject] = []
-    points_text_list: List[_TextObject] = []
+    text_list: list[_TextObject] = []
+    points_text_list: list[_TextObject] = []
 
     for group in tile_components:
         type_info = skin[group[0].type]
@@ -94,7 +94,7 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
 
             if type_info.shape == "line" and "road" in type_info.tags and step.layer == "back":
                 logger.log("Rendering studs")
-                con_nodes: List[str] = list(chain(*(component.nodes for component in group)))
+                con_nodes: list[str] = list(chain(*(component.nodes for component in group)))
                 connected: list[tuple[Component, int]] = list(chain(*(tools.nodes.find_components_attached(x, all_components) for x in con_nodes)))
                 for con_component, index in connected:
                     if "road" not in skin[con_component.type].tags:
@@ -133,7 +133,7 @@ def _draw_components(operated, operations: int, start: RealNum, tile_coord: Tile
     text_list.reverse()
     return tile_coord, img, text_list
 
-def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, List[_TextObject]]]) -> list[tuple[TileCoord, Image.Image, List[_TextObject]]]:
+def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextObject]]]) -> list[tuple[TileCoord, Image.Image, list[_TextObject]]]:
     imgs: dict[TileCoord, Image.Image] = {tile_coord: img for tile_coord, img, _ in texts}
     preout = {}
     for z in list(set(c[0].z for c in texts)):
@@ -172,7 +172,7 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, List[_TextOb
     return out
 
 
-def _draw_text(operated, operations: int, start: RealNum, image: Image.Image, tile_coord: TileCoord, text_list: List[_TextObject],
+def _draw_text(operated, operations: int, start: RealNum, image: Image.Image, tile_coord: TileCoord, text_list: list[_TextObject],
                save_images: bool, save_dir: Path, using_ray: bool=False) -> Dict[TileCoord, Image.Image]:
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
     processed = 0

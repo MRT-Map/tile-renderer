@@ -13,3 +13,5 @@ dist
 build
 tile_renderer.egg-info
 __pycache__
+.idea/*
+.DS_Store

@@ -35,8 +35,8 @@ class _MultiprocessingOperatedHandler:
     def count(self):
         self.operated.value += 1
 
-def merge_tiles(images: Union[Path, Dict[TileCoord, Image.Image]], save_images: bool=True, save_dir: Path=Path.cwd(),
-                zoom: Optional[List[int]]=None) -> Dict[int, Image.Image]:
+def merge_tiles(images: Path | dict[TileCoord, Image], save_images: bool=True, save_dir: Path=Path.cwd(),
+                zoom: list[int] | None = None) -> Dict[int, Image.Image]:
     """
     Merges tiles rendered by :py:func:`render`.
 
@@ -110,8 +110,8 @@ def merge_tiles(images: Union[Path, Dict[TileCoord, Image.Image]], save_images: 
     return tile_return
 
 def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: int, max_zoom_range: RealNum,
-           skin: Skin=Skin.from_name("default"), save_images: bool=True, save_dir: Path= Path.cwd(), assets_dir: Path=Path(__file__).parent/"skins"/"assets",
-           processes: int=psutil.cpu_count(), tiles: Optional[List[TileCoord]]=None, offset: Tuple[RealNum, RealNum]=(0, 0), use_ray: bool=True) -> Dict[TileCoord, Image.Image]:
+           skin: Skin = Skin.from_name("default"), save_images: bool=True, save_dir: Path = Path.cwd(), assets_dir: Path = Path(__file__).parent/"skins"/"assets",
+           processes: int = psutil.cpu_count(), tiles: list[TileCoord] | None = None, offset: tuple[RealNum, RealNum] = (0, 0), use_ray: bool = True) -> Dict[TileCoord, Image.Image]:
     # noinspection GrazieInspection
     """
         Renders tiles from given coordinates and zoom values.

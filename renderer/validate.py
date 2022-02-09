@@ -4,7 +4,7 @@ from renderer.objects.nodes import NodeList
 from renderer.types import *
 
 
-def v_coords(coords: List[Coord]) -> Literal[True]:
+def v_coords(coords: list[Coord]) -> Literal[True]:
     """
     Validates a list of coordinates.
       
@@ -22,7 +22,7 @@ def v_coords(coords: List[Coord]) -> Literal[True]:
                 raise TypeError(f"Coordinate {n} is not type 'int/float'")
     return True
 
-def v_tile_coords(tiles: List[TileCoord], min_zoom: int, max_zoom: int) -> Literal[True]:
+def v_tile_coords(tiles: list[TileCoord], min_zoom: int, max_zoom: int) -> Literal[True]:
     """
     Validates a list of tile coordinates.
       
@@ -46,7 +46,7 @@ def v_tile_coords(tiles: List[TileCoord], min_zoom: int, max_zoom: int) -> Liter
             raise TypeError(f"Zoom value {item[0]} is not an integer")
     return True
 
-def v_node_list(nodes: List[str], all_nodes: NodeList) -> Literal[True]:
+def v_node_list(nodes: list[str], all_nodes: NodeList) -> Literal[True]:
     """
     Validates a list of node IDs.
       
