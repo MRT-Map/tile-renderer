@@ -9,7 +9,7 @@ from renderer.types import *
 
 term = blessed.Terminal()
 
-def find_ends(coords: List[TileCoord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]:
+def find_ends(coords: list[TileCoord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]:
     """
     Find the minimum and maximum x/y values of a set of TileCoords.
 

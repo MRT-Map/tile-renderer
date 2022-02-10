@@ -1,4 +1,4 @@
-from typing import Union, List, Dict, TypedDict, Literal, Any, NamedTuple
+from typing import Union, TypedDict, Literal, Any, NamedTuple
 
 from renderer.internals import internal
 
@@ -32,7 +32,7 @@ NodeJson = TypedDict('NodeJson', {
     'connections': list
 })
 """Represents a node JSON object."""
-NodeListJson: TypeAlias = Dict[str, NodeJson]
+NodeListJson: TypeAlias = dict[str, NodeJson]
 """Represents a node list JSON."""
 
 ComponentJson = TypedDict('ComponentJson', {
@@ -40,29 +40,29 @@ ComponentJson = TypedDict('ComponentJson', {
     'displayname': str,
     'description': str,
     'layer': RealNum,
-    'nodes': List[str],
-    'attrs': Dict[str, Any],
-    'hollows': List[List[str]]
+    'nodes': list[str],
+    'attrs': dict[str, Any],
+    'hollows': list[list[str]]
 }, total=False)
 """Represents a component JSON object."""
-ComponentListJson: TypeAlias = Dict[str, ComponentJson]
+ComponentListJson: TypeAlias = dict[str, ComponentJson]
 """Represents a component list JSON."""
 
 SkinInfo = TypedDict('SkinInfo', {
     'size': int,
-    'font': Dict[str, str],
+    'font': dict[str, str],
     'background': str
 })
 """Represents the ``info`` portion of a skin JSON."""
 SkinType = TypedDict('SkinType', {
-    'tags': List[str],
+    'tags': list[str],
     'type': Literal['point', 'line', 'area'],
-    'style': Dict[str, list]
+    'style': dict[str, list]
 })
 """Represents a component type in the ``types`` portion of a skin JSON."""
 SkinJson = TypedDict('SkinJson', {
     'info': SkinInfo,
-    'order': List[str],
-    'types': Dict[str, SkinType]
+    'order': list[str],
+    'types': dict[str, SkinType]
 })
 """Represents a skin JSON."""

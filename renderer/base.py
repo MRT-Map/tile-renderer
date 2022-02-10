@@ -1,7 +1,6 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Optional, Dict, Union, List, Tuple
 
 import psutil
 from PIL import Image
@@ -36,7 +35,7 @@ class _MultiprocessingOperatedHandler:
         self.operated.value += 1
 
 def merge_tiles(images: Path | dict[TileCoord, Image], save_images: bool=True, save_dir: Path=Path.cwd(),
-                zoom: list[int] | None = None) -> Dict[int, Image.Image]:
+                zoom: list[int] | None = None) -> dict[int, Image.Image]:
     """
     Merges tiles rendered by :py:func:`render`.
 
@@ -110,8 +109,8 @@ def merge_tiles(images: Path | dict[TileCoord, Image], save_images: bool=True, s
     return tile_return
 
 def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: int, max_zoom_range: RealNum,
-           skin: Skin = Skin.from_name("default"), save_images: bool=True, save_dir: Path = Path.cwd(), assets_dir: Path = Path(__file__).parent/"skins"/"assets",
-           processes: int = psutil.cpu_count(), tiles: list[TileCoord] | None = None, offset: tuple[RealNum, RealNum] = (0, 0), use_ray: bool = True) -> Dict[TileCoord, Image.Image]:
+           skin: Skin = Skin.from_name("default"), save_images: bool = True, save_dir: Path = Path.cwd(), assets_dir: Path = Path(__file__).parent/"skins"/"assets",
+           processes: int = psutil.cpu_count(), tiles: list[TileCoord] | None = None, offset: tuple[RealNum, RealNum] = (0, 0), use_ray: bool = True) -> dict[TileCoord, Image.Image]:
     # noinspection GrazieInspection
     """
         Renders tiles from given coordinates and zoom values.
@@ -159,7 +158,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
 
     print(term.green("found\nRemoving components with unknown type..."), end=" ")
     # remove components whose type is not in skin
-    remove_list: List[str] = []
+    remove_list: list[str] = []
     for component in components.component_values():
         if component.type not in skin.order:
             remove_list.append(component.name)
@@ -172,7 +171,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
 
     print(term.green("Sorting components by tiles..."), end=" ")
     #sort components by tiles
-    tile_list: Dict[TileCoord, List[Component]] = {}
+    tile_list: dict[TileCoord, list[Component]] = {}
     for tile in tiles:
         tile_list[tile] = []
     for component in components.component_values():
@@ -184,25 +183,25 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
 
     process_start = time.time() * 1000
     processed = 0
-    timeLeft = 0.0
+    time_left = 0.0
     l = lambda processed_count, time_left, tile_components_, msg: \
         term.green(f"{internal._percentage(processed_count, len(tile_list))}% | {internal._ms_to_time(time_left)} left | ") \
         + f"{tile_components_}: " + term.bright_black(msg) + term.clear_eos
     print(term.green("sorted\n")+term.bright_green("Starting processing"))
-    grouped_tile_list: Dict[TileCoord, List[List[Component]]] = {}
+    grouped_tile_list: dict[TileCoord, list[list[Component]]] = {}
     for tile_coord, tile_components in tile_list.items():
         #sort components in tiles by layer
-        new_tile_components: Dict[float, List[Component]] = {}
+        new_tile_components: dict[float, list[Component]] = {}
         for component in tile_components:
             if component.layer not in new_tile_components.keys():
                 new_tile_components[component.layer] = []
             new_tile_components[component.layer].append(component)
-        with term.location(): print(l(processed, timeLeft, tile_coord, "Sorted component by layer"), end="\r")
+        with term.location(): print(l(processed, time_left, tile_coord, "Sorted component by layer"), end="\r")
 
         #sort components in layers in files by type
         new_tile_components = {layer: sorted(component_list, key=lambda x: skin.order.index(x.type))
                                for layer, component_list in new_tile_components.items()}
-        with term.location(): print(l(processed, timeLeft, tile_coord, "Sorted component by type"), end="\r")
+        with term.location(): print(l(processed, time_left, tile_coord, "Sorted component by type"), end="\r")
 
         #merge layers
         tile_components = []
@@ -210,10 +209,10 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
         for layer in layers:
             for component in new_tile_components[layer]:
                 tile_components.append(component)
-        with term.location(): print(l(processed, timeLeft, tile_coord, "Merged layers"), end="\r")
+        with term.location(): print(l(processed, time_left, tile_coord, "Merged layers"), end="\r")
 
         #groups components of the same type if "road" tag present
-        newer_tile_components: List[List[Component]] = [[]]
+        newer_tile_components: list[list[Component]] = [[]]
         # keys = list(tile_list[tile_components].keys())
         # for i in range(len(tile_list[tile_components])):
         for i, component in enumerate(tile_components):
@@ -224,16 +223,15 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
                 newer_tile_components.append([])
 
         grouped_tile_list[tile_coord] = newer_tile_components
-        with term.location(): print(l(processed, timeLeft, tile_coord, "Components grouped"), end="\r")
+        with term.location(): print(l(processed, time_left, tile_coord, "Components grouped"), end="\r")
 
         processed += 1
-        timeLeft = internal._time_remaining(process_start, processed, len(tile_list))
+        time_left = internal._time_remaining(process_start, processed, len(tile_list))
         #time_left = round(((int(round(time.time() * 1000)) - process_start) / processed * (len(tile_list) - processed)), 2)
 
     print(term.green("100.00% | 0.0s left | ") + "Processing complete" + term.clear_eos)
 
-    #count # of rendering operations
-    print(term.bright_green("Counting no. of operations"))
+    #count # of rendering operations for part 1
     operations = 0
     op_tiles = {}
     tile_operations = 0
@@ -250,8 +248,6 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
                 if info.shape == "line" and "road" in info.tags and step.layer == "back":
                     operations += 1
                     tile_operations += 1
-        operations += 2
-        tile_operations += 2 #text
 
         op_tiles[tile_coord] = tile_operations
         tile_operations = 0
@@ -259,7 +255,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
 
     #render
     render_start = time.time() * 1000
-    print(term.bright_green("\nStarting render"))
+    print(term.bright_green("\nRendering components..."))
     if use_ray:
         try: # noinspection PyPackageRequirements
             import ray
@@ -287,14 +283,16 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
             input_.append((operated, operations, render_start, tile_coord, component_group, components, nodes,
                            skin, max_zoom, max_zoom_range, assets_dir, True))
         futures = [ray.remote(rendering._draw_components).remote(*input_[i]) for i in range(len(input_))]
-        prepreresult: list[tuple[TileCoord, Image.Image, List[_TextObject]] | None] = ray.get(futures)
+        prepreresult: list[tuple[TileCoord, Image.Image, list[_TextObject]] | None] = ray.get(futures)
         prepreresult = list(filter(lambda r: r is not None, prepreresult))
+
         input_ = []
         for tile_coord, image, text_list in rendering._prevent_text_overlap(prepreresult):
             input_.append((operated, operations, render_start, image, tile_coord, text_list,
                            save_images, save_dir, True))
         futures = [ray.remote(rendering._draw_text).remote(*input_[i]) for i in range(len(input_))]
         preresult = ray.get(futures)
+
         result = {}
         for i in preresult:
             if i is None:
@@ -303,7 +301,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
             result[k] = v
         ray.shutdown()
     else:
-        if __name__ == 'renderer.base':
+        if __name__ == 'renderer.base': # TODO update for new procedure
             operated = _MultiprocessingOperatedHandler(multiprocessing.Manager())
 
             input_ = []

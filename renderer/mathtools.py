@@ -80,7 +80,7 @@ def lines_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
     det = lambda a, b: a[0] * b[1] - a[1] * b[0]
     return det(xdiff, ydiff) != 0
 
-def point_in_poly(xp: RealNum, yp: RealNum, coords: List[Coord]) -> bool:
+def point_in_poly(xp: RealNum, yp: RealNum, coords: list[Coord]) -> bool:
     """
     Finds if a point is in a polygon.
         
@@ -154,7 +154,7 @@ def line_in_box(line: list[Coord], top: RealNum, bottom: RealNum, left: RealNum,
             return True
     return False
 
-def dash(c1: Coord, c2: Coord, d: RealNum, g: RealNum, o: RealNum=0, empty_start: bool=False) -> List[List[Coord]]:
+def dash(c1: Coord, c2: Coord, d: RealNum, g: RealNum, o: RealNum=0, empty_start: bool=False) -> list[list[Coord]]:
     """
     Finds points along a segment that are a specified distance apart.
 
@@ -224,7 +224,7 @@ def dash(c1: Coord, c2: Coord, d: RealNum, g: RealNum, o: RealNum=0, empty_start
 
     return dash_
 
-def dash_offset(coords: List[Coord], d: RealNum, g: RealNum) -> list[tuple[RealNum, bool]]:
+def dash_offset(coords: list[Coord], d: RealNum, g: RealNum) -> list[tuple[RealNum, bool]]:
     """
     Calculates the offsets on each coord of a line for a smoother dashing sequence.
 

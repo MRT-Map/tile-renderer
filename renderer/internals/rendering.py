@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import time
 from dataclasses import dataclass
 from itertools import chain
 from pathlib import Path
@@ -40,9 +41,18 @@ class _Logger:
             print(term.green(f"00.0% | 0.0s left | ") + f"{self.tile_coords}: " + term.bright_black(msg), flush=True)
 
 
-def _draw_components(operated, operations: int, start: RealNum, tile_coord: TileCoord, tile_components: list[list[Component]],
-                     all_components: ComponentList, nodes: NodeList, skin: Skin, max_zoom: int, max_zoom_range: RealNum,
-                     assets_dir: Path, using_ray: bool=False) -> tuple[TileCoord, Image.Image, list[_TextObject]] | None:
+def _draw_components(operated,
+                     operations: int,
+                     start: RealNum,
+                     tile_coord: TileCoord,
+                     tile_components: list[list[Component]],
+                     all_components: ComponentList,
+                     nodes: NodeList,
+                     skin: Skin,
+                     max_zoom: int,
+                     max_zoom_range: RealNum,
+                     assets_dir: Path,
+                     using_ray: bool=False) -> tuple[TileCoord, Image.Image, list[_TextObject]] | None:
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
     if tile_components == [[]]:
         logger.log("Render complete")
@@ -145,7 +155,9 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
                 text_dict[text].append(tile_coord)
         no_intersect: list[list[Coord]] = []
         is_rendered = True
-        for text in text_dict.copy().keys():
+        start = time.time() * 1000
+        operations = len(text_dict)
+        for i, text in enumerate(text_dict.copy().keys()):
             r = lambda a, b: mathtools.rotate_around_pivot(a, b, text.x, text.y, text.rot)
             current_box_coords = [
                 r(text.x-text.w/2, text.y-text.h/2),
@@ -161,11 +173,20 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
                     break
             no_intersect.append(current_box_coords)
             if not is_rendered: break
-        for text, tile_coords in text_dict.items():
+            print(term.green(f"{internal._percentage(i+1, operations)}% | " +
+                             f"{internal._ms_to_time(internal._time_remaining(start, i+1, operations))} left | ") +
+                  f"Eliminated overlapping text {i+1}/{operations}", flush=True)
+
+        start = time.time() * 1000
+        operations = len(text_dict)
+        for i, (text, tile_coords) in enumerate(text_dict.items()):
             for tile_coord in tile_coords:
                 if tile_coord not in preout:
                     preout[tile_coord] = (imgs[tile_coord], [])
                 preout[tile_coord][1].append(text)
+            print(term.green(f"{internal._percentage(i + 1, operations)}% | " +
+                             f"{internal._ms_to_time(internal._time_remaining(start, i + 1, operations))} left | ") +
+                  f"Sorting renaining text {i + 1}/{operations}", flush=True)
     for tile_coord, _, _ in texts:
         if tile_coord not in preout: preout[tile_coord] = (imgs[tile_coord], [])
     out = [(tile_coord, img, text_objects) for tile_coord, (img, text_objects) in preout.items()]

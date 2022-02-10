@@ -4,11 +4,11 @@ import itertools
 import math
 import re
 from dataclasses import dataclass
-from typing import Literal, Dict, Tuple, List
+from typing import Literal
 from pathlib import Path
 
 import blessed
-import imagehash as imagehash
+import imagehash
 from PIL import ImageFont, ImageDraw, Image
 from schema import Schema, And, Or, Regex, Optional
 
@@ -30,7 +30,7 @@ class _TextObject:
     h: RealNum
     rot: RealNum
 
-def _node_list_to_image_coords(node_list: List[str], nodes: NodeList, skin: Skin, tile_coord: TileCoord, size: RealNum) -> List[Coord]:
+def _node_list_to_image_coords(node_list: list[str], nodes: NodeList, skin: Skin, tile_coord: TileCoord, size: RealNum) -> list[Coord]:
     image_coords = []
     for x, y in tools.nodes.to_coords(node_list, nodes):
         xc = x - tile_coord.x * size
@@ -47,11 +47,11 @@ class Skin:
     def __init__(self, json: SkinJson):
         self.validate_json(json)
         self.tile_size: int = json['info']['size']
-        self.fonts: Dict[str, Path] = {name: Path(path) for name, path in json['info']['font'].items()}
+        self.fonts: dict[str, Path] = {name: Path(path) for name, path in json['info']['font'].items()}
         self.background: str = json['info']['background']
 
-        self.order: List[str] = json['order']
-        self.types: Dict[str, Skin.ComponentTypeInfo] \
+        self.order: list[str] = json['order']
+        self.types: dict[str, Skin.ComponentTypeInfo] \
             = {name: self.ComponentTypeInfo(name, value, self.order, self) for name, value in json['types'].items()}
 
     def __getitem__(self, type_name: str) -> ComponentTypeInfo:
@@ -75,21 +75,21 @@ class Skin:
 
         :param str name: Will set  ``name``
         :param SkinType json: The JSON of the component type
-        :param List[str] order: Will set ``_order``"""
-        def __init__(self, name: str, json: SkinType, order: List[str], skin: Skin):
+        :param list[str] order: Will set ``_order``"""
+        def __init__(self, name: str, json: SkinType, order: list[str], skin: Skin):
             self.name: str = name
             """The name of the component."""
-            self.tags: List[str] = json['tags']
+            self.tags: list[str] = json['tags']
             """The list of tags attributed to the component."""
             self.shape: Literal["point", "line", "area"] = json['type']
             """The shape of the component, must be one of ``point``, ``line``, ``area``"""
             self._order = order
             self._skin = skin
-            self.styles: Dict[Tuple[int, int], List[Skin.ComponentTypeInfo.ComponentStyle]] \
+            self.styles: dict[tuple[int, int], list[Skin.ComponentTypeInfo.ComponentStyle]] \
                 = {internal._str_to_tuple(range_): [self.ComponentStyle(v, self, shape=self.shape) for v in value] for range_, value in json['style'].items()}
             """The styles of the object, denoted as ``{(max_zoom, min_zoom): [style, ...]}``"""
 
-        def __getitem__(self, zoom_level: int) -> List[ComponentStyle]:
+        def __getitem__(self, zoom_level: int) -> list[ComponentStyle]:
             for (max_level, min_level), styles in self.styles.items():
                 if max_level <= zoom_level <= min_level:
                     return styles
@@ -306,7 +306,7 @@ class Skin:
                         #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Midpoints calculated")
                         t = math.floor(math.dist(c1, c2) / (4 * text_length))
                         t = 1 if t == 0 else t
-                        all_points: List[List[Tuple[Coord, RealNum]]] \
+                        all_points: list[list[tuple[Coord, RealNum]]] \
                             = mathtools.midpoint(c1, c2, self.offset, n=t, return_both=True)
                         for n in range(0, len(all_points), 2):
                             #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: {component.name}: " +
@@ -433,10 +433,6 @@ class Skin:
                             outlines.append(n_coords)
                     for o_coords in outlines:
                         imd.line(o_coords, fill=self.outline, width=2, joint="curve")
-                        if "unroundedEnds" not in self._type_info.tags:
-                            imd.ellipse(
-                                [o_coords[0].x - 2 / 2 + 1, o_coords[0].y - 2 / 2 + 1, o_coords[0].x + 2 / 2,
-                                 o_coords[0].y + 2 / 2], fill=self.outline)
 
         class AreaCenterImage(ComponentStyle):
             # noinspection PyInitNewSignature
