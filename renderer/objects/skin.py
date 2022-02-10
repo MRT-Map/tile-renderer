@@ -217,7 +217,7 @@ class Skin:
                             and 2 * text_length <= math.dist(c1, c2):
                         # print(mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step.offset))
                         #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Generating name text")
-                        for (tx, ty), trot in mathtools.midpoint(c1.x, c1.y, c2.x, c2.y, self.offset, n=t):
+                        for (tx, ty), trot in mathtools.midpoint(c1, c2, self.offset, n=t):
                             lt_i = Image.new('RGBA', (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0))
                             lt_d = ImageDraw.Draw(lt_i)
                             lt_d.text((text_length, self.size + 4), component.displayname,
@@ -231,7 +231,7 @@ class Skin:
                         font = self._type_info._skin.get_font("b", self.size, assets_dir)
                         counter = 0
                         t = math.floor(math.dist(c1, c2) / (4 * text_length))
-                        for (tx, ty), _ in mathtools.midpoint(c1.x, c1.y, c2.x, c2.y, self.offset, n=2 * t + 1):
+                        for (tx, ty), _ in mathtools.midpoint(c1, c2, self.offset, n=2 * t + 1):
                             if counter % 2 == 1:
                                 counter += 1
                                 continue
@@ -274,7 +274,7 @@ class Skin:
                         #logger.log(
                         #   f"{style.index(step) + 1}/{len(style)} {component.name}: Drawing dashes for section {j + 1} of {len(coords)}")
                         o, empty_start = offset_info[j]
-                        for dash_coords in mathtools.dash(c1.x, c1.y, c2.x, c2.y, self.dash[0], self.dash[1], o,
+                        for dash_coords in mathtools.dash(c1, c2, self.dash[0], self.dash[1], o,
                                                           empty_start):
                             # print(dash_coords)
                             imd.line(dash_coords, fill=self.colour, width=self.width)
@@ -307,7 +307,7 @@ class Skin:
                         t = math.floor(math.dist(c1, c2) / (4 * text_length))
                         t = 1 if t == 0 else t
                         all_points: List[List[Tuple[Coord, RealNum]]] \
-                            = mathtools.midpoint(c1.x, c1.y, c2.x, c2.y, self.offset, n=t, return_both=True)
+                            = mathtools.midpoint(c1, c2, self.offset, n=t, return_both=True)
                         for n in range(0, len(all_points), 2):
                             #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: {component.name}: " +
                             #           f"Generating text {n + 1} of {len(all_points)} in section {coords.index(c1)} of {len(coords) + 1}")

@@ -105,7 +105,7 @@ def poly_intersect(poly1: list[Coord], poly2: list[Coord]) -> bool:
     coords1 = [i for i in internal._with_next(poly1)]
     coords2 = [i for i in internal._with_next(poly2)]
     for (c1, c2), (c3, c4) in product(coords1, coords2):
-        if lines_intersect(*c1, *c2, *c3, *c4): return True
+        if lines_intersect(c1, c2, c3, c4): return True
     if all(point_in_poly(x, y, poly2) for x, y in poly1): return True
     if all(point_in_poly(x, y, poly1) for x, y in poly2): return True
     return False
@@ -190,13 +190,13 @@ def dash(c1: Coord, c2: Coord, d: RealNum, g: RealNum, o: RealNum=0, empty_start
             results = points_away(c3.x, c3.y, g, m)
             if np.sign(c2.x-c1.x) == np.sign(results[0][0]-c1.x) and np.sign(c2.y-c1.y) == np.sign(results[0][1]-c1.y):
                 if math.dist(results[0], (c1.x, c1.y)) > math.dist(results[1], (c1.x, c1.y)):
-                    c3.x, c3.y = results[0]
+                    c3 = results[0]
                 else:
-                    c3.x, c3.y = results[1]
+                    c3 = results[1]
             else:
-                c3.x, c3.y = results[1]
+                c3 = results[1]
             #c3.x, c3.y = results[0] if np.sign(c2.x-c1.x) == np.sign(results[0][0]-c1.x) and np.sign(c2.y-c1.y) == np.sign(results[0][1]-c1.y) and math.dist(results[0], (c1.x,c1.y)) > math.dist(results[1], (c1.x,c1.y)) else results[1]
-            dash_.append([Coord(c3.x, c3.y)])
+            dash_.append([c3])
             gap = False
         else:
             results = points_away(c3.x, c3.y, d, m)
@@ -206,19 +206,19 @@ def dash(c1: Coord, c2: Coord, d: RealNum, g: RealNum, o: RealNum=0, empty_start
                 if not (np.sign(c2.x-c1.x) == np.sign(results[1][0]-c1.x)
                         and np.sign(c2.y-c1.y) == np.sign(results[1][1]-c1.y))\
                         or math.dist(results[0], (c1.x, c1.y)) > math.dist(results[1], (c1.x, c1.y)):
-                    c3.x, c3.y = results[0]
+                    c3 = results[0]
                 else:
-                    c3.x, c3.y = results[1]
+                    c3 = results[1]
             else:
-                c3.x, c3.y = results[1]
+                c3 = results[1]
             #c3.x, c3.y = results[0] if np.sign(c2.x-c1.x) == np.sign(results[0][0]-c1.x) and np.sign(c2.y-c1.y) == np.sign(results[0][1]-c1.y) and math.dist(results[0], (c1.x,c1.y)) > math.dist(results[1], (c1.x,c1.y)) else results[1]
-            dash_[-1].append(Coord(c3.x, c3.y))
+            dash_[-1].append(c3)
             gap = True
     
     if len(dash_[-1]) == 1: # last is gap
         dash_.pop()
     else: # last is dash
-        dash_[-1][1] = Coord(c2.x, c2.y)
+        dash_[-1][1] = c2
         if dash_[-1][0] == dash_[-1][1]:
             dash_.pop()
 
@@ -254,9 +254,9 @@ def dash_offset(coords: List[Coord], d: RealNum, g: RealNum) -> list[tuple[RealN
             left = prev + remnant
             empty_start = False
         else:
-            lastCoord = dashes[-1][1]
-            if lastCoord == coords[c+1]: #line ended with a dash
-                if round(remnant := math.dist(dashes[-1][0], lastCoord), 10) == d: #last dash is exactly d
+            last_coord = dashes[-1][1]
+            if last_coord == coords[c+1]: #line ended with a dash
+                if round(remnant := math.dist(dashes[-1][0], last_coord), 10) == d: #last dash is exactly d
                     left = 0
                     o = 0
                     empty_start = True
@@ -299,7 +299,7 @@ def rotate_around_pivot(x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta:
     ny += py
     return Coord(nx, ny)
 
-def points_away(x: RealNum, y: RealNum, d: RealNum, m: RealNum | None) -> List[Coord]:
+def points_away(x: RealNum, y: RealNum, d: RealNum, m: RealNum | None) -> list[Coord]:
     """
     Finds two points that are a specified distance away from a specified point, all on a straight line.
 
@@ -309,7 +309,7 @@ def points_away(x: RealNum, y: RealNum, d: RealNum, m: RealNum | None) -> List[C
     :param m: the gradient of the line. Give ``None`` for a gradient of undefined.
     :type m: RealNum | None
 
-    :returns: Given in ``[(c1.x, c1.y), (c2.x, c2.y)]``
+    :returns: Given in ``[c1, c2]``
     :rtype: list[Coord]
     """
     theta = math.atan(m) if m is not None else math.pi / 2

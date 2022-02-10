@@ -3,7 +3,7 @@ from __future__ import annotations
 from dataclasses import dataclass
 from itertools import chain
 from pathlib import Path
-from typing import list, Dict, Any
+from typing import Any
 
 import blessed
 from PIL import Image, ImageDraw
@@ -173,7 +173,7 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
 
 
 def _draw_text(operated, operations: int, start: RealNum, image: Image.Image, tile_coord: TileCoord, text_list: list[_TextObject],
-               save_images: bool, save_dir: Path, using_ray: bool=False) -> Dict[TileCoord, Image.Image]:
+               save_images: bool, save_dir: Path, using_ray: bool=False) -> dict[TileCoord, Image.Image]:
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
     processed = 0
     #print(text_list)

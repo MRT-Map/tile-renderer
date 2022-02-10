@@ -1216,8 +1216,8 @@
           {
             "layer": "text",
             "colour": "#808080",
-            "size": 16,
-            "offset": 16
+            "size": 8,
+            "offset": 8
           }
         ]
       }
@@ -1694,8 +1694,8 @@
           {
             "layer": "text",
             "colour": "#808080",
-            "size": 16,
-            "offset": 16
+            "size": 8,
+            "offset": 8
           }
         ]
       }
@@ -2091,9 +2091,9 @@
           },
           {
             "layer": "text",
-            "colour": "#000000",
-            "size": 16,
-            "offset": 16
+            "colour": "#808080",
+            "size": 8,
+            "offset": 8
           }
         ]
       }
