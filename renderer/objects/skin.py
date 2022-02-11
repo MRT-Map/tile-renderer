@@ -148,12 +148,12 @@ class Skin:
             def render(self, imd: ImageDraw, coords: list[Coord], 
                        displayname: str, assets_dir: Path, points_text_list: list[_TextObject]):
                 if len(displayname.strip()) == 0: return
-                font = self._type_info._skin.get_font("", self.size, assets_dir)
+                font = self._type_info._skin.get_font("", self.size+1, assets_dir)
                 text_length = int(imd.textlength(displayname, font))
                 pt_i = Image.new('RGBA', (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0))
                 pt_d = ImageDraw.Draw(pt_i)
                 pt_d.text((text_length, self.size + 4), displayname, fill=self.colour, font=font,
-                          anchor="mm")
+                          anchor="mm", stroke_width=1, stroke_fill="#dddddd")
                 tw, th = pt_i.size
                 pt_i = pt_i.crop((0, 0, pt_i.width, pt_i.height))
                 points_text_list.append(_TextObject(pt_i, coords[0].x + self.offset[0], coords[0].y + self.offset[1], tw, th, 0))
@@ -204,7 +204,7 @@ class Skin:
                        assets_dir: Path, component: Component, text_list: list[_TextObject]):
                 if len(component.displayname) == 0: return
                 #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating text length")
-                font = self._type_info._skin.get_font("", self.size, assets_dir)
+                font = self._type_info._skin.get_font("", self.size+1, assets_dir)
                 text_length = int(imd.textlength(component.displayname, font))
                 if text_length == 0:
                     text_length = int(imd.textlength("----------", font))
@@ -221,7 +221,8 @@ class Skin:
                             lt_i = Image.new('RGBA', (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0))
                             lt_d = ImageDraw.Draw(lt_i)
                             lt_d.text((text_length, self.size + 4), component.displayname,
-                                      fill=self.colour, font=font, anchor="mm")
+                                      fill=self.colour, font=font, anchor="mm",
+                                      stroke_width=1, stroke_fill="#dddddd")
                             tw, th = lt_i.size[:]
                             lt_i = lt_i.rotate(trot, expand=True)
                             lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
@@ -297,7 +298,7 @@ class Skin:
             def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord], component: Component,
                        assets_dir: Path, text_list: list[_TextObject]):
                 if len(component.displayname.strip()) == 0: return
-                font = self._type_info._skin.get_font("", self.size, assets_dir)
+                font = self._type_info._skin.get_font("", self.size+1, assets_dir)
                 text_length = int(imd.textlength(component.displayname.replace('\n', ''), font))
                 for c1, c2 in internal._with_next(coords):
                     if mathtools.line_in_box(coords, 0, self._type_info._skin.tile_size, 0,
@@ -323,7 +324,8 @@ class Skin:
                             abt_i = Image.new('RGBA', (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0))
                             abt_d = ImageDraw.Draw(abt_i)
                             abt_d.text((text_length, self.size + 4), component.displayname.replace('\n', ''),
-                                       fill=self.colour, font=font, anchor="mm")
+                                       fill=self.colour, font=font, anchor="mm",
+                                       stroke_width=1, stroke_fill="#dddddd")
                             tw, th = abt_i.size[:]
                             abt_ir = abt_i.rotate(trot, expand=True)
                             abt_ir = abt_ir.crop((0, 0, abt_ir.width, abt_ir.height))
@@ -344,7 +346,7 @@ class Skin:
                 cx, cy = mathtools.poly_center(coords)
                 cx += self.offset[0]
                 cy += self.offset[1]
-                font = self._type_info._skin.get_font("", self.size, assets_dir)
+                font = self._type_info._skin.get_font("", self.size+1, assets_dir)
                 text_length = int(min(imd.textlength(x, font) for x in component.displayname.split('\n')))
 
                 left = min(cl.x for cl in coords)
@@ -370,7 +372,8 @@ class Skin:
 
                 act_i = Image.new('RGBA', (2 * text_length, 2 * text_size), (0, 0, 0, 0))
                 act_d = ImageDraw.Draw(act_i)
-                act_d.text((text_length, text_size), text, fill=self.colour, font=font, anchor="mm")
+                act_d.text((text_length, text_size), text, fill=self.colour, font=font, anchor="mm",
+                           stroke_width=1, stroke_fill="#dddddd")
                 cw, ch = act_i.size[:]
                 act_i = act_i.crop((0, 0, act_i.width, act_i.height))
                 text_list.append(_TextObject(act_i, cx, cy, cw, ch, 0))

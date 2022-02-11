@@ -19,7 +19,7 @@ def midpoint(c1: Coord, c2: Coord, o: RealNum, n: int = 1,
     :param int n: the number of midpoints on a single segment
     :param bool return_both: if True, it will return both possible points.
         
-    :return: A list of *(lists of, when return_both=True)* tuples in the form of (x, y, rot)
+    :return: A list of *(lists of, when return_both=True)* tuples in the form of (Coord, rot)
     :rtype: list[tuple[Coord, RealNum]] *when return_both=False,* list[list[tuple[Coord, RealNum]]] *when return_both=True*
     """
     #print(c1.x, c1.y, c2.x, c2.y, o, n)
