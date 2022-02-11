@@ -22,6 +22,13 @@ term = blessed.Terminal()
 try: import ray
 except ModuleNotFoundError: pass
 
+def _eta(start: RealNum, operated: int, operations: int) -> str:
+    if operated != 0 and operations != 0:
+        return term.green(f"{internal._percentage(operated, operations)}% | " +
+                          f"{internal._ms_to_time(internal._time_remaining(start, operated, operations))} left | ")
+    else:
+        return term.green(f"00.0% | 0.0s left | ")
+
 @dataclass
 class _Logger:
     using_ray: bool
@@ -33,12 +40,8 @@ class _Logger:
     def log(self, msg):
         if self.using_ray: ops = ray.get(self.operated.get.remote())
         else: ops = self.operated.get()
-        if ops != 0 and self.operations != 0:
-            print(term.green(f"{internal._percentage(ops, self.operations)}% | " +
-                             f"{internal._ms_to_time(internal._time_remaining(self.start, ops, self.operations))} left | ") +
-                  f"{self.tile_coords}: " + term.bright_black(msg), flush=True)
-        else:
-            print(term.green(f"00.0% | 0.0s left | ") + f"{self.tile_coords}: " + term.bright_black(msg), flush=True)
+        print(_eta(self.start, ops, self.operations) +
+              f"{self.tile_coords}: " + term.bright_black(msg), flush=True)
 
 
 def _draw_components(operated,
@@ -173,9 +176,8 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
                     break
             no_intersect.append(current_box_coords)
             if not is_rendered: break
-            print(term.green(f"{internal._percentage(i+1, operations)}% | " +
-                             f"{internal._ms_to_time(internal._time_remaining(start, i+1, operations))} left | ") +
-                  f"Eliminated overlapping text {i+1}/{operations}", flush=True)
+            print(_eta(start, i+1, operations) +
+                  f"Eliminated overlapping text {i+1}/{operations} in zoom {z}", flush=True)
 
         start = time.time() * 1000
         operations = len(text_dict)
@@ -184,9 +186,8 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
                 if tile_coord not in preout:
                     preout[tile_coord] = (imgs[tile_coord], [])
                 preout[tile_coord][1].append(text)
-            print(term.green(f"{internal._percentage(i + 1, operations)}% | " +
-                             f"{internal._ms_to_time(internal._time_remaining(start, i + 1, operations))} left | ") +
-                  f"Sorting renaining text {i + 1}/{operations}", flush=True)
+            print(_eta(start, i+1, operations) +
+                  f"Sorting renaining text {i + 1}/{operations} in zoom {z}", flush=True)
     for tile_coord, _, _ in texts:
         if tile_coord not in preout: preout[tile_coord] = (imgs[tile_coord], [])
     out = [(tile_coord, img, text_objects) for tile_coord, (img, text_objects) in preout.items()]
@@ -223,11 +224,10 @@ def _draw_text(operated, operations: int, start: RealNum, image: Image.Image, ti
             if not can_print:
                 break"""
         processed += 1
-        logger.log(f"Text {processed}/{len(text_list)} pasted")
-        image.paste(text.image, (int(text.x-text.image.width/2), int(text.y-text.image.height/2)), text.image)
-    for _ in range(2):
         if using_ray: operated.count.remote()
         else: operated.count()
+        logger.log(f"Text {processed}/{len(text_list)} pasted")
+        image.paste(text.image, (int(text.x-text.image.width/2), int(text.y-text.image.height/2)), text.image)
     
     #tileReturn[tile_coord] = im
     if save_images:

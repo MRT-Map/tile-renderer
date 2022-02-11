@@ -183,9 +183,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
 
     process_start = time.time() * 1000
     processed = 0
-    time_left = 0.0
-    l = lambda processed_count, time_left, tile_components_, msg: \
-        term.green(f"{internal._percentage(processed_count, len(tile_list))}% | {internal._ms_to_time(time_left)} left | ") \
+    l = lambda tile_components_, msg: rendering._eta(process_start, processed, len(tile_list)) \
         + f"{tile_components_}: " + term.bright_black(msg) + term.clear_eos
     print(term.green("sorted\n")+term.bright_green("Starting processing"))
     grouped_tile_list: dict[TileCoord, list[list[Component]]] = {}
@@ -196,12 +194,12 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
             if component.layer not in new_tile_components.keys():
                 new_tile_components[component.layer] = []
             new_tile_components[component.layer].append(component)
-        with term.location(): print(l(processed, time_left, tile_coord, "Sorted component by layer"), end="\r")
+        with term.location(): print(l(tile_coord, "Sorted component by layer"), end="\r")
 
         #sort components in layers in files by type
         new_tile_components = {layer: sorted(component_list, key=lambda x: skin.order.index(x.type))
                                for layer, component_list in new_tile_components.items()}
-        with term.location(): print(l(processed, time_left, tile_coord, "Sorted component by type"), end="\r")
+        with term.location(): print(l(tile_coord, "Sorted component by type"), end="\r")
 
         #merge layers
         tile_components = []
@@ -209,7 +207,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
         for layer in layers:
             for component in new_tile_components[layer]:
                 tile_components.append(component)
-        with term.location(): print(l(processed, time_left, tile_coord, "Merged layers"), end="\r")
+        with term.location(): print(l(tile_coord, "Merged layers"), end="\r")
 
         #groups components of the same type if "road" tag present
         newer_tile_components: list[list[Component]] = [[]]
@@ -223,10 +221,9 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
                 newer_tile_components.append([])
 
         grouped_tile_list[tile_coord] = newer_tile_components
-        with term.location(): print(l(processed, time_left, tile_coord, "Components grouped"), end="\r")
+        with term.location(): print(l(tile_coord, "Components grouped"), end="\r")
 
         processed += 1
-        time_left = internal._time_remaining(process_start, processed, len(tile_list))
         #time_left = round(((int(round(time.time() * 1000)) - process_start) / processed * (len(tile_list) - processed)), 2)
 
     print(term.green("100.00% | 0.0s left | ") + "Processing complete" + term.clear_eos)
@@ -254,8 +251,6 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
         print(f"Counted {tile_coord}", end=term.clear_eos + "\r")
 
     #render
-    render_start = time.time() * 1000
-    print(term.bright_green("\nRendering components..."))
     if use_ray:
         try: # noinspection PyPackageRequirements
             import ray
@@ -273,22 +268,30 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
             def get(self):
                 return len(self.tally)
 
-            def count(self):
-                self.tally.append(1)
+            def count(self, i=1):
+                self.tally.append(i)
 
         operated = _RayOperatedHandler.remote()
 
+        print(term.bright_green("\nRendering components..."))
         input_ = []
+        start = time.time() * 1000
         for tile_coord, component_group in grouped_tile_list.items():
-            input_.append((operated, operations, render_start, tile_coord, component_group, components, nodes,
+            input_.append((operated, operations, start, tile_coord, component_group, components, nodes,
                            skin, max_zoom, max_zoom_range, assets_dir, True))
         futures = [ray.remote(rendering._draw_components).remote(*input_[i]) for i in range(len(input_))]
         prepreresult: list[tuple[TileCoord, Image.Image, list[_TextObject]] | None] = ray.get(futures)
         prepreresult = list(filter(lambda r: r is not None, prepreresult))
 
+        print(term.bright_green("\nEliminating overlapping text..."))
         input_ = []
-        for tile_coord, image, text_list in rendering._prevent_text_overlap(prepreresult):
-            input_.append((operated, operations, render_start, image, tile_coord, text_list,
+        operated = _RayOperatedHandler.remote()
+        new_texts = rendering._prevent_text_overlap(prepreresult)
+        total_texts = sum(len(t[2]) for t in new_texts)
+        start = time.time() * 1000
+        print(term.bright_green("\nRendering text..."))
+        for tile_coord, image, text_list in new_texts:
+            input_.append((operated, total_texts, start, image, tile_coord, text_list,
                            save_images, save_dir, True))
         futures = [ray.remote(rendering._draw_text).remote(*input_[i]) for i in range(len(input_))]
         preresult = ray.get(futures)
@@ -305,8 +308,9 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
             operated = _MultiprocessingOperatedHandler(multiprocessing.Manager())
 
             input_ = []
+            start = time.time() * 1000
             for tile_coord, component_group in grouped_tile_list.items():
-                input_.append((operated, operations, render_start, tile_coord, component_group, components, nodes,
+                input_.append((operated, operations, start, tile_coord, component_group, components, nodes,
                                skin, max_zoom, max_zoom_range, assets_dir))
             p = multiprocessing.Pool(processes)
             try:
@@ -315,10 +319,11 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
                 p.terminate()
                 sys.exit()
             input_ = []
+            start = time.time() * 1000
             for i in prepreresult:
                 tile_coord = list(i.keys())[0]
                 image, text_list = i[tile_coord]
-                input_.append((operated, operations, render_start, image, tile_coord, text_list,
+                input_.append((operated, operations, start, image, tile_coord, text_list,
                                save_images, save_dir))
             try:
                 preresult = p.starmap(rendering._draw_text, input_)
