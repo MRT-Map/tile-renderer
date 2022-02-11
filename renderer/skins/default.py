@@ -459,8 +459,8 @@ def main():
 
     transport_building = CTI("area")
     transport_building[0:5] = [
-        CS.area_fill(colour=0xc2c2a3,
-                     outline=0xaaaa55),
+        CS.area_fill(colour=0x999966,
+                     outline=0x77773c),
         CS.area_centertext(colour=0x444422,
                            size=30)
     ]

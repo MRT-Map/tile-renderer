@@ -1275,8 +1275,8 @@
         "0, 5": [
           {
             "layer": "fill",
-            "colour": "#c2c2a3",
-            "outline": "#aaaa55",
+            "colour": "#999966",
+            "outline": "#77773c",
             "stripe": null
           },
           {
