@@ -7,6 +7,7 @@ from pathlib import Path
 from typing import Any
 
 import blessed
+from colorama import Fore, Style
 from PIL import Image, ImageDraw
 
 import renderer.internals.internal as internal
@@ -18,16 +19,17 @@ from renderer.objects.skin import Skin, _TextObject, _node_list_to_image_coords
 from renderer.types import RealNum, TileCoord, Coord
 
 term = blessed.Terminal()
+R = Style.RESET_ALL
 
 try: import ray
 except ModuleNotFoundError: pass
 
 def _eta(start: RealNum, operated: int, operations: int) -> str:
     if operated != 0 and operations != 0:
-        return term.green(f"{internal._percentage(operated, operations)}% | " +
-                          f"{internal._ms_to_time(internal._time_remaining(start, operated, operations))} left | ")
+        return Fore.GREEN + f"{internal._percentage(operated, operations)}% | " + \
+                            f"{internal._ms_to_time(internal._time_remaining(start, operated, operations))} left | " + R
     else:
-        return term.green(f"00.0% | 0.0s left | ")
+        return Fore.GREEN + f"00.0% | 0.0s left | " + R
 
 @dataclass
 class _Logger:
@@ -41,7 +43,7 @@ class _Logger:
         if self.using_ray: ops = ray.get(self.operated.get.remote())
         else: ops = self.operated.get()
         print(_eta(self.start, ops, self.operations) +
-              f"{self.tile_coords}: " + term.bright_black(msg), flush=True)
+              f"{self.tile_coords}: " + Fore.LIGHTBLACK_EX + msg + R, flush=True)
 
 
 def _draw_components(operated,
