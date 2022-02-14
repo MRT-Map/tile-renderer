@@ -163,23 +163,21 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
         start = time.time() * 1000
         operations = len(text_dict)
         for i, text in enumerate(text_dict.copy().keys()):
-            r = lambda a, b: mathtools.rotate_around_pivot(a, b, text.x, text.y, text.rot)
-            current_box_coords = [
-                r(text.x-text.w/2, text.y-text.h/2),
-                r(text.x-text.w/2, text.y+text.h/2),
-                r(text.x+text.w/2, text.y+text.h/2),
-                r(text.x+text.w/2, text.y-text.h/2),
-                r(text.x-text.w/2, text.y-text.h/2),
-            ]
             for other in no_intersect:
-                if mathtools.poly_intersect(current_box_coords, other):
-                    is_rendered = False
-                    del text_dict[text]
-                    break
-            no_intersect.append(current_box_coords)
-            if not is_rendered: break
-            print(_eta(start, i+1, operations) +
-                  f"Eliminated overlapping text {i+1}/{operations} in zoom {z}", flush=True)
+                for bound in text.bounds:
+                    if mathtools.poly_intersect(bound, other):
+                        is_rendered = False
+                        del text_dict[text]
+                        break
+                    if not is_rendered: break
+                if not is_rendered: break
+            no_intersect.append(*text.bounds)
+            if not is_rendered:
+                print(_eta(start, i + 1, operations) +
+                      f"Eliminated overlapping text {i + 1}/{operations} in zoom {z}", flush=True)
+                break
+            print(_eta(start, i + 1, operations) +
+                  f"Kept text {i + 1}/{operations} in zoom {z}", flush=True)
 
         start = time.time() * 1000
         operations = len(text_dict)
@@ -189,7 +187,7 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
                     preout[tile_coord] = (imgs[tile_coord], [])
                 preout[tile_coord][1].append(text)
             print(_eta(start, i+1, operations) +
-                  f"Sorting renaining text {i + 1}/{operations} in zoom {z}", flush=True)
+                  f"Sorting remaining text {i + 1}/{operations} in zoom {z}", flush=True)
     for tile_coord, _, _ in texts:
         if tile_coord not in preout: preout[tile_coord] = (imgs[tile_coord], [])
     out = [(tile_coord, img, text_objects) for tile_coord, (img, text_objects) in preout.items()]
@@ -202,29 +200,6 @@ def _draw_text(operated, operations: int, start: RealNum, image: Image.Image, ti
     processed = 0
     #print(text_list)
     for text in text_list:
-        """i = text.image; x = text.x; y = text.y; w = text.w; h = text.h; rot = text.rot
-        r = lambda a, b: mathtools.rotate_around_pivot(a, b, x, y, rot)
-        current_box_coords = [r(x-w/2, y-h/2), r(x-w/2, y+h/2), r(x+w/2, y+h/2), r(x+w/2, y-h/2), r(x-w/2, y-h/2)]
-        can_print = True
-        for box in dont_cross:
-            o_text = text_list[dont_cross.index(box)]
-            ox = o_text.x; oy = o_text.y; ow = o_text.w; oh = o_text.h
-            o_max_dist = ((ow/2)**2+(oh/2)**2)**0.5/2
-            this_max_dist = ((w/2)**2+(h/2)**2)**0.5/2
-            dist = ((x-ox)**2+(y-oy)**2)**0.5
-            if dist > o_max_dist + this_max_dist:
-                continue
-            for c1, c2 in internal._with_next(box):
-                for d1, d2 in internal._with_next(current_box_coords):
-                    can_print = False if mathtools.lines_intersect(c1.x, c1.y, c2.x, c2.y, d1.x, d1.y, d2.x, d2.y) else can_print
-                    if not can_print:
-                        break
-                if not can_print:
-                    break
-            if can_print and mathtools.point_in_poly(current_box_coords[0].x, current_box_coords[0].y, box) or mathtools.point_in_poly(box[0].x, box[0].y, current_box_coords):
-                can_print = False
-            if not can_print:
-                break"""
         processed += 1
         if using_ray: operated.count.remote()
         else: operated.count()

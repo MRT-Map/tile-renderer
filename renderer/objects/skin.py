@@ -3,6 +3,7 @@ from __future__ import annotations
 import itertools
 import math
 import re
+from copy import copy
 from dataclasses import dataclass
 from typing import Literal
 from pathlib import Path
@@ -21,14 +22,32 @@ from renderer.types import RealNum, SkinJson, SkinType, Coord, TileCoord
 
 Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=16)
 
-@dataclass(eq=True, frozen=True)
+@dataclass(eq=True, unsafe_hash=True)
 class _TextObject:
     image: Image.Image
-    x: RealNum
-    y: RealNum
-    w: RealNum
-    h: RealNum
-    rot: RealNum
+    bounds: list[list[Coord]]
+
+    def __init__(self, image: Image.Image, x: RealNum, y: RealNum, w: RealNum, h: RealNum, rot: RealNum):
+        r = lambda a, b: mathtools.rotate_around_pivot(a, b, x, y, rot)
+        self.image = image
+        self.bounds = [[
+            r(x - w / 2, y - h / 2),
+            r(x - w / 2, y + h / 2),
+            r(x + w / 2, y + h / 2),
+            r(x + w / 2, y - h / 2),
+            r(x - w / 2, y - h / 2),
+        ]]
+
+    @classmethod
+    def from_multiple(cls, *textobject: _TextObject):
+        to = copy(textobject[0])
+        for sto in textobject[1:]:
+            to.bounds.extend(sto.bounds)
+        return to
+
+    def get_center(self) -> Coord: pass
+
+
 
 def _node_list_to_image_coords(node_list: list[str], nodes: NodeList, skin: Skin, tile_coord: TileCoord, size: RealNum) -> list[Coord]:
     image_coords = []

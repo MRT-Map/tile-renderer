@@ -29,7 +29,8 @@ setup(
         'numpy',
         'click',
         'psutil',
-        'imagehash'
+        'imagehash',
+        'colorama'
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
