@@ -24,29 +24,31 @@ Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=
 
 @dataclass(eq=True, unsafe_hash=True)
 class _TextObject:
-    image: Image.Image
-    bounds: list[list[Coord]]
+    image: tuple[Image.Image, ...]
+    center: tuple[Coord, ...]
+    bounds: tuple[tuple[Coord, ...]]
 
     def __init__(self, image: Image.Image, x: RealNum, y: RealNum, w: RealNum, h: RealNum, rot: RealNum):
         r = lambda a, b: mathtools.rotate_around_pivot(a, b, x, y, rot)
-        self.image = image
-        self.bounds = [[
+        self.image = (image,)
+        self.center = (Coord(x, y),)
+        self.bounds = ((
             r(x - w / 2, y - h / 2),
             r(x - w / 2, y + h / 2),
             r(x + w / 2, y + h / 2),
             r(x + w / 2, y - h / 2),
             r(x - w / 2, y - h / 2),
-        ]]
+        ),)
 
     @classmethod
     def from_multiple(cls, *textobject: _TextObject):
         to = copy(textobject[0])
-        for sto in textobject[1:]:
-            to.bounds.extend(sto.bounds)
+
+        to.bounds = tuple(*(sto.bounds for sto in textobject))
+        to.image = tuple(*(sto.image for sto in textobject))
+        to.center = tuple(*(sto.center for sto in textobject))
+
         return to
-
-    def get_center(self) -> Coord: pass
-
 
 
 def _node_list_to_image_coords(node_list: list[str], nodes: NodeList, skin: Skin, tile_coord: TileCoord, size: RealNum) -> list[Coord]:
@@ -233,7 +235,7 @@ class Skin:
                     t = math.floor(math.dist(c1, c2) / (4 * text_length))
                     t = 1 if t == 0 else t
                     if mathtools.line_in_box(coords, 0, self._type_info._skin.tile_size, 0, self._type_info._skin.tile_size) \
-                            and 2 * text_length <= math.dist(c1, c2):
+                            and 4 * text_length <= math.dist(c1, c2):
                         # print(mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step.offset))
                         #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Generating name text")
                         for (tx, ty), trot in mathtools.midpoint(c1, c2, self.offset, n=t):

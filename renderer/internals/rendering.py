@@ -165,7 +165,7 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
         for i, text in enumerate(text_dict.copy().keys()):
             for other in no_intersect:
                 for bound in text.bounds:
-                    if mathtools.poly_intersect(bound, other):
+                    if mathtools.poly_intersect(list(bound), other):
                         is_rendered = False
                         del text_dict[text]
                         break
@@ -204,7 +204,8 @@ def _draw_text(operated, operations: int, start: RealNum, image: Image.Image, ti
         if using_ray: operated.count.remote()
         else: operated.count()
         logger.log(f"Text {processed}/{len(text_list)} pasted")
-        image.paste(text.image, (int(text.x-text.image.width/2), int(text.y-text.image.height/2)), text.image)
+        for img, center in zip(text.image, text.center):
+            image.paste(img, (int(center.x-img.width/2), int(center.y-img.height/2)), img)
     
     #tileReturn[tile_coord] = im
     if save_images:

@@ -285,11 +285,12 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
 
         print(term.bright_green("\nEliminating overlapping text..."))
         input_ = []
-        operated = _RayOperatedHandler.remote()
         new_texts = rendering._prevent_text_overlap(prepreresult)
         total_texts = sum(len(t[2]) for t in new_texts)
+
         start = time.time() * 1000
         print(term.bright_green("\nRendering text..."))
+        operated = _RayOperatedHandler.remote()
         for tile_coord, image, text_list in new_texts:
             input_.append((operated, total_texts, start, image, tile_coord, text_list,
                            save_images, save_dir, True))
