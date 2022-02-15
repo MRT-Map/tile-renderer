@@ -235,7 +235,7 @@ class Skin:
                     t = math.floor(math.dist(c1, c2) / (4 * text_length))
                     t = 1 if t == 0 else t
                     if mathtools.line_in_box(coords, 0, self._type_info._skin.tile_size, 0, self._type_info._skin.tile_size) \
-                            and 4 * text_length <= math.dist(c1, c2):
+                            and 2 * text_length <= math.dist(c1, c2):
                         # print(mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step.offset))
                         #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Generating name text")
                         for (tx, ty), trot in mathtools.midpoint(c1, c2, self.offset, n=t):
@@ -253,12 +253,10 @@ class Skin:
                         font = self._type_info._skin.get_font("b", self.size, assets_dir)
                         counter = 0
                         t = math.floor(math.dist(c1, c2) / (4 * text_length))
-                        for (tx, ty), _ in mathtools.midpoint(c1, c2, self.offset, n=2 * t + 1):
+                        for (tx, ty), trot in mathtools.midpoint(c1, c2, self.offset, n=2 * t + 1):
                             if counter % 2 == 1:
                                 counter += 1
                                 continue
-                            trot = math.degrees(
-                                math.atan2(c2.x - c1.x, c2.y - c1.y))
                             text_length = int(imd.textlength("↓", font))
                             lt_i = Image.new('RGBA', (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0))
                             lt_d = ImageDraw.Draw(lt_i)
@@ -283,11 +281,11 @@ class Skin:
                 if self.dash is None:
                     imd.line(coords, fill=self.colour, width=self.width, joint="curve")
                     if "unroundedEnds" not in self._type_info.tags:
-                        imd.ellipse([coords[0].x - self.width / 2 + 1, coords[0].y - self.width / 2 + 1,
-                                     coords[0].x + self.width / 2, coords[0].y + self.width / 2],
+                        imd.ellipse([coords[0].x - self.width / 2+1, coords[0].y - self.width / 2+1,
+                                     coords[0].x + self.width / 2-1, coords[0].y + self.width / 2-1],
                                     fill=self.colour)
-                        imd.ellipse([coords[-1].x - self.width / 2 + 1, coords[-1].y - self.width / 2 + 1,
-                                     coords[-1].x + self.width / 2, coords[-1].y + self.width / 2],
+                        imd.ellipse([coords[-1].x - self.width / 2+1, coords[-1].y - self.width / 2+1,
+                                     coords[-1].x + self.width / 2-1, coords[-1].y + self.width / 2-1],
                                     fill=self.colour)
                 else:
                     offset_info = mathtools.dash_offset(coords, self.dash[0], self.dash[1])
