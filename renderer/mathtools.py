@@ -178,9 +178,9 @@ def new_dash(coords: list[Coord], dash_length: RealNum, gap_length: RealNum) -> 
                 dy = dash_dy
             if (dx**2+dy**2)**0.5 > math.dist(c1, c2) - plotted_length:
                 overflow = (dx**2+dy**2)**0.5 - (math.dist(c1, c2) - plotted_length)
-                dx = round((math.dist(c1, c2) - plotted_length) * math.cos(theta), 10)
-                dy = round((math.dist(c1, c2) - plotted_length) * math.sin(theta), 10)
-            predashes.append(Coord(predashes[-1].x + dx, predashes[-1].y + dy))
+                predashes.append(c2)
+            else:
+                predashes.append(Coord(predashes[-1].x + dx, predashes[-1].y + dy))
             if overflow != 0:
                 is_gap = False if is_gap else True
 
