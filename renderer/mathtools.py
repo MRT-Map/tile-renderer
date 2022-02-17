@@ -154,6 +154,37 @@ def line_in_box(line: list[Coord], top: RealNum, bottom: RealNum, left: RealNum,
             return True
     return False
 
+def new_dash(coords: list[Coord], dash_length: RealNum, gap_length: RealNum) -> list[tuple[Coord, Coord]]:
+    if dash_length <= 0 or gap_length <= 0:
+        raise ValueError("dash or gap length cannot be <= 0")
+    predashes = [coords[0]]
+    is_gap = False
+    overflow = 0
+    for c1, c2 in internal._with_next(coords):
+        plotted_length = 0
+        theta = math.atan2(c2.y-c1.y, c2.x-c1.x)
+        dash_dx = round(dash_length * math.cos(theta), 10)
+        dash_dy = round(dash_length * math.sin(theta), 10)
+        gap_dx = round(gap_length * math.cos(theta), 10)
+        gap_dy = round(gap_length * math.sin(theta), 10)
+        if overflow != 0:
+            pass # TODO make overflow = 0
+        while overflow != 0:
+            if is_gap:
+                dx = gap_dx
+                dy = gap_dy
+            else:
+                dx = dash_dx
+                dy = dash_dy
+            if (dx**2+dy**2)**0.5 > math.dist(c1, c2) - plotted_length:
+                overflow = (dx**2+dy**2)**0.5 - (math.dist(c1, c2) - plotted_length)
+                dx = round((math.dist(c1, c2) - plotted_length) * math.cos(theta), 10)
+                dy = round((math.dist(c1, c2) - plotted_length) * math.sin(theta), 10)
+            predashes.append(Coord(predashes[-1].x + dx, predashes[-1].y + dy))
+            if overflow != 0:
+                is_gap = False if is_gap else True
+
+
 def dash(c1: Coord, c2: Coord, d: RealNum, g: RealNum, o: RealNum=0, empty_start: bool=False) -> list[list[Coord]]:
     """
     Finds points along a segment that are a specified distance apart.
