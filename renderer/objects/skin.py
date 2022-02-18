@@ -288,16 +288,8 @@ class Skin:
                                      coords[-1].x + self.width / 2-1, coords[-1].y + self.width / 2-1],
                                     fill=self.colour)
                 else:
-                    offset_info = mathtools.dash_offset(coords, self.dash[0], self.dash[1])
-                    # print(offset_info)
-                    for j, (c1, c2) in enumerate(internal._with_next(coords)):
-                        #logger.log(
-                        #   f"{style.index(step) + 1}/{len(style)} {component.name}: Drawing dashes for section {j + 1} of {len(coords)}")
-                        o, empty_start = offset_info[j]
-                        for dash_coords in mathtools.dash(c1, c2, self.dash[0], self.dash[1], o,
-                                                          empty_start):
-                            # print(dash_coords)
-                            imd.line(dash_coords, fill=self.colour, width=self.width)
+                    for dash_coords in mathtools.dash(coords, self.dash[0], self.dash[1]):
+                        imd.line(dash_coords, fill=self.colour, width=self.width)
                 
         class LineFore(LineBack):
             # noinspection PyInitNewSignature

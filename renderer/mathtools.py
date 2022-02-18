@@ -154,22 +154,42 @@ def line_in_box(line: list[Coord], top: RealNum, bottom: RealNum, left: RealNum,
             return True
     return False
 
-def new_dash(coords: list[Coord], dash_length: RealNum, gap_length: RealNum) -> list[tuple[Coord, Coord]]:
+def dash(coords: list[Coord], dash_length: RealNum, gap_length: RealNum) -> list[tuple[Coord, Coord]]:
+    """
+    Takes a list of coordinates and returns a list of pairs of Coord objects.
+    
+    :param list[Coord] coords:: the coordinates
+    :param RealNum dash_length: the length of each dash
+    :param RealNum gap_length:RealNum: the length of the gap between dashes
+    :return: a list of pairs of Coords.
+    """
     if dash_length <= 0 or gap_length <= 0:
         raise ValueError("dash or gap length cannot be <= 0")
-    predashes = [coords[0]]
+    dashes = []
     is_gap = False
     overflow = 0
     for c1, c2 in internal._with_next(coords):
+        predashes = [c1]
         plotted_length = 0
+        start_as_gap = is_gap
         theta = math.atan2(c2.y-c1.y, c2.x-c1.x)
         dash_dx = round(dash_length * math.cos(theta), 10)
         dash_dy = round(dash_length * math.sin(theta), 10)
         gap_dx = round(gap_length * math.cos(theta), 10)
         gap_dy = round(gap_length * math.sin(theta), 10)
         if overflow != 0:
-            pass # TODO make overflow = 0
-        while overflow != 0:
+            if overflow > math.dist(c1, c2):
+                predashes.append(c2)
+                overflow -= math.dist(c1, c2)
+                plotted_length += math.dist(c1, c2)
+            else:
+                overflow_x = round(overflow * math.cos(theta), 10)
+                overflow_y = round(overflow * math.sin(theta), 10)
+                predashes.append(Coord(predashes[-1].x + overflow_x, predashes[-1].y + overflow_y))
+                plotted_length += overflow
+                is_gap = False if is_gap else True
+                overflow = 0
+        while overflow == 0:
             if is_gap:
                 dx = gap_dx
                 dy = gap_dy
@@ -181,131 +201,12 @@ def new_dash(coords: list[Coord], dash_length: RealNum, gap_length: RealNum) -> 
                 predashes.append(c2)
             else:
                 predashes.append(Coord(predashes[-1].x + dx, predashes[-1].y + dy))
-            if overflow != 0:
+                plotted_length += gap_length if is_gap else dash_length
                 is_gap = False if is_gap else True
+        for i, (c3, c4) in enumerate(internal._with_next(predashes[(1 if start_as_gap else 0):])):
+            if i % 2 == 0 and c3 != c4: dashes.append((c3, c4))
+    return dashes
 
-
-def dash(c1: Coord, c2: Coord, d: RealNum, g: RealNum, o: RealNum=0, empty_start: bool=False) -> list[list[Coord]]:
-    """
-    Finds points along a segment that are a specified distance apart.
-
-    :param Coord c1: the 1st point
-    :param Coord c2: the 2nd point
-    :param RealNum d: the length of a single dash
-    :param RealNum g: the length of the gap between dashes
-    :param RealNum o: the offset from (c1.x,c1.y) towards (c2.x,c2.y) before dashes are calculated
-    :param bool empty_start: Whether to start the line from (c1.x,c1.y) empty before the start of the next dash
-        
-    :returns: A list of points along the segment, given in [[(c1.x, c1.y), (c2.x, c2.y)], etc.]
-    :rtype: list[list[Coord]]
-    """
-    if d <= 0 or g <= 0:
-        raise ValueError("dash or gap length cannot be <= 0")
-    m = None if c1.x == c2.x else (c2.y-c1.y)/(c2.x-c1.x)
-    dash_ = []
-    gap = False
-
-    if o == 0:
-        c3 = c1
-    else:
-        results = points_away(c1.x, c1.y, o, m)
-        c3 = results[0] if min(c1.x, c2.x) <= results[0][0] <= max(c1.x, c2.x) and min(c1.y, c2.y) <= results[0][1] <= max(c1.y, c2.y) else results[1]
-    if not empty_start and o != 0:
-        dash_.append([Coord(c1.x, c1.y), Coord(c3.x, c3.y)])
-        gap = True
-    else:
-        dash_.append([Coord(c3.x, c3.y)])
-
-    while min(c1.x, c2.x) <= c3.x <= max(c1.x, c2.x) and min(c1.y, c2.y) <= c3.y <= max(c1.y, c2.y):
-        if gap:
-            results = points_away(c3.x, c3.y, g, m)
-            if np.sign(c2.x-c1.x) == np.sign(results[0][0]-c1.x) and np.sign(c2.y-c1.y) == np.sign(results[0][1]-c1.y):
-                if math.dist(results[0], (c1.x, c1.y)) > math.dist(results[1], (c1.x, c1.y)):
-                    c3 = results[0]
-                else:
-                    c3 = results[1]
-            else:
-                c3 = results[1]
-            #c3.x, c3.y = results[0] if np.sign(c2.x-c1.x) == np.sign(results[0][0]-c1.x) and np.sign(c2.y-c1.y) == np.sign(results[0][1]-c1.y) and math.dist(results[0], (c1.x,c1.y)) > math.dist(results[1], (c1.x,c1.y)) else results[1]
-            dash_.append([c3])
-            gap = False
-        else:
-            results = points_away(c3.x, c3.y, d, m)
-            #print(results)
-            #print(np.sign(c2.x-c1.x) == np.sign(results[0][0]-c1.x) and np.sign(c2.y-c1.y) == np.sign(results[0][1]-c1.y))
-            if np.sign(c2.x-c1.x) == np.sign(results[0][0]-c1.x) and np.sign(c2.y-c1.y) == np.sign(results[0][1]-c1.y):
-                if not (np.sign(c2.x-c1.x) == np.sign(results[1][0]-c1.x)
-                        and np.sign(c2.y-c1.y) == np.sign(results[1][1]-c1.y))\
-                        or math.dist(results[0], (c1.x, c1.y)) > math.dist(results[1], (c1.x, c1.y)):
-                    c3 = results[0]
-                else:
-                    c3 = results[1]
-            else:
-                c3 = results[1]
-            #c3.x, c3.y = results[0] if np.sign(c2.x-c1.x) == np.sign(results[0][0]-c1.x) and np.sign(c2.y-c1.y) == np.sign(results[0][1]-c1.y) and math.dist(results[0], (c1.x,c1.y)) > math.dist(results[1], (c1.x,c1.y)) else results[1]
-            dash_[-1].append(c3)
-            gap = True
-    
-    if len(dash_[-1]) == 1: # last is gap
-        dash_.pop()
-    else: # last is dash
-        dash_[-1][1] = c2
-        if dash_[-1][0] == dash_[-1][1]:
-            dash_.pop()
-
-    return dash_
-
-def dash_offset(coords: list[Coord], d: RealNum, g: RealNum) -> list[tuple[RealNum, bool]]:
-    """
-    Calculates the offsets on each coord of a line for a smoother dashing sequence.
-
-    :param List[Coord] coords: the coords of the line
-    :param RealNum d: the length of a single dash
-    :param RealNum g: the length of the gap between dashes
-
-    :returns: The offsets of each coordinate, and whether to start the next segment with empty_start, given in (offset, empty_start)
-    :rtype: list[tuple[RealNum, bool]]
-   """
-    o = 0
-    offsets = [(0, False)]
-    empty_start = False
-    left = None
-    for c in range(len(coords)-1):
-        dashes = dash(coords[c], coords[c+1], d, g, o, empty_start)
-        if not dashes: #line has no dashes
-            prev = 0 if offsets == [] or left is None else left
-            remnant = math.dist(coords[c], coords[c+1])
-            o = abs(g - prev - remnant)
-            left = prev + remnant
-            empty_start = True
-        elif dashes[0] == [coords[c], coords[c+1]]: #line is entirely dash
-            prev = 0 if offsets == [] or left is None else left
-            remnant = math.dist(coords[c], coords[c+1])
-            o = abs(d - prev - remnant)
-            left = prev + remnant
-            empty_start = False
-        else:
-            last_coord = dashes[-1][1]
-            if last_coord == coords[c+1]: #line ended with a dash
-                if round(remnant := math.dist(dashes[-1][0], last_coord), 10) == d: #last dash is exactly d
-                    left = 0
-                    o = 0
-                    empty_start = True
-                else:
-                    left = remnant
-                    o = d - remnant
-                    empty_start = False
-            else: #line ended with a gap
-                if round(remnant := math.dist(dashes[-1][0], coords[c+1]), 10) == g: #last gap is exactly g
-                    left = 0
-                    o = 0
-                    empty_start = False
-                else:
-                    o = g - remnant
-                    left = remnant
-                    empty_start = True
-        offsets.append((round(o, 2), empty_start))
-    return offsets
 
 def rotate_around_pivot(x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta: RealNum) -> Coord:
     """
