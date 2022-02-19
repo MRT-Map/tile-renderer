@@ -184,7 +184,7 @@ class Skin:
                 points_text_list.append(_TextObject(pt_i,
                                                     coords[0].x + self.offset[0],
                                                     coords[0].y + self.offset[1],
-                                                    tw/4, th/4, 0,
+                                                    tw/16, th/16, 0,
                                                     tile_coord, tile_size))
                 #font = skin.get_font("", step.size)
                 #img.text((coords[0][0]+step.offset[0], coords[0][1]+step.offset[1]), component.displayname, fill=step.colour, font=font, anchor=step['anchor'])
@@ -257,7 +257,7 @@ class Skin:
                             lt_i = lt_i.rotate(trot, expand=True)
                             lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
                             text_list.append(_TextObject(lt_i, tx, ty,
-                                                         tw/4, th/4, trot,
+                                                         tw/16, th/16, trot,
                                                          tile_coord, tile_size))
                     if "oneWay" in component.tags and text_length <= math.dist(c1, c2):
                         #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Generating oneway arrows")
@@ -277,7 +277,7 @@ class Skin:
                             lt_i = lt_i.rotate(trot, expand=True)
                             lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
                             text_list.append(_TextObject(lt_i, tx, ty,
-                                                         tw/4, th/4, trot,
+                                                         tw/16, th/16, trot,
                                                          tile_coord, tile_size))
                             counter += 1
                
@@ -355,7 +355,7 @@ class Skin:
                             abt_ir = abt_i.rotate(trot, expand=True)
                             abt_ir = abt_ir.crop((0, 0, abt_ir.width, abt_ir.height))
                             text_list.append(_TextObject(abt_ir, tx, ty,
-                                                         tw/4, th/4, trot,
+                                                         tw/16, th/16, trot,
                                                          tile_coord, tile_size))
 
         class AreaCenterText(ComponentStyle):
@@ -405,7 +405,7 @@ class Skin:
                 cw, ch = act_i.size[:]
                 act_i = act_i.crop((0, 0, act_i.width, act_i.height))
                 text_list.append(_TextObject(act_i, cx, cy,
-                                             cw/4, ch/4, 0,
+                                             cw/16, ch/16, 0,
                                              tile_coord, tile_size))
 
         class AreaFill(ComponentStyle):
