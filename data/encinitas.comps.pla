@@ -3253,7 +3253,7 @@
       "ORS7M0pHBAA-3MjAJTVPQAAAAAA",
       "ORS7M0pHBAA-laqrXjMTwAAAAAA",
       "ORS7M0pHBAA-wAyPEt2B8AAAAAA",
-      "ORS7M0ptKgA-gV+9qfNmAAAAAAA",
+      "ORTQ15WZQAA-PEIyTbZjAAAAAAA",
       "ORS7M0ptKgA-IXGawEUR4AAAAAA",
       "enc-seasidePlaza1",
       "ORS7M0qTUAA-lyHibh8qMAAAAAA",
@@ -3748,9 +3748,9 @@
     "type": "shrub"
   },
   "enc-MCNP-peakA": {
-    "type": "stone",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORS7Mz0qFgA-HsCHs/Lm0AAAAAA",
@@ -3771,12 +3771,12 @@
       "ORS7Mz0D8AA-BiS8IhCdYAAAAAA",
       "ORS7Mz0qFgA-wR0rVkVdEAAAAAA"
     ],
-    "attrs": {}
+    "type": "stone"
   },
   "enc-MCNP-peakB": {
-    "type": "stone",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORS7MziLiAA-yDSg9J5SgAAAAAA",
@@ -3812,12 +3812,12 @@
       "ORS7MzlKRAA-twwibbvrkAAAAAA",
       "ORS7M0gw9gA-LV3qsqIKUAAAAAA"
     ],
-    "attrs": {}
+    "type": "stone"
   },
   "enc-MCNP-peakC": {
-    "type": "stone",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORS7Mzni2gA-7Tlnw953sAAAAAA",
@@ -3836,12 +3836,12 @@
       "ORS97JfH8gA-fpmKUiuvgAAAAAA",
       "ORS7Mzni2gA-VUtDcc/I8AAAAAA"
     ],
-    "attrs": {}
+    "type": "stone"
   },
   "enc-MCNP-pondA": {
-    "type": "waterSmall",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORS97JfuFgA-JFhPOdiygAAAAAA",
@@ -3855,12 +3855,12 @@
       "ORS97JhgiAA-d7iyVTsYwAAAAAA",
       "ORS97JhgiAA-GtAViPfo4AAAAAA"
     ],
-    "attrs": {}
+    "type": "waterSmall"
   },
   "enc-MCNP-pondB": {
-    "type": "waterSmall",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORS97JiGrgA-baMwAZdC0AAAAAA",
@@ -3870,12 +3870,12 @@
       "ORS97Jis0gA-2CO/66DZcAAAAAA",
       "ORS97JjS+AA-5W3tJAboUAAAAAA"
     ],
-    "attrs": {}
+    "type": "waterSmall"
   },
   "enc-MCNP-riverB": {
-    "type": "waterSmall",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORS97JjS+AA-tXA9EHzigAAAAAA",
@@ -3912,12 +3912,12 @@
       "ORS97JqcvAA-HSBY/wfDMAAAAAA",
       "ORS97JrC4gA-hpOZe9ivkAAAAAA"
     ],
-    "attrs": {}
+    "type": "waterSmall"
   },
   "enc-MCNP-riverC": {
-    "type": "waterSmall",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORS7MzsUCAA-dT5cyv7HEAAAAAA",
@@ -3930,12 +3930,12 @@
       "ORS97Js1UgA-WdKZkY2RUAAAAAA",
       "ORS97Js1UgA-rai4PHzMAAAAAA"
     ],
-    "attrs": {}
+    "type": "waterSmall"
   },
   "enc-water": {
-    "type": "waterLarge",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORS97JtbeAA-9LVDX6KrMAAAAAA",
@@ -4158,7 +4158,8 @@
       "ORS7MxfpWAA-RBcl8EdvkAAAAAA",
       "ORS97KkQ/gA-WTcSrskPQAAAAAA",
       "ORS97KkQ/gA-dJkuH9ymsAAAAAA",
-      "ORS7M0ptKgA-gV+9qfNmAAAAAAA",
+      "ORTQ2CX9qgA-6t9R76qqEAAAAAA",
+      "ORTQ2CZJ9gA-IRTz7xP2cAAAAAA",
       "ORS7M0pHBAA-laqrXjMTwAAAAAA",
       "ORS97KldSAA-65BFjHzf4AAAAAA",
       "ORS97KldSAA-P+TbQdv+0AAAAAA",
@@ -4217,7 +4218,219 @@
       "ORS97Kzw0AA-TlugqjT+wAAAAAA",
       "ORS97Kzw0AA-nsULzzdKMAAAAAA",
       "ORS97K0W9gA-bA67eSDw4AAAAAA",
-      "ORS97K0W9gA-C18x8ynwcAAAAAA"
+      "ORS97K0W9gA-C18x8ynwcAAAAAA",
+      "ORTQ2DTkXAA-uQ4M5YuWEAAAAAA"
+    ],
+    "type": "waterLarge"
+  },
+  "enc-water-island1": {
+    "type": "landSmall",
+    "displayname": "",
+    "description": "",
+    "layer": 0,
+    "nodes": [
+      "ORTQ2DUwqAA-6hmI5AZ3kAAAAAA",
+      "ORTQ2DV89AA-fBoAXhtb0AAAAAA",
+      "ORTQ2DWjGAA-z3G8suT+IAAAAAA",
+      "ORTQ2DXvZAA-626asAr/sAAAAAA",
+      "ORTQ2DY7sAA-B11qRoS84AAAAAA"
+    ],
+    "attrs": {}
+  },
+  "enc-water-island2": {
+    "type": "landSmall",
+    "displayname": "",
+    "description": "",
+    "layer": 0,
+    "nodes": [
+      "ORTQ2DaH+gA-OaNxqyHugAAAAAA",
+      "ORTQ2DauIAA-aZukrstAYAAAAAA",
+      "ORTQ2Db6bAA-XqpeHSVGMAAAAAA",
+      "ORTQ2DdGtgA-SFHm/sAPgAAAAAA",
+      "ORTQ2Dds3AA-VEzIhW72EAAAAAA",
+      "ORTQ2De5KAA-xHtdsMz7oAAAAAA",
+      "ORTQ2DgFcgA-Qgs3pHnVcAAAAAA",
+      "ORTQ2DgrmAA-U6zXq7n9IAAAAAA"
+    ],
+    "attrs": {}
+  },
+  "enc-water-island7": {
+    "type": "landSmall",
+    "displayname": "",
+    "description": "",
+    "layer": 0,
+    "nodes": [
+      "ORTQ2Dh35AA-sRUJsd50AAAAAA",
+      "ORTQ2DjEMAA-gEktokMNMAAAAAA",
+      "ORTQ2DkQegA-UgVfoRDOgAAAAAA",
+      "ORTQ2Dk2oAA-ZzLdav2MsAAAAAA",
+      "ORTQ2DmC7AA-dsiwh/5RkAAAAAA",
+      "ORTQ2DnPNgA-ZbJe6JB3wAAAAAA",
+      "ORTQ2Dn1XAA-4+GN4TbUUAAAAAA",
+      "ORTQ2DpBqAA-oXh2TlfMoAAAAAA",
+      "ORTQ2DqN8gA-B5rqigZggAAAAAA"
+    ],
+    "attrs": {}
+  },
+  "enc-water-island3": {
+    "type": "landSmall",
+    "displayname": "",
+    "description": "",
+    "layer": 0,
+    "nodes": [
+      "ORTQ2DraPgA-RbnpxrZM4AAAAAA",
+      "ORTQ2DsAZAA-aFiaVPdwMAAAAAA",
+      "ORTQ2DtMrgA-HQd2YcwmMAAAAAA",
+      "ORTQ2DuY+gA-b3u0NEjFUAAAAAA",
+      "ORTQ2Du/IAA-VaUgT7O2cAAAAAA",
+      "ORTQ2DwLagA-Tz8U68M70AAAAAA",
+      "ORTQ2DxXtgA-l8GjGrc1wAAAAAA",
+      "ORTQ2DykAgA-xJeCONKzIAAAAAA",
+      "ORTQ2DzKJgA-nemVnX86QAAAAAA",
+      "ORTQ2D0WcgA-fAKCSvly4AAAAAA",
+      "ORTQ2D1ivgA-1HScaz/2oAAAAAA",
+      "ORTQ2D2I5AA-lnCQfA20oAAAAAA",
+      "ORTQ2D3VLgA-SHuSFP9+QAAAAAA",
+      "ORTQ2D4hegA-EGGlnNWRwAAAAAA",
+      "ORTQ2D5HoAA-BUR4urzGcAAAAAA",
+      "ORTQ2D6T6gA-EhPeDmwTcAAAAAA",
+      "ORTQ2D7gNgA-Sjv6utivQAAAAAA",
+      "ORTQ2D8sgAA-4CsFcAYbgAAAAAA",
+      "ORTQ2D9SpgA-4cBul6GI0AAAAAA",
+      "ORTQ2D+e8gA-5m+lzwmdwAAAAAA",
+      "ORTQ2D/rPAA-nuXbMpQnAAAAAAA",
+      "ORTQ2EA3iAA-1AWDWR+DgAAAAAA",
+      "ORTQ2EBdrgA-H40UqtrTAAAAAAA",
+      "ORTQ2ECp+gA-s9E08LONgAAAAAA",
+      "ORTQ2ED2RAA-eYKpq72/4AAAAAA",
+      "ORTQ2EEcagA-bQ8vTrmuQAAAAAA",
+      "ORTQ2EFotgA-xI5PoAeGMAAAAAA",
+      "ORTQ2EG1AAA-oaKuEEc0EAAAAAA",
+      "ORTQ2EIBTAA-QNjcS+gegAAAAAA",
+      "ORTQ2EJNmAA-KPDxkxXmwAAAAAA",
+      "ORTQ2EKZ4gA-W8kKZ8InQAAAAAA",
+      "ORTQ2ELmLgA-UPFcR5E8cAAAAAA",
+      "ORTQ2EMMVAA-35xfqUgYAAAAAAA",
+      "ORTQ2ENYngA-rZrGRe8EUAAAAAA",
+      "ORTQ2EOk6gA-85eHAyJPgAAAAAA",
+      "ORTQ2EPxNAA-dWJkVt4UUAAAAAA",
+      "ORTQ2EQXWgA-YsBNyGvb8AAAAAA",
+      "ORTQ2ERjpgA-4zKoZnhnUAAAAAA",
+      "ORTQ2ESv8AA-UnzCZ/yCwAAAAAA",
+      "ORTQ2ETWFgA-6PR0s3SMAAAAAAA",
+      "ORTQ2EUiYgA-z8zI6ohGgAAAAAA",
+      "ORTQ2EVurgA-OSMuPDcDkAAAAAA",
+      "ORTQ2EW6+AA-YIixLM5ZAAAAAAA",
+      "ORTQ2EXhHgA-oXk/8aUYUAAAAAA",
+      "ORTQ2EYtagA-1+PqLCQIQAAAAAA",
+      "ORTQ2EZ5tAA-IagyrmW4EAAAAAA",
+      "ORTQ2EbGAAA-4VsWLiFrAAAAAAA",
+      "ORTQ2EbsJgA-MZ+/4tn2QAAAAAA",
+      "ORTQ2Ec4cAA-8TuQQ/6jwAAAAAA",
+      "ORTQ2EeEvAA-q8Ik1szWMAAAAAA",
+      "ORTQ2EfRCAA-65AXYtMdQAAAAAA",
+      "ORTQ2Ef3LAA-x+pdD3CdUAAAAAA",
+      "ORTQ2EhDeAA-5n3PlA8n4AAAAAA",
+      "ORTQ2EiPxAA-ZoV8jiX9wAAAAAA",
+      "ORTQ2EjcDgA-gJruAMQ68AAAAAA",
+      "ORTQ2EkCNAA-PGT3tPYsIAAAAAA",
+      "ORTQ2ElOgAA-EdejWlPJMAAAAAA",
+      "ORTQ2EmaygA-KkEID+SUcAAAAAA",
+      "ORTQ2EnnFgA-L7scKFtVcAAAAAA"
+    ],
+    "attrs": {}
+  },
+  "enc-water-island4": {
+    "type": "landSmall",
+    "displayname": "",
+    "description": "",
+    "layer": 0,
+    "nodes": [
+      "ORTQ2EoNPAA-xMYhgnhuoAAAAAA",
+      "ORTQ2EpZhgA-oNcYl1ShYAAAAAA",
+      "ORTQ2Eql0gA-NNhCoZKTIAAAAAA",
+      "ORTQ2EryHgA-vFuOUKk80AAAAAA",
+      "ORTQ2EsYQgA-IzJJV2ODkAAAAAA",
+      "ORTQ2EtkjgA-/Z1wxenw8AAAAAA",
+      "ORTQ2Euw2gA-PEg/xc7ScAAAAAA"
+    ],
+    "attrs": {}
+  },
+  "enc-water-island5": {
+    "type": "landSmall",
+    "displayname": "",
+    "description": "",
+    "layer": 0,
+    "nodes": [
+      "ORTQ2Ev9JAA-29LANA/foAAAAAA",
+      "ORTQ2ExJcAA-2IZQfjm44AAAAAA",
+      "ORTQ2ExvlgA-9ogd67kYcAAAAAA",
+      "ORTQ2Ey74AA-YhoimCjwYAAAAAA",
+      "ORTQ2E0ILAA-bNiN8JXxoAAAAAA",
+      "ORTQ2E1UeAA-8Y69/pgr0AAAAAA",
+      "ORTQ2E16nAA-u0/iTDM5oAAAAAA",
+      "ORTQ2E3G6AA-FECwvQOUgAAAAAA",
+      "ORTQ2E4TNAA-IxsZGCg40AAAAAA",
+      "ORTQ2E5ffgA-tWhHBGfqAAAAAAA",
+      "ORTQ2E6rygA-xn72oBvHUAAAAAA",
+      "ORTQ2E7R8AA-lNyHz5QfoAAAAAA",
+      "ORTQ2E8eOgA-bdRifux0wAAAAAA",
+      "ORTQ2E9qhgA-W9+rRa5k0AAAAAA",
+      "ORTQ2E+20gA-mqklWUXu4AAAAAA",
+      "ORTQ2E/c9gA-f9LvfUgD8AAAAAA",
+      "ORTQ2FApQgA-06zyba6V0AAAAAA",
+      "ORTQ2FB1jgA-6c7Yi2EnIAAAAAA",
+      "ORTQ2FDB2AA-TRjO7vXyAAAAAAA",
+      "ORTQ2FDn/gA-s1HwLw9oYAAAAAA",
+      "ORTQ2FE0SgA-sWgAnkKCoAAAAAA",
+      "ORTQ2FGAlAA-RFakjN6qEAAAAAA",
+      "ORTQ2FHM4AA-Qic5bjPP4AAAAAA",
+      "ORTQ2FIZLAA-30z5snrO8AAAAAA",
+      "ORTQ2FJldgA-p8KGdVIQUAAAAAA",
+      "ORTQ2FKLnAA-Xf3WSucrwAAAAAA",
+      "ORTQ2FL+DAA-Cq1H4STVoAAAAAA",
+      "ORTQ2FNKWAA-ld6thRwvAAAAAAA",
+      "ORTQ2FOWpAA-fHzPQStgAAAAAA",
+      "ORTQ2FPi7gA-rQVAclSpsAAAAAA",
+      "ORTQ2FQvOgA-5IqIkPzbEAAAAAA"
+    ],
+    "attrs": {}
+  },
+  "enc-crestaCapitol-parkpath": {
+    "type": "pathway",
+    "displayname": "",
+    "description": "",
+    "layer": 0,
+    "nodes": [
+      "ORTQ2FRVYAA-6LcDQnHesAAAAAA",
+      "enc-crestaCapitol_building41",
+      "ORTQ2FTt9gA-Z6dS1zW+QAAAAAA",
+      "ORTQ2FU6QgA-C0mNCLM2EAAAAAA",
+      "ORTQ2FWGjAA-O9E2rn++AAAAAAA",
+      "ORTQ2FWssgA-1RxNB6bccAAAAAA",
+      "ORTQ2FX4/gA-mFh58Ia54AAAAAA",
+      "ORTQ2FZFSAA-6INzS47CcAAAAAA",
+      "ORTQ2FaRlAA-QzNaZ9DREAAAAAA",
+      "ORTQ2Fbd4AA-M+WnMKu3oAAAAAA",
+      "ORTQ2FcEBAA-KA3OsbYXAAAAAAA",
+      "ORTQ2FdQUAA-FASN3DskAAAAAA",
+      "ORTQ2FecnAA-vWGdKnirAAAAAAA",
+      "ORTQ2Ffo5gA-CN2ra9j1gAAAAAA",
+      "enc-crestaCapitol_building34",
+      "enc-cruzAv8"
+    ],
+    "attrs": {}
+  },
+  "enc-water-island6": {
+    "type": "landSmall",
+    "displayname": "",
+    "description": "",
+    "layer": 0,
+    "nodes": [
+      "ORTQ2FinogA-WGkR26r6gAAAAAA",
+      "ORTQ2Fjz7gA-dI3ISHK1YAAAAAA",
+      "ORTQ2FlAOgA-PJnuIPpDsAAAAAA",
+      "ORTQ2FmMhAA-nSGfqms7gAAAAAA"
     ],
     "attrs": {}
   }
