@@ -293,7 +293,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
         operated = _RayOperatedHandler.remote()
         for tile_coord, image, text_list in new_texts:
             input_.append((operated, total_texts, start, image, tile_coord, text_list,
-                           save_images, save_dir, True))
+                           save_images, save_dir, skin, True))
         futures = [ray.remote(rendering._draw_text).remote(*input_[i]) for i in range(len(input_))]
         preresult = ray.get(futures)
 

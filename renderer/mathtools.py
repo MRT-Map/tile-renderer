@@ -62,14 +62,14 @@ def midpoint(c1: Coord, c2: Coord, o: RealNum, n: int = 1,
             points.append((c, rot))
     return points
 
-def lines_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
+def segments_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
     """
     Finds if two segments intersect.
     
-    :param RealNum c1:  the 1st point of the 1st segment.
-    :param RealNum c2:  the 2nd point of the 1st segment.
-    :param RealNum c3:  the 1st point of the 2nd segment.
-    :param RealNum c4:  the 2nd point of the 2nd segment.
+    :param RealNum c1: the 1st point of the 1st segment.
+    :param RealNum c2: the 2nd point of the 1st segment.
+    :param RealNum c3: the 1st point of the 2nd segment.
+    :param RealNum c4: the 2nd point of the 2nd segment.
         
     :returns: Whether the two segments intersect.
     :rtype: bool
@@ -78,7 +78,12 @@ def lines_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
     xdiff = (c1.x - c2.x, c3.x - c4.x)
     ydiff = (c1.y - c2.y, c3.y - c4.y)
     det = lambda a, b: a[0] * b[1] - a[1] * b[0]
-    return det(xdiff, ydiff) != 0
+    div = det(xdiff, ydiff)
+    if div == 0: return False
+    d = (det(c1, c2), det(c3, c4))
+    x = det(d, xdiff) / div
+    y = det(d, ydiff) / div
+    return min(c1.x, c2.x) <= x <= max(c1.x, c2.x) and min(c1.y, c2.y) <= y <= max(c1.y, c2.y)
 
 def point_in_poly(xp: RealNum, yp: RealNum, coords: list[Coord]) -> bool:
     """
@@ -105,7 +110,7 @@ def poly_intersect(poly1: list[Coord], poly2: list[Coord]) -> bool:
     coords1 = [i for i in internal._with_next(poly1)]
     coords2 = [i for i in internal._with_next(poly2)]
     for (c1, c2), (c3, c4) in product(coords1, coords2):
-        if lines_intersect(c1, c2, c3, c4): return True
+        if segments_intersect(c1, c2, c3, c4): return True
     if all(point_in_poly(x, y, poly2) for x, y in poly1): return True
     if all(point_in_poly(x, y, poly1) for x, y in poly2): return True
     return False
@@ -147,7 +152,7 @@ def line_in_box(line: list[Coord], top: RealNum, bottom: RealNum, left: RealNum,
                        (Coord(bottom, left), Coord(bottom, right)),
                        (Coord(bottom, right), Coord(top, right)),
                        (Coord(top, right), Coord(top, left))]:
-            if lines_intersect(c1, c2, c3, c4):
+            if segments_intersect(c1, c2, c3, c4):
                 return True
     for c in line:
         if top < c.x < bottom or left < c.y < right:

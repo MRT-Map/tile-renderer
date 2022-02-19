@@ -80,18 +80,18 @@ def _draw_components(operated,
                 args = {
                     "point": {
                         "circle": (imd, coords),
-                        "text": (imd, coords, component.displayname, assets_dir, points_text_list),
+                        "text": (imd, coords, component.displayname, assets_dir, points_text_list, tile_coord, skin.tile_size),
                         "square": (imd, coords),
                         "image": (img, coords, assets_dir)
                     },
                     "line": {
-                        "text": (imd, coords, assets_dir, component, text_list),
+                        "text": (imd, coords, assets_dir, component, text_list, tile_coord, skin.tile_size),
                         "back": (imd, coords),
                         "fore": (imd, coords)
                     },
                     "area": {
-                        "bordertext": (imd, coords, component, assets_dir, text_list),
-                        "centertext": (imd, coords, component, assets_dir, text_list),
+                        "bordertext": (imd, coords, component, assets_dir, text_list, tile_coord, skin.tile_size),
+                        "centertext": (imd, coords, component, assets_dir, text_list, tile_coord, skin.tile_size),
                         "fill": (imd, img, coords, component, nodes, tile_coord, size),
                         "centerimage": (img, coords, assets_dir)
                     }
@@ -159,10 +159,10 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
                 if text not in text_dict: text_dict[text] = []
                 text_dict[text].append(tile_coord)
         no_intersect: list[list[Coord]] = []
-        is_rendered = True
         start = time.time() * 1000
         operations = len(text_dict)
         for i, text in enumerate(text_dict.copy().keys()):
+            is_rendered = True
             for other in no_intersect:
                 for bound in text.bounds:
                     if mathtools.poly_intersect(list(bound), other):
@@ -171,13 +171,13 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
                         break
                     if not is_rendered: break
                 if not is_rendered: break
-            no_intersect.append(*text.bounds)
             if not is_rendered:
                 print(_eta(start, i + 1, operations) +
                       f"Eliminated overlapping text {i + 1}/{operations} in zoom {z}", flush=True)
-                break
-            print(_eta(start, i + 1, operations) +
-                  f"Kept text {i + 1}/{operations} in zoom {z}", flush=True)
+            else:
+                no_intersect.append(*text.bounds)
+                print(_eta(start, i + 1, operations) +
+                      f"Kept text {i + 1}/{operations} in zoom {z}", flush=True)
 
         start = time.time() * 1000
         operations = len(text_dict)
@@ -195,7 +195,7 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
 
 
 def _draw_text(operated, operations: int, start: RealNum, image: Image.Image, tile_coord: TileCoord, text_list: list[_TextObject],
-               save_images: bool, save_dir: Path, using_ray: bool=False) -> dict[TileCoord, Image.Image]:
+               save_images: bool, save_dir: Path, skin: Skin, using_ray: bool=False) -> dict[TileCoord, Image.Image]:
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
     processed = 0
     #print(text_list)
@@ -205,7 +205,8 @@ def _draw_text(operated, operations: int, start: RealNum, image: Image.Image, ti
         else: operated.count()
         logger.log(f"Text {processed}/{len(text_list)} pasted")
         for img, center in zip(text.image, text.center):
-            image.paste(img, (int(center.x-img.width/2), int(center.y-img.height/2)), img)
+            image.paste(img, (int(center.x-tile_coord.x*skin.tile_size-img.width/2),
+                              int(center.y-tile_coord.y*skin.tile_size-img.height/2)), img)
     
     #tileReturn[tile_coord] = im
     if save_images:

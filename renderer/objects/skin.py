@@ -28,16 +28,19 @@ class _TextObject:
     center: tuple[Coord, ...]
     bounds: tuple[tuple[Coord, ...]]
 
-    def __init__(self, image: Image.Image, x: RealNum, y: RealNum, w: RealNum, h: RealNum, rot: RealNum):
-        r = lambda a, b: mathtools.rotate_around_pivot(a, b, x, y, rot)
+    def __init__(self, image: Image.Image, x: RealNum, y: RealNum, w: RealNum, h: RealNum, rot: RealNum, tile_coord: TileCoord, tile_size: int):
+        r = lambda a, b: mathtools.rotate_around_pivot(a, b,
+                                                       tile_coord.x * tile_size + x,
+                                                       tile_coord.y * tile_size + y,
+                                                       rot)
         self.image = (image,)
-        self.center = (Coord(x, y),)
+        self.center = (Coord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),)
         self.bounds = ((
-            r(x - w / 2, y - h / 2),
-            r(x - w / 2, y + h / 2),
-            r(x + w / 2, y + h / 2),
-            r(x + w / 2, y - h / 2),
-            r(x - w / 2, y - h / 2),
+            r(tile_coord.x * tile_size + x - w / 2, tile_coord.y * tile_size + y - h / 2),
+            r(tile_coord.x * tile_size + x - w / 2, tile_coord.y * tile_size + y + h / 2),
+            r(tile_coord.x * tile_size + x + w / 2, tile_coord.y * tile_size + y + h / 2),
+            r(tile_coord.x * tile_size + x + w / 2, tile_coord.y * tile_size + y - h / 2),
+            r(tile_coord.x * tile_size + x - w / 2, tile_coord.y * tile_size + y - h / 2),
         ),)
 
     @classmethod
@@ -167,7 +170,8 @@ class Skin:
                 self.anchor: str = json['anchor']
                 
             def render(self, imd: ImageDraw, coords: list[Coord], 
-                       displayname: str, assets_dir: Path, points_text_list: list[_TextObject]):
+                       displayname: str, assets_dir: Path, points_text_list: list[_TextObject],
+                       tile_coord: TileCoord, tile_size: int):
                 if len(displayname.strip()) == 0: return
                 font = self._type_info._skin.get_font("", self.size+1, assets_dir)
                 text_length = int(imd.textlength(displayname, font))
@@ -177,7 +181,11 @@ class Skin:
                           anchor="mm", stroke_width=1, stroke_fill="#dddddd")
                 tw, th = pt_i.size
                 pt_i = pt_i.crop((0, 0, pt_i.width, pt_i.height))
-                points_text_list.append(_TextObject(pt_i, coords[0].x + self.offset[0], coords[0].y + self.offset[1], tw, th, 0))
+                points_text_list.append(_TextObject(pt_i,
+                                                    coords[0].x + self.offset[0],
+                                                    coords[0].y + self.offset[1],
+                                                    tw/4, th/4, 0,
+                                                    tile_coord, tile_size))
                 #font = skin.get_font("", step.size)
                 #img.text((coords[0][0]+step.offset[0], coords[0][1]+step.offset[1]), component.displayname, fill=step.colour, font=font, anchor=step['anchor'])
             
@@ -222,7 +230,8 @@ class Skin:
                 self.offset: int = json['offset']
                 
             def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord],
-                       assets_dir: Path, component: Component, text_list: list[_TextObject]):
+                       assets_dir: Path, component: Component, text_list: list[_TextObject],
+                       tile_coord: TileCoord, tile_size: int):
                 if len(component.displayname) == 0: return
                 #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating text length")
                 font = self._type_info._skin.get_font("", self.size+1, assets_dir)
@@ -247,7 +256,9 @@ class Skin:
                             tw, th = lt_i.size[:]
                             lt_i = lt_i.rotate(trot, expand=True)
                             lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
-                            text_list.append(_TextObject(lt_i, tx, ty, tw, th, trot))
+                            text_list.append(_TextObject(lt_i, tx, ty,
+                                                         tw/4, th/4, trot,
+                                                         tile_coord, tile_size))
                     if "oneWay" in component.tags and text_length <= math.dist(c1, c2):
                         #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Generating oneway arrows")
                         font = self._type_info._skin.get_font("b", self.size, assets_dir)
@@ -265,7 +276,9 @@ class Skin:
                             tw, th = lt_i.size[:]
                             lt_i = lt_i.rotate(trot, expand=True)
                             lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
-                            text_list.append(_TextObject(lt_i, tx, ty, tw, th, trot))
+                            text_list.append(_TextObject(lt_i, tx, ty,
+                                                         tw/4, th/4, trot,
+                                                         tile_coord, tile_size))
                             counter += 1
                
         class LineBack(ComponentStyle):
@@ -307,7 +320,8 @@ class Skin:
                 self.size: int = json['size']
                 
             def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord], component: Component,
-                       assets_dir: Path, text_list: list[_TextObject]):
+                       assets_dir: Path, text_list: list[_TextObject],
+                       tile_coord: TileCoord, tile_size: int):
                 if len(component.displayname.strip()) == 0: return
                 font = self._type_info._skin.get_font("", self.size+1, assets_dir)
                 text_length = int(imd.textlength(component.displayname.replace('\n', ''), font))
@@ -340,7 +354,9 @@ class Skin:
                             tw, th = abt_i.size[:]
                             abt_ir = abt_i.rotate(trot, expand=True)
                             abt_ir = abt_ir.crop((0, 0, abt_ir.width, abt_ir.height))
-                            text_list.append(_TextObject(abt_ir, tx, ty, tw, th, trot))
+                            text_list.append(_TextObject(abt_ir, tx, ty,
+                                                         tw/4, th/4, trot,
+                                                         tile_coord, tile_size))
 
         class AreaCenterText(ComponentStyle):
             # noinspection PyInitNewSignature
@@ -352,7 +368,8 @@ class Skin:
                 self.size: int = json['size']
                 
             def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord], component: Component,
-                       assets_dir: Path, text_list: list[_TextObject]):
+                       assets_dir: Path, text_list: list[_TextObject],
+                       tile_coord: TileCoord, tile_size: int):
                 if len(component.displayname.strip()) == 0: return
                 cx, cy = mathtools.poly_center(coords)
                 cx += self.offset[0]
@@ -387,7 +404,9 @@ class Skin:
                            stroke_width=1, stroke_fill="#dddddd")
                 cw, ch = act_i.size[:]
                 act_i = act_i.crop((0, 0, act_i.width, act_i.height))
-                text_list.append(_TextObject(act_i, cx, cy, cw, ch, 0))
+                text_list.append(_TextObject(act_i, cx, cy,
+                                             cw/4, ch/4, 0,
+                                             tile_coord, tile_size))
 
         class AreaFill(ComponentStyle):
             # noinspection PyInitNewSignature
