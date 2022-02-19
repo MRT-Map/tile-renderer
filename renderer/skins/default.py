@@ -287,7 +287,8 @@ def main():
         CS.line_back(colour=0xeeeeee,
                      width=8),
         CS.line_fore(colour=0x66ff66,
-                     width=4),
+                     width=4,
+                     dash=(16, 16)),
         CS.line_text(colour=0xaaaaaa,
                      size=16,
                      offset=10)
@@ -462,7 +463,7 @@ def main():
         CS.area_fill(colour=0x999966,
                      outline=0x77773c),
         CS.area_centertext(colour=0x444422,
-                           size=30)
+                           size=10)
     ]
     s['transportBuilding'] = transport_building
 
@@ -480,7 +481,8 @@ def main():
         CS.line_back(colour=0xeeeeee,
                      width=8),
         CS.line_fore(colour=0x008000,
-                     width=4),
+                     width=4,
+                     dash=(16, 16)),
         CS.line_text(colour=0xaaaaaa,
                      size=16,
                      offset=10)
@@ -638,7 +640,8 @@ def main():
         CS.line_back(colour=0xeeeeee,
                      width=8),
         CS.line_fore(colour=0x008000,
-                     width=4),
+                     width=4,
+                     dash=(16, 16)),
         CS.line_text(colour=0xaaaaaa,
                      size=16,
                      offset=10)

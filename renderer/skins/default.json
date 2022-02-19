@@ -850,7 +850,10 @@
             "layer": "fore",
             "colour": "#66ff66",
             "width": 4,
-            "dash": null
+            "dash": [
+              16,
+              16
+            ]
           },
           {
             "layer": "text",
@@ -1286,7 +1289,7 @@
               0,
               0
             ],
-            "size": 30
+            "size": 10
           }
         ]
       }
@@ -1331,7 +1334,10 @@
             "layer": "fore",
             "colour": "#008000",
             "width": 4,
-            "dash": null
+            "dash": [
+              16,
+              16
+            ]
           },
           {
             "layer": "text",
@@ -1723,7 +1729,10 @@
             "layer": "fore",
             "colour": "#008000",
             "width": 4,
-            "dash": null
+            "dash": [
+              16,
+              16
+            ]
           },
           {
             "layer": "text",

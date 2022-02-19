@@ -173,7 +173,7 @@ class Skin:
                        displayname: str, assets_dir: Path, points_text_list: list[_TextObject],
                        tile_coord: TileCoord, tile_size: int):
                 if len(displayname.strip()) == 0: return
-                font = self._type_info._skin.get_font("", self.size+1, assets_dir)
+                font = self._type_info._skin.get_font("", self.size+2, assets_dir)
                 text_length = int(imd.textlength(displayname, font))
                 pt_i = Image.new('RGBA', (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0))
                 pt_d = ImageDraw.Draw(pt_i)
@@ -234,7 +234,7 @@ class Skin:
                        tile_coord: TileCoord, tile_size: int):
                 if len(component.displayname) == 0: return
                 #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating text length")
-                font = self._type_info._skin.get_font("", self.size+1, assets_dir)
+                font = self._type_info._skin.get_font("", self.size+2, assets_dir)
                 text_length = int(imd.textlength(component.displayname, font))
                 if text_length == 0:
                     text_length = int(imd.textlength("----------", font))
@@ -323,7 +323,7 @@ class Skin:
                        assets_dir: Path, text_list: list[_TextObject],
                        tile_coord: TileCoord, tile_size: int):
                 if len(component.displayname.strip()) == 0: return
-                font = self._type_info._skin.get_font("", self.size+1, assets_dir)
+                font = self._type_info._skin.get_font("", self.size+2, assets_dir)
                 text_length = int(imd.textlength(component.displayname.replace('\n', ''), font))
                 for c1, c2 in internal._with_next(coords):
                     if mathtools.line_in_box(coords, 0, self._type_info._skin.tile_size, 0,
@@ -374,7 +374,7 @@ class Skin:
                 cx, cy = mathtools.poly_center(coords)
                 cx += self.offset[0]
                 cy += self.offset[1]
-                font = self._type_info._skin.get_font("", self.size+1, assets_dir)
+                font = self._type_info._skin.get_font("", self.size+2, assets_dir)
                 text_length = int(min(imd.textlength(x, font) for x in component.displayname.split('\n')))
 
                 left = min(cl.x for cl in coords)
