@@ -4238,7 +4238,7 @@
     "attrs": {}
   },
   "enc-water-islandB": {
-    "type": "simpleArea",
+    "type": "landSmall",
     "displayname": "",
     "description": "",
     "layer": 0,
@@ -4254,7 +4254,7 @@
     "attrs": {}
   },
   "enc-water-islandC": {
-    "type": "simpleArea",
+    "type": "landSmall",
     "displayname": "",
     "description": "",
     "layer": 0,
@@ -4270,7 +4270,7 @@
     "attrs": {}
   },
   "enc-water-islandD": {
-    "type": "simpleArea",
+    "type": "landSmall",
     "displayname": "",
     "description": "",
     "layer": 0,
