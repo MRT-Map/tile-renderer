@@ -1,1441 +1,4224 @@
 {
-    "B209_1s": {
-        "type": "bRoad oneWay",
-        "displayname": "B209",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["B209s1", "B209s2", "B209s3", "B209s4", "B209s5", "B209s6"],
-        "attrs": {}
-    },
-    "B209_2s": {
-        "type": "bRoad_elevated oneWay",
-        "displayname": "B209",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["B209s6", "B209s7"],
-        "attrs": {}
-    },
-    "B209_3s": {
-        "type": "bRoad oneWay",
-        "displayname": "B209",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["B209s7", "B209s8"],
-        "attrs": {}
-    },
-    "B209_1n": {
-        "type": "bRoad oneWay",
-        "displayname": "B209",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["B209n6", "B209n5", "B209n4", "B209n3", "B209n2", "B209n1"],
-        "attrs": {}
-    },
-    "B209_2n": {
-        "type": "bRoad_elevated oneWay",
-        "displayname": "B209",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["B209n7", "B209n6"],
-        "attrs": {}
-    },
-    "B209_3n": {
-        "type": "bRoad oneWay",
-        "displayname": "B209",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["B209n8", "B209n7"],
-        "attrs": {}
-    },
-    "enc-roundabout": {
-        "type": "bRoadSlip oneWay",
-        "displayname": "Cruz Av",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-roundabout16", "enc-roundabout15", "enc-roundabout14", "enc-roundabout13", "enc-roundabout12", "enc-roundabout11", "enc-roundabout10", "enc-roundabout9", 
-                  "enc-roundabout8","enc-roundabout7", "enc-roundabout6", "enc-roundabout5", "enc-roundabout4", "enc-roundabout3", "enc-roundabout2", "enc-roundabout1", "enc-roundabout16"],
-        "attrs": {}
-    },
-    "enc-B209slip_1": {
-        "type": "bRoadSlip oneWay",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cruzAv2", "enc-roundaboutSlip2", "B209s1"],
-        "attrs": {}
-    },
-    "enc-B209slip_2": {
-        "type": "bRoadSlip oneWay",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["B209n1", "enc-roundaboutSlip1", "enc-cruzAv5"],
-        "attrs": {}
-    },
-    "enc-cruzAv_1": {
-        "type": "localMainRoad",
-        "displayname": "Cruz Av",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cruzAv1_joyaSt2", "enc-cruzAv2"],
-        "attrs": {}
-    },
-    "enc-cruzAv_2e": {
-        "type": "bRoadSlip oneWay",
-        "displayname": "Cruz Av",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cruzAv2", "enc-cruzAve3", "enc-roundabout3", "B209s1"],
-        "attrs": {}
-    },
-    "enc-cruzAv_2w": {
-        "type": "bRoadSlip oneWay",
-        "displayname": "Cruz Av",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-escondidoSt8", "enc-roundabout7", "enc-cruzAvw3", "enc-cruzAv2"],
-        "attrs": {}
-    },
-    "enc-cruzAv_3e": {
-        "type": "bRoadSlip oneWay",
-        "displayname": "Cruz Av",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["B209n1", "enc-roundabout15", "enc-cruzAve4", "enc-cruzAv5"],
-        "attrs": {}
-    },
-    "enc-cruzAv_3w": {
-        "type": "bRoadSlip oneWay",
-        "displayname": "Cruz Av",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cruzAv5", "enc-cruzAvw4", "enc-roundabout11", "enc-escondidoSt8"],
-        "attrs": {}
-    },
-    "enc-cruzAv_4": {
-        "type": "localMainRoad",
-        "displayname": "Cruz Av",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cruzAv5", "enc-cruzAv6_cabrilloAv1", "enc-cruzAv7_costaBlvd1", "enc-cruzAv7_wCross", "enc-cruzAv8"],
-        "attrs": {}
-    },
-    "enc-costaBlvd": {
-        "type": "localTertiaryRoad",
-        "displayname": "Costa Blvd",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cruzAv7_costaBlvd1", "enc-arelaPkwy1_costaBlvd2", "enc-escondidoSt1_costaBlvd3", "enc-costaBlvd4", "enc-costaBlvd5",
-                  "enc-costaBlvd6", "enc-costaBlvd7", "enc-costaBlvd8_cabrilloAv4", "enc-costaBlvd9"],
-        "attrs": {}
-    },
-    "enc-cabrilloAv": {
-        "type": "localSecondaryRoad",
-        "displayname": "Cabrillo Av",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cruzAv6_cabrilloAv1", "enc-arelaPkwy2_cabrilloAv2", "enc-escondidoSt2_cabrilloAv3", "enc-costaBlvd8_cabrilloAv4",
-                  "enc-cabrilloAv5", "enc-cabrilloAv6", "enc-cabrilloAv7", "enc-cabrilloAv8", "enc-calleMontana35_cabrilloAv9"],
-        "attrs": {}
-    },
-    "enc-escondidoSt": {
-        "type": "localTertiaryRoad",
-        "displayname": "Escondido St",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-escondidoSt1_costaBlvd3", "enc-escondidoSt2_cabrilloAv3", "enc-escondidoSt3", "enc-escondidoSt4",
-                  "enc-escondidoSt5", "enc-escondidoSt6", "enc-arelaPkwy3_escondidoSt7", "enc-escondidoSt8"],
-        "attrs": {}
-    },
-    "enc-joyaSt1": {
-        "type": "localSecondaryRoad",
-        "displayname": "Joya St",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-arelaPkwy4_joyaSt1", "enc-cruzAv1_joyaSt2", "enc-joyaSt3", "enc-joyaSt4", "enc-joyaSt5", "enc-joyaSt6", "enc-joyaSt7",
-                  "enc-joyaSt8", "enc-joyaSt9", "enc-joyaSt10", "enc-joyaSt11_B209sSlip2"],
-        "attrs": {}
-    },
-    "enc-joyaSt2": {
-        "type": "localSecondaryRoad_underground",
-        "displayname": "Joya St",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-joyaSt11_B209sSlip2", "enc-joyaSt12_B209nSlip2"],
-        "attrs": {}
-    },
-    "enc-joyaSt3": {
-        "type": "localSecondaryRoad",
-        "displayname": "Joya St",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-joyaSt12_B209nSlip2", "enc-joyaSt13_diplomacyBlvd1_unnamedB3"],
-        "attrs": {}
-    },
-    "enc-diplomacyBlvd": {
-        "type": "localTertiaryRoad",
-        "displayname": "Diplomacy Blvd",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-joyaSt13_diplomacyBlvd1_unnamedB3", "enc-diplomacyBlvd2", "enc-diplomacyBlvd3", "enc-diplomacyBlvd4", "enc-diplomacyBlvd5",
-                  "enc-diplomacyBlvd6", "enc-diplomacyBlvd7", "enc-diplomacyBlvd8", "enc-diplomacyBlvd9", "enc-diplomacyBlvd10"],
-        "attrs": {}
-    },
-    "enc-unnamedA": {
-        "type": "localMainRoad",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-unnamedA1", "enc-unnamedA2_B1", "enc-unnamedA3"],
-        "attrs": {}
-    },
-    "enc-unnamedB": {
-        "type": "localSecondaryRoad",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-unnamedA2_B1", "enc-unnamedB2", "enc-joyaSt13_diplomacyBlvd1_unnamedB3"],
-        "attrs": {}
-    },
-    "enc-arelaPkwy": {
-        "type": "localSecondaryRoad",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-arelaPkwy1_costaBlvd2", "enc-arelaPkwy2_cabrilloAv2", "enc-arelaPkwy3_escondidoSt7", "enc-arelaPkwy4_joyaSt1", "enc-arelaPkwy5_calleMontana1"],
-        "attrs": {}
-    },
-    "enc-calleMontana": {
-        "type": "localSecondaryRoad",
-        "displayname": "Calle Montaña",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-arelaPkwy5_calleMontana1", "enc-calleMontana2", "enc-calleMontana3", "enc-calleMontana4", "enc-calleMontana5", "enc-calleMontana6_montanasCabrillos2",
-                  "enc-calleMontana7", "enc-calleMontana8", "enc-calleMontana9", "enc-calleMontana10", "enc-calleMontana11", "enc-calleMontana12", "enc-calleMontana13",
-                  "enc-calleMontana14", "enc-calleMontana15", "enc-calleMontana16", "enc-calleMontana17", "enc-calleMontana18", "enc-calleMontana19", "enc-calleMontana20",
-                  "enc-calleMontana21", "enc-calleMontana22", "enc-calleMontana23", "enc-calleMontana24", "enc-calleMontana25", "enc-calleMontana26", "enc-calleMontana27",
-                  "enc-calleMontana28", "enc-calleMontana29", "enc-calleMontana30", "enc-calleMontana31", "enc-calleMontana32", "enc-calleMontana33", "enc-calleMontana34",
-                  "enc-calleMontana35_cabrilloAv9", "enc-calleMontana36", "enc-calleMontana37", "enc-calleMontana38", "enc-calleMontana39", "enc-calleMontana40_caminoDiamanteA1",
-                  "enc-calleMontana41"],
-        "attrs": {}
-    },
-    "enc-caminoDiamanteA": {
-        "type": "localTertiaryRoad",
-        "displayname": "Camino Diamante",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-calleMontana40_caminoDiamanteA1", "enc-caminoDiamanteA2_B5"],
-        "attrs": {}
-    },
-    "enc-caminoDiamanteB": {
-        "type": "localTertiaryRoad",
-        "displayname": "Camino Diamante",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-caminoDiamanteB1", "enc-caminoDiamanteB2", "enc-caminoDiamanteB3", "enc-caminoDiamanteB4", "enc-caminoDiamanteA2_B5", "enc-caminoDiamanteB6",
-                  "enc-caminoDiamanteB7", "enc-caminoDiamanteB8", "enc-caminoDiamanteB9"],
-        "attrs": {}
-    },
-    "enc-montanasCabrillos": {
-        "type": "localQuaternaryRoad",
-        "displayname": "Montañas Cabrillos",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-montanasCabrillos1", "enc-calleMontana6_montanasCabrillos2", "enc-montanasCabrillos3"],
-        "attrs": {}
-    },
-    "enc-ecjTerminal": {
-        "type": "transportBuilding",
-        "displayname": "Encinitas Joya Airfield",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-ecjTerminal1_front1", "enc-ecjTerminal2_apron8", "enc-ecjTerminal3_apron1", "enc-ecjTerminal4_front2"],
-        "attrs": {}
-    },
-    "enc-ecjApron": {
-        "type": "apron",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-ecjTerminal3_apron1", "enc-ecjApron2", "enc-ecjApron3", "enc-ecjApron4", "enc-ecjApron5", "enc-ecjApron6", "enc-ecjApron7", "enc-ecjTerminal2_apron8"],
-        "attrs": {}
-    },
-    "enc-ecjTaxiway": {
-        "type": "taxiway",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-ecjTaxiway1_runway2", "enc-ecjTaxiway2", "enc-ecjTaxiway3", "enc-ecjTaxiway4", "enc-ecjTaxiway5", "enc-ecjTaxiway6", "enc-ecjTaxiway7", "enc-ecjTaxiway8_runway3"],
-        "attrs": {}
-    },
-    "enc-ecjRunway": {
-        "type": "runway",
-        "displayname": "09/27",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-ecjRunway1", "enc-ecjTaxiway1_runway2", "enc-ecjTaxiway8_runway3", "enc-ecjRunway4"],
-        "attrs": {}
-    },
-    "enc-ecjFountain": {
-        "type": "waterSmall",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-ecjFountain1", "enc-ecjFountain2", "enc-ecjFountain3", "enc-ecjFountain4"],
-        "attrs": {}
-    },
-    "enc-ecjFront": {
-        "type": "plaza",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": -1,
-        "nodes": ["enc-ecjTerminal1_front1", "enc-ecjTerminal4_front2", "enc-ecjFront3", "enc-ecjFront4"],
-        "attrs": {}
-    },
-    "enc-subwayStn_joyaAirfieldEntrance": {
-        "type": "transportBuilding",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_joyaAirfieldEntrance1", "enc-subwayStn_joyaAirfieldEntrance2", "enc-subwayStn_joyaAirfieldEntrance3", "enc-subwayStn_joyaAirfieldEntrance4",
-                  "enc-subwayStn_joyaAirfieldEntrance5", "enc-subwayStn_joyaAirfieldEntrance6", "enc-subwayStn_joyaAirfieldEntrance7", "enc-subwayStn_joyaAirfieldEntrance8"],
-        "attrs": {}
-    },
-    "enc-subwayStn_joyaAirfieldConcourse": {
-        "type": "transportBuilding_underground",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_joyaAirfieldConcourse1", "enc-subwayStn_joyaAirfieldConcourse2", "enc-subwayStn_joyaAirfieldConcourse3_platforms4", "enc-subwayStn_joyaAirfieldConcourse4_platforms5",
-                  "enc-subwayStn_joyaAirfieldConcourse5_platformn5", "enc-subwayStn_joyaAirfieldConcourse6_platformn4", "enc-subwayStn_joyaAirfieldConcourse7", "enc-subwayStn_joyaAirfieldConcourse8"],
-        "attrs": {}
-    },
-    "enc-subwayStn_joyaAirfieldPlatformN": {
-        "type": "platform_underground",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_joyaAirfieldPlatformn1", "enc-subwayStn_joyaAirfieldPlatformn2", "enc-subwayStn_joyaAirfieldPlatformn3", "enc-subwayStn_joyaAirfieldConcourse6_platformn4", "enc-subwayStn_joyaAirfieldConcourse5_platformn5"],
-        "attrs": {}
-    },
-    "enc-subwayStn_joyaAirfieldPlatformS": {
-        "type": "platform_underground",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_joyaAirfieldPlatforms1", "enc-subwayStn_joyaAirfieldPlatforms2", "enc-subwayStn_joyaAirfieldPlatforms3", "enc-subwayStn_joyaAirfieldConcourse3_platforms4", "enc-subwayStn_joyaAirfieldConcourse4_platforms5"],
-        "attrs": {}
-    },
-    "enc-subwayStn_joyaAirfieldMarker": {
-        "type": "railStation",
-        "displayname": "Joya Airfield",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_joyaAirfieldMarker"],
-        "attrs": {}
-    },
-    "enc-subwayStn_uptownEntrance": {
-        "type": "transportBuilding",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_uptownEntrance1", "enc-subwayStn_uptownEntrance2", "enc-subwayStn_uptownEntrance3", "enc-subwayStn_uptownEntrance4",
-                  "enc-subwayStn_uptownEntrance5", "enc-subwayStn_uptownEntrance6", "enc-subwayStn_uptownEntrance7", "enc-subwayStn_uptownEntrance8"],
-        "attrs": {}
-    },
-    "enc-subwayStn_uptownConcourse": {
-        "type": "transportBuilding_underground",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_uptownConcourse1", "enc-subwayStn_uptownConcourse2", "enc-subwayStn_uptownConcourse3_platformn4", "enc-subwayStn_uptownConcourse4_platformn5",
-                  "enc-subwayStn_uptownConcourse5_platforms5", "enc-subwayStn_uptownConcourse6_platforms4", "enc-subwayStn_uptownConcourse7", "enc-subwayStn_uptownConcourse8"],
-        "attrs": {}
-    },
-    "enc-subwayStn_uptownPlatformN": {
-        "type": "platform_underground",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_uptownPlatformn1", "enc-subwayStn_uptownPlatformn2", "enc-subwayStn_uptownPlatformn3", "enc-subwayStn_uptownConcourse3_platformn4", "enc-subwayStn_uptownConcourse4_platformn5"],
-        "attrs": {}
-    },
-    "enc-subwayStn_uptownPlatformS": {
-        "type": "platform_underground",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_uptownPlatforms1", "enc-subwayStn_uptownPlatforms2", "enc-subwayStn_uptownPlatforms3", "enc-subwayStn_uptownConcourse6_platforms4", "enc-subwayStn_uptownConcourse5_platforms5"],
-        "attrs": {}
-    },
-    "enc-subwayStn_uptownMarker": {
-        "type": "railStation",
-        "displayname": "Uptown",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_uptownMarker"],
-        "attrs": {}
-    },
-    "enc-subwayStn_marketEntrance": {
-        "type": "transportBuilding",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_marketEntrance1", "enc-subwayStn_marketEntrance2", "enc-subwayStn_marketEntrance3", "enc-subwayStn_marketEntrance4",
-                  "enc-subwayStn_marketEntrance5", "enc-subwayStn_marketEntrance6", "enc-subwayStn_marketEntrance7", "enc-subwayStn_marketEntrance8"],
-        "attrs": {}
-    },
-    "enc-subwayStn_marketConcourse": {
-        "type": "transportBuilding_underground",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_marketConcourse1", "enc-subwayStn_marketConcourse2", "enc-subwayStn_marketConcourse3_platforms4", "enc-subwayStn_marketConcourse4_platforms5",
-                  "enc-subwayStn_marketConcourse5_platformn5", "enc-subwayStn_marketConcourse6_platformn4", "enc-subwayStn_marketConcourse7", "enc-subwayStn_marketConcourse8"],
-        "attrs": {}
-    },
-    "enc-subwayStn_marketPlatformN": {
-        "type": "platform_underground",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_marketPlatformn1", "enc-subwayStn_marketPlatformn2", "enc-subwayStn_marketPlatformn3", "enc-subwayStn_marketConcourse6_platformn4", "enc-subwayStn_marketConcourse5_platformn5"],
-        "attrs": {}
-    },
-    "enc-subwayStn_marketPlatformS": {
-        "type": "platform_underground",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_marketPlatforms1", "enc-subwayStn_marketPlatforms2", "enc-subwayStn_marketPlatforms3", "enc-subwayStn_marketConcourse3_platforms4", "enc-subwayStn_marketConcourse4_platforms5"],
-        "attrs": {}
-    },
-    "enc-subwayStn_marketMarker": {
-        "type": "railStation",
-        "displayname": "Market",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_marketMarker"],
-        "attrs": {}
-    },
-    "enc-subwayStn_cabrilloEntrance": {
-        "type": "transportBuilding",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_cabrilloEntrance1", "enc-subwayStn_cabrilloEntrance2", "enc-subwayStn_cabrilloEntrance3", "enc-subwayStn_cabrilloEntrance4",
-                  "enc-subwayStn_cabrilloEntrance5", "enc-subwayStn_cabrilloEntrance6", "enc-subwayStn_cabrilloEntrance7", "enc-subwayStn_cabrilloEntrance8"],
-        "attrs": {}
-    },
-    "enc-subwayStn_cabrilloConcourse": {
-        "type": "transportBuilding_underground",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_cabrilloConcourse1", "enc-subwayStn_cabrilloConcourse2", "enc-subwayStn_cabrilloConcourse3_platforms4", "enc-subwayStn_cabrilloConcourse4_platforms5",
-                  "enc-subwayStn_cabrilloConcourse5_platformn5", "enc-subwayStn_cabrilloConcourse6_platformn4", "enc-subwayStn_cabrilloConcourse7", "enc-subwayStn_cabrilloConcourse8"],
-        "attrs": {}
-    },
-    "enc-subwayStn_cabrilloPlatformN": {
-        "type": "platform_underground",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_cabrilloPlatformn1", "enc-subwayStn_cabrilloPlatformn2", "enc-subwayStn_cabrilloPlatformn3", "enc-subwayStn_cabrilloConcourse6_platformn4", "enc-subwayStn_cabrilloConcourse5_platformn5"],
-        "attrs": {}
-    },
-    "enc-subwayStn_cabrilloPlatformS": {
-        "type": "platform_underground",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_cabrilloPlatforms1", "enc-subwayStn_cabrilloPlatforms2", "enc-subwayStn_cabrilloPlatforms3", "enc-subwayStn_cabrilloConcourse3_platforms4", "enc-subwayStn_cabrilloConcourse4_platforms5"],
-        "attrs": {}
-    },
-    "enc-subwayStn_cabrilloMarker": {
-        "type": "railStation",
-        "displayname": "Cabrillo",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayStn_cabrilloMarker"],
-        "attrs": {}
-    },
-    "enc-subwayTracksN": {
-        "type": "rail_underground",
-        "displayname": "Encinitas Subway",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayTracksn1", "enc-subwayTracksn2", "enc-subwayTracksn3", "enc-subwayTracksn4", "enc-subwayTracksn5",
-                  "enc-subwayTracksn6", "enc-subwayTracksn7", "enc-subwayTracksn8", "enc-subwayTracksn9", "enc-subwayTracksn10"],
-        "attrs": {}
-    },
-    "enc-subwayTracksS": {
-        "type": "rail_underground",
-        "displayname": "Encinitas Subway",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-subwayTrackss1", "enc-subwayTrackss2", "enc-subwayTrackss3", "enc-subwayTrackss4", "enc-subwayTrackss5",
-                  "enc-subwayTrackss6", "enc-subwayTrackss7", "enc-subwayTrackss8", "enc-subwayTrackss9", "enc-subwayTrackss10"],
-        "attrs": {}
-    },
-    "enc-cityHall": {
-        "type": "cityHall",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cityHall1", "enc-cityHall2", "enc-cityHall3", "enc-cityHall4"],
-        "attrs": {}
-    },
-    "enc-cityHallFountainW": {
-        "type": "waterSmall",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cityHallFountainw1", "enc-cityHallFountainw2", "enc-cityHallFountainw3", "enc-cityHallFountainw4",
-                  "enc-cityHallFountainw5", "enc-cityHallFountainw6", "enc-cityHallFountainw7", "enc-cityHallFountainw8"],
-        "attrs": {}
-    },
-    "enc-cityHallFountainE": {
-        "type": "waterSmall",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cityHallFountaine1", "enc-cityHallFountaine2", "enc-cityHallFountaine3", "enc-cityHallFountaine4",
-                  "enc-cityHallFountaine5", "enc-cityHallFountaine6", "enc-cityHallFountaine7", "enc-cityHallFountaine8"],
-        "attrs": {}
-    },
-    "enc-officeA": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Cruz-Arela, andesite/sandstone/cyan terr",
-        "layer": 0,
-        "nodes": ["enc-officeA1", "enc-officeA2", "enc-officeA3", "enc-officeA4"],
-        "attrs": {}
-    },
-    "enc-apartmentA": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Cruz-Arela, smooth stone/red terr/white terr",
-        "layer": 0,
-        "nodes": ["enc-apartmentA1", "enc-apartmentA2", "enc-apartmentA3", "enc-apartmentA4"],
-        "attrs": {}
-    },
-    "enc-parkA": {
-        "type": "park",
-        "displayname": "",
-        "description": "Encinitas, Cruz-Arela",
-        "layer": 0,
-        "nodes": ["enc-parkA1", "enc-parkA2", "enc-parkA3", "enc-parkA4"],
-        "attrs": {}
-    },
-    "enc-apartmentB": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Cruz-Arela, blue terr/andesite/white terr",
-        "layer": 0,
-        "nodes": ["enc-apartmentB1", "enc-apartmentB2", "enc-apartmentB3", "enc-apartmentB4"],
-        "attrs": {}
-    },
-    "enc-officeB": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Cruz-Arela, yellow terr/stone bricks/stone",
-        "layer": 0,
-        "nodes": ["enc-officeB1", "enc-officeB2", "enc-officeB3", "enc-officeB4"],
-        "attrs": {}
-    },
-    "enc-apartmentC": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Cruz-Arela, red terr/andesite/white terr",
-        "layer": 0,
-        "nodes": ["enc-apartmentC1", "enc-apartmentC2", "enc-apartmentC3", "enc-apartmentC4"],
-        "attrs": {}
-    },
-    "enc-officeC": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Cruz-Arela, light blue terr/bricks/stone",
-        "layer": 0,
-        "nodes": ["enc-officeC1", "enc-officeC2", "enc-officeC3", "enc-officeC4"],
-        "attrs": {}
-    },
-    "enc-apartmentD": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Cruz-Arela, magenta terr/netherite/stone",
-        "layer": 0,
-        "nodes": ["enc-apartmentD1", "enc-apartmentD2", "enc-apartmentD3", "enc-apartmentD4"],
-        "attrs": {}
-    },
-    "enc-zone_cruzArela": {
-        "type": "residentialOfficeArea",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-zone_cruzArela1", "enc-zone_cruzArela2", "enc-arelaPkwy1_costaBlvd2", "enc-arelaPkwy4_joyaSt1"],
-        "attrs": {}
-    },
-    "enc-officeD": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Arela-Escondido, andesite/white terr/stone bricks",
-        "layer": 0,
-        "nodes": ["enc-officeD1", "enc-officeD2", "enc-officeD3", "enc-officeD4"],
-        "attrs": {}
-    },
-    "enc-officeE": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Arela-Escondido, light blue terr/stone bricks/stone",
-        "layer": 0,
-        "nodes": ["enc-officeE1", "enc-officeE2", "enc-officeE3", "enc-officeE4"],
-        "attrs": {}
-    },
-    "enc-apartmentE": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Arela-Escondido, cobble/purpur pillar/light gray terr",
-        "layer": 0,
-        "nodes": ["enc-apartmentE1", "enc-apartmentE2", "enc-apartmentE3", "enc-apartmentE4"],
-        "attrs": {}
-    },
-    "enc-ECLibrary": {
-        "type": "building",
-        "displayname": "Edwards Central Library",
-        "description": "Encinitas, Arela-Escondido",
-        "layer": 0,
-        "nodes": ["enc-ECLibrary1", "enc-ECLibrary2", "enc-ECLibrary3", "enc-ECLibrary4"],
-        "attrs": {}
-    },
-    "enc-parkB": {
-        "type": "park",
-        "displayname": "",
-        "description": "Encinitas, Arela-Escondido",
-        "layer": 0,
-        "nodes": ["enc-parkB1", "enc-parkB2", "enc-parkB3", "enc-parkB4"],
-        "attrs": {}
-    },
-    "enc-apartmentF": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Arela-Escondido, cobble/blue terr/andesite",
-        "layer": 0,
-        "nodes": ["enc-apartmentF1", "enc-apartmentF2", "enc-apartmentF3", "enc-apartmentF4"],
-        "attrs": {}
-    },
-    "enc-officeFa": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Arela-Escondido, white/light gray terr",
-        "layer": 0,
-        "nodes": ["enc-officeFa1", "enc-officeFa2", "enc-officeFa3", "enc-officeFa4"],
-        "attrs": {}
-    },
-    "enc-officeFb": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Arela-Escondido, white/light gray terr",
-        "layer": 0,
-        "nodes": ["enc-officeFb1", "enc-officeFb2", "enc-officeFb3", "enc-officeFb4"],
-        "attrs": {}
-    },
-    "enc-officeG": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Arela-Escondido, cyan terr/andesite/white terr",
-        "layer": 0,
-        "nodes": ["enc-officeG1", "enc-officeG2", "enc-officeG3", "enc-officeG4"],
-        "attrs": {}
-    },
-    "enc-officeH": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Arela-Escondido, quartz bricks/terr/smooth stone",
-        "layer": 0,
-        "nodes": ["enc-officeH1", "enc-officeH2", "enc-officeH3", "enc-officeH4"],
-        "attrs": {}
-    },
-    "enc-centuryTower": {
-        "type": "building",
-        "displayname": "Century Tower",
-        "description": "Encinitas, Arela-Escondido",
-        "layer": 0,
-        "nodes": ["enc-centuryTower1", "enc-centuryTower2", "enc-centuryTower3", "enc-centuryTower4", "enc-centuryTower5", "enc-centuryTower6", "enc-centuryTower7", "enc-centuryTower8",
-                  "enc-centuryTower9", "enc-centuryTower10", "enc-centuryTower11", "enc-centuryTower12", "enc-centuryTower13", "enc-centuryTower14", "enc-centuryTower16", "enc-centuryTower16"],
-        "attrs": {}
-    },
-    "enc-apartmentG": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Arela-Escondido, pink terr/smooth stone/smooth stone",
-        "layer": 0,
-        "nodes": ["enc-apartmentG1", "enc-apartmentG2", "enc-apartmentG3", "enc-apartmentG4"],
-        "attrs": {}
-    },
-    "enc-officeI": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Arela-Escondido, andesite/crimson hyphae/cyan terr",
-        "layer": 0,
-        "nodes": ["enc-officeI1", "enc-officeI2", "enc-officeI3", "enc-officeI4"],
-        "attrs": {}
-    },
-    "enc-apartmentH1": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Arela-Escondido, cobblestone/green/lime terr/stone bricks",
-        "layer": 0,
-        "nodes": ["enc-apartmentH1", "enc-apartmentH2", "enc-apartmentH3", "enc-apartmentH4"],
-        "attrs": {}
-    },
-    "enc-officeJ": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Costa West, blackstone",
-        "layer": 0,
-        "nodes": ["enc-officeJ1", "enc-officeJ2", "enc-officeJ3", "enc-officeJ4"],
-        "attrs": {}
-    },
-    "enc-seasidePlaza": {
-        "type": "plaza",
-        "displayname": "",
-        "description": "Encinitas, Cruz-Escondido",
-        "layer": 0,
-        "nodes": ["enc-seasidePlaza1","enc-seasidePlaza2_capitolPlazaStnEntrance1", "enc-seasidePlaza3_capitolPlazaStnEntrance2", "enc-seasidePlaza4_capitolPlazaStnEntrance3",
-                  "enc-seasidePlaza5", "enc-seasidePlaza6", "enc-seasidePlaza7", "enc-seasidePlaza8", "enc-seasidePlaza9", "enc-seasidePlaza10", "enc-seasidePlaza11",
-                  "enc-seasidePlaza12", "enc-seasidePlaza13", "enc-seasidePlaza14", "enc-seasidePlaza15", "enc-seasidePlaza16", "enc-seasidePlaza17", "enc-seasidePlaza18",
-                  "enc-seasidePlaza19", "enc-seasidePlaza20"],
-        "attrs": {}
-    },
-    "enc-capitolPlazaStnEntrance": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Cruz-Escondido",
-        "layer": 0,
-        "nodes": ["enc-seasidePlaza2_capitolPlazaStnEntrance1", "enc-seasidePlaza3_capitolPlazaStnEntrance2", "enc-seasidePlaza4_capitolPlazaStnEntrance3", "enc-capitolPlazaStnEntrance4"],
-        "attrs": {}
-    },
-    "enc-seasidePark": {
-        "type": "park",
-        "displayname": "",
-        "description": "Encinitas, Cruz-Escondido",
-        "layer": 0,
-        "nodes": ["enc-seasidePark1", "enc-seasidePark2", "enc-seasidePark3", "enc-seasidePark4"],
-        "attrs": {}
-    },
-    "enc-officeK": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Escondido-Costa, blue terr/andesite/stone bricks",
-        "layer": 0,
-        "nodes": ["enc-officeK1", "enc-officeK2", "enc-officeK3", "enc-officeK4"],
-        "attrs": {}
-    },
-    "enc-officeL": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Escondido-Costa, light blue terr/cobble/stone",
-        "layer": 0,
-        "nodes": ["enc-officeL1", "enc-officeL2", "enc-officeL3", "enc-officeL4"],
-        "attrs": {}
-    },
-    "enc-parkC": {
-        "type": "park",
-        "displayname": "",
-        "description": "Encinitas, Escondido-Costa",
-        "layer": 0,
-        "nodes": ["enc-parkC1", "enc-parkC2", "enc-parkC3", "enc-parkC4"],
-        "attrs": {}
-    },
-    "enc-parkCFountain": {
-        "type": "waterSmall",
-        "displayname": "",
-        "description": "Encinitas, Escondido-Costa",
-        "layer": 0,
-        "nodes": ["enc-parkCFountain1", "enc-parkCFountain2", "enc-parkCFountain3", "enc-parkCFountain4",
-                  "enc-parkCFountain5", "enc-parkCFountain6", "enc-parkCFountain7", "enc-parkCFountain8"],
-        "attrs": {}
-    },
-    "enc-bankOfOaks": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Escondido-Costa, quartz/stone bricks",
-        "layer": 0,
-        "nodes": ["enc-bankOfOaks1", "enc-bankOfOaks2", "enc-bankOfOaks3", "enc-bankOfOaks4"],
-        "attrs": {}
-    },
-    "enc-officeM": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Costa West, quartz/stone bricks",
-        "layer": 0,
-        "nodes": ["enc-officeM1", "enc-officeM2", "enc-officeM3", "enc-officeM4"],
-        "attrs": {}
-    },
-    "enc-apartmentI": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Costa West, andesite/smooth stone",
-        "layer": 0,
-        "nodes": ["enc-apartmentI1", "enc-apartmentI2", "enc-apartmentI3", "enc-apartmentI4"],
-        "attrs": {}
-    },
-    "enc-officeN": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Costa West, smooth stone/light blue terr/polished basalt",
-        "layer": 0,
-        "nodes": ["enc-officeN1", "enc-officeN2", "enc-officeN3", "enc-officeN4", "enc-officeN5", "enc-officeN6", "enc-officeN7"],
-        "attrs": {}
-    },
-    "enc-zone_arelaEscondido": {
-        "type": "residentialOfficeArea",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-zone_arelaEscondido1", "enc-zone_arelaEscondido2", "enc-zone_arelaEscondido3",
-                  "enc-escondidoSt6", "enc-escondidoSt5", "enc-escondidoSt4", "enc-escondidoSt3",
-                  "enc-escondidoSt1_costaBlvd3", "enc-arelaPkwy1_costaBlvd2"],
-        "attrs": {}
-    },
-    "enc-zone_escondidoCosta": {
-        "type": "officeArea",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-zone_escondidoCosta1", "enc-zone_escondidoCosta2",
-            "enc-costaBlvd7", "enc-costaBlvd6", "enc-costaBlvd5", "enc-costaBlvd4",
-            "enc-escondidoSt1_costaBlvd3"],
-        "attrs": {}
-    },
-    "enc-zone_costaWest": {
-        "type": "residentialOfficeArea",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-zone_costaWest1", "enc-zone_costaWest2", "enc-zone_costaWest3", "enc-zone_costaWest4", "enc-escondidoSt1_costaBlvd3"],
-        "attrs": {}
-    },
-    "enc-officeO": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Costa North, yellow terr/smooth stone/stone",
-        "layer": 0,
-        "nodes": ["enc-officeO1", "enc-officeO2", "enc-officeO3", "enc-officeO4"],
-        "attrs": {}
-    },
-    "enc-apartmentJ1": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Costa North, chiselled stone/white/purple terr",
-        "layer": 0,
-        "nodes": ["enc-apartmentJ1", "enc-apartmentJ2", "enc-apartmentJ3", "enc-apartmentJ4"],
-        "attrs": {}
-    },
-    "enc-officeP": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Costa North, stripped crimson hyphae/polished andesite/cyan terr",
-        "layer": 0,
-        "nodes": ["enc-officeP1", "enc-officeP2", "enc-officeP3", "enc-officeP4"],
-        "attrs": {}
-    },
-    "enc-officeQ": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Costa North, stripped warped hyphae/andesite/polished andesite",
-        "layer": 0,
-        "nodes": ["enc-officeQ1", "enc-officeQ2", "enc-officeQ3", "enc-officeQ4"],
-        "attrs": {}
-    },
-    "enc-apartmentK": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Costa North, cyan terr/stone/smooth stone",
-        "layer": 0,
-        "nodes": ["enc-apartmentK1", "enc-apartmentK2", "enc-apartmentK3", "enc-apartmentK4"],
-        "attrs": {}
-    },
-    "enc-apartmentL": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Costa North, cobble/purple/light gray terr",
-        "layer": 0,
-        "nodes": ["enc-apartmentL1", "enc-apartmentL2", "enc-apartmentL3", "enc-apartmentL4"],
-        "attrs": {}
-    },
-    "enc-officeR": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Costa North, blue terr/bricks/smooth stone",
-        "layer": 0,
-        "nodes": ["enc-officeR1", "enc-officeR2", "enc-officeR3", "enc-officeR4"],
-        "attrs": {}
-    },
-    "enc-apartmentM": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Costa North, terr/cobble/smooth stone",
-        "layer": 0,
-        "nodes": ["enc-apartmentM1", "enc-apartmentM2", "enc-apartmentM3", "enc-apartmentM4"],
-        "attrs": {}
-    },
-    "enc-officeS": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Costa North, stone bricks/red terr/stone",
-        "layer": 0,
-        "nodes": ["enc-officeS1", "enc-officeS2", "enc-officeS3", "enc-officeS4"],
-        "attrs": {}
-    },
-    "enc-officeT": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Costa North, cut sandstone/blackstone bricks/polished andesite",
-        "layer": 0,
-        "nodes": ["enc-officeT1", "enc-officeT2", "enc-officeT3", "enc-officeT4"],
-        "attrs": {}
-    },
-    "enc-officeU": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Costa North, magenta terr/chiselled stone bricks/smooth stone",
-        "layer": 0,
-        "nodes": ["enc-officeU1", "enc-officeU2", "enc-officeU3", "enc-officeU4"],
-        "attrs": {}
-    },
-    "enc-apartmentN": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, Costa North, bricks/white terr/polished andesite",
-        "layer": 0,
-        "nodes": ["enc-apartmentN1", "enc-apartmentN2", "enc-apartmentN3", "enc-apartmentN4", "enc-apartmentN5"],
-        "attrs": {}
-    },
-    "enc-cabrilloHouseA": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, quartz/andesite",
-        "layer": 0,
-        "nodes": ["enc-cabrilloHouseA1", "enc-cabrilloHouseA2", "enc-cabrilloHouseA3", "enc-cabrilloHouseA4"],
-        "attrs": {}
-    },
-    "enc-eliteNeonHouse": {
-        "type": "building",
-        "displayname": "EliteNeon's residence",
-        "description": "Encinitas, brick/sandstone",
-        "layer": 0,
-        "nodes": ["enc-eliteNeonHouse1", "enc-eliteNeonHouse2", "enc-eliteNeonHouse3", "enc-eliteNeonHouse4"],
-        "attrs": {}
-    },
-    "enc-cabrilloHouseB": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, white terr/stone bricks",
-        "layer": 0,
-        "nodes": ["enc-cabrilloHouseB1", "enc-cabrilloHouseB2", "enc-cabrilloHouseB3", "enc-cabrilloHouseB4"],
-        "attrs": {}
-    },
-    "enc-cabrilloHouseC": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, cyan terr/cobble",
-        "layer": 0,
-        "nodes": ["enc-cabrilloHouseC1", "enc-cabrilloHouseC2", "enc-cabrilloHouseC3", "enc-cabrilloHouseC4"],
-        "attrs": {}
-    },
-    "enc-cabrilloHouseD": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, blackstone/sandstone",
-        "layer": 0,
-        "nodes": ["enc-cabrilloHouseD1", "enc-cabrilloHouseD2", "enc-cabrilloHouseD3", "enc-cabrilloHouseD4"],
-        "attrs": {}
-    },
-    "enc-cabrilloHouseE": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, red terr/andesite",
-        "layer": 0,
-        "nodes": ["enc-cabrilloHouseE1", "enc-cabrilloHouseE2", "enc-cabrilloHouseE3", "enc-cabrilloHouseE4"],
-        "attrs": {}
-    },
-    "enc-cabrilloHouseF": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, brick/cobble",
-        "layer": 0,
-        "nodes": ["enc-cabrilloHouseF1", "enc-cabrilloHouseF2", "enc-cabrilloHouseF3", "enc-cabrilloHouseF4"],
-        "attrs": {}
-    },
-    "enc-cabrilloHouseG": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, yellow terr/stone",
-        "layer": 0,
-        "nodes": ["enc-cabrilloHouseG1", "enc-cabrilloHouseG2", "enc-cabrilloHouseG3", "enc-cabrilloHouseG4"],
-        "attrs": {}
-    },
-    "enc-cabrilloHouseH": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, netherite/clay",
-        "layer": 0,
-        "nodes": ["enc-cabrilloHouseH1", "enc-cabrilloHouseH2", "enc-cabrilloHouseH3", "enc-cabrilloHouseH4"],
-        "attrs": {}
-    },
-    "enc-cabrilloHouseI": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, purple terr/sandstone",
-        "layer": 0,
-        "nodes": ["enc-cabrilloHouseI1", "enc-cabrilloHouseI2", "enc-cabrilloHouseI3", "enc-cabrilloHouseI4"],
-        "attrs": {}
-    },
-    "enc-cabrilloHouseJ": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, acacia wood/stone bricks",
-        "layer": 0,
-        "nodes": ["enc-cabrilloHouseJ1", "enc-cabrilloHouseJ2", "enc-cabrilloHouseJ3", "enc-cabrilloHouseJ4"],
-        "attrs": {}
-    },
-    "enc-cabrilloHouseK": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, blue terr/polished basalt",
-        "layer": 0,
-        "nodes": ["enc-cabrilloHouseK1", "enc-cabrilloHouseK2", "enc-cabrilloHouseK3", "enc-cabrilloHouseK4"],
-        "attrs": {}
-    },
-    "enc-cabrilloStallA": {
-        "type": "building",
-        "displayname": "Rocky Plateau Food Hub",
-        "description": "Encinitas, rocky plateau food hub",
-        "layer": 0,
-        "nodes": ["enc-cabrilloStallA1", "enc-cabrilloStallA2", "enc-cabrilloStallA3", "enc-cabrilloStallA4"],
-        "attrs": {}
-    },
-    "enc-cabrilloStallB": {
-        "type": "building",
-        "displayname": "Rocky Plateau Food Hub",
-        "description": "Encinitas, rocky plateau food hub",
-        "layer": 0,
-        "nodes": ["enc-cabrilloStallB1", "enc-cabrilloStallB2", "enc-cabrilloStallB3", "enc-cabrilloStallB4"],
-        "attrs": {}
-    },
-    "enc-cabrilloHouseL": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, quartz/polished andesite/sandstone",
-        "layer": 0,
-        "nodes": ["enc-cabrilloHouseL1", "enc-cabrilloHouseL2", "enc-cabrilloHouseL3", "enc-cabrilloHouseL4"],
-        "attrs": {}
-    },
-    "enc-cabrilloEdgeA": {
-        "type": "building",
-        "displayname": "Cabrillo Edge Blk 1",
-        "description": "Encinitas, terr/sandstone/cobble",
-        "layer": 0,
-        "nodes": ["enc-cabrilloEdgeA1", "enc-cabrilloEdgeA2", "enc-cabrilloEdgeA3", "enc-cabrilloEdgeA4",  "enc-cabrilloEdgeA5", "enc-cabrilloEdgeA6"],
-        "attrs": {}
-    },
-    "enc-cabrilloEdgeB": {
-        "type": "building",
-        "displayname": "Cabrillo Edge Blk 2",
-        "description": "Encinitas, terr/sandstone/cobble",
-        "layer": 0,
-        "nodes": ["enc-cabrilloEdgeB1", "enc-cabrilloEdgeB2", "enc-cabrilloEdgeB3", "enc-cabrilloEdgeB4"],
-        "attrs": {}
-    },
-    "enc-rockyPlateauHighSch_Block1": {
-        "type": "building",
-        "displayname": "Block 1",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-rockyPlateauHighSch_Block1_1", "enc-rockyPlateauHighSch_Block1_2", "enc-rockyPlateauHighSch_Block1_3", "enc-rockyPlateauHighSch_Block1_4"],
-        "attrs": {}
-    },
-    "enc-rockyPlateauHighSch_Block2": {
-        "type": "building",
-        "displayname": "Block 2",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-rockyPlateauHighSch_Block2_1", "enc-rockyPlateauHighSch_Block2_2", "enc-rockyPlateauHighSch_Block2_3", "enc-rockyPlateauHighSch_Block2_4"],
-        "attrs": {}
-    },
-    "enc-rockyPlateauHighSch_Block3": {
-        "type": "building",
-        "displayname": "Block 3",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-rockyPlateauHighSch_Block3_1", "enc-rockyPlateauHighSch_Block3_2", "enc-rockyPlateauHighSch_Block3_3", "enc-rockyPlateauHighSch_Block3_4"],
-        "attrs": {}
-    },
-    "enc-rockyPlateauHighSch_Block4": {
-        "type": "building",
-        "displayname": "Block 4",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-rockyPlateauHighSch_Block4_1", "enc-rockyPlateauHighSch_Block4_2", "enc-rockyPlateauHighSch_Block4_3", "enc-rockyPlateauHighSch_Block4_4"],
-        "attrs": {}
-    },
-    "enc-rockyPlateauHighSch_Block5": {
-        "type": "building",
-        "displayname": "Block 5",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-rockyPlateauHighSch_Block5_1", "enc-rockyPlateauHighSch_Block5_2", "enc-rockyPlateauHighSch_Block5_3", "enc-rockyPlateauHighSch_Block5_4"],
-        "attrs": {}
-    },
-    "enc-rockyPlateauHighSch_Block6": {
-        "type": "building",
-        "displayname": "Block 6",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-rockyPlateauHighSch_Block6_1", "enc-rockyPlateauHighSch_Block6_2", "enc-rockyPlateauHighSch_Block6_3", "enc-rockyPlateauHighSch_Block6_4"],
-        "attrs": {}
-    },
-    "enc-rockyPlateauHighSch_Block7": {
-        "type": "building",
-        "displayname": "Block 7",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-rockyPlateauHighSch_Block7_1", "enc-rockyPlateauHighSch_Block7_2", "enc-rockyPlateauHighSch_Block7_3", "enc-rockyPlateauHighSch_Block7_4"],
-        "attrs": {}
-    },
-    "enc-rockyPlateauHighSch_Block8": {
-        "type": "building",
-        "displayname": "Block 8",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-rockyPlateauHighSch_Block8_1", "enc-rockyPlateauHighSch_Block8_2", "enc-rockyPlateauHighSch_Block8_3_fence18", "enc-rockyPlateauHighSch_Block8_4_fence17"],
-        "attrs": {}
-    },
-    "enc-rockyPlateauHighSch_bBallCourt": {
-        "type": "park",
-        "displayname": "Basketball Court",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-rockyPlateauHighSch_bBallCourt1", "enc-rockyPlateauHighSch_bBallCourt2", "enc-rockyPlateauHighSch_bBallCourt3", "enc-rockyPlateauHighSch_bBallCourt4"],
-        "attrs": {}
-    },
-    "enc-cabrilloHouseM": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, bricks/stone bricks",
-        "layer": 0,
-        "nodes": ["enc-cabrilloHouseM1", "enc-cabrilloHouseM2", "enc-cabrilloHouseM3", "enc-cabrilloHouseM4", "enc-cabrilloHouseM5", "enc-cabrilloHouseM6", "enc-cabrilloHouseM7", "enc-cabrilloHouseM8"],
-        "attrs": {}
-    },
-    "enc-mayorHouse": {
-        "type": "building",
-        "displayname": "Mayor's House",
-        "description": "Encinitas, quartz/polished andesite/sandstone",
-        "layer": 0,
-        "nodes": ["enc-mayorHouse1", "enc-mayorHouse2", "enc-mayorHouse3", "enc-mayorHouse4", "enc-mayorHouse5", "enc-mayorHouse6", "enc-mayorHouse7", "enc-mayorHouse8"],
-        "attrs": {}
-    },
-    "enc-lighthousea": {
-        "type": "building",
-        "displayname": "Lighthouse",
-        "description": "Encinitas, quartz/polished andesite/sandstone",
-        "layer": 0,
-        "nodes": ["enc-lighthousea1", "enc-lighthousea2", "enc-lighthousea3", "enc-lighthousea4"],
-        "attrs": {}
-    },
-    "enc-lighthouseb": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, quartz/polished andesite/sandstone",
-        "layer": 0,
-        "nodes": ["enc-lighthouseb1", "enc-lighthouseb2", "enc-lighthouseb3", "enc-lighthouseb4", "enc-lighthouseb5", "enc-lighthouseb6", "enc-lighthouseb7", "enc-lighthouseb8"],
-        "attrs": {}
-    },
-    "enc-montanasCabrillosRangerOffice": {
-        "type": "building",
-        "displayname": "Ranger Office",
-        "description": "Encinitas, quartz/polished andesite/sandstone",
-        "layer": 0,
-        "nodes": ["enc-montanasCabrillosRangerOffice1", "enc-montanasCabrillosRangerOffice2", "enc-montanasCabrillosRangerOffice3", "enc-montanasCabrillosRangerOffice4", "enc-montanasCabrillosRangerOffice5", "enc-montanasCabrillosRangerOffice6"],
-        "attrs": {}
-    },
-    "enc-CCIAa": {
-        "type": "building",
-        "displayname": "Cresta Communications Interceptions Agency",
-        "description": "Encinitas, quartz/polished andesite/sandstone",
-        "layer": 0,
-        "nodes": ["enc-CCIAa1", "enc-CCIAa2", "enc-CCIAa3b3c2", "enc-CCIAa4", "enc-CCIAa5b8", "enc-CCIAa6"],
-        "attrs": {}
-    },
-    "enc-CCIAb": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, quartz/polished andesite/sandstone",
-        "layer": 0.1,
-        "nodes": ["enc-CCIAb1", "enc-CCIAb2c1", "enc-CCIAa3b3c2", "enc-CCIAb4c3", "enc-CCIAb5c4", "enc-CCIAb6c5", "enc-CCIAb7c6", "enc-CCIAa5b8"],
-        "attrs": {}
-    },
-    "enc-CCIAc": {
-        "type": "building",
-        "displayname": "",
-        "description": "Encinitas, quartz/polished andesite/sandstone",
-        "layer": 0.2,
-        "nodes": ["enc-CCIAb2c1", "enc-CCIAa3b3c2", "enc-CCIAb4c3", "enc-CCIAb5c4", "enc-CCIAb6c5", "enc-CCIAb7c6"],
-        "attrs": {}
-    },
-    "enc-crestaCapitol_building": {
-        "type": "building",
-        "displayname": "Cresta Capitol",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-crestaCapitol_building1", "enc-crestaCapitol_building2", "enc-crestaCapitol_building3", "enc-crestaCapitol_building4", "enc-crestaCapitol_building5", 
-                  "enc-crestaCapitol_building6", "enc-crestaCapitol_building7", "enc-crestaCapitol_building8", "enc-crestaCapitol_building9", "enc-crestaCapitol_building10", 
-                  "enc-crestaCapitol_building11", "enc-crestaCapitol_building12", "enc-crestaCapitol_building13", "enc-crestaCapitol_building14", "enc-crestaCapitol_building15", 
-                  "enc-crestaCapitol_building16", "enc-crestaCapitol_building17", "enc-crestaCapitol_building18", "enc-crestaCapitol_building19", "enc-crestaCapitol_building20", 
-                  "enc-crestaCapitol_building21", "enc-crestaCapitol_building22", "enc-crestaCapitol_building23", "enc-crestaCapitol_building24", "enc-crestaCapitol_building25", 
-                  "enc-crestaCapitol_building26", "enc-crestaCapitol_building27", "enc-crestaCapitol_building28", "enc-crestaCapitol_building29", "enc-crestaCapitol_building30", 
-                  "enc-crestaCapitol_building31", "enc-crestaCapitol_building32", "enc-crestaCapitol_building33", "enc-crestaCapitol_building34", "enc-crestaCapitol_building35", 
-                  "enc-crestaCapitol_building36", "enc-crestaCapitol_building37", "enc-crestaCapitol_building38", "enc-crestaCapitol_building39", "enc-crestaCapitol_building40", 
-                  "enc-crestaCapitol_building41"],
-        "attrs": {}
-    },
-    "enc-crestaCapitol_lawn": {
-        "type": "grass",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0.1,
-        "nodes": ["enc-crestaCapitol_lawn1", "enc-crestaCapitol_lawn2", "enc-crestaCapitol_lawn3", "enc-crestaCapitol_lawn4", "enc-crestaCapitol_lawn5", 
-                  "enc-crestaCapitol_lawn6", "enc-crestaCapitol_lawn7", "enc-crestaCapitol_lawn8", "enc-crestaCapitol_lawn9", "enc-crestaCapitol_lawn10", 
-                  "enc-crestaCapitol_lawn11", "enc-crestaCapitol_lawn12", "enc-crestaCapitol_lawn13", "enc-crestaCapitol_lawn14", "enc-crestaCapitol_lawn15", 
-                  "enc-crestaCapitol_lawn16", "enc-crestaCapitol_lawn17", "enc-crestaCapitol_lawn18", "enc-crestaCapitol_lawn19", "enc-crestaCapitol_lawn20", 
-                  "enc-crestaCapitol_lawn21", "enc-crestaCapitol_lawn22", "enc-crestaCapitol_lawn23", "enc-crestaCapitol_lawn24", "enc-crestaCapitol_lawn25", 
-                  "enc-crestaCapitol_lawn26", "enc-crestaCapitol_lawn27", "enc-crestaCapitol_lawn28", "enc-crestaCapitol_lawn29", "enc-crestaCapitol_lawn30", 
-                  "enc-crestaCapitol_lawn31", "enc-crestaCapitol_lawn32"],
-        "attrs": {}
-    },
-    "enc-crestaCapitol_fountainN": {
-        "type": "waterSmall",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-crestaCapitol_fountainN1", "enc-crestaCapitol_fountainN2", "enc-crestaCapitol_fountainN3", "enc-crestaCapitol_fountainN4",
-                  "enc-crestaCapitol_fountainN5", "enc-crestaCapitol_fountainN6", "enc-crestaCapitol_fountainN7", "enc-crestaCapitol_fountainN8",
-                  "enc-crestaCapitol_fountainN9", "enc-crestaCapitol_fountainN10",  "enc-crestaCapitol_fountainN11", "enc-crestaCapitol_fountainN12",
-                  "enc-crestaCapitol_fountainN13", "enc-crestaCapitol_fountainN14", "enc-crestaCapitol_fountainN15", "enc-crestaCapitol_fountainN16"],
-        "attrs": {}
-    },
-    "enc-crestaCapitol_fountainS": {
-        "type": "waterSmall",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-crestaCapitol_fountainS1", "enc-crestaCapitol_fountainS2", "enc-crestaCapitol_fountainS3", "enc-crestaCapitol_fountainS4",
-                  "enc-crestaCapitol_fountainS5", "enc-crestaCapitol_fountainS6", "enc-crestaCapitol_fountainS7", "enc-crestaCapitol_fountainS8",
-                  "enc-crestaCapitol_fountainS9", "enc-crestaCapitol_fountainS10",  "enc-crestaCapitol_fountainS11", "enc-crestaCapitol_fountainS12",
-                  "enc-crestaCapitol_fountainS13", "enc-crestaCapitol_fountainS14", "enc-crestaCapitol_fountainS15", "enc-crestaCapitol_fountainS16"],
-        "attrs": {}
-    },
-    "enc-crestaCapitol_pathSE": {
-        "type": "pathway",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-crestaCapitol_pathSE1", "enc-crestaCapitol_pathSE2", "enc-crestaCapitol_pathSE3", "enc-crestaCapitol_pathSE4",
-                  "enc-crestaCapitol_pathSE5", "enc-crestaCapitol_pathS6", "enc-crestaCapitol_pathS7"],
-        "attrs": {}
-    },
-    "enc-crestaCapitol_pathSW": {
-        "type": "pathway",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-crestaCapitol_pathSW1", "enc-crestaCapitol_pathSW2", "enc-crestaCapitol_pathSW3", "enc-crestaCapitol_pathSW4",
-                  "enc-crestaCapitol_pathSW5", "enc-crestaCapitol_pathS6"],
-        "attrs": {}
-    },
-    "enc-crestaCapitol_pathNE": {
-        "type": "pathway",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-crestaCapitol_pathNE1", "enc-crestaCapitol_pathNE2", "enc-crestaCapitol_pathNE3", "enc-crestaCapitol_pathNE4",
-                  "enc-crestaCapitol_pathNE5", "enc-crestaCapitol_pathN6", "enc-crestaCapitol_pathN7"],
-        "attrs": {}
-    },
-    "enc-crestaCapitol_pathNW": {
-        "type": "pathway",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-crestaCapitol_pathNW1", "enc-crestaCapitol_pathNW2", "enc-crestaCapitol_pathNW3", "enc-crestaCapitol_pathNW4",
-                  "enc-crestaCapitol_pathNW5", "enc-crestaCapitol_pathN6"],
-        "attrs": {}
-    },
-    "enc-crestaCapitol_plazaN": {
-        "type": "plaza",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-crestaCapitol_building1", "enc-crestaCapitol_building2", "enc-crestaCapitol_building3", "enc-crestaCapitol_building4", "enc-crestaCapitol_building5", 
-                  "enc-crestaCapitol_building6", "enc-crestaCapitol_building7", "enc-crestaCapitol_building8", "enc-crestaCapitol_building9", "enc-crestaCapitol_building10", 
-                  "enc-crestaCapitol_building11", "enc-crestaCapitol_building12", "enc-crestaCapitol_pathSW1", "enc-crestaCapitol_pathSE1"],
-        "attrs": {}
-    },
-    "enc-crestaCapitol_plazaS": {
-        "type": "plaza",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-crestaCapitol_building22", "enc-crestaCapitol_building23", "enc-crestaCapitol_building24", "enc-crestaCapitol_building25", "enc-crestaCapitol_building26", 
-                  "enc-crestaCapitol_building27", "enc-crestaCapitol_building28", "enc-crestaCapitol_building29", "enc-crestaCapitol_building30", "enc-crestaCapitol_building31", 
-                  "enc-crestaCapitol_building32", "enc-crestaCapitol_building33", "enc-crestaCapitol_pathNE1", "enc-crestaCapitol_pathNW1"],
-        "attrs": {}
-    },
-    "enc-seawallPark": {
-        "type": "park",
-        "displayname": "Seawall Park",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-seawallPark1", "enc-seawallPark2", "enc-seawallPark3", "enc-seawallPark4", "enc-seawallPark5", 
-                  "enc-seawallPark6", "enc-seawallPark7", "enc-seawallPark8", "enc-seawallPark9", "enc-seawallPark10", 
-                  "enc-seawallPark11", "enc-seawallPark12", "enc-seawallPark13", "enc-seawallPark14", "enc-seawallPark15", 
-                  "enc-seawallPark16", "enc-seawallPark17", "enc-seawallPark18", "enc-seawallPark19", "enc-seawallPark20", 
-                  "enc-seawallPark21", "enc-seawallPark22", "enc-seawallPark23", "enc-seawallPark24", "enc-seawallPark25", 
-                  "enc-seawallPark26", "enc-seawallPark27", "enc-seawallPark28", "enc-seawallPark29", "enc-seawallPark30", 
-                  "enc-seawallPark31", "enc-seawallPark32", "enc-seawallPark33", "enc-seawallPark34", "enc-seawallPark35"],
-        "attrs": {}
-    },
-    "enc-rockyPlateauHighSch_fence": {
-        "type": "schoolArea",
-        "displayname": "Rocky Plateau High School",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-rockyPlateauHighSch_fence1", "enc-rockyPlateauHighSch_fence2", "enc-rockyPlateauHighSch_fence3", "enc-rockyPlateauHighSch_fence4", "enc-rockyPlateauHighSch_fence5", 
-                  "enc-rockyPlateauHighSch_fence6", "enc-rockyPlateauHighSch_fence7", "enc-rockyPlateauHighSch_fence8", "enc-rockyPlateauHighSch_fence9", "enc-rockyPlateauHighSch_fence10", 
-                  "enc-rockyPlateauHighSch_fence11", "enc-rockyPlateauHighSch_fence12", "enc-rockyPlateauHighSch_fence13", "enc-rockyPlateauHighSch_fence14", "enc-rockyPlateauHighSch_fence15", 
-                  "enc-rockyPlateauHighSch_fence16", "enc-rockyPlateauHighSch_Block8_4_fence17", "enc-rockyPlateauHighSch_Block8_3_fence18", "enc-rockyPlateauHighSch_fence19", "enc-rockyPlateauHighSch_fence20", 
-                  "enc-rockyPlateauHighSch_fence21", "enc-subwayStn_cabrilloEntrance8"],
-        "attrs": {}
-    },
-    "enc-lookoutPark": {
-        "type": "park",
-        "displayname": "Lookout Park",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-lookoutPark1", "enc-lookoutPark2", "enc-lookoutPark3", "enc-lookoutPark4", "enc-lookoutPark5", 
-                  "enc-lookoutPark6", "enc-lookoutPark7", "enc-lookoutPark8", "enc-lookoutPark9", "enc-lookoutPark10", 
-                  "enc-lookoutPark11", "enc-lookoutPark12", "enc-lookoutPark13", "enc-lookoutPark14", "enc-lookoutPark15", 
-                  "enc-lookoutPark16", "enc-lookoutPark17", "enc-lookoutPark18"],
-        "attrs": {}
-    },
-    "enc-cityForestA": {
-        "type": "forest",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cityForestA1", "enc-cityForestA2", "enc-cityForestA3", "enc-cityForestA4", "enc-cityForestA5"],
-        "attrs": {}
-    },
-    "enc-cityForestB": {
-        "type": "forest",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cityForestB1", "enc-cityForestB2", "enc-cityForestB3", "enc-cityForestB4", "enc-cityForestB5", "enc-cityForestB6", "enc-cityForestB7"],
-        "attrs": {}
-    },
-    "enc-cityForestC": {
-        "type": "forest",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cityForestC1", "enc-cityForestC2", "enc-cityForestC3", "enc-cityForestC4", "enc-cityForestC5", "enc-cityForestC6", "enc-cityForestC7"],
-        "attrs": {}
-    },
-    "enc-cityForestD": {
-        "type": "forest",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cityForestD1", "enc-cityForestD2", "enc-cityForestD3", "enc-cityForestD4", "enc-cityForestD5", "enc-cityForestD6"],
-        "attrs": {}
-    },
-    "enc-cityForestE": {
-        "type": "forest",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cityForestE1", "enc-cityForestE2", "enc-cityForestE3", "enc-cityForestE4"],
-        "attrs": {}
-    },
-    "enc-cityForestF": {
-        "type": "forest",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cityForestF1", "enc-cityForestF2", "enc-cityForestF3", "enc-cityForestF4", "enc-cityForestF5",
-                  "enc-cityForestF6", "enc-cityForestF7", "enc-cityForestF8", "enc-cityForestF9", "enc-cityForestF10",
-                  "enc-cityForestF11", "enc-cityForestF12", "enc-cityForestF13"],
-        "attrs": {}
-    },
-    "enc-cityForestG": {
-        "type": "forest",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cityForestG1", "enc-cityForestG2", "enc-cityForestG3", "enc-cityForestG4", "enc-cityForestG5", "enc-cityForestG6", "enc-cityForestG8"],
-        "attrs": {}
-    },
-    "enc-cityForestH": {
-        "type": "forest",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cityForestH1", "enc-cityForestH2", "enc-cityForestH3", "enc-cityForestH4", "enc-cityForestH5",
-                  "enc-cityForestH6", "enc-cityForestH7", "enc-cityForestH8", "enc-cityForestH9", "enc-cityForestH10",
-                  "enc-cityForestH11", "enc-cityForestH12", "enc-cityForestH13", "enc-cityForestH14"],
-        "attrs": {}
-    },
-    "enc-cityForestI": {
-        "type": "forest",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cityForestI1", "enc-cityForestI2", "enc-cityForestI3", "enc-cityForestI4"],
-        "attrs": {}
-    },
-    "enc-cityForestJ": {
-        "type": "forest",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cityForestJ1", "enc-cityForestJ2", "enc-cityForestJ3"],
-        "attrs": {}
-    },
-    "enc-cityForestK": {
-        "type": "forest",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cityForestK1", "enc-cityForestK2", "enc-cityForestK3", "enc-cityForestK4", "enc-cityForestK5"],
-        "attrs": {}
-    },
-    "enc-cityForestL": {
-        "type": "forest",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cityForestL1", "enc-cityForestL2", "enc-cityForestL3", "enc-cityForestL4", "enc-cityForestL5"],
-        "attrs": {}
-    },
-    "enc-cityForestM": {
-        "type": "forest",
-        "displayname": "",
-        "description": "Encinitas",
-        "layer": 0,
-        "nodes": ["enc-cityForestM1", "enc-cityForestM2", "enc-cityForestM3", "enc-cityForestM4", "enc-cityForestM5"],
-        "attrs": {}
-    }
+  "B209_1s": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "B209",
+    "layer": 0,
+    "nodes": [
+      "B209s1",
+      "B209s2",
+      "B209s3",
+      "B209s4",
+      "B209s5",
+      "B209s6"
+    ],
+    "type": "bRoad oneWay"
+  },
+  "B209_2s": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "B209",
+    "layer": 0,
+    "nodes": [
+      "B209s6",
+      "B209s7"
+    ],
+    "type": "bRoad_elevated oneWay"
+  },
+  "B209_3s": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "B209",
+    "layer": 0,
+    "nodes": [
+      "B209s7",
+      "B209s8"
+    ],
+    "type": "bRoad oneWay"
+  },
+  "B209_1n": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "B209",
+    "layer": 0,
+    "nodes": [
+      "B209n6",
+      "B209n5",
+      "B209n4",
+      "B209n3",
+      "B209n2",
+      "B209n1"
+    ],
+    "type": "bRoad oneWay"
+  },
+  "B209_2n": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "B209",
+    "layer": 0,
+    "nodes": [
+      "B209n7",
+      "B209n6"
+    ],
+    "type": "bRoad_elevated oneWay"
+  },
+  "B209_3n": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "B209",
+    "layer": 0,
+    "nodes": [
+      "B209n8",
+      "B209n7"
+    ],
+    "type": "bRoad oneWay"
+  },
+  "enc-roundabout": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Cruz Av",
+    "layer": 0,
+    "nodes": [
+      "enc-roundabout16",
+      "enc-roundabout15",
+      "enc-roundabout14",
+      "enc-roundabout13",
+      "enc-roundabout12",
+      "enc-roundabout11",
+      "enc-roundabout10",
+      "enc-roundabout9",
+      "enc-roundabout8",
+      "enc-roundabout7",
+      "enc-roundabout6",
+      "enc-roundabout5",
+      "enc-roundabout4",
+      "enc-roundabout3",
+      "enc-roundabout2",
+      "enc-roundabout1",
+      "enc-roundabout16"
+    ],
+    "type": "bRoadSlip oneWay"
+  },
+  "enc-B209slip_1": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cruzAv2",
+      "enc-roundaboutSlip2",
+      "B209s1"
+    ],
+    "type": "bRoadSlip oneWay"
+  },
+  "enc-B209slip_2": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "B209n1",
+      "enc-roundaboutSlip1",
+      "enc-cruzAv5"
+    ],
+    "type": "bRoadSlip oneWay"
+  },
+  "enc-cruzAv_1": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Cruz Av",
+    "layer": 0,
+    "nodes": [
+      "enc-cruzAv1_joyaSt2",
+      "enc-cruzAv2"
+    ],
+    "type": "localMainRoad"
+  },
+  "enc-cruzAv_2e": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Cruz Av",
+    "layer": 0,
+    "nodes": [
+      "enc-cruzAv2",
+      "enc-cruzAve3",
+      "enc-roundabout3",
+      "B209s1"
+    ],
+    "type": "bRoadSlip oneWay"
+  },
+  "enc-cruzAv_2w": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Cruz Av",
+    "layer": 0,
+    "nodes": [
+      "enc-escondidoSt8",
+      "enc-roundabout7",
+      "enc-cruzAvw3",
+      "enc-cruzAv2"
+    ],
+    "type": "bRoadSlip oneWay"
+  },
+  "enc-cruzAv_3e": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Cruz Av",
+    "layer": 0,
+    "nodes": [
+      "B209n1",
+      "enc-roundabout15",
+      "enc-cruzAve4",
+      "enc-cruzAv5"
+    ],
+    "type": "bRoadSlip oneWay"
+  },
+  "enc-cruzAv_3w": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Cruz Av",
+    "layer": 0,
+    "nodes": [
+      "enc-cruzAv5",
+      "enc-cruzAvw4",
+      "enc-roundabout11",
+      "enc-escondidoSt8"
+    ],
+    "type": "bRoadSlip oneWay"
+  },
+  "enc-cruzAv_4": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Cruz Av",
+    "layer": 0,
+    "nodes": [
+      "enc-cruzAv5",
+      "enc-cruzAv6_cabrilloAv1",
+      "enc-cruzAv7_costaBlvd1",
+      "enc-cruzAv7_wCross",
+      "enc-cruzAv8"
+    ],
+    "type": "localMainRoad"
+  },
+  "enc-costaBlvd": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Costa Blvd",
+    "layer": 0,
+    "nodes": [
+      "enc-cruzAv7_costaBlvd1",
+      "enc-arelaPkwy1_costaBlvd2",
+      "enc-escondidoSt1_costaBlvd3",
+      "enc-costaBlvd4",
+      "enc-costaBlvd5",
+      "enc-costaBlvd6",
+      "enc-costaBlvd7",
+      "enc-costaBlvd8_cabrilloAv4",
+      "enc-costaBlvd9"
+    ],
+    "type": "localTertiaryRoad"
+  },
+  "enc-cabrilloAv": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Cabrillo Av",
+    "layer": 0,
+    "nodes": [
+      "enc-cruzAv6_cabrilloAv1",
+      "enc-arelaPkwy2_cabrilloAv2",
+      "enc-escondidoSt2_cabrilloAv3",
+      "enc-costaBlvd8_cabrilloAv4",
+      "enc-cabrilloAv5",
+      "enc-cabrilloAv6",
+      "enc-cabrilloAv7",
+      "enc-cabrilloAv8",
+      "enc-calleMontana35_cabrilloAv9"
+    ],
+    "type": "localSecondaryRoad"
+  },
+  "enc-escondidoSt": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Escondido St",
+    "layer": 0,
+    "nodes": [
+      "enc-escondidoSt1_costaBlvd3",
+      "enc-escondidoSt2_cabrilloAv3",
+      "enc-escondidoSt3",
+      "enc-escondidoSt4",
+      "enc-escondidoSt5",
+      "enc-escondidoSt6",
+      "enc-arelaPkwy3_escondidoSt7",
+      "enc-escondidoSt8"
+    ],
+    "type": "localTertiaryRoad"
+  },
+  "enc-joyaSt1": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Joya St",
+    "layer": 0,
+    "nodes": [
+      "enc-arelaPkwy4_joyaSt1",
+      "enc-cruzAv1_joyaSt2",
+      "enc-joyaSt3",
+      "enc-joyaSt4",
+      "enc-joyaSt5",
+      "enc-joyaSt6",
+      "enc-joyaSt7",
+      "enc-joyaSt8",
+      "enc-joyaSt9",
+      "enc-joyaSt10",
+      "enc-joyaSt11_B209sSlip2"
+    ],
+    "type": "localSecondaryRoad"
+  },
+  "enc-joyaSt2": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Joya St",
+    "layer": 0,
+    "nodes": [
+      "enc-joyaSt11_B209sSlip2",
+      "enc-joyaSt12_B209nSlip2"
+    ],
+    "type": "localSecondaryRoad_underground"
+  },
+  "enc-joyaSt3": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Joya St",
+    "layer": 0,
+    "nodes": [
+      "enc-joyaSt12_B209nSlip2",
+      "enc-joyaSt13_diplomacyBlvd1_unnamedB3"
+    ],
+    "type": "localSecondaryRoad"
+  },
+  "enc-diplomacyBlvd": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Diplomacy Blvd",
+    "layer": 0,
+    "nodes": [
+      "enc-joyaSt13_diplomacyBlvd1_unnamedB3",
+      "enc-diplomacyBlvd2",
+      "enc-diplomacyBlvd3",
+      "enc-diplomacyBlvd4",
+      "enc-diplomacyBlvd5",
+      "enc-diplomacyBlvd6",
+      "enc-diplomacyBlvd7",
+      "enc-diplomacyBlvd8",
+      "enc-diplomacyBlvd9",
+      "enc-diplomacyBlvd10"
+    ],
+    "type": "localTertiaryRoad"
+  },
+  "enc-unnamedA": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-unnamedA1",
+      "enc-unnamedA2_B1",
+      "enc-unnamedA3"
+    ],
+    "type": "localMainRoad"
+  },
+  "enc-unnamedB": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-unnamedA2_B1",
+      "enc-unnamedB2",
+      "enc-joyaSt13_diplomacyBlvd1_unnamedB3"
+    ],
+    "type": "localSecondaryRoad"
+  },
+  "enc-arelaPkwy": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-arelaPkwy1_costaBlvd2",
+      "enc-arelaPkwy2_cabrilloAv2",
+      "enc-arelaPkwy3_escondidoSt7",
+      "enc-arelaPkwy4_joyaSt1",
+      "enc-arelaPkwy5_calleMontana1"
+    ],
+    "type": "localSecondaryRoad"
+  },
+  "enc-calleMontana": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Calle Montaña",
+    "layer": 0,
+    "nodes": [
+      "enc-arelaPkwy5_calleMontana1",
+      "enc-calleMontana2",
+      "enc-calleMontana3",
+      "enc-calleMontana4",
+      "enc-calleMontana5",
+      "enc-calleMontana6_montanasCabrillos2",
+      "enc-calleMontana7",
+      "enc-calleMontana8",
+      "enc-calleMontana9",
+      "enc-calleMontana10",
+      "enc-calleMontana11",
+      "enc-calleMontana12",
+      "enc-calleMontana13",
+      "enc-calleMontana14",
+      "enc-calleMontana15",
+      "enc-calleMontana16",
+      "enc-calleMontana17",
+      "enc-calleMontana18",
+      "enc-calleMontana19",
+      "enc-calleMontana20",
+      "enc-calleMontana21",
+      "enc-calleMontana22",
+      "enc-calleMontana23",
+      "enc-calleMontana24",
+      "enc-calleMontana25",
+      "enc-calleMontana26",
+      "enc-calleMontana27",
+      "enc-calleMontana28",
+      "enc-calleMontana29",
+      "enc-calleMontana30",
+      "enc-calleMontana31",
+      "enc-calleMontana32",
+      "enc-calleMontana33",
+      "enc-calleMontana34",
+      "enc-calleMontana35_cabrilloAv9",
+      "enc-calleMontana36",
+      "enc-calleMontana37",
+      "enc-calleMontana38",
+      "enc-calleMontana39",
+      "enc-calleMontana40_caminoDiamanteA1",
+      "enc-calleMontana41"
+    ],
+    "type": "localSecondaryRoad"
+  },
+  "enc-caminoDiamanteA": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Camino Diamante",
+    "layer": 0,
+    "nodes": [
+      "enc-calleMontana40_caminoDiamanteA1",
+      "enc-caminoDiamanteA2_B5"
+    ],
+    "type": "localTertiaryRoad"
+  },
+  "enc-caminoDiamanteB": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Camino Diamante",
+    "layer": 0,
+    "nodes": [
+      "enc-caminoDiamanteB1",
+      "enc-caminoDiamanteB2",
+      "enc-caminoDiamanteB3",
+      "enc-caminoDiamanteB4",
+      "enc-caminoDiamanteA2_B5",
+      "enc-caminoDiamanteB6",
+      "enc-caminoDiamanteB7",
+      "enc-caminoDiamanteB8",
+      "enc-caminoDiamanteB9"
+    ],
+    "type": "localTertiaryRoad"
+  },
+  "enc-montanasCabrillos": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Montañas Cabrillos",
+    "layer": 0,
+    "nodes": [
+      "enc-montanasCabrillos1",
+      "enc-calleMontana6_montanasCabrillos2",
+      "enc-montanasCabrillos3"
+    ],
+    "type": "localQuaternaryRoad"
+  },
+  "enc-ecjTerminal": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Encinitas Joya Airfield",
+    "layer": 0,
+    "nodes": [
+      "enc-ecjTerminal1_front1",
+      "enc-ecjTerminal2_apron8",
+      "enc-ecjTerminal3_apron1",
+      "enc-ecjTerminal4_front2"
+    ],
+    "type": "transportBuilding"
+  },
+  "enc-ecjApron": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-ecjTerminal3_apron1",
+      "enc-ecjApron2",
+      "enc-ecjApron3",
+      "enc-ecjApron4",
+      "enc-ecjApron5",
+      "enc-ecjApron6",
+      "enc-ecjApron7",
+      "enc-ecjTerminal2_apron8"
+    ],
+    "type": "apron"
+  },
+  "enc-ecjTaxiway": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-ecjTaxiway1_runway2",
+      "enc-ecjTaxiway2",
+      "enc-ecjTaxiway3",
+      "enc-ecjTaxiway4",
+      "enc-ecjTaxiway5",
+      "enc-ecjTaxiway6",
+      "enc-ecjTaxiway7",
+      "enc-ecjTaxiway8_runway3"
+    ],
+    "type": "taxiway"
+  },
+  "enc-ecjRunway": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "09/27",
+    "layer": 0,
+    "nodes": [
+      "enc-ecjRunway1",
+      "enc-ecjTaxiway1_runway2",
+      "enc-ecjTaxiway8_runway3",
+      "enc-ecjRunway4"
+    ],
+    "type": "runway"
+  },
+  "enc-ecjFountain": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-ecjFountain1",
+      "enc-ecjFountain2",
+      "enc-ecjFountain3",
+      "enc-ecjFountain4"
+    ],
+    "type": "waterSmall"
+  },
+  "enc-ecjFront": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": -1,
+    "nodes": [
+      "enc-ecjTerminal1_front1",
+      "enc-ecjTerminal4_front2",
+      "enc-ecjFront3",
+      "enc-ecjFront4"
+    ],
+    "type": "plaza"
+  },
+  "enc-subwayStn_joyaAirfieldEntrance": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_joyaAirfieldEntrance1",
+      "enc-subwayStn_joyaAirfieldEntrance2",
+      "enc-subwayStn_joyaAirfieldEntrance3",
+      "enc-subwayStn_joyaAirfieldEntrance4",
+      "enc-subwayStn_joyaAirfieldEntrance5",
+      "enc-subwayStn_joyaAirfieldEntrance6",
+      "enc-subwayStn_joyaAirfieldEntrance7",
+      "enc-subwayStn_joyaAirfieldEntrance8"
+    ],
+    "type": "transportBuilding"
+  },
+  "enc-subwayStn_joyaAirfieldConcourse": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_joyaAirfieldConcourse1",
+      "enc-subwayStn_joyaAirfieldConcourse2",
+      "enc-subwayStn_joyaAirfieldConcourse3_platforms4",
+      "enc-subwayStn_joyaAirfieldConcourse4_platforms5",
+      "enc-subwayStn_joyaAirfieldConcourse5_platformn5",
+      "enc-subwayStn_joyaAirfieldConcourse6_platformn4",
+      "enc-subwayStn_joyaAirfieldConcourse7",
+      "enc-subwayStn_joyaAirfieldConcourse8"
+    ],
+    "type": "transportBuilding_underground"
+  },
+  "enc-subwayStn_joyaAirfieldPlatformN": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_joyaAirfieldPlatformn1",
+      "enc-subwayStn_joyaAirfieldPlatformn2",
+      "enc-subwayStn_joyaAirfieldPlatformn3",
+      "enc-subwayStn_joyaAirfieldConcourse6_platformn4",
+      "enc-subwayStn_joyaAirfieldConcourse5_platformn5"
+    ],
+    "type": "platform_underground"
+  },
+  "enc-subwayStn_joyaAirfieldPlatformS": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_joyaAirfieldPlatforms1",
+      "enc-subwayStn_joyaAirfieldPlatforms2",
+      "enc-subwayStn_joyaAirfieldPlatforms3",
+      "enc-subwayStn_joyaAirfieldConcourse3_platforms4",
+      "enc-subwayStn_joyaAirfieldConcourse4_platforms5"
+    ],
+    "type": "platform_underground"
+  },
+  "enc-subwayStn_joyaAirfieldMarker": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Joya Airfield",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_joyaAirfieldMarker"
+    ],
+    "type": "railStation"
+  },
+  "enc-subwayStn_uptownEntrance": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_uptownEntrance1",
+      "enc-subwayStn_uptownEntrance2",
+      "enc-subwayStn_uptownEntrance3",
+      "enc-subwayStn_uptownEntrance4",
+      "enc-subwayStn_uptownEntrance5",
+      "enc-subwayStn_uptownEntrance6",
+      "enc-subwayStn_uptownEntrance7",
+      "enc-subwayStn_uptownEntrance8"
+    ],
+    "type": "transportBuilding"
+  },
+  "enc-subwayStn_uptownConcourse": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_uptownConcourse1",
+      "enc-subwayStn_uptownConcourse2",
+      "enc-subwayStn_uptownConcourse3_platformn4",
+      "enc-subwayStn_uptownConcourse4_platformn5",
+      "enc-subwayStn_uptownConcourse5_platforms5",
+      "enc-subwayStn_uptownConcourse6_platforms4",
+      "enc-subwayStn_uptownConcourse7",
+      "enc-subwayStn_uptownConcourse8"
+    ],
+    "type": "transportBuilding_underground"
+  },
+  "enc-subwayStn_uptownPlatformN": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_uptownPlatformn1",
+      "enc-subwayStn_uptownPlatformn2",
+      "enc-subwayStn_uptownPlatformn3",
+      "enc-subwayStn_uptownConcourse3_platformn4",
+      "enc-subwayStn_uptownConcourse4_platformn5"
+    ],
+    "type": "platform_underground"
+  },
+  "enc-subwayStn_uptownPlatformS": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_uptownPlatforms1",
+      "enc-subwayStn_uptownPlatforms2",
+      "enc-subwayStn_uptownPlatforms3",
+      "enc-subwayStn_uptownConcourse6_platforms4",
+      "enc-subwayStn_uptownConcourse5_platforms5"
+    ],
+    "type": "platform_underground"
+  },
+  "enc-subwayStn_uptownMarker": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Uptown",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_uptownMarker"
+    ],
+    "type": "railStation"
+  },
+  "enc-subwayStn_marketEntrance": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_marketEntrance1",
+      "enc-subwayStn_marketEntrance2",
+      "enc-subwayStn_marketEntrance3",
+      "enc-subwayStn_marketEntrance4",
+      "enc-subwayStn_marketEntrance5",
+      "enc-subwayStn_marketEntrance6",
+      "enc-subwayStn_marketEntrance7",
+      "enc-subwayStn_marketEntrance8"
+    ],
+    "type": "transportBuilding"
+  },
+  "enc-subwayStn_marketConcourse": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_marketConcourse1",
+      "enc-subwayStn_marketConcourse2",
+      "enc-subwayStn_marketConcourse3_platforms4",
+      "enc-subwayStn_marketConcourse4_platforms5",
+      "enc-subwayStn_marketConcourse5_platformn5",
+      "enc-subwayStn_marketConcourse6_platformn4",
+      "enc-subwayStn_marketConcourse7",
+      "enc-subwayStn_marketConcourse8"
+    ],
+    "type": "transportBuilding_underground"
+  },
+  "enc-subwayStn_marketPlatformN": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_marketPlatformn1",
+      "enc-subwayStn_marketPlatformn2",
+      "enc-subwayStn_marketPlatformn3",
+      "enc-subwayStn_marketConcourse6_platformn4",
+      "enc-subwayStn_marketConcourse5_platformn5"
+    ],
+    "type": "platform_underground"
+  },
+  "enc-subwayStn_marketPlatformS": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_marketPlatforms1",
+      "enc-subwayStn_marketPlatforms2",
+      "enc-subwayStn_marketPlatforms3",
+      "enc-subwayStn_marketConcourse3_platforms4",
+      "enc-subwayStn_marketConcourse4_platforms5"
+    ],
+    "type": "platform_underground"
+  },
+  "enc-subwayStn_marketMarker": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Market",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_marketMarker"
+    ],
+    "type": "railStation"
+  },
+  "enc-subwayStn_cabrilloEntrance": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_cabrilloEntrance1",
+      "enc-subwayStn_cabrilloEntrance2",
+      "enc-subwayStn_cabrilloEntrance3",
+      "enc-subwayStn_cabrilloEntrance4",
+      "enc-subwayStn_cabrilloEntrance5",
+      "enc-subwayStn_cabrilloEntrance6",
+      "enc-subwayStn_cabrilloEntrance7",
+      "enc-subwayStn_cabrilloEntrance8"
+    ],
+    "type": "transportBuilding"
+  },
+  "enc-subwayStn_cabrilloConcourse": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_cabrilloConcourse1",
+      "enc-subwayStn_cabrilloConcourse2",
+      "enc-subwayStn_cabrilloConcourse3_platforms4",
+      "enc-subwayStn_cabrilloConcourse4_platforms5",
+      "enc-subwayStn_cabrilloConcourse5_platformn5",
+      "enc-subwayStn_cabrilloConcourse6_platformn4",
+      "enc-subwayStn_cabrilloConcourse7",
+      "enc-subwayStn_cabrilloConcourse8"
+    ],
+    "type": "transportBuilding_underground"
+  },
+  "enc-subwayStn_cabrilloPlatformN": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_cabrilloPlatformn1",
+      "enc-subwayStn_cabrilloPlatformn2",
+      "enc-subwayStn_cabrilloPlatformn3",
+      "enc-subwayStn_cabrilloConcourse6_platformn4",
+      "enc-subwayStn_cabrilloConcourse5_platformn5"
+    ],
+    "type": "platform_underground"
+  },
+  "enc-subwayStn_cabrilloPlatformS": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_cabrilloPlatforms1",
+      "enc-subwayStn_cabrilloPlatforms2",
+      "enc-subwayStn_cabrilloPlatforms3",
+      "enc-subwayStn_cabrilloConcourse3_platforms4",
+      "enc-subwayStn_cabrilloConcourse4_platforms5"
+    ],
+    "type": "platform_underground"
+  },
+  "enc-subwayStn_cabrilloMarker": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Cabrillo",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayStn_cabrilloMarker"
+    ],
+    "type": "railStation"
+  },
+  "enc-subwayTracksN": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Encinitas Subway",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayTracksn1",
+      "enc-subwayTracksn2",
+      "enc-subwayTracksn3",
+      "enc-subwayTracksn4",
+      "enc-subwayTracksn5",
+      "enc-subwayTracksn6",
+      "enc-subwayTracksn7",
+      "enc-subwayTracksn8",
+      "enc-subwayTracksn9",
+      "enc-subwayTracksn10"
+    ],
+    "type": "rail_underground"
+  },
+  "enc-subwayTracksS": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Encinitas Subway",
+    "layer": 0,
+    "nodes": [
+      "enc-subwayTrackss1",
+      "enc-subwayTrackss2",
+      "enc-subwayTrackss3",
+      "enc-subwayTrackss4",
+      "enc-subwayTrackss5",
+      "enc-subwayTrackss6",
+      "enc-subwayTrackss7",
+      "enc-subwayTrackss8",
+      "enc-subwayTrackss9",
+      "enc-subwayTrackss10"
+    ],
+    "type": "rail_underground"
+  },
+  "enc-cityHall": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cityHall1",
+      "enc-cityHall2",
+      "enc-cityHall3",
+      "enc-cityHall4"
+    ],
+    "type": "cityHall"
+  },
+  "enc-cityHallFountainW": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cityHallFountainw1",
+      "enc-cityHallFountainw2",
+      "enc-cityHallFountainw3",
+      "enc-cityHallFountainw4",
+      "enc-cityHallFountainw5",
+      "enc-cityHallFountainw6",
+      "enc-cityHallFountainw7",
+      "enc-cityHallFountainw8"
+    ],
+    "type": "waterSmall"
+  },
+  "enc-cityHallFountainE": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cityHallFountaine1",
+      "enc-cityHallFountaine2",
+      "enc-cityHallFountaine3",
+      "enc-cityHallFountaine4",
+      "enc-cityHallFountaine5",
+      "enc-cityHallFountaine6",
+      "enc-cityHallFountaine7",
+      "enc-cityHallFountaine8"
+    ],
+    "type": "waterSmall"
+  },
+  "enc-officeA": {
+    "attrs": {},
+    "description": "Encinitas, Cruz-Arela, andesite/sandstone/cyan terr",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeA1",
+      "enc-officeA2",
+      "enc-officeA3",
+      "enc-officeA4"
+    ],
+    "type": "building"
+  },
+  "enc-apartmentA": {
+    "attrs": {},
+    "description": "Encinitas, Cruz-Arela, smooth stone/red terr/white terr",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-apartmentA1",
+      "enc-apartmentA2",
+      "enc-apartmentA3",
+      "enc-apartmentA4"
+    ],
+    "type": "building"
+  },
+  "enc-parkA": {
+    "attrs": {},
+    "description": "Encinitas, Cruz-Arela",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-parkA1",
+      "enc-parkA2",
+      "enc-parkA3",
+      "enc-parkA4"
+    ],
+    "type": "park"
+  },
+  "enc-apartmentB": {
+    "attrs": {},
+    "description": "Encinitas, Cruz-Arela, blue terr/andesite/white terr",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-apartmentB1",
+      "enc-apartmentB2",
+      "enc-apartmentB3",
+      "enc-apartmentB4"
+    ],
+    "type": "building"
+  },
+  "enc-officeB": {
+    "attrs": {},
+    "description": "Encinitas, Cruz-Arela, yellow terr/stone bricks/stone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeB1",
+      "enc-officeB2",
+      "enc-officeB3",
+      "enc-officeB4"
+    ],
+    "type": "building"
+  },
+  "enc-apartmentC": {
+    "attrs": {},
+    "description": "Encinitas, Cruz-Arela, red terr/andesite/white terr",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-apartmentC1",
+      "enc-apartmentC2",
+      "enc-apartmentC3",
+      "enc-apartmentC4"
+    ],
+    "type": "building"
+  },
+  "enc-officeC": {
+    "attrs": {},
+    "description": "Encinitas, Cruz-Arela, light blue terr/bricks/stone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeC1",
+      "enc-officeC2",
+      "enc-officeC3",
+      "enc-officeC4"
+    ],
+    "type": "building"
+  },
+  "enc-apartmentD": {
+    "attrs": {},
+    "description": "Encinitas, Cruz-Arela, magenta terr/netherite/stone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-apartmentD1",
+      "enc-apartmentD2",
+      "enc-apartmentD3",
+      "enc-apartmentD4"
+    ],
+    "type": "building"
+  },
+  "enc-zone_cruzArela": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-zone_cruzArela1",
+      "enc-zone_cruzArela2",
+      "enc-arelaPkwy1_costaBlvd2",
+      "enc-arelaPkwy4_joyaSt1"
+    ],
+    "type": "residentialOfficeArea"
+  },
+  "enc-officeD": {
+    "attrs": {},
+    "description": "Encinitas, Arela-Escondido, andesite/white terr/stone bricks",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeD1",
+      "enc-officeD2",
+      "enc-officeD3",
+      "enc-officeD4"
+    ],
+    "type": "building"
+  },
+  "enc-officeE": {
+    "attrs": {},
+    "description": "Encinitas, Arela-Escondido, light blue terr/stone bricks/stone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeE1",
+      "enc-officeE2",
+      "enc-officeE3",
+      "enc-officeE4"
+    ],
+    "type": "building"
+  },
+  "enc-apartmentE": {
+    "attrs": {},
+    "description": "Encinitas, Arela-Escondido, cobble/purpur pillar/light gray terr",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-apartmentE1",
+      "enc-apartmentE2",
+      "enc-apartmentE3",
+      "enc-apartmentE4"
+    ],
+    "type": "building"
+  },
+  "enc-ECLibrary": {
+    "attrs": {},
+    "description": "Encinitas, Arela-Escondido",
+    "displayname": "Edwards Central Library",
+    "layer": 0,
+    "nodes": [
+      "enc-ECLibrary1",
+      "enc-ECLibrary2",
+      "enc-ECLibrary3",
+      "enc-ECLibrary4"
+    ],
+    "type": "building"
+  },
+  "enc-parkB": {
+    "attrs": {},
+    "description": "Encinitas, Arela-Escondido",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-parkB1",
+      "enc-parkB2",
+      "enc-parkB3",
+      "enc-parkB4"
+    ],
+    "type": "park"
+  },
+  "enc-apartmentF": {
+    "attrs": {},
+    "description": "Encinitas, Arela-Escondido, cobble/blue terr/andesite",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-apartmentF1",
+      "enc-apartmentF2",
+      "enc-apartmentF3",
+      "enc-apartmentF4"
+    ],
+    "type": "building"
+  },
+  "enc-officeFa": {
+    "attrs": {},
+    "description": "Encinitas, Arela-Escondido, white/light gray terr",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeFa1",
+      "enc-officeFa2",
+      "enc-officeFa3",
+      "enc-officeFa4"
+    ],
+    "type": "building"
+  },
+  "enc-officeFb": {
+    "attrs": {},
+    "description": "Encinitas, Arela-Escondido, white/light gray terr",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeFb1",
+      "enc-officeFb2",
+      "enc-officeFb3",
+      "enc-officeFb4"
+    ],
+    "type": "building"
+  },
+  "enc-officeG": {
+    "attrs": {},
+    "description": "Encinitas, Arela-Escondido, cyan terr/andesite/white terr",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeG1",
+      "enc-officeG2",
+      "enc-officeG3",
+      "enc-officeG4"
+    ],
+    "type": "building"
+  },
+  "enc-officeH": {
+    "attrs": {},
+    "description": "Encinitas, Arela-Escondido, quartz bricks/terr/smooth stone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeH1",
+      "enc-officeH2",
+      "enc-officeH3",
+      "enc-officeH4"
+    ],
+    "type": "building"
+  },
+  "enc-centuryTower": {
+    "attrs": {},
+    "description": "Encinitas, Arela-Escondido",
+    "displayname": "Century Tower",
+    "layer": 0,
+    "nodes": [
+      "enc-centuryTower1",
+      "enc-centuryTower2",
+      "enc-centuryTower3",
+      "enc-centuryTower4",
+      "enc-centuryTower5",
+      "enc-centuryTower6",
+      "enc-centuryTower7",
+      "enc-centuryTower8",
+      "enc-centuryTower9",
+      "enc-centuryTower10",
+      "enc-centuryTower11",
+      "enc-centuryTower12",
+      "enc-centuryTower13",
+      "enc-centuryTower14",
+      "enc-centuryTower16",
+      "enc-centuryTower16"
+    ],
+    "type": "building"
+  },
+  "enc-apartmentG": {
+    "attrs": {},
+    "description": "Encinitas, Arela-Escondido, pink terr/smooth stone/smooth stone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-apartmentG1",
+      "enc-apartmentG2",
+      "enc-apartmentG3",
+      "enc-apartmentG4"
+    ],
+    "type": "building"
+  },
+  "enc-officeI": {
+    "attrs": {},
+    "description": "Encinitas, Arela-Escondido, andesite/crimson hyphae/cyan terr",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeI1",
+      "enc-officeI2",
+      "enc-officeI3",
+      "enc-officeI4"
+    ],
+    "type": "building"
+  },
+  "enc-apartmentH1": {
+    "attrs": {},
+    "description": "Encinitas, Arela-Escondido, cobblestone/green/lime terr/stone bricks",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-apartmentH1",
+      "enc-apartmentH2",
+      "enc-apartmentH3",
+      "enc-apartmentH4"
+    ],
+    "type": "building"
+  },
+  "enc-officeJ": {
+    "attrs": {},
+    "description": "Encinitas, Costa West, blackstone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeJ1",
+      "enc-officeJ2",
+      "enc-officeJ3",
+      "enc-officeJ4"
+    ],
+    "type": "building"
+  },
+  "enc-seasidePlaza": {
+    "attrs": {},
+    "description": "Encinitas, Cruz-Escondido",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-seasidePlaza1",
+      "enc-seasidePlaza2_capitolPlazaStnEntrance1",
+      "enc-seasidePlaza3_capitolPlazaStnEntrance2",
+      "enc-seasidePlaza4_capitolPlazaStnEntrance3",
+      "enc-seasidePlaza5",
+      "enc-seasidePlaza6",
+      "enc-seasidePlaza7",
+      "enc-seasidePlaza8",
+      "enc-seasidePlaza9",
+      "enc-seasidePlaza10",
+      "enc-seasidePlaza11",
+      "enc-seasidePlaza12",
+      "enc-seasidePlaza13",
+      "ORS7MxedDAA-RCakhlGzAAAAAAA",
+      "ORS7MxedDAA-Cgh3LouNAAAAAAA",
+      "ORS7MxfDMgA-RzPKEjp9UAAAAAA",
+      "ORS7MxfDMgA-Nzs29AFagAAAAAA",
+      "ORS7MxfDMgA-b6RKP1kdoAAAAAA",
+      "ORS7MxfpWAA-nfqdisuaIAAAAAA",
+      "ORS7MxfpWAA-Ic5RpyH+MAAAAAA",
+      "ORS7MxfpWAA-RBcl8EdvkAAAAAA"
+    ],
+    "type": "plaza"
+  },
+  "enc-capitolPlazaStnEntrance": {
+    "attrs": {},
+    "description": "Encinitas, Cruz-Escondido",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-seasidePlaza2_capitolPlazaStnEntrance1",
+      "enc-seasidePlaza3_capitolPlazaStnEntrance2",
+      "enc-seasidePlaza4_capitolPlazaStnEntrance3",
+      "enc-capitolPlazaStnEntrance4"
+    ],
+    "type": "building"
+  },
+  "enc-seasidePark": {
+    "attrs": {},
+    "description": "Encinitas, Cruz-Escondido",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-seasidePark1",
+      "enc-seasidePark2",
+      "enc-seasidePark3",
+      "enc-seasidePark4"
+    ],
+    "type": "park"
+  },
+  "enc-officeK": {
+    "attrs": {},
+    "description": "Encinitas, Escondido-Costa, blue terr/andesite/stone bricks",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeK1",
+      "enc-officeK2",
+      "enc-officeK3",
+      "enc-officeK4"
+    ],
+    "type": "building"
+  },
+  "enc-officeL": {
+    "attrs": {},
+    "description": "Encinitas, Escondido-Costa, light blue terr/cobble/stone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeL1",
+      "enc-officeL2",
+      "enc-officeL3",
+      "enc-officeL4"
+    ],
+    "type": "building"
+  },
+  "enc-parkC": {
+    "attrs": {},
+    "description": "Encinitas, Escondido-Costa",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-parkC1",
+      "enc-parkC2",
+      "enc-parkC3",
+      "enc-parkC4"
+    ],
+    "type": "park"
+  },
+  "enc-parkCFountain": {
+    "attrs": {},
+    "description": "Encinitas, Escondido-Costa",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-parkCFountain1",
+      "enc-parkCFountain2",
+      "enc-parkCFountain3",
+      "enc-parkCFountain4",
+      "enc-parkCFountain5",
+      "enc-parkCFountain6",
+      "enc-parkCFountain7",
+      "enc-parkCFountain8"
+    ],
+    "type": "waterSmall"
+  },
+  "enc-bankOfOaks": {
+    "attrs": {},
+    "description": "Encinitas, Escondido-Costa, quartz/stone bricks",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-bankOfOaks1",
+      "enc-bankOfOaks2",
+      "enc-bankOfOaks3",
+      "enc-bankOfOaks4"
+    ],
+    "type": "building"
+  },
+  "enc-officeM": {
+    "attrs": {},
+    "description": "Encinitas, Costa West, quartz/stone bricks",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeM1",
+      "enc-officeM2",
+      "enc-officeM3",
+      "enc-officeM4"
+    ],
+    "type": "building"
+  },
+  "enc-apartmentI": {
+    "attrs": {},
+    "description": "Encinitas, Costa West, andesite/smooth stone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-apartmentI1",
+      "enc-apartmentI2",
+      "enc-apartmentI3",
+      "enc-apartmentI4"
+    ],
+    "type": "building"
+  },
+  "enc-officeN": {
+    "attrs": {},
+    "description": "Encinitas, Costa West, smooth stone/light blue terr/polished basalt",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeN1",
+      "enc-officeN2",
+      "enc-officeN3",
+      "enc-officeN4",
+      "enc-officeN5",
+      "enc-officeN6",
+      "enc-officeN7"
+    ],
+    "type": "building"
+  },
+  "enc-zone_arelaEscondido": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-zone_arelaEscondido1",
+      "enc-zone_arelaEscondido2",
+      "enc-zone_arelaEscondido3",
+      "enc-escondidoSt6",
+      "enc-escondidoSt5",
+      "enc-escondidoSt4",
+      "enc-escondidoSt3",
+      "enc-escondidoSt1_costaBlvd3",
+      "enc-arelaPkwy1_costaBlvd2"
+    ],
+    "type": "residentialOfficeArea"
+  },
+  "enc-zone_escondidoCosta": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-zone_escondidoCosta1",
+      "enc-zone_escondidoCosta2",
+      "enc-costaBlvd7",
+      "enc-costaBlvd6",
+      "enc-costaBlvd5",
+      "enc-costaBlvd4",
+      "enc-escondidoSt1_costaBlvd3"
+    ],
+    "type": "officeArea"
+  },
+  "enc-zone_costaWest": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-zone_costaWest1",
+      "enc-zone_costaWest2",
+      "enc-zone_costaWest3",
+      "enc-zone_costaWest4",
+      "enc-escondidoSt1_costaBlvd3"
+    ],
+    "type": "residentialOfficeArea"
+  },
+  "enc-officeO": {
+    "attrs": {},
+    "description": "Encinitas, Costa North, yellow terr/smooth stone/stone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeO1",
+      "enc-officeO2",
+      "enc-officeO3",
+      "enc-officeO4"
+    ],
+    "type": "building"
+  },
+  "enc-apartmentJ1": {
+    "attrs": {},
+    "description": "Encinitas, Costa North, chiselled stone/white/purple terr",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-apartmentJ1",
+      "enc-apartmentJ2",
+      "enc-apartmentJ3",
+      "enc-apartmentJ4"
+    ],
+    "type": "building"
+  },
+  "enc-officeP": {
+    "attrs": {},
+    "description": "Encinitas, Costa North, stripped crimson hyphae/polished andesite/cyan terr",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeP1",
+      "enc-officeP2",
+      "enc-officeP3",
+      "enc-officeP4"
+    ],
+    "type": "building"
+  },
+  "enc-officeQ": {
+    "attrs": {},
+    "description": "Encinitas, Costa North, stripped warped hyphae/andesite/polished andesite",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeQ1",
+      "enc-officeQ2",
+      "enc-officeQ3",
+      "enc-officeQ4"
+    ],
+    "type": "building"
+  },
+  "enc-apartmentK": {
+    "attrs": {},
+    "description": "Encinitas, Costa North, cyan terr/stone/smooth stone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-apartmentK1",
+      "enc-apartmentK2",
+      "enc-apartmentK3",
+      "enc-apartmentK4"
+    ],
+    "type": "building"
+  },
+  "enc-apartmentL": {
+    "attrs": {},
+    "description": "Encinitas, Costa North, cobble/purple/light gray terr",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-apartmentL1",
+      "enc-apartmentL2",
+      "enc-apartmentL3",
+      "enc-apartmentL4"
+    ],
+    "type": "building"
+  },
+  "enc-officeR": {
+    "attrs": {},
+    "description": "Encinitas, Costa North, blue terr/bricks/smooth stone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeR1",
+      "enc-officeR2",
+      "enc-officeR3",
+      "enc-officeR4"
+    ],
+    "type": "building"
+  },
+  "enc-apartmentM": {
+    "attrs": {},
+    "description": "Encinitas, Costa North, terr/cobble/smooth stone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-apartmentM1",
+      "enc-apartmentM2",
+      "enc-apartmentM3",
+      "enc-apartmentM4"
+    ],
+    "type": "building"
+  },
+  "enc-officeS": {
+    "attrs": {},
+    "description": "Encinitas, Costa North, stone bricks/red terr/stone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeS1",
+      "enc-officeS2",
+      "enc-officeS3",
+      "enc-officeS4"
+    ],
+    "type": "building"
+  },
+  "enc-officeT": {
+    "attrs": {},
+    "description": "Encinitas, Costa North, cut sandstone/blackstone bricks/polished andesite",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeT1",
+      "enc-officeT2",
+      "enc-officeT3",
+      "enc-officeT4"
+    ],
+    "type": "building"
+  },
+  "enc-officeU": {
+    "attrs": {},
+    "description": "Encinitas, Costa North, magenta terr/chiselled stone bricks/smooth stone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-officeU1",
+      "enc-officeU2",
+      "enc-officeU3",
+      "enc-officeU4"
+    ],
+    "type": "building"
+  },
+  "enc-apartmentN": {
+    "attrs": {},
+    "description": "Encinitas, Costa North, bricks/white terr/polished andesite",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-apartmentN1",
+      "enc-apartmentN2",
+      "enc-apartmentN3",
+      "enc-apartmentN4",
+      "enc-apartmentN5"
+    ],
+    "type": "building"
+  },
+  "enc-cabrilloHouseA": {
+    "attrs": {},
+    "description": "Encinitas, quartz/andesite",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cabrilloHouseA1",
+      "enc-cabrilloHouseA2",
+      "enc-cabrilloHouseA3",
+      "enc-cabrilloHouseA4"
+    ],
+    "type": "building"
+  },
+  "enc-eliteNeonHouse": {
+    "attrs": {},
+    "description": "Encinitas, brick/sandstone",
+    "displayname": "EliteNeon's residence",
+    "layer": 0,
+    "nodes": [
+      "enc-eliteNeonHouse1",
+      "enc-eliteNeonHouse2",
+      "enc-eliteNeonHouse3",
+      "enc-eliteNeonHouse4"
+    ],
+    "type": "building"
+  },
+  "enc-cabrilloHouseB": {
+    "attrs": {},
+    "description": "Encinitas, white terr/stone bricks",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cabrilloHouseB1",
+      "enc-cabrilloHouseB2",
+      "enc-cabrilloHouseB3",
+      "enc-cabrilloHouseB4"
+    ],
+    "type": "building"
+  },
+  "enc-cabrilloHouseC": {
+    "attrs": {},
+    "description": "Encinitas, cyan terr/cobble",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cabrilloHouseC1",
+      "enc-cabrilloHouseC2",
+      "enc-cabrilloHouseC3",
+      "enc-cabrilloHouseC4"
+    ],
+    "type": "building"
+  },
+  "enc-cabrilloHouseD": {
+    "attrs": {},
+    "description": "Encinitas, blackstone/sandstone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cabrilloHouseD1",
+      "enc-cabrilloHouseD2",
+      "enc-cabrilloHouseD3",
+      "enc-cabrilloHouseD4"
+    ],
+    "type": "building"
+  },
+  "enc-cabrilloHouseE": {
+    "attrs": {},
+    "description": "Encinitas, red terr/andesite",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cabrilloHouseE1",
+      "enc-cabrilloHouseE2",
+      "enc-cabrilloHouseE3",
+      "enc-cabrilloHouseE4"
+    ],
+    "type": "building"
+  },
+  "enc-cabrilloHouseF": {
+    "attrs": {},
+    "description": "Encinitas, brick/cobble",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cabrilloHouseF1",
+      "enc-cabrilloHouseF2",
+      "enc-cabrilloHouseF3",
+      "enc-cabrilloHouseF4"
+    ],
+    "type": "building"
+  },
+  "enc-cabrilloHouseG": {
+    "attrs": {},
+    "description": "Encinitas, yellow terr/stone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cabrilloHouseG1",
+      "enc-cabrilloHouseG2",
+      "enc-cabrilloHouseG3",
+      "enc-cabrilloHouseG4"
+    ],
+    "type": "building"
+  },
+  "enc-cabrilloHouseH": {
+    "attrs": {},
+    "description": "Encinitas, netherite/clay",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cabrilloHouseH1",
+      "enc-cabrilloHouseH2",
+      "enc-cabrilloHouseH3",
+      "enc-cabrilloHouseH4"
+    ],
+    "type": "building"
+  },
+  "enc-cabrilloHouseI": {
+    "attrs": {},
+    "description": "Encinitas, purple terr/sandstone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cabrilloHouseI1",
+      "enc-cabrilloHouseI2",
+      "enc-cabrilloHouseI3",
+      "enc-cabrilloHouseI4"
+    ],
+    "type": "building"
+  },
+  "enc-cabrilloHouseJ": {
+    "attrs": {},
+    "description": "Encinitas, acacia wood/stone bricks",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cabrilloHouseJ1",
+      "enc-cabrilloHouseJ2",
+      "enc-cabrilloHouseJ3",
+      "enc-cabrilloHouseJ4"
+    ],
+    "type": "building"
+  },
+  "enc-cabrilloHouseK": {
+    "attrs": {},
+    "description": "Encinitas, blue terr/polished basalt",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cabrilloHouseK1",
+      "enc-cabrilloHouseK2",
+      "enc-cabrilloHouseK3",
+      "enc-cabrilloHouseK4"
+    ],
+    "type": "building"
+  },
+  "enc-cabrilloStallA": {
+    "attrs": {},
+    "description": "Encinitas, rocky plateau food hub",
+    "displayname": "Rocky Plateau Food Hub",
+    "layer": 0,
+    "nodes": [
+      "enc-cabrilloStallA1",
+      "enc-cabrilloStallA2",
+      "enc-cabrilloStallA3",
+      "enc-cabrilloStallA4"
+    ],
+    "type": "building"
+  },
+  "enc-cabrilloStallB": {
+    "attrs": {},
+    "description": "Encinitas, rocky plateau food hub",
+    "displayname": "Rocky Plateau Food Hub",
+    "layer": 0,
+    "nodes": [
+      "enc-cabrilloStallB1",
+      "enc-cabrilloStallB2",
+      "enc-cabrilloStallB3",
+      "enc-cabrilloStallB4"
+    ],
+    "type": "building"
+  },
+  "enc-cabrilloHouseL": {
+    "attrs": {},
+    "description": "Encinitas, quartz/polished andesite/sandstone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cabrilloHouseL1",
+      "enc-cabrilloHouseL2",
+      "enc-cabrilloHouseL3",
+      "enc-cabrilloHouseL4"
+    ],
+    "type": "building"
+  },
+  "enc-cabrilloEdgeA": {
+    "attrs": {},
+    "description": "Encinitas, terr/sandstone/cobble",
+    "displayname": "Cabrillo Edge Blk 1",
+    "layer": 0,
+    "nodes": [
+      "enc-cabrilloEdgeA1",
+      "enc-cabrilloEdgeA2",
+      "enc-cabrilloEdgeA3",
+      "enc-cabrilloEdgeA4",
+      "enc-cabrilloEdgeA5",
+      "enc-cabrilloEdgeA6"
+    ],
+    "type": "building"
+  },
+  "enc-cabrilloEdgeB": {
+    "attrs": {},
+    "description": "Encinitas, terr/sandstone/cobble",
+    "displayname": "Cabrillo Edge Blk 2",
+    "layer": 0,
+    "nodes": [
+      "enc-cabrilloEdgeB1",
+      "enc-cabrilloEdgeB2",
+      "enc-cabrilloEdgeB3",
+      "enc-cabrilloEdgeB4"
+    ],
+    "type": "building"
+  },
+  "enc-rockyPlateauHighSch_Block1": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Block 1",
+    "layer": 0,
+    "nodes": [
+      "enc-rockyPlateauHighSch_Block1_1",
+      "enc-rockyPlateauHighSch_Block1_2",
+      "enc-rockyPlateauHighSch_Block1_3",
+      "enc-rockyPlateauHighSch_Block1_4"
+    ],
+    "type": "building"
+  },
+  "enc-rockyPlateauHighSch_Block2": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Block 2",
+    "layer": 0,
+    "nodes": [
+      "enc-rockyPlateauHighSch_Block2_1",
+      "enc-rockyPlateauHighSch_Block2_2",
+      "enc-rockyPlateauHighSch_Block2_3",
+      "enc-rockyPlateauHighSch_Block2_4"
+    ],
+    "type": "building"
+  },
+  "enc-rockyPlateauHighSch_Block3": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Block 3",
+    "layer": 0,
+    "nodes": [
+      "enc-rockyPlateauHighSch_Block3_1",
+      "enc-rockyPlateauHighSch_Block3_2",
+      "enc-rockyPlateauHighSch_Block3_3",
+      "enc-rockyPlateauHighSch_Block3_4"
+    ],
+    "type": "building"
+  },
+  "enc-rockyPlateauHighSch_Block4": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Block 4",
+    "layer": 0,
+    "nodes": [
+      "enc-rockyPlateauHighSch_Block4_1",
+      "enc-rockyPlateauHighSch_Block4_2",
+      "enc-rockyPlateauHighSch_Block4_3",
+      "enc-rockyPlateauHighSch_Block4_4"
+    ],
+    "type": "building"
+  },
+  "enc-rockyPlateauHighSch_Block5": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Block 5",
+    "layer": 0,
+    "nodes": [
+      "enc-rockyPlateauHighSch_Block5_1",
+      "enc-rockyPlateauHighSch_Block5_2",
+      "enc-rockyPlateauHighSch_Block5_3",
+      "enc-rockyPlateauHighSch_Block5_4"
+    ],
+    "type": "building"
+  },
+  "enc-rockyPlateauHighSch_Block6": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Block 6",
+    "layer": 0,
+    "nodes": [
+      "enc-rockyPlateauHighSch_Block6_1",
+      "enc-rockyPlateauHighSch_Block6_2",
+      "enc-rockyPlateauHighSch_Block6_3",
+      "enc-rockyPlateauHighSch_Block6_4"
+    ],
+    "type": "building"
+  },
+  "enc-rockyPlateauHighSch_Block7": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Block 7",
+    "layer": 0,
+    "nodes": [
+      "enc-rockyPlateauHighSch_Block7_1",
+      "enc-rockyPlateauHighSch_Block7_2",
+      "enc-rockyPlateauHighSch_Block7_3",
+      "enc-rockyPlateauHighSch_Block7_4"
+    ],
+    "type": "building"
+  },
+  "enc-rockyPlateauHighSch_Block8": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Block 8",
+    "layer": 0,
+    "nodes": [
+      "enc-rockyPlateauHighSch_Block8_1",
+      "enc-rockyPlateauHighSch_Block8_2",
+      "enc-rockyPlateauHighSch_Block8_3_fence18",
+      "enc-rockyPlateauHighSch_Block8_4_fence17"
+    ],
+    "type": "building"
+  },
+  "enc-rockyPlateauHighSch_bBallCourt": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Basketball Court",
+    "layer": 0,
+    "nodes": [
+      "enc-rockyPlateauHighSch_bBallCourt1",
+      "enc-rockyPlateauHighSch_bBallCourt2",
+      "enc-rockyPlateauHighSch_bBallCourt3",
+      "enc-rockyPlateauHighSch_bBallCourt4"
+    ],
+    "type": "park"
+  },
+  "enc-cabrilloHouseM": {
+    "attrs": {},
+    "description": "Encinitas, bricks/stone bricks",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cabrilloHouseM1",
+      "enc-cabrilloHouseM2",
+      "enc-cabrilloHouseM3",
+      "enc-cabrilloHouseM4",
+      "enc-cabrilloHouseM5",
+      "enc-cabrilloHouseM6",
+      "enc-cabrilloHouseM7",
+      "enc-cabrilloHouseM8"
+    ],
+    "type": "building"
+  },
+  "enc-mayorHouse": {
+    "attrs": {},
+    "description": "Encinitas, quartz/polished andesite/sandstone",
+    "displayname": "Mayor's House",
+    "layer": 0,
+    "nodes": [
+      "enc-mayorHouse1",
+      "enc-mayorHouse2",
+      "enc-mayorHouse3",
+      "enc-mayorHouse4",
+      "enc-mayorHouse5",
+      "enc-mayorHouse6",
+      "enc-mayorHouse7",
+      "enc-mayorHouse8"
+    ],
+    "type": "building"
+  },
+  "enc-lighthousea": {
+    "attrs": {},
+    "description": "Encinitas, quartz/polished andesite/sandstone",
+    "displayname": "Lighthouse",
+    "layer": 0,
+    "nodes": [
+      "enc-lighthousea1",
+      "enc-lighthousea2",
+      "enc-lighthousea3",
+      "enc-lighthousea4"
+    ],
+    "type": "building"
+  },
+  "enc-lighthouseb": {
+    "attrs": {},
+    "description": "Encinitas, quartz/polished andesite/sandstone",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-lighthouseb1",
+      "enc-lighthouseb2",
+      "enc-lighthouseb3",
+      "enc-lighthouseb4",
+      "enc-lighthouseb5",
+      "enc-lighthouseb6",
+      "enc-lighthouseb7",
+      "enc-lighthouseb8"
+    ],
+    "type": "building"
+  },
+  "enc-montanasCabrillosRangerOffice": {
+    "attrs": {},
+    "description": "Encinitas, quartz/polished andesite/sandstone",
+    "displayname": "Ranger Office",
+    "layer": 0,
+    "nodes": [
+      "enc-montanasCabrillosRangerOffice1",
+      "enc-montanasCabrillosRangerOffice2",
+      "enc-montanasCabrillosRangerOffice3",
+      "enc-montanasCabrillosRangerOffice4",
+      "enc-montanasCabrillosRangerOffice5",
+      "enc-montanasCabrillosRangerOffice6"
+    ],
+    "type": "building"
+  },
+  "enc-CCIAa": {
+    "attrs": {},
+    "description": "Encinitas, quartz/polished andesite/sandstone",
+    "displayname": "Cresta Communications Interceptions Agency",
+    "layer": 0,
+    "nodes": [
+      "enc-CCIAa1",
+      "enc-CCIAa2",
+      "enc-CCIAa3b3c2",
+      "enc-CCIAa4",
+      "enc-CCIAa5b8",
+      "enc-CCIAa6"
+    ],
+    "type": "building"
+  },
+  "enc-CCIAb": {
+    "attrs": {},
+    "description": "Encinitas, quartz/polished andesite/sandstone",
+    "displayname": "",
+    "layer": 0.1,
+    "nodes": [
+      "enc-CCIAb1",
+      "enc-CCIAb2c1",
+      "enc-CCIAa3b3c2",
+      "enc-CCIAb4c3",
+      "enc-CCIAb5c4",
+      "enc-CCIAb6c5",
+      "enc-CCIAb7c6",
+      "enc-CCIAa5b8"
+    ],
+    "type": "building"
+  },
+  "enc-CCIAc": {
+    "attrs": {},
+    "description": "Encinitas, quartz/polished andesite/sandstone",
+    "displayname": "",
+    "layer": 0.2,
+    "nodes": [
+      "enc-CCIAb2c1",
+      "enc-CCIAa3b3c2",
+      "enc-CCIAb4c3",
+      "enc-CCIAb5c4",
+      "enc-CCIAb6c5",
+      "enc-CCIAb7c6"
+    ],
+    "type": "building"
+  },
+  "enc-crestaCapitol_building": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Cresta Capitol",
+    "layer": 0,
+    "nodes": [
+      "enc-crestaCapitol_building1",
+      "enc-crestaCapitol_building2",
+      "enc-crestaCapitol_building3",
+      "enc-crestaCapitol_building4",
+      "enc-crestaCapitol_building5",
+      "enc-crestaCapitol_building6",
+      "enc-crestaCapitol_building7",
+      "enc-crestaCapitol_building8",
+      "enc-crestaCapitol_building9",
+      "enc-crestaCapitol_building10",
+      "enc-crestaCapitol_building11",
+      "enc-crestaCapitol_building12",
+      "enc-crestaCapitol_building13",
+      "enc-crestaCapitol_building14",
+      "enc-crestaCapitol_building15",
+      "enc-crestaCapitol_building16",
+      "enc-crestaCapitol_building17",
+      "enc-crestaCapitol_building18",
+      "enc-crestaCapitol_building19",
+      "enc-crestaCapitol_building20",
+      "enc-crestaCapitol_building21",
+      "enc-crestaCapitol_building22",
+      "enc-crestaCapitol_building23",
+      "enc-crestaCapitol_building24",
+      "enc-crestaCapitol_building25",
+      "enc-crestaCapitol_building26",
+      "enc-crestaCapitol_building27",
+      "enc-crestaCapitol_building28",
+      "enc-crestaCapitol_building29",
+      "enc-crestaCapitol_building30",
+      "enc-crestaCapitol_building31",
+      "enc-crestaCapitol_building32",
+      "enc-crestaCapitol_building33",
+      "enc-crestaCapitol_building34",
+      "enc-crestaCapitol_building35",
+      "enc-crestaCapitol_building36",
+      "enc-crestaCapitol_building37",
+      "enc-crestaCapitol_building38",
+      "enc-crestaCapitol_building39",
+      "enc-crestaCapitol_building40",
+      "enc-crestaCapitol_building41"
+    ],
+    "type": "building"
+  },
+  "enc-crestaCapitol_lawn": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0.1,
+    "nodes": [
+      "enc-crestaCapitol_lawn1",
+      "enc-crestaCapitol_lawn2",
+      "enc-crestaCapitol_lawn3",
+      "enc-crestaCapitol_lawn4",
+      "enc-crestaCapitol_lawn5",
+      "enc-crestaCapitol_lawn6",
+      "enc-crestaCapitol_lawn7",
+      "enc-crestaCapitol_lawn8",
+      "enc-crestaCapitol_lawn9",
+      "enc-crestaCapitol_lawn10",
+      "enc-crestaCapitol_lawn11",
+      "enc-crestaCapitol_lawn12",
+      "enc-crestaCapitol_lawn13",
+      "enc-crestaCapitol_lawn14",
+      "enc-crestaCapitol_lawn15",
+      "enc-crestaCapitol_lawn16",
+      "enc-crestaCapitol_lawn17",
+      "enc-crestaCapitol_lawn18",
+      "enc-crestaCapitol_lawn19",
+      "enc-crestaCapitol_lawn20",
+      "enc-crestaCapitol_lawn21",
+      "enc-crestaCapitol_lawn22",
+      "enc-crestaCapitol_lawn23",
+      "enc-crestaCapitol_lawn24",
+      "enc-crestaCapitol_lawn25",
+      "enc-crestaCapitol_lawn26",
+      "enc-crestaCapitol_lawn27",
+      "enc-crestaCapitol_lawn28",
+      "enc-crestaCapitol_lawn29",
+      "enc-crestaCapitol_lawn30",
+      "enc-crestaCapitol_lawn31",
+      "enc-crestaCapitol_lawn32"
+    ],
+    "type": "grass"
+  },
+  "enc-crestaCapitol_fountainN": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-crestaCapitol_fountainN1",
+      "enc-crestaCapitol_fountainN2",
+      "enc-crestaCapitol_fountainN3",
+      "enc-crestaCapitol_fountainN4",
+      "enc-crestaCapitol_fountainN5",
+      "enc-crestaCapitol_fountainN6",
+      "enc-crestaCapitol_fountainN7",
+      "enc-crestaCapitol_fountainN8",
+      "enc-crestaCapitol_fountainN9",
+      "enc-crestaCapitol_fountainN10",
+      "enc-crestaCapitol_fountainN11",
+      "enc-crestaCapitol_fountainN12",
+      "enc-crestaCapitol_fountainN13",
+      "enc-crestaCapitol_fountainN14",
+      "enc-crestaCapitol_fountainN15",
+      "enc-crestaCapitol_fountainN16"
+    ],
+    "type": "waterSmall"
+  },
+  "enc-crestaCapitol_fountainS": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-crestaCapitol_fountainS1",
+      "enc-crestaCapitol_fountainS2",
+      "enc-crestaCapitol_fountainS3",
+      "enc-crestaCapitol_fountainS4",
+      "enc-crestaCapitol_fountainS5",
+      "enc-crestaCapitol_fountainS6",
+      "enc-crestaCapitol_fountainS7",
+      "enc-crestaCapitol_fountainS8",
+      "enc-crestaCapitol_fountainS9",
+      "enc-crestaCapitol_fountainS10",
+      "enc-crestaCapitol_fountainS11",
+      "enc-crestaCapitol_fountainS12",
+      "enc-crestaCapitol_fountainS13",
+      "enc-crestaCapitol_fountainS14",
+      "enc-crestaCapitol_fountainS15",
+      "enc-crestaCapitol_fountainS16"
+    ],
+    "type": "waterSmall"
+  },
+  "enc-crestaCapitol_pathSE": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-crestaCapitol_pathSE1",
+      "enc-crestaCapitol_pathSE2",
+      "enc-crestaCapitol_pathSE3",
+      "enc-crestaCapitol_pathSE4",
+      "enc-crestaCapitol_pathSE5",
+      "enc-crestaCapitol_pathS6",
+      "enc-crestaCapitol_pathS7"
+    ],
+    "type": "pathway"
+  },
+  "enc-crestaCapitol_pathSW": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-crestaCapitol_pathSW1",
+      "enc-crestaCapitol_pathSW2",
+      "enc-crestaCapitol_pathSW3",
+      "enc-crestaCapitol_pathSW4",
+      "enc-crestaCapitol_pathSW5",
+      "enc-crestaCapitol_pathS6"
+    ],
+    "type": "pathway"
+  },
+  "enc-crestaCapitol_pathNE": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-crestaCapitol_pathNE1",
+      "enc-crestaCapitol_pathNE2",
+      "enc-crestaCapitol_pathNE3",
+      "enc-crestaCapitol_pathNE4",
+      "enc-crestaCapitol_pathNE5",
+      "enc-crestaCapitol_pathN6",
+      "enc-crestaCapitol_pathN7"
+    ],
+    "type": "pathway"
+  },
+  "enc-crestaCapitol_pathNW": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-crestaCapitol_pathNW1",
+      "enc-crestaCapitol_pathNW2",
+      "enc-crestaCapitol_pathNW3",
+      "enc-crestaCapitol_pathNW4",
+      "enc-crestaCapitol_pathNW5",
+      "enc-crestaCapitol_pathN6"
+    ],
+    "type": "pathway"
+  },
+  "enc-crestaCapitol_plazaN": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-crestaCapitol_building1",
+      "enc-crestaCapitol_building2",
+      "enc-crestaCapitol_building3",
+      "enc-crestaCapitol_building4",
+      "enc-crestaCapitol_building5",
+      "enc-crestaCapitol_building6",
+      "enc-crestaCapitol_building7",
+      "enc-crestaCapitol_building8",
+      "enc-crestaCapitol_building9",
+      "enc-crestaCapitol_building10",
+      "enc-crestaCapitol_building11",
+      "enc-crestaCapitol_building12",
+      "enc-crestaCapitol_pathSW1",
+      "enc-crestaCapitol_pathSE1"
+    ],
+    "type": "plaza"
+  },
+  "enc-crestaCapitol_plazaS": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-crestaCapitol_building22",
+      "enc-crestaCapitol_building23",
+      "enc-crestaCapitol_building24",
+      "enc-crestaCapitol_building25",
+      "enc-crestaCapitol_building26",
+      "enc-crestaCapitol_building27",
+      "enc-crestaCapitol_building28",
+      "enc-crestaCapitol_building29",
+      "enc-crestaCapitol_building30",
+      "enc-crestaCapitol_building31",
+      "enc-crestaCapitol_building32",
+      "enc-crestaCapitol_building33",
+      "enc-crestaCapitol_pathNE1",
+      "enc-crestaCapitol_pathNW1"
+    ],
+    "type": "plaza"
+  },
+  "enc-seawallPark": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Seawall Park",
+    "layer": 0,
+    "nodes": [
+      "enc-seawallPark1",
+      "enc-seawallPark2",
+      "enc-seawallPark3",
+      "enc-seawallPark4",
+      "enc-seawallPark5",
+      "enc-seawallPark6",
+      "enc-seawallPark7",
+      "enc-seawallPark8",
+      "enc-seawallPark9",
+      "enc-seawallPark10",
+      "enc-seawallPark11",
+      "enc-seawallPark12",
+      "enc-seawallPark13",
+      "enc-seawallPark14",
+      "enc-seawallPark15",
+      "enc-seawallPark16",
+      "enc-seawallPark17",
+      "enc-seawallPark18",
+      "enc-seawallPark19",
+      "enc-seawallPark20",
+      "enc-seawallPark21",
+      "enc-seawallPark22",
+      "enc-seawallPark23",
+      "enc-seawallPark24",
+      "enc-seawallPark25",
+      "enc-seawallPark26",
+      "enc-seawallPark27",
+      "enc-seawallPark28",
+      "enc-seawallPark29",
+      "enc-seawallPark30",
+      "enc-seawallPark31",
+      "enc-seawallPark32",
+      "enc-seawallPark33",
+      "enc-seawallPark34",
+      "enc-seawallPark35"
+    ],
+    "type": "park"
+  },
+  "enc-rockyPlateauHighSch_fence": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Rocky Plateau High School",
+    "layer": 0,
+    "nodes": [
+      "enc-rockyPlateauHighSch_fence1",
+      "enc-rockyPlateauHighSch_fence2",
+      "enc-rockyPlateauHighSch_fence3",
+      "enc-rockyPlateauHighSch_fence4",
+      "enc-rockyPlateauHighSch_fence5",
+      "enc-rockyPlateauHighSch_fence6",
+      "enc-rockyPlateauHighSch_fence7",
+      "enc-rockyPlateauHighSch_fence8",
+      "enc-rockyPlateauHighSch_fence9",
+      "enc-rockyPlateauHighSch_fence10",
+      "enc-rockyPlateauHighSch_fence11",
+      "enc-rockyPlateauHighSch_fence12",
+      "enc-rockyPlateauHighSch_fence13",
+      "enc-rockyPlateauHighSch_fence14",
+      "enc-rockyPlateauHighSch_fence15",
+      "enc-rockyPlateauHighSch_fence16",
+      "enc-rockyPlateauHighSch_Block8_4_fence17",
+      "enc-rockyPlateauHighSch_Block8_3_fence18",
+      "enc-rockyPlateauHighSch_fence19",
+      "enc-rockyPlateauHighSch_fence20",
+      "enc-rockyPlateauHighSch_fence21",
+      "enc-subwayStn_cabrilloEntrance8"
+    ],
+    "type": "schoolArea"
+  },
+  "enc-lookoutPark": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "Lookout Park",
+    "layer": 0,
+    "nodes": [
+      "enc-lookoutPark1",
+      "enc-lookoutPark2",
+      "enc-lookoutPark3",
+      "enc-lookoutPark4",
+      "enc-lookoutPark5",
+      "enc-lookoutPark6",
+      "enc-lookoutPark7",
+      "enc-lookoutPark8",
+      "enc-lookoutPark9",
+      "enc-lookoutPark10",
+      "enc-lookoutPark11",
+      "enc-lookoutPark12",
+      "enc-lookoutPark13",
+      "enc-lookoutPark14",
+      "enc-lookoutPark15",
+      "enc-lookoutPark16",
+      "enc-lookoutPark17",
+      "enc-lookoutPark18"
+    ],
+    "type": "park"
+  },
+  "enc-cityForestA": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cityForestA1",
+      "enc-cityForestA2",
+      "enc-cityForestA3",
+      "enc-cityForestA4",
+      "enc-cityForestA5"
+    ],
+    "type": "forest"
+  },
+  "enc-cityForestB": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cityForestB1",
+      "enc-cityForestB2",
+      "enc-cityForestB3",
+      "enc-cityForestB4",
+      "enc-cityForestB5",
+      "enc-cityForestB6",
+      "enc-cityForestB7"
+    ],
+    "type": "forest"
+  },
+  "enc-cityForestC": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cityForestC1",
+      "enc-cityForestC2",
+      "enc-cityForestC3",
+      "enc-cityForestC4",
+      "enc-cityForestC5",
+      "enc-cityForestC6",
+      "enc-cityForestC7"
+    ],
+    "type": "forest"
+  },
+  "enc-cityForestD": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cityForestD1",
+      "enc-cityForestD2",
+      "enc-cityForestD3",
+      "enc-cityForestD4",
+      "enc-cityForestD5",
+      "enc-cityForestD6"
+    ],
+    "type": "forest"
+  },
+  "enc-cityForestE": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-centuryTower5",
+      "enc-cityForestE2",
+      "enc-centuryTower2",
+      "enc-cityForestE4"
+    ],
+    "type": "forest"
+  },
+  "enc-cityForestF": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cityForestF1",
+      "enc-cityForestF2",
+      "enc-cityForestF3",
+      "enc-cityForestF4",
+      "enc-cityForestF5",
+      "enc-cityForestF6",
+      "enc-cityForestF7",
+      "enc-cityForestF8",
+      "enc-cityForestF9",
+      "enc-cityForestF10",
+      "enc-cityForestF11",
+      "enc-cityForestF12",
+      "enc-cityForestF13"
+    ],
+    "type": "forest"
+  },
+  "enc-cityForestG": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cityForestG1",
+      "enc-cityForestG2",
+      "enc-cityForestG3",
+      "enc-cityForestG4",
+      "enc-cityForestG5",
+      "enc-cityForestG6",
+      "enc-cityForestG8"
+    ],
+    "type": "forest"
+  },
+  "enc-cityForestH": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cityForestH1",
+      "enc-cityForestH2",
+      "enc-cityForestH3",
+      "enc-cityForestH4",
+      "enc-cityForestH5",
+      "enc-cityForestH6",
+      "enc-cityForestH7",
+      "enc-cityForestH8",
+      "enc-cityForestH9",
+      "enc-cityForestH10",
+      "enc-cityForestH11",
+      "enc-cityForestH12",
+      "enc-cityForestH13",
+      "enc-cityForestH14"
+    ],
+    "type": "forest"
+  },
+  "enc-cityForestI": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cityForestI1",
+      "enc-cityForestI2",
+      "enc-cityForestI3",
+      "enc-cityForestI4"
+    ],
+    "type": "forest"
+  },
+  "enc-cityForestJ": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cityForestJ1",
+      "enc-cityForestJ2",
+      "enc-cityForestJ3"
+    ],
+    "type": "forest"
+  },
+  "enc-cityForestK": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cityForestK1",
+      "enc-cityForestK2",
+      "enc-cityForestK3",
+      "enc-cityForestK4",
+      "enc-cityForestK5"
+    ],
+    "type": "forest"
+  },
+  "enc-cityForestL": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cityForestL1",
+      "enc-cityForestL2",
+      "enc-cityForestL3",
+      "enc-cityForestL4",
+      "enc-cityForestL5"
+    ],
+    "type": "forest"
+  },
+  "enc-cityForestM": {
+    "attrs": {},
+    "description": "Encinitas",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-cityForestM1",
+      "enc-cityForestM2",
+      "enc-cityForestM3",
+      "enc-cityForestM4",
+      "enc-cityForestM5"
+    ],
+    "type": "forest"
+  },
+  "enc-MCNP-riverA": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7My/nAgA-XToAccaNsAAAAAA",
+      "ORS7My/nAgA-HyhYDAriEAAAAAA",
+      "ORS7MzANKAA-97xZa1xAMAAAAAA",
+      "ORS7MzANKAA-bBxrCRA8MAAAAAA",
+      "ORS7MzANKAA-0eemlI+ycAAAAAA",
+      "ORS7MzAzTAA-aWk1qSVN8AAAAAA",
+      "ORS7MzAzTAA-oM+OMIKCoAAAAAA",
+      "ORS7MzAzTAA-Ei8RtxOdoAAAAAA",
+      "ORS7MzAzTAA-feeXng6i0AAAAAA",
+      "ORS7MzBZcgA-ZP+oFm4zgAAAAAA",
+      "ORS7MzBZcgA-6pGJ5xN18AAAAAA",
+      "ORS7MzBZcgA-bCLLxJlacAAAAAA",
+      "ORS7MzB/mAA-Sy1Xmzyt8AAAAAA",
+      "ORS7MzB/mAA-D+bsUdLHMAAAAAA",
+      "ORS7MzB/mAA-fHlacWWHsAAAAAA",
+      "ORS7MzB/mAA-gH44zzuIAAAAAA",
+      "ORS7MzClvgA-ko792ezA4AAAAAA",
+      "ORS7MzClvgA-aUgT8469UAAAAAA",
+      "ORS7MzClvgA-LODbrkyQ8AAAAAA",
+      "ORS7MzDL5AA-hFeHg/7aAAAAAAA",
+      "ORS7MzDL5AA-oUtIE/iAgAAAAAA",
+      "enc-MCNP_stoneB21_river107",
+      "ORS7MzDL5AA-WqlU/2sTkAAAAAA",
+      "ORS7MzDyCAA-ln0A2z7DoAAAAAA",
+      "ORS7MzDyCAA-gkngnTul4AAAAAA",
+      "ORS7MzDyCAA-LL26cRKgEAAAAAA",
+      "enc-MCNP_secforestB7_river111",
+      "ORS7MzEYLgA-Gv2faBMl4AAAAAA",
+      "ORS7MzEYLgA-V1/Awj/98AAAAAA",
+      "ORS7MzEYLgA-Kld2z+ofQAAAAAA",
+      "ORS7MzE+VAA-nqI3x1V+gAAAAAA",
+      "ORS7MzE+VAA-o7v4Lp3G8AAAAAA",
+      "ORS7MzE+VAA-v2AhBPPgkAAAAAA",
+      "ORS7MzE+VAA-KhQabZ+aAAAAAAA",
+      "ORS7MzFkegA-Qwj5rPkQ4AAAAAA",
+      "enc-MCNP_shrubB3_river120",
+      "enc-MCNP_shrubB4_river121",
+      "ORS7MzGKoAA-HaLa6XwbYAAAAAA",
+      "ORS7MzGKoAA-53MXc7I2wAAAAAA",
+      "ORS7MzGKoAA-+Cs2BfUNkAAAAAA",
+      "ORS7MzGKoAA-U0msmCME8AAAAAA",
+      "ORS7MzGwxAA-q43wAd5+cAAAAAA",
+      "ORS7MzGwxAA-E3EX12puAAAAAAA",
+      "ORS7MzGwxAA-isx6ZGGDkAAAAAA",
+      "ORS7MzHW6gA-Gn2LB4FUkAAAAAA",
+      "ORS7MzHW6gA-ygPstWSrEAAAAAA",
+      "ORS7MzHW6gA-yPUiMRZbEAAAAAA",
+      "ORS7MzHW6gA-YSHgx65eEAAAAAA",
+      "ORS7MzH9EAA-cuVptmP/YAAAAAA",
+      "ORS7MzH9EAA-dYAezIk8gAAAAAA",
+      "enc-MCNP_river132",
+      "ORS7MzIjNgA-35Ljse8uwAAAAAA",
+      "ORS7MzIjNgA-WYdt5yuLQAAAAAA",
+      "ORS7MzIjNgA-1SygpnLb0AAAAAA",
+      "ORS7MzIjNgA-CLx/CC/oUAAAAAA",
+      "ORS7MzJJXAA-+LB+SkGeUAAAAAA",
+      "enc-MCNP_river137",
+      "ORS7MzJJXAA-ZYQTKxDUoAAAAAA",
+      "ORS7MzJvgAA-pSC8cCk/IAAAAAA",
+      "ORS7MzJvgAA-dNSlaODUkAAAAAA",
+      "ORS7MzJvgAA-bWDveSk9AAAAAAA",
+      "ORS7MzJvgAA-UCjua96PwAAAAAA",
+      "ORS7MzKVpgA-ByDwJXvDMAAAAAA",
+      "ORS7MzKVpgA-4ym/aEMVQAAAAAA",
+      "enc-MCNP_river145",
+      "ORS7MzK7zAA-GXs9+uQBEAAAAAA",
+      "ORS7MzK7zAA-X6F9S+cF4AAAAAA",
+      "ORS7MzK7zAA-Mio86eC+QAAAAAA",
+      "ORS7MzK7zAA-mnO37/GBAAAAAAA",
+      "ORS7MzLh8gA-D6P1T/RUgAAAAAA",
+      "ORS7MzLh8gA-+lLO3wWNIAAAAAA",
+      "ORS7MzLh8gA-Gah6y/BcAAAAAA",
+      "ORS7MzMIGAA-IEartOVzMAAAAAA",
+      "ORS7MzMIGAA-0djH4/G7QAAAAAA",
+      "ORS7MzMIGAA-S/yDdMUvsAAAAAA",
+      "ORS7MzMuPgA-oSU2dgJ/wAAAAAA",
+      "ORS7MzMuPgA-f/lfKkE+0AAAAAA",
+      "ORS7MzMuPgA-y5YGKpQAAAAAAAA",
+      "ORS7MzMuPgA-V7vdx6m9gAAAAAA",
+      "ORS7MzNUYgA-FvULFbE98AAAAAA",
+      "ORS7MzNUYgA-z33LHGZ60AAAAAA",
+      "ORS7MzNUYgA-FyCJnVBKwAAAAAA",
+      "ORS7MzN6iAA-Xk8NDCRHQAAAAAA",
+      "enc-MCNP_forest16_river16",
+      "ORS7MzN6iAA-xW1LGAXWUAAAAAA",
+      "ORS7MzN6iAA-OMFHR8aZ4AAAAAA",
+      "ORS7MzOgrgA-3jtcRy5dgAAAAAA",
+      "ORS7MzOgrgA-VEmzZWe2UAAAAAA",
+      "ORS7MzPG1AA-jRtqDtOAAAAAAAA",
+      "ORS7MzPG1AA-K5x75Z2cAAAAAAA",
+      "ORS7MzPG1AA-CqSrWEfT8AAAAAA",
+      "ORS7MzPs+gA-GGa6crz0oAAAAAA",
+      "ORS7MzPs+gA-+ztP0/KvMAAAAAA",
+      "enc-MCNP_forest28_river28",
+      "ORS7MzPs+gA-yUgMVCsQwAAAAAA",
+      "ORS7MzQTHgA-yEcn9Gj68AAAAAA",
+      "enc-MCNP_forest33_river33",
+      "enc-MCNP_forest34_river34",
+      "ORS7MzQ5RAA-wsy/h4cpIAAAAAA",
+      "ORS7MzQ5RAA-VvJiuPP/cAAAAAA",
+      "ORS7MzQ5RAA-xp9LknUMAAAAAA",
+      "ORS7MzQ5RAA-qCr3+4WFMAAAAAA",
+      "ORS7MzRfagA-02Mw8KffIAAAAAA",
+      "ORS7MzRfagA-3k2XSgjboAAAAAA",
+      "ORS7MzRfagA-miUXLhdsYAAAAAA",
+      "enc-MCNP_forest41_river41",
+      "ORS7MzSFkAA-J6lGx4PJYAAAAAA",
+      "ORS7MzSFkAA-z3u85e9ngAAAAAA",
+      "ORS7MzSrtgA-vTBwq8X9oAAAAAA",
+      "ORS7MzSrtgA-wW5nZkskQAAAAAA",
+      "ORS7MzSrtgA-w5y9f4UpUAAAAAA",
+      "ORS7MzSrtgA-MnBeYQUKYAAAAAA",
+      "ORS7MzTR3AA-oe54oAXGgAAAAAA",
+      "ORS7MzTR3AA-eaqP1GnB4AAAAAA",
+      "ORS7MzTR3AA-U38bFncAsAAAAAA",
+      "enc-MCNP_forest53_river53",
+      "ORS7MzT4AAA-k4WtcqBZkAAAAAA",
+      "ORS7MzT4AAA-6pUAVN+s0AAAAAA",
+      "ORS7MzUeJgA-d8ouHbV/EAAAAAA",
+      "ORS7MzUeJgA-lEZyEjIl0AAAAAA",
+      "ORS7MzUeJgA-FPe17vcwAAAAAAA",
+      "ORS7MzVETAA-XBDTuUKoMAAAAAA",
+      "ORS7MzVETAA-BerYmhs1UAAAAAA",
+      "ORS7MzVETAA-gWJFsTDE0AAAAAA",
+      "ORS7MzVqcgA-+Ai8+QDHYAAAAAA",
+      "ORS7MzVqcgA-0UUjUF/NIAAAAAA",
+      "ORS7MzVqcgA-al/khiTfcAAAAAA",
+      "ORS7MzVqcgA-cOF/l/fLoAAAAAA",
+      "enc-MCNP_secforestA26_river70",
+      "ORS7MzWQmAA-q0EnY/9iYAAAAAA",
+      "enc-MCNP_river74_stoneA17",
+      "ORS7MzW2vAA-gTaGtS1ncAAAAAA",
+      "ORS7MzW2vAA-ymfVwCDCEAAAAAA",
+      "ORS7MzW2vAA-3mUlKmingAAAAAA",
+      "ORS7MzXc4gA-xlpczJ2/gAAAAAA",
+      "enc-MCNP_river80_stoneA12",
+      "ORS7MzXc4gA-uuNWYoKw0AAAAAA",
+      "ORS7MzXc4gA-JJpusEa00AAAAAA",
+      "ORS7MzYDCAA-bM4B5W7sAAAAAAA"
+    ],
+    "type": "waterSmall"
+  },
+  "enc-MCNP-forestA": {
+    "attrs": {},
+    "description": "",
+    "displayname": "Montañas Cabrillos National Park",
+    "layer": 0,
+    "nodes": [
+      "ORS7MzK7zAA-Mio86eC+QAAAAAA",
+      "enc-cruzAv1_joyaSt2",
+      "enc-arelaPkwy4_joyaSt1",
+      "enc-zone_arelaEscondido1",
+      "ORS7MzYpLgA-VPa+OUXqsAAAAAA",
+      "ORS7MzZPVAA-NkECHPNDkAAAAAA",
+      "ORS7MzZPVAA-zOVlXKXQUAAAAAA",
+      "ORS7MzZPVAA-YPy3NLFaIAAAAAA",
+      "ORS7MzZPVAA-4V5Imo+ZwAAAAAA",
+      "ORS7MzZ1eAA-tJWGam5yUAAAAAA",
+      "ORS7MzZ1eAA-zDvvM+AWEAAAAAA",
+      "ORS7MzZ1eAA-s0JVl9gBUAAAAAA",
+      "ORS7MzabngA-6YBJLfOYMAAAAAA",
+      "ORS7MzabngA-Sw4MI5h7gAAAAAA",
+      "ORS7MzabngA-1KZy7FDNYAAAAAA",
+      "ORS7MzbBxAA-Q7qvuCU9IAAAAAA",
+      "ORS7MzbBxAA-Q2YJqPU+wAAAAAA",
+      "ORS7MzbBxAA-nFS9ORA2oAAAAAA",
+      "ORS7Mzbn6gA-cmzDWrww4AAAAAA",
+      "ORS7Mzbn6gA-nU9K5u6HAAAAAAA",
+      "ORS7Mzbn6gA-44BOGUdgIAAAAAA",
+      "ORS7Mzbn6gA-nofpwJGkwAAAAAA",
+      "ORS7MzcOEAA-0V0ZWLUAQAAAAAA",
+      "ORS7MzcOEAA-e3B2aVVCUAAAAAA",
+      "ORS7MzcOEAA-YuFbkZjDUAAAAAA",
+      "ORS7Mzc0NAA-aGgA4/JDkAAAAAA",
+      "ORS7Mzc0NAA-uLwVZGqWkAAAAAA",
+      "ORS7Mzc0NAA-V6FlDuoxkAAAAAA",
+      "ORS7MzdaWgA-uI3EryGGsAAAAAA",
+      "ORS7MzdaWgA-ULKzfzzKwAAAAAA",
+      "ORS7MzdaWgA-WC+FYCENcAAAAAA",
+      "ORS7MzeAgAA-Yi8w1WQFIAAAAAA",
+      "ORS7MzeAgAA-xnTh+OiSoAAAAAA",
+      "ORS7MzempgA-+vdYvVm3EAAAAAA",
+      "ORS7MzempgA-HSmQQ1Ru8AAAAAA",
+      "ORS7MzempgA-0SFgbf+28AAAAAA",
+      "ORS7MzempgA-EaWRu1oPQAAAAAA",
+      "ORS7MzfMzAA-bPobWP0VkAAAAAA",
+      "enc-rockyPlateauHighSch_fence19",
+      "enc-rockyPlateauHighSch_Block8_3_fence18",
+      "enc-rockyPlateauHighSch_Block8_4_fence17",
+      "ORS7Mzfy8gA-vcKvgTo3oAAAAAA",
+      "ORS7Mzfy8gA-yHBCMpE8sAAAAAA",
+      "ORS7MzgZFgA-JnvMp5I38AAAAAA",
+      "ORS7MzgZFgA-F2fj8tg00AAAAAA",
+      "ORS7MzgZFgA-+gz9liGUkAAAAAA",
+      "ORS7Mzg/PAA-q7tcjaBowAAAAAA",
+      "ORS7Mzg/PAA-LCAm+y9eIAAAAAA",
+      "ORS7Mzg/PAA-iq3KGm3nUAAAAAA",
+      "ORS7MzhlYgA-Pog7MAsJYAAAAAA",
+      "ORS7MzhlYgA-8SdWigX7cAAAAAA",
+      "ORS7MzhlYgA-M7tN+CiPUAAAAAA",
+      "ORS7MzhlYgA-EMllpKo/IAAAAAA",
+      "ORS7MziLiAA-orK1A4EZwAAAAAA",
+      "ORS7MziLiAA-yDSg9J5SgAAAAAA",
+      "ORS7MziLiAA-NPLwvOmgcAAAAAA",
+      "ORS7MzixrgA-kbZA2uDd8AAAAAA",
+      "ORS7MzixrgA-uXgsOHmdsAAAAAA",
+      "ORS7MzixrgA-07/39uMesAAAAAA",
+      "ORS7MzjX0gA-q5S3gqayMAAAAAA",
+      "ORS7MzjX0gA-ZUSuOt+k4AAAAAA",
+      "ORS7MzjX0gA-3m/SIX9Z0AAAAAA",
+      "ORS7Mzj9+AA-PEcLDthVYAAAAAA",
+      "ORS7Mzj9+AA-+2MCMpdUAAAAAAA",
+      "ORS7Mzj9+AA-4I5uT1QJsAAAAAA",
+      "ORS7MzkkHgA-IHJudz4fgAAAAAA",
+      "ORS7MzkkHgA-RbX1CpMqgAAAAAA",
+      "ORS7MzkkHgA-Ci34W25mIAAAAAA",
+      "ORS7MzlKRAA-1IQ0SWDSAAAAAAA",
+      "ORS7MzlKRAA-VVWjF/gAwAAAAAA",
+      "ORS7MzlKRAA-twwibbvrkAAAAAA",
+      "ORS7MzlwagA-Q2gfQmPecAAAAAA",
+      "ORS7MzlwagA-WSddWoY0oAAAAAA",
+      "ORS7MzlwagA-zUmbrg2pAAAAAAA",
+      "ORS7MzlwagA-LWENch8DAAAAAAA",
+      "ORS7MzmWkAA-s2eipp6IwAAAAAA",
+      "ORS7MzmWkAA-X2svgtue8AAAAAA",
+      "ORS7MzmWkAA-vLLYoXxHIAAAAAA",
+      "ORS7Mzm8tAA-Zl9JCw2f0AAAAAA",
+      "ORS7Mzm8tAA-tDHI3bhoMAAAAAA",
+      "ORS7Mzm8tAA-WZ0ZF+fjsAAAAAA",
+      "ORS7Mzni2gA-VUtDcc/I8AAAAAA",
+      "ORS7Mzni2gA-7Tlnw953sAAAAAA",
+      "ORS7Mzni2gA-QB6n8Nm+gAAAAAA",
+      "ORS7MzoJAAA-3rDK5y64oAAAAAA",
+      "ORS7MzoJAAA-aZfl7nOPMAAAAAA",
+      "ORS7MzoJAAA-Xr7z0zMOoAAAAAA",
+      "ORS7MzovJgA-fVa8lP9iUAAAAAA",
+      "ORS7MzovJgA-Fr3UaqsVgAAAAAA",
+      "ORS7MzovJgA-lp4f+uqF4AAAAAA",
+      "ORS7MzpVTAA-MLUpYS1FgAAAAAA",
+      "ORS7MzpVTAA-osQACd7LEAAAAAA",
+      "ORS7MzpVTAA-F4e5C+2y4AAAAAA",
+      "ORS7Mzp7cAA-TsjB9xZEoAAAAAA",
+      "ORS7Mzp7cAA-7yalbNPiQAAAAAA",
+      "ORS7Mzp7cAA-hO4mSgAkMAAAAAA",
+      "ORS7MzqhlgA-lEXp/xq+MAAAAAA",
+      "ORS7MzqhlgA-UHHGgbQCgAAAAAA",
+      "ORS7MzqhlgA-KpF33Up1UAAAAAA",
+      "ORS7MzrHvAA-I3wQszk5IAAAAAA",
+      "ORS7MzrHvAA-1R2jueGAUAAAAAA",
+      "ORS7MzrHvAA-e1RjGmtWIAAAAAA",
+      "ORS7Mzrt4gA-/9MWozUCcAAAAAA",
+      "ORS7Mzrt4gA-vdpOcrrzYAAAAAA",
+      "ORS7Mzrt4gA-Via2KF+foAAAAAA",
+      "ORS7MzsUCAA-RmeBWzYZ0AAAAAA",
+      "ORS7MzsUCAA-dT5cyv7HEAAAAAA",
+      "ORS7MzsUCAA-UikowuHZwAAAAAA",
+      "ORS7Mzs6LAA-MXMoLMifcAAAAAA",
+      "ORS7Mzs6LAA-BzAkyNQrAAAAAAA",
+      "ORS7Mzs6LAA-DaO4d8FfYAAAAAA",
+      "ORS7MztgUgA-2wqpozJgoAAAAAA",
+      "ORS7MztgUgA-NMldxMBO4AAAAAA",
+      "ORS7MztgUgA-BF8d1zk8sAAAAAA",
+      "ORS7MzuGeAA-bm2UvfeZwAAAAAA",
+      "ORS7MzuGeAA-SJBGRUX0UAAAAAA",
+      "ORS7MzuGeAA-YvmaiAi2MAAAAAA",
+      "ORS7MzusngA-yAAjxNPUQAAAAAA",
+      "ORS7MzusngA-TtIZyFfrkAAAAAA",
+      "ORS7MzusngA-lw44I7iCoAAAAAA",
+      "ORS7MzvSxAA-hUs2uS73MAAAAAA",
+      "ORS7MzvSxAA-+9L90y/0kAAAAAA",
+      "ORS7MzvSxAA-R/zscsow0AAAAAA",
+      "ORS7Mzv46AA-X29ZxoIswAAAAAA",
+      "ORS7Mzv46AA-PYamSio/QAAAAAA",
+      "ORS7Mzv46AA-eOkuNAHBgAAAAAA",
+      "ORS7MzwfDgA-hPMFgzleoAAAAAA",
+      "ORS7MzwfDgA-x4Wcdz+T0AAAAAA",
+      "ORS7MzwfDgA-MFxy5lWVMAAAAAA",
+      "ORS7MzxFNAA-7ezENGqigAAAAAA",
+      "ORS7MzxFNAA-TfgXIJGeIAAAAAA",
+      "ORS7MzxFNAA-1TAuQVKHUAAAAAA",
+      "ORS7MzxrWgA-RaEKqHNqEAAAAAA",
+      "ORS7MzxrWgA-LOVXeOh3kAAAAAA",
+      "ORS7MzxrWgA-8V8TMDb0kAAAAAA",
+      "ORS7MzyRgAA-SS7jKSmTAAAAAAA",
+      "ORS7MzyRgAA-B/BPfwPGkAAAAAA",
+      "ORS7MzyRgAA-UQZmP7HaAAAAAAA",
+      "ORS7Mzy3pgA-+XeLXwMS4AAAAAA",
+      "ORS7Mzy3pgA-UwK19uYZIAAAAAA",
+      "ORS7Mzy3pgA-NM2ZPXHlcAAAAAA",
+      "ORS7MzzdygA-VPbaZnOKgAAAAAA",
+      "ORS7MzzdygA-4Y3LA21woAAAAAA",
+      "ORS7MzzdygA-Zfd3oRh4gAAAAAA",
+      "ORS7Mz0D8AA-ezf1/poW8AAAAAA",
+      "ORS7Mz0D8AA-bBsM5bcDgAAAAAA",
+      "ORS7Mz0D8AA-BiS8IhCdYAAAAAA",
+      "ORS7Mz0qFgA-wR0rVkVdEAAAAAA",
+      "ORS7Mz0qFgA-HsCHs/Lm0AAAAAA",
+      "ORS7Mz0qFgA-TAvNJ6wcUAAAAAA",
+      "ORS7Mz1QPAA-jFBfvTZ4sAAAAAA",
+      "ORS7Mz1QPAA-xRzuCo45MAAAAAA",
+      "ORS7Mz12YgA-T5KgDbxqUAAAAAA",
+      "ORS7Mz12YgA-gC5iFUDSgAAAAAA",
+      "ORS7Mz12YgA-/M0MZuNTAAAAAAA",
+      "ORS7Mz2chgA-YGA+OQbcAAAAAAA",
+      "ORS7Mz2chgA-ndG4AvmIIAAAAAA",
+      "ORS7Mz2chgA-mozUznpYEAAAAAA",
+      "ORS7Mz3CrAA-d8IM4T7HQAAAAAA",
+      "ORS7Mz3CrAA-hRF3rXWkAAAAAA",
+      "ORS7Mz3CrAA-M6QGjOTqsAAAAAA",
+      "ORS7Mz3o0gA-QUnk4fN+wAAAAAA",
+      "ORS7Mz3o0gA-0/EvQjnokAAAAAA",
+      "ORS7Mz3o0gA-+qxe0Cm4MAAAAAA",
+      "ORS7Mz4O+AA-LQQGCLLGEAAAAAA",
+      "ORS7Mz4O+AA-RE/NJ8/8QAAAAAA",
+      "ORS7Mz4O+AA-kYS98Z6E0AAAAAA",
+      "ORS7Mz41HgA-06Y0DNpcMAAAAAA",
+      "ORS7Mz41HgA-SQD0FkS5kAAAAAA",
+      "ORS7Mz41HgA-b+036pd1YAAAAAA",
+      "ORS7Mz5bRAA-F2S0YxLJ4AAAAAA",
+      "ORS7Mz5bRAA-63kFJ+F10AAAAAA",
+      "ORS7Mz5bRAA-ZZt+xdFEAAAAAA",
+      "ORS7Mz6BaAA-sSCit59+MAAAAAA",
+      "ORS7Mz6BaAA-vNTQGMSOQAAAAAA",
+      "ORS7Mz6BaAA-ZCvI0795UAAAAAA",
+      "ORS7MzDL5AA-hFeHg/7aAAAAAAA",
+      "ORS7MzClvgA-LODbrkyQ8AAAAAA",
+      "ORS7MzClvgA-aUgT8469UAAAAAA",
+      "ORS7MzClvgA-ko792ezA4AAAAAA",
+      "ORS7MzB/mAA-gH44zzuIAAAAAA",
+      "ORS7MzB/mAA-fHlacWWHsAAAAAA",
+      "ORS7MzB/mAA-D+bsUdLHMAAAAAA",
+      "ORS7MzB/mAA-Sy1Xmzyt8AAAAAA",
+      "ORS7MzBZcgA-bCLLxJlacAAAAAA",
+      "ORS7MzBZcgA-6pGJ5xN18AAAAAA",
+      "ORS7MzBZcgA-ZP+oFm4zgAAAAAA",
+      "ORS7MzAzTAA-feeXng6i0AAAAAA",
+      "ORS7MzAzTAA-Ei8RtxOdoAAAAAA",
+      "ORS7MzAzTAA-oM+OMIKCoAAAAAA",
+      "ORS7MzAzTAA-aWk1qSVN8AAAAAA",
+      "ORS7MzANKAA-0eemlI+ycAAAAAA",
+      "ORS7MzANKAA-bBxrCRA8MAAAAAA",
+      "ORS7MzANKAA-97xZa1xAMAAAAAA",
+      "ORS7My/nAgA-HyhYDAriEAAAAAA",
+      "ORS7My/nAgA-XToAccaNsAAAAAA",
+      "ORS7MzYDCAA-bM4B5W7sAAAAAAA",
+      "ORS7MzXc4gA-JJpusEa00AAAAAA",
+      "ORS7Mz+ylgA-fxkdT8zTwAAAAAA",
+      "ORS7Mz/YvAA-PGjoTrRgoAAAAAA",
+      "ORS7Mz/YvAA-lvG9qwDSMAAAAAA",
+      "ORS7Mz/YvAA-4zNUiubsAAAAAA",
+      "ORS7Mz/+4AA-6MuW+21ZcAAAAAA",
+      "ORS7MzUeJgA-d8ouHbV/EAAAAAA",
+      "ORS7MzT4AAA-6pUAVN+s0AAAAAA",
+      "ORS7MzT4AAA-k4WtcqBZkAAAAAA",
+      "enc-MCNP_forest53_river53",
+      "ORS7MzTR3AA-U38bFncAsAAAAAA",
+      "ORS7MzTR3AA-eaqP1GnB4AAAAAA",
+      "ORS7MzSrtgA-MnBeYQUKYAAAAAA",
+      "ORS7MzSrtgA-w5y9f4UpUAAAAAA",
+      "ORS7MzSrtgA-wW5nZkskQAAAAAA",
+      "ORS7MzSrtgA-vTBwq8X9oAAAAAA",
+      "ORS7MzSFkAA-z3u85e9ngAAAAAA",
+      "ORS7MzSFkAA-J6lGx4PJYAAAAAA",
+      "enc-MCNP_forest41_river41",
+      "ORS7MzRfagA-miUXLhdsYAAAAAA",
+      "ORS7MzRfagA-3k2XSgjboAAAAAA",
+      "ORS7M0C9nAA-Maoxtdo/AAAAAAA",
+      "ORS7MzQ5RAA-qCr3+4WFMAAAAAA",
+      "ORS7MzQ5RAA-xp9LknUMAAAAAA",
+      "ORS7MzQ5RAA-VvJiuPP/cAAAAAA",
+      "enc-MCNP_forest34_river34",
+      "enc-MCNP_forest33_river33",
+      "ORS7MzQTHgA-yEcn9Gj68AAAAAA",
+      "ORS7MzPs+gA-yUgMVCsQwAAAAAA",
+      "enc-MCNP_forest28_river28",
+      "ORS7MzPs+gA-+ztP0/KvMAAAAAA",
+      "ORS7MzPs+gA-GGa6crz0oAAAAAA",
+      "ORS7MzPG1AA-CqSrWEfT8AAAAAA",
+      "ORS7MzPG1AA-K5x75Z2cAAAAAAA",
+      "ORS7MzPG1AA-jRtqDtOAAAAAAAA",
+      "ORS7MzOgrgA-VEmzZWe2UAAAAAA",
+      "ORS7MzOgrgA-3jtcRy5dgAAAAAA",
+      "ORS7MzN6iAA-OMFHR8aZ4AAAAAA",
+      "ORS7MzN6iAA-xW1LGAXWUAAAAAA",
+      "enc-MCNP_forest16_river16",
+      "ORS7MzN6iAA-Xk8NDCRHQAAAAAA",
+      "ORS7MzN6iAA-Xk8NDCRHQAAAAAA",
+      "ORS7MzNUYgA-FyCJnVBKwAAAAAA",
+      "ORS7MzNUYgA-z33LHGZ60AAAAAA",
+      "ORS7MzNUYgA-FvULFbE98AAAAAA",
+      "ORS7MzMuPgA-V7vdx6m9gAAAAAA",
+      "ORS7MzMuPgA-y5YGKpQAAAAAAAA",
+      "ORS7MzMuPgA-f/lfKkE+0AAAAAA",
+      "ORS7MzMuPgA-oSU2dgJ/wAAAAAA",
+      "ORS7MzMIGAA-S/yDdMUvsAAAAAA",
+      "ORS7MzMIGAA-0djH4/G7QAAAAAA",
+      "ORS7MzMIGAA-IEartOVzMAAAAAA",
+      "ORS7MzLh8gA-Gah6y/BcAAAAAA",
+      "ORS7MzLh8gA-+lLO3wWNIAAAAAA",
+      "ORS7MzLh8gA-D6P1T/RUgAAAAAA",
+      "ORS7MzK7zAA-mnO37/GBAAAAAAA"
+    ],
+    "type": "forest"
+  },
+  "enc-MCNP-forestB": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7MzVETAA-XBDTuUKoMAAAAAA",
+      "ORS7M0JhOgA-4KKCc4aTAAAAAAA",
+      "enc-MCNP_secforestA13_stoneA30",
+      "ORS7M0KHYAA-CkmDtoKxkAAAAAA",
+      "ORS7M0KHYAA-a4T5At8bYAAAAAA",
+      "ORS7M0KthgA-aO5SEkYwsAAAAAA",
+      "ORS7M0KthgA-dh9a6uvgoAAAAAA",
+      "ORS7M0KthgA-zBOjpcVIcAAAAAA",
+      "enc-MCNP_river74_stoneA17",
+      "ORS7MzWQmAA-q0EnY/9iYAAAAAA",
+      "enc-MCNP_secforestA26_river70",
+      "ORS7MzVqcgA-cOF/l/fLoAAAAAA",
+      "ORS7MzVqcgA-al/khiTfcAAAAAA",
+      "ORS7MzVqcgA-0UUjUF/NIAAAAAA",
+      "ORS7MzVqcgA-+Ai8+QDHYAAAAAA",
+      "ORS7MzVETAA-gWJFsTDE0AAAAAA",
+      "ORS7MzVETAA-BerYmhs1UAAAAAA"
+    ],
+    "type": "forest"
+  },
+  "enc-shrubA": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7Mz41HgA-SQD0FkS5kAAAAAA",
+      "ORS7M0NGHAA-xNsa/a99AAAAAAA",
+      "ORS7M0NGHAA-3gAHrZF1QAAAAAA",
+      "ORS7M0NsQgA-MHqWVUMMsAAAAAA",
+      "ORS7M0NsQgA-p/U6kx+4sAAAAAA",
+      "ORS7M0OSaAA-ojBQa39ugAAAAAA",
+      "ORS7M0OSaAA-3YMFsIzbAAAAAAA",
+      "ORS7M0OSaAA-+hndC1VucAAAAAA",
+      "ORS7M0O4jgA-N9mkOGrZQAAAAAA",
+      "ORS7M0O4jgA-mLieXc9UEAAAAAA",
+      "ORS7M0O4jgA-gxREWOpTUAAAAAA",
+      "ORS7M0PetAA-BV5gPeVvkAAAAAA",
+      "ORS7M0PetAA-Op3lea8EcAAAAAA",
+      "ORS7Mz5bRAA-ZZt+xdFEAAAAAA",
+      "ORS7Mz5bRAA-63kFJ+F10AAAAAA",
+      "ORS7Mz5bRAA-F2S0YxLJ4AAAAAA",
+      "ORS7Mz41HgA-b+036pd1YAAAAAA"
+    ],
+    "type": "shrub"
+  },
+  "enc-shrubB": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7MzGKoAA-U0msmCME8AAAAAA",
+      "ORS7MzGKoAA-+Cs2BfUNkAAAAAA",
+      "ORS7MzGKoAA-53MXc7I2wAAAAAA",
+      "ORS7MzGKoAA-HaLa6XwbYAAAAAA",
+      "enc-MCNP_shrubB4_river121",
+      "enc-MCNP_shrubB3_river120",
+      "ORS7MzFkegA-Qwj5rPkQ4AAAAAA",
+      "ORS7MzE+VAA-KhQabZ+aAAAAAAA",
+      "ORS7MzE+VAA-v2AhBPPgkAAAAAA",
+      "ORS7MzE+VAA-o7v4Lp3G8AAAAAA",
+      "ORS7MzE+VAA-nqI3x1V+gAAAAAA",
+      "ORS7MzEYLgA-Kld2z+ofQAAAAAA",
+      "ORS7MzEYLgA-V1/Awj/98AAAAAA",
+      "ORS7MzEYLgA-Gv2faBMl4AAAAAA",
+      "enc-MCNP_secforestB7_river111",
+      "ORS7MzDyCAA-LL26cRKgEAAAAAA",
+      "ORS7MzDyCAA-gkngnTul4AAAAAA",
+      "ORS7MzDyCAA-ln0A2z7DoAAAAAA",
+      "ORS7M0UP4AA-opT5Oq7HIAAAAAA",
+      "ORS7M0UP4AA-CRn1IiFKkAAAAAA",
+      "ORS7M0U2BgA-9W+WvcWewAAAAAA",
+      "ORS7M0U2BgA-ewujDvt9IAAAAAA",
+      "ORS7M0U2BgA-8rTQ+aFEwAAAAAA",
+      "ORS7M0VcLAA-+RT04VeH4AAAAAA",
+      "ORS7M0VcLAA-oyvjUReFQAAAAAA",
+      "ORS7M0VcLAA-ZxVmelS58AAAAAA",
+      "ORS7M0WCUAA-pqTexTRz0AAAAAA",
+      "ORS7M0WCUAA-RIp1CndagAAAAAA",
+      "ORS7M0WCUAA-odxyh+VQkAAAAAA",
+      "ORS7M0WodgA-FOh943wR0AAAAAA",
+      "ORS7M0WodgA-tlYEBsSj8AAAAAA",
+      "ORS7M0WodgA-xhaUyVF4sAAAAAA",
+      "ORS7M0XOnAA-SucgdU8RUAAAAAA",
+      "ORS7M0XOnAA-UeKXuibK0AAAAAA",
+      "ORS7M0XOnAA-lnITGu9SgAAAAAA",
+      "ORS7M0X0wgA-49e6SI66AAAAAAA",
+      "ORS7M0X0wgA-Jf1+oLHaMAAAAAA",
+      "ORS7M0X0wgA-WvLFObDFkAAAAAA",
+      "ORS7M0Ya6AA-zfmRZewq0AAAAAA",
+      "ORS7M0Ya6AA-8bTgzX/+QAAAAAA",
+      "ORS7MzGwxAA-E3EX12puAAAAAAA",
+      "ORS7MzGwxAA-q43wAd5+cAAAAAA"
+    ],
+    "type": "shrub"
+  },
+  "enc-stoneA": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M0UP4AA-CRn1IiFKkAAAAAA",
+      "ORS7M0ZBDgA-hbg1c+q1gAAAAAA",
+      "ORS7M0PetAA-BV5gPeVvkAAAAAA",
+      "ORS7M0PetAA-Op3lea8EcAAAAAA",
+      "ORS7Mz5bRAA-ZZt+xdFEAAAAAA",
+      "ORS7Mz6BaAA-sSCit59+MAAAAAA",
+      "ORS7Mz6BaAA-vNTQGMSOQAAAAAA",
+      "ORS7Mz6BaAA-ZCvI0795UAAAAAA",
+      "ORS7MzDL5AA-hFeHg/7aAAAAAAA",
+      "ORS7MzDL5AA-oUtIE/iAgAAAAAA",
+      "enc-MCNP_stoneB21_river107",
+      "ORS7MzDL5AA-WqlU/2sTkAAAAAA",
+      "ORS7MzDyCAA-ln0A2z7DoAAAAAA",
+      "ORS7M0UP4AA-opT5Oq7HIAAAAAA"
+    ],
+    "type": "stone"
+  },
+  "enc-stoneB": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M0JhOgA-4KKCc4aTAAAAAAA",
+      "ORS7MzVETAA-XBDTuUKoMAAAAAA",
+      "ORS7MzUeJgA-FPe17vcwAAAAAAA",
+      "ORS7MzUeJgA-lEZyEjIl0AAAAAA",
+      "ORS7MzUeJgA-d8ouHbV/EAAAAAA",
+      "ORS7Mz/+4AA-6MuW+21ZcAAAAAA",
+      "ORS7Mz/YvAA-4zNUiubsAAAAAA",
+      "ORS7Mz/YvAA-lvG9qwDSMAAAAAA",
+      "ORS7Mz/YvAA-PGjoTrRgoAAAAAA",
+      "ORS7Mz+ylgA-fxkdT8zTwAAAAAA",
+      "ORS7MzXc4gA-JJpusEa00AAAAAA",
+      "ORS7MzXc4gA-uuNWYoKw0AAAAAA",
+      "enc-MCNP_river80_stoneA12",
+      "ORS7MzW2vAA-ymfVwCDCEAAAAAA",
+      "ORS7MzW2vAA-gTaGtS1ncAAAAAA",
+      "enc-MCNP_river74_stoneA17",
+      "ORS7M0KthgA-zBOjpcVIcAAAAAA",
+      "ORS7M0KthgA-dh9a6uvgoAAAAAA",
+      "ORS7M0KthgA-aO5SEkYwsAAAAAA",
+      "ORS7M0KHYAA-a4T5At8bYAAAAAA",
+      "ORS7M0KHYAA-CkmDtoKxkAAAAAA",
+      "enc-MCNP_secforestA13_stoneA30"
+    ],
+    "type": "stone"
+  },
+  "enc-stoneC": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7MzlKRAA-twwibbvrkAAAAAA",
+      "ORS7M0gw9gA-LV3qsqIKUAAAAAA",
+      "ORS7MziLiAA-yDSg9J5SgAAAAAA",
+      "ORS7MziLiAA-NPLwvOmgcAAAAAA",
+      "ORS7MzixrgA-kbZA2uDd8AAAAAA",
+      "ORS7MzixrgA-uXgsOHmdsAAAAAA",
+      "ORS7MzixrgA-07/39uMesAAAAAA",
+      "ORS7MzjX0gA-q5S3gqayMAAAAAA",
+      "ORS7MzjX0gA-ZUSuOt+k4AAAAAA",
+      "ORS7MzjX0gA-3m/SIX9Z0AAAAAA",
+      "ORS7Mzj9+AA-PEcLDthVYAAAAAA",
+      "ORS7Mzj9+AA-+2MCMpdUAAAAAAA",
+      "ORS7Mzj9+AA-4I5uT1QJsAAAAAA",
+      "ORS7MzkkHgA-IHJudz4fgAAAAAA",
+      "ORS7MzkkHgA-RbX1CpMqgAAAAAA",
+      "ORS7MzkkHgA-Ci34W25mIAAAAAA",
+      "ORS7MzlKRAA-1IQ0SWDSAAAAAAA",
+      "ORS7MzlKRAA-VVWjF/gAwAAAAAA"
+    ],
+    "type": "stone"
+  },
+  "enc-aqualinqTerminal": {
+    "attrs": {},
+    "description": "",
+    "displayname": "AquaLinQ Terminal",
+    "layer": 0,
+    "nodes": [
+      "ORS7M0jvsgA-MacHMoUZEAAAAAA",
+      "ORS7M0kV2AA-YBC2+dSqEAAAAAA",
+      "ORS7MxfDMgA-Nzs29AFagAAAAAA",
+      "ORS7M0k7/gA-aB9Uc1Ga8AAAAAA",
+      "ORS7M0k7/gA-0yZxtlMuQAAAAAA",
+      "ORS97IYMdAA-VbHdrMGZ0AAAAAA",
+      "ORS7M0liJAA-2FnqPB2f8AAAAAA",
+      "ORS7M0liJAA-s6L2/RSacAAAAAA"
+    ],
+    "type": "transportBuilding"
+  },
+  "enc-crestaCapitol-park": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-crestaCapitol_building34",
+      "enc-crestaCapitol_building35",
+      "enc-crestaCapitol_building36",
+      "enc-crestaCapitol_building37",
+      "enc-crestaCapitol_building38",
+      "enc-crestaCapitol_building39",
+      "enc-crestaCapitol_building40",
+      "enc-crestaCapitol_building41",
+      "ORS7M0nUlAA-4VexFVkwAAAAAAA",
+      "ORS7M0nUlAA-3monGT6TYAAAAAA",
+      "ORS7M0n6ugA-4FN1vt34MAAAAAA",
+      "ORS7M0n6ugA-Gmg2SKL3kAAAAAA",
+      "ORS7M0n6ugA-r0lEquT0gAAAAAA",
+      "ORS7M0og4AA-NTYXAC5+sAAAAAA",
+      "ORS7M0og4AA-KCn/ZK3D8AAAAAA",
+      "ORS7M0og4AA-5nv/9sgyIAAAAAA",
+      "ORS7M0pHBAA-3MjAJTVPQAAAAAA",
+      "ORS7M0pHBAA-laqrXjMTwAAAAAA",
+      "ORS7M0pHBAA-wAyPEt2B8AAAAAA",
+      "ORS7M0ptKgA-gV+9qfNmAAAAAAA",
+      "ORS7M0ptKgA-IXGawEUR4AAAAAA",
+      "enc-seasidePlaza1",
+      "ORS7M0qTUAA-lyHibh8qMAAAAAA",
+      "ORS7M0qTUAA-xD+q5N8SgAAAAAA",
+      "ORS7M0q5dgA-1wwFCCTIcAAAAAA"
+    ],
+    "type": "park"
+  },
+  "enc-CCIA_plaza": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-joyaSt12_B209nSlip2",
+      "ORS7M0q5dgA-w3jboJb7wAAAAAA",
+      "ORS7M0rfnAA-Ued+iydUUAAAAAA",
+      "ORS7M0rfnAA-oVWIZ5TIIAAAAAA",
+      "enc-diplomacyBlvd5",
+      "enc-diplomacyBlvd4",
+      "enc-diplomacyBlvd3",
+      "enc-diplomacyBlvd2",
+      "enc-joyaSt13_diplomacyBlvd1_unnamedB3"
+    ],
+    "type": "plaza"
+  },
+  "enc-MCNP_river_island": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M0sr5gA-k2jWx7SwsAAAAAA",
+      "ORS7M0sr5gA-/oUHmXCAAAAAAAA",
+      "ORS7M0tSDAA-fj62Co6kAAAAAA",
+      "ORS7M0tSDAA-d/h/EQv70AAAAAA"
+    ],
+    "type": "sand"
+  },
+  "enc-cabrilloPlaza": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M0tSDAA-Le+kt940wAAAAAA",
+      "enc-lookoutPark12",
+      "enc-lookoutPark11",
+      "enc-calleMontana39",
+      "enc-calleMontana40_caminoDiamanteA1",
+      "enc-caminoDiamanteA2_B5",
+      "enc-caminoDiamanteB4",
+      "enc-caminoDiamanteB3",
+      "enc-caminoDiamanteB2",
+      "ORS7M0vqogA-TjZMKEN1EAAAAAA"
+    ],
+    "type": "plaza"
+  },
+  "enc-seawallPark-pathA": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M0vqogA-eAvoN6RioAAAAAA",
+      "ORS7M0wQyAA-MTGODhhiIAAAAAA",
+      "ORS7M0wQyAA-xKiZGyW3YAAAAAA",
+      "ORS7M0wQyAA-0vYekzCwAAAAAAA",
+      "ORS7M0w27gA-sPYc9/DXkAAAAAA",
+      "ORS7M0w27gA-8EIRJIRE0AAAAAA",
+      "ORS7M0xdFAA-9w2Lb3NNsAAAAAA",
+      "ORS7M0xdFAA-PWRYdFeDQAAAAAA",
+      "ORS7M0xdFAA-9nHSeDDIsAAAAAA",
+      "ORS7M0yDOgA-rhBeygti4AAAAAA",
+      "ORS7M0yDOgA-WUMUAkVpUAAAAAA",
+      "ORS7M0yDOgA-EWxLzH71cAAAAAA",
+      "ORS7M0ypYAA-qcMLw9jgMAAAAAA",
+      "ORS7M0ypYAA-JF2rOeVukAAAAAA",
+      "ORS7M0ypYAA-c8bGKP6QAAAAAA",
+      "ORS7M0zPhAA-2w2x/T4mIAAAAAA",
+      "ORS7M0zPhAA-Q3KzM2DpAAAAAAA",
+      "ORS7M0zPhAA-NXpHWgoTcAAAAAA",
+      "ORS7M0z1qgA-JMOipZbbgAAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-seawallPark-pathB": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M0z1qgA-2u53lq81cAAAAAA",
+      "ORS7M0wQyAA-0vYekzCwAAAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-seawallPark-pathD": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M0xdFAA-PWRYdFeDQAAAAAA",
+      "ORS7M00b0AA-WJvXTWz6sAAAAAA",
+      "ORS7M0zPhAA-NXpHWgoTcAAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-seawallPark-pathC": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M0xdFAA-9w2Lb3NNsAAAAAA",
+      "ORS7M01B9gA-HvbBOQZBkAAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathA": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-arelaPkwy5_calleMontana1",
+      "ORS7M01oHAA-lvqhoS8pwAAAAAA",
+      "ORS7M01oHAA-qlcqRLYd8AAAAAA",
+      "ORS7M02OQAA-YWsMu40yQAAAAAA",
+      "ORS7M02OQAA-epLrY11QMAAAAAA",
+      "ORS7M02OQAA-fJ9Izs1F4AAAAAA",
+      "ORS7M020ZgA-KwnuWgid0AAAAAA",
+      "ORS7M020ZgA-vaZJ1GGJAAAAAAA",
+      "ORS7M020ZgA-merSHop90AAAAAA",
+      "ORS7M03ajAA-jtRbVTGlMAAAAAA",
+      "ORS7M03ajAA-C/CYOZw1kAAAAAA",
+      "ORS7M04AsgA-UgclrkdIoAAAAAA",
+      "ORS7M04AsgA-41kVdV0IEAAAAAA",
+      "ORS7M04AsgA-cL95g8IjkAAAAAA",
+      "ORS7M04m2AA-Uj6Zg7F5MAAAAAA",
+      "ORS7M04m2AA-OqaaME7WwAAAAAA",
+      "ORS7M04m2AA-5ajPGmHx0AAAAAA",
+      "enc-calleMontana19",
+      "ORS7M05M/AA-KDyV7mVe8AAAAAA",
+      "ORS7M05M/AA-w0I0HawQUAAAAAA",
+      "ORS7M05zIgA-syAqsL39kAAAAAA",
+      "ORS7M05zIgA-6OC5MQU/AAAAAAA",
+      "ORS7M06ZSAA-OEfexw7BMAAAAAA",
+      "ORS7M06ZSAA-FC3hiRXcQAAAAAA",
+      "ORS7M06ZSAA-FE7EcEnaEAAAAAA",
+      "ORS7M06/bgA-jEGNGEVRoAAAAAA",
+      "ORS7M06/bgA-keciE9BOsAAAAAA",
+      "ORS7M06/bgA-kCu1GxopwAAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathB": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M07llAA-OCFgc9vvcAAAAAA",
+      "ORS7M07llAA-wK0W0U8vYAAAAAA",
+      "ORS7M08LuAA-bVM9K75v8AAAAAA",
+      "ORS7M08LuAA-BYl9UO4AkAAAAAA",
+      "ORS7M08LuAA-j+8pzmq7sAAAAAA",
+      "ORS7M08x3gA-1MZKvUC2YAAAAAA",
+      "ORS7M020ZgA-merSHop90AAAAAA",
+      "ORS7M08x3gA-uxc1wHz2IAAAAAA",
+      "ORS7M09YBAA-FTng9dFQkAAAAAA",
+      "ORS7M09YBAA-6N0kjedNUAAAAAA",
+      "ORS7M09YBAA-lPH80iqMwAAAAAA",
+      "ORS7M09+KgA-cweiHlaI4AAAAAA",
+      "ORS7M09+KgA-LviRkh15cAAAAAA",
+      "ORS7M0+kUAA-kj9pn4DpwAAAAAA",
+      "ORS7M0+kUAA-d1QRlydvsAAAAAA",
+      "ORS7M0/KdgA-L5YjlfpSYAAAAAA",
+      "ORS7M0/KdgA-JwOe/4MBIAAAAAA",
+      "ORS7M04m2AA-5ajPGmHx0AAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathC": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M09YBAA-lPH80iqMwAAAAAA",
+      "ORS7M0/wmgA-jiepDWQgQAAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathD": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "enc-calleMontana5",
+      "ORS7M1AWwAA-qmoWBpzqgAAAAAA",
+      "ORS7M1AWwAA-gYbLS5bMkAAAAAA",
+      "ORS7M1A85gA-cywRWOTiQAAAAAA",
+      "ORS7M1A85gA-Ps86Re05EAAAAAA",
+      "ORS7M1A85gA-qnS/zy9kUAAAAAA",
+      "ORS7M1BjDAA-c+8JzqmMYAAAAAA",
+      "ORS7M1BjDAA-MLB70ldCAAAAAAA",
+      "ORS7M1BjDAA-Vk1UKiQPIAAAAAA",
+      "ORS7M1CJMgA-S+50WibRkAAAAAA",
+      "ORS7M1CJMgA-wn7jv7uaEAAAAAA",
+      "ORS7M1CJMgA-c3/t9d590AAAAAA",
+      "ORS7M1CvVgA-NUqtCJf3sAAAAAA",
+      "ORS7M1CvVgA-raoJ1z7UcAAAAAA",
+      "ORS7M1DVfAA-IL3ZcLpj4AAAAAA",
+      "ORS7M1DVfAA-YPr/29rT8AAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathE": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M1DVfAA-6+clV0BHgAAAAAA",
+      "ORS7M1CvVgA-NUqtCJf3sAAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathF": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M1AWwAA-gYbLS5bMkAAAAAA",
+      "ORS7M1D7ogA-S7R/gVPBcAAAAAA",
+      "ORS7M1EhyAA-Prc9PchvoAAAAAA",
+      "ORS7M1EhyAA-WnOEXuH40AAAAAA",
+      "ORS7M1FH7gA-iqF13Mv9kAAAAAA",
+      "ORS7M1FH7gA-4aHpqg80AAAAAA",
+      "ORS7M1FH7gA-/u3875SUAAAAAAA",
+      "enc-arelaPkwy5_calleMontana1"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathG": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M1A85gA-cywRWOTiQAAAAAA",
+      "ORS7M1FuFAA-hmOe9hE2YAAAAAA",
+      "ORS7M1GUOAA-19XjXrd6QAAAAAA",
+      "ORS7M1GUOAA-huep1uXwAAAAAA",
+      "ORS7M1G6XgA-HOhVkkyFEAAAAAA",
+      "ORS7M1G6XgA-rVNVZ0EiUAAAAAA",
+      "ORS7M1G6XgA-SMoh8uLz4AAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathH": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M05zIgA-syAqsL39kAAAAAA",
+      "ORS7M1HghAA-0714bEj8QAAAAAA",
+      "ORS7M1IGqgA-x5m4ud1ZUAAAAAA",
+      "ORS7M1IGqgA-YcAS68mwMAAAAAA",
+      "ORS7M1IGqgA-skQWKDvekAAAAAA",
+      "ORS7M1Is0AA-JKzT7lF9gAAAAAA",
+      "ORS7Mz0D8AA-ezf1/poW8AAAAAA",
+      "ORS7M1Is0AA-U4QritlKYAAAAAA",
+      "ORS7Mz1QPAA-xRzuCo45MAAAAAA",
+      "ORS7M1JS9AA-RfVkZbtPAAAAAAA",
+      "ORS7M1JS9AA-vOWbVSm/IAAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathI": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M1J5GgA-c+8tFf9dAAAAAAA",
+      "ORS7M1J5GgA-Uo+zOwrFwAAAAAA",
+      "ORS7M1KfQAA-JdOWCWYxAAAAAAA",
+      "ORS7M1KfQAA-zzazcNVbwAAAAAA",
+      "ORS7M1JS9AA-vOWbVSm/IAAAAAA",
+      "ORS7M1LFZgA-aAK9Bc/acAAAAAA",
+      "ORS7M1LFZgA-RwX3wGNUYAAAAAA",
+      "ORS7M1LrjAA-hKyxV1fYAAAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathJ": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M1LFZgA-aAK9Bc/acAAAAAA",
+      "ORS7M1LrjAA-LPnv3qGRcAAAAAA",
+      "ORS7M1MRsAA-Vmn5/HnmoAAAAAA",
+      "ORS7M1MRsAA-RAYwfSw2AAAAAAA",
+      "ORS7M1MRsAA-m8FHE10PYAAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathK": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M1MRsAA-Vmn5/HnmoAAAAAA",
+      "ORS7M1M31gA-wZqGPLs9IAAAAAA",
+      "ORS7M1M31gA-/9XpSxwK8AAAAAA",
+      "ORS7M1Nd/AA-lyqNUsv6cAAAAAA",
+      "ORS7M1Nd/AA-yIKpQPvyAAAAAAA",
+      "ORS7M1OEIgA-rDGn5zNYIAAAAAA",
+      "ORS7M1OEIgA-Uwwob34pcAAAAAA",
+      "ORS7M1OEIgA-Yr8NOwX6cAAAAAA",
+      "ORS7M1OqSAA-QFbQ48va4AAAAAA",
+      "ORS7M1OqSAA-0oup4MTKsAAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathL": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M1Nd/AA-yIKpQPvyAAAAAAA",
+      "ORS7M1PQbAA-E81bAiDWsAAAAAA",
+      "ORS7M1P2kgA-+/CmdWxoYAAAAAA",
+      "ORS7M1P2kgA-f8VXL/G88AAAAAA",
+      "ORS7M1P2kgA-i+4kH7cugAAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathM": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M1M31gA-wZqGPLs9IAAAAAA",
+      "ORS7M1QcuAA-TTxFci6Y4AAAAAA",
+      "ORS7M1RC3gA-+mQUeWws0AAAAAA",
+      "ORS7M1RC3gA-iih0euD9wAAAAAA",
+      "ORS7M1RC3gA-l+w/z0DPkAAAAAA",
+      "ORS7M1RpBAA-gpYHPqSEkAAAAAA",
+      "ORS7M1RpBAA-GfgMGQR84AAAAAA",
+      "ORS7M1LrjAA-hKyxV1fYAAAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathN": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M1RC3gA-iih0euD9wAAAAAA",
+      "ORS7Mz3o0gA-QUnk4fN+wAAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathO": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M1S1TgA-jZbWLEq0oAAAAAA",
+      "ORS7M1S1TgA-FNegP6XVkAAAAAA",
+      "enc-calleMontana27",
+      "ORS7M1TbdAA-ReLTuUfSEAAAAAA",
+      "ORS7M1TbdAA-qaeB8SW18AAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathP": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M05zIgA-syAqsL39kAAAAAA",
+      "ORS7M1UBmgA-OaY3q8Yn0AAAAAA",
+      "ORS7M1UBmgA-xYckqw218AAAAAA",
+      "ORS7M1UnwAA-j5UI52jLgAAAAAA",
+      "ORS7M1UnwAA-OzFO4kaPAAAAAAA",
+      "ORS7M1UnwAA-aqoBvBw7wAAAAAA",
+      "ORS7M1VN5gA-lhxfjw5wAAAAAAA",
+      "ORS7M1VN5gA-Y/XdPof64AAAAAA",
+      "ORS7M1V0CgA-3gR7SPTYAAAAAA",
+      "ORS7M1V0CgA-5cXPCpBnMAAAAAA",
+      "ORS7M1V0CgA-w0HuS/iHkAAAAAA",
+      "ORS7M1WaMAA-hadzRkaC4AAAAAA",
+      "ORS7M1WaMAA-812Fa3Z2YAAAAAA",
+      "ORS7M1WaMAA-JqWcoL6jkAAAAAA",
+      "ORS7M1XAVgA-N7qlxIWt8AAAAAA",
+      "ORS7M1XAVgA-7Kpb+2rUMAAAAAA",
+      "ORS7M1XmfAA-QJgHNxEpcAAAAAA",
+      "ORS7M1XmfAA-RaHF0yeeIAAAAAA",
+      "ORS7M1YMogA-jfu5EYTy8AAAAAA",
+      "ORS7M1YMogA-kjSqtN1k8AAAAAA",
+      "ORS7M1YMogA-zOUbplQPgAAAAAA",
+      "ORS7M1YyyAA-M+ta2nWJIAAAAAA",
+      "ORS7M1YyyAA-eEwrDoQr8AAAAAA",
+      "ORS7M1YyyAA-a9qGQPuksAAAAAA",
+      "ORS7M1ZY7AA-E2EUAe9hMAAAAAA",
+      "ORS7M1ZY7AA-VBqoWUIMgAAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathQ": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M1WaMAA-812Fa3Z2YAAAAAA",
+      "ORS7MzxrWgA-RaEKqHNqEAAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathR": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M1VN5gA-Y/XdPof64AAAAAA",
+      "ORS7M1alOAA-WeyAPS4/kAAAAAA",
+      "ORS7M06/bgA-keciE9BOsAAAAAA"
+    ],
+    "type": "pathway"
+  },
+  "enc-MCNP-pathS": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M1UBmgA-xYckqw218AAAAAA",
+      "ORS7M1bLXgA-rKfFQqPXkAAAAAA",
+      "ORS7M1bLXgA-ffQPEX5hwAAAAAA",
+      "enc-calleMontana24"
+    ],
+    "type": "pathway"
+  },
+  "enc-lighthouseShrub": {
+    "attrs": {},
+    "description": "",
+    "displayname": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7M1bxhAA-aTdBcMnHIAAAAAA",
+      "ORS7M1bxhAA-/xJ516J7kAAAAAA",
+      "ORS7M1cXqAA-oKnAbRlnwAAAAAA",
+      "ORS7M1cXqAA-gPSzvp5L4AAAAAA",
+      "ORS7M1c9zgA-XylU/uhuQAAAAAA",
+      "ORS7M1c9zgA-ipleqomsIAAAAAA",
+      "ORS7M1c9zgA-LpJB9kRCsAAAAAA",
+      "ORS7M1dj9AA-7lMmlLDXgAAAAAA",
+      "ORS7M1dj9AA-RmWnDUlAYAAAAAA",
+      "ORS7M1eKGgA-iUtOQvs3oAAAAAA",
+      "ORS7M1eKGgA-8AQiflVZAAAAAAA",
+      "ORS7M1eKGgA-R07KfAM1sAAAAAA",
+      "ORS7M1ewQAA-P59xEauFQAAAAAA",
+      "ORS7M1ewQAA-gymz9/Bp8AAAAAA",
+      "ORS7M1fWZAA-W9o7ztlOoAAAAAA",
+      "ORS7M1fWZAA-XYXlCuwCsAAAAAA",
+      "ORS7M1fWZAA-OBa4fJLLAAAAAAA",
+      "ORS7M1f8igA-bV8wEZi/QAAAAAA",
+      "ORS7M1f8igA-fLJKU/fRAAAAAAA",
+      "ORS7M1f8igA-Du3mPgEpIAAAAAA",
+      "ORS7M1gisAA-i9hF8w+hYAAAAAA",
+      "ORS7M1hI1gA-0jzwrhIjsAAAAAA",
+      "ORS7M1hI1gA-Ue2gEBJzEAAAAAA"
+    ],
+    "type": "shrub"
+  },
+  "enc-MCNP-peakA": {
+    "type": "stone",
+    "displayname": "",
+    "description": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7Mz0qFgA-HsCHs/Lm0AAAAAA",
+      "ORS7Mz0qFgA-TAvNJ6wcUAAAAAA",
+      "ORS7Mz1QPAA-jFBfvTZ4sAAAAAA",
+      "ORS7Mz1QPAA-xRzuCo45MAAAAAA",
+      "ORS7Mz12YgA-T5KgDbxqUAAAAAA",
+      "ORS97JSm3AA-X6SQt/HeYAAAAAA",
+      "ORS97JSm3AA-Itk4UZjgoAAAAAA",
+      "ORS97JSm3AA-YS86OKVY0AAAAAA",
+      "ORS97JTNAAA-dhO6a8szwAAAAAA",
+      "ORS97JTNAAA-iLT9PxDt0AAAAAA",
+      "ORS7MzzdygA-VPbaZnOKgAAAAAA",
+      "ORS7MzzdygA-4Y3LA21woAAAAAA",
+      "ORS7MzzdygA-Zfd3oRh4gAAAAAA",
+      "ORS7Mz0D8AA-ezf1/poW8AAAAAA",
+      "ORS7Mz0D8AA-bBsM5bcDgAAAAAA",
+      "ORS7Mz0D8AA-BiS8IhCdYAAAAAA",
+      "ORS7Mz0qFgA-wR0rVkVdEAAAAAA"
+    ],
+    "attrs": {}
+  },
+  "enc-MCNP-peakB": {
+    "type": "stone",
+    "displayname": "",
+    "description": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7MziLiAA-yDSg9J5SgAAAAAA",
+      "ORS7MziLiAA-orK1A4EZwAAAAAA",
+      "ORS7MzhlYgA-EMllpKo/IAAAAAA",
+      "ORS7MzhlYgA-M7tN+CiPUAAAAAA",
+      "ORS97JVlmAA-FbSB1idz4AAAAAA",
+      "ORS97JWLvAA-sEu2WpcIYAAAAAA",
+      "ORS97JWLvAA-bxW5ldW5kAAAAAA",
+      "ORS97JWLvAA-r15CZpkDQAAAAAA",
+      "ORS97JWx4gA-DsrJhxdXQAAAAAA",
+      "ORS97JWx4gA-pySiDWDyQAAAAAA",
+      "ORS97JXYCAA-9RTsufWn0AAAAAA",
+      "ORS97JXYCAA-CRi0tlGmQAAAAAA",
+      "ORS97JXYCAA-qcfyq5epQAAAAAA",
+      "ORS97JX+LgA-Ygm5ha1fsAAAAAA",
+      "ORS97JX+LgA-sEaW9xFwQAAAAAA",
+      "ORS97JX+LgA-XfhdH242wAAAAAA",
+      "ORS97JYkVAA-B/Cd1JxB4AAAAAA",
+      "ORS97JYkVAA-Zjo2eGW3YAAAAAA",
+      "ORS97JZKeAA-CGSy01xTAAAAAAA",
+      "ORS97JZKeAA-Vct2dyuL4AAAAAA",
+      "ORS97JZwngA-7rmxZiy2AAAAAAA",
+      "ORS97JZwngA-4KZWt6mYQAAAAAA",
+      "ORS97JZwngA-T5qEgwrIwAAAAAA",
+      "ORS97JaWxAA-O+fTKbatIAAAAAA",
+      "ORS97JaWxAA-rwfDtvVcUAAAAAA",
+      "ORS97JaWxAA-Bm8rJR7jwAAAAAA",
+      "ORS7MzlwagA-LWENch8DAAAAAAA",
+      "ORS7MzlwagA-zUmbrg2pAAAAAAA",
+      "ORS7MzlwagA-WSddWoY0oAAAAAA",
+      "ORS7MzlwagA-Q2gfQmPecAAAAAA",
+      "ORS7MzlKRAA-twwibbvrkAAAAAA",
+      "ORS7M0gw9gA-LV3qsqIKUAAAAAA"
+    ],
+    "attrs": {}
+  },
+  "enc-MCNP-peakC": {
+    "type": "stone",
+    "displayname": "",
+    "description": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7Mzni2gA-7Tlnw953sAAAAAA",
+      "ORS7Mzni2gA-QB6n8Nm+gAAAAAA",
+      "ORS7MzoJAAA-3rDK5y64oAAAAAA",
+      "ORS7MzoJAAA-aZfl7nOPMAAAAAA",
+      "ORS7MzoJAAA-Xr7z0zMOoAAAAAA",
+      "ORS7MzovJgA-fVa8lP9iUAAAAAA",
+      "ORS7MzovJgA-Fr3UaqsVgAAAAAA",
+      "ORS7MzovJgA-lp4f+uqF4AAAAAA",
+      "ORS97Jd7pgA-KzlPBKPmQAAAAAA",
+      "ORS97Jd7pgA-9eW5sWeWYAAAAAA",
+      "ORS97JehzAA-YV+vfwZtMAAAAAA",
+      "ORS97JehzAA-kaG2CjfVAAAAAAA",
+      "ORS97JehzAA-xi3AbadCgAAAAAA",
+      "ORS97JfH8gA-fpmKUiuvgAAAAAA",
+      "ORS7Mzni2gA-VUtDcc/I8AAAAAA"
+    ],
+    "attrs": {}
+  },
+  "enc-MCNP-pondA": {
+    "type": "waterSmall",
+    "displayname": "",
+    "description": "",
+    "layer": 0,
+    "nodes": [
+      "ORS97JfuFgA-JFhPOdiygAAAAAA",
+      "ORS97JfuFgA-qobv4I4PwAAAAAA",
+      "ORS97JfuFgA-fr5D4MFI8AAAAAA",
+      "ORS97JgUPAA-VOKtAbTWAAAAAAA",
+      "ORS97JgUPAA-7n2XiELYoAAAAAA",
+      "ORS97Jg6YgA-L4YtKjKVoAAAAAA",
+      "ORS97Jg6YgA-9DYsa5vscAAAAAA",
+      "ORS97Jg6YgA-qRM85UaggAAAAAA",
+      "ORS97JhgiAA-d7iyVTsYwAAAAAA",
+      "ORS97JhgiAA-GtAViPfo4AAAAAA"
+    ],
+    "attrs": {}
+  },
+  "enc-MCNP-pondB": {
+    "type": "waterSmall",
+    "displayname": "",
+    "description": "",
+    "layer": 0,
+    "nodes": [
+      "ORS97JiGrgA-baMwAZdC0AAAAAA",
+      "ORS97JiGrgA-nV5n1Frz8AAAAAA",
+      "ORS97JiGrgA-gr7Y5Ifu0AAAAAA",
+      "ORS97Jis0gA-r00dYVtbAAAAAAA",
+      "ORS97Jis0gA-2CO/66DZcAAAAAA",
+      "ORS97JjS+AA-5W3tJAboUAAAAAA"
+    ],
+    "attrs": {}
+  },
+  "enc-MCNP-riverB": {
+    "type": "waterSmall",
+    "displayname": "",
+    "description": "",
+    "layer": 0,
+    "nodes": [
+      "ORS97JjS+AA-tXA9EHzigAAAAAA",
+      "ORS97Jj5HgA-xrm/LUiOcAAAAAA",
+      "ORS97Jj5HgA-QFqAZyZ3EAAAAAA",
+      "ORS97Jj5HgA-t0IaY0LMkAAAAAA",
+      "ORS7MzvSxAA-+9L90y/0kAAAAAA",
+      "ORS7MzvSxAA-hUs2uS73MAAAAAA",
+      "ORS7MzusngA-lw44I7iCoAAAAAA",
+      "ORS7MzusngA-TtIZyFfrkAAAAAA",
+      "ORS7MzusngA-yAAjxNPUQAAAAAA",
+      "ORS7MzuGeAA-YvmaiAi2MAAAAAA",
+      "ORS7MzuGeAA-SJBGRUX0UAAAAAA",
+      "ORS7MzuGeAA-bm2UvfeZwAAAAAA",
+      "ORS7MztgUgA-BF8d1zk8sAAAAAA",
+      "ORS7MztgUgA-NMldxMBO4AAAAAA",
+      "ORS97JmRtAA-2KHWX3Jv8AAAAAA",
+      "ORS97Jm32gA-Uloue3OrAAAAAAA",
+      "ORS97Jm32gA-X8VJqn3pwAAAAAA",
+      "ORS97Jm32gA-ibyrCEeUAAAAAAA",
+      "ORS97JneAAA-WZoNH8cJQAAAAAA",
+      "ORS97JneAAA-CZeFs2KXQAAAAAA",
+      "ORS97JoEJgA-3Gx1GMOrYAAAAAA",
+      "ORS97JoEJgA-krYSjpsR0AAAAAA",
+      "ORS97JoEJgA-XOyoJG3R8AAAAAA",
+      "ORS97JoqTAA-mgOMqLKicAAAAAA",
+      "ORS97JoqTAA-vME49Fz+UAAAAAA",
+      "ORS97JpQcAA-eapqvtGbUAAAAAA",
+      "ORS97JpQcAA-czZ3bLqPEAAAAAA",
+      "ORS97JpQcAA-OZd8ZhbJwAAAAAA",
+      "ORS97Jp2lgA-mIX3pEmz4AAAAAA",
+      "ORS97Jp2lgA-RPwDy92xQAAAAAA",
+      "ORS97JqcvAA-Jl+L9EwjYAAAAAA",
+      "ORS97JqcvAA-HSBY/wfDMAAAAAA",
+      "ORS97JrC4gA-hpOZe9ivkAAAAAA"
+    ],
+    "attrs": {}
+  },
+  "enc-MCNP-riverC": {
+    "type": "waterSmall",
+    "displayname": "",
+    "description": "",
+    "layer": 0,
+    "nodes": [
+      "ORS7MzsUCAA-dT5cyv7HEAAAAAA",
+      "ORS97JrC4gA-LKT4RdjmEAAAAAA",
+      "ORS97JrpCAA-v3vlpvcvAAAAAAA",
+      "ORS97JrpCAA-9TpEzcoh0AAAAAA",
+      "ORS97JrpCAA-XPcWLW0ksAAAAAA",
+      "ORS97JsPLAA-ugjiJ4vIYAAAAAA",
+      "ORS97JsPLAA-Kxz7m8b5gAAAAAA",
+      "ORS97Js1UgA-WdKZkY2RUAAAAAA",
+      "ORS97Js1UgA-rai4PHzMAAAAAA"
+    ],
+    "attrs": {}
+  },
+  "enc-water": {
+    "type": "waterLarge",
+    "displayname": "",
+    "description": "",
+    "layer": 0,
+    "nodes": [
+      "ORS97JtbeAA-9LVDX6KrMAAAAAA",
+      "ORS97JtbeAA-94T+Aw7JAAAAAAA",
+      "ORS97JtbeAA-I84sQf8hcAAAAAA",
+      "ORS97JuBngA-0FgSCCVUwAAAAAA",
+      "ORS97JuBngA-uh0SkxaqQAAAAAA",
+      "ORS97JuBngA-zGxNTFLxsAAAAAA",
+      "ORS97JunxAA-qiR1uKoi0AAAAAA",
+      "ORS97JunxAA-VeMSZ1YzMAAAAAA",
+      "ORS97JvN6AA-lJy41rdB8AAAAAA",
+      "ORS97JvN6AA-jKLum7pJYAAAAAA",
+      "ORS97JvN6AA-z4Ofr3uLsAAAAAA",
+      "ORS97Jv0DgA-tEqn7tfu8AAAAAA",
+      "ORS97Jv0DgA-lS2B3ckIoAAAAAA",
+      "ORS97JwaNAA-QdOcwWlUwAAAAAA",
+      "ORS97JwaNAA-xFZ2IVACoAAAAAA",
+      "ORS97JwaNAA-CnjJH/rCEAAAAAA",
+      "ORS97JxAWgA-Dj9rgCNnUAAAAAA",
+      "ORS97JxAWgA-QP5wiXOgYAAAAAA",
+      "ORS97JxAWgA-ikVPiQjn4AAAAAA",
+      "ORS97JxmgAA-BmsPmaCrwAAAAAA",
+      "ORS97JxmgAA-u5JAb3iM0AAAAAA",
+      "ORS97JyMpgA-eAdDi/ylUAAAAAA",
+      "ORS97JyMpgA-hqwSinLhcAAAAAA",
+      "ORS97JyMpgA-UB0TXWx6UAAAAAA",
+      "ORS97JyyygA-Em+jib2SIAAAAAA",
+      "ORS97JyyygA-s1Er4kd0EAAAAAA",
+      "ORS97JzY8AA-98m4re7A4AAAAAA",
+      "ORS97JzY8AA-rluT1YZF0AAAAAA",
+      "ORS97JzY8AA-uRWRwQ8ssAAAAAA",
+      "ORS97Jz/FgA-JJkoZ65D8AAAAAA",
+      "ORS97Jz/FgA-QFB/u7kRoAAAAAA",
+      "ORS97Jz/FgA-yQipW4OZ4AAAAAA",
+      "ORS97J0lPAA-9XAc+FEdAAAAAAA",
+      "ORS97J0lPAA-Q1MC/ldSsAAAAAA",
+      "ORS97J1LYgA-GQnDXlUMsAAAAAA",
+      "ORS97J1LYgA-zj1ZKM9rQAAAAAA",
+      "ORS97J1LYgA-utse29/eAAAAAAA",
+      "ORS97JjS+AA-tXA9EHzigAAAAAA",
+      "ORS97JrC4gA-hpOZe9ivkAAAAAA",
+      "ORS97J2XrAA-zqbvdIElsAAAAAA",
+      "ORS97J2XrAA-/ztDFo0RYAAAAAA",
+      "ORS97J2XrAA-HS+iWWQtkAAAAAA",
+      "ORS97J290gA-hNiqzZh1EAAAAAA",
+      "ORS97J290gA-/ZduyMBVAAAAAAA",
+      "ORS97J3j+AA-Z/jiPW41QAAAAAA",
+      "ORS97J3j+AA-MXQbVje1EAAAAAA",
+      "ORS97J3j+AA-yH/ZPeYWMAAAAAA",
+      "ORS97J4KHgA-Tnxjbu+7YAAAAAA",
+      "ORS97J4KHgA-aiAz2EeVMAAAAAA",
+      "ORS97J4wRAA-jR1zUoJjoAAAAAA",
+      "ORS97J4wRAA-Dinr0imxwAAAAAA",
+      "ORS97J4wRAA-cyLBfCkMAAAAAA",
+      "ORS97J5WaAA-8sW1+kGlsAAAAAA",
+      "ORS97J5WaAA-mveg0/3PIAAAAAA",
+      "ORS97J58jgA-iadlwyqJoAAAAAA",
+      "ORS97J58jgA-+aal1ezSkAAAAAA",
+      "ORS97J58jgA-/g3LHBhmYAAAAAA",
+      "ORS97J6itAA-Yh9Gy2hX0AAAAAA",
+      "ORS97J6itAA-FYWyRhyQoAAAAAA",
+      "ORS97J7I2gA-VfTJuOTQMAAAAAA",
+      "ORS97J7I2gA-c9HWZ0EbYAAAAAA",
+      "ORS97J7I2gA-xShnxhrWIAAAAAA",
+      "ORS97J7vAAA-caw7jquiwAAAAAA",
+      "ORS97J7vAAA-5u0+pNJxYAAAAAA",
+      "ORS97J8VJAA-oCQsbsrFsAAAAAA",
+      "ORS97J8VJAA-pZyPxqt8gAAAAAA",
+      "ORS97J87SgA-s3k7bYM0YAAAAAA",
+      "ORS97J87SgA-x+1BohH8oAAAAAA",
+      "ORS97J87SgA-jl9h9ZZCgAAAAAA",
+      "ORS97J9hcAA-KVecwcsw0AAAAAA",
+      "ORS97J9hcAA-60GKmJJIQAAAAAA",
+      "ORS97J+HlgA-7pmgWR+uYAAAAAA",
+      "ORS97J+HlgA-RRbqgZ2FIAAAAAA",
+      "ORS97J+HlgA-nreUanEWwAAAAAA",
+      "ORS97J+tvAA-c7DvUCP4kAAAAAA",
+      "ORS97J+tvAA-+fDOKe+HEAAAAAA",
+      "ORS97J+tvAA-S04bghz/wAAAAAA",
+      "ORS97J/T4AA-gdkKZs8NAAAAAAA",
+      "ORS97J/T4AA-ehEPYQz30AAAAAA",
+      "ORS97J/6BgA-a0DbIRFHsAAAAAA",
+      "ORS97J/6BgA-hxIjLIf/sAAAAAA",
+      "ORS97KAgLAA-f9FXJweyQAAAAAA",
+      "ORS97KAgLAA-cBRZEa6iwAAAAAA",
+      "ORS97KAgLAA-XPH4pmni0AAAAAA",
+      "ORS97KBGUgA-DoZcRMfXIAAAAAA",
+      "ORS97KBGUgA-XiWqGKRPgAAAAAA",
+      "ORS97KBGUgA-ltGhjOT/IAAAAAA",
+      "ORS97KBseAA-Z/oxXhy9IAAAAAA",
+      "ORS97KBseAA-lHAYyrfhIAAAAAA",
+      "ORS97KCSnAA-1k/gS4tgcAAAAAA",
+      "ORS97KCSnAA-rvuP2Yis4AAAAAA",
+      "ORS97KCSnAA-IJL8sE1eoAAAAAA",
+      "ORS97KC4wgA-UDXHvLnn0AAAAAA",
+      "ORS97KC4wgA-nNC12O9tIAAAAAA",
+      "ORS97KDe6AA-CaKLio8/cAAAAAA",
+      "ORS97KDe6AA-62s2/DKEIAAAAAA",
+      "ORS97KDe6AA-XlX9eThioAAAAAA",
+      "ORS97KEFDgA-/Pnek46fMAAAAAA",
+      "ORS97KEFDgA-G4VXclJL4AAAAAA",
+      "ORS97KErNAA-ozEsiJutoAAAAAA",
+      "ORS97KErNAA-JufTPKfpYAAAAAA",
+      "ORS97KErNAA-9Kdw4uObYAAAAAA",
+      "ORS97KFRWgA-XLftHe5PsAAAAAA",
+      "ORS97KFRWgA-tBimOBDfsAAAAAA",
+      "ORS97KF3fgA-yyY0RxIWMAAAAAA",
+      "ORS97KF3fgA-4aR7PTWt0AAAAAA",
+      "ORS97KGdpAA-D3rIS/EkkAAAAAA",
+      "ORS97KGdpAA-e8ZfKjE2YAAAAAA",
+      "ORS97KGdpAA-hiNn5T+VgAAAAAA",
+      "ORS97KHDygA-8wJ8Hc50AAAAAAA",
+      "ORS97KHDygA-6E5LOt7U0AAAAAA",
+      "ORS97KHp8AA-oWkNdEpvkAAAAAA",
+      "ORS97KHp8AA-m7njpT0CoAAAAAA",
+      "ORS97KHp8AA-fONejGdaIAAAAAA",
+      "ORS97KIQFgA-0SvyDzCoAAAAAA",
+      "ORS97KIQFgA-BXKy9ar4wAAAAAA",
+      "ORS97KI2OgA-WsHcue+FMAAAAAA",
+      "ORS97KI2OgA-QUikPffLcAAAAAA",
+      "ORS97KJcYAA-fnOSy/XPMAAAAAA",
+      "ORS97KJcYAA-OhmECkVa8AAAAAA",
+      "ORS97KKChgA-TuwwFQwJ0AAAAAA",
+      "ORS97KKChgA-QKS8aKJkMAAAAAA",
+      "ORS97KKChgA-8gNQJPgx0AAAAAA",
+      "ORS97KKorAA-Utoho8QJsAAAAAA",
+      "ORS97KKorAA-vdsGOgRPgAAAAAA",
+      "ORS97KLO0gA-2FQebqqcsAAAAAA",
+      "ORS97KLO0gA-uvcpvvAGMAAAAAA",
+      "ORS97KLO0gA-48uFAtEHUAAAAAA",
+      "ORS97KL0+AA-DRA2qFltYAAAAAA",
+      "ORS97KL0+AA-7DYGBduFgAAAAAA",
+      "ORS97KMbHAA-D9613fHrsAAAAAA",
+      "ORS97KMbHAA-0qaoYpzUkAAAAAA",
+      "ORS97KNBQgA-9bG0UZOOwAAAAAA",
+      "ORS97KNBQgA-icW1XaV1sAAAAAA",
+      "ORS97KNnaAA-95ZxF8ScAAAAAAA",
+      "ORS97KNnaAA-YsaWOSrawAAAAAA",
+      "ORS97KONjgA-SoT7v6isQAAAAAA",
+      "ORS97KONjgA-Sbwww/yS4AAAAAA",
+      "ORS97KONjgA-lkAvKvHLsAAAAAA",
+      "ORS97KOztAA-N47V0OVLwAAAAAA",
+      "ORS97KOztAA-/aG0uN49UAAAAAA",
+      "ORS97KPZ2AA-HvMZqbg70AAAAAA",
+      "ORS97KPZ2AA-cApTJrEfMAAAAAA",
+      "ORS97KPZ2AA-ZdZeFl5H8AAAAAA",
+      "ORS97KP//gA-1CeRg/csgAAAAAA",
+      "ORS97KP//gA-1l2Gz1gjIAAAAAA",
+      "ORS97KQmJAA-I1EwQlZMAAAAAAA",
+      "ORS97KQmJAA-T9jddagi4AAAAAA",
+      "ORS97KRMSgA-ryQvh1vpwAAAAAA",
+      "ORS97KRMSgA-bJOLGN4TcAAAAAA",
+      "ORS97KRMSgA-meDetK430AAAAAA",
+      "ORS97KRycAA-3iNqVqCKwAAAAAA",
+      "ORS97KRycAA-tlmp4zR9oAAAAAA",
+      "ORS97KSYlAA-Uv+QdQrPoAAAAAA",
+      "ORS97KSYlAA-vDZUsSA+wAAAAAA",
+      "ORS97KS+ugA-xYsiVoUjsAAAAAA",
+      "ORS97KS+ugA-CEHi4/lR0AAAAAA",
+      "ORS97KTk4AA-FH73s2ijwAAAAAA",
+      "ORS97KTk4AA-BxMuNlhq8AAAAAA",
+      "ORS97KTk4AA-5AMd7t2bsAAAAAA",
+      "ORS97KULBgA-beLDHeUC4AAAAAA",
+      "ORS97KULBgA-8Z2I8Pgl0AAAAAA",
+      "ORS97KUxLAA-9QCc0v8ycAAAAAA",
+      "ORS97KUxLAA-Mu6abOcYcAAAAAA",
+      "ORS97KUxLAA-8VsybWquUAAAAAA",
+      "ORS97KVXUAA-e+XNcKAJIAAAAAA",
+      "ORS97KVXUAA-Ie6HVqB6EAAAAAA",
+      "ORS97KV9dgA-DSUErlzHAAAAAAA",
+      "ORS97KV9dgA-IVqMGyIzAAAAAAA",
+      "ORS97KWjnAA-8DgVuI8WcAAAAAA",
+      "ORS97KWjnAA-mWuqkBK3cAAAAAA",
+      "ORS97KWjnAA-sdBHsQeYIAAAAAA",
+      "ORS97KXJwgA-PDGyKRSW8AAAAAA",
+      "ORS97KXJwgA-U4+bvNxRsAAAAAA",
+      "ORS97KXv6AA-7qnZAi+OsAAAAAA",
+      "ORS97KXv6AA-L1PNJOuiYAAAAAA",
+      "ORS97KYWDgA-SayvEK23gAAAAAA",
+      "ORS97KYWDgA-cpiYKM+S4AAAAAA",
+      "ORS97KY8MgA-ZB1EvlLcAAAAAAA",
+      "ORS97KY8MgA-rQPrdwx5cAAAAAA",
+      "ORS97KZiWAA-OtH/555pEAAAAAA",
+      "ORS97KZiWAA-K1n1eRdUEAAAAAA",
+      "ORS97KaIfgA-J4b2bB3ocAAAAAA",
+      "ORS97KaupAA-p7OZVtk4QAAAAAA",
+      "ORS97KaupAA-qoi2VXsysAAAAAA",
+      "ORS97KaupAA-nANXInD9IAAAAAA",
+      "ORS7M1fWZAA-XYXlCuwCsAAAAAA",
+      "ORS7M1fWZAA-W9o7ztlOoAAAAAA",
+      "ORS7M1ewQAA-gymz9/Bp8AAAAAA",
+      "ORS7M1ewQAA-P59xEauFQAAAAAA",
+      "ORS7M1eKGgA-8AQiflVZAAAAAAA",
+      "ORS97KchFAA-q3sJLI/zIAAAAAA",
+      "ORS97KdHOgA-QryWvQOcYAAAAAA",
+      "ORS97KdHOgA-umAWp0/7gAAAAAA",
+      "ORS97KdtYAA-E49b1qdPEAAAAAA",
+      "ORS97KdtYAA-ofjIEC+jIAAAAAA",
+      "ORS97KdtYAA-9NjQjV40sAAAAAA",
+      "ORS97KeThgA-q38v/L47kAAAAAA",
+      "ORS97KeThgA-NKFQ1g0AsAAAAAA",
+      "ORS97Ke5rAA-L4M1YLoLUAAAAAA",
+      "ORS97Ke5rAA-LBPAbmNQgAAAAAA",
+      "ORS97Kff0AA-IkBSQ6FNEAAAAAA",
+      "enc-seawallPark25",
+      "ORS7M0yDOgA-WUMUAkVpUAAAAAA",
+      "enc-seawallPark20",
+      "enc-seawallPark17",
+      "enc-seawallPark14",
+      "enc-seawallPark11",
+      "enc-seawallPark8",
+      "enc-seasidePlaza11",
+      "enc-seasidePlaza13",
+      "ORS7MxedDAA-RCakhlGzAAAAAAA",
+      "ORS7MxfDMgA-RzPKEjp9UAAAAAA",
+      "ORS7MxfDMgA-Nzs29AFagAAAAAA",
+      "ORS7MxfDMgA-b6RKP1kdoAAAAAA",
+      "ORS7MxfpWAA-nfqdisuaIAAAAAA",
+      "ORS7MxfpWAA-Ic5RpyH+MAAAAAA",
+      "ORS7MxfpWAA-RBcl8EdvkAAAAAA",
+      "ORS97KkQ/gA-WTcSrskPQAAAAAA",
+      "ORS97KkQ/gA-dJkuH9ymsAAAAAA",
+      "ORS7M0ptKgA-gV+9qfNmAAAAAAA",
+      "ORS7M0pHBAA-laqrXjMTwAAAAAA",
+      "ORS97KldSAA-65BFjHzf4AAAAAA",
+      "ORS97KldSAA-P+TbQdv+0AAAAAA",
+      "ORS97KldSAA-VV3BAlJr8AAAAAA",
+      "ORS97KmDbgA-/alfLiDgQAAAAAA",
+      "ORS97KmDbgA-rhr+DdxowAAAAAA",
+      "ORS97KmplAA-zB6nP1pf0AAAAAA",
+      "ORS7M0nUlAA-4VexFVkwAAAAAAA",
+      "ORS97KnPugA-o7ong3yfAAAAAAA",
+      "ORS97KnPugA-UbFCfCvqcAAAAAA",
+      "ORS97Kn14AA-KQH1thXSsAAAAAA",
+      "ORS97Kn14AA-2bFPQgOJsAAAAAA",
+      "ORS97Kn14AA-y7mgdhLF0AAAAAA",
+      "ORS97KocBAA-XrO0mXalMAAAAAA",
+      "ORS97KocBAA-ZWEH4NazMAAAAAA",
+      "ORS97KpCKgA-t4/nGLqTIAAAAAA",
+      "ORS97KpCKgA-LXPN/zqIsAAAAAA",
+      "ORS97KpoUAA-N+53WiQhkAAAAAA",
+      "ORS97KpoUAA-EWUUF/FH4AAAAAA",
+      "ORS97KpoUAA-e+iiuselYAAAAAA",
+      "ORS97KqOdgA-uZ9bpiWwoAAAAAA",
+      "ORS97KqOdgA-J2R7yifHgAAAAAA",
+      "ORS97Kq0nAA-a9Cd6lfl4AAAAAA",
+      "ORS97Kq0nAA-Jk+a1fa1YAAAAAA",
+      "ORS97KrawgA-C8zEjKfK4AAAAAA",
+      "ORS97KrawgA-iIHJSgUDoAAAAAA",
+      "ORS97KrawgA-IO9BR0QaAAAAAAA",
+      "ORS97KsA5gA-jTs0SqvQ8AAAAAA",
+      "ORS97KsA5gA-I9WRHANlsAAAAAA",
+      "ORS97KsnDAA-3yJQ45lFkAAAAAA",
+      "ORS97KsnDAA-U6IJXqtt0AAAAAA",
+      "ORS97KtNMgA-xOYwkMxe8AAAAAA",
+      "ORS97KtNMgA-1hb6gqURsAAAAAA",
+      "ORS97KtzWAA-N9osSlXeIAAAAAA",
+      "ORS97KtzWAA-u2TMtVDVIAAAAAA",
+      "ORS97KtzWAA-EK1ZOCf/YAAAAAA",
+      "ORS97KuZfgA-KUplBQdK0AAAAAA",
+      "ORS97KuZfgA-+IZHgsLOgAAAAAA",
+      "ORS97Ku/ogA-aWpXcUw6UAAAAAA",
+      "ORS97Ku/ogA-Il+vZ2fu8AAAAAA",
+      "ORS97KvlyAA-3jwjKhP9UAAAAAA",
+      "ORS97KvlyAA-YGttOBE+4AAAAAA",
+      "ORS97KwL7gA-IaZVP+KIMAAAAAA",
+      "ORS97KwL7gA-8sJzZh7XEAAAAAA",
+      "ORS97KwL7gA-K2hb8BgoQAAAAAA",
+      "ORS97KwyFAA-qbDi4DVNUAAAAAA",
+      "ORS97KwyFAA-BzeDC972sAAAAAA",
+      "ORS97KxYOgA-B1GxU60P8AAAAAA",
+      "ORS97KxYOgA-JC5iSJCgQAAAAAA",
+      "ORS97Kx+YAA-B+5ySSNhwAAAAAA",
+      "ORS97KykhAA-nQ7XfZ2tMAAAAAA",
+      "ORS97KykhAA-kUQMF0nI4AAAAAA",
+      "ORS97KykhAA-cTs0+uPTIAAAAAA",
+      "ORS97KzKqgA-LETgpxFgwAAAAAA",
+      "ORS97KzKqgA-NwUyxfC1UAAAAAA",
+      "ORS97Kzw0AA-TlugqjT+wAAAAAA",
+      "ORS97Kzw0AA-nsULzzdKMAAAAAA",
+      "ORS97K0W9gA-bA67eSDw4AAAAAA",
+      "ORS97K0W9gA-C18x8ynwcAAAAAA"
+    ],
+    "attrs": {}
+  }
 }
