@@ -236,7 +236,7 @@ def rotate_around_pivot(x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta:
     ny += py
     return Coord(nx, ny)
 
-def points_away(x: RealNum, y: RealNum, d: RealNum, m: RealNum | None) -> list[Coord]:
+def points_away(x: RealNum, y: RealNum, d: RealNum, m: RealNum | None = None, theta: RealNum | None = None) -> tuple[Coord, Coord]:
     """
     Finds two points that are a specified distance away from a specified point, all on a straight line.
 
@@ -245,11 +245,33 @@ def points_away(x: RealNum, y: RealNum, d: RealNum, m: RealNum | None) -> list[C
     :param RealNum d: the distance the two points from the original point
     :param m: the gradient of the line. Give ``None`` for a gradient of undefined.
     :type m: RealNum | None
+    :param theta: TODO
 
-    :returns: Given in ``[c1, c2]``
-    :rtype: list[Coord]
+    :returns: Given in ``(c1, c2)``
+    :rtype: tuple(Coord, Coord)
     """
-    theta = math.atan(m) if m is not None else math.pi / 2
+    theta = theta if theta is not None else math.atan(m) if m is not None else math.pi / 2
     dx = round(d*math.cos(theta), 10)
     dy = round(d*math.sin(theta), 10)
-    return [Coord(x+dx, y+dy), Coord(x-dx, y-dy)]
+    return Coord(x + dx, y + dy), Coord(x - dx, y - dy)
+
+def offset(coords: list[Coord], d: RealNum):
+    angles = [math.atan2(c2.y-c1.y, c2.x-c1.x) for c1, c2 in internal._with_next(coords)]
+    offsetted_points_pairs = []
+    for i, (a1, a2) in enumerate([(None, angles[0]), *internal._with_next(angles), (angles[-1], None)]):
+        if a1 is None or a2 is None:
+            # noinspection PyTypeChecker
+            bisect_angle = a1+math.pi/2 if a1 is not None else a2+math.pi
+        else:
+            bisect_angle = (a1+a2)/2
+        offsetted_points_pairs.append(points_away(*coords[i], d, theta=bisect_angle))
+    pc = None
+    offsetted_points = []
+    for i, ((c11, c12), (c21, c22)) in enumerate(internal._with_next(offsetted_points_pairs)):
+        if pc is None:
+            pc = c11 if c11.y > coords[0].y else c11 if c11.x > coords[0].x else c12
+            offsetted_points.append(c21 if math.atan2(c21.y-pc.y, c21.x-pc.x) == angles[i])
+    return offsetted_points
+
+
+
