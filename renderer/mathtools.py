@@ -261,17 +261,17 @@ def offset(coords: list[Coord], d: RealNum):
     for i, (a1, a2) in enumerate([(None, angles[0]), *internal._with_next(angles), (angles[-1], None)]):
         if a1 is None or a2 is None:
             # noinspection PyTypeChecker
-            bisect_angle = a1+math.pi/2 if a1 is not None else a2+math.pi
+            bisect_angle = a1+math.pi/2 if a1 is not None else a2+math.pi/2
+            theta = math.pi
         else:
             bisect_angle = (a1+a2)/2
-        offsetted_points_pairs.append(points_away(*coords[i], d, theta=bisect_angle))
-    pc = None
-    offsetted_points = []
-    for i, ((c11, c12), (c21, c22)) in enumerate(internal._with_next(offsetted_points_pairs)):
-        if pc is None:
-            pc = c11 if c11.y > coords[0].y else c11 if c11.x > coords[0].x else c12
-            offsetted_points.append(c21 if math.atan2(c21.y-pc.y, c21.x-pc.x) == angles[i])
+            theta = abs(a1-a2)
+        offsetted_points_pairs.append(points_away(*coords[i], d/math.sin(theta/2) if theta != 0 else d, theta=bisect_angle))
+    pc = offsetted_points_pairs[0][0] if offsetted_points_pairs[0][0].y > coords[0].y else offsetted_points_pairs[0][0] if offsetted_points_pairs[0][0].x > coords[0].x else offsetted_points_pairs[0][1]
+    pc = offsetted_points_pairs[0][1] if pc == offsetted_points_pairs[0][0] and d < 0 else offsetted_points_pairs[0][0]
+    pc = offsetted_points_pairs[0][0] if pc == offsetted_points_pairs[0][1] and d < 0 else offsetted_points_pairs[0][1]
+    offsetted_points = [pc]
+    for i, (c21, c22) in enumerate(offsetted_points_pairs[1:]):
+        pc = offsetted_points[-1]
+        offsetted_points.append(c21 if math.atan2(c21.y-pc.y, c21.x-pc.x) == angles[i] else c22)
     return offsetted_points
-
-
-
