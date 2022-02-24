@@ -1,6 +1,7 @@
 from typing import Literal
 
 from schema import Schema, Or
+from tqdm import tqdm
 
 from renderer.types import RealNum, NodeListJson, NodeJson
 
@@ -21,9 +22,10 @@ class NodeList:
     """A list of nodes.
 
     :param NodeListJson json: The JSON of the list of nodes."""
-    def __init__(self, json: NodeListJson):
+    def __init__(self, json: NodeListJson, progress_bar: bool = False):
         self.validate_json(json)
-        self.nodes: dict[str, Node] = {name: Node(node) for name, node in json.items()}
+        raw_nodes = tqdm(json.items()) if progress_bar else json.items()
+        self.nodes: dict[str, Node] = {name: Node(node) for name, node in raw_nodes}
         """A dictionary of node objects, in the form ``{id: node}``"""
 
     def __getitem__(self, name: str) -> Node:

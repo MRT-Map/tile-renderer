@@ -30,7 +30,8 @@ setup(
         'click',
         'psutil',
         'imagehash',
-        'colorama'
+        'colorama',
+        'tqdm'
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',

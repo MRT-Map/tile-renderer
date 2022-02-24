@@ -165,7 +165,7 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
             is_rendered = True
             for other in no_intersect:
                 for bound in text.bounds:
-                    if mathtools.poly_intersect(list(bound), other):
+                    if mathtools.poly_intersect(list(bound), list(other)):
                         is_rendered = False
                         del text_dict[text]
                         break
@@ -175,7 +175,7 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
                 print(_eta(start, i + 1, operations) +
                       f"Eliminated overlapping text {i + 1}/{operations} in zoom {z}", flush=True)
             else:
-                no_intersect.append(*text.bounds)
+                no_intersect.extend(*text.bounds)
                 print(_eta(start, i + 1, operations) +
                       f"Kept text {i + 1}/{operations} in zoom {z}", flush=True)
 

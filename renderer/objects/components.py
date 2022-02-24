@@ -1,6 +1,7 @@
 from typing import Literal
 
 from schema import Schema, Or, And, Optional
+from tqdm import tqdm
 
 from renderer import validate
 from renderer.objects.nodes import NodeList
@@ -41,9 +42,10 @@ class ComponentList:
 
     :param ComponentListJson component_json: The JSON of the list of components.
     :param NodeListJson node_json: The JSON of the list of nodes for validation."""
-    def __init__(self, component_json: ComponentListJson, node_json: NodeListJson):
+    def __init__(self, component_json: ComponentListJson, node_json: NodeListJson, progress_bar: bool = False):
         self.validate_json(component_json, node_json)
-        self.components: dict[str, Component] = {name: Component(name, component) for name, component in component_json.items()}
+        raw_components = tqdm(component_json.items()) if progress_bar else component_json.items()
+        self.components: dict[str, Component] = {name: Component(name, component) for name, component in raw_components}
         """A dictionary of component objects, in the form of ``{id: component}``."""
 
     def __getitem__(self, name: str) -> Component:

@@ -47,9 +47,9 @@ class _TextObject:
     def from_multiple(cls, *textobject: _TextObject):
         to = copy(textobject[0])
 
-        to.bounds = tuple(sto.bounds for sto in textobject)
-        to.image = tuple(sto.image for sto in textobject)
-        to.center = tuple(sto.center for sto in textobject)
+        to.bounds = tuple(itertools.chain(*[sto.bounds for sto in textobject]))
+        to.image = tuple(itertools.chain(*[sto.image for sto in textobject]))
+        to.center = tuple(itertools.chain(*[sto.center for sto in textobject]))
 
         return to
 
