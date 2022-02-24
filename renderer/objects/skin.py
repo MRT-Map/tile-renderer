@@ -285,7 +285,8 @@ class Skin:
                 if text_length == 0:
                     text_length = int(imd.textlength("----------", font))
 
-                coord_lines = mathtools.combine_edge_dashes(mathtools.dash(coords, text_length, text_length*3))
+                coord_lines = mathtools.combine_edge_dashes(mathtools.dash(
+                    mathtools.offset(coords, self.offset), text_length, text_length*3))
                 if coord_lines \
                    and sum(math.dist(c1, c2) for c1, c2 in internal._with_next(coord_lines[-1])) < text_length:
                     coord_lines = coord_lines[:-1]

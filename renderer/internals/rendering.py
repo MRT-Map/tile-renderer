@@ -129,10 +129,10 @@ def _draw_components(operated,
 
                         con_mask_img = Image.new("RGBA", (skin.tile_size,)*2, (0,)*4)
                         con_mask_imd = ImageDraw.Draw(con_mask_img)
-                        con_mask_imd.ellipse((con_coords[index].x - (max(con_step.width, step.width) + 2) / 2 + 1,
-                                              con_coords[index].y - (max(con_step.width, step.width) + 2) / 2 + 1,
-                                              con_coords[index].x + (max(con_step.width, step.width) + 2) / 2,
-                                              con_coords[index].y + (max(con_step.width, step.width) + 2) / 2),
+                        con_mask_imd.ellipse((con_coords[index].x - (max(con_step.width, step.width) * 2) / 2 + 1,
+                                              con_coords[index].y - (max(con_step.width, step.width) * 2) / 2 + 1,
+                                              con_coords[index].x + (max(con_step.width, step.width) * 2) / 2,
+                                              con_coords[index].y + (max(con_step.width, step.width) * 2) / 2),
                                              fill="#000000")
 
                         inter = Image.new("RGBA", (skin.tile_size,)*2, (0,)*4)
