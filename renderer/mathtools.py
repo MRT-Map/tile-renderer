@@ -163,7 +163,7 @@ def dash(coords: list[Coord], dash_length: RealNum, gap_length: RealNum) -> list
     """
     Takes a list of coordinates and returns a list of pairs of Coord objects.
     
-    :param list[Coord] coords:: the coordinates
+    :param list[Coord] coords: the coordinates
     :param RealNum dash_length: the length of each dash
     :param RealNum gap_length:RealNum: the length of the gap between dashes
     :return: a list of pairs of Coords.
@@ -212,6 +212,16 @@ def dash(coords: list[Coord], dash_length: RealNum, gap_length: RealNum) -> list
             if i % 2 == 0 and c3 != c4: dashes.append((c3, c4))
     return dashes
 
+def combine_edge_dashes(coords: list[tuple[Coord, Coord]]) -> list[tuple[Coord, ...]]:
+    new_coords = []
+    prev_coord = None
+    for c1, c2 in coords:
+        if prev_coord != c1:
+            new_coords.append((c1, c2))
+        else:
+            new_coords[-1] = (*new_coords[-1], c2)
+        prev_coord = c2
+    return new_coords
 
 def rotate_around_pivot(x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta: RealNum) -> Coord:
     """
@@ -264,7 +274,7 @@ def offset(coords: list[Coord], d: RealNum):
             bisect_angle = a1+math.pi/2 if a1 is not None else a2+math.pi/2
             theta = math.pi
         else:
-            bisect_angle = (a1+a2)/2
+            bisect_angle = (a1+a2+math.pi)/2
             theta = abs(a1-a2)
         offsetted_points_pairs.append(points_away(*coords[i], d/math.sin(theta/2) if theta != 0 else d, theta=bisect_angle))
     pc = offsetted_points_pairs[0][0] if offsetted_points_pairs[0][0].y > coords[0].y else offsetted_points_pairs[0][0] if offsetted_points_pairs[0][0].x > coords[0].x else offsetted_points_pairs[0][1]

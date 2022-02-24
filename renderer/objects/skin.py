@@ -47,9 +47,9 @@ class _TextObject:
     def from_multiple(cls, *textobject: _TextObject):
         to = copy(textobject[0])
 
-        to.bounds = tuple(*(sto.bounds for sto in textobject))
-        to.image = tuple(*(sto.image for sto in textobject))
-        to.center = tuple(*(sto.center for sto in textobject))
+        to.bounds = tuple(sto.bounds for sto in textobject)
+        to.image = tuple(sto.image for sto in textobject)
+        to.center = tuple(sto.center for sto in textobject)
 
         return to
 
@@ -228,7 +228,45 @@ class Skin:
                 self.colour: str | None = json['colour']
                 self.size: int = json['size']
                 self.offset: int = json['offset']
-                
+
+            def _text_on_line(self, imd: ImageDraw.ImageDraw, font: ImageFont.FreeTypeFont,
+                              text: str, coords: list[Coord],
+                              tile_coord: TileCoord, tile_size: int) -> _TextObject:
+                char_cursor = 0
+                text_to_print = ""
+                overflow = 0
+                text_objects = []
+                for c1, c2 in internal._with_next(coords):
+                    while overflow + imd.textlength(text_to_print, font) < math.dist(c1, c2) and char_cursor < len(text):
+                        text_to_print += text[char_cursor]
+                        char_cursor += 1
+                    text_to_print = text_to_print[:-1]
+                    char_cursor -= 1
+                    text_length = int(imd.textlength(text_to_print, font))
+
+                    if text_length != 0:
+                        lt_i = Image.new('RGBA', (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0))
+                        lt_d = ImageDraw.Draw(lt_i)
+                        lt_d.text((text_length, self.size + 4), text_to_print,
+                                  fill=self.colour, font=font,
+                                  stroke_width=1, stroke_fill="#dddddd")
+                        tw, th = lt_i.size[:]
+                        trot = math.atan2(c2.y-c1.y, c2.x-c1.x)/math.pi*180
+                        if 90 <= trot <= 270: trot += 180
+                        lt_i = lt_i.rotate(trot, expand=True)
+                        lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
+                        tx = c2.x - (math.dist(c1, c2) - overflow) * math.cos(trot / 180 * math.pi)
+                        ty = c2.y - (math.dist(c1, c2) - overflow) * math.sin(trot / 180 * math.pi)
+                        text_objects.append(_TextObject(lt_i, tx, ty,
+                                                        tw / 16, th / 16, trot,
+                                                        tile_coord, tile_size))
+
+                    text_to_print = ""
+                    overflow = math.dist(c1, c2) - overflow - text_length
+
+                    if char_cursor >= len(text): break
+                return _TextObject.from_multiple(*text_objects)
+
             def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord],
                        assets_dir: Path, component: Component, text_list: list[_TextObject],
                        tile_coord: TileCoord, tile_size: int):
@@ -238,7 +276,17 @@ class Skin:
                 text_length = int(imd.textlength(component.displayname, font))
                 if text_length == 0:
                     text_length = int(imd.textlength("----------", font))
-                for c1, c2 in internal._with_next(coords):
+
+                coord_lines = mathtools.combine_edge_dashes(mathtools.dash(coords, text_length, text_length*3))
+                if coord_lines \
+                   and sum(math.dist(c1, c2) for c1, c2 in internal._with_next(coord_lines[-1])) < text_length:
+                    coord_lines = coord_lines[:-1]
+                text_list.extend([self._text_on_line(imd, font, component.displayname, list(cs), tile_coord, tile_size)
+                                  for cs in coord_lines])
+
+                # TODO oneWay
+
+                """for c1, c2 in internal._with_next(coords):
                     # print(coords)
                     # print(mathtools.line_in_box(coords, 0, skin.tile_size, 0, skin.tile_size))
                     t = math.floor(math.dist(c1, c2) / (4 * text_length))
@@ -279,7 +327,7 @@ class Skin:
                             text_list.append(_TextObject(lt_i, tx, ty,
                                                          tw/16, th/16, trot,
                                                          tile_coord, tile_size))
-                            counter += 1
+                            counter += 1"""
                
         class LineBack(ComponentStyle):
             # noinspection PyInitNewSignature

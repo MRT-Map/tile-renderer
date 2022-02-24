@@ -3,7 +3,7 @@ from __future__ import annotations
 import math
 import json
 from pathlib import Path
-from typing import TypeVar, Any, Generator
+from typing import TypeVar, Any, Generator, Sequence
 import time
 import random
 import blessed
@@ -119,7 +119,7 @@ def _similar(s: _T, i: list[_T]):
     if len(sim := difflib.get_close_matches(s, i)) != 0:
         print(term.bright_red(f"Perhaps you mean: {', '.join(sim)}"))
 
-def _with_next(l: list[_T]) -> Generator[tuple[_T, _T], None, None]:
+def _with_next(l: Sequence[_T]) -> Generator[tuple[_T, _T], None, None]:
     if len(l) > 1:
         for i, a in enumerate(l[:-1]):
             b = l[i+1]
