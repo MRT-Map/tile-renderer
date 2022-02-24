@@ -22,10 +22,11 @@ class NodeList:
     """A list of nodes.
 
     :param NodeListJson json: The JSON of the list of nodes."""
-    def __init__(self, json: NodeListJson, progress_bar: bool = False):
-        self.validate_json(json)
-        raw_nodes = tqdm(json.items()) if progress_bar else json.items()
-        self.nodes: dict[str, Node] = {name: Node(node) for name, node in raw_nodes}
+    def __init__(self, json: NodeListJson):
+        try: self.nodes: dict[str, Node] = {name: Node(node) for name, node in json.items()}
+        except Exception:
+            self.validate_json(json)
+            self.nodes: dict[str, Node] = {name: Node(node) for name, node in json.items()}
         """A dictionary of node objects, in the form ``{id: node}``"""
 
     def __getitem__(self, name: str) -> Node:

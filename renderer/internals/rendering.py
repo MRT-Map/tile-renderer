@@ -158,7 +158,7 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
             for text in text_objects:
                 if text not in text_dict: text_dict[text] = []
                 text_dict[text].append(tile_coord)
-        no_intersect: list[list[Coord]] = []
+        no_intersect: list[tuple[Coord]] = []
         start = time.time() * 1000
         operations = len(text_dict)
         for i, text in enumerate(text_dict.copy().keys()):
@@ -175,7 +175,7 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
                 print(_eta(start, i + 1, operations) +
                       f"Eliminated overlapping text {i + 1}/{operations} in zoom {z}", flush=True)
             else:
-                no_intersect.extend(*text.bounds)
+                no_intersect.extend(text.bounds)
                 print(_eta(start, i + 1, operations) +
                       f"Kept text {i + 1}/{operations} in zoom {z}", flush=True)
 
@@ -211,6 +211,9 @@ def _draw_text(operated, operations: int, start: RealNum, image: Image.Image, ti
     #tileReturn[tile_coord] = im
     if save_images:
         image.save(save_dir/f'{tile_coord}.png', 'PNG')
+
+    if using_ray: operated.count.remote()
+    else: operated.count()
 
     logger.log("Rendered")
 

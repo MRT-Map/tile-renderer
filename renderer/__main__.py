@@ -63,9 +63,9 @@ def cmd():
     elif args.task == "render" and __name__ == '__main__':
         print("Getting nodes...")
         node_json = renderer.internals.internal._read_json(args.nodes)
-        nodes = renderer.NodeList(renderer.internals.internal._read_json(args.nodes), progress_bar=True)
+        nodes = renderer.NodeList(renderer.internals.internal._read_json(args.nodes))
         print("Getting components...")
-        comps = renderer.ComponentList(renderer.internals.internal._read_json(args.components), node_json, progress_bar=True)
+        comps = renderer.ComponentList(renderer.internals.internal._read_json(args.components), node_json)
         print("Getting skin...")
         skin = renderer.Skin.from_name(args.skin)
         print("Starting rendering...")
