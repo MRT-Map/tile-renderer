@@ -184,7 +184,7 @@ class Skin:
                 points_text_list.append(_TextObject(pt_i,
                                                     coords[0].x + self.offset[0],
                                                     coords[0].y + self.offset[1],
-                                                    tw/16, th/16, 0,
+                                                    tw/tile_size, th/tile_size, 0,
                                                     tile_coord, tile_size))
                 #font = skin.get_font("", step.size)
                 #img.text((coords[0][0]+step.offset[0], coords[0][1]+step.offset[1]), component.displayname, fill=step.colour, font=font, anchor=step['anchor'])
@@ -265,7 +265,7 @@ class Skin:
                         tx = c2.x - ((c2.x-c1.x - overflow * math.cos(trot/180*math.pi)) / 2)
                         ty = c2.y - ((c2.y-c1.y - overflow * math.sin(trot/180*math.pi)) / 2)
                         text_objects.append(_TextObject(lt_i, tx, ty,
-                                                        tw / 16, th / 16, trot,
+                                                        tw / tile_size, th / tile_size, trot,
                                                         tile_coord, tile_size))
 
                     text_to_print = ""
@@ -286,7 +286,7 @@ class Skin:
                     text_length = int(imd.textlength("----------", font))
 
                 coord_lines = mathtools.combine_edge_dashes(mathtools.dash(
-                    mathtools.offset(coords, self.offset), text_length, text_length*3))
+                    mathtools.offset(coords, self.offset), text_length, text_length*1.5))
                 if coord_lines \
                    and sum(math.dist(c1, c2) for c1, c2 in internal._with_next(coord_lines[-1])) < text_length:
                     coord_lines = coord_lines[:-1]
@@ -316,7 +316,7 @@ class Skin:
                             lt_i = lt_i.rotate(trot, expand=True)
                             lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
                             text_list.append(_TextObject(lt_i, tx, ty,
-                                                         tw/16, th/16, trot,
+                                                         tw/tile_size, th/tile_size, trot,
                                                          tile_coord, tile_size))
                     if "oneWay" in component.tags and text_length <= math.dist(c1, c2):
                         #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Generating oneway arrows")
@@ -336,7 +336,7 @@ class Skin:
                             lt_i = lt_i.rotate(trot, expand=True)
                             lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
                             text_list.append(_TextObject(lt_i, tx, ty,
-                                                         tw/16, th/16, trot,
+                                                         tw/tile_size, th/tile_size, trot,
                                                          tile_coord, tile_size))
                             counter += 1"""
                
@@ -414,7 +414,7 @@ class Skin:
                             abt_ir = abt_i.rotate(trot, expand=True)
                             abt_ir = abt_ir.crop((0, 0, abt_ir.width, abt_ir.height))
                             text_list.append(_TextObject(abt_ir, tx, ty,
-                                                         tw/16, th/16, trot,
+                                                         tw/tile_size, th/tile_size, trot,
                                                          tile_coord, tile_size))
 
         class AreaCenterText(ComponentStyle):
@@ -464,7 +464,7 @@ class Skin:
                 cw, ch = act_i.size[:]
                 act_i = act_i.crop((0, 0, act_i.width, act_i.height))
                 text_list.append(_TextObject(act_i, cx, cy,
-                                             cw/16, ch/16, 0,
+                                             cw/tile_size, ch/tile_size, 0,
                                              tile_coord, tile_size))
 
         class AreaFill(ComponentStyle):

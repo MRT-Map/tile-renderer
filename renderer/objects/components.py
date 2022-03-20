@@ -42,7 +42,7 @@ class ComponentList:
 
     :param ComponentListJson component_json: The JSON of the list of components.
     :param NodeListJson node_json: The JSON of the list of nodes for validation."""
-    def __init__(self, component_json: ComponentListJson, node_json: NodeListJson):
+    def __init__(self, component_json: ComponentListJson, node_json: NodeListJson ):
         try: self.components: dict[str, Component] = {name: Component(name, component) for name, component in
                                                       component_json.items()}
         except Exception:
