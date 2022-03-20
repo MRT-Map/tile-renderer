@@ -274,7 +274,7 @@ def offset(coords: list[Coord], d: RealNum):
             bisect_angle = a1+math.pi/2 if a1 is not None else a2+math.pi/2
             theta = math.pi
         else:
-            bisect_angle = (a1+a2)/2
+            bisect_angle = (a1+a2)/2+math.pi
             theta = abs(a1-a2)
         offsetted_points_pairs.append(points_away(*coords[i], d/math.sin(theta/2) if theta != 0 else d, theta=bisect_angle))
     pc = offsetted_points_pairs[0][0] if offsetted_points_pairs[0][0].y > coords[0].y else offsetted_points_pairs[0][0] if offsetted_points_pairs[0][0].x > coords[0].x else offsetted_points_pairs[0][1]

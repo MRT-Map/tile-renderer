@@ -231,7 +231,8 @@ class Skin:
 
             def _text_on_line(self, imd: ImageDraw.ImageDraw, font: ImageFont.FreeTypeFont,
                               text: str, coords: list[Coord],
-                              tile_coord: TileCoord, tile_size: int) -> _TextObject | None:
+                              tile_coord: TileCoord, tile_size: int,
+                              fill: str | None = None, stroke: str | None = None) -> _TextObject | None:
                 char_cursor = 0
                 text_to_print = ""
                 overflow = 0
@@ -256,8 +257,8 @@ class Skin:
                         lt_i = Image.new('RGBA', (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0))
                         lt_d = ImageDraw.Draw(lt_i)
                         lt_d.text((text_length, self.size + 4), text_to_print,
-                                  fill=self.colour, font=font, anchor="mm",
-                                  stroke_width=1, stroke_fill="#dddddd")
+                                  fill=fill or self.colour, font=font, anchor="mm",
+                                  stroke_width=1, stroke_fill=stroke or "#dddddd")
                         tw, th = lt_i.size[:]
                         trot = -math.atan2(c2.y-c1.y, c2.x-c1.x)/math.pi*180
                         lt_i = lt_i.rotate(trot, expand=True)
@@ -295,50 +296,19 @@ class Skin:
                                                             list(cs), tile_coord, tile_size)
                                          for cs in coord_lines)))
 
-                # TODO oneWay
-
-                """for c1, c2 in internal._with_next(coords):
-                    # print(coords)
-                    # print(mathtools.line_in_box(coords, 0, skin.tile_size, 0, skin.tile_size))
-                    t = math.floor(math.dist(c1, c2) / (4 * text_length))
-                    t = 1 if t == 0 else t
-                    if mathtools.line_in_box(coords, 0, self._type_info._skin.tile_size, 0, self._type_info._skin.tile_size) \
-                            and 2 * text_length <= math.dist(c1, c2):
-                        # print(mathtools.midpoint(coords[c][0], coords[c][1], coords[c+1][0], coords[c+1][1], step.offset))
-                        #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Generating name text")
-                        for (tx, ty), trot in mathtools.midpoint(c1, c2, self.offset, n=t):
-                            lt_i = Image.new('RGBA', (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0))
-                            lt_d = ImageDraw.Draw(lt_i)
-                            lt_d.text((text_length, self.size + 4), component.displayname,
-                                      fill=self.colour, font=font, anchor="mm",
-                                      stroke_width=1, stroke_fill="#dddddd")
-                            tw, th = lt_i.size[:]
-                            lt_i = lt_i.rotate(trot, expand=True)
-                            lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
-                            text_list.append(_TextObject(lt_i, tx, ty,
-                                                         tw/tile_size, th/tile_size, trot,
-                                                         tile_coord, tile_size))
-                    if "oneWay" in component.tags and text_length <= math.dist(c1, c2):
-                        #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Generating oneway arrows")
-                        font = self._type_info._skin.get_font("b", self.size, assets_dir)
-                        counter = 0
-                        t = math.floor(math.dist(c1, c2) / (4 * text_length))
-                        for (tx, ty), trot in mathtools.midpoint(c1, c2, self.offset, n=2 * t + 1):
-                            if counter % 2 == 1:
-                                counter += 1
-                                continue
-                            text_length = int(imd.textlength("↓", font))
-                            lt_i = Image.new('RGBA', (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0))
-                            lt_d = ImageDraw.Draw(lt_i)
-                            lt_d.text((text_length, self.size + 4), "↓", fill=self.colour, font=font,
-                                      anchor="mm")
-                            tw, th = lt_i.size[:]
-                            lt_i = lt_i.rotate(trot, expand=True)
-                            lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
-                            text_list.append(_TextObject(lt_i, tx, ty,
-                                                         tw/tile_size, th/tile_size, trot,
-                                                         tile_coord, tile_size))
-                            counter += 1"""
+                if 'oneWay' in component.tags:
+                    arrow_coord_lines = mathtools.combine_edge_dashes(mathtools.dash(
+                        mathtools.offset(coords, self.offset), text_length/2, text_length*0.75
+                    ))
+                    if arrow_coord_lines \
+                       and sum(math.dist(c1, c2) for c1, c2 in internal._with_next(arrow_coord_lines[-1])) \
+                       < int(imd.textlength("→", font)):
+                        arrow_coord_lines = arrow_coord_lines[:-1]
+                    text_list.extend(filter(lambda e: e is not None,
+                                            (self._text_on_line(imd, font, "→",
+                                                                list(cs), tile_coord, tile_size,
+                                                                fill="#555555", stroke="#00000000")
+                                             for i, cs in enumerate(arrow_coord_lines) if i % 2 != 0)))
                
         class LineBack(ComponentStyle):
             # noinspection PyInitNewSignature
