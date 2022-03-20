@@ -225,6 +225,7 @@ class Skin:
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info: Skin.ComponentTypeInfo = type_info
                 self.layer = "text"
+                self.arrow_colour: str | None = json['arrow_colour']
                 self.colour: str | None = json['colour']
                 self.size: int = json['size']
                 self.offset: int = json['offset']
@@ -307,7 +308,7 @@ class Skin:
                     text_list.extend(filter(lambda e: e is not None,
                                             (self._text_on_line(imd, font, "→",
                                                                 list(cs), tile_coord, tile_size,
-                                                                fill="#555555", stroke="#00000000")
+                                                                fill="#000000", stroke="#00000000")
                                              for i, cs in enumerate(arrow_coord_lines) if i % 2 != 0)))
                
         class LineBack(ComponentStyle):
@@ -592,6 +593,7 @@ class Skin:
         line_text = Schema({
             "layer": "text",
             "colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{3,6}$'))),
+            "arrow_colour": Or(None, And(str, Regex(r'^#[a-f,0-9]{3,6}$'))),
             "size": int,
             "offset": int
         })

@@ -114,12 +114,14 @@ class SkinBuilder:
 
             @classmethod
             def line_text(cls, *, colour: int | None = None,
+                          arrow_colour: int | None = None,
                           size: int = 1,
                           offset: int = 0):
                 cs = cls()
                 cs.json = {
                     "layer": "text",
                     "colour": _hex_to_colour(colour),
+                    "arrow_colour": _hex_to_colour(arrow_colour),
                     "size": size,
                     "offset": offset
                 }

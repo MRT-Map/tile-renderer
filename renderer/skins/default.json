@@ -438,6 +438,7 @@
           {
             "layer": "text",
             "colour": "#00abf0",
+            "arrow_colour": "#00abf0",
             "size": 20,
             "offset": 0
           }
@@ -458,6 +459,7 @@
           {
             "layer": "text",
             "colour": "#1e85ae",
+            "arrow_colour": "#25a7da",
             "size": 10,
             "offset": 0
           }
@@ -639,6 +641,7 @@
           {
             "layer": "text",
             "colour": "#33334d",
+            "arrow_colour": "#8f8fa3",
             "size": 20,
             "offset": 0
           }
@@ -653,6 +656,7 @@
           {
             "layer": "text",
             "colour": "#33334d",
+            "arrow_colour": "#8f8fa3",
             "size": 10,
             "offset": 0
           }
@@ -675,6 +679,7 @@
           {
             "layer": "text",
             "colour": "#33334d",
+            "arrow_colour": "#73738c",
             "size": 30,
             "offset": 0
           }
@@ -689,6 +694,7 @@
           {
             "layer": "text",
             "colour": "#33334d",
+            "arrow_colour": "#73738c",
             "size": 15,
             "offset": 0
           }
@@ -858,6 +864,7 @@
           {
             "layer": "text",
             "colour": "#aaaaaa",
+            "arrow_colour": "#eeeeee",
             "size": 16,
             "offset": 10
           }
@@ -886,6 +893,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ffc266",
             "size": 20,
             "offset": 0
           }
@@ -914,6 +922,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ffa64d",
             "size": 24,
             "offset": 0
           }
@@ -942,6 +951,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ffb3b3",
             "size": 32,
             "offset": 0
           }
@@ -970,6 +980,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#a6a6a6",
             "size": 16,
             "offset": 0
           }
@@ -998,6 +1009,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#b3b3b3",
             "size": 16,
             "offset": 0
           }
@@ -1026,6 +1038,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#a6a6a6",
             "size": 24,
             "offset": 0
           }
@@ -1054,6 +1067,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#b3b3b3",
             "size": 24,
             "offset": 0
           }
@@ -1082,6 +1096,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#fff399",
             "size": 28,
             "offset": 0
           }
@@ -1110,6 +1125,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ffe066",
             "size": 32,
             "offset": 0
           }
@@ -1138,6 +1154,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ffc266",
             "size": 36,
             "offset": 0
           }
@@ -1166,6 +1183,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ffa64d",
             "size": 40,
             "offset": 0
           }
@@ -1194,6 +1212,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ffb3b3",
             "size": 48,
             "offset": 0
           }
@@ -1219,6 +1238,7 @@
           {
             "layer": "text",
             "colour": "#808080",
+            "arrow_colour": "#808080",
             "size": 16,
             "offset": 16
           }
@@ -1342,6 +1362,7 @@
           {
             "layer": "text",
             "colour": "#aaaaaa",
+            "arrow_colour": "#eeeeee",
             "size": 16,
             "offset": 10
           }
@@ -1370,6 +1391,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ffad33",
             "size": 20,
             "offset": 0
           }
@@ -1398,6 +1420,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#e67300",
             "size": 24,
             "offset": 0
           }
@@ -1426,6 +1449,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ff8080",
             "size": 32,
             "offset": 0
           }
@@ -1454,6 +1478,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#bbbbbb",
             "size": 16,
             "offset": 0
           }
@@ -1482,6 +1507,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#cccccc",
             "size": 16,
             "offset": 0
           }
@@ -1510,6 +1536,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#bbbbbb",
             "size": 24,
             "offset": 0
           }
@@ -1538,6 +1565,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#cccccc",
             "size": 24,
             "offset": 0
           }
@@ -1566,6 +1594,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ffee66",
             "size": 28,
             "offset": 0
           }
@@ -1594,6 +1623,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ffcc00",
             "size": 32,
             "offset": 0
           }
@@ -1622,6 +1652,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ffad33",
             "size": 36,
             "offset": 0
           }
@@ -1650,6 +1681,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#e67300",
             "size": 40,
             "offset": 0
           }
@@ -1678,6 +1710,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ff8080",
             "size": 48,
             "offset": 0
           }
@@ -1700,6 +1733,7 @@
           {
             "layer": "text",
             "colour": "#808080",
+            "arrow_colour": "#808080",
             "size": 16,
             "offset": 16
           }
@@ -1737,6 +1771,7 @@
           {
             "layer": "text",
             "colour": "#aaaaaa",
+            "arrow_colour": "#008000",
             "size": 16,
             "offset": 10
           }
@@ -1765,6 +1800,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ffad33",
             "size": 20,
             "offset": 0
           }
@@ -1793,6 +1829,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#e67300",
             "size": 24,
             "offset": 0
           }
@@ -1821,6 +1858,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ff8080",
             "size": 32,
             "offset": 0
           }
@@ -1849,6 +1887,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#bbbbbb",
             "size": 16,
             "offset": 0
           }
@@ -1877,6 +1916,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#cccccc",
             "size": 16,
             "offset": 0
           }
@@ -1905,6 +1945,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#bbbbbb",
             "size": 24,
             "offset": 0
           }
@@ -1933,6 +1974,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#cccccc",
             "size": 24,
             "offset": 0
           }
@@ -1961,6 +2003,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ffee66",
             "size": 28,
             "offset": 0
           }
@@ -1989,6 +2032,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ffcc00",
             "size": 32,
             "offset": 0
           }
@@ -2017,6 +2061,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ffad33",
             "size": 36,
             "offset": 0
           }
@@ -2045,6 +2090,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#e67300",
             "size": 40,
             "offset": 0
           }
@@ -2073,6 +2119,7 @@
           {
             "layer": "text",
             "colour": "#000000",
+            "arrow_colour": "#ff8080",
             "size": 48,
             "offset": 0
           }
@@ -2101,6 +2148,7 @@
           {
             "layer": "text",
             "colour": "#808080",
+            "arrow_colour": "#808080",
             "size": 16,
             "offset": 16
           }
