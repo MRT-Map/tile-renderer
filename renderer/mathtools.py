@@ -178,18 +178,18 @@ def dash(coords: list[Coord], dash_length: RealNum, gap_length: RealNum) -> list
         plotted_length = 0
         start_as_gap = is_gap
         theta = math.atan2(c2.y-c1.y, c2.x-c1.x)
-        dash_dx = round(dash_length * math.cos(theta), 10)
-        dash_dy = round(dash_length * math.sin(theta), 10)
-        gap_dx = round(gap_length * math.cos(theta), 10)
-        gap_dy = round(gap_length * math.sin(theta), 10)
+        dash_dx = dash_length * math.cos(theta)
+        dash_dy = dash_length * math.sin(theta)
+        gap_dx = gap_length * math.cos(theta)
+        gap_dy = gap_length * math.sin(theta)
         if overflow != 0:
             if overflow > math.dist(c1, c2):
                 predashes.append(c2)
                 overflow -= math.dist(c1, c2)
                 plotted_length += math.dist(c1, c2)
             else:
-                overflow_x = round(overflow * math.cos(theta), 10)
-                overflow_y = round(overflow * math.sin(theta), 10)
+                overflow_x = overflow * math.cos(theta)
+                overflow_y = overflow * math.sin(theta)
                 predashes.append(Coord(predashes[-1].x + overflow_x, predashes[-1].y + overflow_y))
                 plotted_length += overflow
                 is_gap = False if is_gap else True
@@ -261,8 +261,8 @@ def points_away(x: RealNum, y: RealNum, d: RealNum, m: RealNum | None = None, th
     :rtype: tuple(Coord, Coord)
     """
     theta = theta if theta is not None else math.atan(m) if m is not None else math.pi / 2
-    dx = round(d*math.cos(theta), 10)
-    dy = round(d*math.sin(theta), 10)
+    dx = d*math.cos(theta)
+    dy = d*math.sin(theta)
     return Coord(x + dx, y + dy), Coord(x - dx, y - dy)
 
 def offset(coords: list[Coord], d: RealNum):
@@ -283,5 +283,5 @@ def offset(coords: list[Coord], d: RealNum):
     offsetted_points = [pc]
     for i, (c21, c22) in enumerate(offsetted_points_pairs[1:]):
         pc = offsetted_points[-1]
-        offsetted_points.append(c21 if math.atan2(c21.y-pc.y, c21.x-pc.x) == angles[i] else c22)
+        offsetted_points.append(c21 if round(math.atan2(c21.y-pc.y, c21.x-pc.x), 10) == round(angles[i], 10) else c22)
     return offsetted_points

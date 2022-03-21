@@ -483,7 +483,7 @@ def main():
         CS.area_fill(colour=0x999966,
                      outline=0x77773c),
         CS.area_centertext(colour=0x444422,
-                           size=10)
+                           size=30)
     ]
     s['transportBuilding'] = transport_building
 

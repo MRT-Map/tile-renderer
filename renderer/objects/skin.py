@@ -299,7 +299,7 @@ class Skin:
 
                 if 'oneWay' in component.tags:
                     arrow_coord_lines = mathtools.combine_edge_dashes(mathtools.dash(
-                        mathtools.offset(coords, self.offset), text_length/2, text_length*0.75
+                        mathtools.offset(coords, self.offset+self.size/8), text_length/2, text_length*0.75
                     ))
                     if arrow_coord_lines \
                        and sum(math.dist(c1, c2) for c1, c2 in internal._with_next(arrow_coord_lines[-1])) \

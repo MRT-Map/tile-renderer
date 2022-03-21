@@ -10,6 +10,14 @@ def _hex_to_colour(h: int | None) -> str | None:
     if len(nh) != 6: nh = nh.zfill(6)
     return "#"+nh
 
+def _blend(h1: int, h2: int) -> int:
+    nh1 = hex(h1)[2:]
+    nh2 = hex(h2)[2:]
+    r = hex(round(int(nh1[0:2], base=16) + int(nh2[0:2], base=16) / 2))[2:].zfill(2)
+    g = hex(round(int(nh1[2:4], base=16) + int(nh2[2:4], base=16) / 2))[2:].zfill(2)
+    b = hex(round(int(nh1[4:6], base=16) + int(nh2[4:6], base=16) / 2))[2:].zfill(2)
+    return int(r+g+b)
+
 class SkinBuilder:
     tile_size: int
     fonts: dict[str, Path]
