@@ -57,7 +57,8 @@ def _draw_components(operated,
                      max_zoom: int,
                      max_zoom_range: RealNum,
                      assets_dir: Path,
-                     using_ray: bool=False) -> tuple[TileCoord, Image.Image, list[_TextObject]] | None:
+                     using_ray: bool = False,
+                     debug: bool = False) -> tuple[TileCoord, Image.Image, list[_TextObject]] | None:
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
     if tile_components == [[]]:
         logger.log("Render complete")
@@ -100,7 +101,7 @@ def _draw_components(operated,
                 if step.layer not in args[type_info.shape].keys():
                     raise KeyError(f"{step.layer} is not a valid layer")
                 logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}")
-                step.render(*args[type_info.shape][step.layer])
+                step.render(*args[type_info.shape][step.layer], debug=debug)
 
                 if using_ray:
                     operated.count.remote()

@@ -28,7 +28,14 @@ class _TextObject:
     center: tuple[Coord, ...]
     bounds: tuple[tuple[Coord, ...]]
 
-    def __init__(self, image: Image.Image, x: RealNum, y: RealNum, w: RealNum, h: RealNum, rot: RealNum, tile_coord: TileCoord, tile_size: int):
+    def __init__(self, image: Image.Image,
+                 x: RealNum, y: RealNum,
+                 w: RealNum, h: RealNum,
+                 rot: RealNum,
+                 tile_coord: TileCoord,
+                 tile_size: int,
+                 imd: ImageDraw,
+                 debug: bool = False):
         r = lambda a, b: mathtools.rotate_around_pivot(a, b,
                                                        tile_coord.x * tile_size + x,
                                                        tile_coord.y * tile_size + y,
@@ -42,6 +49,9 @@ class _TextObject:
             r(tile_coord.x * tile_size + x + w / 2, tile_coord.y * tile_size + y - h / 2),
             r(tile_coord.x * tile_size + x - w / 2, tile_coord.y * tile_size + y - h / 2),
         ),)
+        if debug:
+            for line in self.bounds:
+                imd.line(line, fill="#ff0000")
 
     @classmethod
     def from_multiple(cls, *textobject: _TextObject):
@@ -152,7 +162,7 @@ class Skin:
                 self.size: int = json['size']
                 self.width: int = json['width']
                 
-            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord]):
+            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord], **_):
                 imd.ellipse((coords[0].x - self.size / 2 + 1,
                              coords[0].y - self.size / 2 + 1,
                              coords[0].x + self.size / 2,
@@ -171,7 +181,7 @@ class Skin:
                 
             def render(self, imd: ImageDraw, coords: list[Coord], 
                        displayname: str, assets_dir: Path, points_text_list: list[_TextObject],
-                       tile_coord: TileCoord, tile_size: int):
+                       tile_coord: TileCoord, tile_size: int, debug: bool = False):
                 if len(displayname.strip()) == 0: return
                 font = self._type_info._skin.get_font("", self.size+2, assets_dir)
                 text_length = int(imd.textlength(displayname, font))
@@ -185,7 +195,8 @@ class Skin:
                                                     coords[0].x + self.offset[0],
                                                     coords[0].y + self.offset[1],
                                                     tw/tile_size, th/tile_size, 0,
-                                                    tile_coord, tile_size))
+                                                    tile_coord, tile_size,
+                                                    imd, debug=debug))
                 #font = skin.get_font("", step.size)
                 #img.text((coords[0][0]+step.offset[0], coords[0][1]+step.offset[1]), component.displayname, fill=step.colour, font=font, anchor=step['anchor'])
             
@@ -199,7 +210,7 @@ class Skin:
                 self.size: int = json['size']
                 self.width: int = json['width']
                 
-            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord]):
+            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord], **_):
                 imd.rectangle((coords[0].x - self.size / 2 + 1,
                                coords[0].y - self.size / 2 + 1,
                                coords[0].x + self.size / 2,
@@ -215,7 +226,7 @@ class Skin:
                 self.offset: Coord = Coord(*json['offset'])
                 
             def render(self, img: Image.Image, coords: list[Coord],
-                       assets_dir: Path):
+                       assets_dir: Path, **_):
                 icon = Image.open(assets_dir/self.file)
                 img.paste(icon, (int(coords[0].x - icon.width / 2 + self.offset[0]),
                                  int(coords[0].y - icon.height / 2 + self.offset[1])), icon)
@@ -233,7 +244,8 @@ class Skin:
             def _text_on_line(self, imd: ImageDraw.ImageDraw, font: ImageFont.FreeTypeFont,
                               text: str, coords: list[Coord],
                               tile_coord: TileCoord, tile_size: int,
-                              fill: str | None = None, stroke: str | None = None) -> _TextObject | None:
+                              fill: str | None = None, stroke: str | None = None,
+                              debug: bool = False) -> _TextObject | None:
                 char_cursor = 0
                 text_to_print = ""
                 overflow = 0
@@ -268,7 +280,7 @@ class Skin:
                         ty = c2.y - ((c2.y-c1.y - overflow * math.sin(trot/180*math.pi)) / 2)
                         text_objects.append(_TextObject(lt_i, tx, ty,
                                                         tw / tile_size, th / tile_size, trot,
-                                                        tile_coord, tile_size))
+                                                        tile_coord, tile_size, imd, debug=debug))
 
                     text_to_print = ""
                     overflow = text_length - (math.dist(c1, c2) - overflow)
@@ -279,7 +291,7 @@ class Skin:
 
             def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord],
                        assets_dir: Path, component: Component, text_list: list[_TextObject],
-                       tile_coord: TileCoord, tile_size: int):
+                       tile_coord: TileCoord, tile_size: int, debug: bool = False):
                 if len(component.displayname) == 0: return
                 #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating text length")
                 font = self._type_info._skin.get_font("", self.size+2, assets_dir)
@@ -292,9 +304,11 @@ class Skin:
                 if coord_lines \
                    and sum(math.dist(c1, c2) for c1, c2 in internal._with_next(coord_lines[-1])) < text_length:
                     coord_lines = coord_lines[:-1]
+                if debug:
+                    imd.line(mathtools.offset(coords, self.offset), fill="#ff0000")
                 text_list.extend(filter(lambda e: e is not None,
                                         (self._text_on_line(imd, font, component.displayname,
-                                                            list(cs), tile_coord, tile_size)
+                                                            list(cs), tile_coord, tile_size, debug=debug)
                                          for cs in coord_lines)))
 
                 if 'oneWay' in component.tags:
@@ -308,7 +322,7 @@ class Skin:
                     text_list.extend(filter(lambda e: e is not None,
                                             (self._text_on_line(imd, font, "→",
                                                                 list(cs), tile_coord, tile_size,
-                                                                fill="#000000", stroke="#00000000")
+                                                                fill="#000000", stroke="#00000000", debug=debug)
                                              for i, cs in enumerate(arrow_coord_lines) if i % 2 != 0)))
                
         class LineBack(ComponentStyle):
@@ -320,7 +334,7 @@ class Skin:
                 self.width: int = json['width']
                 self.dash: tuple[int, int] = json['dash']
                 
-            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord]):
+            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord], **_):
                 if self.dash is None:
                     imd.line(coords, fill=self.colour, width=self.width, joint="curve")
                     if "unroundedEnds" not in self._type_info.tags:
@@ -351,7 +365,7 @@ class Skin:
                 
             def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord], component: Component,
                        assets_dir: Path, text_list: list[_TextObject],
-                       tile_coord: TileCoord, tile_size: int):
+                       tile_coord: TileCoord, tile_size: int, debug: bool = False):
                 if len(component.displayname.strip()) == 0: return
                 font = self._type_info._skin.get_font("", self.size+2, assets_dir)
                 text_length = int(imd.textlength(component.displayname.replace('\n', ''), font))
@@ -386,7 +400,7 @@ class Skin:
                             abt_ir = abt_ir.crop((0, 0, abt_ir.width, abt_ir.height))
                             text_list.append(_TextObject(abt_ir, tx, ty,
                                                          tw/tile_size, th/tile_size, trot,
-                                                         tile_coord, tile_size))
+                                                         tile_coord, tile_size, imd, debug=debug))
 
         class AreaCenterText(ComponentStyle):
             # noinspection PyInitNewSignature
@@ -399,7 +413,7 @@ class Skin:
                 
             def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord], component: Component,
                        assets_dir: Path, text_list: list[_TextObject],
-                       tile_coord: TileCoord, tile_size: int):
+                       tile_coord: TileCoord, tile_size: int, debug: bool = False):
                 if len(component.displayname.strip()) == 0: return
                 cx, cy = mathtools.poly_center(coords)
                 cx += self.offset[0]
@@ -436,7 +450,7 @@ class Skin:
                 act_i = act_i.crop((0, 0, act_i.width, act_i.height))
                 text_list.append(_TextObject(act_i, cx, cy,
                                              cw/tile_size, ch/tile_size, 0,
-                                             tile_coord, tile_size))
+                                             tile_coord, tile_size, imd, debug=debug))
 
         class AreaFill(ComponentStyle):
             # noinspection PyInitNewSignature
@@ -448,7 +462,7 @@ class Skin:
                 self.stripe: tuple[int, int, int] | None = None if json['stripe'] is None else tuple(json['stripe'])
                 
             def render(self, imd: ImageDraw.ImageDraw, img: Image.Image, coords: list[Coord], component: Component,
-                       nodes: NodeList, tile_coord: TileCoord, size: int):
+                       nodes: NodeList, tile_coord: TileCoord, size: int, **_):
                 ai = Image.new("RGBA", (self._type_info._skin.tile_size, self._type_info._skin.tile_size), (0, 0, 0, 0))
                 ad = ImageDraw.Draw(ai)
 
@@ -505,7 +519,7 @@ class Skin:
                 self.file: Path = Path(json['file'])
                 self.offset: Coord = Coord(*json['offset'])
                 
-            def render(self, img: Image.Image, coords: list[Coord], assets_dir: Path):
+            def render(self, img: Image.Image, coords: list[Coord], assets_dir: Path, **_):
                 cx, cy = mathtools.poly_center(coords)
                 icon = Image.open(assets_dir / self.file)
                 img.paste(icon, (cx + self.offset[0], cy + self.offset[1]), icon)

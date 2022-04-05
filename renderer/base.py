@@ -34,7 +34,9 @@ class _MultiprocessingOperatedHandler:
     def count(self):
         self.operated.value += 1
 
-def merge_tiles(images: Path | dict[TileCoord, Image], save_images: bool=True, save_dir: Path=Path.cwd(),
+def merge_tiles(images: Path | dict[TileCoord, Image],
+                save_images: bool=True,
+                save_dir: Path = Path.cwd(),
                 zoom: list[int] | None = None) -> dict[int, Image.Image]:
     """
     Merges tiles rendered by :py:func:`render`.
@@ -108,9 +110,20 @@ def merge_tiles(images: Path | dict[TileCoord, Image], save_images: bool=True, s
     print(term.green("\nAll merges complete"))
     return tile_return
 
-def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: int, max_zoom_range: RealNum,
-           skin: Skin = Skin.from_name("default"), save_images: bool = True, save_dir: Path = Path.cwd(), assets_dir: Path = Path(__file__).parent/"skins"/"assets",
-           processes: int = psutil.cpu_count(), tiles: list[TileCoord] | None = None, offset: tuple[RealNum, RealNum] = (0, 0), use_ray: bool = True) -> dict[TileCoord, Image.Image]:
+def render(components: ComponentList,
+           nodes: NodeList,
+           min_zoom: int,
+           max_zoom: int,
+           max_zoom_range: RealNum,
+           skin: Skin = Skin.from_name("default"),
+           save_images: bool = True,
+           save_dir: Path = Path.cwd(),
+           assets_dir: Path = Path(__file__).parent/"skins"/"assets",
+           processes: int = psutil.cpu_count(),
+           tiles: list[TileCoord] | None = None,
+           offset: tuple[RealNum, RealNum] = (0, 0),
+           use_ray: bool = True,
+           debug: bool = False) -> dict[TileCoord, Image.Image]:
     # noinspection GrazieInspection
     """
         Renders tiles from given coordinates and zoom values.
@@ -293,7 +306,7 @@ def render(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: 
         operated = _RayOperatedHandler.remote()
         for tile_coord, image, text_list in new_texts:
             input_.append((operated, total_texts+len(new_texts), start, image, tile_coord, text_list,
-                           save_images, save_dir, skin, True))
+                           save_images, save_dir, skin, True, debug))
         futures = [ray.remote(rendering._draw_text).remote(*input_[i]) for i in range(len(input_))]
         preresult = ray.get(futures)
 
