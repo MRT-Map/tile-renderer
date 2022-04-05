@@ -291,7 +291,7 @@ def render(components: ComponentList,
         start = time.time() * 1000
         for tile_coord, component_group in grouped_tile_list.items():
             input_.append((operated, operations-1, start, tile_coord, component_group, components, nodes,
-                           skin, max_zoom, max_zoom_range, assets_dir, True))
+                           skin, max_zoom, max_zoom_range, assets_dir, True, debug))
         futures = [ray.remote(rendering._draw_components).remote(*input_[i]) for i in range(len(input_))]
         prepreresult: list[tuple[TileCoord, Image.Image, list[_TextObject]] | None] = ray.get(futures)
         prepreresult = list(filter(lambda r: r is not None, prepreresult))
@@ -306,7 +306,7 @@ def render(components: ComponentList,
         operated = _RayOperatedHandler.remote()
         for tile_coord, image, text_list in new_texts:
             input_.append((operated, total_texts+len(new_texts), start, image, tile_coord, text_list,
-                           save_images, save_dir, skin, True, debug))
+                           save_images, save_dir, skin, True))
         futures = [ray.remote(rendering._draw_text).remote(*input_[i]) for i in range(len(input_))]
         preresult = ray.get(futures)
 
