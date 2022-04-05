@@ -41,6 +41,7 @@ def cmd():
     p_render.add_argument('-m', '--processes', type=int, help="the amount of processes to run for rendering", default=psutil.cpu_count())
     p_render.add_argument('-t', '--tiles', type=list, help="a list of tiles to render, given in tuples of (z,x,y)")
     p_render.add_argument('-o', '--offset', type=tuple, help="the offset of node coordinates, given as (x,y)", default=[0, 0])
+    p_render.add_argument('-dbg', '--debug', help="Prints extra debug information on tiles", default=False, action="store_true")
 
     p_merge = subparsers.add_parser('merge', help='merge tiles', formatter_class=argparse.MetavarTypeHelpFormatter)
     p_merge.add_argument('-i', '--image_dir', type=Path, help='the directory of tiles', default=Path.cwd())
@@ -75,7 +76,8 @@ def cmd():
                         save_dir=args.save_dir,
                         processes=args.processes,
                         tiles=args.tiles,
-                        offset=args.offset)
+                        offset=args.offset,
+                        debug=args.debug)
     elif args.task == "validate":
         n = renderer.internals.internal._read_json(args.nodes)
         if args.components is not None:
