@@ -21,7 +21,7 @@ Leaflet.js streetmap tile renderer, made by 7d
 
 **Documentation: https://tile-renderer.readthedocs.io/en/latest/**
 
-## Current version: v2.2
+## Current version: v2.1
 * **v2.1 (6/4/22)**
 
   * Added SkinBuilder, a utility class for building skins Pythonically
