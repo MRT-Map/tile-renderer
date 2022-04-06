@@ -252,12 +252,14 @@ class Skin:
                               text: str, coords: list[Coord],
                               tile_coord: TileCoord, tile_size: int,
                               fill: str | None = None, stroke: str | None = None,
-                              debug: bool = False, paste_direct: bool = False) -> _TextObject | None:
+                              debug: bool = False, paste_direct: bool = False,
+                              upright: bool = True) -> _TextObject | None:
                 char_cursor = 0
                 text_to_print = ""
                 overflow = 0
                 text_objects = []
-                if coords[-1].x < coords[0].x: coords = coords[::-1]
+                swap = coords[-1].x < coords[0].x
+                if swap and upright: coords = coords[::-1]
                 for c1, c2 in internal._with_next(coords):
                     if c2 == coords[-1]:
                         while char_cursor < len(text):
@@ -280,13 +282,22 @@ class Skin:
                                   fill=fill or self.colour, font=font, anchor="mm",
                                   stroke_width=1, stroke_fill=stroke or "#dddddd")
                         tw, th = lt_i.size[:]
-                        trot = -math.atan2(c2.y-c1.y, c2.x-c1.x)/math.pi*180
+                        trot = math.atan2(-c2.y+c1.y, c2.x-c1.x)/math.pi*180
                         lt_i = lt_i.rotate(trot, expand=True)
                         lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
                         tx = c2.x - ((c2.x-c1.x - overflow * math.cos(trot/180*math.pi)) / 2)
                         ty = c2.y - ((c2.y-c1.y - overflow * math.sin(trot/180*math.pi)) / 2)
                         if paste_direct:
-                            img.paste(lt_i, (int(tx), int(ty)), lt_i)
+                            img.paste(lt_i, (int(tx-lt_i.width/2), int(ty-lt_i.height/2)), lt_i)
+                            if debug:
+                                nr = lambda a, b: mathtools.rotate_around_pivot(a, b, tx, ty, trot)
+                                imd.line([
+                                    nr(tx - tw / 4, ty - th / 4),
+                                    nr(tx - tw / 4, ty + th / 4),
+                                    nr(tx + tw / 4, ty + th / 4),
+                                    nr(tx + tw / 4, ty - th / 4),
+                                    nr(tx - tw / 4, ty - th / 4)
+                                ], fill="#ff0000")
                         else:
                             text_objects.append(_TextObject(lt_i, tx, ty,
                                                             tw/2, th/2, trot,
@@ -323,7 +334,7 @@ class Skin:
 
                 if 'oneWay' in component.tags:
                     arrow_coord_lines = mathtools.combine_edge_dashes(mathtools.dash(
-                        mathtools.offset(coords, self.offset-self.size/8), text_length/2, text_length*0.75
+                        mathtools.offset(coords, self.offset+self.size*3/16), text_length/2, text_length*0.75
                     ))
                     if arrow_coord_lines \
                        and sum(math.dist(c1, c2) for c1, c2 in internal._with_next(arrow_coord_lines[-1])) \
@@ -333,7 +344,7 @@ class Skin:
                                             (self._text_on_line(imd, img, font, "→",
                                                                 list(cs), tile_coord, tile_size,
                                                                 fill=self.arrow_colour, stroke="#00000000",
-                                                                debug=debug, paste_direct=True)
+                                                                debug=debug, paste_direct=True, upright=False)
                                              for i, cs in enumerate(arrow_coord_lines) if i % 2 != 0)))
                
         class LineBack(ComponentStyle):
