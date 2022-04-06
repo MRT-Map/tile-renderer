@@ -12,7 +12,7 @@ setup(
     description='Leaflet.js streetmap tile renderer',
     long_description=long_description,
     long_description_content_type="text/markdown",
-    author='7d (from Minecart Rapid Transit Mapping Team)',
+    author='7d (from Minecart Rapid Transit Mapping Service)',
     author_email='i.third.7d@protonmail.com',
     url='https://github.com/MRT-Map/tile-renderer',
     download_url=f'https://github.com/MRT-Map/tile-renderer/archive/refs/tags/v{renderer.__version__}.tar.gz',
@@ -30,8 +30,7 @@ setup(
         'click',
         'psutil',
         'imagehash',
-        'colorama',
-        'tqdm'
+        'colorama'
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
