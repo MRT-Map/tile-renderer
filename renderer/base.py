@@ -146,6 +146,7 @@ def render(components: ComponentList,
         :param offset: the offset to shift all node coordinates by, given as ``(x,y)``
         :type offset: tuple[RealNum, RealNum]
         :param bool use_ray: Whether to use Ray multiprocessing instead of the internal multiprocessing module.
+        :param bool debug: Enables debugging information that is printed onto the tiles
 
         :returns: Given in the form of ``{tile_coord: image}``
         :rtype: dict[TileCoord, Image.Image]
@@ -281,8 +282,8 @@ def render(components: ComponentList,
             def get(self):
                 return len(self.tally)
 
-            def count(self, i=1):
-                self.tally.append(i)
+            def count(self, i_=1):
+                self.tally.append(i_)
 
         operated = _RayOperatedHandler.remote()
 
@@ -318,27 +319,35 @@ def render(components: ComponentList,
             result[k] = v
         ray.shutdown()
     else:
-        if __name__ == 'renderer.base': # TODO update for new procedure
+        if __name__ == 'renderer.base':
             operated = _MultiprocessingOperatedHandler(multiprocessing.Manager())
 
+            print(term.bright_green("\nRendering components..."))
             input_ = []
             start = time.time() * 1000
             for tile_coord, component_group in grouped_tile_list.items():
-                input_.append((operated, operations, start, tile_coord, component_group, components, nodes,
-                               skin, max_zoom, max_zoom_range, assets_dir))
+                input_.append((operated, operations - 1, start, tile_coord, component_group, components, nodes,
+                               skin, max_zoom, max_zoom_range, assets_dir, True, debug))
             p = multiprocessing.Pool(processes)
             try:
                 prepreresult = p.starmap(rendering._draw_components, input_)
+                prepreresult = list(filter(lambda r: r is not None, prepreresult))
             except KeyboardInterrupt:
                 p.terminate()
                 sys.exit()
+
+            print(term.bright_green("\nEliminating overlapping text..."))
             input_ = []
+            new_texts = rendering._prevent_text_overlap(prepreresult)
+            total_texts = sum(len(t[2]) for t in new_texts)
+
             start = time.time() * 1000
-            for i in prepreresult:
-                tile_coord = list(i.keys())[0]
-                image, text_list = i[tile_coord]
-                input_.append((operated, operations, start, image, tile_coord, text_list,
-                               save_images, save_dir))
+            print(term.bright_green("\nRendering text..."))
+            operated = _MultiprocessingOperatedHandler(multiprocessing.Manager())
+            for tile_coord, image, text_list in new_texts:
+                input_.append((operated, total_texts + len(new_texts), start, image, tile_coord, text_list,
+                               save_images, save_dir, skin, True))
+
             try:
                 preresult = p.starmap(rendering._draw_text, input_)
             except KeyboardInterrupt:
@@ -346,10 +355,9 @@ def render(components: ComponentList,
                 sys.exit()
             result = {}
             for i in preresult:
-                if i == {}:
+                if i is None:
                     continue
-                k = list(i.keys())[0]
-                v = i[k]
+                k, v = list(i.items())[0]
                 result[k] = v
 
         print(term.green("100.00% | 0.0s left | ") + "Rendering complete" + term.clear_eos)
