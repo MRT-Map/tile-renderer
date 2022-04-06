@@ -1,8 +1,11 @@
-sphinxcontrib-programoutput
-numpy
-schema
-blessed
 pillow
-click
+blessed
 pyautogui
+schema
+numpy
+click
 psutil
+imagehash
+colorama
+tqdm
+sphinxcontrib.programoutput
