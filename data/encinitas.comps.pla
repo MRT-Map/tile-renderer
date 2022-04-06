@@ -341,7 +341,7 @@
   "enc-arelaPkwy": {
     "attrs": {},
     "description": "Encinitas",
-    "displayname": "",
+    "displayname": "Arela Pkwy",
     "layer": 0,
     "nodes": [
       "ORTZFBtZDgA-TBWJqnMqwAAAAAA",
@@ -3748,9 +3748,9 @@
     "type": "shrub"
   },
   "enc-MCNP-peakA": {
-    "type": "stone",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORTZFEWEpgA-7zgvHo9+oAAAAAA",
@@ -3771,12 +3771,12 @@
       "ORTZFEVegAA-Jhxr4lIKcAAAAAA",
       "ORTZFEWEpgA-RmPLg/GhwAAAAAA"
     ],
-    "attrs": {}
+    "type": "stone"
   },
   "enc-MCNP-peakB": {
-    "type": "stone",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORTZFD/bEAA-XkCena98QAAAAAA",
@@ -3812,12 +3812,12 @@
       "ORTZFEC/8gA-oqkVWJHLAAAAAAA",
       "ORTZFFNgUgA-58cqKa17AAAAAAA"
     ],
-    "attrs": {}
+    "type": "stone"
   },
   "enc-MCNP-peakC": {
-    "type": "stone",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORTZFEF+rgA-ye5h157VYAAAAAA",
@@ -3836,12 +3836,12 @@
       "ORTZFGzbdAA-nueZs5OHUAAAAAA",
       "ORTZFEFYiAA-HWMJPmYFAAAAAAA"
     ],
-    "attrs": {}
+    "type": "stone"
   },
   "enc-MCNP-pondA": {
-    "type": "waterSmall",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORTZFG0BmAA-dgSPAYfeIAAAAAA",
@@ -3855,12 +3855,12 @@
       "ORTZFG2aMAA-fJYmih74cAAAAAA",
       "ORTZFG3AVAA-q7tyMt0dkAAAAAA"
     ],
-    "attrs": {}
+    "type": "waterSmall"
   },
   "enc-MCNP-pondB": {
-    "type": "waterSmall",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORTZFG3megA-mWGinJk7MAAAAAA",
@@ -3870,12 +3870,12 @@
       "ORTZFG4yxgA-p6Db1AgoIAAAAAA",
       "ORTZFG4yxgA-bboztHNtkAAAAAA"
     ],
-    "attrs": {}
+    "type": "waterSmall"
   },
   "enc-MCNP-riverB": {
-    "type": "waterSmall",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORTZFG5Y7AA-7KR0TX3ycAAAAAA",
@@ -3912,12 +3912,12 @@
       "ORTZFHC7RgA-hmcnHdDkUAAAAAA",
       "ORTZFHDhbAA-pH7/nELx4AAAAAA"
     ],
-    "attrs": {}
+    "type": "waterSmall"
   },
   "enc-MCNP-riverC": {
-    "type": "waterSmall",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORTZFEL8JgA-Tjd4mkGuUAAAAAA",
@@ -3930,12 +3930,12 @@
       "ORTZFHF6AgA-/SkDPDOO8AAAAAA",
       "ORTZFHGgKAA-1mEirDJHkAAAAAA"
     ],
-    "attrs": {}
+    "type": "waterSmall"
   },
   "enc-water": {
-    "type": "waterLarge",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORTZFHGgKAA-aSK0hNUBAAAAAAA",
@@ -4221,12 +4221,12 @@
       "ORTZFIpcjAA-7ic6g3Ec4AAAAAA",
       "ORTZFIqCsgA-R/qhKAYKUAAAAAA"
     ],
-    "attrs": {}
+    "type": "waterLarge"
   },
   "enc-water-islandA": {
-    "type": "landSmall",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORTZFIqCsgA-MgBFN7sUwAAAAAA",
@@ -4235,12 +4235,12 @@
       "ORTZFIrO/gA-kxnlZf6SQAAAAAA",
       "ORTZFIr1JAA-KKDfTl9H0AAAAAA"
     ],
-    "attrs": {}
+    "type": "landSmall"
   },
   "enc-water-islandB": {
-    "type": "landSmall",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORTZFIr1JAA-cqLpkjcc0AAAAAA",
@@ -4251,12 +4251,12 @@
       "ORTZFItnlAA-e3tqoBwU8AAAAAA",
       "ORTZFIuNugA-lt1lEHTB4AAAAAA"
     ],
-    "attrs": {}
+    "type": "landSmall"
   },
   "enc-water-islandC": {
-    "type": "landSmall",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORTZFIuz4AA-hkZu18AvIAAAAAA",
@@ -4267,12 +4267,12 @@
       "ORTZFIwmUAA-mnkHlsDioAAAAAA",
       "ORTZFIwmUAA-WswSJKsHEAAAAAA"
     ],
-    "attrs": {}
+    "type": "landSmall"
   },
   "enc-water-islandD": {
-    "type": "landSmall",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORTZFIxMdgA-vru6/B2eAAAAAAA",
@@ -4280,12 +4280,12 @@
       "ORTZFIxynAA-pZUx2DJ78AAAAAA",
       "ORTZFIyYwgA-V7z4CjzlEAAAAAA"
     ],
-    "attrs": {}
+    "type": "landSmall"
   },
   "enc-water-islandE": {
-    "type": "landSmall",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORTZFIy+6AA-xsrUacbJcAAAAAA",
@@ -4367,12 +4367,12 @@
       "ORTZFJQMGgA-zp4d+/8SQAAAAAA",
       "ORTZFJQyQAA-VlCIIfh68AAAAAA"
     ],
-    "attrs": {}
+    "type": "landSmall"
   },
   "enc-water-islandF": {
-    "type": "landSmall",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORTZFJQyQAA-/gSWzZSewAAAAAA",
@@ -4410,12 +4410,12 @@
       "ORTZFJd5fAA-6F4Yghm/gAAAAAA",
       "ORTZFJefogA-kXinAyeEQAAAAAA"
     ],
-    "attrs": {}
+    "type": "landSmall"
   },
   "enc-water-islandG": {
-    "type": "landSmall",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORTZFJfFyAA-pk8HvtMJEAAAAAA",
@@ -4427,12 +4427,12 @@
       "ORTZFJheXgA-dlvQTpDBwAAAAAA",
       "ORTZFJheXgA-2YRV8C98sAAAAAA"
     ],
-    "attrs": {}
+    "type": "landSmall"
   },
   "enc-crestaCapitol-parkPath": {
-    "type": "pathway",
-    "displayname": "",
+    "attrs": {},
     "description": "",
+    "displayname": "",
     "layer": 0,
     "nodes": [
       "ORTZFBvxpAA-MqaUKhsbwAAAAAA",
@@ -4457,6 +4457,6 @@
       "ORTZFJqakgA-YAJTWiV80AAAAAA",
       "ORTZFBtZDgA-nN5I8lxtgAAAAAA"
     ],
-    "attrs": {}
+    "type": "pathway"
   }
 }

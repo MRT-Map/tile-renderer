@@ -39,7 +39,7 @@ class _TextObject:
         r = lambda a, b: mathtools.rotate_around_pivot(a, b,
                                                        tile_coord.x * tile_size + x,
                                                        tile_coord.y * tile_size + y,
-                                                       rot)
+                                                       -rot)
         self.image = (image,)
         self.center = (Coord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),)
         self.bounds = ((
@@ -50,8 +50,14 @@ class _TextObject:
             r(tile_coord.x * tile_size + x - w / 2, tile_coord.y * tile_size + y - h / 2),
         ),)
         if debug:
-            for line in self.bounds:
-                imd.line(line, fill="#ff0000")
+            nr = lambda a, b: mathtools.rotate_around_pivot(a, b, x, y, -rot)
+            imd.line([
+                nr(x - w / 2, y - h / 2),
+                nr(x - w / 2, y + h / 2),
+                nr(x + w / 2, y + h / 2),
+                nr(x + w / 2, y - h / 2),
+                nr(x - w / 2, y - h / 2)
+            ], fill="#ff0000")
 
     @classmethod
     def from_multiple(cls, *textobject: _TextObject):
@@ -194,7 +200,7 @@ class Skin:
                 points_text_list.append(_TextObject(pt_i,
                                                     coords[0].x + self.offset[0],
                                                     coords[0].y + self.offset[1],
-                                                    tw/tile_size, th/tile_size, 0,
+                                                    tw/2, th/2, 0,
                                                     tile_coord, tile_size,
                                                     imd, debug=debug))
                 #font = skin.get_font("", step.size)
@@ -241,11 +247,12 @@ class Skin:
                 self.size: int = json['size']
                 self.offset: int = json['offset']
 
-            def _text_on_line(self, imd: ImageDraw.ImageDraw, font: ImageFont.FreeTypeFont,
+            def _text_on_line(self, imd: ImageDraw.ImageDraw, img: Image.Image,
+                              font: ImageFont.FreeTypeFont,
                               text: str, coords: list[Coord],
                               tile_coord: TileCoord, tile_size: int,
                               fill: str | None = None, stroke: str | None = None,
-                              debug: bool = False) -> _TextObject | None:
+                              debug: bool = False, paste_direct: bool = False) -> _TextObject | None:
                 char_cursor = 0
                 text_to_print = ""
                 overflow = 0
@@ -278,9 +285,12 @@ class Skin:
                         lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
                         tx = c2.x - ((c2.x-c1.x - overflow * math.cos(trot/180*math.pi)) / 2)
                         ty = c2.y - ((c2.y-c1.y - overflow * math.sin(trot/180*math.pi)) / 2)
-                        text_objects.append(_TextObject(lt_i, tx, ty,
-                                                        tw / tile_size, th / tile_size, trot,
-                                                        tile_coord, tile_size, imd, debug=debug))
+                        if paste_direct:
+                            img.paste(lt_i, (int(tx), int(ty)), lt_i)
+                        else:
+                            text_objects.append(_TextObject(lt_i, tx, ty,
+                                                            tw/2, th/2, trot,
+                                                            tile_coord, tile_size, imd, debug=debug))
 
                     text_to_print = ""
                     overflow = text_length - (math.dist(c1, c2) - overflow)
@@ -289,7 +299,7 @@ class Skin:
                 if text_objects: return _TextObject.from_multiple(*text_objects)
                 else: return None
 
-            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord],
+            def render(self, imd: ImageDraw.ImageDraw, img: Image.Image, coords: list[Coord],
                        assets_dir: Path, component: Component, text_list: list[_TextObject],
                        tile_coord: TileCoord, tile_size: int, debug: bool = False):
                 if len(component.displayname) == 0: return
@@ -307,22 +317,23 @@ class Skin:
                 if debug:
                     imd.line(mathtools.offset(coords, self.offset), fill="#ff0000")
                 text_list.extend(filter(lambda e: e is not None,
-                                        (self._text_on_line(imd, font, component.displayname,
+                                        (self._text_on_line(imd, img, font, component.displayname,
                                                             list(cs), tile_coord, tile_size, debug=debug)
                                          for cs in coord_lines)))
 
                 if 'oneWay' in component.tags:
                     arrow_coord_lines = mathtools.combine_edge_dashes(mathtools.dash(
-                        mathtools.offset(coords, self.offset+self.size/8), text_length/2, text_length*0.75
+                        mathtools.offset(coords, self.offset-self.size/8), text_length/2, text_length*0.75
                     ))
                     if arrow_coord_lines \
                        and sum(math.dist(c1, c2) for c1, c2 in internal._with_next(arrow_coord_lines[-1])) \
                        < int(imd.textlength("→", font)):
                         arrow_coord_lines = arrow_coord_lines[:-1]
                     text_list.extend(filter(lambda e: e is not None,
-                                            (self._text_on_line(imd, font, "→",
+                                            (self._text_on_line(imd, img, font, "→",
                                                                 list(cs), tile_coord, tile_size,
-                                                                fill="#000000", stroke="#00000000", debug=debug)
+                                                                fill=self.arrow_colour, stroke="#00000000",
+                                                                debug=debug, paste_direct=True)
                                              for i, cs in enumerate(arrow_coord_lines) if i % 2 != 0)))
                
         class LineBack(ComponentStyle):
@@ -399,7 +410,7 @@ class Skin:
                             abt_ir = abt_i.rotate(trot, expand=True)
                             abt_ir = abt_ir.crop((0, 0, abt_ir.width, abt_ir.height))
                             text_list.append(_TextObject(abt_ir, tx, ty,
-                                                         tw/tile_size, th/tile_size, trot,
+                                                         tw/2, th/2, trot,
                                                          tile_coord, tile_size, imd, debug=debug))
 
         class AreaCenterText(ComponentStyle):
@@ -449,7 +460,7 @@ class Skin:
                 cw, ch = act_i.size[:]
                 act_i = act_i.crop((0, 0, act_i.width, act_i.height))
                 text_list.append(_TextObject(act_i, cx, cy,
-                                             cw/tile_size, ch/tile_size, 0,
+                                             cw/2, ch/2, 0,
                                              tile_coord, tile_size, imd, debug=debug))
 
         class AreaFill(ComponentStyle):
@@ -550,7 +561,7 @@ class Skin:
         
         :returns: Returns True if no errors
         """
-        mainSchema = Schema({
+        main_schema = Schema({
             "info": {
                 "size": int,
                 "font": {
@@ -655,7 +666,7 @@ class Skin:
             }
         }
     
-        mainSchema.validate(json)
+        main_schema.validate(json)
         for n, t in json['types'].items():
             if n not in json['order']:
                 raise ValueError(f"Type {n} is not in order list")

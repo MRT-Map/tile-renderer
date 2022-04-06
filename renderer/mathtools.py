@@ -83,7 +83,8 @@ def segments_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
     d = (det(c1, c2), det(c3, c4))
     x = det(d, xdiff) / div
     y = det(d, ydiff) / div
-    return min(c1.x, c2.x) <= x <= max(c1.x, c2.x) and min(c1.y, c2.y) <= y <= max(c1.y, c2.y)
+    return min(c1.x, c2.x) <= x <= max(c1.x, c2.x) and min(c1.y, c2.y) <= y <= max(c1.y, c2.y) \
+        and min(c3.x, c4.x) <= x <= max(c3.x, c4.x) and min(c3.y, c4.y) <= y <= max(c3.y, c4.y)
 
 def point_in_poly(xp: RealNum, yp: RealNum, coords: list[Coord]) -> bool:
     """
@@ -274,14 +275,17 @@ def offset(coords: list[Coord], d: RealNum):
             bisect_angle = a1+math.pi/2 if a1 is not None else a2+math.pi/2
             theta = math.pi
         else:
-            bisect_angle = (a1+a2)/2+math.pi
+            bisect_angle = (a1+a2+math.pi)/2
             theta = abs(a1-a2)
-        offsetted_points_pairs.append(points_away(*coords[i], d/math.sin(theta/2) if theta != 0 else d, theta=bisect_angle))
+        offsetted_points_pairs.append(points_away(*coords[i], d, theta=bisect_angle))
     pc = offsetted_points_pairs[0][0] if offsetted_points_pairs[0][0].y > coords[0].y else offsetted_points_pairs[0][0] if offsetted_points_pairs[0][0].x > coords[0].x else offsetted_points_pairs[0][1]
     pc = offsetted_points_pairs[0][1] if pc == offsetted_points_pairs[0][0] and d < 0 else offsetted_points_pairs[0][0]
     pc = offsetted_points_pairs[0][0] if pc == offsetted_points_pairs[0][1] and d < 0 else offsetted_points_pairs[0][1]
     offsetted_points = [pc]
     for i, (c21, c22) in enumerate(offsetted_points_pairs[1:]):
         pc = offsetted_points[-1]
-        offsetted_points.append(c21 if round(math.atan2(c21.y-pc.y, c21.x-pc.x), 10) == round(angles[i], 10) else c22)
+        if segments_intersect(c22, pc, coords[i], coords[i+1]):
+            offsetted_points.append(c21)
+        else:
+            offsetted_points.append(c22)
     return offsetted_points

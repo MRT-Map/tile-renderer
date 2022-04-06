@@ -6,7 +6,6 @@ from itertools import chain
 from pathlib import Path
 from typing import Any
 
-import blessed
 from colorama import Fore, Style
 from PIL import Image, ImageDraw
 
@@ -18,7 +17,6 @@ from renderer.objects.nodes import NodeList
 from renderer.objects.skin import Skin, _TextObject, _node_list_to_image_coords
 from renderer.types import RealNum, TileCoord, Coord
 
-term = blessed.Terminal()
 R = Style.RESET_ALL
 
 try: import ray
@@ -26,10 +24,12 @@ except ModuleNotFoundError: pass
 
 def _eta(start: RealNum, operated: int, operations: int) -> str:
     if operated != 0 and operations != 0:
-        return Fore.GREEN + f"{internal._percentage(operated, operations)}% | " + \
-                            f"{internal._ms_to_time(internal._time_remaining(start, operated, operations))} left | " + R
+        return "\r\033[K" + \
+            Fore.GREEN + f"{internal._percentage(operated, operations)}% | " + \
+                         f"{internal._ms_to_time(internal._time_remaining(start, operated, operations))} left | " + R
     else:
-        return Fore.GREEN + f"00.0% | 0.0s left | " + R
+        return "\r\033[K" + \
+               Fore.GREEN + f"00.0% | 0.0s left | " + R
 
 @dataclass
 class _Logger:
@@ -43,7 +43,7 @@ class _Logger:
         if self.using_ray: ops = ray.get(self.operated.get.remote())
         else: ops = self.operated.get()
         print(_eta(self.start, ops, self.operations) +
-              f"{self.tile_coords}: " + Fore.LIGHTBLACK_EX + msg + R, flush=True)
+              f"{self.tile_coords}: " + Fore.LIGHTBLACK_EX + msg + R, flush=True, end="")
 
 
 def _draw_components(operated,
@@ -86,7 +86,7 @@ def _draw_components(operated,
                         "image": (img, coords, assets_dir)
                     },
                     "line": {
-                        "text": (imd, coords, assets_dir, component, text_list, tile_coord, skin.tile_size),
+                        "text": (imd, img, coords, assets_dir, component, text_list, tile_coord, skin.tile_size),
                         "back": (imd, coords),
                         "fore": (imd, coords)
                     },
@@ -174,12 +174,12 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
                 if not is_rendered: break
             if not is_rendered:
                 print(_eta(start, i + 1, operations) +
-                      f"Eliminated overlapping text {i + 1}/{operations} in zoom {z}", flush=True)
+                      f"Eliminated overlapping text {i + 1}/{operations} in zoom {z}", flush=True, end="")
             else:
                 no_intersect.extend(text.bounds)
                 print(_eta(start, i + 1, operations) +
-                      f"Kept text {i + 1}/{operations} in zoom {z}", flush=True)
-
+                      f"Kept text {i + 1}/{operations} in zoom {z}", flush=True, end="")
+        print()
         start = time.time() * 1000
         operations = len(text_dict)
         for i, (text, tile_coords) in enumerate(text_dict.items()):
@@ -188,7 +188,7 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
                     preout[tile_coord] = (imgs[tile_coord], [])
                 preout[tile_coord][1].append(text)
             print(_eta(start, i+1, operations) +
-                  f"Sorting remaining text {i + 1}/{operations} in zoom {z}", flush=True)
+                  f"Sorting remaining text {i + 1}/{operations} in zoom {z}", flush=True, end="")
     for tile_coord, _, _ in texts:
         if tile_coord not in preout: preout[tile_coord] = (imgs[tile_coord], [])
     out = [(tile_coord, img, text_objects) for tile_coord, (img, text_objects) in preout.items()]
