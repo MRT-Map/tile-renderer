@@ -290,7 +290,7 @@ class Skin:
                         if paste_direct:
                             img.paste(lt_i, (int(tx-lt_i.width/2), int(ty-lt_i.height/2)), lt_i)
                             if debug:
-                                nr = lambda a, b: mathtools.rotate_around_pivot(a, b, tx, ty, trot)
+                                nr = lambda a, b: mathtools.rotate_around_pivot(a, b, tx, ty, -trot)
                                 imd.line([
                                     nr(tx - tw / 4, ty - th / 4),
                                     nr(tx - tw / 4, ty + th / 4),

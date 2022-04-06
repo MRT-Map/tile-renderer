@@ -18,6 +18,55 @@ def _blend(h1: int, h2: int, prop: float = 0.5) -> int:
     b = hex(round(int(nh1[4:6], base=16)*(1-prop) + int(nh2[4:6], base=16)*prop))[2:].zfill(2)
     return int(r+g+b, base=16)
 
+def _darken(h1: int, strength: float = 0.5) -> int:
+    nh1 = hex(h1)[2:].zfill(6)
+    r = int(nh1[0:2], base=16)/255
+    g = int(nh1[2:4], base=16)/255
+    b = int(nh1[4:6], base=16)/255
+    k = 1-max(r, g, b)
+    c = (1 - r - k) / (1 - k)
+    m = (1 - g - k) / (1 - k)
+    y = (1 - b - k) / (1 - k)
+
+    k += strength*(1-k)
+
+    r = hex(round(255*(1-c)*(1-k)))[2:].zfill(2)
+    g = hex(round(255*(1-m)*(1-k)))[2:].zfill(2)
+    b = hex(round(255*(1-y)*(1-k)))[2:].zfill(2)
+    return int(r + g + b, base=16)
+
+def _lighten(h1: int, strength: float = 0.5) -> int:
+    nh1 = hex(h1)[2:].zfill(6)
+    r = int(nh1[0:2], base=16)/255
+    g = int(nh1[2:4], base=16)/255
+    b = int(nh1[4:6], base=16)/255
+    cmin = min(r, g, b)
+    cmax = max(r, g, b)
+    delta = cmax - cmin
+    h = 0 if delta == 0 \
+        else 60*((g-b)/delta % 6) if cmax == r \
+        else 60*((b-r)/delta + 2) if cmax == g \
+        else 60*((r-g)/delta + 4)
+    s = 0 if cmax == 0 else delta/cmax
+    v = cmax
+
+    s *= 1-strength
+
+    c = v*s
+    x = c*(1-abs(((h/60) % 2)-1))
+    m = v-c
+    r, g, b = (c, x, 0) if 0 <= h < 60 \
+        else (x, c, 0) if 60 <= h < 120 \
+        else (0, c, x) if 120 <= h < 180 \
+        else (0, x, c) if 180 <= h < 240 \
+        else (x, 0, c) if 240 <= h < 300 \
+        else (c, 0, x)
+
+    r = hex(round((r+m)*255))[2:].zfill(2)
+    g = hex(round((g+m)*255))[2:].zfill(2)
+    b = hex(round((b+m)*255))[2:].zfill(2)
+    return int(r + g + b, base=16)
+
 class SkinBuilder:
     tile_size: int
     fonts: dict[str, Path]

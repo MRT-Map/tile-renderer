@@ -1,9 +1,18 @@
 import json
 from pathlib import Path
 
-from renderer.objects.skinbuilder import SkinBuilder, CTI, CS
+from renderer.objects.skinbuilder import SkinBuilder, CTI, CS, _darken, _lighten
 from renderer.types import Coord
 
+A_ROAD = 0xffaaaa
+B_ROAD = 0xff8000
+LOCAL_HIGHWAY = 0xffcc80
+LOCAL_MAIN = 0xffee00
+LOCAL_SECONDARY = 0xfff899
+LOCAL_TERTIARY_QUATERNARY = 0xeeeeee
+LOCAL_PEDESTRIAN = 0xccccff
+BUILDING = 0xa2a288
+TRANSPORT_BUILDING = 0x999966
 
 def main():
     s = SkinBuilder(256, {
@@ -16,7 +25,7 @@ def main():
     residential_area = CTI("area")
     residential_area[0:5] = [
         CS.area_fill(colour=0xb3cbcb),
-        CS.area_centertext(colour=0x008080,
+        CS.area_centertext(colour=_darken(0xb3cbcb),
                            size=30)
     ]
     s['residentialArea'] = residential_area
@@ -24,7 +33,7 @@ def main():
     industrial_area = CTI("area")
     industrial_area[0:5] = [
         CS.area_fill(colour=0xffccb3),
-        CS.area_centertext(colour=0xcc4400,
+        CS.area_centertext(colour=_darken(0xffccb3),
                            size=30)
     ]
     s['industrialArea'] = industrial_area
@@ -32,7 +41,7 @@ def main():
     commercial_area = CTI("area")
     commercial_area[0:5] = [
         CS.area_fill(colour=0xe7b1ca),
-        CS.area_centertext(colour=0xc33c7b,
+        CS.area_centertext(colour=_darken(0xe7b1ca),
                            size=30)
     ]
     s['commercialArea'] = commercial_area
@@ -40,7 +49,7 @@ def main():
     office_area = CTI("area")
     office_area[0:5] = [
         CS.area_fill(colour=0xffcc99),
-        CS.area_centertext(colour=0xcc6000,
+        CS.area_centertext(colour=_darken(0xffcc99),
                            size=30)
     ]
     s['officeArea'] = office_area
@@ -48,7 +57,7 @@ def main():
     residential_office_area = CTI("area")
     residential_office_area[0:5] = [
         CS.area_fill(colour=0xd9dbb2),
-        CS.area_centertext(colour=0x669240,
+        CS.area_centertext(colour=_darken(0xd9dbb2),
                            size=30)
     ]
     s['residentialOfficeArea'] = residential_office_area
@@ -56,7 +65,7 @@ def main():
     school_area = CTI("area")
     school_area[0:5] = [
         CS.area_fill(colour=0xecc6c6),
-        CS.area_centertext(colour=0xbf4040,
+        CS.area_centertext(colour=_darken(0xecc6c6),
                            size=30)
     ]
     s['schoolArea'] = school_area
@@ -64,7 +73,7 @@ def main():
     health_area = CTI("area")
     health_area[0:5] = [
         CS.area_fill(colour=0xff9999),
-        CS.area_centertext(colour=0xcc0000,
+        CS.area_centertext(colour=_darken(0xff9999),
                            size=30)
     ]
     s['healthArea'] = health_area
@@ -72,7 +81,7 @@ def main():
     agriculture_area = CTI("area")
     agriculture_area[0:5] = [
         CS.area_fill(colour=0xccff99),
-        CS.area_centertext(colour=0x66cc00,
+        CS.area_centertext(colour=_darken(0xccff99),
                            size=30)
     ]
     s['agricultureArea'] = agriculture_area
@@ -80,7 +89,7 @@ def main():
     military_area = CTI("area")
     military_area[0:5] = [
         CS.area_fill(colour=0xc2c2a3),
-        CS.area_centertext(colour=0x999966,
+        CS.area_centertext(colour=_darken(0xc2c2a3),
                            size=30)
     ]
     s['militaryArea'] = military_area
@@ -88,7 +97,7 @@ def main():
     water_large = CTI("area")
     water_large[0:] = [
         CS.area_fill(colour=0x87ceeb),
-        CS.area_centertext(colour=0x00abf0,
+        CS.area_centertext(colour=_darken(0x87ceeb),
                            size=50)
     ]
     s['waterLarge'] = water_large
@@ -96,7 +105,7 @@ def main():
     water_small = CTI("area")
     water_small[0:2] = [
         CS.area_fill(colour=0x87ceeb),
-        CS.area_centertext(colour=0x00abf0,
+        CS.area_centertext(colour=_darken(0x87ceeb),
                            size=25)
     ]
     water_small[3:5] = [
@@ -127,8 +136,8 @@ def main():
     waterway[0:5] = [
         CS.line_fore(colour=0x87ceeb,
                      width=10),
-        CS.line_text(colour=0x00abf0,
-                     arrow_colour=0x00abf0,
+        CS.line_text(colour=_darken(0x87ceeb),
+                     arrow_colour=_darken(0x87ceeb, 0.25),
                      size=20)
     ]
     s['waterway'] = waterway
@@ -137,7 +146,7 @@ def main():
     ferry_line[0:5] = [
         CS.line_fore(colour=0x25a7da,
                      width=10),
-        CS.line_text(colour=0x1e85ae,
+        CS.line_text(colour=_darken(0x25a7da),
                      arrow_colour=0x25a7da,
                      size=10)
     ]
@@ -146,7 +155,7 @@ def main():
     grass = CTI("area")
     grass[0:5] = [
         CS.area_fill(colour=0xbbff99),
-        CS.area_centertext(colour=0x008000,
+        CS.area_centertext(colour=_darken(0xbbff99),
                            size=25)
     ]
     s['grass'] = grass
@@ -154,7 +163,7 @@ def main():
     shrub = CTI("area")
     shrub[0:5] = [
         CS.area_fill(colour=0x99ff99),
-        CS.area_centertext(colour=0x008000,
+        CS.area_centertext(colour=_darken(0x99ff99),
                            size=25)
     ]
     s['shrub'] = shrub
@@ -162,7 +171,7 @@ def main():
     forest = CTI("area")
     forest[0:5] = [
         CS.area_fill(colour=0x5ca904),
-        CS.area_centertext(colour=0x008000,
+        CS.area_centertext(colour=_darken(0x5ca904),
                            size=25)
     ]
     s['forest'] = forest
@@ -170,7 +179,7 @@ def main():
     stone = CTI("area")
     stone[0:5] = [
         CS.area_fill(colour=0xaaaaaa),
-        CS.area_centertext(colour=0x008000,
+        CS.area_centertext(colour=_darken(0xaaaaaa),
                            size=25)
     ]
     s['stone'] = stone
@@ -178,7 +187,7 @@ def main():
     sand = CTI("area")
     sand[0:5] = [
         CS.area_fill(colour=0xf7e1a1),
-        CS.area_centertext(colour=0xefc443,
+        CS.area_centertext(colour=_darken(0xf7e1a1),
                            size=25)
     ]
     s['sand'] = sand
@@ -253,9 +262,9 @@ def main():
 
     building_underground = CTI("area")
     building_underground[0:5] = [
-        CS.area_fill(colour=0xc6c6b5,
-                     outline=0xa5a57a),
-        CS.area_centertext(colour=0x777777,
+        CS.area_fill(colour=_lighten(BUILDING),
+                     outline=BUILDING),
+        CS.area_centertext(colour=_darken(BUILDING),
                            size=15)
     ]
     s['building_underground'] = building_underground
@@ -264,9 +273,9 @@ def main():
 
     transport_building_underground = CTI("area")
     transport_building_underground[0:5] = [
-        CS.area_fill(colour=0xc2c2a3,
-                     outline=0xaaaa55),
-        CS.area_centertext(colour=0x444422,
+        CS.area_fill(colour=_lighten(TRANSPORT_BUILDING),
+                     outline=TRANSPORT_BUILDING),
+        CS.area_centertext(colour=_darken(TRANSPORT_BUILDING),
                            size=30)
     ]
     s['transportBuilding_underground'] = transport_building_underground
@@ -274,8 +283,8 @@ def main():
     platform_underground = CTI("area")
     platform_underground[0:5] = [
         CS.area_fill(colour=0xaaaaaa,
-                     outline=0x808080),
-        CS.area_centertext(colour=0x555555,
+                     outline=_darken(0xaaaaaa)),
+        CS.area_centertext(colour=_darken(0xaaaaaa),
                            size=10)
     ]
     s['platform_underground'] = platform_underground
@@ -283,7 +292,7 @@ def main():
     park = CTI("area")
     park[0:5] = [
         CS.area_fill(colour=0x669900),
-        CS.area_centertext(colour=0x008000,
+        CS.area_centertext(colour=_darken(0x669900),
                            size=25)
     ]
     s['park'] = park
@@ -304,35 +313,35 @@ def main():
 
     local_highway_slip_underground = CTI("line", ["road"])
     local_highway_slip_underground[0:5] = [
-        CS.line_back(colour=0xffc266,
+        CS.line_back(colour=LOCAL_HIGHWAY,
                      width=28),
-        CS.line_fore(colour=0xffe0b3,
+        CS.line_fore(colour=_lighten(LOCAL_HIGHWAY),
                      width=20),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xffc266,
+                     arrow_colour=LOCAL_HIGHWAY,
                      size=20)
     ]
     s['localHighwaySlip_underground'] = local_highway_slip_underground
 
     b_road_slip_underground = CTI("line", ["road"])
     b_road_slip_underground[0:5] = [
-        CS.line_back(colour=0xffa64d,
+        CS.line_back(colour=B_ROAD,
                      width=32),
-        CS.line_fore(colour=0xffb366,
+        CS.line_fore(colour=_lighten(B_ROAD),
                      width=24),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xffa64d,
+                     arrow_colour=B_ROAD,
                      size=24)
     ]
     s['bRoadSlip_underground'] = b_road_slip_underground
 
     a_road_slip_underground = CTI("line", ["road"])
     a_road_slip_underground[0:5] = [
-        CS.line_back(colour=0xffb3b3,
+        CS.line_back(colour=A_ROAD,
                      width=40),
-        CS.line_fore(colour=0xffcccc,
+        CS.line_fore(colour=_lighten(A_ROAD),
                      width=32),
-        CS.line_text(colour=0x000000,
+        CS.line_text(colour=A_ROAD,
                      arrow_colour=0xffb3b3,
                      size=32)
     ]
@@ -340,23 +349,23 @@ def main():
 
     local_pedestrian_quaternary_road_underground = CTI("line", ["road"])
     local_pedestrian_quaternary_road_underground[0:5] = [
-        CS.line_back(colour=0xa6a6a6,
+        CS.line_back(colour=LOCAL_PEDESTRIAN,
                      width=24),
-        CS.line_fore(colour=0xb3b3ff,
+        CS.line_fore(colour=_lighten(LOCAL_PEDESTRIAN),
                      width=16),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xa6a6a6,
+                     arrow_colour=LOCAL_PEDESTRIAN,
                      size=16)
     ]
     s['localPedestrianQuaternaryRoad_underground'] = local_pedestrian_quaternary_road_underground
 
     local_quaternary_road_underground = CTI("line", ["road"])
     local_quaternary_road_underground[0:5] = [
-        CS.line_back(colour=0xb3b3b3,
+        CS.line_back(colour=LOCAL_TERTIARY_QUATERNARY,
                      width=24),
-        CS.line_fore(colour=0xd9d9d9,
+        CS.line_fore(colour=_lighten(LOCAL_TERTIARY_QUATERNARY),
                      width=16),
-        CS.line_text(colour=0x000000,
+        CS.line_text(colour=LOCAL_TERTIARY_QUATERNARY,
                      arrow_colour=0xb3b3b3,
                      size=16)
     ]
@@ -364,23 +373,23 @@ def main():
 
     local_pedestrian_tertiary_road_underground = CTI("line", ["road"])
     local_pedestrian_tertiary_road_underground[0:5] = [
-        CS.line_back(colour=0xa6a6a6,
+        CS.line_back(colour=LOCAL_PEDESTRIAN,
                      width=32),
-        CS.line_fore(colour=0xb3b3ff,
+        CS.line_fore(colour=_lighten(LOCAL_PEDESTRIAN),
                      width=24),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xa6a6a6,
+                     arrow_colour=LOCAL_PEDESTRIAN,
                      size=24)
     ]
     s['localPedestrianTertiaryRoad_underground'] = local_pedestrian_tertiary_road_underground
 
     local_tertiary_road_underground = CTI("line", ["road"])
     local_tertiary_road_underground[0:5] = [
-        CS.line_back(colour=0xb3b3b3,
+        CS.line_back(colour=LOCAL_TERTIARY_QUATERNARY,
                      width=32),
-        CS.line_fore(colour=0xd9d9d9,
+        CS.line_fore(colour=_lighten(LOCAL_TERTIARY_QUATERNARY),
                      width=24),
-        CS.line_text(colour=0x000000,
+        CS.line_text(colour=LOCAL_TERTIARY_QUATERNARY,
                      arrow_colour=0xb3b3b3,
                      size=24)
     ]
@@ -388,60 +397,60 @@ def main():
 
     local_secondary_road_underground = CTI("line", ["road"])
     local_secondary_road_underground[0:5] = [
-        CS.line_back(colour=0xfff399,
+        CS.line_back(colour=LOCAL_SECONDARY,
                      width=36),
-        CS.line_fore(colour=0xfffccc,
+        CS.line_fore(colour=_lighten(LOCAL_SECONDARY),
                      width=28),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xfff399,
+                     arrow_colour=LOCAL_SECONDARY,
                      size=28)
     ]
     s['localSecondaryRoad_underground'] = local_secondary_road_underground
 
     local_main_road_underground = CTI("line", ["road"])
     local_main_road_underground[0:5] = [
-        CS.line_back(colour=0xffe066,
+        CS.line_back(colour=LOCAL_MAIN,
                      width=40),
-        CS.line_fore(colour=0xfff566,
+        CS.line_fore(colour=_lighten(LOCAL_MAIN),
                      width=32),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xffe066,
+                     arrow_colour=LOCAL_MAIN,
                      size=32)
     ]
     s['localMainRoad_underground'] = local_main_road_underground
 
     local_highway_underground = CTI("line", ["road"])
     local_highway_underground[0:5] = [
-        CS.line_back(colour=0xffc266,
+        CS.line_back(colour=LOCAL_HIGHWAY,
                      width=44),
-        CS.line_fore(colour=0xffe0b3,
+        CS.line_fore(colour=_lighten(LOCAL_HIGHWAY),
                      width=36),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xffc266,
+                     arrow_colour=LOCAL_HIGHWAY,
                      size=36)
     ]
     s['localHighway_underground'] = local_highway_underground
 
     b_road_underground = CTI("line", ["road"])
     b_road_underground[0:5] = [
-        CS.line_back(colour=0xffa64d,
+        CS.line_back(colour=B_ROAD,
                      width=48),
-        CS.line_fore(colour=0xffb366,
+        CS.line_fore(colour=_lighten(B_ROAD),
                      width=40),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xffa64d,
+                     arrow_colour=B_ROAD,
                      size=40)
     ]
     s['bRoad_underground'] = b_road_underground
 
     a_road_underground = CTI("line", ["road"])
     a_road_underground[0:5] = [
-        CS.line_back(colour=0xffb3b3,
+        CS.line_back(colour=A_ROAD,
                      width=56),
-        CS.line_fore(colour=0xffcccc,
+        CS.line_fore(colour=_lighten(A_ROAD),
                      width=48),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xffb3b3,
+                     arrow_colour=A_ROAD,
                      size=48)
     ]
     s['aRoad_underground'] = a_road_underground
@@ -462,9 +471,9 @@ def main():
 
     building = CTI("area")
     building[0:5] = [
-        CS.area_fill(colour=0xa2a288,
-                     outline=0x727256),
-        CS.area_centertext(colour=0x555555,
+        CS.area_fill(colour=BUILDING,
+                     outline=_darken(BUILDING)),
+        CS.area_centertext(colour=_darken(BUILDING),
                            size=15)
     ]
     s['building'] = building
@@ -472,17 +481,17 @@ def main():
     city_hall = CTI("area")
     city_hall[0:5] = [
         CS.area_fill(colour=0xffaaaa,
-                     outline=0xff8080),
-        CS.area_centertext(colour=0xff5555,
+                     outline=_darken(0xffaaaa)),
+        CS.area_centertext(colour=_darken(0xffaaaa),
                            size=30)
     ]
     s['cityHall'] = city_hall
 
     transport_building = CTI("area")
     transport_building[0:5] = [
-        CS.area_fill(colour=0x999966,
-                     outline=0x77773c),
-        CS.area_centertext(colour=0x444422,
+        CS.area_fill(colour=TRANSPORT_BUILDING,
+                     outline=_darken(TRANSPORT_BUILDING)),
+        CS.area_centertext(colour=_darken(TRANSPORT_BUILDING),
                            size=30)
     ]
     s['transportBuilding'] = transport_building
@@ -512,144 +521,144 @@ def main():
 
     local_highway_slip = CTI("line", ["road"])
     local_highway_slip[0:5] = [
-        CS.line_back(colour=0xffad33,
+        CS.line_back(colour=_darken(LOCAL_HIGHWAY, 0.25),
                      width=28),
-        CS.line_fore(colour=0xffcc80,
+        CS.line_fore(colour=LOCAL_HIGHWAY,
                      width=20),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xffad33,
+                     arrow_colour=_darken(LOCAL_HIGHWAY, 0.25),
                      size=20)
     ]
     s['localHighwaySlip'] = local_highway_slip
 
     b_road_slip = CTI("line", ["road"])
     b_road_slip[0:5] = [
-        CS.line_back(colour=0xe67300,
+        CS.line_back(colour=_darken(B_ROAD, 0.25),
                      width=32),
-        CS.line_fore(colour=0xff8000,
+        CS.line_fore(colour=B_ROAD,
                      width=24),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xe67300,
+                     arrow_colour=_darken(B_ROAD, 0.25),
                      size=24)
     ]
     s['bRoadSlip'] = b_road_slip
 
     a_road_slip = CTI("line", ["road"])
     a_road_slip[0:5] = [
-        CS.line_back(colour=0xff8080,
+        CS.line_back(colour=_darken(A_ROAD, 0.25),
                      width=40),
-        CS.line_fore(colour=0xffaaaa,
+        CS.line_fore(colour=A_ROAD,
                      width=32),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xff8080,
+                     arrow_colour=_darken(A_ROAD, 0.25),
                      size=32)
     ]
     s['aRoadSlip'] = a_road_slip
 
     local_pedestrian_quaternary_road = CTI("line", ["road"])
     local_pedestrian_quaternary_road[0:5] = [
-        CS.line_back(colour=0xbbbbbb,
+        CS.line_back(colour=_darken(LOCAL_PEDESTRIAN, 0.25),
                      width=24),
-        CS.line_fore(colour=0xccccff,
+        CS.line_fore(colour=LOCAL_PEDESTRIAN,
                      width=16),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xbbbbbb,
+                     arrow_colour=_darken(LOCAL_PEDESTRIAN, 0.25),
                      size=16)
     ]
     s['localPedestrianQuaternaryRoad'] = local_pedestrian_quaternary_road
 
     local_quaternary_road = CTI("line", ["road"])
     local_quaternary_road[0:5] = [
-        CS.line_back(colour=0xcccccc,
+        CS.line_back(colour=_darken(LOCAL_TERTIARY_QUATERNARY, 0.25),
                      width=24),
-        CS.line_fore(colour=0xeeeeee,
+        CS.line_fore(colour=LOCAL_TERTIARY_QUATERNARY,
                      width=16),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xcccccc,
+                     arrow_colour=_darken(LOCAL_TERTIARY_QUATERNARY, 0.25),
                      size=16)
     ]
     s['localQuaternaryRoad'] = local_quaternary_road
 
     local_pedestrian_tertiary_road = CTI("line", ["road"])
     local_pedestrian_tertiary_road[0:5] = [
-        CS.line_back(colour=0xbbbbbb,
+        CS.line_back(colour=_darken(LOCAL_PEDESTRIAN, 0.25),
                      width=32),
-        CS.line_fore(colour=0xccccff,
+        CS.line_fore(colour=LOCAL_PEDESTRIAN,
                      width=24),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xbbbbbb,
+                     arrow_colour=_darken(LOCAL_PEDESTRIAN, 0.25),
                      size=24)
     ]
     s['localPedestrianTertiaryRoad'] = local_pedestrian_tertiary_road
 
     local_tertiary_road = CTI("line", ["road"])
     local_tertiary_road[0:5] = [
-        CS.line_back(colour=0xcccccc,
+        CS.line_back(colour=_darken(LOCAL_TERTIARY_QUATERNARY, 0.25),
                      width=32),
-        CS.line_fore(colour=0xeeeeee,
+        CS.line_fore(colour=LOCAL_TERTIARY_QUATERNARY,
                      width=24),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xcccccc,
+                     arrow_colour=_darken(LOCAL_TERTIARY_QUATERNARY, 0.25),
                      size=24)
     ]
     s['localTertiaryRoad'] = local_tertiary_road
 
     local_secondary_road = CTI("line", ["road"])
     local_secondary_road[0:5] = [
-        CS.line_back(colour=0xffee66,
+        CS.line_back(colour=_darken(LOCAL_SECONDARY, 0.25),
                      width=36),
-        CS.line_fore(colour=0xfff899,
+        CS.line_fore(colour=LOCAL_SECONDARY,
                      width=28),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xffee66,
+                     arrow_colour=_darken(LOCAL_SECONDARY, 0.25),
                      size=28)
     ]
     s['localSecondaryRoad'] = local_secondary_road
 
     local_main_road = CTI("line", ["road"])
     local_main_road[0:5] = [
-        CS.line_back(colour=0xffcc00,
+        CS.line_back(colour=_darken(LOCAL_MAIN, 0.25),
                      width=40),
-        CS.line_fore(colour=0xffee00,
+        CS.line_fore(colour=LOCAL_MAIN,
                      width=32),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xffcc00,
+                     arrow_colour=_darken(LOCAL_MAIN, 0.25),
                      size=32)
     ]
     s['localMainRoad'] = local_main_road
 
     local_highway = CTI("line", ["road"])
     local_highway[0:5] = [
-        CS.line_back(colour=0xffad33,
+        CS.line_back(colour=_darken(LOCAL_HIGHWAY, 0.25),
                      width=44),
-        CS.line_fore(colour=0xffcc80,
+        CS.line_fore(colour=LOCAL_HIGHWAY,
                      width=36),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xffad33,
+                     arrow_colour=_darken(LOCAL_HIGHWAY, 0.25),
                      size=36)
     ]
     s['localHighway'] = local_highway
 
     b_road = CTI("line", ["road"])
     b_road[0:5] = [
-        CS.line_back(colour=0xe67300,
+        CS.line_back(colour=_darken(B_ROAD, 0.25),
                      width=48),
-        CS.line_fore(colour=0xff8000,
+        CS.line_fore(colour=B_ROAD,
                      width=40),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xe67300,
+                     arrow_colour=_darken(B_ROAD, 0.25),
                      size=40)
     ]
     s['bRoad'] = b_road
 
     a_road = CTI("line", ["road"])
     a_road[0:5] = [
-        CS.line_back(colour=0xff8080,
+        CS.line_back(colour=_darken(A_ROAD, 0.25),
                      width=56),
-        CS.line_fore(colour=0xffaaaa,
+        CS.line_fore(colour=A_ROAD,
                      width=48),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xff8080,
+                     arrow_colour=_darken(A_ROAD, 0.25),
                      size=48)
     ]
     s['aRoad'] = a_road
@@ -687,10 +696,10 @@ def main():
     local_highway_slip_elevated[0:5] = [
         CS.line_back(colour=0x000000,
                      width=28),
-        CS.line_fore(colour=0xffcc80,
+        CS.line_fore(colour=LOCAL_HIGHWAY,
                      width=20),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xffad33,
+                     arrow_colour=_darken(LOCAL_HIGHWAY, 0.25),
                      size=20)
     ]
     s['localHighwaySlip_elevated'] = local_highway_slip_elevated
@@ -699,10 +708,10 @@ def main():
     b_road_slip_elevated[0:5] = [
         CS.line_back(colour=0x000000,
                      width=32),
-        CS.line_fore(colour=0xff8000,
+        CS.line_fore(colour=B_ROAD,
                      width=24),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xe67300,
+                     arrow_colour=_darken(B_ROAD, 0.25),
                      size=24)
     ]
     s['bRoadSlip_elevated'] = b_road_slip_elevated
@@ -711,10 +720,10 @@ def main():
     a_road_slip_elevated[0:5] = [
         CS.line_back(colour=0x000000,
                      width=40),
-        CS.line_fore(colour=0xffaaaa,
+        CS.line_fore(colour=A_ROAD,
                      width=32),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xff8080,
+                     arrow_colour=_darken(A_ROAD, 0.25),
                      size=32)
     ]
     s['aRoadSlip_elevated'] = a_road_slip_elevated
@@ -723,10 +732,10 @@ def main():
     local_pedestrian_quaternary_road_elevated[0:5] = [
         CS.line_back(colour=0x000000,
                      width=24),
-        CS.line_fore(colour=0xccccff,
+        CS.line_fore(colour=LOCAL_PEDESTRIAN,
                      width=16),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xbbbbbb,
+                     arrow_colour=_darken(LOCAL_PEDESTRIAN, 0.25),
                      size=16)
     ]
     s['localPedestrianQuaternaryRoad_elevated'] = local_pedestrian_quaternary_road_elevated
@@ -735,10 +744,10 @@ def main():
     local_quaternary_road_elevated[0:5] = [
         CS.line_back(colour=0x000000,
                      width=24),
-        CS.line_fore(colour=0xeeeeee,
+        CS.line_fore(colour=LOCAL_TERTIARY_QUATERNARY,
                      width=16),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xcccccc,
+                     arrow_colour=_darken(LOCAL_TERTIARY_QUATERNARY, 0.25),
                      size=16)
     ]
     s['localQuaternaryRoad_elevated'] = local_quaternary_road_elevated
@@ -747,10 +756,10 @@ def main():
     local_pedestrian_tertiary_road_elevated[0:5] = [
         CS.line_back(colour=0x000000,
                      width=32),
-        CS.line_fore(colour=0xccccff,
+        CS.line_fore(colour=LOCAL_PEDESTRIAN,
                      width=24),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xbbbbbb,
+                     arrow_colour=_darken(LOCAL_PEDESTRIAN, 0.25),
                      size=24)
     ]
     s['localPedestrianTertiaryRoad_elevated'] = local_pedestrian_tertiary_road_elevated
@@ -759,10 +768,10 @@ def main():
     local_tertiary_road_elevated[0:5] = [
         CS.line_back(colour=0x000000,
                      width=32),
-        CS.line_fore(colour=0xeeeeee,
+        CS.line_fore(colour=LOCAL_TERTIARY_QUATERNARY,
                      width=24),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xcccccc,
+                     arrow_colour=_darken(LOCAL_TERTIARY_QUATERNARY, 0.25),
                      size=24)
     ]
     s['localTertiaryRoad_elevated'] = local_tertiary_road_elevated
@@ -771,10 +780,10 @@ def main():
     local_secondary_road_elevated[0:5] = [
         CS.line_back(colour=0x000000,
                      width=36),
-        CS.line_fore(colour=0xfff899,
+        CS.line_fore(colour=LOCAL_SECONDARY,
                      width=28),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xffee66,
+                     arrow_colour=_darken(LOCAL_SECONDARY, 0.25),
                      size=28)
     ]
     s['localSecondaryRoad_elevated'] = local_secondary_road_elevated
@@ -783,10 +792,10 @@ def main():
     local_main_road_elevated[0:5] = [
         CS.line_back(colour=0x000000,
                      width=40),
-        CS.line_fore(colour=0xffee00,
+        CS.line_fore(colour=LOCAL_MAIN,
                      width=32),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xffcc00,
+                     arrow_colour=_darken(LOCAL_MAIN, 0.25),
                      size=32)
     ]
     s['localMainRoad_elevated'] = local_main_road_elevated
@@ -795,10 +804,10 @@ def main():
     local_highway_elevated[0:5] = [
         CS.line_back(colour=0x000000,
                      width=44),
-        CS.line_fore(colour=0xffcc80,
+        CS.line_fore(colour=LOCAL_HIGHWAY,
                      width=36),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xffad33,
+                     arrow_colour=_darken(LOCAL_HIGHWAY, 0.25),
                      size=36)
     ]
     s['localHighway_elevated'] = local_highway_elevated
@@ -807,10 +816,10 @@ def main():
     b_road_elevated[0:5] = [
         CS.line_back(colour=0x000000,
                      width=48),
-        CS.line_fore(colour=0xff8000,
+        CS.line_fore(colour=B_ROAD,
                      width=40),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xe67300,
+                     arrow_colour=_darken(B_ROAD, 0.25),
                      size=40)
     ]
     s['bRoad_elevated'] = b_road_elevated
@@ -819,10 +828,10 @@ def main():
     a_road_elevated[0:5] = [
         CS.line_back(colour=0x000000,
                      width=56),
-        CS.line_fore(colour=0xffaaaa,
+        CS.line_fore(colour=A_ROAD,
                      width=48),
         CS.line_text(colour=0x000000,
-                     arrow_colour=0xff8080,
+                     arrow_colour=_darken(A_ROAD, 0.25),
                      size=48)
     ]
     s['aRoad_elevated'] = a_road_elevated
@@ -1055,11 +1064,11 @@ def main():
     bus_stop = CTI("point")
     bus_stop[0:5] = [
         CS.point_square(colour=0x66ccff,
-                        size=20,
-                        width=12),
+                        size=15,
+                        width=10),
         CS.point_text(colour=0x66ccff,
                       offset=Coord(0, 20),
-                      size=25,
+                      size=15,
                       anchor="mm")
     ]
     s['busStop'] = bus_stop
@@ -1067,11 +1076,11 @@ def main():
     ferry_stop = CTI("point")
     ferry_stop[0:5] = [
         CS.point_square(colour=0x1e85ae,
-                        size=20,
-                        width=12),
+                        size=15,
+                        width=10),
         CS.point_text(colour=0x1e85ae,
                       offset=Coord(0, 20),
-                      size=25,
+                      size=15,
                       anchor="mm")
     ]
     s['ferryStop'] = ferry_stop
@@ -1079,11 +1088,11 @@ def main():
     rail_station = CTI("point")
     rail_station[0:5] = [
         CS.point_square(colour=0x1f3d7a,
-                        size=20,
-                        width=12),
+                        size=15,
+                        width=10),
         CS.point_text(colour=0x1f3d7a,
                       offset=Coord(0, 20),
-                      size=25,
+                      size=15,
                       anchor="mm")
     ]
     s['railStation'] = rail_station
