@@ -6,4 +6,4 @@ from renderer.objects.nodes import *
 from renderer.objects.components import *
 from renderer.objects.skin import *
 
-__version__ = '2.0'
+__version__ = '2.1'

@@ -1,6 +1,7 @@
-from typing import List, Dict, Literal
+from typing import Literal
 
 from schema import Schema, Or, And, Optional
+from tqdm import tqdm
 
 from renderer import validate
 from renderer.objects.nodes import NodeList
@@ -26,39 +27,43 @@ class Component:
         """The layer of the component."""
         self.nodes: list[str] = json['nodes']
         """The list of nodes that the component is anchored on."""
-        self.hollows: List[str] = [] if 'hollows' not in json else json['hollows']
+        self.hollows: list[str] = [] if 'hollows' not in json else json['hollows']
         """A list of hollow areas, if the ``type`` is ``area``."""
         self.attrs: dict = json['attrs']
         """A dictionary of attributes."""
         if len(json['type'].split(" ")) >= 1:
-            self.tags: List[str] = json['type'].split(" ")[1:]
+            self.tags: list[str] = json['type'].split(" ")[1:]
             """A list of tags appended at the end of the component's type."""
         else:
-            self.tags: List[str] = []
+            self.tags: list[str] = []
 
 class ComponentList:
     """A list of components.
 
     :param ComponentListJson component_json: The JSON of the list of components.
     :param NodeListJson node_json: The JSON of the list of nodes for validation."""
-    def __init__(self, component_json: ComponentListJson, node_json: NodeListJson):
-        self.validate_json(component_json, node_json)
-        self.components: Dict[str, Component] = {name: Component(name, component) for name, component in component_json.items()}
+    def __init__(self, component_json: ComponentListJson, node_json: NodeListJson ):
+        try: self.components: dict[str, Component] = {name: Component(name, component) for name, component in
+                                                      component_json.items()}
+        except Exception:
+            self.validate_json(component_json, node_json)
+            self.components: dict[str, Component] = {name: Component(name, component) for name, component in
+                                                     component_json.items()}
         """A dictionary of component objects, in the form of ``{id: component}``."""
 
     def __getitem__(self, name: str) -> Component:
         return self.components[name]
 
-    def component_ids(self) -> List[str]:
+    def component_ids(self) -> list[str]:
         """Gets all the component IDs.
 
-        :rtype: List[str]"""
+        :rtype: list[str]"""
         return list(self.components.keys())
 
-    def component_values(self) -> List[Component]:
+    def component_values(self) -> list[Component]:
         """Gets all the component values.
 
-        :rtype: List[Component]"""
+        :rtype: list[Component]"""
         return list(self.components.values())
 
     @staticmethod

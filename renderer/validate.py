@@ -4,7 +4,7 @@ from renderer.objects.nodes import NodeList
 from renderer.types import *
 
 
-def v_coords(coords: List[Coord]) -> Literal[True]:
+def v_coords(coords: list[Coord]) -> Literal[True]:
     """
     Validates a list of coordinates.
       
@@ -22,7 +22,7 @@ def v_coords(coords: List[Coord]) -> Literal[True]:
                 raise TypeError(f"Coordinate {n} is not type 'int/float'")
     return True
 
-def v_tile_coords(tiles: List[TileCoord], min_zoom: int, max_zoom: int) -> Literal[True]:
+def v_tile_coords(tiles: list[TileCoord], min_zoom: int, max_zoom: int) -> Literal[True]:
     """
     Validates a list of tile coordinates.
       
@@ -46,7 +46,7 @@ def v_tile_coords(tiles: List[TileCoord], min_zoom: int, max_zoom: int) -> Liter
             raise TypeError(f"Zoom value {item[0]} is not an integer")
     return True
 
-def v_node_list(nodes: List[str], all_nodes: NodeList) -> Literal[True]:
+def v_node_list(nodes: list[str], all_nodes: NodeList) -> Literal[True]:
     """
     Validates a list of node IDs.
       
@@ -69,7 +69,7 @@ def v_geo_json(geo_json: dict) -> Literal[True]:
     
     :returns: Returns True if no errors
     """
-    mainSchema = Schema({
+    main_schema = Schema({
         "type": "FeatureCollection", 
         "features": [{
             "type": "Feature",
@@ -83,7 +83,7 @@ def v_geo_json(geo_json: dict) -> Literal[True]:
         "coordinates": And([int, float], lambda c: len(c) == 2)
     }, ignore_extra_keys=True)
 
-    lineString = Schema({
+    line_string = Schema({
         "type": "LineString",
         "coordinates": v_coords
     }, ignore_extra_keys=True)
@@ -93,41 +93,41 @@ def v_geo_json(geo_json: dict) -> Literal[True]:
         "coordinates": lambda cs: all([v_coords(c) and c[0] == c[-1] for c in cs])
     }, ignore_extra_keys=True)
 
-    multiPoint = Schema({
+    multi_point = Schema({
         "type": "MultiPoint",
         "coordinates": v_coords
     }, ignore_extra_keys=True)
 
-    multiLineString = Schema({
+    multi_line_string = Schema({
         "type": "MultiLineString",
         "coordinates": lambda cs: all([v_coords(c) for c in cs])
     }, ignore_extra_keys=True)
 
-    multiPolygon = Schema({
+    multi_polygon = Schema({
         "type": "MultiPolygon",
         "coordinates": lambda css: all([all([v_coords(c) and c[0] == c[-1] for c in cs]) for cs in css])
     }, ignore_extra_keys=True)
 
-    def vGeometry(geo: dict):
+    def v_geometry(geo: dict):
         schemas = {
             "Point": point,
-            "LineString": lineString,
+            "LineString": line_string,
             "Polygon": polygon,
-            "MultiPoint": multiPoint,
-            "MultiLineString": multiLineString,
-            "MultiPolygon": multiPolygon
+            "MultiPoint": multi_point,
+            "MultiLineString": multi_line_string,
+            "MultiPolygon": multi_polygon
         }
 
         if geo['type'] == "GeometryCollection":
             for sub_geo in geo['geometries']:
-                vGeometry(sub_geo)
+                v_geometry(sub_geo)
         elif geo['type'] in schemas.keys():
             schemas[geo['type']].validate(geo)
         else:
             raise ValueError(f"Invalid type {geo['type']}")
 
-    mainSchema.validate(geo_json)
+    main_schema.validate(geo_json)
     for feature in geo_json['features']:
-        vGeometry(feature['geometry'])
+        v_geometry(feature['geometry'])
 
     return True

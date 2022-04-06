@@ -1,6 +1,7 @@
-from typing import Literal, Dict, List
+from typing import Literal
 
 from schema import Schema, Or
+from tqdm import tqdm
 
 from renderer.types import RealNum, NodeListJson, NodeJson
 
@@ -22,23 +23,25 @@ class NodeList:
 
     :param NodeListJson json: The JSON of the list of nodes."""
     def __init__(self, json: NodeListJson):
-        self.validate_json(json)
-        self.nodes: Dict[str, Node] = {name: Node(node) for name, node in json.items()}
+        try: self.nodes: dict[str, Node] = {name: Node(node) for name, node in json.items()}
+        except Exception:
+            self.validate_json(json)
+            self.nodes: dict[str, Node] = {name: Node(node) for name, node in json.items()}
         """A dictionary of node objects, in the form ``{id: node}``"""
 
     def __getitem__(self, name: str) -> Node:
         return self.nodes[name]
 
-    def node_ids(self) -> List[str]:
+    def node_ids(self) -> list[str]:
         """Gets all the node IDs.
 
-        :rtype: List[str]"""
+        :rtype: list[str]"""
         return list(self.nodes.keys())
 
-    def node_values(self) -> List[Node]:
+    def node_values(self) -> list[Node]:
         """Gets all the node values.
 
-        :rtype: List[Node]"""
+        :rtype: list[Node]"""
         return list(self.nodes.values())
 
     @staticmethod

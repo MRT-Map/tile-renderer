@@ -3,8 +3,7 @@ from typing import Tuple
 
 import blessed
 
-import renderer.internals.internal as internal # type: ignore
-import renderer.validate as validate
+import renderer.internals.internal as internal  # type: ignore
 import renderer.tools as tools
 from renderer.objects.components import ComponentList
 from renderer.objects.nodes import NodeList
@@ -37,7 +36,7 @@ def find_ends(components: ComponentList, nodes: NodeList) -> Tuple[RealNum, Real
     return x_max, x_min, y_max, y_min
 
 
-def rendered_in(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: int, max_zoom_range: RealNum) -> List[TileCoord]:
+def rendered_in(components: ComponentList, nodes: NodeList, min_zoom: int, max_zoom: int, max_zoom_range: RealNum) -> list[TileCoord]:
     """
     Like :py:func:`tools.line.to_tiles`, but for a JSON of components.
 
@@ -62,7 +61,7 @@ def rendered_in(components: ComponentList, nodes: NodeList, min_zoom: int, max_z
 
     return tiles
 
-
+ # TODO fix types
 def to_geo_json(component_json: ComponentListJson, node_json: NodeListJson, skin_json: SkinJson) -> dict:
     """
     Converts component JSON into GeoJson (with nodes and skin).

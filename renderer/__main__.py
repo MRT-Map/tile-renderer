@@ -31,8 +31,8 @@ def cmd():
     p_vdir.add_argument('-ns', '--nodes_suffix', type=str, help='The suffix for node files\' names', default='.nodes.pla')
 
     p_render = subparsers.add_parser('render', help='render tiles', formatter_class=argparse.MetavarTypeHelpFormatter)
-    p_render.add_argument('-c', '--components', required=True, type=str, help='the component JSON file directory')
-    p_render.add_argument('-n', '--nodes', required=True, type=str, help='the node JSON file directory')
+    p_render.add_argument('-c', '--components', required=True, type=Path, help='the component JSON file directory')
+    p_render.add_argument('-n', '--nodes', required=True, type=Path, help='the node JSON file directory')
     p_render.add_argument('-min', '--min_zoom', type=int, required=True, help="minimum zoom value")
     p_render.add_argument('-max', '--max_zoom', type=int, required=True, help="maximum zoom value")
     p_render.add_argument('-r', '--max_zoom_range', type=float, required=True, help="range of coordinates covered by a tile in the maximum zoom")
@@ -41,6 +41,7 @@ def cmd():
     p_render.add_argument('-m', '--processes', type=int, help="the amount of processes to run for rendering", default=psutil.cpu_count())
     p_render.add_argument('-t', '--tiles', type=list, help="a list of tiles to render, given in tuples of (z,x,y)")
     p_render.add_argument('-o', '--offset', type=tuple, help="the offset of node coordinates, given as (x,y)", default=[0, 0])
+    p_render.add_argument('-dbg', '--debug', help="Prints extra debug information on tiles", default=False, action="store_true")
 
     p_merge = subparsers.add_parser('merge', help='merge tiles', formatter_class=argparse.MetavarTypeHelpFormatter)
     p_merge.add_argument('-i', '--image_dir', type=Path, help='the directory of tiles', default=Path.cwd())
@@ -61,14 +62,22 @@ def cmd():
     elif args.task == "compbuilder":
         import renderer.builders.comp # type: ignore
     elif args.task == "render" and __name__ == '__main__':
-        renderer.render(renderer.ComponentList(renderer.internals.internal._read_json(args.components), renderer.internals.internal._read_json(args.nodes)),
-                        renderer.NodeList(renderer.internals.internal._read_json(args.nodes)),
+        print("Getting nodes...")
+        node_json = renderer.internals.internal._read_json(args.nodes)
+        nodes = renderer.NodeList(renderer.internals.internal._read_json(args.nodes))
+        print("Getting components...")
+        comps = renderer.ComponentList(renderer.internals.internal._read_json(args.components), node_json)
+        print("Getting skin...")
+        skin = renderer.Skin.from_name(args.skin)
+        print("Starting rendering...")
+        renderer.render(comps, nodes,
                         args.min_zoom, args.max_zoom, args.max_zoom_range,
-                        skin=renderer.Skin.from_name(args.skin),
+                        skin=skin,
                         save_dir=args.save_dir,
                         processes=args.processes,
                         tiles=args.tiles,
-                        offset=args.offset)
+                        offset=args.offset,
+                        debug=args.debug)
     elif args.task == "validate":
         n = renderer.internals.internal._read_json(args.nodes)
         if args.components is not None:
@@ -97,7 +106,6 @@ def cmd():
             renderer.NodeList.validate_json(nodes)
         print(term.green("Validated"))
     elif args.task == "merge":
-        if not args.image_dir.endswith("/") and args.image_dir != "": args.image_dir += '/'
         renderer.merge_tiles(args.image_dir, save_dir=args.save_dir, zoom=args.zoom)
     else:
         parser.print_help()

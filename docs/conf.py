@@ -20,7 +20,7 @@ sys.path.insert(0, os.path.abspath('../renderer'))
 # -- Project information -----------------------------------------------------
 
 project = 'tile-renderer'
-copyright = '2021, The MRT Mapping Team'
+copyright = '2022, The MRT Mapping Team'
 author = '7d'
 
 # The full version, including alpha/beta/rc tags
