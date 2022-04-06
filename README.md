@@ -21,9 +21,22 @@ Leaflet.js streetmap tile renderer, made by 7d
 
 **Documentation: https://tile-renderer.readthedocs.io/en/latest/**
 
-## Current version: v2.1
-* **v2.1 (??/??/21)**
-  *
+## Current version: v2.2
+* **v2.1 (6/4/22)**
+
+  * Added SkinBuilder, a utility class for building skins Pythonically
+  * Moved bulk of rendering code to ComponentStyle classes
+  * Redid stud drawing
+  * Fix text overlapping with _prevent_text_overlap
+  * most mathtools functions now use Coord and TileCoord
+  * logging improvements
+  * _TextObjects now store their bounds instead of their width/heights
+  * new dashing algorithm ``mathtools.dash()``
+  * offset function ``mathtools.offset()``
+  * redid rendering for LineText so that they can go around corners
+  * fixed arrow offset
+  * debug switch to show additional debug Information
+  * tweaked skin
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)
@@ -32,7 +45,7 @@ Leaflet.js streetmap tile renderer, made by 7d
 3. In your file, run the renderer. Here is an example code:
 
 ```python
-import renderer  # important!!
+import renderer
 import json
 
 
@@ -49,9 +62,7 @@ comps = renderer.ComponentList(read_file("path_to_your_components_file/blah.comp
 if __name__ == "__main__": renderer.render(comps, nodes, 1, 2, 8)
 # renders tiles at zoom levels 1 and 2 with the max zoom tile covering 8 units
 # Don't like clogging the main directory? Create a new folder and use this instead:
-# if __name__ == "__main__": renderer.render(comps, nodes, 1, 2, 8, save_dir=Path("your_folder_name/"))
-# Too slow? Increase the number of processes
-# if __name__ == "__main__": renderer.render(comps, nodes, 1, 2, 8, processes=5)
+# renderer.render(comps, nodes, 1, 2, 8, save_dir=Path("your_folder_name/"))
 ```
 
 <!--

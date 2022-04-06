@@ -1,5 +1,21 @@
 Changelog
 =========
+* **v2.1 (6/4/22)**
+
+  * Added SkinBuilder, a utility class for building skins Pythonically
+  * Moved bulk of rendering code to ComponentStyle classes
+  * Redid stud drawing
+  * Fix text overlapping with _prevent_text_overlap
+  * most mathtools functions now use Coord and TileCoord
+  * logging improvements
+  * _TextObjects now store their bounds instead of their width/heights
+  * new dashing algorithm ``mathtools.dash()``
+  * offset function ``mathtools.offset()``
+  * redid rendering for LineText so that they can go around corners
+  * fixed arrow offset
+  * debug switch to show additional debug Information
+  * tweaked skin
+
 * **v2.0 (23/12/21)**
 
   * "PLA" is no longer defined as "a set of components" but a file type (`.pla`)
