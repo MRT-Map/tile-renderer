@@ -137,7 +137,10 @@ class Skin:
                 return []
         
         class ComponentStyle:
-            """Represents the ``styles`` portion of a ComponentTypeInfo."""
+            """Represents the ``styles`` portion of a ComponentTypeInfo. Base class for all types of ComponentStyle.
+
+            :param dict json: JSON dictionary as input
+            :param CompnentTypeInfo type_info: The type_info that the ComponentStyle is under"""
             def __new__(cls, json: dict | None = None, type_info: Skin.ComponentTypeInfo | None = None, shape: Literal["point", "line", "area"] | None = None):
                 if cls != Skin.ComponentTypeInfo.ComponentStyle: return super().__new__(cls)
                 if shape == "point":
@@ -156,7 +159,8 @@ class Skin:
                     if json['layer'] == "centerimage": return Skin.ComponentTypeInfo.AreaCenterImage.__new__(Skin.ComponentTypeInfo.AreaCenterImage, json, type_info)
                 raise ValueError(f"No layer `{json['layer']}` in shape `{shape}`")
 
-            def render(self, *args, **kwargs): pass
+            def render(self, *args, **kwargs):
+                """Renders the component into an ImageDraw instance."""
 
         class PointCircle(ComponentStyle):
             # noinspection PyInitNewSignature

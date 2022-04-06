@@ -3,7 +3,7 @@ Formats
 .. _formats:
 
 Components
-----
+----------
 .. code-block:: javascript
 
   {

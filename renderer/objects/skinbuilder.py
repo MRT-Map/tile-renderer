@@ -68,6 +68,12 @@ def _lighten(h1: int, strength: float = 0.5) -> int:
     return int(r + g + b, base=16)
 
 class SkinBuilder:
+    """Utility class for building skins.
+
+    :param int tile_size: Size of the tiles that the skin produces.
+    :param fonts: Keys are the formatting, eg "", "b", "i", "bi", values are the relative paths to the fonts.
+    :type fonts: dict[str, Path]
+    :param int background: The colour of the background in hexadecimal."""
     tile_size: int
     fonts: dict[str, Path]
     background: str
@@ -82,6 +88,8 @@ class SkinBuilder:
         self.types[key] = value
 
     def json(self) -> dict:
+        """Returns a JSON representation of the skin.
+        :rtype: dict"""
         return {
             "info": {
                 "size": self.tile_size,
@@ -93,6 +101,11 @@ class SkinBuilder:
         }
 
     class ComponentTypeInfo:
+        """Utility class for building the component type info for the skin.
+
+        :param shape: The shape of the component. Must be either `point`, `line` or `area`.
+        :type shape: str
+        :param list[str] tags: A list of tags for the component"""
         shape: Literal["point", "line", "area"]
         tags: list[str]
         style: dict[str, list[ComponentStyle]]
@@ -105,6 +118,8 @@ class SkinBuilder:
             self.style[f"{key.start}, {key.stop or 1000}"] = value
 
         def json(self) -> dict:
+            """Returns a JSON representation of the skin.
+            :rtype: dict"""
             return {
                 "tags": self.tags,
                 "type": self.shape,
@@ -112,6 +127,7 @@ class SkinBuilder:
             }
 
         class ComponentStyle:
+            """Utility class for building the component style for the component."""
             json: dict
             @classmethod
             def point_circle(cls, *, colour: int | None = None,

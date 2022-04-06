@@ -214,6 +214,13 @@ def dash(coords: list[Coord], dash_length: RealNum, gap_length: RealNum) -> list
     return dashes
 
 def combine_edge_dashes(coords: list[tuple[Coord, Coord]]) -> list[tuple[Coord, ...]]:
+    """
+    Combines dashes at joints from the output of dash().
+
+    :param coords: list of dashes.
+    :type coords: list[tuple[Coord, Coord]]
+    :return: list of combined dashes
+    """
     new_coords = []
     prev_coord = None
     for c1, c2 in coords:
@@ -256,7 +263,8 @@ def points_away(x: RealNum, y: RealNum, d: RealNum, m: RealNum | None = None, th
     :param RealNum d: the distance the two points from the original point
     :param m: the gradient of the line. Give ``None`` for a gradient of undefined.
     :type m: RealNum | None
-    :param theta: TODO
+    :param theta: The angle of the line from the horizontal, uses m if is None
+    :type theta: RealNum | None
 
     :returns: Given in ``(c1, c2)``
     :rtype: tuple(Coord, Coord)
@@ -266,17 +274,22 @@ def points_away(x: RealNum, y: RealNum, d: RealNum, m: RealNum | None = None, th
     dy = d*math.sin(theta)
     return Coord(x + dx, y + dy), Coord(x - dx, y - dy)
 
-def offset(coords: list[Coord], d: RealNum):
+def offset(coords: list[Coord], d: RealNum) -> list[Coord]:
+    """
+    Returns a list of coordinates offset by d along its normal vector.
+
+    :param list[Coord] coords: the coordinates
+    :param RealNum d: the offset distance
+    :rtype: list[Coord]
+    """
     angles = [math.atan2(c2.y-c1.y, c2.x-c1.x) for c1, c2 in internal._with_next(coords)]
     offsetted_points_pairs = []
     for i, (a1, a2) in enumerate([(None, angles[0]), *internal._with_next(angles), (angles[-1], None)]):
         if a1 is None or a2 is None:
             # noinspection PyTypeChecker
             bisect_angle = a1+math.pi/2 if a1 is not None else a2+math.pi/2
-            theta = math.pi
         else:
             bisect_angle = (a1+a2+math.pi)/2
-            theta = abs(a1-a2)
         offsetted_points_pairs.append(points_away(*coords[i], d, theta=bisect_angle))
     pc = offsetted_points_pairs[0][0] if offsetted_points_pairs[0][0].y > coords[0].y else offsetted_points_pairs[0][0] if offsetted_points_pairs[0][0].x > coords[0].x else offsetted_points_pairs[0][1]
     pc = offsetted_points_pairs[0][1] if pc == offsetted_points_pairs[0][0] and d < 0 else offsetted_points_pairs[0][0]
