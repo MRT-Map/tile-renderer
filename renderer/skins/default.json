@@ -113,7 +113,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1000": [
           {
             "layer": "fill",
             "colour": "#b3cbcb",
@@ -129,6 +129,40 @@
             ],
             "size": 30
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#b3cbcb",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#596565",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 20
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#b3cbcb",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#596565",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
         ]
       }
     },
@@ -136,7 +170,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1000": [
           {
             "layer": "fill",
             "colour": "#ffccb3",
@@ -152,6 +186,40 @@
             ],
             "size": 30
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#ffccb3",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#80665a",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 20
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#ffccb3",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#80665a",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
         ]
       }
     },
@@ -159,7 +227,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1000": [
           {
             "layer": "fill",
             "colour": "#e7b1ca",
@@ -175,6 +243,40 @@
             ],
             "size": 30
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#e7b1ca",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#735865",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 20
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#e7b1ca",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#735865",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
         ]
       }
     },
@@ -182,7 +284,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1000": [
           {
             "layer": "fill",
             "colour": "#ffcc99",
@@ -198,6 +300,40 @@
             ],
             "size": 30
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#ffcc99",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#80664c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 20
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#ffcc99",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#80664c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
         ]
       }
     },
@@ -205,7 +341,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1000": [
           {
             "layer": "fill",
             "colour": "#d9dbb2",
@@ -221,6 +357,40 @@
             ],
             "size": 30
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#d9dbb2",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#6d6e59",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 20
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#d9dbb2",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#6d6e59",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
         ]
       }
     },
@@ -228,7 +398,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1000": [
           {
             "layer": "fill",
             "colour": "#ecc6c6",
@@ -244,6 +414,40 @@
             ],
             "size": 30
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#ecc6c6",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#766363",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 20
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#ecc6c6",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#766363",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
         ]
       }
     },
@@ -251,7 +455,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1000": [
           {
             "layer": "fill",
             "colour": "#ff9999",
@@ -267,6 +471,40 @@
             ],
             "size": 30
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#ff9999",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#804c4c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 20
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#ff9999",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#804c4c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
         ]
       }
     },
@@ -274,7 +512,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1000": [
           {
             "layer": "fill",
             "colour": "#ccff99",
@@ -290,6 +528,40 @@
             ],
             "size": 30
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#ccff99",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#66804c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 20
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#ccff99",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#66804c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
         ]
       }
     },
@@ -297,7 +569,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1000": [
           {
             "layer": "fill",
             "colour": "#c2c2a3",
@@ -312,6 +584,40 @@
               0
             ],
             "size": 30
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#c2c2a3",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#616152",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 20
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#c2c2a3",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#616152",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
           }
         ]
       }
@@ -414,7 +720,7 @@
             "size": 50
           }
         ],
-        "3, 5": [
+        "3, 1000": [
           {
             "layer": "fill",
             "colour": "#dddddd",
@@ -428,7 +734,7 @@
       "tags": [],
       "type": "line",
       "style": {
-        "0, 5": [
+        "0, 1000": [
           {
             "layer": "fore",
             "colour": "#87ceeb",
@@ -442,6 +748,44 @@
             "size": 20,
             "offset": 0
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "fore",
+            "colour": "#87ceeb",
+            "width": 7,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#436775",
+            "arrow_colour": "#659ab0",
+            "size": 13,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fore",
+            "colour": "#87ceeb",
+            "width": 5,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#436775",
+            "arrow_colour": "#659ab0",
+            "size": 10,
+            "offset": 0
+          }
+        ],
+        "3, 4": [
+          {
+            "layer": "fore",
+            "colour": "#87ceeb",
+            "width": 3,
+            "dash": null
+          }
         ]
       }
     },
@@ -449,18 +793,18 @@
       "tags": [],
       "type": "line",
       "style": {
-        "0, 5": [
+        "0, 3": [
           {
             "layer": "fore",
             "colour": "#25a7da",
-            "width": 10,
+            "width": 5,
             "dash": null
           },
           {
             "layer": "text",
             "colour": "#13546d",
             "arrow_colour": "#25a7da",
-            "size": 10,
+            "size": 5,
             "offset": 0
           }
         ]
@@ -470,11 +814,11 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1000": [
           {
             "layer": "fill",
             "colour": "#bbff99",
-            "outline": null,
+            "outline": "#8cbf73",
             "stripe": null
           },
           {
@@ -486,6 +830,57 @@
             ],
             "size": 25
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#bbff99",
+            "outline": "#8cbf73",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#5e804c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 15
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#bbff99",
+            "outline": "#8cbf73",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#5e804c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "fill",
+            "colour": "#bbff99",
+            "outline": "#8cbf73",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#5e804c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 7
+          }
         ]
       }
     },
@@ -493,11 +888,11 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1000": [
           {
             "layer": "fill",
             "colour": "#99ff99",
-            "outline": null,
+            "outline": "#73bf73",
             "stripe": null
           },
           {
@@ -509,6 +904,57 @@
             ],
             "size": 25
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#99ff99",
+            "outline": "#73bf73",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#4c804c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 15
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#99ff99",
+            "outline": "#73bf73",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#4c804c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "fill",
+            "colour": "#99ff99",
+            "outline": "#73bf73",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#4c804c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 7
+          }
         ]
       }
     },
@@ -516,11 +962,11 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1000": [
           {
             "layer": "fill",
             "colour": "#5ca904",
-            "outline": null,
+            "outline": "#457f03",
             "stripe": null
           },
           {
@@ -532,6 +978,57 @@
             ],
             "size": 25
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#5ca904",
+            "outline": "#457f03",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#2e5402",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 15
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#5ca904",
+            "outline": "#457f03",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#2e5402",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "fill",
+            "colour": "#5ca904",
+            "outline": "#457f03",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#2e5402",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 7
+          }
         ]
       }
     },
@@ -539,11 +1036,11 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1000": [
           {
             "layer": "fill",
             "colour": "#aaaaaa",
-            "outline": null,
+            "outline": "#808080",
             "stripe": null
           },
           {
@@ -555,6 +1052,57 @@
             ],
             "size": 25
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#aaaaaa",
+            "outline": "#808080",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#555555",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 15
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#aaaaaa",
+            "outline": "#808080",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#555555",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "fill",
+            "colour": "#aaaaaa",
+            "outline": "#808080",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#555555",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 7
+          }
         ]
       }
     },
@@ -562,21 +1110,72 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1000": [
           {
             "layer": "fill",
-            "colour": "#f7e1a1",
-            "outline": null,
+            "colour": "#669900",
+            "outline": "#4c7300",
             "stripe": null
           },
           {
             "layer": "centertext",
-            "colour": "#7c7151",
+            "colour": "#334d00",
             "offset": [
               0,
               0
             ],
             "size": 25
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#669900",
+            "outline": "#4c7300",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#334d00",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 15
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#669900",
+            "outline": "#4c7300",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#334d00",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "fill",
+            "colour": "#669900",
+            "outline": "#4c7300",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#334d00",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 7
           }
         ]
       }
@@ -585,7 +1184,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 2": [
           {
             "layer": "fill",
             "colour": null,
@@ -599,7 +1198,15 @@
               0,
               0
             ],
-            "size": 15
+            "size": 10
+          }
+        ],
+        "3, 5": [
+          {
+            "layer": "fill",
+            "colour": null,
+            "outline": "#33334d",
+            "stripe": null
           }
         ]
       }
@@ -622,7 +1229,7 @@
               0,
               0
             ],
-            "size": 30
+            "size": 15
           }
         ]
       }
@@ -669,7 +1276,7 @@
       ],
       "type": "line",
       "style": {
-        "0, 2": [
+        "0, 1000": [
           {
             "layer": "fore",
             "colour": "#73738c",
@@ -680,22 +1287,82 @@
             "layer": "text",
             "colour": "#33334d",
             "arrow_colour": "#73738c",
-            "size": 30,
+            "size": 20,
             "offset": 0
           }
         ],
-        "3, 5": [
+        "1, 1": [
           {
             "layer": "fore",
             "colour": "#73738c",
-            "width": 50,
+            "width": 67,
             "dash": null
           },
           {
             "layer": "text",
             "colour": "#33334d",
             "arrow_colour": "#73738c",
-            "size": 15,
+            "size": 13,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fore",
+            "colour": "#73738c",
+            "width": 45,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#33334d",
+            "arrow_colour": "#73738c",
+            "size": 10,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "fore",
+            "colour": "#73738c",
+            "width": 30,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#33334d",
+            "arrow_colour": "#73738c",
+            "size": 7,
+            "offset": 0
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "fore",
+            "colour": "#73738c",
+            "width": 20,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#33334d",
+            "arrow_colour": "#73738c",
+            "size": 5,
+            "offset": 0
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "fore",
+            "colour": "#73738c",
+            "width": 13,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#33334d",
+            "arrow_colour": "#73738c",
+            "size": 3,
             "offset": 0
           }
         ]
@@ -705,7 +1372,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1": [
           {
             "layer": "fill",
             "colour": "#ff99ff",
@@ -719,7 +1386,7 @@
               0,
               0
             ],
-            "size": 50
+            "size": 10
           }
         ]
       }
@@ -788,7 +1455,7 @@
               0,
               0
             ],
-            "size": 30
+            "size": 15
           }
         ]
       }
@@ -819,25 +1486,7 @@
     "park": {
       "tags": [],
       "type": "area",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "fill",
-            "colour": "#669900",
-            "outline": null,
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#334d00",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 25
-          }
-        ]
-      }
+      "style": {}
     },
     "pathway_underground": {
       "tags": [

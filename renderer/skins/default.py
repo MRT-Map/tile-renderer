@@ -22,77 +22,25 @@ def main():
         "bi": Path("ClearSans-BoldItalic.ttf")
     }, 0xdddddd)
 
-    residential_area = CTI("area")
-    residential_area[0:5] = [
-        CS.area_fill(colour=0xb3cbcb),
-        CS.area_centertext(colour=_darken(0xb3cbcb),
-                           size=30)
-    ]
-    s['residentialArea'] = residential_area
-
-    industrial_area = CTI("area")
-    industrial_area[0:5] = [
-        CS.area_fill(colour=0xffccb3),
-        CS.area_centertext(colour=_darken(0xffccb3),
-                           size=30)
-    ]
-    s['industrialArea'] = industrial_area
-
-    commercial_area = CTI("area")
-    commercial_area[0:5] = [
-        CS.area_fill(colour=0xe7b1ca),
-        CS.area_centertext(colour=_darken(0xe7b1ca),
-                           size=30)
-    ]
-    s['commercialArea'] = commercial_area
-
-    office_area = CTI("area")
-    office_area[0:5] = [
-        CS.area_fill(colour=0xffcc99),
-        CS.area_centertext(colour=_darken(0xffcc99),
-                           size=30)
-    ]
-    s['officeArea'] = office_area
-
-    residential_office_area = CTI("area")
-    residential_office_area[0:5] = [
-        CS.area_fill(colour=0xd9dbb2),
-        CS.area_centertext(colour=_darken(0xd9dbb2),
-                           size=30)
-    ]
-    s['residentialOfficeArea'] = residential_office_area
-
-    school_area = CTI("area")
-    school_area[0:5] = [
-        CS.area_fill(colour=0xecc6c6),
-        CS.area_centertext(colour=_darken(0xecc6c6),
-                           size=30)
-    ]
-    s['schoolArea'] = school_area
-
-    health_area = CTI("area")
-    health_area[0:5] = [
-        CS.area_fill(colour=0xff9999),
-        CS.area_centertext(colour=_darken(0xff9999),
-                           size=30)
-    ]
-    s['healthArea'] = health_area
-
-    agriculture_area = CTI("area")
-    agriculture_area[0:5] = [
-        CS.area_fill(colour=0xccff99),
-        CS.area_centertext(colour=_darken(0xccff99),
-                           size=30)
-    ]
-    s['agricultureArea'] = agriculture_area
-
-    military_area = CTI("area")
-    military_area[0:5] = [
-        CS.area_fill(colour=0xc2c2a3),
-        CS.area_centertext(colour=_darken(0xc2c2a3),
-                           size=30)
-    ]
-    s['militaryArea'] = military_area
+    for name, col in [("residentialArea", 0xb3cbcb),
+                      ("industrialArea", 0xffccb3),
+                      ("commercialArea", 0xe7b1ca),
+                      ("officeArea", 0xffcc99),
+                      ("residentialOfficeArea", 0xd9dbb2),
+                      ("schoolArea", 0xecc6c6),
+                      ("healthArea", 0xff9999),
+                      ("agricultureArea", 0xccff99),
+                      ("militaryArea", 0xc2c2a3)]:
+        area = CTI("area")
+        for i, size in [(0, 30),
+                        (1, 20),
+                        (2, 10)]:
+            area[i:i] = [
+                CS.area_fill(colour=col),
+                CS.area_centertext(colour=_darken(col),
+                                   size=size)
+            ]
+        s[name] = area
 
     water_large = CTI("area")
     water_large[0:] = [
@@ -127,76 +75,64 @@ def main():
         CS.area_centertext(colour=0x808080,
                            size=50)
     ]
-    land_small[3:5] = [
+    land_small[3:] = [
         CS.area_fill(colour=0xdddddd)
     ]
     s['landSmall'] = land_small
 
     waterway = CTI("line")
-    waterway[0:5] = [
+    for i, width, size in [(0, 10, 20),
+                           (1, 7, 13),
+                           (2, 5, 10)]:
+        waterway[i:i] = [
+            CS.line_fore(colour=0x87ceeb,
+                         width=width),
+            CS.line_text(colour=_darken(0x87ceeb),
+                         arrow_colour=_darken(0x87ceeb, 0.25),
+                         size=size)
+        ]
+    waterway[3:4] = [
         CS.line_fore(colour=0x87ceeb,
-                     width=10),
-        CS.line_text(colour=_darken(0x87ceeb),
-                     arrow_colour=_darken(0x87ceeb, 0.25),
-                     size=20)
+                     width=3),
     ]
     s['waterway'] = waterway
 
     ferry_line = CTI("line")
-    ferry_line[0:5] = [
+    ferry_line[0:3] = [
         CS.line_fore(colour=0x25a7da,
-                     width=10),
+                     width=5),
         CS.line_text(colour=_darken(0x25a7da),
                      arrow_colour=0x25a7da,
-                     size=10)
+                     size=5)
     ]
     s['ferryLine'] = ferry_line
 
-    grass = CTI("area")
-    grass[0:5] = [
-        CS.area_fill(colour=0xbbff99),
-        CS.area_centertext(colour=_darken(0xbbff99),
-                           size=25)
-    ]
-    s['grass'] = grass
-
-    shrub = CTI("area")
-    shrub[0:5] = [
-        CS.area_fill(colour=0x99ff99),
-        CS.area_centertext(colour=_darken(0x99ff99),
-                           size=25)
-    ]
-    s['shrub'] = shrub
-
-    forest = CTI("area")
-    forest[0:5] = [
-        CS.area_fill(colour=0x5ca904),
-        CS.area_centertext(colour=_darken(0x5ca904),
-                           size=25)
-    ]
-    s['forest'] = forest
-
-    stone = CTI("area")
-    stone[0:5] = [
-        CS.area_fill(colour=0xaaaaaa),
-        CS.area_centertext(colour=_darken(0xaaaaaa),
-                           size=25)
-    ]
-    s['stone'] = stone
-
-    sand = CTI("area")
-    sand[0:5] = [
-        CS.area_fill(colour=0xf7e1a1),
-        CS.area_centertext(colour=_darken(0xf7e1a1),
-                           size=25)
-    ]
-    s['sand'] = sand
-
+    for name, colour in [("grass", 0xbbff99),
+                         ("shrub", 0x99ff99),
+                         ("forest", 0x5ca904),
+                         ("stone", 0xaaaaaa),
+                         ("sand", 0xf7e1a1)]:
+        area = CTI("area")
+        for i, size in [(0, 25),
+                        (1, 15),
+                        (2, 10),
+                        (3, 7)]:
+            area[i:i] = [
+                CS.area_fill(colour=colour,
+                             outline=_darken(colour, 0.25)),
+                CS.area_centertext(colour=_darken(colour),
+                                   size=size)
+            ]
+        s[name] = area
+    # will do when there's an actual large airport to map
     gate = CTI("area")
-    gate[0:5] = [
+    gate[0:2] = [
         CS.area_fill(outline=0x33334d),
         CS.area_centertext(colour=0x33334d,
-                           size=15)
+                           size=10)
+    ]
+    gate[3:5] = [
+        CS.area_fill(outline=0x33334d),
     ]
     s['gate'] = gate
 
@@ -204,7 +140,7 @@ def main():
     apron[0:5] = [
         CS.area_fill(colour=0xc2c2d6),
         CS.area_centertext(colour=0x33334d,
-                           size=30)
+                           size=15)
     ]
     s['apron'] = apron
 
@@ -226,28 +162,27 @@ def main():
     s['taxiway'] = taxiway
 
     runway = CTI("line", ["unroundedEnds"])
-    runway[0:2] = [
-        CS.line_fore(colour=0x73738c,
-                     width=100),
-        CS.line_text(colour=0x33334d,
-                     arrow_colour=0x73738c,
-                     size=30)
-    ]
-    runway[3:5] = [
-        CS.line_fore(colour=0x73738c,
-                     width=50),
-        CS.line_text(colour=0x33334d,
-                     arrow_colour=0x73738c,
-                     size=15)
-    ]
+    for i, width, size in [(0, 100, 20),
+                           (1, 67, 13),
+                           (2, 45, 10),
+                           (3, 30, 7),
+                           (4, 20, 5),
+                           (5, 13, 3)]:
+        runway[i:i] = [
+            CS.line_fore(colour=0x73738c,
+                         width=width),
+            CS.line_text(colour=0x33334d,
+                         arrow_colour=0x73738c,
+                         size=size)
+        ]
     s['runway'] = runway
 
     helipad = CTI("area")
-    helipad[0:5] = [
+    helipad[0:1] = [
         CS.area_fill(colour=0xff99ff,
                      outline=0xff66ff),
         CS.area_centertext(colour=0xff66ff,
-                           size=50)
+                           size=10)
     ]
     s['helipad'] = helipad
 
@@ -276,7 +211,7 @@ def main():
         CS.area_fill(colour=_lighten(TRANSPORT_BUILDING),
                      outline=TRANSPORT_BUILDING),
         CS.area_centertext(colour=_darken(TRANSPORT_BUILDING),
-                           size=30)
+                           size=15)
     ]
     s['transportBuilding_underground'] = transport_building_underground
 
@@ -290,11 +225,16 @@ def main():
     s['platform_underground'] = platform_underground
 
     park = CTI("area")
-    park[0:5] = [
-        CS.area_fill(colour=0x669900),
-        CS.area_centertext(colour=_darken(0x669900),
-                           size=25)
-    ]
+    for i, size in [(0, 25),
+                    (1, 15),
+                    (2, 10),
+                    (3, 7)]:
+        area[i:i] = [
+            CS.area_fill(colour=0x669900,
+                         outline=_darken(0x669900, 0.25)),
+            CS.area_centertext(colour=_darken(0x669900),
+                               size=size)
+        ]
     s['park'] = park
 
     pathway_underground = CTI("line", ["road"])
@@ -310,6 +250,13 @@ def main():
                      offset=10)
     ]
     s['pathway_underground'] = pathway_underground
+
+    for name, col, width in [("localHighwaySlip_underground", LOCAL_HIGHWAY, 20),
+                      ("bRoadSlip_underground", B_ROAD, 24),
+                      ("aRoadSlip_underground", A_ROAD, 32),
+                      ]:
+        area = CTI("line", ["road"])
+
 
     local_highway_slip_underground = CTI("line", ["road"])
     local_highway_slip_underground[0:5] = [
