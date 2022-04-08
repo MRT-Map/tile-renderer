@@ -306,16 +306,16 @@ def main():
     for name, col,\
         width, small_width in [("localHighwaySlip_underground", LOCAL_HIGHWAY, 20, 1),
                                ("bRoadSlip_underground", B_ROAD, 24, 2),
-                               ("aRoadSlip_underground", A_ROAD, 32, 4),
+                               ("aRoadSlip_underground", A_ROAD, 32, 3),
                                ("localPedestrianQuaternaryRoad_underground", LOCAL_PEDESTRIAN, 16, 1),
                                ("localQuaternaryRoad_underground", LOCAL_TERTIARY_QUATERNARY, 16, 1),
                                ("localPedestrianTertiaryRoad_underground", LOCAL_PEDESTRIAN, 24, 2),
                                ("localTertiaryRoad_underground", LOCAL_TERTIARY_QUATERNARY, 24, 2),
-                               ("localSecondaryRoad_underground", LOCAL_SECONDARY, 28, 3),
-                               ("localMainRoad_underground", LOCAL_MAIN, 32, 4),
-                               ("localHighway_underground", LOCAL_HIGHWAY, 36, 5),
-                               ("bRoad_underground", B_ROAD, 40, 6),
-                               ("aRoad_underground", A_ROAD, 48, 7)]:
+                               ("localSecondaryRoad_underground", LOCAL_SECONDARY, 28, 2),
+                               ("localMainRoad_underground", LOCAL_MAIN, 32, 3),
+                               ("localHighway_underground", LOCAL_HIGHWAY, 36, 3),
+                               ("bRoad_underground", B_ROAD, 40, 4),
+                               ("aRoad_underground", A_ROAD, 48, 4)]:
         area = CTI("line", ["road"])
         for i in [0, 1, 2, 3, 4]:
             area[i] = [
@@ -334,7 +334,7 @@ def main():
                              width=(small_width-i+5)*2),
                 CS.line_fore(colour=_lighten(col),
                              width=small_width-i+5)
-            ] if width-i+5 >= 1 else []
+            ] if small_width-i+5 >= 1 else []
         s[name] = area
 
     rail_underground = CTI("line", ["road"])
@@ -451,16 +451,16 @@ def main():
     for name, col, \
         width, small_width in [("localHighwaySlip", LOCAL_HIGHWAY, 20, 1),
                                ("bRoadSlip", B_ROAD, 24, 2),
-                               ("aRoadSlip", A_ROAD, 32, 4),
+                               ("aRoadSlip", A_ROAD, 32, 3),
                                ("localPedestrianQuaternaryRoad", LOCAL_PEDESTRIAN, 16, 1),
                                ("localQuaternaryRoad", LOCAL_TERTIARY_QUATERNARY, 16, 1),
                                ("localPedestrianTertiaryRoad", LOCAL_PEDESTRIAN, 24, 2),
                                ("localTertiaryRoad", LOCAL_TERTIARY_QUATERNARY, 24, 2),
-                               ("localSecondaryRoad", LOCAL_SECONDARY, 28, 3),
-                               ("localMainRoad", LOCAL_MAIN, 32, 4),
-                               ("localHighway", LOCAL_HIGHWAY, 36, 5),
-                               ("bRoad", B_ROAD, 40, 6),
-                               ("aRoad", A_ROAD, 48, 7)]:
+                               ("localSecondaryRoad", LOCAL_SECONDARY, 28, 2),
+                               ("localMainRoad", LOCAL_MAIN, 32, 3),
+                               ("localHighway", LOCAL_HIGHWAY, 36, 3),
+                               ("bRoad", B_ROAD, 40, 4),
+                               ("aRoad", A_ROAD, 48, 4)]:
         area = CTI("line", ["road"])
         for i in [0, 1, 2, 3, 4]:
             area[i] = [
@@ -479,7 +479,7 @@ def main():
                              width=(small_width-i+5)*2),
                 CS.line_fore(colour=_lighten(col),
                              width=small_width-i+5)
-            ] if width-i+5 >= 1 else []
+            ] if small_width-i+5 >= 1 else []
         s[name] = area
 
     rail = CTI("line", ["road"])
@@ -548,16 +548,16 @@ def main():
     for name, col,\
         width, small_width in [("localHighwaySlip_elevated", LOCAL_HIGHWAY, 20, 1),
                                ("bRoadSlip_elevated", B_ROAD, 24, 2),
-                               ("aRoadSlip_elevated", A_ROAD, 32, 4),
+                               ("aRoadSlip_elevated", A_ROAD, 32, 3),
                                ("localPedestrianQuaternaryRoad_elevated", LOCAL_PEDESTRIAN, 16, 1),
                                ("localQuaternaryRoad_elevated", LOCAL_TERTIARY_QUATERNARY, 16, 1),
                                ("localPedestrianTertiaryRoad_elevated", LOCAL_PEDESTRIAN, 24, 2),
                                ("localTertiaryRoad_elevated", LOCAL_TERTIARY_QUATERNARY, 24, 2),
-                               ("localSecondaryRoad_elevated", LOCAL_SECONDARY, 28, 3),
-                               ("localMainRoad_elevated", LOCAL_MAIN, 32, 4),
-                               ("localHighway_elevated", LOCAL_HIGHWAY, 36, 5),
-                               ("bRoad_elevated", B_ROAD, 40, 6),
-                               ("aRoad_elevated", A_ROAD, 48, 7)]:
+                               ("localSecondaryRoad_elevated", LOCAL_SECONDARY, 28, 2),
+                               ("localMainRoad_elevated", LOCAL_MAIN, 32, 3),
+                               ("localHighway_elevated", LOCAL_HIGHWAY, 36, 3),
+                               ("bRoad_elevated", B_ROAD, 40, 4),
+                               ("aRoad_elevated", A_ROAD, 48, 4)]:
         area = CTI("line", ["road"])
         for i in [0, 1, 2, 3, 4]:
             area[i] = [
@@ -576,7 +576,7 @@ def main():
                              width=(small_width-i+5)*2),
                 CS.line_fore(colour=_lighten(col),
                              width=small_width-i+5)
-            ] if width-i+5 >= 1 else []
+            ] if small_width-i+5 >= 1 else []
         s[name] = area
 
     rail_elevated = CTI("line", ["road"])
