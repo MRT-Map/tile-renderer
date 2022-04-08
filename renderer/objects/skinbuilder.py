@@ -85,6 +85,7 @@ class SkinBuilder:
         self.types = {}
 
     def __setitem__(self, key: str, value: ComponentTypeInfo):
+        print("Setting", key)
         self.types[key] = value
 
     def json(self) -> dict:
@@ -114,8 +115,11 @@ class SkinBuilder:
             self.tags = tags or []
             self.style = {}
 
-        def __setitem__(self, key: slice, value: list[ComponentStyle]):
-            self.style[f"{key.start}, {key.stop or 1000}"] = value
+        def __setitem__(self, key: int | slice, value: list[ComponentStyle]):
+            if isinstance(key, int):
+                self.style[f"{key}, {key}"] = value
+            else:
+                self.style[f"{key.start}, {key.stop or 1000}"] = value
 
         def json(self) -> dict:
             """Returns a JSON representation of the skin.

@@ -70,20 +70,16 @@ def merge_tiles(images: Path | dict[TileCoord, Image],
     print(term.green("\nAll images retrieved"))
     print(term.green("Determined zoom levels..."), end=" ")
     if not zoom:
-        for c in image_dict.keys():
-            if c.z not in zoom:
-                zoom.append(c.z)
+        zoom = list({c.z for c in image_dict.keys()})
     print(term.green("determined"))
     for z in zoom:
         print(term.green(f"Zoom {z}: ") + "Determining tiles to be merged", end=term.clear_eos+"\r")
-        to_merge = {}
-        for c, i in image_dict.items():
-            if c.z == z:
-                to_merge[c] = i
+        to_merge = {k: v for k, v in image_dict.items() if k.z == z}
 
         tile_coords = list(to_merge.keys())
         x_max, x_min, y_max, y_min = tools_tile.find_ends(tile_coords)
         tile_size = list(image_dict.values())[0].size[0]
+        print(term.green(f"Zoom {z}: ") + f"Creating image {tile_size*(x_max-x_min+1)}x{tile_size*(y_max-y_min+1)}", end=term.clear_eos + "\r")
         i = Image.new('RGBA', (tile_size*(x_max-x_min+1), tile_size*(y_max-y_min+1)), (0, 0, 0, 0))
         px = 0
         py = 0

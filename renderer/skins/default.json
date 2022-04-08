@@ -34,9 +34,11 @@
     "apron",
     "taxiway",
     "runway",
+    "wideRunway",
     "helipad",
     "plaza",
     "building_underground",
+    "cityHall",
     "transportBuilding_underground",
     "platform_underground",
     "park",
@@ -54,8 +56,8 @@
     "bRoad_underground",
     "aRoad_underground",
     "rail_underground",
+    "intercityRail_underground",
     "building",
-    "cityHall",
     "transportBuilding",
     "platform",
     "pathway",
@@ -72,6 +74,7 @@
     "bRoad",
     "aRoad",
     "rail",
+    "intercityRail",
     "pathway_elevated",
     "localHighwaySlip_elevated",
     "bRoadSlip_elevated",
@@ -86,6 +89,7 @@
     "bRoad_elevated",
     "aRoad_elevated",
     "rail_elevated",
+    "intercityRail_elevated",
     "pedestrianCrossing",
     "railCrossing",
     "parking",
@@ -100,10 +104,15 @@
     "ferryStop",
     "railStation",
     "subdistrict",
+    "subdistrictMarker",
     "district",
+    "districtMarker",
     "town",
+    "townMarker",
     "state",
+    "stateMarker",
     "country",
+    "countryMarker",
     "simpleArea",
     "simpleLine",
     "simplePoint"
@@ -113,7 +122,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 1000": [
+        "0, 0": [
           {
             "layer": "fill",
             "colour": "#b3cbcb",
@@ -162,6 +171,14 @@
               0
             ],
             "size": 10
+          }
+        ],
+        "3, 6": [
+          {
+            "layer": "fill",
+            "colour": "#b3cbcb",
+            "outline": null,
+            "stripe": null
           }
         ]
       }
@@ -170,7 +187,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 1000": [
+        "0, 0": [
           {
             "layer": "fill",
             "colour": "#ffccb3",
@@ -219,6 +236,14 @@
               0
             ],
             "size": 10
+          }
+        ],
+        "3, 6": [
+          {
+            "layer": "fill",
+            "colour": "#ffccb3",
+            "outline": null,
+            "stripe": null
           }
         ]
       }
@@ -227,7 +252,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 1000": [
+        "0, 0": [
           {
             "layer": "fill",
             "colour": "#e7b1ca",
@@ -276,6 +301,14 @@
               0
             ],
             "size": 10
+          }
+        ],
+        "3, 6": [
+          {
+            "layer": "fill",
+            "colour": "#e7b1ca",
+            "outline": null,
+            "stripe": null
           }
         ]
       }
@@ -284,7 +317,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 1000": [
+        "0, 0": [
           {
             "layer": "fill",
             "colour": "#ffcc99",
@@ -333,6 +366,14 @@
               0
             ],
             "size": 10
+          }
+        ],
+        "3, 6": [
+          {
+            "layer": "fill",
+            "colour": "#ffcc99",
+            "outline": null,
+            "stripe": null
           }
         ]
       }
@@ -341,7 +382,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 1000": [
+        "0, 0": [
           {
             "layer": "fill",
             "colour": "#d9dbb2",
@@ -390,6 +431,14 @@
               0
             ],
             "size": 10
+          }
+        ],
+        "3, 6": [
+          {
+            "layer": "fill",
+            "colour": "#d9dbb2",
+            "outline": null,
+            "stripe": null
           }
         ]
       }
@@ -398,7 +447,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 1000": [
+        "0, 0": [
           {
             "layer": "fill",
             "colour": "#ecc6c6",
@@ -447,6 +496,14 @@
               0
             ],
             "size": 10
+          }
+        ],
+        "3, 6": [
+          {
+            "layer": "fill",
+            "colour": "#ecc6c6",
+            "outline": null,
+            "stripe": null
           }
         ]
       }
@@ -455,7 +512,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 1000": [
+        "0, 0": [
           {
             "layer": "fill",
             "colour": "#ff9999",
@@ -504,6 +561,14 @@
               0
             ],
             "size": 10
+          }
+        ],
+        "3, 6": [
+          {
+            "layer": "fill",
+            "colour": "#ff9999",
+            "outline": null,
+            "stripe": null
           }
         ]
       }
@@ -512,7 +577,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 1000": [
+        "0, 0": [
           {
             "layer": "fill",
             "colour": "#ccff99",
@@ -561,6 +626,14 @@
               0
             ],
             "size": 10
+          }
+        ],
+        "3, 6": [
+          {
+            "layer": "fill",
+            "colour": "#ccff99",
+            "outline": null,
+            "stripe": null
           }
         ]
       }
@@ -569,7 +642,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 1000": [
+        "0, 0": [
           {
             "layer": "fill",
             "colour": "#c2c2a3",
@@ -618,6 +691,14 @@
               0
             ],
             "size": 10
+          }
+        ],
+        "3, 6": [
+          {
+            "layer": "fill",
+            "colour": "#c2c2a3",
+            "outline": null,
+            "stripe": null
           }
         ]
       }
@@ -734,7 +815,7 @@
       "tags": [],
       "type": "line",
       "style": {
-        "0, 1000": [
+        "0, 0": [
           {
             "layer": "fore",
             "colour": "#87ceeb",
@@ -814,11 +895,11 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 1000": [
+        "0, 3": [
           {
             "layer": "fill",
             "colour": "#bbff99",
-            "outline": "#8cbf73",
+            "outline": "#a8e68a",
             "stripe": null
           },
           {
@@ -831,55 +912,12 @@
             "size": 25
           }
         ],
-        "1, 1": [
+        "4, 6": [
           {
             "layer": "fill",
             "colour": "#bbff99",
-            "outline": "#8cbf73",
+            "outline": "#a8e68a",
             "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#5e804c",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 15
-          }
-        ],
-        "2, 2": [
-          {
-            "layer": "fill",
-            "colour": "#bbff99",
-            "outline": "#8cbf73",
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#5e804c",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 10
-          }
-        ],
-        "3, 3": [
-          {
-            "layer": "fill",
-            "colour": "#bbff99",
-            "outline": "#8cbf73",
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#5e804c",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 7
           }
         ]
       }
@@ -888,28 +926,11 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 1000": [
+        "0, 3": [
           {
             "layer": "fill",
             "colour": "#99ff99",
-            "outline": "#73bf73",
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#4c804c",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 25
-          }
-        ],
-        "1, 1": [
-          {
-            "layer": "fill",
-            "colour": "#99ff99",
-            "outline": "#73bf73",
+            "outline": "#8ae68a",
             "stripe": null
           },
           {
@@ -922,38 +943,12 @@
             "size": 15
           }
         ],
-        "2, 2": [
+        "4, 6": [
           {
             "layer": "fill",
             "colour": "#99ff99",
-            "outline": "#73bf73",
+            "outline": "#8ae68a",
             "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#4c804c",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 10
-          }
-        ],
-        "3, 3": [
-          {
-            "layer": "fill",
-            "colour": "#99ff99",
-            "outline": "#73bf73",
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#4c804c",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 7
           }
         ]
       }
@@ -962,45 +957,11 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 1000": [
+        "0, 3": [
           {
             "layer": "fill",
             "colour": "#5ca904",
-            "outline": "#457f03",
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#2e5402",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 25
-          }
-        ],
-        "1, 1": [
-          {
-            "layer": "fill",
-            "colour": "#5ca904",
-            "outline": "#457f03",
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#2e5402",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 15
-          }
-        ],
-        "2, 2": [
-          {
-            "layer": "fill",
-            "colour": "#5ca904",
-            "outline": "#457f03",
+            "outline": "#539804",
             "stripe": null
           },
           {
@@ -1013,21 +974,12 @@
             "size": 10
           }
         ],
-        "3, 3": [
+        "4, 6": [
           {
             "layer": "fill",
             "colour": "#5ca904",
-            "outline": "#457f03",
+            "outline": "#539804",
             "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#2e5402",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 7
           }
         ]
       }
@@ -1036,62 +988,11 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 1000": [
+        "0, 3": [
           {
             "layer": "fill",
             "colour": "#aaaaaa",
-            "outline": "#808080",
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#555555",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 25
-          }
-        ],
-        "1, 1": [
-          {
-            "layer": "fill",
-            "colour": "#aaaaaa",
-            "outline": "#808080",
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#555555",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 15
-          }
-        ],
-        "2, 2": [
-          {
-            "layer": "fill",
-            "colour": "#aaaaaa",
-            "outline": "#808080",
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#555555",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 10
-          }
-        ],
-        "3, 3": [
-          {
-            "layer": "fill",
-            "colour": "#aaaaaa",
-            "outline": "#808080",
+            "outline": "#999999",
             "stripe": null
           },
           {
@@ -1102,6 +1003,14 @@
               0
             ],
             "size": 7
+          }
+        ],
+        "4, 6": [
+          {
+            "layer": "fill",
+            "colour": "#aaaaaa",
+            "outline": "#999999",
+            "stripe": null
           }
         ]
       }
@@ -1110,72 +1019,29 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 1000": [
+        "0, 3": [
           {
             "layer": "fill",
-            "colour": "#669900",
-            "outline": "#4c7300",
+            "colour": "#f7e1a1",
+            "outline": "#deca91",
             "stripe": null
           },
           {
             "layer": "centertext",
-            "colour": "#334d00",
+            "colour": "#7c7151",
             "offset": [
               0,
               0
             ],
-            "size": 25
+            "size": 5
           }
         ],
-        "1, 1": [
+        "4, 6": [
           {
             "layer": "fill",
-            "colour": "#669900",
-            "outline": "#4c7300",
+            "colour": "#f7e1a1",
+            "outline": "#deca91",
             "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#334d00",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 15
-          }
-        ],
-        "2, 2": [
-          {
-            "layer": "fill",
-            "colour": "#669900",
-            "outline": "#4c7300",
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#334d00",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 10
-          }
-        ],
-        "3, 3": [
-          {
-            "layer": "fill",
-            "colour": "#669900",
-            "outline": "#4c7300",
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#334d00",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 7
           }
         ]
       }
@@ -1238,7 +1104,7 @@
       "tags": [],
       "type": "line",
       "style": {
-        "0, 2": [
+        "0, 0": [
           {
             "layer": "fore",
             "colour": "#8f8fa3",
@@ -1253,7 +1119,7 @@
             "offset": 0
           }
         ],
-        "3, 5": [
+        "1, 1": [
           {
             "layer": "fore",
             "colour": "#8f8fa3",
@@ -1267,6 +1133,45 @@
             "size": 10,
             "offset": 0
           }
+        ],
+        "2, 2": [
+          {
+            "layer": "fore",
+            "colour": "#8f8fa3",
+            "width": 13,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#33334d",
+            "arrow_colour": "#8f8fa3",
+            "size": 5,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "fore",
+            "colour": "#8f8fa3",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "fore",
+            "colour": "#8f8fa3",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "fore",
+            "colour": "#8f8fa3",
+            "width": 5,
+            "dash": null
+          }
         ]
       }
     },
@@ -1276,7 +1181,7 @@
       ],
       "type": "line",
       "style": {
-        "0, 1000": [
+        "0, 0": [
           {
             "layer": "fore",
             "colour": "#73738c",
@@ -1295,14 +1200,14 @@
           {
             "layer": "fore",
             "colour": "#73738c",
-            "width": 67,
+            "width": 50,
             "dash": null
           },
           {
             "layer": "text",
             "colour": "#33334d",
             "arrow_colour": "#73738c",
-            "size": 13,
+            "size": 10,
             "offset": 0
           }
         ],
@@ -1310,7 +1215,77 @@
           {
             "layer": "fore",
             "colour": "#73738c",
-            "width": 45,
+            "width": 25,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "fore",
+            "colour": "#73738c",
+            "width": 13,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "fore",
+            "colour": "#73738c",
+            "width": 6,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "fore",
+            "colour": "#73738c",
+            "width": 3,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "wideRunway": {
+      "tags": [
+        "unroundedEnds"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "fore",
+            "colour": "#73738c",
+            "width": 200,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#33334d",
+            "arrow_colour": "#73738c",
+            "size": 40,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "fore",
+            "colour": "#73738c",
+            "width": 100,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#33334d",
+            "arrow_colour": "#73738c",
+            "size": 20,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fore",
+            "colour": "#73738c",
+            "width": 50,
             "dash": null
           },
           {
@@ -1325,45 +1300,24 @@
           {
             "layer": "fore",
             "colour": "#73738c",
-            "width": 30,
+            "width": 25,
             "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#33334d",
-            "arrow_colour": "#73738c",
-            "size": 7,
-            "offset": 0
           }
         ],
         "4, 4": [
           {
             "layer": "fore",
             "colour": "#73738c",
-            "width": 20,
+            "width": 13,
             "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#33334d",
-            "arrow_colour": "#73738c",
-            "size": 5,
-            "offset": 0
           }
         ],
         "5, 5": [
           {
             "layer": "fore",
             "colour": "#73738c",
-            "width": 13,
+            "width": 6,
             "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#33334d",
-            "arrow_colour": "#73738c",
-            "size": 3,
-            "offset": 0
           }
         ]
       }
@@ -1395,7 +1349,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 4": [
           {
             "layer": "fill",
             "colour": "#ccccff",
@@ -1418,7 +1372,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1": [
           {
             "layer": "fill",
             "colour": "#a2a295",
@@ -1434,6 +1388,45 @@
             ],
             "size": 15
           }
+        ],
+        "2, 3": [
+          {
+            "layer": "fill",
+            "colour": "#a2a295",
+            "outline": "#a2a288",
+            "stripe": null
+          }
+        ]
+      }
+    },
+    "cityHall": {
+      "tags": [],
+      "type": "area",
+      "style": {
+        "0, 1": [
+          {
+            "layer": "fill",
+            "colour": "#ffaaaa",
+            "outline": "#805555",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#805555",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 15
+          }
+        ],
+        "2, 3": [
+          {
+            "layer": "fill",
+            "colour": "#ffaaaa",
+            "outline": "#805555",
+            "stripe": null
+          }
         ]
       }
     },
@@ -1441,7 +1434,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1": [
           {
             "layer": "fill",
             "colour": "#999980",
@@ -1457,6 +1450,14 @@
             ],
             "size": 15
           }
+        ],
+        "2, 3": [
+          {
+            "layer": "fill",
+            "colour": "#999980",
+            "outline": "#999966",
+            "stripe": null
+          }
         ]
       }
     },
@@ -1464,7 +1465,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 5": [
+        "0, 1": [
           {
             "layer": "fill",
             "colour": "#aaaaaa",
@@ -1480,13 +1481,47 @@
             ],
             "size": 10
           }
+        ],
+        "2, 3": [
+          {
+            "layer": "fill",
+            "colour": "#aaaaaa",
+            "outline": "#555555",
+            "stripe": null
+          }
         ]
       }
     },
     "park": {
       "tags": [],
       "type": "area",
-      "style": {}
+      "style": {
+        "0, 1": [
+          {
+            "layer": "fill",
+            "colour": "#669900",
+            "outline": "#5c8a00",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#334d00",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 15
+          }
+        ],
+        "2, 3": [
+          {
+            "layer": "fill",
+            "colour": "#669900",
+            "outline": "#5c8a00",
+            "stripe": null
+          }
+        ]
+      }
     },
     "pathway_underground": {
       "tags": [
@@ -1494,908 +1529,7 @@
       ],
       "type": "line",
       "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#eeeeee",
-            "width": 8,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#66ff66",
-            "width": 4,
-            "dash": [
-              16,
-              16
-            ]
-          },
-          {
-            "layer": "text",
-            "colour": "#aaaaaa",
-            "arrow_colour": "#eeeeee",
-            "size": 16,
-            "offset": 10
-          }
-        ]
-      }
-    },
-    "localHighwaySlip_underground": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#ffcc80",
-            "width": 28,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#ffe6c0",
-            "width": 20,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#ffcc80",
-            "size": 20,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "bRoadSlip_underground": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#ff8000",
-            "width": 32,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#ffc080",
-            "width": 24,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#ff8000",
-            "size": 24,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "aRoadSlip_underground": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#ffaaaa",
-            "width": 40,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#ffd4d4",
-            "width": 32,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#ffaaaa",
-            "arrow_colour": "#ffb3b3",
-            "size": 32,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "localPedestrianQuaternaryRoad_underground": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#ccccff",
-            "width": 24,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#e6e6ff",
-            "width": 16,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#ccccff",
-            "size": 16,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "localQuaternaryRoad_underground": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#eeeeee",
-            "width": 24,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#eeeeee",
-            "width": 16,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#eeeeee",
-            "arrow_colour": "#b3b3b3",
-            "size": 16,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "localPedestrianTertiaryRoad_underground": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#ccccff",
-            "width": 32,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#e6e6ff",
-            "width": 24,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#ccccff",
-            "size": 24,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "localTertiaryRoad_underground": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#eeeeee",
-            "width": 32,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#eeeeee",
-            "width": 24,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#eeeeee",
-            "arrow_colour": "#b3b3b3",
-            "size": 24,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "localSecondaryRoad_underground": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#fff899",
-            "width": 36,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#fffccc",
-            "width": 28,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#fff899",
-            "size": 28,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "localMainRoad_underground": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#ffee00",
-            "width": 40,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#fff680",
-            "width": 32,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#ffee00",
-            "size": 32,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "localHighway_underground": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#ffcc80",
-            "width": 44,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#ffe6c0",
-            "width": 36,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#ffcc80",
-            "size": 36,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "bRoad_underground": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#ff8000",
-            "width": 48,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#ffc080",
-            "width": 40,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#ff8000",
-            "size": 40,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "aRoad_underground": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#ffaaaa",
-            "width": 56,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#ffd4d4",
-            "width": 48,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#ffaaaa",
-            "size": 48,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "rail_underground": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "fore",
-            "colour": "#808080",
-            "width": 8,
-            "dash": [
-              50,
-              25
-            ]
-          },
-          {
-            "layer": "text",
-            "colour": "#808080",
-            "arrow_colour": "#808080",
-            "size": 16,
-            "offset": 16
-          }
-        ]
-      }
-    },
-    "building": {
-      "tags": [],
-      "type": "area",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "fill",
-            "colour": "#a2a288",
-            "outline": "#515144",
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#515144",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 15
-          }
-        ]
-      }
-    },
-    "cityHall": {
-      "tags": [],
-      "type": "area",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "fill",
-            "colour": "#ffaaaa",
-            "outline": "#805555",
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#805555",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 30
-          }
-        ]
-      }
-    },
-    "transportBuilding": {
-      "tags": [],
-      "type": "area",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "fill",
-            "colour": "#999966",
-            "outline": "#4d4d33",
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#4d4d33",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 30
-          }
-        ]
-      }
-    },
-    "platform": {
-      "tags": [],
-      "type": "area",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "fill",
-            "colour": "#cccccc",
-            "outline": "#808080",
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#808080",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 10
-          }
-        ]
-      }
-    },
-    "pathway": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#eeeeee",
-            "width": 8,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#008000",
-            "width": 4,
-            "dash": [
-              16,
-              16
-            ]
-          },
-          {
-            "layer": "text",
-            "colour": "#aaaaaa",
-            "arrow_colour": "#eeeeee",
-            "size": 16,
-            "offset": 10
-          }
-        ]
-      }
-    },
-    "localHighwaySlip": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#bf9960",
-            "width": 28,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#ffcc80",
-            "width": 20,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#bf9960",
-            "size": 20,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "bRoadSlip": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#bf6000",
-            "width": 32,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#ff8000",
-            "width": 24,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#bf6000",
-            "size": 24,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "aRoadSlip": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#bf8080",
-            "width": 40,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#ffaaaa",
-            "width": 32,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#bf8080",
-            "size": 32,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "localPedestrianQuaternaryRoad": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#9999bf",
-            "width": 24,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#ccccff",
-            "width": 16,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#9999bf",
-            "size": 16,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "localQuaternaryRoad": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#b2b2b2",
-            "width": 24,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#eeeeee",
-            "width": 16,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#b2b2b2",
-            "size": 16,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "localPedestrianTertiaryRoad": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#9999bf",
-            "width": 32,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#ccccff",
-            "width": 24,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#9999bf",
-            "size": 24,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "localTertiaryRoad": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#b2b2b2",
-            "width": 32,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#eeeeee",
-            "width": 24,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#b2b2b2",
-            "size": 24,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "localSecondaryRoad": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#bfba73",
-            "width": 36,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#fff899",
-            "width": 28,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#bfba73",
-            "size": 28,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "localMainRoad": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#bfb200",
-            "width": 40,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#ffee00",
-            "width": 32,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#bfb200",
-            "size": 32,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "localHighway": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#bf9960",
-            "width": 44,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#ffcc80",
-            "width": 36,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#bf9960",
-            "size": 36,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "bRoad": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#bf6000",
-            "width": 48,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#ff8000",
-            "width": 40,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#bf6000",
-            "size": 40,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "aRoad": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#bf8080",
-            "width": 56,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#ffaaaa",
-            "width": 48,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "arrow_colour": "#bf8080",
-            "size": 48,
-            "offset": 0
-          }
-        ]
-      }
-    },
-    "rail": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "fore",
-            "colour": "#808080",
-            "width": 8,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#808080",
-            "arrow_colour": "#808080",
-            "size": 16,
-            "offset": 16
-          }
-        ]
-      }
-    },
-    "pathway_elevated": {
-      "tags": [
-        "road"
-      ],
-      "type": "line",
-      "style": {
-        "0, 5": [
+        "0, 0": [
           {
             "layer": "back",
             "colour": "#000000",
@@ -2424,8 +1558,4476 @@
             "size": 16,
             "offset": 10
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#008000",
+            "width": 4,
+            "dash": [
+              16,
+              16
+            ]
+          },
+          {
+            "layer": "text",
+            "colour": "#aaaaaa",
+            "arrow_colour": "#008000",
+            "size": 16,
+            "offset": 10
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 9,
+            "dash": null
+          },
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#008000",
+            "width": 3,
+            "dash": [
+              12,
+              12
+            ]
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#008000",
+            "width": 2,
+            "dash": [
+              8,
+              8
+            ]
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 3,
+            "dash": null
+          },
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#008000",
+            "width": 1,
+            "dash": [
+              4,
+              4
+            ]
+          }
         ]
       }
+    },
+    "localHighwaySlip_underground": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 28,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 20,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ffcc80",
+            "size": 20,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 18,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 13,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ffcc80",
+            "size": 13,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 8,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 5,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 5,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": -2,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": -6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": -3,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "bRoadSlip_underground": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 32,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ff8000",
+            "size": 24,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ff8000",
+            "size": 16,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 9,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": -2,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "aRoadSlip_underground": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 40,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 32,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ffaaaa",
+            "size": 32,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 26,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ffaaaa",
+            "size": 21,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 17,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ffaaaa",
+            "size": 14,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 11,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 9,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 7,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 6,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 0,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "localPedestrianQuaternaryRoad_underground": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ccccff",
+            "size": 16,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 7,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": -2,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": -6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": -3,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "localQuaternaryRoad_underground": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#eeeeee",
+            "size": 16,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 7,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": -2,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": -6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": -3,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "localPedestrianTertiaryRoad_underground": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 32,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ccccff",
+            "size": 24,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ccccff",
+            "size": 16,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 9,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": -2,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "localTertiaryRoad_underground": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 32,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#eeeeee",
+            "size": 24,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#eeeeee",
+            "size": 16,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 9,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": -2,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "localSecondaryRoad_underground": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": 36,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": 28,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#fff899",
+            "size": 28,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": 18,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#fff899",
+            "size": 18,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#fff899",
+            "size": 12,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": 8,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": 7,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": 5,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": -1,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "localMainRoad_underground": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 40,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 32,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ffee00",
+            "size": 32,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 26,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ffee00",
+            "size": 21,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 17,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ffee00",
+            "size": 14,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 11,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 9,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 7,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 6,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 0,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "localHighway_underground": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 44,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 36,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ffcc80",
+            "size": 36,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 29,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ffcc80",
+            "size": 24,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 19,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ffcc80",
+            "size": 16,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 13,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 5,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 1,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "bRoad_underground": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 48,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 40,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ff8000",
+            "size": 40,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 32,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 26,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ff8000",
+            "size": 26,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 17,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ff8000",
+            "size": 17,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 11,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 9,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 6,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 5,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 2,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "aRoad_underground": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 56,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 48,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ffaaaa",
+            "size": 48,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 37,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 32,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ffaaaa",
+            "size": 32,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ffaaaa",
+            "size": 21,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#ffaaaa",
+            "size": 14,
+            "offset": 0
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 11,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 9,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 6,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 5,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 3,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "rail_underground": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "fore",
+            "colour": "#808080",
+            "width": 8,
+            "dash": [
+              50,
+              25
+            ]
+          },
+          {
+            "layer": "text",
+            "colour": "#808080",
+            "arrow_colour": "#808080",
+            "size": 16,
+            "offset": 16
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "fore",
+            "colour": "#808080",
+            "width": 6,
+            "dash": [
+              40,
+              20
+            ]
+          },
+          {
+            "layer": "text",
+            "colour": "#808080",
+            "arrow_colour": "#808080",
+            "size": 13,
+            "offset": 13
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fore",
+            "colour": "#808080",
+            "width": 4,
+            "dash": [
+              30,
+              15
+            ]
+          },
+          {
+            "layer": "text",
+            "colour": "#808080",
+            "arrow_colour": "#808080",
+            "size": 10,
+            "offset": 10
+          }
+        ],
+        "3, 4": [
+          {
+            "layer": "fore",
+            "colour": "#808080",
+            "width": 2,
+            "dash": [
+              20,
+              10
+            ]
+          }
+        ]
+      }
+    },
+    "intercityRail_underground": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "fore",
+            "colour": "#808080",
+            "width": 16,
+            "dash": [
+              50,
+              50
+            ]
+          },
+          {
+            "layer": "text",
+            "colour": "#808080",
+            "arrow_colour": "#808080",
+            "size": 16,
+            "offset": 16
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "fore",
+            "colour": "#808080",
+            "width": 12,
+            "dash": [
+              40,
+              40
+            ]
+          },
+          {
+            "layer": "text",
+            "colour": "#808080",
+            "arrow_colour": "#808080",
+            "size": 13,
+            "offset": 13
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fore",
+            "colour": "#808080",
+            "width": 8,
+            "dash": [
+              30,
+              30
+            ]
+          },
+          {
+            "layer": "text",
+            "colour": "#808080",
+            "arrow_colour": "#808080",
+            "size": 10,
+            "offset": 10
+          }
+        ],
+        "3, 6": [
+          {
+            "layer": "fore",
+            "colour": "#808080",
+            "width": 4,
+            "dash": [
+              20,
+              20
+            ]
+          }
+        ]
+      }
+    },
+    "building": {
+      "tags": [],
+      "type": "area",
+      "style": {
+        "0, 1": [
+          {
+            "layer": "fill",
+            "colour": "#a2a288",
+            "outline": "#515144",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#515144",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 15
+          }
+        ],
+        "2, 3": [
+          {
+            "layer": "fill",
+            "colour": "#a2a288",
+            "outline": "#515144",
+            "stripe": null
+          }
+        ]
+      }
+    },
+    "transportBuilding": {
+      "tags": [],
+      "type": "area",
+      "style": {
+        "0, 1": [
+          {
+            "layer": "fill",
+            "colour": "#999966",
+            "outline": "#4d4d33",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#4d4d33",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 15
+          }
+        ],
+        "2, 3": [
+          {
+            "layer": "fill",
+            "colour": "#999966",
+            "outline": "#4d4d33",
+            "stripe": null
+          }
+        ]
+      }
+    },
+    "platform": {
+      "tags": [],
+      "type": "area",
+      "style": {
+        "0, 1": [
+          {
+            "layer": "fill",
+            "colour": "#cccccc",
+            "outline": "#808080",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#808080",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
+        ],
+        "2, 3": [
+          {
+            "layer": "fill",
+            "colour": "#cccccc",
+            "outline": "#808080",
+            "stripe": null
+          }
+        ]
+      }
+    },
+    "pathway": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {}
+    },
+    "localHighwaySlip": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#bf9960",
+            "width": 28,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 20,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf9960",
+            "size": 20,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#bf9960",
+            "width": 18,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 13,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf9960",
+            "size": 13,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#bf9960",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 8,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#bf9960",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 5,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#bf9960",
+            "width": 5,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": -2,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": -6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": -3,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "bRoadSlip": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#bf6000",
+            "width": 32,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf6000",
+            "size": 24,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#bf6000",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf6000",
+            "size": 16,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#bf6000",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#bf6000",
+            "width": 9,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#bf6000",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": -2,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "aRoadSlip": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#bf8080",
+            "width": 40,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 32,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf8080",
+            "size": 32,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#bf8080",
+            "width": 26,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf8080",
+            "size": 21,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#bf8080",
+            "width": 17,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf8080",
+            "size": 14,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#bf8080",
+            "width": 11,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 9,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#bf8080",
+            "width": 7,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 6,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 0,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "localPedestrianQuaternaryRoad": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#9999bf",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#9999bf",
+            "size": 16,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#9999bf",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#9999bf",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#9999bf",
+            "width": 7,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#9999bf",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": -2,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": -6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": -3,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "localQuaternaryRoad": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#b2b2b2",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#b2b2b2",
+            "size": 16,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#b2b2b2",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#b2b2b2",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#b2b2b2",
+            "width": 7,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#b2b2b2",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": -2,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": -6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": -3,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "localPedestrianTertiaryRoad": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#9999bf",
+            "width": 32,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#9999bf",
+            "size": 24,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#9999bf",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#9999bf",
+            "size": 16,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#9999bf",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#9999bf",
+            "width": 9,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#9999bf",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": -2,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "localTertiaryRoad": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#b2b2b2",
+            "width": 32,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#b2b2b2",
+            "size": 24,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#b2b2b2",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#b2b2b2",
+            "size": 16,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#b2b2b2",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#b2b2b2",
+            "width": 9,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#b2b2b2",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": -2,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "localSecondaryRoad": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#bfba73",
+            "width": 36,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff899",
+            "width": 28,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bfba73",
+            "size": 28,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#bfba73",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff899",
+            "width": 18,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bfba73",
+            "size": 18,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#bfba73",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff899",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bfba73",
+            "size": 12,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#bfba73",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff899",
+            "width": 8,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#bfba73",
+            "width": 7,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff899",
+            "width": 5,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": -1,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "localMainRoad": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#bfb200",
+            "width": 40,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffee00",
+            "width": 32,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bfb200",
+            "size": 32,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#bfb200",
+            "width": 26,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffee00",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bfb200",
+            "size": 21,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#bfb200",
+            "width": 17,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffee00",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bfb200",
+            "size": 14,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#bfb200",
+            "width": 11,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffee00",
+            "width": 9,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#bfb200",
+            "width": 7,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffee00",
+            "width": 6,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 0,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "localHighway": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#bf9960",
+            "width": 44,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 36,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf9960",
+            "size": 36,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#bf9960",
+            "width": 29,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf9960",
+            "size": 24,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#bf9960",
+            "width": 19,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf9960",
+            "size": 16,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#bf9960",
+            "width": 13,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#bf9960",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 5,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 1,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "bRoad": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#bf6000",
+            "width": 48,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 40,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf6000",
+            "size": 40,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#bf6000",
+            "width": 32,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 26,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf6000",
+            "size": 26,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#bf6000",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 17,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf6000",
+            "size": 17,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#bf6000",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 11,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#bf6000",
+            "width": 9,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 6,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 5,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 2,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "aRoad": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#bf8080",
+            "width": 56,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 48,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf8080",
+            "size": 48,
+            "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#bf8080",
+            "width": 37,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 32,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf8080",
+            "size": 32,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#bf8080",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf8080",
+            "size": 21,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#bf8080",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf8080",
+            "size": 14,
+            "offset": 0
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#bf8080",
+            "width": 11,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 9,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 6,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 5,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 3,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "rail": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "fore",
+            "colour": "#808080",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#808080",
+            "arrow_colour": "#808080",
+            "size": 16,
+            "offset": 16
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "fore",
+            "colour": "#808080",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#808080",
+            "arrow_colour": "#808080",
+            "size": 13,
+            "offset": 13
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fore",
+            "colour": "#808080",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#808080",
+            "arrow_colour": "#808080",
+            "size": 10,
+            "offset": 10
+          }
+        ],
+        "3, 4": [
+          {
+            "layer": "fore",
+            "colour": "#808080",
+            "width": 2,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "intercityRail": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#808080",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffffff",
+            "width": 8,
+            "dash": [
+              50,
+              50
+            ]
+          },
+          {
+            "layer": "text",
+            "colour": "#808080",
+            "arrow_colour": "#808080",
+            "size": 16,
+            "offset": 16
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#808080",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffffff",
+            "width": 6,
+            "dash": [
+              40,
+              40
+            ]
+          },
+          {
+            "layer": "text",
+            "colour": "#808080",
+            "arrow_colour": "#808080",
+            "size": 13,
+            "offset": 13
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#808080",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffffff",
+            "width": 4,
+            "dash": [
+              30,
+              30
+            ]
+          },
+          {
+            "layer": "text",
+            "colour": "#808080",
+            "arrow_colour": "#808080",
+            "size": 10,
+            "offset": 10
+          }
+        ],
+        "3, 6": [
+          {
+            "layer": "back",
+            "colour": "#808080",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffffff",
+            "width": 2,
+            "dash": [
+              20,
+              20
+            ]
+          }
+        ]
+      }
+    },
+    "pathway_elevated": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {}
     },
     "localHighwaySlip_elevated": {
       "tags": [
@@ -2433,7 +6035,7 @@
       ],
       "type": "line",
       "style": {
-        "0, 5": [
+        "0, 0": [
           {
             "layer": "back",
             "colour": "#000000",
@@ -2453,6 +6055,139 @@
             "size": 20,
             "offset": 0
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 18,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 13,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf9960",
+            "size": 13,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 8,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 5,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 5,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": -2,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": -6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": -3,
+            "dash": null
+          }
         ]
       }
     },
@@ -2462,7 +6197,7 @@
       ],
       "type": "line",
       "style": {
-        "0, 5": [
+        "0, 0": [
           {
             "layer": "back",
             "colour": "#000000",
@@ -2482,6 +6217,139 @@
             "size": 24,
             "offset": 0
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf6000",
+            "size": 16,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 9,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": -2,
+            "dash": null
+          }
         ]
       }
     },
@@ -2491,7 +6359,7 @@
       ],
       "type": "line",
       "style": {
-        "0, 5": [
+        "0, 0": [
           {
             "layer": "back",
             "colour": "#000000",
@@ -2511,6 +6379,146 @@
             "size": 32,
             "offset": 0
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 26,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf8080",
+            "size": 21,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 17,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf8080",
+            "size": 14,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 11,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 9,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 7,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 6,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 0,
+            "dash": null
+          }
         ]
       }
     },
@@ -2520,7 +6528,7 @@
       ],
       "type": "line",
       "style": {
-        "0, 5": [
+        "0, 0": [
           {
             "layer": "back",
             "colour": "#000000",
@@ -2539,6 +6547,132 @@
             "arrow_colour": "#9999bf",
             "size": 16,
             "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 7,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": -2,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": -6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": -3,
+            "dash": null
           }
         ]
       }
@@ -2549,7 +6683,7 @@
       ],
       "type": "line",
       "style": {
-        "0, 5": [
+        "0, 0": [
           {
             "layer": "back",
             "colour": "#000000",
@@ -2569,6 +6703,132 @@
             "size": 16,
             "offset": 0
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 7,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": -2,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": -6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": -3,
+            "dash": null
+          }
         ]
       }
     },
@@ -2578,7 +6838,7 @@
       ],
       "type": "line",
       "style": {
-        "0, 5": [
+        "0, 0": [
           {
             "layer": "back",
             "colour": "#000000",
@@ -2598,6 +6858,139 @@
             "size": 24,
             "offset": 0
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#9999bf",
+            "size": 16,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 9,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ccccff",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ccccff",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#e6e6ff",
+            "width": -2,
+            "dash": null
+          }
         ]
       }
     },
@@ -2607,7 +7000,7 @@
       ],
       "type": "line",
       "style": {
-        "0, 5": [
+        "0, 0": [
           {
             "layer": "back",
             "colour": "#000000",
@@ -2627,6 +7020,139 @@
             "size": 24,
             "offset": 0
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#b2b2b2",
+            "size": 16,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 9,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": -1,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": -4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#eeeeee",
+            "width": -2,
+            "dash": null
+          }
         ]
       }
     },
@@ -2636,7 +7162,7 @@
       ],
       "type": "line",
       "style": {
-        "0, 5": [
+        "0, 0": [
           {
             "layer": "back",
             "colour": "#000000",
@@ -2656,6 +7182,146 @@
             "size": 28,
             "offset": 0
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff899",
+            "width": 18,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bfba73",
+            "size": 18,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff899",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bfba73",
+            "size": 12,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff899",
+            "width": 8,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 7,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff899",
+            "width": 5,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": 0,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#fff899",
+            "width": -2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fffccc",
+            "width": -1,
+            "dash": null
+          }
         ]
       }
     },
@@ -2665,7 +7331,7 @@
       ],
       "type": "line",
       "style": {
-        "0, 5": [
+        "0, 0": [
           {
             "layer": "back",
             "colour": "#000000",
@@ -2685,6 +7351,146 @@
             "size": 32,
             "offset": 0
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 26,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffee00",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bfb200",
+            "size": 21,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 17,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffee00",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bfb200",
+            "size": 14,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 11,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffee00",
+            "width": 9,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 7,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffee00",
+            "width": 6,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 1,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ffee00",
+            "width": 0,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#fff680",
+            "width": 0,
+            "dash": null
+          }
         ]
       }
     },
@@ -2694,7 +7500,7 @@
       ],
       "type": "line",
       "style": {
-        "0, 5": [
+        "0, 0": [
           {
             "layer": "back",
             "colour": "#000000",
@@ -2714,6 +7520,146 @@
             "size": 36,
             "offset": 0
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 29,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf9960",
+            "size": 24,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 19,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf9960",
+            "size": 16,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 13,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 10,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffcc80",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 5,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ffcc80",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffe6c0",
+            "width": 1,
+            "dash": null
+          }
         ]
       }
     },
@@ -2723,7 +7669,7 @@
       ],
       "type": "line",
       "style": {
-        "0, 5": [
+        "0, 0": [
           {
             "layer": "back",
             "colour": "#000000",
@@ -2743,6 +7689,146 @@
             "size": 40,
             "offset": 0
           }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 32,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 26,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf6000",
+            "size": 26,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 17,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf6000",
+            "size": 17,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 11,
+            "dash": null
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 9,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ff8000",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 6,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 5,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 3,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ff8000",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffc080",
+            "width": 2,
+            "dash": null
+          }
         ]
       }
     },
@@ -2752,7 +7838,7 @@
       ],
       "type": "line",
       "style": {
-        "0, 5": [
+        "0, 0": [
           {
             "layer": "back",
             "colour": "#000000",
@@ -2771,6 +7857,153 @@
             "arrow_colour": "#bf8080",
             "size": 48,
             "offset": 0
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 37,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 32,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf8080",
+            "size": 32,
+            "offset": 0
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 24,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 21,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf8080",
+            "size": 21,
+            "offset": 0
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#000000",
+            "arrow_colour": "#bf8080",
+            "size": 14,
+            "offset": 0
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 11,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffaaaa",
+            "width": 9,
+            "dash": null
+          }
+        ],
+        "5, 5": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 14,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 7,
+            "dash": null
+          }
+        ],
+        "6, 6": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 6,
+            "dash": null
+          }
+        ],
+        "7, 7": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 10,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 5,
+            "dash": null
+          }
+        ],
+        "8, 8": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 4,
+            "dash": null
+          }
+        ],
+        "9, 9": [
+          {
+            "layer": "back",
+            "colour": "#ffaaaa",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffd4d4",
+            "width": 3,
+            "dash": null
           }
         ]
       }
@@ -2800,6 +8033,173 @@
             "arrow_colour": "#808080",
             "size": 16,
             "offset": 16
+          }
+        ],
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#808080",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#808080",
+            "arrow_colour": "#808080",
+            "size": 16,
+            "offset": 16
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#808080",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "text",
+            "colour": "#808080",
+            "arrow_colour": "#808080",
+            "size": 13,
+            "offset": 13
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#808080",
+            "width": 2,
+            "dash": null
+          }
+        ],
+        "3, 4": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#808080",
+            "width": 2,
+            "dash": null
+          }
+        ]
+      }
+    },
+    "intercityRail_elevated": {
+      "tags": [
+        "road"
+      ],
+      "type": "line",
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 16,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffffff",
+            "width": 8,
+            "dash": [
+              50,
+              50
+            ]
+          },
+          {
+            "layer": "text",
+            "colour": "#808080",
+            "arrow_colour": "#808080",
+            "size": 16,
+            "offset": 16
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffffff",
+            "width": 6,
+            "dash": [
+              40,
+              40
+            ]
+          },
+          {
+            "layer": "text",
+            "colour": "#808080",
+            "arrow_colour": "#808080",
+            "size": 13,
+            "offset": 13
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffffff",
+            "width": 4,
+            "dash": [
+              30,
+              30
+            ]
+          },
+          {
+            "layer": "text",
+            "colour": "#808080",
+            "arrow_colour": "#808080",
+            "size": 10,
+            "offset": 10
+          }
+        ],
+        "3, 6": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#ffffff",
+            "width": 2,
+            "dash": [
+              20,
+              20
+            ]
           }
         ]
       }
@@ -3068,23 +8468,51 @@
       "tags": [],
       "type": "point",
       "style": {
-        "0, 5": [
+        "0, 0": [
           {
             "layer": "square",
             "colour": "#66ccff",
             "outline": null,
-            "size": 15,
-            "width": 10
+            "size": 10,
+            "width": 6
           },
           {
             "layer": "text",
             "colour": "#66ccff",
-            "size": 15,
+            "size": 10,
             "offset": [
               0,
               20
             ],
             "anchor": "mm"
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "square",
+            "colour": "#66ccff",
+            "outline": null,
+            "size": 10,
+            "width": 6
+          },
+          {
+            "layer": "text",
+            "colour": "#66ccff",
+            "size": 10,
+            "offset": [
+              0,
+              20
+            ],
+            "anchor": "mm"
+          }
+        ],
+        "2, 3": [
+          {
+            "layer": "square",
+            "colour": "#66ccff",
+            "outline": null,
+            "size": 7,
+            "width": 5
           }
         ]
       }
@@ -3093,23 +8521,51 @@
       "tags": [],
       "type": "point",
       "style": {
-        "0, 5": [
+        "0, 0": [
           {
             "layer": "square",
             "colour": "#1e85ae",
             "outline": null,
-            "size": 15,
-            "width": 10
+            "size": 10,
+            "width": 6
           },
           {
             "layer": "text",
             "colour": "#1e85ae",
-            "size": 15,
+            "size": 10,
             "offset": [
               0,
               20
             ],
             "anchor": "mm"
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "square",
+            "colour": "#1e85ae",
+            "outline": null,
+            "size": 10,
+            "width": 6
+          },
+          {
+            "layer": "text",
+            "colour": "#1e85ae",
+            "size": 10,
+            "offset": [
+              0,
+              20
+            ],
+            "anchor": "mm"
+          }
+        ],
+        "2, 3": [
+          {
+            "layer": "square",
+            "colour": "#1e85ae",
+            "outline": null,
+            "size": 7,
+            "width": 5
           }
         ]
       }
@@ -3118,7 +8574,7 @@
       "tags": [],
       "type": "point",
       "style": {
-        "0, 5": [
+        "0, 0": [
           {
             "layer": "square",
             "colour": "#1f3d7a",
@@ -3135,6 +8591,53 @@
               20
             ],
             "anchor": "mm"
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "square",
+            "colour": "#1f3d7a",
+            "outline": null,
+            "size": 15,
+            "width": 10
+          },
+          {
+            "layer": "text",
+            "colour": "#1f3d7a",
+            "size": 15,
+            "offset": [
+              0,
+              20
+            ],
+            "anchor": "mm"
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "square",
+            "colour": "#1f3d7a",
+            "outline": null,
+            "size": 10,
+            "width": 6
+          },
+          {
+            "layer": "text",
+            "colour": "#1f3d7a",
+            "size": 13,
+            "offset": [
+              0,
+              20
+            ],
+            "anchor": "mm"
+          }
+        ],
+        "3, 4": [
+          {
+            "layer": "square",
+            "colour": "#1f3d7a",
+            "outline": null,
+            "size": 10,
+            "width": 7
           }
         ]
       }
@@ -3177,7 +8680,25 @@
               0,
               0
             ],
-            "size": 50
+            "size": 25
+          }
+        ]
+      }
+    },
+    "subdistrictMarker": {
+      "tags": [],
+      "type": "point",
+      "style": {
+        "2, 5": [
+          {
+            "layer": "text",
+            "colour": "#d9b38c",
+            "size": 25,
+            "offset": [
+              0,
+              0
+            ],
+            "anchor": null
           }
         ]
       }
@@ -3220,7 +8741,25 @@
               0,
               0
             ],
-            "size": 50
+            "size": 25
+          }
+        ]
+      }
+    },
+    "districtMarker": {
+      "tags": [],
+      "type": "point",
+      "style": {
+        "4, 6": [
+          {
+            "layer": "text",
+            "colour": "#cc9966",
+            "size": 25,
+            "offset": [
+              0,
+              0
+            ],
+            "anchor": null
           }
         ]
       }
@@ -3263,7 +8802,7 @@
               0,
               0
             ],
-            "size": 50
+            "size": 25
           }
         ],
         "9, 11": [
@@ -3281,6 +8820,31 @@
               0
             ],
             "size": 25
+          }
+        ]
+      }
+    },
+    "townMarker": {
+      "tags": [],
+      "type": "point",
+      "style": {
+        "4, 8": [
+          {
+            "layer": "circle",
+            "colour": "#dddddd",
+            "outline": "#000000",
+            "size": 5,
+            "width": 2
+          },
+          {
+            "layer": "text",
+            "colour": "#bf8040",
+            "size": 25,
+            "offset": [
+              0,
+              0
+            ],
+            "anchor": null
           }
         ]
       }
@@ -3323,7 +8887,7 @@
               0,
               0
             ],
-            "size": 50
+            "size": 25
           }
         ],
         "11, 13": [
@@ -3341,6 +8905,24 @@
               0
             ],
             "size": 25
+          }
+        ]
+      }
+    },
+    "stateMarker": {
+      "tags": [],
+      "type": "point",
+      "style": {
+        "5, 10": [
+          {
+            "layer": "text",
+            "colour": "#996633",
+            "size": 25,
+            "offset": [
+              0,
+              0
+            ],
+            "anchor": null
           }
         ]
       }
@@ -3383,7 +8965,7 @@
               0,
               0
             ],
-            "size": 50
+            "size": 25
           }
         ],
         "11, 13": [
@@ -3401,6 +8983,24 @@
               0
             ],
             "size": 25
+          }
+        ]
+      }
+    },
+    "countryMarker": {
+      "tags": [],
+      "type": "point",
+      "style": {
+        "5, 10": [
+          {
+            "layer": "text",
+            "colour": "#86592d",
+            "size": 25,
+            "offset": [
+              0,
+              0
+            ],
+            "anchor": null
           }
         ]
       }

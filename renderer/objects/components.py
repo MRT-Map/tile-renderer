@@ -1,7 +1,6 @@
 from typing import Literal
 
 from schema import Schema, Or, And, Optional
-from tqdm import tqdm
 
 from renderer import validate
 from renderer.objects.nodes import NodeList

@@ -31,7 +31,6 @@ setup(
         'psutil',
         'imagehash',
         'colorama',
-        'tqdm'
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
