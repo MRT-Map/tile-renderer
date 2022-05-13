@@ -8,4 +8,5 @@ psutil
 imagehash
 colorama
 tqdm
-sphinxcontrib.programoutput
+sphinxcontrib-programoutput
+sphinxcontrib-codeautolink
