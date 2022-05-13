@@ -62,10 +62,10 @@ def _draw_components(operated,
                      debug: bool = False) -> tuple[TileCoord, list[_TextObject]] | None:
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
     if tile_components == [[]]:
-        logger.log("Render complete")
+        logger.log("Nothing to render")
         return None
 
-    logger.log("Initialising canvas")
+    logger.log("Rendering")
     size = zoom.range * 2 ** (zoom.max - tile_coord[0])
     img = Image.new(mode="RGBA", size=(skin.tile_size,)*2, color=skin.background)
     imd = ImageDraw.Draw(img)
@@ -101,7 +101,7 @@ def _draw_components(operated,
 
                 if step.layer not in args[type_info.shape].keys():
                     raise KeyError(f"{step.layer} is not a valid layer")
-                logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}")
+                #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}")
                 step.render(*args[type_info.shape][step.layer], debug=debug)
 
                 if using_ray:
@@ -110,7 +110,7 @@ def _draw_components(operated,
                     operated.count()
 
             if type_info.shape == "line" and "road" in type_info.tags and step.layer == "back":
-                logger.log("Rendering studs")
+                #logger.log("Rendering studs")
                 con_nodes: list[str] = list(chain(*(component.nodes for component in group)))
                 connected: list[tuple[Component, int]] = list(chain(*(tools.nodes.find_components_attached(x, all_components) for x in con_nodes)))
                 for con_component, index in connected:
@@ -150,6 +150,7 @@ def _draw_components(operated,
     text_list.reverse()
 
     img.save(Path(__file__).parent.parent / f'tmp/{tile_coord}.tmp.png', 'PNG')
+    logger.log("Rendered")
 
     return tile_coord, text_list
 
@@ -200,13 +201,12 @@ def _draw_text(operated, operations: int, start: RealNum, tile_coord: TileCoord,
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
     processed = 0
     image = Image.open(Path(__file__).parent.parent / f'tmp/{tile_coord}.tmp.png')
-    os.remove(Path(__file__).parent.parent / f'tmp/{tile_coord}.tmp.png')
     #print(text_list)
     for text in text_list:
         processed += 1
         if using_ray: operated.count.remote()
         else: operated.count()
-        logger.log(f"Text {processed}/{len(text_list)} pasted")
+        #logger.log(f"Text {processed}/{len(text_list)} pasted")
         for img, center in zip(text.image, text.center):
             image.paste(img, (int(center.x-tile_coord.x*skin.tile_size-img.width/2),
                               int(center.y-tile_coord.y*skin.tile_size-img.height/2)), img)

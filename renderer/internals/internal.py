@@ -20,7 +20,7 @@ def _dict_index(d: dict[_K, _V], v: _V) -> _K:
     return list(d.keys())[list(d.values()).index(v)]
 
 def _read_json(file: Path | str) -> Any:
-    with open(file, "r") as f:
+    with open(file, "r", encoding="utf-8") as f:
         data = json.load(f)
         f.close()
         return data

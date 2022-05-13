@@ -306,7 +306,7 @@ def render(components: ComponentList,
                 continue
             k, v = list(i.items())[0]
             result[k] = v
-        ray.shutdown()
+        #ray.shutdown()
     else:
         if __name__ == 'renderer.base':
             operated = _MultiprocessingOperatedHandler(multiprocessing.Manager())
@@ -316,7 +316,7 @@ def render(components: ComponentList,
             start = time.time() * 1000
             for tile_coord, component_group in grouped_tile_list.items():
                 input_.append((operated, operations - 1, start, tile_coord, component_group, components, nodes,
-                               skin, zoom, assets_dir, True, debug))
+                               skin, zoom, assets_dir, False, debug))
             p = multiprocessing.Pool(processes)
             try:
                 prepreresult = p.starmap(rendering._draw_components, input_)
@@ -335,7 +335,7 @@ def render(components: ComponentList,
             operated = _MultiprocessingOperatedHandler(multiprocessing.Manager())
             for tile_coord, text_list in new_texts:
                 input_.append((operated, total_texts + len(new_texts), start, tile_coord, text_list,
-                               save_images, save_dir, skin, True))
+                               save_images, save_dir, skin, False))
 
             try:
                 preresult = p.starmap(rendering._draw_text, input_)

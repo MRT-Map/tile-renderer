@@ -16,10 +16,10 @@ TRANSPORT_BUILDING = 0x999966
 
 def main():
     s = SkinBuilder(256, {
-        "": Path("ClearSans-Medium.ttf"),
-        "b": Path("ClearSans-Bold.ttf"),
-        "i": Path("ClearSans-MediumItalic.ttf"),
-        "bi": Path("ClearSans-BoldItalic.ttf")
+        "": Path("NotoSans-Medium.ttf"),
+        "b": Path("NotoSans-Bold.ttf"),
+        "i": Path("NotoSans-MediumItalic.ttf"),
+        "bi": Path("NotoSans-BoldItalic.ttf")
     }, 0xdddddd)
 
     for name, col in [("residentialArea", 0xb3cbcb),

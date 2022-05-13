@@ -2,10 +2,10 @@
   "info": {
     "size": 256,
     "font": {
-      "": "ClearSans-Medium.ttf",
-      "b": "ClearSans-Bold.ttf",
-      "i": "ClearSans-MediumItalic.ttf",
-      "bi": "ClearSans-BoldItalic.ttf"
+      "": "NotoSans-Medium.ttf",
+      "b": "NotoSans-Bold.ttf",
+      "i": "NotoSans-MediumItalic.ttf",
+      "bi": "NotoSans-BoldItalic.ttf"
     },
     "background": "#dddddd"
   },

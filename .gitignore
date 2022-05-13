@@ -155,4 +155,5 @@ tile_renderer.egg-info
 __pycache__
 .idea/*
 .DS_Store
-renderer/tmp/*
+renderer/tmp/*.tmp.png
+renderer/skins/Noto_Sans.zip
