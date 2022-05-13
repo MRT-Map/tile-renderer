@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 from pathlib import Path
 
 import psutil
@@ -349,5 +350,8 @@ def render(components: ComponentList,
                 result[k] = v
 
         print(term.green("100.00% | 0.0s left | ") + "Rendering complete" + term.clear_eos)
+
+    for file in glob.glob(str(Path(__file__).parent / f'tmp/*.tmp.png')):
+        os.remove(file)
     print(term.bright_green("Render complete"))
     return result
