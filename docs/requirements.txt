@@ -9,4 +9,4 @@ imagehash
 colorama
 tqdm
 sphinxcontrib-programoutput
-sphinxcontrib-codeautolink
+sphinx-codeautolink

@@ -34,7 +34,7 @@ release = "v"+renderer.__version__
 extensions = [
     "sphinx_rtd_theme",
     "sphinxcontrib.programoutput",
-    "sphinxcontrib.codeautolink",
+    "sphinx_codeautolink",
     "sphinx.ext.autodoc"
 ]
 
