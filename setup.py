@@ -19,7 +19,7 @@ setup(
     keywords=['leaflet', 'leaflet.js', 'leafletjs', 'map', 'tiles', 'renderer', 'tile-renderer', 'mapping'],
     python_requires='>=3.8',
     package_data={
-        'renderer': ['skins/*', 'skins/assets/*', 'internals/*', 'builders/*', 'tools/*', 'objects/*'],
+        'renderer': ['skins/*', 'skins/assets/*', 'internals/*', 'builders/*', 'tools/*', 'objects/*', 'tmp/README.txt'],
     },
     install_requires=[
         'pillow',
@@ -30,7 +30,7 @@ setup(
         'click',
         'psutil',
         'imagehash',
-        'colorama'
+        'colorama',
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',

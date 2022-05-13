@@ -1,5 +1,11 @@
 Changelog
 =========
+* **v2.2 (13/5/22)**
+
+  * Multiline text is now centered
+  * Improve skin, especially for small zooms
+  * implement memory swapping for images to reduce RAM usage
+
 * **v2.1 (6/4/22)**
 
   * Added SkinBuilder, a utility class for building skins Pythonically

@@ -1,7 +1,6 @@
 from typing import Literal
 
 from schema import Schema, Or
-from tqdm import tqdm
 
 from renderer.types import RealNum, NodeListJson, NodeJson
 

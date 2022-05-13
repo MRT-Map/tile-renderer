@@ -21,22 +21,13 @@ Leaflet.js streetmap tile renderer, made by 7d
 
 **Documentation: https://tile-renderer.readthedocs.io/en/latest/**
 
-## Current version: v2.1
-* **v2.1 (6/4/22)**
+## Current version: v2.2
+* **v2.2 (13/5/22)**
 
-  * Added SkinBuilder, a utility class for building skins Pythonically
-  * Moved bulk of rendering code to ComponentStyle classes
-  * Redid stud drawing
-  * Fix text overlapping with _prevent_text_overlap
-  * most mathtools functions now use Coord and TileCoord
-  * logging improvements
-  * _TextObjects now store their bounds instead of their width/heights
-  * new dashing algorithm ``mathtools.dash()``
-  * offset function ``mathtools.offset()``
-  * redid rendering for LineText so that they can go around corners
-  * fixed arrow offset
-  * debug switch to show additional debug Information
-  * tweaked skin
+  * Multiline text is now centered
+  * Improve skin, especially for small zooms
+  * implement memory swapping for images to reduce RAM usage
+
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
 ## Usage (simple)
@@ -59,10 +50,10 @@ nodes = renderer.NodeList(read_file("path_to_your_nodes_file/blah.nodes.pla"))
 comps = renderer.ComponentList(read_file("path_to_your_components_file/blah.comps.pla"),
                                read_file("path_to_your_nodes_file/blah.nodes.pla"))
 
-if __name__ == "__main__": renderer.render(comps, nodes, 1, 2, 8)
+if __name__ == "__main__": renderer.render(comps, nodes, renderer.ZoomParams(1, 2, 8))
 # renders tiles at zoom levels 1 and 2 with the max zoom tile covering 8 units
 # Don't like clogging the main directory? Create a new folder and use this instead:
-# renderer.render(comps, nodes, 1, 2, 8, save_dir=Path("your_folder_name/"))
+# renderer.render(comps, nodes, renderer.ZoomParams(1, 2, 8), save_dir=Path("your_folder_name/"))
 ```
 
 <!--

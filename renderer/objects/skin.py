@@ -470,8 +470,8 @@ class Skin:
 
                 act_i = Image.new('RGBA', (2 * text_length, 2 * text_size), (0, 0, 0, 0))
                 act_d = ImageDraw.Draw(act_i)
-                act_d.text((text_length, text_size), text, fill=self.colour, font=font, anchor="mm",
-                           stroke_width=1, stroke_fill="#dddddd")
+                act_d.multiline_text((text_length, text_size), text, fill=self.colour, font=font, anchor="mm",
+                                     stroke_width=1, stroke_fill="#dddddd", align="center")
                 cw, ch = act_i.size[:]
                 act_i = act_i.crop((0, 0, act_i.width, act_i.height))
                 text_list.append(_TextObject(act_i, cx, cy,
@@ -593,7 +593,7 @@ class Skin:
                     "tags": list,
                     "type": lambda t_: t_ in ['point', 'line', 'area'],
                     "style": {
-                        str: list
+                        Optional(str): list
                     }
                 }
             }

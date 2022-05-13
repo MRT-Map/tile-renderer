@@ -32,7 +32,7 @@ def test_pytest():
         s = Skin.from_name("default")
 
         #base
-        a = renderer.render(p, n, 8, 8, 8, save_dir=Path("tiles/"), processes=8)
+        a = renderer.render(p, n, renderer.ZoomParams(8, 8, 8), save_dir=Path("tiles/"), processes=8)
         renderer.merge_tiles(a, save_images=False)
         return
         #tools
