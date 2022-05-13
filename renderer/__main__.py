@@ -6,6 +6,8 @@ import blessed
 
 import psutil
 
+from renderer.objects.zoom_params import ZoomParams
+
 
 def cmd():
     import renderer
@@ -71,7 +73,7 @@ def cmd():
         skin = renderer.Skin.from_name(args.skin)
         print("Starting rendering...")
         renderer.render(comps, nodes,
-                        args.min_zoom, args.max_zoom, args.max_zoom_range,
+                        ZoomParams(args.min_zoom, args.max_zoom, args.max_zoom_range),
                         skin=skin,
                         save_dir=args.save_dir,
                         processes=args.processes,

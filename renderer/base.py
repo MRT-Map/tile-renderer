@@ -17,6 +17,7 @@ import renderer.internals.rendering as rendering
 from renderer.objects.components import ComponentList, Component
 from renderer.objects.nodes import NodeList
 from renderer.objects.skin import Skin, _TextObject
+from renderer.objects.zoom_params import ZoomParams
 from renderer.types import RealNum, TileCoord
 
 import renderer.tools.components as tools_component_json
@@ -108,9 +109,7 @@ def merge_tiles(images: Path | dict[TileCoord, Image],
 
 def render(components: ComponentList,
            nodes: NodeList,
-           min_zoom: int,
-           max_zoom: int,
-           max_zoom_range: RealNum,
+           zoom: ZoomParams,
            skin: Skin = Skin.from_name("default"),
            save_images: bool = True,
            save_dir: Path = Path.cwd(),
@@ -129,9 +128,7 @@ def render(components: ComponentList,
 
         :param ComponentList components: a JSON of components
         :param NodeList nodes: a JSON of nodes
-        :param int min_zoom: minimum zoom value
-        :param int max_zoom: maximum zoom value
-        :param RealNum max_zoom_range: actual distance covered by a tile in the maximum zoom
+        :param ZoomParams zoom: a ZoomParams object
         :param Skin skin: The skin to use for rendering the tiles
         :param int save_images: whether to save the tile images in a folder or not
         :param Path save_dir: the directory to save tiles in
@@ -146,12 +143,7 @@ def render(components: ComponentList,
 
         :returns: Given in the form of ``{tile_coord: image}``
         :rtype: dict[TileCoord, Image.Image]
-
-        :raises ValueError: if max_zoom < min_zoom
         """
-
-    if max_zoom < min_zoom:
-        raise ValueError("Max zoom value is greater than min zoom value")
     term = blessed.Terminal()
 
     # offset
@@ -162,9 +154,9 @@ def render(components: ComponentList,
     print(term.green("Finding tiles..."), end=" ")
     #finds which tiles to render
     if tiles is not None:
-        validate.v_tile_coords(tiles, min_zoom, max_zoom)
+        validate.v_tile_coords(tiles, zoom.min, zoom.max)
     else: #finds box of tiles
-        tiles = tools_component_json.rendered_in(components, nodes, min_zoom, max_zoom, max_zoom_range)
+        tiles = tools_component_json.rendered_in(components, nodes, zoom.min, zoom.max, zoom.range)
 
     print(term.green("found\nRemoving components with unknown type..."), end=" ")
     # remove components whose type is not in skin
@@ -186,7 +178,7 @@ def render(components: ComponentList,
         tile_list[tile] = []
     for component in components.component_values():
         coords = tools_nodes.to_coords(component.nodes, nodes)
-        rendered_in = tools_line.to_tiles(coords, min_zoom, max_zoom, max_zoom_range)
+        rendered_in = tools_line.to_tiles(coords, zoom.min, zoom.max, zoom.range)
         for tile in rendered_in:
             if tile in tile_list.keys():
                 tile_list[tile].append(component)
@@ -249,7 +241,7 @@ def render(components: ComponentList,
 
         for group in tile_components:
             info = skin.types[group[0].type]
-            for step in info[max_zoom-tile_coord.z]:
+            for step in info[zoom.max-tile_coord.z]:
                 operations += len(group)
                 tile_operations += len(group)
                 if info.shape == "line" and "road" in info.tags and step.layer == "back":
@@ -288,21 +280,21 @@ def render(components: ComponentList,
         start = time.time() * 1000
         for tile_coord, component_group in grouped_tile_list.items():
             input_.append((operated, operations-1, start, tile_coord, component_group, components, nodes,
-                           skin, max_zoom, max_zoom_range, assets_dir, True, debug))
+                           skin, zoom, assets_dir, True, debug))
         futures = [ray.remote(rendering._draw_components).remote(*input_[i]) for i in range(len(input_))]
-        prepreresult: list[tuple[TileCoord, Image.Image, list[_TextObject]] | None] = ray.get(futures)
+        prepreresult: list[tuple[TileCoord, list[_TextObject]] | None] = ray.get(futures)
         prepreresult = list(filter(lambda r: r is not None, prepreresult))
 
         print(term.bright_green("\nEliminating overlapping text..."))
         input_ = []
         new_texts = rendering._prevent_text_overlap(prepreresult)
-        total_texts = sum(len(t[2]) for t in new_texts)
+        total_texts = sum(len(t[1]) for t in new_texts)
 
         start = time.time() * 1000
         print(term.bright_green("\nRendering text..."))
         operated = _RayOperatedHandler.remote()
-        for tile_coord, image, text_list in new_texts:
-            input_.append((operated, total_texts+len(new_texts), start, image, tile_coord, text_list,
+        for tile_coord, text_list in new_texts:
+            input_.append((operated, total_texts+len(new_texts), start, tile_coord, text_list,
                            save_images, save_dir, skin, True))
         futures = [ray.remote(rendering._draw_text).remote(*input_[i]) for i in range(len(input_))]
         preresult = ray.get(futures)
@@ -323,7 +315,7 @@ def render(components: ComponentList,
             start = time.time() * 1000
             for tile_coord, component_group in grouped_tile_list.items():
                 input_.append((operated, operations - 1, start, tile_coord, component_group, components, nodes,
-                               skin, max_zoom, max_zoom_range, assets_dir, True, debug))
+                               skin, zoom, assets_dir, True, debug))
             p = multiprocessing.Pool(processes)
             try:
                 prepreresult = p.starmap(rendering._draw_components, input_)
@@ -335,13 +327,13 @@ def render(components: ComponentList,
             print(term.bright_green("\nEliminating overlapping text..."))
             input_ = []
             new_texts = rendering._prevent_text_overlap(prepreresult)
-            total_texts = sum(len(t[2]) for t in new_texts)
+            total_texts = sum(len(t[1]) for t in new_texts)
 
             start = time.time() * 1000
             print(term.bright_green("\nRendering text..."))
             operated = _MultiprocessingOperatedHandler(multiprocessing.Manager())
-            for tile_coord, image, text_list in new_texts:
-                input_.append((operated, total_texts + len(new_texts), start, image, tile_coord, text_list,
+            for tile_coord, text_list in new_texts:
+                input_.append((operated, total_texts + len(new_texts), start, tile_coord, text_list,
                                save_images, save_dir, skin, True))
 
             try:

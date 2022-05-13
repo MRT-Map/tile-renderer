@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import os
 import time
 from dataclasses import dataclass
 from itertools import chain
@@ -15,6 +16,7 @@ import renderer.tools as tools
 from renderer.objects.components import ComponentList, Component
 from renderer.objects.nodes import NodeList
 from renderer.objects.skin import Skin, _TextObject, _node_list_to_image_coords
+from renderer.objects.zoom_params import ZoomParams
 from renderer.types import RealNum, TileCoord, Coord
 
 R = Style.RESET_ALL
@@ -54,18 +56,17 @@ def _draw_components(operated,
                      all_components: ComponentList,
                      nodes: NodeList,
                      skin: Skin,
-                     max_zoom: int,
-                     max_zoom_range: RealNum,
+                     zoom: ZoomParams,
                      assets_dir: Path,
                      using_ray: bool = False,
-                     debug: bool = False) -> tuple[TileCoord, Image.Image, list[_TextObject]] | None:
+                     debug: bool = False) -> tuple[TileCoord, list[_TextObject]] | None:
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
     if tile_components == [[]]:
         logger.log("Render complete")
         return None
 
     logger.log("Initialising canvas")
-    size = max_zoom_range * 2 ** (max_zoom - tile_coord[0])
+    size = zoom.range * 2 ** (zoom.max - tile_coord[0])
     img = Image.new(mode="RGBA", size=(skin.tile_size,)*2, color=skin.background)
     imd = ImageDraw.Draw(img)
     text_list: list[_TextObject] = []
@@ -73,7 +74,7 @@ def _draw_components(operated,
 
     for group in tile_components:
         type_info = skin[group[0].type]
-        style = type_info[max_zoom-tile_coord[0]]
+        style = type_info[zoom.max-tile_coord[0]]
         for step in style:
             for component in group:
                 coords = _node_list_to_image_coords(component.nodes, nodes, skin, tile_coord, size)
@@ -116,7 +117,7 @@ def _draw_components(operated,
                     if "road" not in skin[con_component.type].tags:
                         continue
                     con_info = skin[con_component.type]
-                    for con_step in con_info[max_zoom-tile_coord.z]:
+                    for con_step in con_info[zoom.max-tile_coord.z]:
                         if con_step.layer in ["back", "text"]:
                             continue
 
@@ -147,14 +148,16 @@ def _draw_components(operated,
 
     text_list += points_text_list
     text_list.reverse()
-    return tile_coord, img, text_list
 
-def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextObject]]]) -> list[tuple[TileCoord, Image.Image, list[_TextObject]]]:
-    imgs: dict[TileCoord, Image.Image] = {tile_coord: img for tile_coord, img, _ in texts}
-    preout = {}
+    img.save(Path(__file__).parent.parent / f'tmp/{tile_coord}.tmp.png', 'PNG')
+
+    return tile_coord, text_list
+
+def _prevent_text_overlap(texts: list[tuple[TileCoord, list[_TextObject]]]) -> list[tuple[TileCoord, list[_TextObject]]]:
+    out = {}
     for z in list(set(c[0].z for c in texts)):
         text_dict: dict[_TextObject, list[TileCoord]] = {}
-        for tile_coord, _, text_objects in texts:
+        for tile_coord, text_objects in texts:
             if tile_coord.z != z: continue
             for text in text_objects:
                 if text not in text_dict: text_dict[text] = []
@@ -184,21 +187,20 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, Image.Image, list[_TextOb
         operations = len(text_dict)
         for i, (text, tile_coords) in enumerate(text_dict.items()):
             for tile_coord in tile_coords:
-                if tile_coord not in preout:
-                    preout[tile_coord] = (imgs[tile_coord], [])
-                preout[tile_coord][1].append(text)
+                if tile_coord not in out:
+                    out[tile_coord] = []
+                out[tile_coord].append(text)
             print(_eta(start, i+1, operations) +
                   f"Sorting remaining text {i + 1}/{operations} in zoom {z}", flush=True, end="")
-    for tile_coord, _, _ in texts:
-        if tile_coord not in preout: preout[tile_coord] = (imgs[tile_coord], [])
-    out = [(tile_coord, img, text_objects) for tile_coord, (img, text_objects) in preout.items()]
-    return out
+    return [(tile_coord, texts) for tile_coord, texts in out.items()]
 
 
-def _draw_text(operated, operations: int, start: RealNum, image: Image.Image, tile_coord: TileCoord, text_list: list[_TextObject],
+def _draw_text(operated, operations: int, start: RealNum, tile_coord: TileCoord, text_list: list[_TextObject],
                save_images: bool, save_dir: Path, skin: Skin, using_ray: bool=False) -> dict[TileCoord, Image.Image]:
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
     processed = 0
+    image = Image.open(Path(__file__).parent.parent / f'tmp/{tile_coord}.tmp.png')
+    os.remove(Path(__file__).parent.parent / f'tmp/{tile_coord}.tmp.png')
     #print(text_list)
     for text in text_list:
         processed += 1

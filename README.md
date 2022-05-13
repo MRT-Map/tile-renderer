@@ -59,7 +59,7 @@ nodes = renderer.NodeList(read_file("path_to_your_nodes_file/blah.nodes.pla"))
 comps = renderer.ComponentList(read_file("path_to_your_components_file/blah.comps.pla"),
                                read_file("path_to_your_nodes_file/blah.nodes.pla"))
 
-if __name__ == "__main__": renderer.render(comps, nodes, 1, 2, 8)
+if __name__ == "__main__": renderer.render(comps, nodes, renderer.ZoomParams(1, 2, 8))
 # renders tiles at zoom levels 1 and 2 with the max zoom tile covering 8 units
 # Don't like clogging the main directory? Create a new folder and use this instead:
 # renderer.render(comps, nodes, 1, 2, 8, save_dir=Path("your_folder_name/"))
