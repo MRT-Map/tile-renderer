@@ -534,7 +534,7 @@ def main():
                                          (2, 3, 12, 0, 0),
                                          (3, 2, 8, 0, 0),
                                          (4, 1, 4, 0, 0)]:
-        pathway_underground[i] = [
+        pathway_elevated[i] = [
             CS.line_back(colour=0x000000,
                          width=width*3),
             CS.line_back(colour=0xeeeeee,

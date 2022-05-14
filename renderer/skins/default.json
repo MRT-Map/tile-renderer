@@ -1772,19 +1772,13 @@
         "0, 0": [
           {
             "layer": "back",
-            "colour": "#000000",
-            "width": 12,
-            "dash": null
-          },
-          {
-            "layer": "back",
             "colour": "#eeeeee",
             "width": 8,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#008000",
+            "colour": "#66ff66",
             "width": 4,
             "dash": [
               16,
@@ -1794,7 +1788,7 @@
           {
             "layer": "text",
             "colour": "#aaaaaa",
-            "arrow_colour": "#008000",
+            "arrow_colour": "#eeeeee",
             "size": 16,
             "offset": 10
           }
@@ -1802,19 +1796,13 @@
         "1, 1": [
           {
             "layer": "back",
-            "colour": "#000000",
-            "width": 12,
-            "dash": null
-          },
-          {
-            "layer": "back",
             "colour": "#eeeeee",
             "width": 8,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#008000",
+            "colour": "#66ff66",
             "width": 4,
             "dash": [
               16,
@@ -1824,18 +1812,12 @@
           {
             "layer": "text",
             "colour": "#aaaaaa",
-            "arrow_colour": "#008000",
+            "arrow_colour": "#eeeeee",
             "size": 16,
             "offset": 10
           }
         ],
         "2, 2": [
-          {
-            "layer": "back",
-            "colour": "#000000",
-            "width": 9,
-            "dash": null
-          },
           {
             "layer": "back",
             "colour": "#eeeeee",
@@ -1844,7 +1826,7 @@
           },
           {
             "layer": "fore",
-            "colour": "#008000",
+            "colour": "#66ff66",
             "width": 3,
             "dash": [
               12,
@@ -1855,19 +1837,13 @@
         "3, 3": [
           {
             "layer": "back",
-            "colour": "#000000",
-            "width": 6,
-            "dash": null
-          },
-          {
-            "layer": "back",
             "colour": "#eeeeee",
             "width": 4,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#008000",
+            "colour": "#66ff66",
             "width": 2,
             "dash": [
               8,
@@ -1878,19 +1854,13 @@
         "4, 4": [
           {
             "layer": "back",
-            "colour": "#000000",
-            "width": 3,
-            "dash": null
-          },
-          {
-            "layer": "back",
             "colour": "#eeeeee",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#008000",
+            "colour": "#66ff66",
             "width": 1,
             "dash": [
               4,
@@ -5535,7 +5505,137 @@
         "road"
       ],
       "type": "line",
-      "style": {}
+      "style": {
+        "0, 0": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#008000",
+            "width": 4,
+            "dash": [
+              16,
+              16
+            ]
+          },
+          {
+            "layer": "text",
+            "colour": "#aaaaaa",
+            "arrow_colour": "#008000",
+            "size": 16,
+            "offset": 10
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 12,
+            "dash": null
+          },
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 8,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#008000",
+            "width": 4,
+            "dash": [
+              16,
+              16
+            ]
+          },
+          {
+            "layer": "text",
+            "colour": "#aaaaaa",
+            "arrow_colour": "#008000",
+            "size": 16,
+            "offset": 10
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 9,
+            "dash": null
+          },
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#008000",
+            "width": 3,
+            "dash": [
+              12,
+              12
+            ]
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 6,
+            "dash": null
+          },
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 4,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#008000",
+            "width": 2,
+            "dash": [
+              8,
+              8
+            ]
+          }
+        ],
+        "4, 4": [
+          {
+            "layer": "back",
+            "colour": "#000000",
+            "width": 3,
+            "dash": null
+          },
+          {
+            "layer": "back",
+            "colour": "#eeeeee",
+            "width": 2,
+            "dash": null
+          },
+          {
+            "layer": "fore",
+            "colour": "#008000",
+            "width": 1,
+            "dash": [
+              4,
+              4
+            ]
+          }
+        ]
+      }
     },
     "localHighwaySlip_elevated": {
       "tags": [
