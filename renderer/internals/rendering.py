@@ -192,7 +192,7 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, list[_TextObject]]]) -> l
                 out[tile_coord].append(text)
             print(_eta(start, i+1, operations) +
                   f"Sorting remaining text {i + 1}/{operations} in zoom {z}", flush=True, end="")
-    return [(tile_coord, texts) for tile_coord, texts in out.items()]
+    return [(tile_coord, texts) for tile_coord, texts in {**texts, **out}.items()]
 
 
 def _draw_text(operated, operations: int, start: RealNum, tile_coord: TileCoord, text_list: list[_TextObject],
