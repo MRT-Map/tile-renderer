@@ -110,6 +110,7 @@ class Skin:
         :raises FileNotFoundError: if font is not found"""
         if style in self.fonts.keys():
             for font in self.fonts[style]:
+                print("\n\n\n"+str(assets_dir/font)+"\n\n\n")
                 pil_font = ImageFont.truetype(str(assets_dir/font), size)
                 ft_font = TTFont(str(assets_dir/font))
                 for table in ft_font['cmap'].tables:
