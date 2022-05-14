@@ -439,7 +439,7 @@ def main():
                                          (2, 3, 12, 0, 0),
                                          (3, 2, 8, 0, 0),
                                          (4, 1, 4, 0, 0)]:
-        pathway_underground[i] = [
+        pathway[i] = [
             CS.line_back(colour=0xeeeeee,
                          width=width*2),
             CS.line_fore(colour=0x008000,
