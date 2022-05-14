@@ -2,10 +2,26 @@
   "info": {
     "size": 256,
     "font": {
-      "": "NotoSans-Medium.ttf",
-      "b": "NotoSans-Bold.ttf",
-      "i": "NotoSans-MediumItalic.ttf",
-      "bi": "NotoSans-BoldItalic.ttf"
+      "": [
+        "ClearSans-Medium.ttf",
+        "NotoSans-Medium.ttf",
+        "NotoSansSC-Medium.ttf"
+      ],
+      "b": [
+        "ClearSans-Bold.ttf",
+        "NotoSans-Bold.ttf",
+        "NotoSansSC-Bold.ttf"
+      ],
+      "i": [
+        "ClearSans-MediumItalic.ttf",
+        "NotoSans-MediumItalic.ttf",
+        "NotoSansSC-Medium.ttf"
+      ],
+      "bi": [
+        "ClearSans-BoldItalic.ttf",
+        "NotoSans-BoldItalic.ttf",
+        "NotoSansSC-Bold.ttf"
+      ]
     },
     "background": "#dddddd"
   },
@@ -40,7 +56,6 @@
     "building_underground",
     "cityHall",
     "transportBuilding_underground",
-    "platform_underground",
     "park",
     "pathway_underground",
     "localHighwaySlip_underground",
@@ -57,9 +72,9 @@
     "aRoad_underground",
     "rail_underground",
     "intercityRail_underground",
+    "platform_underground",
     "building",
     "transportBuilding",
-    "platform",
     "pathway",
     "localHighwaySlip",
     "bRoadSlip",
@@ -90,6 +105,7 @@
     "aRoad_elevated",
     "rail_elevated",
     "intercityRail_elevated",
+    "platform",
     "pedestrianCrossing",
     "railCrossing",
     "parking",
@@ -798,7 +814,7 @@
               0,
               0
             ],
-            "size": 50
+            "size": 25
           }
         ],
         "3, 1000": [
@@ -895,7 +911,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 3": [
+        "0, 0": [
           {
             "layer": "fill",
             "colour": "#bbff99",
@@ -912,6 +928,57 @@
             "size": 25
           }
         ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#bbff99",
+            "outline": "#a8e68a",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#5e804c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 20
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#bbff99",
+            "outline": "#a8e68a",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#5e804c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 15
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "fill",
+            "colour": "#bbff99",
+            "outline": "#a8e68a",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#5e804c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
+        ],
         "4, 6": [
           {
             "layer": "fill",
@@ -926,7 +993,41 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 3": [
+        "0, 0": [
+          {
+            "layer": "fill",
+            "colour": "#99ff99",
+            "outline": "#8ae68a",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#4c804c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 25
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#99ff99",
+            "outline": "#8ae68a",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#4c804c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 20
+          }
+        ],
+        "2, 2": [
           {
             "layer": "fill",
             "colour": "#99ff99",
@@ -943,6 +1044,23 @@
             "size": 15
           }
         ],
+        "3, 3": [
+          {
+            "layer": "fill",
+            "colour": "#99ff99",
+            "outline": "#8ae68a",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#4c804c",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
+        ],
         "4, 6": [
           {
             "layer": "fill",
@@ -957,7 +1075,58 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 3": [
+        "0, 0": [
+          {
+            "layer": "fill",
+            "colour": "#5ca904",
+            "outline": "#539804",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#2e5402",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 25
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#5ca904",
+            "outline": "#539804",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#2e5402",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 20
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#5ca904",
+            "outline": "#539804",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#2e5402",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 15
+          }
+        ],
+        "3, 3": [
           {
             "layer": "fill",
             "colour": "#5ca904",
@@ -988,7 +1157,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 3": [
+        "0, 0": [
           {
             "layer": "fill",
             "colour": "#aaaaaa",
@@ -1002,7 +1171,58 @@
               0,
               0
             ],
-            "size": 7
+            "size": 25
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#aaaaaa",
+            "outline": "#999999",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#555555",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 20
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#aaaaaa",
+            "outline": "#999999",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#555555",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 15
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "fill",
+            "colour": "#aaaaaa",
+            "outline": "#999999",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#555555",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
           }
         ],
         "4, 6": [
@@ -1019,7 +1239,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 3": [
+        "0, 0": [
           {
             "layer": "fill",
             "colour": "#f7e1a1",
@@ -1033,7 +1253,58 @@
               0,
               0
             ],
-            "size": 5
+            "size": 25
+          }
+        ],
+        "1, 1": [
+          {
+            "layer": "fill",
+            "colour": "#f7e1a1",
+            "outline": "#deca91",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#7c7151",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 20
+          }
+        ],
+        "2, 2": [
+          {
+            "layer": "fill",
+            "colour": "#f7e1a1",
+            "outline": "#deca91",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#7c7151",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 15
+          }
+        ],
+        "3, 3": [
+          {
+            "layer": "fill",
+            "colour": "#f7e1a1",
+            "outline": "#deca91",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#7c7151",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
           }
         ],
         "4, 6": [
@@ -1461,37 +1732,6 @@
         ]
       }
     },
-    "platform_underground": {
-      "tags": [],
-      "type": "area",
-      "style": {
-        "0, 1": [
-          {
-            "layer": "fill",
-            "colour": "#aaaaaa",
-            "outline": "#555555",
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#555555",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 10
-          }
-        ],
-        "2, 3": [
-          {
-            "layer": "fill",
-            "colour": "#aaaaaa",
-            "outline": "#555555",
-            "stripe": null
-          }
-        ]
-      }
-    },
     "park": {
       "tags": [],
       "type": "area",
@@ -1510,7 +1750,7 @@
               0,
               0
             ],
-            "size": 15
+            "size": 20
           }
         ],
         "2, 3": [
@@ -3369,6 +3609,37 @@
         ]
       }
     },
+    "platform_underground": {
+      "tags": [],
+      "type": "area",
+      "style": {
+        "0, 1": [
+          {
+            "layer": "fill",
+            "colour": "#aaaaaa",
+            "outline": "#555555",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#555555",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
+        ],
+        "2, 3": [
+          {
+            "layer": "fill",
+            "colour": "#aaaaaa",
+            "outline": "#555555",
+            "stripe": null
+          }
+        ]
+      }
+    },
     "building": {
       "tags": [],
       "type": "area",
@@ -3426,37 +3697,6 @@
             "layer": "fill",
             "colour": "#999966",
             "outline": "#4d4d33",
-            "stripe": null
-          }
-        ]
-      }
-    },
-    "platform": {
-      "tags": [],
-      "type": "area",
-      "style": {
-        "0, 1": [
-          {
-            "layer": "fill",
-            "colour": "#cccccc",
-            "outline": "#808080",
-            "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#808080",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 10
-          }
-        ],
-        "2, 3": [
-          {
-            "layer": "fill",
-            "colour": "#cccccc",
-            "outline": "#808080",
             "stripe": null
           }
         ]
@@ -6766,27 +7006,6 @@
       ],
       "type": "line",
       "style": {
-        "0, 5": [
-          {
-            "layer": "back",
-            "colour": "#000000",
-            "width": 16,
-            "dash": null
-          },
-          {
-            "layer": "fore",
-            "colour": "#808080",
-            "width": 8,
-            "dash": null
-          },
-          {
-            "layer": "text",
-            "colour": "#808080",
-            "arrow_colour": "#808080",
-            "size": 16,
-            "offset": 16
-          }
-        ],
         "0, 0": [
           {
             "layer": "back",
@@ -6952,6 +7171,37 @@
               20,
               20
             ]
+          }
+        ]
+      }
+    },
+    "platform": {
+      "tags": [],
+      "type": "area",
+      "style": {
+        "0, 1": [
+          {
+            "layer": "fill",
+            "colour": "#cccccc",
+            "outline": "#808080",
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#808080",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 10
+          }
+        ],
+        "2, 3": [
+          {
+            "layer": "fill",
+            "colour": "#cccccc",
+            "outline": "#808080",
+            "stripe": null
           }
         ]
       }

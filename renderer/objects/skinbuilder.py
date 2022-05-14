@@ -72,13 +72,13 @@ class SkinBuilder:
 
     :param int tile_size: Size of the tiles that the skin produces.
     :param fonts: Keys are the formatting, eg "", "b", "i", "bi", values are the relative paths to the fonts.
-    :type fonts: dict[str, Path]
+    :type fonts: dict[str, list[Path]]
     :param int background: The colour of the background in hexadecimal."""
     tile_size: int
-    fonts: dict[str, Path]
+    fonts: dict[str, list[Path]]
     background: str
     types: dict[str, ComponentTypeInfo]
-    def __init__(self, tile_size: int, fonts: dict[str, Path], background: int):
+    def __init__(self, tile_size: int, fonts: dict[str, list[Path]], background: int):
         self.tile_size = tile_size
         self.fonts = fonts
         self.background = _hex_to_colour(background)
@@ -94,7 +94,7 @@ class SkinBuilder:
         return {
             "info": {
                 "size": self.tile_size,
-                "font": {k: str(v) for k, v in self.fonts.items()},
+                "font": {k: [str(sv) for sv in v] for k, v in self.fonts.items()},
                 "background": self.background
             },
             "order": list(self.types.keys()),

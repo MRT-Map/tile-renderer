@@ -11,6 +11,7 @@ from pathlib import Path
 import blessed
 import imagehash
 from PIL import ImageFont, ImageDraw, Image
+from fontTools.ttLib import TTFont
 from schema import Schema, And, Or, Regex, Optional
 
 import renderer.internals.internal as internal
@@ -87,7 +88,7 @@ class Skin:
     def __init__(self, json: SkinJson):
         self.validate_json(json)
         self.tile_size: int = json['info']['size']
-        self.fonts: dict[str, Path] = {name: Path(path) for name, path in json['info']['font'].items()}
+        self.fonts: dict[str, list[Path]] = {name: [Path(path) for path in paths] for name, paths in json['info']['font'].items()}
         self.background: str = json['info']['background']
 
         self.order: list[str] = json['order']
@@ -97,17 +98,25 @@ class Skin:
     def __getitem__(self, type_name: str) -> ComponentTypeInfo:
         return self.types[type_name]
 
-    def get_font(self, style: str, size: int, assets_dir: Path) -> ImageFont.FreeTypeFont:
+    def get_font(self, style: str, size: int, assets_dir: Path, rendered_text: str = "") -> ImageFont.FreeTypeFont:
         """Gets a font, given the style and size.
 
         :param str style: The style of the font needed, eg. bold, italic etc
         :param int size: The size of the font
         :param Path assets_dir: Where the font is stored
+        :param str rendered_text: The text that is rendered with the font, to allow for fallbacks
         :return: The font
         :rtype: ImageFont.FreeTypeFont
         :raises FileNotFoundError: if font is not found"""
         if style in self.fonts.keys():
-            return ImageFont.truetype(str(assets_dir/self.fonts[style]), size)
+            for font in self.fonts[style]:
+                pil_font = ImageFont.truetype(str(assets_dir/font), size)
+                ft_font = TTFont(str(assets_dir/font))
+                for table in ft_font['cmap'].tables:
+                    if all((ord(char) in table.cmap.keys()) for char in rendered_text):
+                        return pil_font
+            else:
+                return pil_font
         raise FileNotFoundError(f"Font for {style} not found")
 
     class ComponentTypeInfo:
@@ -137,10 +146,11 @@ class Skin:
                 return []
         
         class ComponentStyle:
+            # noinspection PyUnresolvedReferences
             """Represents the ``styles`` portion of a ComponentTypeInfo. Base class for all types of ComponentStyle.
 
-            :param dict json: JSON dictionary as input
-            :param CompnentTypeInfo type_info: The type_info that the ComponentStyle is under"""
+                        :param dict json: JSON dictionary as input
+                        :param CompnentTypeInfo type_info: The type_info that the ComponentStyle is under"""
             def __new__(cls, json: dict | None = None, type_info: Skin.ComponentTypeInfo | None = None, shape: Literal["point", "line", "area"] | None = None):
                 if cls != Skin.ComponentTypeInfo.ComponentStyle: return super().__new__(cls)
                 if shape == "point":
@@ -193,7 +203,7 @@ class Skin:
                        displayname: str, assets_dir: Path, points_text_list: list[_TextObject],
                        tile_coord: TileCoord, tile_size: int, debug: bool = False):
                 if len(displayname.strip()) == 0: return
-                font = self._type_info._skin.get_font("", self.size+2, assets_dir)
+                font = self._type_info._skin.get_font("", self.size+2, assets_dir, displayname)
                 text_length = int(imd.textlength(displayname, font))
                 pt_i = Image.new('RGBA', (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0))
                 pt_d = ImageDraw.Draw(pt_i)
@@ -319,7 +329,7 @@ class Skin:
                        tile_coord: TileCoord, tile_size: int, debug: bool = False):
                 if len(component.displayname) == 0: return
                 #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating text length")
-                font = self._type_info._skin.get_font("", self.size+2, assets_dir)
+                font = self._type_info._skin.get_font("", self.size+2, assets_dir, component.displayname)
                 text_length = int(imd.textlength(component.displayname, font))
                 if text_length == 0:
                     text_length = int(imd.textlength("----------", font))
@@ -337,6 +347,7 @@ class Skin:
                                          for cs in coord_lines)))
 
                 if 'oneWay' in component.tags:
+                    font = self._type_info._skin.get_font("", self.size+2, assets_dir, "→")
                     arrow_coord_lines = mathtools.combine_edge_dashes(mathtools.dash(
                         mathtools.offset(coords, self.offset+self.size*3/16), text_length/2, text_length*0.75
                     ))
@@ -393,7 +404,7 @@ class Skin:
                        assets_dir: Path, text_list: list[_TextObject],
                        tile_coord: TileCoord, tile_size: int, debug: bool = False):
                 if len(component.displayname.strip()) == 0: return
-                font = self._type_info._skin.get_font("", self.size+2, assets_dir)
+                font = self._type_info._skin.get_font("", self.size+2, assets_dir, component.displayname)
                 text_length = int(imd.textlength(component.displayname.replace('\n', ''), font))
                 for c1, c2 in internal._with_next(coords):
                     if mathtools.line_in_box(coords, 0, self._type_info._skin.tile_size, 0,
@@ -444,7 +455,7 @@ class Skin:
                 cx, cy = mathtools.poly_center(coords)
                 cx += self.offset[0]
                 cy += self.offset[1]
-                font = self._type_info._skin.get_font("", self.size+2, assets_dir)
+                font = self._type_info._skin.get_font("", self.size+2, assets_dir, component.displayname)
                 text_length = int(min(imd.textlength(x, font) for x in component.displayname.split('\n')))
 
                 left = min(cl.x for cl in coords)
@@ -580,10 +591,10 @@ class Skin:
             "info": {
                 "size": int,
                 "font": {
-                    "": str,
-                    "b": str,
-                    "i": str,
-                    "bi": str
+                    "": [str],
+                    "b": [str],
+                    "i": [str],
+                    "bi": [str]
                 },
                 "background": And(str, Regex(r'^#[a-f,0-9]{3,6}$')),
             },

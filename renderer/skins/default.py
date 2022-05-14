@@ -16,10 +16,26 @@ TRANSPORT_BUILDING = 0x999966
 
 def main():
     s = SkinBuilder(256, {
-        "": Path("NotoSans-Medium.ttf"),
-        "b": Path("NotoSans-Bold.ttf"),
-        "i": Path("NotoSans-MediumItalic.ttf"),
-        "bi": Path("NotoSans-BoldItalic.ttf")
+        "": [
+            Path("ClearSans-Medium.ttf"),
+            Path("NotoSans-Medium.ttf"),
+            Path("NotoSansSC-Medium.ttf")
+        ],
+        "b": [
+            Path("ClearSans-Bold.ttf"),
+            Path("NotoSans-Bold.ttf"),
+            Path("NotoSansSC-Bold.ttf")
+        ],
+        "i": [
+            Path("ClearSans-MediumItalic.ttf"),
+            Path("NotoSans-MediumItalic.ttf"),
+            Path("NotoSansSC-Medium.ttf")
+        ],
+        "bi": [
+            Path("ClearSans-BoldItalic.ttf"),
+            Path("NotoSans-BoldItalic.ttf"),
+            Path("NotoSansSC-Bold.ttf")
+        ]
     }, 0xdddddd)
 
     for name, col in [("residentialArea", 0xb3cbcb),
@@ -76,7 +92,7 @@ def main():
     land_small[0:2] = [
         CS.area_fill(colour=0xdddddd),
         CS.area_centertext(colour=0x808080,
-                           size=50)
+                           size=25)
     ]
     land_small[3:] = [
         CS.area_fill(colour=0xdddddd)
@@ -110,18 +126,19 @@ def main():
     ]
     s['ferryLine'] = ferry_line
 
-    for name, colour, size in [("grass", 0xbbff99, 25),
-                               ("shrub", 0x99ff99, 15),
-                               ("forest", 0x5ca904, 10),
-                               ("stone", 0xaaaaaa, 7),
-                               ("sand", 0xf7e1a1, 5)]:
+    for name, colour in [("grass", 0xbbff99),
+                         ("shrub", 0x99ff99),
+                         ("forest", 0x5ca904),
+                         ("stone", 0xaaaaaa),
+                         ("sand", 0xf7e1a1)]:
         area = CTI("area")
-        area[0:3] = [
-            CS.area_fill(colour=colour,
-                         outline=_darken(colour, 0.1)),
-            CS.area_centertext(colour=_darken(colour),
-                               size=size)
-        ]
+        for i, size in [(0, 25), (1, 20), (2, 15), (3, 10)]:
+            area[i] = [
+                CS.area_fill(colour=colour,
+                             outline=_darken(colour, 0.1)),
+                CS.area_centertext(colour=_darken(colour),
+                                   size=size)
+            ]
         area[4:6] = [
             CS.area_fill(colour=colour,
                          outline=_darken(colour, 0.1)),
@@ -258,25 +275,12 @@ def main():
     ]
     s['transportBuilding_underground'] = transport_building_underground
 
-    platform_underground = CTI("area")
-    platform_underground[0:1] = [
-        CS.area_fill(colour=0xaaaaaa,
-                     outline=_darken(0xaaaaaa)),
-        CS.area_centertext(colour=_darken(0xaaaaaa),
-                           size=10)
-    ]
-    platform_underground[2:3] = [
-        CS.area_fill(colour=0xaaaaaa,
-                     outline=_darken(0xaaaaaa))
-    ]
-    s['platform_underground'] = platform_underground
-
     park = CTI("area")
     park[0:1] = [
         CS.area_fill(colour=0x669900,
                      outline=_darken(0x669900, 0.1)),
         CS.area_centertext(colour=_darken(0x669900),
-                           size=15)
+                           size=20)
     ]
     park[2:3] = [
         CS.area_fill(colour=0x669900,
@@ -377,6 +381,19 @@ def main():
     ]
     s['intercityRail_underground'] = intercity_rail_underground
 
+    platform_underground = CTI("area")
+    platform_underground[0:1] = [
+        CS.area_fill(colour=0xaaaaaa,
+                     outline=_darken(0xaaaaaa)),
+        CS.area_centertext(colour=_darken(0xaaaaaa),
+                           size=10)
+    ]
+    platform_underground[2:3] = [
+        CS.area_fill(colour=0xaaaaaa,
+                     outline=_darken(0xaaaaaa))
+    ]
+    s['platform_underground'] = platform_underground
+
     building = CTI("area")
     building[0:1] = [
         CS.area_fill(colour=BUILDING,
@@ -415,19 +432,6 @@ def main():
                      outline=_darken(TRANSPORT_BUILDING)),
     ]
     s['transportBuilding'] = transport_building
-
-    platform = CTI("area")
-    platform[0:1] = [
-        CS.area_fill(colour=0xcccccc,
-                     outline=0x808080),
-        CS.area_centertext(colour=0x808080,
-                           size=10)
-    ]
-    platform[2:3] = [
-        CS.area_fill(colour=0xcccccc,
-                     outline=0x808080),
-    ]
-    s['platform'] = platform
 
     pathway = CTI("line", ["road"])
     for i, width, dash, size, offset in [(0, 4, 16, 16, 10),
@@ -580,16 +584,6 @@ def main():
         s[name] = area
 
     rail_elevated = CTI("line", ["road"])
-    rail_elevated[0:5] = [
-        CS.line_back(colour=0x000000,
-                     width=16),
-        CS.line_fore(colour=0x808080,
-                     width=8),
-        CS.line_text(colour=0x808080,
-                     arrow_colour=0x808080,
-                     offset=16,
-                     size=16)
-    ]
     for i, width, size in [(0, 8, 16),
                            (1, 6, 13),
                            (2, 4, 10)]:
@@ -634,6 +628,19 @@ def main():
                      dash=(20, 20))
     ]
     s['intercityRail_elevated'] = intercity_rail_elevated
+
+    platform = CTI("area")
+    platform[0:1] = [
+        CS.area_fill(colour=0xcccccc,
+                     outline=0x808080),
+        CS.area_centertext(colour=0x808080,
+                           size=10)
+    ]
+    platform[2:3] = [
+        CS.area_fill(colour=0xcccccc,
+                     outline=0x808080),
+    ]
+    s['platform'] = platform
 
     pedestrian_crossing = CTI("point")
     pedestrian_crossing[0:5] = [

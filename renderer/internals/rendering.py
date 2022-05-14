@@ -1,14 +1,13 @@
 from __future__ import annotations
 
-import os
 import time
 from dataclasses import dataclass
 from itertools import chain
 from pathlib import Path
 from typing import Any
 
-from colorama import Fore, Style
 from PIL import Image, ImageDraw
+from colorama import Fore, Style
 
 import renderer.internals.internal as internal
 import renderer.mathtools as mathtools

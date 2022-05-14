@@ -31,6 +31,7 @@ setup(
         'psutil',
         'imagehash',
         'colorama',
+        'fontTools'
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',
