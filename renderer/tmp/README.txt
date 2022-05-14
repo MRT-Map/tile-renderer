@@ -1,0 +1,1 @@
+This directory is for temporary image files when using the render() command
