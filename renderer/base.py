@@ -241,6 +241,7 @@ def render(components: ComponentList,
             continue
 
         for group in tile_components:
+            if not group: continue
             info = skin.types[group[0].type]
             for step in info[zoom.max-tile_coord.z]:
                 operations += len(group)

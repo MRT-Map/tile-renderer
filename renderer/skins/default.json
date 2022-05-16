@@ -763,7 +763,7 @@
             "size": 25
           }
         ],
-        "3, 5": [
+        "3, 1000": [
           {
             "layer": "fill",
             "colour": "#87ceeb",
@@ -901,7 +901,7 @@
             "layer": "text",
             "colour": "#13546d",
             "arrow_colour": "#25a7da",
-            "size": 5,
+            "size": 12,
             "offset": 0
           }
         ]
@@ -1736,7 +1736,7 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 1": [
+        "0, 2": [
           {
             "layer": "fill",
             "colour": "#669900",
@@ -1753,7 +1753,7 @@
             "size": 20
           }
         ],
-        "2, 3": [
+        "3, 6": [
           {
             "layer": "fill",
             "colour": "#669900",
@@ -3872,13 +3872,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ffcc80",
+            "colour": "#bf9960",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffe6c0",
+            "colour": "#ffcc80",
             "width": 1,
             "dash": null
           }
@@ -3982,13 +3982,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ff8000",
+            "colour": "#bf6000",
             "width": 4,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffc080",
+            "colour": "#ff8000",
             "width": 2,
             "dash": null
           }
@@ -3996,13 +3996,13 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#ff8000",
+            "colour": "#bf6000",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffc080",
+            "colour": "#ff8000",
             "width": 1,
             "dash": null
           }
@@ -4112,13 +4112,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ffaaaa",
+            "colour": "#bf8080",
             "width": 6,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffd4d4",
+            "colour": "#ffaaaa",
             "width": 3,
             "dash": null
           }
@@ -4126,13 +4126,13 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#ffaaaa",
+            "colour": "#bf8080",
             "width": 4,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffd4d4",
+            "colour": "#ffaaaa",
             "width": 2,
             "dash": null
           }
@@ -4140,13 +4140,13 @@
         "7, 7": [
           {
             "layer": "back",
-            "colour": "#ffaaaa",
+            "colour": "#bf8080",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffd4d4",
+            "colour": "#ffaaaa",
             "width": 1,
             "dash": null
           }
@@ -4241,13 +4241,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ccccff",
+            "colour": "#9999bf",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#e6e6ff",
+            "colour": "#ccccff",
             "width": 1,
             "dash": null
           }
@@ -4344,7 +4344,7 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#eeeeee",
+            "colour": "#b2b2b2",
             "width": 2,
             "dash": null
           },
@@ -4454,13 +4454,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ccccff",
+            "colour": "#9999bf",
             "width": 4,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#e6e6ff",
+            "colour": "#ccccff",
             "width": 2,
             "dash": null
           }
@@ -4468,13 +4468,13 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#ccccff",
+            "colour": "#9999bf",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#e6e6ff",
+            "colour": "#ccccff",
             "width": 1,
             "dash": null
           }
@@ -4577,7 +4577,7 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#eeeeee",
+            "colour": "#b2b2b2",
             "width": 4,
             "dash": null
           },
@@ -4591,7 +4591,7 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#eeeeee",
+            "colour": "#b2b2b2",
             "width": 2,
             "dash": null
           },
@@ -4707,13 +4707,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#fff899",
+            "colour": "#bfba73",
             "width": 4,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#fffccc",
+            "colour": "#fff899",
             "width": 2,
             "dash": null
           }
@@ -4721,13 +4721,13 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#fff899",
+            "colour": "#bfba73",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#fffccc",
+            "colour": "#fff899",
             "width": 1,
             "dash": null
           }
@@ -4837,13 +4837,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ffee00",
+            "colour": "#bfb200",
             "width": 6,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#fff680",
+            "colour": "#ffee00",
             "width": 3,
             "dash": null
           }
@@ -4851,13 +4851,13 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#ffee00",
+            "colour": "#bfb200",
             "width": 4,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#fff680",
+            "colour": "#ffee00",
             "width": 2,
             "dash": null
           }
@@ -4865,13 +4865,13 @@
         "7, 7": [
           {
             "layer": "back",
-            "colour": "#ffee00",
+            "colour": "#bfb200",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#fff680",
+            "colour": "#ffee00",
             "width": 1,
             "dash": null
           }
@@ -4980,13 +4980,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ffcc80",
+            "colour": "#bf9960",
             "width": 6,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffe6c0",
+            "colour": "#ffcc80",
             "width": 3,
             "dash": null
           }
@@ -4994,13 +4994,13 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#ffcc80",
+            "colour": "#bf9960",
             "width": 4,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffe6c0",
+            "colour": "#ffcc80",
             "width": 2,
             "dash": null
           }
@@ -5008,13 +5008,13 @@
         "7, 7": [
           {
             "layer": "back",
-            "colour": "#ffcc80",
+            "colour": "#bf9960",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffe6c0",
+            "colour": "#ffcc80",
             "width": 1,
             "dash": null
           }
@@ -5123,13 +5123,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ff8000",
+            "colour": "#bf6000",
             "width": 8,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffc080",
+            "colour": "#ff8000",
             "width": 4,
             "dash": null
           }
@@ -5137,13 +5137,13 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#ff8000",
+            "colour": "#bf6000",
             "width": 6,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffc080",
+            "colour": "#ff8000",
             "width": 3,
             "dash": null
           }
@@ -5151,13 +5151,13 @@
         "7, 7": [
           {
             "layer": "back",
-            "colour": "#ff8000",
+            "colour": "#bf6000",
             "width": 4,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffc080",
+            "colour": "#ff8000",
             "width": 2,
             "dash": null
           }
@@ -5165,13 +5165,13 @@
         "8, 8": [
           {
             "layer": "back",
-            "colour": "#ff8000",
+            "colour": "#bf6000",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffc080",
+            "colour": "#ff8000",
             "width": 1,
             "dash": null
           }
@@ -5286,13 +5286,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ffaaaa",
+            "colour": "#bf8080",
             "width": 8,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffd4d4",
+            "colour": "#ffaaaa",
             "width": 4,
             "dash": null
           }
@@ -5300,13 +5300,13 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#ffaaaa",
+            "colour": "#bf8080",
             "width": 6,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffd4d4",
+            "colour": "#ffaaaa",
             "width": 3,
             "dash": null
           }
@@ -5314,13 +5314,13 @@
         "7, 7": [
           {
             "layer": "back",
-            "colour": "#ffaaaa",
+            "colour": "#bf8080",
             "width": 4,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffd4d4",
+            "colour": "#ffaaaa",
             "width": 2,
             "dash": null
           }
@@ -5328,13 +5328,13 @@
         "8, 8": [
           {
             "layer": "back",
-            "colour": "#ffaaaa",
+            "colour": "#bf8080",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffd4d4",
+            "colour": "#ffaaaa",
             "width": 1,
             "dash": null
           }
@@ -5730,13 +5730,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ffcc80",
+            "colour": "#000000",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffe6c0",
+            "colour": "#ffcc80",
             "width": 1,
             "dash": null
           }
@@ -5840,13 +5840,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ff8000",
+            "colour": "#000000",
             "width": 4,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffc080",
+            "colour": "#ff8000",
             "width": 2,
             "dash": null
           }
@@ -5854,13 +5854,13 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#ff8000",
+            "colour": "#000000",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffc080",
+            "colour": "#ff8000",
             "width": 1,
             "dash": null
           }
@@ -5970,13 +5970,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ffaaaa",
+            "colour": "#000000",
             "width": 6,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffd4d4",
+            "colour": "#ffaaaa",
             "width": 3,
             "dash": null
           }
@@ -5984,13 +5984,13 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#ffaaaa",
+            "colour": "#000000",
             "width": 4,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffd4d4",
+            "colour": "#ffaaaa",
             "width": 2,
             "dash": null
           }
@@ -5998,13 +5998,13 @@
         "7, 7": [
           {
             "layer": "back",
-            "colour": "#ffaaaa",
+            "colour": "#000000",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffd4d4",
+            "colour": "#ffaaaa",
             "width": 1,
             "dash": null
           }
@@ -6099,13 +6099,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ccccff",
+            "colour": "#000000",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#e6e6ff",
+            "colour": "#ccccff",
             "width": 1,
             "dash": null
           }
@@ -6202,7 +6202,7 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#eeeeee",
+            "colour": "#000000",
             "width": 2,
             "dash": null
           },
@@ -6312,13 +6312,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ccccff",
+            "colour": "#000000",
             "width": 4,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#e6e6ff",
+            "colour": "#ccccff",
             "width": 2,
             "dash": null
           }
@@ -6326,13 +6326,13 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#ccccff",
+            "colour": "#000000",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#e6e6ff",
+            "colour": "#ccccff",
             "width": 1,
             "dash": null
           }
@@ -6435,7 +6435,7 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#eeeeee",
+            "colour": "#000000",
             "width": 4,
             "dash": null
           },
@@ -6449,7 +6449,7 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#eeeeee",
+            "colour": "#000000",
             "width": 2,
             "dash": null
           },
@@ -6565,13 +6565,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#fff899",
+            "colour": "#000000",
             "width": 4,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#fffccc",
+            "colour": "#fff899",
             "width": 2,
             "dash": null
           }
@@ -6579,13 +6579,13 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#fff899",
+            "colour": "#000000",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#fffccc",
+            "colour": "#fff899",
             "width": 1,
             "dash": null
           }
@@ -6695,13 +6695,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ffee00",
+            "colour": "#000000",
             "width": 6,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#fff680",
+            "colour": "#ffee00",
             "width": 3,
             "dash": null
           }
@@ -6709,13 +6709,13 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#ffee00",
+            "colour": "#000000",
             "width": 4,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#fff680",
+            "colour": "#ffee00",
             "width": 2,
             "dash": null
           }
@@ -6723,13 +6723,13 @@
         "7, 7": [
           {
             "layer": "back",
-            "colour": "#ffee00",
+            "colour": "#000000",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#fff680",
+            "colour": "#ffee00",
             "width": 1,
             "dash": null
           }
@@ -6838,13 +6838,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ffcc80",
+            "colour": "#000000",
             "width": 6,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffe6c0",
+            "colour": "#ffcc80",
             "width": 3,
             "dash": null
           }
@@ -6852,13 +6852,13 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#ffcc80",
+            "colour": "#000000",
             "width": 4,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffe6c0",
+            "colour": "#ffcc80",
             "width": 2,
             "dash": null
           }
@@ -6866,13 +6866,13 @@
         "7, 7": [
           {
             "layer": "back",
-            "colour": "#ffcc80",
+            "colour": "#000000",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffe6c0",
+            "colour": "#ffcc80",
             "width": 1,
             "dash": null
           }
@@ -6981,13 +6981,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ff8000",
+            "colour": "#000000",
             "width": 8,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffc080",
+            "colour": "#ff8000",
             "width": 4,
             "dash": null
           }
@@ -6995,13 +6995,13 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#ff8000",
+            "colour": "#000000",
             "width": 6,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffc080",
+            "colour": "#ff8000",
             "width": 3,
             "dash": null
           }
@@ -7009,13 +7009,13 @@
         "7, 7": [
           {
             "layer": "back",
-            "colour": "#ff8000",
+            "colour": "#000000",
             "width": 4,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffc080",
+            "colour": "#ff8000",
             "width": 2,
             "dash": null
           }
@@ -7023,13 +7023,13 @@
         "8, 8": [
           {
             "layer": "back",
-            "colour": "#ff8000",
+            "colour": "#000000",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffc080",
+            "colour": "#ff8000",
             "width": 1,
             "dash": null
           }
@@ -7144,13 +7144,13 @@
         "5, 5": [
           {
             "layer": "back",
-            "colour": "#ffaaaa",
+            "colour": "#000000",
             "width": 8,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffd4d4",
+            "colour": "#ffaaaa",
             "width": 4,
             "dash": null
           }
@@ -7158,13 +7158,13 @@
         "6, 6": [
           {
             "layer": "back",
-            "colour": "#ffaaaa",
+            "colour": "#000000",
             "width": 6,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffd4d4",
+            "colour": "#ffaaaa",
             "width": 3,
             "dash": null
           }
@@ -7172,13 +7172,13 @@
         "7, 7": [
           {
             "layer": "back",
-            "colour": "#ffaaaa",
+            "colour": "#000000",
             "width": 4,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffd4d4",
+            "colour": "#ffaaaa",
             "width": 2,
             "dash": null
           }
@@ -7186,13 +7186,13 @@
         "8, 8": [
           {
             "layer": "back",
-            "colour": "#ffaaaa",
+            "colour": "#000000",
             "width": 2,
             "dash": null
           },
           {
             "layer": "fore",
-            "colour": "#ffd4d4",
+            "colour": "#ffaaaa",
             "width": 1,
             "dash": null
           }
@@ -7210,7 +7210,7 @@
           {
             "layer": "back",
             "colour": "#000000",
-            "width": 16,
+            "width": 12,
             "dash": null
           },
           {
@@ -7231,7 +7231,7 @@
           {
             "layer": "back",
             "colour": "#000000",
-            "width": 12,
+            "width": 9,
             "dash": null
           },
           {
@@ -7681,7 +7681,7 @@
           {
             "layer": "text",
             "colour": "#66ccff",
-            "size": 10,
+            "size": 12,
             "offset": [
               0,
               20
@@ -7700,7 +7700,7 @@
           {
             "layer": "text",
             "colour": "#66ccff",
-            "size": 10,
+            "size": 12,
             "offset": [
               0,
               20
@@ -7734,7 +7734,7 @@
           {
             "layer": "text",
             "colour": "#1e85ae",
-            "size": 10,
+            "size": 12,
             "offset": [
               0,
               20
@@ -7753,7 +7753,7 @@
           {
             "layer": "text",
             "colour": "#1e85ae",
-            "size": 10,
+            "size": 12,
             "offset": [
               0,
               20

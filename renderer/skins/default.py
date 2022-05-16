@@ -1,4 +1,5 @@
 import json
+from math import ceil
 from pathlib import Path
 
 from renderer.objects.skinbuilder import SkinBuilder, CTI, CS, _darken, _lighten
@@ -75,7 +76,7 @@ def main():
         CS.area_centertext(colour=_darken(0x87ceeb),
                            size=25)
     ]
-    water_small[3:5] = [
+    water_small[3:] = [
         CS.area_fill(colour=0x87ceeb)
     ]
     s['waterSmall'] = water_small
@@ -122,7 +123,7 @@ def main():
                      width=5),
         CS.line_text(colour=_darken(0x25a7da),
                      arrow_colour=0x25a7da,
-                     size=5)
+                     size=12)
     ]
     s['ferryLine'] = ferry_line
 
@@ -276,13 +277,13 @@ def main():
     s['transportBuilding_underground'] = transport_building_underground
 
     park = CTI("area")
-    park[0:1] = [
+    park[0:2] = [
         CS.area_fill(colour=0x669900,
                      outline=_darken(0x669900, 0.1)),
         CS.area_centertext(colour=_darken(0x669900),
                            size=20)
     ]
-    park[2:3] = [
+    park[3:6] = [
         CS.area_fill(colour=0x669900,
                      outline=_darken(0x669900, 0.1)),
     ]
@@ -479,9 +480,9 @@ def main():
             ]
         for i in [5, 6, 7, 8, 9]:
             area[i] = [
-                CS.line_back(colour=col,
+                CS.line_back(colour=_darken(col, 0.25),
                              width=(small_width-i+5)*2),
-                CS.line_fore(colour=_lighten(col),
+                CS.line_fore(colour=col,
                              width=small_width-i+5)
             ] if small_width-i+5 >= 1 else []
         s[name] = area
@@ -576,9 +577,9 @@ def main():
             ]
         for i in [5, 6, 7, 8, 9]:
             area[i] = [
-                CS.line_back(colour=col,
+                CS.line_back(colour=0x000000,
                              width=(small_width-i+5)*2),
-                CS.line_fore(colour=_lighten(col),
+                CS.line_fore(colour=col,
                              width=small_width-i+5)
             ] if small_width-i+5 >= 1 else []
         s[name] = area
@@ -589,7 +590,7 @@ def main():
                            (2, 4, 10)]:
         rail_elevated[i] = [
             CS.line_back(colour=0x000000,
-                         width=width*2),
+                         width=ceil(1.5*width)),
             CS.line_fore(colour=0x808080,
                          width=width),
             CS.line_text(colour=0x808080,
@@ -853,8 +854,8 @@ def main():
     s['pickUpDropOff'] = pick_up_drop_off'''
 
     bus_stop = CTI("point")
-    for i, sq_size, text_size in [(0, 10, 10),
-                                  (1, 10, 10)]:
+    for i, sq_size, text_size in [(0, 10, 12),
+                                  (1, 10, 12)]:
         bus_stop[i] = [
             CS.point_square(colour=0x66ccff,
                             size=sq_size,
@@ -872,8 +873,8 @@ def main():
     s['busStop'] = bus_stop
 
     ferry_stop = CTI("point")
-    for i, sq_size, text_size in [(0, 10, 10),
-                                  (1, 10, 10)]:
+    for i, sq_size, text_size in [(0, 10, 12),
+                                  (1, 10, 12)]:
         ferry_stop[i] = [
             CS.point_square(colour=0x1e85ae,
                             size=sq_size,
