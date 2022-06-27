@@ -130,6 +130,98 @@ def _sort_by_tiles(tiles: list[TileCoord], components: ComponentList,
                 tile_list[tile].append(component)
     return tile_list
 
+
+def _process_tiles(tile_list: dict[TileCoord, list[Component]], skin: Skin) -> dict[TileCoord, list[list[Component]]]:
+    term = blessed.Terminal()
+    process_start = time.time() * 1000
+    processed = 0
+    l = lambda tile_components_, msg: rendering._eta(process_start, processed, len(tile_list)) \
+        + f"{tile_components_}: " + term.bright_black(msg) + term.clear_eos
+    print(term.green("sorted\n") + term.bright_green("Starting processing"))
+    grouped_tile_list: dict[TileCoord, list[list[Component]]] = {}
+    for tile_coord, tile_components in tile_list.items():
+        # sort components in tiles by layer
+        new_tile_components: dict[float, list[Component]] = {}
+        for component in tile_components:
+            if component.layer not in new_tile_components.keys():
+                new_tile_components[component.layer] = []
+            new_tile_components[component.layer].append(component)
+        with term.location():
+            print(l(tile_coord, "Sorted component by layer"), end="\r")
+
+        # sort components in layers in files by type
+        new_tile_components = {layer: sorted(component_list, key=lambda x: skin.order.index(x.type))
+                               for layer, component_list in new_tile_components.items()}
+        with term.location():
+            print(l(tile_coord, "Sorted component by type"), end="\r")
+
+        # merge layers
+        tile_components = []
+        layers = sorted(new_tile_components.keys())
+        for layer in layers:
+            for component in new_tile_components[layer]:
+                tile_components.append(component)
+        with term.location():
+            print(l(tile_coord, "Merged layers"), end="\r")
+
+        # groups components of the same type if "road" tag present
+        newer_tile_components: list[list[Component]] = [[]]
+        # keys = list(tile_list[tile_components].keys())
+        # for i in range(len(tile_list[tile_components])):
+        for i, component in enumerate(tile_components):
+            newer_tile_components[-1].append(component)
+            if i != len(tile_components) - 1 \
+                    and (tile_components[i + 1].type != component.type
+                         or "road" not in skin[component.type].tags):
+                newer_tile_components.append([])
+
+        grouped_tile_list[tile_coord] = newer_tile_components
+        with term.location():
+            print(l(tile_coord, "Components grouped"), end="\r")
+
+        processed += 1
+    return grouped_tile_list
+
+def prepare_render(components: ComponentList,
+                   nodes: NodeList,
+                   zoom: ZoomParams,
+                   skin: Skin = Skin.from_name("default"),
+                   tiles: list[TileCoord] | None = None,
+                   offset: tuple[RealNum, RealNum] = (0, 0),
+                   logs: bool = True,
+                   export_id: str | None = None) -> dict[TileCoord, list[list[Component]]]:
+    term = blessed.Terminal()
+
+    # offset
+    for node in nodes.node_values():
+        node.x += offset[0]
+    node.y += offset[1]
+
+    if logs: print(term.green("Finding tiles..."), end=" ")
+    # finds which tiles to render
+    if tiles is not None:
+        validate.v_tile_coords(tiles, zoom.min, zoom.max)
+    else:  # finds box of tiles
+        tiles = tools_component_json.rendered_in(components, nodes, zoom.min, zoom.max, zoom.range)
+
+    if logs: print(term.green("found\nRemoving components with unknown type..."), end=" ")
+    remove_list = _remove_unknown_component_types(components, skin)
+    if logs: print(term.green("removed"))
+    if logs and remove_list:
+        print(term.yellow('The following components were removed:'))
+        print(term.yellow(" | ".join(remove_list)))
+
+    if logs: print(term.green("Sorting components by tiles..."), end=" ")
+    tile_list = _sort_by_tiles(tiles, components, nodes, zoom)
+
+    grouped_tile_list = _process_tiles(tile_list, skin)
+    if logs: print(term.green("100.00% | 0.0s left | ") + "Processing complete" + term.clear_eos)
+
+    if export_id is not None:
+        pass # TODO exporting to /tmp
+
+    return grouped_tile_list
+
 def render(components: ComponentList,
            nodes: NodeList,
            zoom: ZoomParams,
@@ -168,75 +260,6 @@ def render(components: ComponentList,
         :rtype: dict[TileCoord, Image.Image]
         """
     term = blessed.Terminal()
-
-    # offset
-    for node in nodes.node_values():
-        node.x += offset[0]
-        node.y += offset[1]
-
-    print(term.green("Finding tiles..."), end=" ")
-    #finds which tiles to render
-    if tiles is not None:
-        validate.v_tile_coords(tiles, zoom.min, zoom.max)
-    else: #finds box of tiles
-        tiles = tools_component_json.rendered_in(components, nodes, zoom.min, zoom.max, zoom.range)
-
-    print(term.green("found\nRemoving components with unknown type..."), end=" ")
-    remove_list = _remove_unknown_component_types(components, skin)
-    print(term.green("removed"))
-    if remove_list:
-        print(term.yellow('The following components were removed:'))
-        print(term.yellow(" | ".join(remove_list)))
-
-    print(term.green("Sorting components by tiles..."), end=" ")
-    tile_list = _sort_by_tiles(tiles, components, nodes, zoom)
-
-    process_start = time.time() * 1000
-    processed = 0
-    l = lambda tile_components_, msg: rendering._eta(process_start, processed, len(tile_list)) \
-        + f"{tile_components_}: " + term.bright_black(msg) + term.clear_eos
-    print(term.green("sorted\n")+term.bright_green("Starting processing"))
-    grouped_tile_list: dict[TileCoord, list[list[Component]]] = {}
-    for tile_coord, tile_components in tile_list.items():
-        #sort components in tiles by layer
-        new_tile_components: dict[float, list[Component]] = {}
-        for component in tile_components:
-            if component.layer not in new_tile_components.keys():
-                new_tile_components[component.layer] = []
-            new_tile_components[component.layer].append(component)
-        with term.location(): print(l(tile_coord, "Sorted component by layer"), end="\r")
-
-        #sort components in layers in files by type
-        new_tile_components = {layer: sorted(component_list, key=lambda x: skin.order.index(x.type))
-                               for layer, component_list in new_tile_components.items()}
-        with term.location(): print(l(tile_coord, "Sorted component by type"), end="\r")
-
-        #merge layers
-        tile_components = []
-        layers = sorted(new_tile_components.keys())
-        for layer in layers:
-            for component in new_tile_components[layer]:
-                tile_components.append(component)
-        with term.location(): print(l(tile_coord, "Merged layers"), end="\r")
-
-        #groups components of the same type if "road" tag present
-        newer_tile_components: list[list[Component]] = [[]]
-        # keys = list(tile_list[tile_components].keys())
-        # for i in range(len(tile_list[tile_components])):
-        for i, component in enumerate(tile_components):
-            newer_tile_components[-1].append(component)
-            if i != len(tile_components)-1 \
-               and (tile_components[i + 1].type != component.type
-               or "road" not in skin[component.type].tags):
-                newer_tile_components.append([])
-
-        grouped_tile_list[tile_coord] = newer_tile_components
-        with term.location(): print(l(tile_coord, "Components grouped"), end="\r")
-
-        processed += 1
-        #time_left = round(((int(round(time.time() * 1000)) - process_start) / processed * (len(tile_list) - processed)), 2)
-
-    print(term.green("100.00% | 0.0s left | ") + "Processing complete" + term.clear_eos)
 
     #count # of rendering operations for part 1
     operations = 0
