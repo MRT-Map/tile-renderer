@@ -344,10 +344,10 @@ class Skin:
                     coord_lines = coord_lines[:-1]
                 if debug:
                     imd.line(mathtools.offset(coords, self.offset), fill="#ff0000")
-                text_list.extend(filter(lambda e: e is not None,
-                                        (self._text_on_line(imd, img, font, component.displayname,
-                                                            list(cs), tile_coord, tile_size, debug=debug)
-                                         for cs in coord_lines)))
+                text_list.extend(e for e in (self._text_on_line(imd, img, font, component.displayname,
+                                                                list(cs), tile_coord, tile_size, debug=debug)
+                                             for cs in coord_lines)
+                                 if e is not None)
 
                 if 'oneWay' in component.tags:
                     font = self._type_info._skin.get_font("", self.size+2, assets_dir, "→")
@@ -358,12 +358,11 @@ class Skin:
                        and sum(math.dist(c1, c2) for c1, c2 in internal._with_next(arrow_coord_lines[-1])) \
                        < int(imd.textlength("→", font)):
                         arrow_coord_lines = arrow_coord_lines[:-1]
-                    text_list.extend(filter(lambda e: e is not None,
-                                            (self._text_on_line(imd, img, font, "→",
-                                                                list(cs), tile_coord, tile_size,
-                                                                fill=self.arrow_colour, stroke="#00000000",
-                                                                debug=debug, paste_direct=True, upright=False)
-                                             for i, cs in enumerate(arrow_coord_lines) if i % 2 != 0)))
+                    text_list.extend(e for e in (self._text_on_line(imd, img, font, "→",
+                                                                    list(cs), tile_coord, tile_size,
+                                                                    fill=self.arrow_colour, stroke="#00000000",
+                                                                    debug=debug, paste_direct=True, upright=False)
+                                     for i, cs in enumerate(arrow_coord_lines) if i % 2 != 0) if e is not None)
                
         class LineBack(ComponentStyle):
             # noinspection PyInitNewSignature

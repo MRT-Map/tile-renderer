@@ -284,8 +284,7 @@ def render(components: ComponentList,
             input_.append((operated, operations-1, start, tile_coord, component_group, components, nodes,
                            skin, zoom, assets_dir, True, debug))
         futures = [ray.remote(rendering._draw_components).remote(*input_[i]) for i in range(len(input_))]
-        prepreresult: list[tuple[TileCoord, list[_TextObject]] | None] = ray.get(futures)
-        prepreresult = list(filter(lambda r: r is not None, prepreresult))
+        prepreresult: list[tuple[TileCoord, list[_TextObject]]] = [r for r in ray.get(futures) if r is not None]
 
         print(term.bright_green("\nEliminating overlapping text..."))
         input_ = []
@@ -320,8 +319,7 @@ def render(components: ComponentList,
                                skin, zoom, assets_dir, False, debug))
             p = multiprocessing.Pool(processes)
             try:
-                prepreresult = p.starmap(rendering._draw_components, input_)
-                prepreresult = list(filter(lambda r: r is not None, prepreresult))
+                prepreresult = [r for r in p.starmap(rendering._draw_components, input_) if r is not None]
             except KeyboardInterrupt:
                 p.terminate()
                 sys.exit()

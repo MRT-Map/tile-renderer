@@ -71,10 +71,10 @@ while not e:
         option = input(term.yellow(f"Input\n'r' for regex search of nodes\n's' for basic search of nodes\n'a' to include all nodes\n'n' for an automatic and sorted search (based on name+number)\nanything else for nothing\n"))
         if option == 'r':
             regex = input(term.yellow("Regex: "))
-            pre_nodes = filter(lambda x: re.search(regex, x), nodes.node_ids())
+            pre_nodes = (x for x in nodes.node_ids() if re.search(regex, x))
         elif option == 's':
             substring = input(term.yellow("Substring: "))
-            pre_nodes = filter(lambda x: substring in x, nodes.node_ids())
+            pre_nodes = (x for x in nodes.node_ids() if re.search(regex, x))
         elif option == 'a':
             pre_nodes = list(nodes.node_ids())
         elif option == 'n':
