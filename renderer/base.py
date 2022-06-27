@@ -108,6 +108,28 @@ def merge_tiles(images: Path | dict[TileCoord, Image],
     print(term.green("\nAll merges complete"))
     return tile_return
 
+def _remove_unknown_component_types(components: ComponentList, skin: Skin) -> list[str]:
+    remove_list: list[str] = []
+    for component in components.component_values():
+        if component.type not in skin.order:
+            remove_list.append(component.name)
+    for component_name in remove_list:
+        del components.components[component_name]
+    return remove_list
+
+def _sort_by_tiles(tiles: list[TileCoord], components: ComponentList,
+                   nodes: NodeList, zoom: ZoomParams) -> dict[TileCoord, list[Component]]:
+    tile_list: dict[TileCoord, list[Component]] = {}
+    for tile in tiles:
+        tile_list[tile] = []
+    for component in components.component_values():
+        coords = tools_nodes.to_coords(component.nodes, nodes)
+        rendered_in = tools_line.to_tiles(coords, zoom.min, zoom.max, zoom.range)
+        for tile in rendered_in:
+            if tile in tile_list.keys():
+                tile_list[tile].append(component)
+    return tile_list
+
 def render(components: ComponentList,
            nodes: NodeList,
            zoom: ZoomParams,
@@ -160,29 +182,14 @@ def render(components: ComponentList,
         tiles = tools_component_json.rendered_in(components, nodes, zoom.min, zoom.max, zoom.range)
 
     print(term.green("found\nRemoving components with unknown type..."), end=" ")
-    # remove components whose type is not in skin
-    remove_list: list[str] = []
-    for component in components.component_values():
-        if component.type not in skin.order:
-            remove_list.append(component.name)
-    for component_name in remove_list:
-        del components.components[component_name]
+    remove_list = _remove_unknown_component_types(components, skin)
     print(term.green("removed"))
     if remove_list:
         print(term.yellow('The following components were removed:'))
         print(term.yellow(" | ".join(remove_list)))
 
     print(term.green("Sorting components by tiles..."), end=" ")
-    #sort components by tiles
-    tile_list: dict[TileCoord, list[Component]] = {}
-    for tile in tiles:
-        tile_list[tile] = []
-    for component in components.component_values():
-        coords = tools_nodes.to_coords(component.nodes, nodes)
-        rendered_in = tools_line.to_tiles(coords, zoom.min, zoom.max, zoom.range)
-        for tile in rendered_in:
-            if tile in tile_list.keys():
-                tile_list[tile].append(component)
+    tile_list = _sort_by_tiles(tiles, components, nodes, zoom)
 
     process_start = time.time() * 1000
     processed = 0
