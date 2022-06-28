@@ -20,7 +20,7 @@ from renderer.objects.components import ComponentList, Component
 from renderer.objects.nodes import NodeList
 from renderer.objects.skin import Skin, _TextObject
 from renderer.objects.zoom_params import ZoomParams
-from renderer.types import RealNum, TileCoord
+from renderer.types import RealNum, TileCoord, Coord
 
 import renderer.tools.components as tools_component_json
 import renderer.tools.line as tools_line
@@ -186,11 +186,11 @@ def _process_tiles(tile_list: dict[TileCoord, list[Component]], skin: Skin) -> d
 def prepare_render(components: ComponentList,
                    nodes: NodeList,
                    zoom: ZoomParams,
+                   export_id: str,
                    skin: Skin = Skin.from_name("default"),
                    tiles: list[TileCoord] | None = None,
                    offset: tuple[RealNum, RealNum] = (0, 0),
-                   logs: bool = True,
-                   export_id: str | None = None) -> dict[TileCoord, list[list[Component]]]:
+                   logs: bool = True) -> dict[TileCoord, list[list[Component]]]:
     term = blessed.Terminal()
 
     # offset
@@ -218,17 +218,24 @@ def prepare_render(components: ComponentList,
     grouped_tile_list = _process_tiles(tile_list, skin)
     if logs: print(term.green("100.00% | 0.0s left | ") + "Processing complete" + term.clear_eos)
 
-    if export_id is not None:
-        for coord, grouped_components in grouped_tile_list.items():
-            with open(Path(__file__).parent/"tmp"/f"{export_id}_{coord}.0.json", "r+") as f:
-                json.dump({b.name: b.as_json() for a in grouped_components for b in a}, f)
+    for coord, grouped_components in grouped_tile_list.items():
+        with open(Path(__file__).parent/"tmp"/f"{export_id}_{coord}.0.json", "r+") as f: # TODO convert to pkl
+            json.dump([{b.name: b.as_json() for b in a} for a in grouped_components], f)
 
     return grouped_tile_list
 
-def _count_num_rendering_oprs(grouped_tile_list: dict[TileCoord, list[list[Component]]],
+def _count_num_rendering_oprs(export_id: str,
                               skin: Skin,
                               zoom: ZoomParams) -> int:
     term = blessed.Terminal()
+
+    grouped_tile_list = {}
+    for file in glob.glob(str(Path(__file__).parent/"tmp"/"*.0.json")):
+        with open(file, "r") as f:
+            result = re.search(fr"\b{re.escape(export_id)}_(\d+), (\d+), (\d+)\.0\.json$", file)
+            grouped_tile_list[TileCoord(result.group(2), result.group(3), result.group(4))] \
+                = [[Component(k, v) for k, v in a.items()] for a in json.load(f)]
+
     operations = 0
     op_tiles = {}
     tile_operations = 0
@@ -252,51 +259,83 @@ def _count_num_rendering_oprs(grouped_tile_list: dict[TileCoord, list[list[Compo
         print(f"Counted {tile_coord}", end=term.clear_eos + "\r")
     return operations
 
+class _RayOperatedHandler:
+    def __init__(self):
+        self.tally = []
+
+    def get(self):
+        return len(self.tally)
+
+    def count(self, i_=1):
+        self.tally.append(i_)
+
+def _pre_draw_components(operated,
+                         operations: int,
+                         start: RealNum,
+                         export_id: str,
+                         tile_coord: TileCoord,
+                         all_components: ComponentList,
+                         nodes: NodeList,
+                         skin: Skin,
+                         zoom: ZoomParams,
+                         assets_dir: Path,
+                         using_ray: bool = False,
+                         debug: bool = False) -> tuple[TileCoord, list[_TextObject]] | None:
+    with open(Path(__file__).parent/"tmp"/f"{export_id}_{tile_coord}.0.json") as f:
+        tile_components = [[Component(k, v) for k, v in a.items()] for a in json.load(f)]
+    return rendering._draw_components(operated,
+                                      operations,
+                                      start,
+                                      tile_coord,
+                                      tile_components,
+                                      all_components,
+                                      nodes,
+                                      skin,
+                                      zoom,
+                                      assets_dir,
+                                      using_ray,
+                                      debug)
+
+
 def render_part1_ray(components: ComponentList,
                      nodes: NodeList,
                      zoom: ZoomParams,
-                     grouped_tile_list: dict[TileCoord, list[list[Component]]] | None,
+                     export_id: str,
                      skin: Skin = Skin.from_name("default"),
                      assets_dir: Path = Path(__file__).parent/"skins"/"assets",
                      processes: int = psutil.cpu_count(),
-                     debug: bool = False,
-                     export_id: str | None = None) -> list[tuple[TileCoord, list[_TextObject]]]:
+                     debug: bool = False) -> list[tuple[TileCoord, list[_TextObject]]]:
     term = blessed.Terminal()
     import ray
     ray.init(num_cpus=processes)
 
-    operations = _count_num_rendering_oprs(grouped_tile_list, skin, zoom)
+    tile_coords = []
+    for file in glob.glob(str(Path(__file__).parent/"tmp"/"*.0.json")):
+        re_result = re.search(fr"\b({re.escape(export_id)})_(\d+), (\d+), (\d+)\.0\.json$", file)
+        tile_coords.append(TileCoord(re_result.group(2), re_result.group(3), re_result.group(4)))
 
-    if grouped_tile_list is None:
-        if export_id is None:
-            raise ValueError("export_id must not be None if grouped_tile_list is None")
-        grouped_tile_list = {}
-        for file in glob.glob(str(Path(__file__).parent/"tmp"/"*.0.json")):
-            with open(file, "r") as f:
-                result = re.search(fr"\b({re.escape(export_id)})_(\d+), (\d+), (\d+)\.0\.json$", file)
-                grouped_tile_list[result] = [Component(k, v) for a in json.load(f) for k, v in a.items()]
+    operations = _count_num_rendering_oprs(export_id, skin, zoom)
 
-    @ray.remote
-    class _RayOperatedHandler:
-        def __init__(self):
-            self.tally = []
-
-        def get(self):
-            return len(self.tally)
-
-        def count(self, i_=1):
-            self.tally.append(i_)
-
-    operated = _RayOperatedHandler.remote()
+    operated = ray.remote(_RayOperatedHandler).remote()
 
     print(term.bright_green("\nRendering components..."))
-    input_ = []
     start = time.time() * 1000
-    for tile_coord, component_group in grouped_tile_list.items():
-        input_.append((operated, operations - 1, start, tile_coord, component_group, components, nodes,
-                       skin, zoom, assets_dir, True, debug))
-    futures = [ray.remote(rendering._draw_components).remote(*input_[i]) for i in range(len(input_))]
-    return [r for r in ray.get(futures) if r is not None]
+    futures = [ray.remote(rendering._draw_components).remote(operated,
+                                                             operations - 1,
+                                                             start,
+                                                             export_id,
+                                                             tile_coord,
+                                                             components,
+                                                             nodes,
+                                                             skin,
+                                                             zoom,
+                                                             assets_dir,
+                                                             True,
+                                                             debug)
+               for tile_coord in tile_coords]
+    result: list[tuple[TileCoord, list[_TextObject]]] = [r for r in ray.get(futures) if r is not None]
+    # TODO
+    return result
 
 def render_part2(components: ComponentList,
                  nodes: NodeList,
