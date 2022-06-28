@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import json
 import os
 from pathlib import Path
 
@@ -218,9 +219,101 @@ def prepare_render(components: ComponentList,
     if logs: print(term.green("100.00% | 0.0s left | ") + "Processing complete" + term.clear_eos)
 
     if export_id is not None:
-        pass # TODO exporting to /tmp
+        for coord, grouped_components in grouped_tile_list.items():
+            with open(Path(__file__).parent/"tmp"/f"{export_id}_{coord}.0.json", "r+") as f:
+                json.dump({b.name: b.as_json() for a in grouped_components for b in a}, f)
 
     return grouped_tile_list
+
+def _count_num_rendering_oprs(grouped_tile_list: dict[TileCoord, list[list[Component]]],
+                              skin: Skin,
+                              zoom: ZoomParams) -> int:
+    term = blessed.Terminal()
+    operations = 0
+    op_tiles = {}
+    tile_operations = 0
+    for tile_coord, tile_components in grouped_tile_list.items():
+        if not tile_components:
+            op_tiles[tile_coord] = 0
+            continue
+
+        for group in tile_components:
+            if not group: continue
+            info = skin.types[group[0].type]
+            for step in info[zoom.max - tile_coord.z]:
+                operations += len(group)
+                tile_operations += len(group)
+                if info.shape == "line" and "road" in info.tags and step.layer == "back":
+                    operations += 1
+                    tile_operations += 1
+
+        op_tiles[tile_coord] = tile_operations
+        tile_operations = 0
+        print(f"Counted {tile_coord}", end=term.clear_eos + "\r")
+    return operations
+
+def render_part1_ray(components: ComponentList,
+                     nodes: NodeList,
+                     zoom: ZoomParams,
+                     grouped_tile_list: dict[TileCoord, list[list[Component]]] | None,
+                     skin: Skin = Skin.from_name("default"),
+                     assets_dir: Path = Path(__file__).parent/"skins"/"assets",
+                     processes: int = psutil.cpu_count(),
+                     debug: bool = False,
+                     export_id: str | None = None) -> list[tuple[TileCoord, list[_TextObject]]]:
+    term = blessed.Terminal()
+    import ray
+    ray.init(num_cpus=processes)
+
+    operations = _count_num_rendering_oprs(grouped_tile_list, skin, zoom)
+
+    if grouped_tile_list is None:
+        if export_id is None:
+            raise ValueError("export_id must not be None if grouped_tile_list is None")
+        grouped_tile_list = {}
+        for file in glob.glob(str(Path(__file__).parent/"tmp"/"*.0.json")):
+            with open(file, "r") as f:
+                result = re.search(fr"\b({re.escape(export_id)})_(\d+), (\d+), (\d+)\.0\.json$", file)
+                grouped_tile_list[result] = [Component(k, v) for a in json.load(f) for k, v in a.items()]
+
+    @ray.remote
+    class _RayOperatedHandler:
+        def __init__(self):
+            self.tally = []
+
+        def get(self):
+            return len(self.tally)
+
+        def count(self, i_=1):
+            self.tally.append(i_)
+
+    operated = _RayOperatedHandler.remote()
+
+    print(term.bright_green("\nRendering components..."))
+    input_ = []
+    start = time.time() * 1000
+    for tile_coord, component_group in grouped_tile_list.items():
+        input_.append((operated, operations - 1, start, tile_coord, component_group, components, nodes,
+                       skin, zoom, assets_dir, True, debug))
+    futures = [ray.remote(rendering._draw_components).remote(*input_[i]) for i in range(len(input_))]
+    return [r for r in ray.get(futures) if r is not None]
+
+def render_part2(components: ComponentList,
+                 nodes: NodeList,
+                 zoom: ZoomParams,
+                 prepreresult: list[tuple[TileCoord, list[_TextObject]]],
+                 grouped_tile_list: dict[TileCoord, list[list[Component]]] | None,
+                 skin: Skin = Skin.from_name("default"),
+                 assets_dir: Path = Path(__file__).parent/"skins"/"assets",
+                 processes: int = psutil.cpu_count(),
+                 debug: bool = False,
+                 export_id: str | None = None) -> list[tuple[TileCoord, list[_TextObject]]]:
+    term = blessed.Terminal()
+    print(term.bright_green("\nEliminating overlapping text..."))
+    new_texts = rendering._prevent_text_overlap(prepreresult)
+    total_texts = sum(len(t[1]) for t in new_texts)
+    # TODO
+
 
 def render(components: ComponentList,
            nodes: NodeList,
@@ -262,27 +355,6 @@ def render(components: ComponentList,
     term = blessed.Terminal()
 
     #count # of rendering operations for part 1
-    operations = 0
-    op_tiles = {}
-    tile_operations = 0
-    for tile_coord, tile_components in grouped_tile_list.items():
-        if not tile_components:
-            op_tiles[tile_coord] = 0
-            continue
-
-        for group in tile_components:
-            if not group: continue
-            info = skin.types[group[0].type]
-            for step in info[zoom.max-tile_coord.z]:
-                operations += len(group)
-                tile_operations += len(group)
-                if info.shape == "line" and "road" in info.tags and step.layer == "back":
-                    operations += 1
-                    tile_operations += 1
-
-        op_tiles[tile_coord] = tile_operations
-        tile_operations = 0
-        print(f"Counted {tile_coord}", end=term.clear_eos + "\r")
 
     #render
     if use_ray:
@@ -292,30 +364,6 @@ def render(components: ComponentList,
             use_ray = False
 
     if use_ray:
-        ray.init(num_cpus=processes)
-
-        @ray.remote
-        class _RayOperatedHandler:
-            def __init__(self):
-                self.tally = []
-
-            def get(self):
-                return len(self.tally)
-
-            def count(self, i_=1):
-                self.tally.append(i_)
-
-        operated = _RayOperatedHandler.remote()
-
-        print(term.bright_green("\nRendering components..."))
-        input_ = []
-        start = time.time() * 1000
-        for tile_coord, component_group in grouped_tile_list.items():
-            input_.append((operated, operations-1, start, tile_coord, component_group, components, nodes,
-                           skin, zoom, assets_dir, True, debug))
-        futures = [ray.remote(rendering._draw_components).remote(*input_[i]) for i in range(len(input_))]
-        prepreresult: list[tuple[TileCoord, list[_TextObject]]] = [r for r in ray.get(futures) if r is not None]
-
         print(term.bright_green("\nEliminating overlapping text..."))
         input_ = []
         new_texts = rendering._prevent_text_overlap(prepreresult)

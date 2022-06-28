@@ -26,7 +26,7 @@ class Component:
         """The layer of the component."""
         self.nodes: list[str] = json['nodes']
         """The list of nodes that the component is anchored on."""
-        self.hollows: list[str] = [] if 'hollows' not in json else json['hollows']
+        self.hollows: list[list[str]] = [] if 'hollows' not in json else json['hollows']
         """A list of hollow areas, if the ``type`` is ``area``."""
         self.attrs: dict = json['attrs']
         """A dictionary of attributes."""
@@ -35,6 +35,18 @@ class Component:
             """A list of tags appended at the end of the component's type."""
         else:
             self.tags: list[str] = []
+
+    def as_json(self) -> ComponentJson:
+        """Returns the component as a JSON."""
+        return {
+            "type": (self.type + " " + " ".join(self.tags)).strip(),
+            "displayname": self.displayname,
+            "description": self.description,
+            "layer": self.layer,
+            "nodes": self.nodes,
+            "hollows": self.hollows,
+            "attrs": self.attrs
+        }
 
 class ComponentList:
     """A list of components.
