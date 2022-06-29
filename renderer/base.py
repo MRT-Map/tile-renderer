@@ -1,7 +1,7 @@
 from __future__ import annotations
 
-import json
 import os
+import pickle
 from pathlib import Path
 
 import psutil
@@ -9,18 +9,18 @@ from PIL import Image
 import time
 import glob
 import re
-import multiprocessing
-import sys
 import blessed
+from rich.progress import track
 
 import renderer.internals.internal as internal
 import renderer.validate as validate
 import renderer.internals.rendering as rendering
+from renderer.internals.logger import log
 from renderer.objects.components import ComponentList, Component
 from renderer.objects.nodes import NodeList
 from renderer.objects.skin import Skin, _TextObject
 from renderer.objects.zoom_params import ZoomParams
-from renderer.types import RealNum, TileCoord, Coord
+from renderer.types import RealNum, TileCoord
 
 import renderer.tools.components as tools_component_json
 import renderer.tools.line as tools_line
@@ -36,6 +36,8 @@ class _MultiprocessingOperatedHandler:
 
     def count(self):
         self.operated.value += 1
+        
+_path_in_tmp = lambda file: Path(__file__).parent/"tmp"/file
 
 def merge_tiles(images: Path | dict[TileCoord, Image],
                 save_images: bool=True,
@@ -133,28 +135,18 @@ def _sort_by_tiles(tiles: list[TileCoord], components: ComponentList,
 
 
 def _process_tiles(tile_list: dict[TileCoord, list[Component]], skin: Skin) -> dict[TileCoord, list[list[Component]]]:
-    term = blessed.Terminal()
-    process_start = time.time() * 1000
-    processed = 0
-    l = lambda tile_components_, msg: rendering._eta(process_start, processed, len(tile_list)) \
-        + f"{tile_components_}: " + term.bright_black(msg) + term.clear_eos
-    print(term.green("sorted\n") + term.bright_green("Starting processing"))
     grouped_tile_list: dict[TileCoord, list[list[Component]]] = {}
-    for tile_coord, tile_components in tile_list.items():
+    for tile_coord, tile_components in track(tile_list.items(), description="Processing tiles"):
         # sort components in tiles by layer
         new_tile_components: dict[float, list[Component]] = {}
         for component in tile_components:
             if component.layer not in new_tile_components.keys():
                 new_tile_components[component.layer] = []
             new_tile_components[component.layer].append(component)
-        with term.location():
-            print(l(tile_coord, "Sorted component by layer"), end="\r")
 
         # sort components in layers in files by type
         new_tile_components = {layer: sorted(component_list, key=lambda x: skin.order.index(x.type))
                                for layer, component_list in new_tile_components.items()}
-        with term.location():
-            print(l(tile_coord, "Sorted component by type"), end="\r")
 
         # merge layers
         tile_components = []
@@ -162,8 +154,6 @@ def _process_tiles(tile_list: dict[TileCoord, list[Component]], skin: Skin) -> d
         for layer in layers:
             for component in new_tile_components[layer]:
                 tile_components.append(component)
-        with term.location():
-            print(l(tile_coord, "Merged layers"), end="\r")
 
         # groups components of the same type if "road" tag present
         newer_tile_components: list[list[Component]] = [[]]
@@ -177,10 +167,7 @@ def _process_tiles(tile_list: dict[TileCoord, list[Component]], skin: Skin) -> d
                 newer_tile_components.append([])
 
         grouped_tile_list[tile_coord] = newer_tile_components
-        with term.location():
-            print(l(tile_coord, "Components grouped"), end="\r")
 
-        processed += 1
     return grouped_tile_list
 
 def prepare_render(components: ComponentList,
@@ -189,57 +176,49 @@ def prepare_render(components: ComponentList,
                    export_id: str,
                    skin: Skin = Skin.from_name("default"),
                    tiles: list[TileCoord] | None = None,
-                   offset: tuple[RealNum, RealNum] = (0, 0),
-                   logs: bool = True) -> dict[TileCoord, list[list[Component]]]:
-    term = blessed.Terminal()
-
+                   offset: tuple[RealNum, RealNum] = (0, 0)) -> dict[TileCoord, list[list[Component]]]:
     # offset
     for node in nodes.node_values():
         node.x += offset[0]
     node.y += offset[1]
 
-    if logs: print(term.green("Finding tiles..."), end=" ")
+    log.info("Finding tiles...")
     # finds which tiles to render
     if tiles is not None:
         validate.v_tile_coords(tiles, zoom.min, zoom.max)
     else:  # finds box of tiles
         tiles = tools_component_json.rendered_in(components, nodes, zoom.min, zoom.max, zoom.range)
 
-    if logs: print(term.green("found\nRemoving components with unknown type..."), end=" ")
+    log.info("Removing components with unknown type...")
     remove_list = _remove_unknown_component_types(components, skin)
-    if logs: print(term.green("removed"))
-    if logs and remove_list:
-        print(term.yellow('The following components were removed:'))
-        print(term.yellow(" | ".join(remove_list)))
+    if remove_list:
+        log.warning("The following components were removed:" + " | ".join(remove_list))
 
-    if logs: print(term.green("Sorting components by tiles..."), end=" ")
+    log.info("Sorting components by tiles...")
     tile_list = _sort_by_tiles(tiles, components, nodes, zoom)
 
     grouped_tile_list = _process_tiles(tile_list, skin)
-    if logs: print(term.green("100.00% | 0.0s left | ") + "Processing complete" + term.clear_eos)
 
-    for coord, grouped_components in grouped_tile_list.items():
-        with open(Path(__file__).parent/"tmp"/f"{export_id}_{coord}.0.json", "r+") as f: # TODO convert to pkl
-            json.dump([{b.name: b.as_json() for b in a} for a in grouped_components], f)
+    for coord, grouped_components in track(grouped_tile_list.items(), description="Dumping data"):
+        with open(_path_in_tmp(f"{export_id}_{coord}.0.pkl"), "wb") as f:
+            pickle.dump(grouped_components, f)
 
     return grouped_tile_list
 
 def _count_num_rendering_oprs(export_id: str,
                               skin: Skin,
                               zoom: ZoomParams) -> int:
-    term = blessed.Terminal()
-
     grouped_tile_list = {}
-    for file in glob.glob(str(Path(__file__).parent/"tmp"/"*.0.json")):
-        with open(file, "r") as f:
-            result = re.search(fr"\b{re.escape(export_id)}_(\d+), (\d+), (\d+)\.0\.json$", file)
-            grouped_tile_list[TileCoord(result.group(2), result.group(3), result.group(4))] \
-                = [[Component(k, v) for k, v in a.items()] for a in json.load(f)]
+    for file in track(glob.glob(str(_path_in_tmp("*.0.pkl"))), description="Loading data"):
+        with open(file, "rb") as f:
+            result = re.search(fr"\b{re.escape(export_id)}_(-?\d+), (-?\d+), (-?\d+)\.0\.pkl$", file)
+            grouped_tile_list[TileCoord(int(result.group(1)), int(result.group(2)), int(result.group(3)))] \
+                = pickle.load(f)
 
     operations = 0
     op_tiles = {}
     tile_operations = 0
-    for tile_coord, tile_components in grouped_tile_list.items():
+    for tile_coord, tile_components in track(grouped_tile_list.items(), description="Counting operations"):
         if not tile_components:
             op_tiles[tile_coord] = 0
             continue
@@ -256,7 +235,6 @@ def _count_num_rendering_oprs(export_id: str,
 
         op_tiles[tile_coord] = tile_operations
         tile_operations = 0
-        print(f"Counted {tile_coord}", end=term.clear_eos + "\r")
     return operations
 
 class _RayOperatedHandler:
@@ -281,20 +259,27 @@ def _pre_draw_components(operated,
                          assets_dir: Path,
                          using_ray: bool = False,
                          debug: bool = False) -> tuple[TileCoord, list[_TextObject]] | None:
-    with open(Path(__file__).parent/"tmp"/f"{export_id}_{tile_coord}.0.json") as f:
-        tile_components = [[Component(k, v) for k, v in a.items()] for a in json.load(f)]
-    return rendering._draw_components(operated,
-                                      operations,
-                                      start,
-                                      tile_coord,
-                                      tile_components,
-                                      all_components,
-                                      nodes,
-                                      skin,
-                                      zoom,
-                                      assets_dir,
-                                      using_ray,
-                                      debug)
+    path = _path_in_tmp(f"{export_id}_{tile_coord}.0.pkl")
+    with open(path, "rb") as f:
+        tile_components = pickle.load(f)
+    result = rendering._draw_components(operated,
+                                        operations,
+                                        start,
+                                        tile_coord,
+                                        tile_components,
+                                        all_components,
+                                        nodes,
+                                        skin,
+                                        zoom,
+                                        assets_dir,
+                                        export_id,
+                                        using_ray,
+                                        debug)
+    os.remove(path)
+    if result is not None:
+        with open(_path_in_tmp(f"{export_id}_{tile_coord}.1.pkl")) as f:
+            pickle.dump({result[0]: result[1]}, f)
+    return result
 
 
 def render_part1_ray(components: ComponentList,
@@ -304,22 +289,21 @@ def render_part1_ray(components: ComponentList,
                      skin: Skin = Skin.from_name("default"),
                      assets_dir: Path = Path(__file__).parent/"skins"/"assets",
                      processes: int = psutil.cpu_count(),
-                     debug: bool = False) -> list[tuple[TileCoord, list[_TextObject]]]:
-    term = blessed.Terminal()
+                     debug: bool = False) -> dict[TileCoord, list[_TextObject]]:
     import ray
     ray.init(num_cpus=processes)
 
     tile_coords = []
-    for file in glob.glob(str(Path(__file__).parent/"tmp"/"*.0.json")):
-        re_result = re.search(fr"\b({re.escape(export_id)})_(\d+), (\d+), (\d+)\.0\.json$", file)
-        tile_coords.append(TileCoord(re_result.group(2), re_result.group(3), re_result.group(4)))
+    for file in track(glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.0.pkl"))), description="Loading tile coords"):
+        re_result = re.search(fr"_(-?\d+), (-?\d+), (-?\d+)\.0\.pkl$", file)
+        tile_coords.append(TileCoord(int(re_result.group(1)), int(re_result.group(2)), int(re_result.group(3))))
 
     operations = _count_num_rendering_oprs(export_id, skin, zoom)
 
     operated = ray.remote(_RayOperatedHandler).remote()
 
-    print(term.bright_green("\nRendering components..."))
     start = time.time() * 1000
+    log.info("Rendering components...")
     futures = [ray.remote(rendering._draw_components).remote(operated,
                                                              operations - 1,
                                                              start,
@@ -333,38 +317,73 @@ def render_part1_ray(components: ComponentList,
                                                              True,
                                                              debug)
                for tile_coord in tile_coords]
-    result: list[tuple[TileCoord, list[_TextObject]]] = [r for r in ray.get(futures) if r is not None]
-    # TODO
-    return result
+    result: list[tuple[TileCoord, list[_TextObject]] | None] = ray.get(futures)
+    return {r[0]: r[1] for r in result if r is not None}
 
-def render_part2(components: ComponentList,
-                 nodes: NodeList,
-                 zoom: ZoomParams,
-                 prepreresult: list[tuple[TileCoord, list[_TextObject]]],
-                 grouped_tile_list: dict[TileCoord, list[list[Component]]] | None,
-                 skin: Skin = Skin.from_name("default"),
-                 assets_dir: Path = Path(__file__).parent/"skins"/"assets",
-                 processes: int = psutil.cpu_count(),
-                 debug: bool = False,
-                 export_id: str | None = None) -> list[tuple[TileCoord, list[_TextObject]]]:
+def render_part2(export_id: str) -> tuple[dict[TileCoord, list[_TextObject]], int]:
     term = blessed.Terminal()
-    print(term.bright_green("\nEliminating overlapping text..."))
-    new_texts = rendering._prevent_text_overlap(prepreresult)
+    
+    in_ = {}
+    for file in track(glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.1.pkl"))), description="Loading data"):
+        with open(file, "rb") as f:
+            in_.update(pickle.load(f))
+
+    new_texts = rendering._prevent_text_overlap(in_)
     total_texts = sum(len(t[1]) for t in new_texts)
-    # TODO
+    with open(_path_in_tmp(f"{export_id}.2.pkl"), "wb") as f:
+        pickle.dump((new_texts, total_texts), f)
+    return new_texts, total_texts
+
+def render_part3_ray(export_id: str,
+                     skin: Skin = Skin.from_name("default"),
+                     save_images: bool = True,
+                     save_dir: Path = Path.cwd()) -> dict[TileCoord, Image.Image]:
+    import ray
+
+    with open(_path_in_tmp(f"{export_id}.2.pkl"), "rb") as f:
+        new_texts, total_texts = pickle.load(f)
+
+    log.info(f"Rendering images...")
+    start = time.time() * 1000
+    operated = ray.remote(_RayOperatedHandler).remote()
+    futures = [ray.remote(rendering._draw_text).remote(operated,
+                                                       total_texts + len(new_texts),
+                                                       start,
+                                                       tile_coord,
+                                                       text_list,
+                                                       save_images,
+                                                       save_dir,
+                                                       skin,
+                                                       export_id,
+                                                       True) for tile_coord, text_list in new_texts.items()]
+    preresult = ray.get(futures)
+
+    result = {}
+    for i in preresult:
+        if i is None:
+            continue
+        k, v = list(i.items())[0]
+        result[k] = v
+
+    for file in track(glob.glob(str(Path(__file__).parent / f'tmp/{glob.escape(export_id)}_*.tmp.png')),
+                      description="Cleaning up"):
+        os.remove(file)
+    log.info("Render complete")
+
+    return result
 
 
 def render(components: ComponentList,
            nodes: NodeList,
            zoom: ZoomParams,
            skin: Skin = Skin.from_name("default"),
+           export_id: str = "unnamed",
            save_images: bool = True,
            save_dir: Path = Path.cwd(),
            assets_dir: Path = Path(__file__).parent/"skins"/"assets",
            processes: int = psutil.cpu_count(),
            tiles: list[TileCoord] | None = None,
            offset: tuple[RealNum, RealNum] = (0, 0),
-           use_ray: bool = True,
            debug: bool = False) -> dict[TileCoord, Image.Image]:
     # noinspection GrazieInspection
     """
@@ -377,6 +396,7 @@ def render(components: ComponentList,
         :param NodeList nodes: a JSON of nodes
         :param ZoomParams zoom: a ZoomParams object
         :param Skin skin: The skin to use for rendering the tiles
+        :param str export_id: The name of the rendering task
         :param int save_images: whether to save the tile images in a folder or not
         :param Path save_dir: the directory to save tiles in
         :param Path assets_dir: the asset directory for the skin
@@ -385,89 +405,13 @@ def render(components: ComponentList,
         :type tiles: list[TileCoord] | None
         :param offset: the offset to shift all node coordinates by, given as ``(x,y)``
         :type offset: tuple[RealNum, RealNum]
-        :param bool use_ray: Whether to use Ray multiprocessing instead of the internal multiprocessing module.
         :param bool debug: Enables debugging information that is printed onto the tiles
 
         :returns: Given in the form of ``{tile_coord: image}``
         :rtype: dict[TileCoord, Image.Image]
         """
-    term = blessed.Terminal()
+    prepare_render(components, nodes, zoom, export_id, skin, tiles, offset, logs=not debug)
 
-    #count # of rendering operations for part 1
-
-    #render
-    if use_ray:
-        try: # noinspection PyPackageRequirements
-            import ray
-        except ModuleNotFoundError:
-            use_ray = False
-
-    if use_ray:
-        print(term.bright_green("\nEliminating overlapping text..."))
-        input_ = []
-        new_texts = rendering._prevent_text_overlap(prepreresult)
-        total_texts = sum(len(t[1]) for t in new_texts)
-
-        start = time.time() * 1000
-        print(term.bright_green("\nRendering text..."))
-        operated = _RayOperatedHandler.remote()
-        for tile_coord, text_list in new_texts:
-            input_.append((operated, total_texts+len(new_texts), start, tile_coord, text_list,
-                           save_images, save_dir, skin, True))
-        futures = [ray.remote(rendering._draw_text).remote(*input_[i]) for i in range(len(input_))]
-        preresult = ray.get(futures)
-
-        result = {}
-        for i in preresult:
-            if i is None:
-                continue
-            k, v = list(i.items())[0]
-            result[k] = v
-        #ray.shutdown()
-    else:
-        if __name__ == 'renderer.base':
-            operated = _MultiprocessingOperatedHandler(multiprocessing.Manager())
-
-            print(term.bright_green("\nRendering components..."))
-            input_ = []
-            start = time.time() * 1000
-            for tile_coord, component_group in grouped_tile_list.items():
-                input_.append((operated, operations - 1, start, tile_coord, component_group, components, nodes,
-                               skin, zoom, assets_dir, False, debug))
-            p = multiprocessing.Pool(processes)
-            try:
-                prepreresult = [r for r in p.starmap(rendering._draw_components, input_) if r is not None]
-            except KeyboardInterrupt:
-                p.terminate()
-                sys.exit()
-
-            print(term.bright_green("\nEliminating overlapping text..."))
-            input_ = []
-            new_texts = rendering._prevent_text_overlap(prepreresult)
-            total_texts = sum(len(t[1]) for t in new_texts)
-
-            start = time.time() * 1000
-            print(term.bright_green("\nRendering text..."))
-            operated = _MultiprocessingOperatedHandler(multiprocessing.Manager())
-            for tile_coord, text_list in new_texts:
-                input_.append((operated, total_texts + len(new_texts), start, tile_coord, text_list,
-                               save_images, save_dir, skin, False))
-
-            try:
-                preresult = p.starmap(rendering._draw_text, input_)
-            except KeyboardInterrupt:
-                p.terminate()
-                sys.exit()
-            result = {}
-            for i in preresult:
-                if i is None:
-                    continue
-                k, v = list(i.items())[0]
-                result[k] = v
-
-        print(term.green("100.00% | 0.0s left | ") + "Rendering complete" + term.clear_eos)
-
-    for file in glob.glob(str(Path(__file__).parent / f'tmp/*.tmp.png')):
-        os.remove(file)
-    print(term.bright_green("Render complete"))
-    return result
+    render_part1_ray(components, nodes, zoom, export_id, skin, assets_dir, processes, debug)
+    render_part2(export_id)
+    return render_part3_ray(export_id, skin, save_images, save_dir)

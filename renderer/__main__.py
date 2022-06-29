@@ -80,8 +80,7 @@ def cmd():
                         processes=args.processes,
                         tiles=args.tiles,
                         offset=args.offset,
-                        debug=args.debug,
-                        use_ray=not args.no_ray)
+                        debug=args.debug)
     elif args.task == "validate":
         n = renderer.internals.internal._read_json(args.nodes)
         if args.components is not None:

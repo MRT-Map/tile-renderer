@@ -57,6 +57,7 @@ def _draw_components(operated,
                      skin: Skin,
                      zoom: ZoomParams,
                      assets_dir: Path,
+                     export_id: str,
                      using_ray: bool = False,
                      debug: bool = False) -> tuple[TileCoord, list[_TextObject]] | None:
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
@@ -148,12 +149,12 @@ def _draw_components(operated,
     text_list += points_text_list
     text_list.reverse()
 
-    img.save(Path(__file__).parent.parent / f'tmp/{tile_coord}.tmp.png', 'PNG')
+    img.save(Path(__file__).parent.parent / f'tmp/{export_id}_{tile_coord}.tmp.png', 'PNG')
     logger.log("Rendered")
 
     return tile_coord, text_list
 
-def _prevent_text_overlap(texts: list[tuple[TileCoord, list[_TextObject]]]) -> list[tuple[TileCoord, list[_TextObject]]]:
+def _prevent_text_overlap(texts: dict[TileCoord, list[_TextObject]]) -> dict[TileCoord, list[_TextObject]]:
     out = {}
     for z in list(set(c[0].z for c in texts)):
         text_dict: dict[_TextObject, list[TileCoord]] = {}
@@ -194,14 +195,14 @@ def _prevent_text_overlap(texts: list[tuple[TileCoord, list[_TextObject]]]) -> l
                   f"Sorting remaining text {i + 1}/{operations} in zoom {z}", flush=True, end="")
 
     default = {tc: [] for tc in (e[0] for e in texts)}
-    return [(tile_coord, texts) for tile_coord, texts in {**default, **out}.items()]
+    return {**default, **out}
 
 
 def _draw_text(operated, operations: int, start: RealNum, tile_coord: TileCoord, text_list: list[_TextObject],
-               save_images: bool, save_dir: Path, skin: Skin, using_ray: bool=False) -> dict[TileCoord, Image.Image]:
+               save_images: bool, save_dir: Path, skin: Skin, export_id: str, using_ray: bool=False) -> dict[TileCoord, Image.Image]:
     logger = _Logger(using_ray, operated, operations, start, tile_coord)
     processed = 0
-    image = Image.open(Path(__file__).parent.parent / f'tmp/{tile_coord}.tmp.png')
+    image = Image.open(Path(__file__).parent.parent / f'tmp/{export_id}_{tile_coord}.tmp.png')
     #print(text_list)
     for text in text_list:
         processed += 1
