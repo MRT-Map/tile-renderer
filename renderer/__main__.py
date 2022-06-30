@@ -79,8 +79,7 @@ def cmd():
                         save_dir=args.save_dir,
                         processes=args.processes,
                         tiles=args.tiles,
-                        offset=args.offset,
-                        debug=args.debug)
+                        offset=args.offset)
     elif args.task == "validate":
         n = renderer.internals.internal._read_json(args.nodes)
         if args.components is not None:

@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import time
 from dataclasses import dataclass
 from itertools import chain
 from pathlib import Path
@@ -8,6 +7,7 @@ from typing import Any
 
 from PIL import Image, ImageDraw
 from colorama import Fore, Style
+from rich.progress import TaskID, Progress
 
 import renderer.internals.internal as internal
 import renderer.mathtools as mathtools
@@ -41,15 +41,14 @@ class _Logger:
     tile_coords: TileCoord
 
     def log(self, msg):
-        if self.using_ray: ops = ray.get(self.operated.get.remote())
+        if self.using_ray: ops = ray.get(self.operated.get())
         else: ops = self.operated.get()
         print(_eta(self.start, ops, self.operations) +
               f"{self.tile_coords}: " + Fore.LIGHTBLACK_EX + msg + R, flush=True, end="")
 
 
-def _draw_components(operated,
-                     operations: int,
-                     start: RealNum,
+def _draw_components(task_id: TaskID,
+                     progress: Progress,
                      tile_coord: TileCoord,
                      tile_components: list[list[Component]],
                      all_components: ComponentList,
@@ -57,15 +56,7 @@ def _draw_components(operated,
                      skin: Skin,
                      zoom: ZoomParams,
                      assets_dir: Path,
-                     export_id: str,
-                     using_ray: bool = False,
-                     debug: bool = False) -> tuple[TileCoord, list[_TextObject]] | None:
-    logger = _Logger(using_ray, operated, operations, start, tile_coord)
-    if tile_components == [[]]:
-        logger.log("Nothing to render")
-        return None
-
-    logger.log("Rendering")
+                     export_id: str) -> tuple[TileCoord, list[_TextObject]]:
     size = zoom.range * 2 ** (zoom.max - tile_coord[0])
     img = Image.new(mode="RGBA", size=(skin.tile_size,)*2, color=skin.background)
     imd = ImageDraw.Draw(img)
@@ -102,12 +93,9 @@ def _draw_components(operated,
                 if step.layer not in args[type_info.shape].keys():
                     raise KeyError(f"{step.layer} is not a valid layer")
                 #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}")
-                step.render(*args[type_info.shape][step.layer], debug=debug)
+                step.render(*args[type_info.shape][step.layer])
 
-                if using_ray:
-                    operated.count.remote()
-                else:
-                    operated.count()
+                progress.advance(task_id, 1)
 
             if type_info.shape == "line" and "road" in type_info.tags and step.layer == "back":
                 #logger.log("Rendering studs")
@@ -141,60 +129,56 @@ def _draw_components(operated,
                         inter.paste(con_img, (0, 0), con_mask_img)
                         img.paste(inter, (0, 0), inter)
 
-                if using_ray:
-                    operated.count.remote()
-                else:
-                    operated.count()
+                progress.advance(task_id, 1)
 
     text_list += points_text_list
     text_list.reverse()
 
     img.save(Path(__file__).parent.parent / f'tmp/{export_id}_{tile_coord}.tmp.png', 'PNG')
-    logger.log("Rendered")
 
     return tile_coord, text_list
 
 def _prevent_text_overlap(texts: dict[TileCoord, list[_TextObject]]) -> dict[TileCoord, list[_TextObject]]:
     out = {}
-    for z in list(set(c[0].z for c in texts)):
-        text_dict: dict[_TextObject, list[TileCoord]] = {}
-        for tile_coord, text_objects in texts:
-            if tile_coord.z != z: continue
-            for text in text_objects:
-                if text not in text_dict: text_dict[text] = []
-                text_dict[text].append(tile_coord)
-        no_intersect: list[tuple[Coord]] = []
-        start = time.time() * 1000
-        operations = len(text_dict)
-        for i, text in enumerate(text_dict.copy().keys()):
-            is_rendered = True
-            for other in no_intersect:
-                for bound in text.bounds:
-                    if mathtools.poly_intersect(list(bound), list(other)):
-                        is_rendered = False
-                        del text_dict[text]
-                        break
-                    if not is_rendered: break
-                if not is_rendered: break
-            if not is_rendered:
-                print(_eta(start, i + 1, operations) +
-                      f"Eliminated overlapping text {i + 1}/{operations} in zoom {z}", flush=True, end="")
-            else:
-                no_intersect.extend(text.bounds)
-                print(_eta(start, i + 1, operations) +
-                      f"Kept text {i + 1}/{operations} in zoom {z}", flush=True, end="")
-        print()
-        start = time.time() * 1000
-        operations = len(text_dict)
-        for i, (text, tile_coords) in enumerate(text_dict.items()):
-            for tile_coord in tile_coords:
-                if tile_coord not in out:
-                    out[tile_coord] = []
-                out[tile_coord].append(text)
-            print(_eta(start, i+1, operations) +
-                  f"Sorting remaining text {i + 1}/{operations} in zoom {z}", flush=True, end="")
+    with Progress() as progress:
+        zoom_id = progress.add_task("[green]Eliminating overlapping text", total=len(zooms := set(c[0].z for c in texts)))
+        for z in zooms:
+            z: int
+            text_dict: dict[_TextObject, list[TileCoord]] = {}
+            prep_id = progress.add_task(f"Zoom {z}: [dim white]Preparing text", total=len(texts))
+            for tile_coord, text_objects in texts:
+                if tile_coord.z != z: continue
+                for text in text_objects:
+                    if text not in text_dict: text_dict[text] = []
+                    text_dict[text].append(tile_coord)
+                progress.advance(prep_id, 1)
 
-    default = {tc: [] for tc in (e[0] for e in texts)}
+            no_intersect: list[tuple[Coord]] = []
+            operations = len(text_dict)
+            filter_id = progress.add_task(f"Zoom {z}: [dim white]Filtering text", total=operations)
+            for i, text in enumerate(text_dict.copy().keys()):
+                is_rendered = True
+                for other in no_intersect:
+                    for bound in text.bounds:
+                        if mathtools.poly_intersect(list(bound), list(other)):
+                            is_rendered = False
+                            del text_dict[text]
+                            break
+                        if not is_rendered: break
+                    if not is_rendered: break
+                progress.advance(filter_id, 1)
+
+            operations = len(text_dict)
+            sort_id = progress.add_task(f"Zoom {z}: [dim white]Sorting remaining text", total=operations)
+            for i, (text, tile_coords) in enumerate(text_dict.items()):
+                for tile_coord in tile_coords:
+                    if tile_coord not in out:
+                        out[tile_coord] = []
+                    out[tile_coord].append(text)
+                progress.advance(sort_id, 1)
+
+            progress.advance(zoom_id, 1)
+        default = {tc: [] for tc in (e[0] for e in texts)}
     return {**default, **out}
 
 
@@ -206,7 +190,7 @@ def _draw_text(operated, operations: int, start: RealNum, tile_coord: TileCoord,
     #print(text_list)
     for text in text_list:
         processed += 1
-        if using_ray: operated.count.remote()
+        if using_ray: operated.count()
         else: operated.count()
         #logger.log(f"Text {processed}/{len(text_list)} pasted")
         for img, center in zip(text.image, text.center):
@@ -217,7 +201,7 @@ def _draw_text(operated, operations: int, start: RealNum, tile_coord: TileCoord,
     if save_images:
         image.save(save_dir/f'{tile_coord}.png', 'PNG')
 
-    if using_ray: operated.count.remote()
+    if using_ray: operated.count()
     else: operated.count()
 
     logger.log("Rendered")
