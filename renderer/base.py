@@ -1,21 +1,25 @@
 from __future__ import annotations
 
+import glob
+import logging
 import os
 import pickle
+import re
 from pathlib import Path
+from queue import Queue, Empty
 
 import psutil
+import ray
 from PIL import Image
-import time
-import glob
-import re
-
-from ray.util import inspect_serializability
-from rich.progress import track, Progress, TaskID
+from rich.progress import track, Progress
 
 import renderer.internals.internal as internal
-import renderer.validate as validate
 import renderer.internals.rendering as rendering
+import renderer.tools.components as tools_component_json
+import renderer.tools.line as tools_line
+import renderer.tools.nodes as tools_nodes
+import renderer.tools.tile as tools_tile
+import renderer.validate as validate
 from renderer.internals.logger import log
 from renderer.objects.components import ComponentList, Component
 from renderer.objects.nodes import NodeList
@@ -23,11 +27,6 @@ from renderer.objects.skin import Skin, _TextObject
 from renderer.objects.zoom_params import ZoomParams
 from renderer.types import RealNum, TileCoord
 
-import renderer.tools.components as tools_component_json
-import renderer.tools.line as tools_line
-import renderer.tools.nodes as tools_nodes
-import renderer.tools.tile as tools_tile
-        
 _path_in_tmp = lambda file: Path(__file__).parent/"tmp"/file
 
 def merge_tiles(images: Path | dict[TileCoord, Image],
@@ -214,20 +213,38 @@ def _count_num_rendering_oprs(export_id: str,
         tile_operations = 0
     return operations
 
-def _pre_draw_components(task_id: TaskID,
-                         progress: Progress,
-                         export_id: str,
+@ray.remote
+class ProgressHandler:
+    def __init__(self):
+        self.queue = Queue()
+        self.completed = 0
+
+    def add(self, id_: TileCoord):
+        self.queue.put_nowait(id_)
+
+    def get(self) -> TileCoord:
+        return self.queue.get_nowait()
+
+    def complete(self):
+        self.completed += 1
+
+    def get_complete(self):
+        return self.completed
+
+def _pre_draw_components(ph: ProgressHandler,
                          tile_coord: TileCoord,
                          all_components: ComponentList,
                          nodes: NodeList,
                          skin: Skin,
                          zoom: ZoomParams,
-                         assets_dir: Path) -> tuple[TileCoord, list[_TextObject]]:
+                         assets_dir: Path,
+                         export_id: str) -> tuple[TileCoord, list[_TextObject]]:
     path = _path_in_tmp(f"{export_id}_{tile_coord}.0.pkl")
     with open(path, "rb") as f:
         tile_components = pickle.load(f)
-    result = rendering._draw_components(task_id,
-                                        progress,
+    logging.getLogger('fontTools').setLevel(logging.CRITICAL)
+    logging.getLogger('PIL').setLevel(logging.CRITICAL)
+    result = rendering._draw_components(ph,
                                         tile_coord,
                                         tile_components,
                                         all_components,
@@ -238,10 +255,9 @@ def _pre_draw_components(task_id: TaskID,
                                         export_id)
     os.remove(path)
     if result is not None:
-        with open(_path_in_tmp(f"{export_id}_{tile_coord}.1.pkl")) as f:
+        with open(_path_in_tmp(f"{export_id}_{tile_coord}.1.pkl"), "wb") as f:
             pickle.dump({result[0]: result[1]}, f)
     return result
-
 
 def render_part1_ray(components: ComponentList,
                      nodes: NodeList,
@@ -254,33 +270,44 @@ def render_part1_ray(components: ComponentList,
     ray.init(num_cpus=processes)
 
     tile_coords = []
-    for file in track(glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.0.pkl"))), description="Loading tile coords"):
+    for file in glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.0.pkl"))):
         re_result = re.search(fr"_(-?\d+), (-?\d+), (-?\d+)\.0\.pkl$", file)
         tile_coords.append(TileCoord(int(re_result.group(1)), int(re_result.group(2)), int(re_result.group(3))))
 
     operations = _count_num_rendering_oprs(export_id, skin, zoom)
-
-    @ray.remote
-    class ProgressHandler:
-        def __init__(self, progress: Progress):
-            self.progress = progress
-
-    log.info("Rendering components...")
+            
+    log.info(f"Rendering components in {len(tile_coords)} tiles...")
+    ph = ProgressHandler.remote()
+    futures = [ray.remote(_pre_draw_components).remote(ph,
+                                                       tile_coord,
+                                                       components,
+                                                       nodes,
+                                                       skin,
+                                                       zoom,
+                                                       assets_dir,
+                                                       export_id)
+               for tile_coord in track(tile_coords, description="Dispatching tasks")]
     with Progress() as progress:
-        inspect_serializability(progress, name="test")
-        futures = [ray.remote(_pre_draw_components).remote(progress.add_task(str(tile_coord),
-                                                                             total=operations[tile_coord],
-                                                                             visible=False),
-                                                           progress,
-                                                           tile_coord,
-                                                           components,
-                                                           nodes,
-                                                           skin,
-                                                           zoom,
-                                                           assets_dir,
-                                                           export_id)
-                   for tile_coord in tile_coords]
-        result: list[tuple[TileCoord, list[_TextObject]]] = ray.get(futures)
+        main_id = progress.add_task("Rendering components", total=sum(operations.values()))
+        ids = {}
+        progresses = {}
+        while ray.get(ph.get_complete.remote()) != len(tile_coords):
+            try:
+                id_ = ray.get(ph.get.remote())
+            except Empty:
+                continue
+            if id_ not in ids:
+                ids[id_] = progress.add_task(str(id_), total=operations[id_])
+                progresses[id_] = 0
+            progress.advance(ids[id_], 1)
+            progress.advance(main_id, 1)
+            progresses[id_] += 1
+            if operations[id_] <= progresses[id_]:
+                progress.update(ids[id_], visible=False)
+                progress.remove_task(ids[id_])
+                del progresses[id_]
+                del ids[id_]
+    result: list[tuple[TileCoord, list[_TextObject]]] = ray.get(futures)
     return {r[0]: r[1] for r in result}
 
 def render_part2(export_id: str) -> tuple[dict[TileCoord, list[_TextObject]], int]:
@@ -288,11 +315,12 @@ def render_part2(export_id: str) -> tuple[dict[TileCoord, list[_TextObject]], in
     for file in track(glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.1.pkl"))), description="Loading data"):
         with open(file, "rb") as f:
             in_.update(pickle.load(f))
-
     new_texts = rendering._prevent_text_overlap(in_)
-    total_texts = sum(len(t[1]) for t in new_texts)
+    total_texts = sum(len(t) for t in new_texts.values())
     with open(_path_in_tmp(f"{export_id}.2.pkl"), "wb") as f:
-        pickle.dump((new_texts, total_texts), f)
+        pickle.dump((new_texts, total_texts), f) # TODO clean up and dedup
+    for file in track(glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.1.pkl"))), description="Loading data"):
+        os.remove(file)
     return new_texts, total_texts
 
 def render_part3_ray(export_id: str,
@@ -304,19 +332,36 @@ def render_part3_ray(export_id: str,
     with open(_path_in_tmp(f"{export_id}.2.pkl"), "rb") as f:
         new_texts, total_texts = pickle.load(f)
 
-    log.info(f"Rendering images...")
-    start = time.time() * 1000
-    operated = ray.remote(_RayOperatedHandler).remote()
-    futures = [ray.remote(rendering._draw_text).remote(operated,
-                                                       total_texts + len(new_texts),
-                                                       start,
+    log.info(f"Rendering images in {len(new_texts)} tiles...")
+    ph = ProgressHandler.remote()
+    futures = [ray.remote(rendering._draw_text).remote(ph,
                                                        tile_coord,
                                                        text_list,
                                                        save_images,
                                                        save_dir,
                                                        skin,
-                                                       export_id,
-                                                       True) for tile_coord, text_list in new_texts.items()]
+                                                       export_id)
+               for tile_coord, text_list in new_texts.items()]
+    with Progress() as progress:
+        main_id = progress.add_task("Rendering texts", total=sum(len(l) for l in new_texts.values()))
+        ids = {}
+        progresses = {}
+        while ray.get(ph.get_complete.remote()) != len(new_texts):
+            try:
+                id_ = ray.get(ph.get.remote())
+            except Empty:
+                continue
+            if id_ not in ids:
+                ids[id_] = progress.add_task(str(id_), total=len(new_texts[id_]))
+                progresses[id_] = 0
+            progress.advance(ids[id_], 1)
+            progress.advance(main_id, 1)
+            progresses[id_] += 1
+            if len(new_texts[id_]) <= progresses[id_]:
+                progress.update(ids[id_], visible=False)
+                progress.remove_task(ids[id_])
+                del progresses[id_]
+                del ids[id_]
     preresult = ray.get(futures)
 
     result = {}
@@ -327,6 +372,9 @@ def render_part3_ray(export_id: str,
         result[k] = v
 
     for file in track(glob.glob(str(Path(__file__).parent / f'tmp/{glob.escape(export_id)}_*.tmp.png')),
+                      description="Cleaning up", transient=True):
+        os.remove(file)
+    for file in track(glob.glob(str(Path(__file__).parent / f'tmp/{glob.escape(export_id)}.2.pkl')),
                       description="Cleaning up"):
         os.remove(file)
     log.info("Render complete")

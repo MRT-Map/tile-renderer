@@ -24,16 +24,17 @@ setup(
     install_requires=[
         'pillow',
         'blessed',
-        'pyautogui',
+        'pyautogui[builder]',
         'schema',
         'numpy',
-        'click',
+        'click[builder]',
         'psutil',
         'imagehash',
         'colorama',
         'fontTools',
         'ray',
-        'rich'
+        'rich',
+        'cloudpickle'
     ],
     classifiers=[
         'Development Status :: 5 - Production/Stable',

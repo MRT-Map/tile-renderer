@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 from dataclasses import dataclass
 from itertools import chain
 from pathlib import Path
@@ -47,8 +48,7 @@ class _Logger:
               f"{self.tile_coords}: " + Fore.LIGHTBLACK_EX + msg + R, flush=True, end="")
 
 
-def _draw_components(task_id: TaskID,
-                     progress: Progress,
+def _draw_components(ph,
                      tile_coord: TileCoord,
                      tile_components: list[list[Component]],
                      all_components: ComponentList,
@@ -95,7 +95,7 @@ def _draw_components(task_id: TaskID,
                 #logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}")
                 step.render(*args[type_info.shape][step.layer])
 
-                progress.advance(task_id, 1)
+                ph.add.remote(tile_coord)
 
             if type_info.shape == "line" and "road" in type_info.tags and step.layer == "back":
                 #logger.log("Rendering studs")
@@ -129,29 +129,31 @@ def _draw_components(task_id: TaskID,
                         inter.paste(con_img, (0, 0), con_mask_img)
                         img.paste(inter, (0, 0), inter)
 
-                progress.advance(task_id, 1)
+                ph.add.remote(tile_coord)
 
     text_list += points_text_list
     text_list.reverse()
 
     img.save(Path(__file__).parent.parent / f'tmp/{export_id}_{tile_coord}.tmp.png', 'PNG')
+    ph.complete.remote()
 
     return tile_coord, text_list
 
 def _prevent_text_overlap(texts: dict[TileCoord, list[_TextObject]]) -> dict[TileCoord, list[_TextObject]]:
     out = {}
     with Progress() as progress:
-        zoom_id = progress.add_task("[green]Eliminating overlapping text", total=len(zooms := set(c[0].z for c in texts)))
+        zoom_id = progress.add_task("[green]Eliminating overlapping text", total=len(zooms := set(c.z for c in texts.keys())))
         for z in zooms:
             z: int
             text_dict: dict[_TextObject, list[TileCoord]] = {}
             prep_id = progress.add_task(f"Zoom {z}: [dim white]Preparing text", total=len(texts))
-            for tile_coord, text_objects in texts:
+            for tile_coord, text_objects in texts.items():
                 if tile_coord.z != z: continue
                 for text in text_objects:
                     if text not in text_dict: text_dict[text] = []
                     text_dict[text].append(tile_coord)
                 progress.advance(prep_id, 1)
+            progress.update(prep_id, visible=False)
 
             no_intersect: list[tuple[Coord]] = []
             operations = len(text_dict)
@@ -167,6 +169,7 @@ def _prevent_text_overlap(texts: dict[TileCoord, list[_TextObject]]) -> dict[Til
                         if not is_rendered: break
                     if not is_rendered: break
                 progress.advance(filter_id, 1)
+            progress.update(filter_id, visible=False)
 
             operations = len(text_dict)
             sort_id = progress.add_task(f"Zoom {z}: [dim white]Sorting remaining text", total=operations)
@@ -178,32 +181,30 @@ def _prevent_text_overlap(texts: dict[TileCoord, list[_TextObject]]) -> dict[Til
                 progress.advance(sort_id, 1)
 
             progress.advance(zoom_id, 1)
-        default = {tc: [] for tc in (e[0] for e in texts)}
+        default = {tc: [] for tc in texts.keys()}
     return {**default, **out}
 
 
-def _draw_text(operated, operations: int, start: RealNum, tile_coord: TileCoord, text_list: list[_TextObject],
-               save_images: bool, save_dir: Path, skin: Skin, export_id: str, using_ray: bool=False) -> dict[TileCoord, Image.Image]:
-    logger = _Logger(using_ray, operated, operations, start, tile_coord)
-    processed = 0
+def _draw_text(ph,
+               tile_coord: TileCoord,
+               text_list: list[_TextObject],
+               save_images: bool,
+               save_dir: Path,
+               skin: Skin,
+               export_id: str) -> dict[TileCoord, Image.Image]:
+    logging.getLogger('PIL').setLevel(logging.CRITICAL)
     image = Image.open(Path(__file__).parent.parent / f'tmp/{export_id}_{tile_coord}.tmp.png')
     #print(text_list)
     for text in text_list:
-        processed += 1
-        if using_ray: operated.count()
-        else: operated.count()
         #logger.log(f"Text {processed}/{len(text_list)} pasted")
         for img, center in zip(text.image, text.center):
             image.paste(img, (int(center.x-tile_coord.x*skin.tile_size-img.width/2),
                               int(center.y-tile_coord.y*skin.tile_size-img.height/2)), img)
+        ph.add.remote(tile_coord)
     
     #tileReturn[tile_coord] = im
     if save_images:
         image.save(save_dir/f'{tile_coord}.png', 'PNG')
-
-    if using_ray: operated.count()
-    else: operated.count()
-
-    logger.log("Rendered")
+    ph.complete.remote()
 
     return {tile_coord: image}
