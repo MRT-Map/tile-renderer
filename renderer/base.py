@@ -264,11 +264,7 @@ def render_part1_ray(components: ComponentList,
                      zoom: ZoomParams,
                      export_id: str,
                      skin: Skin = Skin.from_name("default"),
-                     assets_dir: Path = Path(__file__).parent/"skins"/"assets",
-                     processes: int = psutil.cpu_count()) -> dict[TileCoord, list[_TextObject]]:
-    import ray
-    ray.init(num_cpus=processes)
-
+                     assets_dir: Path = Path(__file__).parent/"skins"/"assets") -> dict[TileCoord, list[_TextObject]]:
     tile_coords = []
     for file in glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.0.pkl"))):
         re_result = re.search(fr"_(-?\d+), (-?\d+), (-?\d+)\.0\.pkl$", file)
@@ -419,6 +415,8 @@ def render(components: ComponentList,
         """
     prepare_render(components, nodes, zoom, export_id, skin, tiles, offset)
 
-    render_part1_ray(components, nodes, zoom, export_id, skin, assets_dir, processes)
+    log.info("Initialising Ray...")
+    ray.init(num_cpus=processes)
+    render_part1_ray(components, nodes, zoom, export_id, skin, assets_dir)
     render_part2(export_id)
     return render_part3_ray(export_id, skin, save_images, save_dir)

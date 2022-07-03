@@ -1,51 +1,19 @@
 from __future__ import annotations
 
 import logging
-from dataclasses import dataclass
 from itertools import chain
 from pathlib import Path
-from typing import Any
 
 from PIL import Image, ImageDraw
-from colorama import Fore, Style
-from rich.progress import TaskID, Progress
+from rich.progress import Progress
 
-import renderer.internals.internal as internal
 import renderer.mathtools as mathtools
 import renderer.tools as tools
 from renderer.objects.components import ComponentList, Component
 from renderer.objects.nodes import NodeList
 from renderer.objects.skin import Skin, _TextObject, _node_list_to_image_coords
 from renderer.objects.zoom_params import ZoomParams
-from renderer.types import RealNum, TileCoord, Coord
-
-R = Style.RESET_ALL
-
-try: import ray
-except ModuleNotFoundError: pass
-
-def _eta(start: RealNum, operated: int, operations: int) -> str:
-    if operated != 0 and operations != 0:
-        return "\r\033[K" + \
-            Fore.GREEN + f"{internal._percentage(operated, operations)}% | " + \
-                         f"{internal._ms_to_time(internal._time_remaining(start, operated, operations))} left | " + R
-    else:
-        return "\r\033[K" + \
-               Fore.GREEN + f"00.0% | 0.0s left | " + R
-
-@dataclass
-class _Logger:
-    using_ray: bool
-    operated: Any
-    operations: int
-    start: RealNum
-    tile_coords: TileCoord
-
-    def log(self, msg):
-        if self.using_ray: ops = ray.get(self.operated.get())
-        else: ops = self.operated.get()
-        print(_eta(self.start, ops, self.operations) +
-              f"{self.tile_coords}: " + Fore.LIGHTBLACK_EX + msg + R, flush=True, end="")
+from renderer.types import TileCoord, Coord
 
 
 def _draw_components(ph,

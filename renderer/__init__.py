@@ -8,4 +8,9 @@ from renderer.objects.skin import *
 from renderer.objects.skinbuilder import *
 from renderer.objects.zoom_params import *
 
-__version__ = '2.2'
+from importlib import metadata
+import toml
+try:
+    __version__ = metadata.version(__package__)
+except metadata.PackageNotFoundError:
+    __version__ = toml.load("pyproject.toml")["tool"]["poetry"]["version"]

@@ -1,0 +1,51 @@
+[tool.poetry]
+name = "tile-renderer"
+version = "2.3"
+description = "Leaflet.js streetmap tile renderer"
+authors = ["7d <i.third.7d@protonmail.com>"]
+license = "gpl-3.0"
+readme = "README.md"
+repository = "https://github.com/MRT-Map/tile-renderer"
+documentation = "https://tile-renderer.rtfd.io"
+keywords = ['leaflet', 'leaflet.js', 'leafletjs', 'map', 'tiles', 'renderer', 'tile-renderer', 'mapping']
+classifiers = [
+    'Development Status :: 5 - Production/Stable',
+    'Intended Audience :: Developers',
+    'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+    'Natural Language :: English',
+    'Programming Language :: Python',
+    'Programming Language :: Python :: 3',
+    'Programming Language :: Python :: 3.9',
+    'Programming Language :: Python :: 3.10',
+]
+packages = [{ include = "renderer" }]
+include = ['skins/*', 'skins/assets/*', 'internals/*', 'builders/*', 'tools/*', 'objects/*', 'tmp/README.txt']
+
+[tool.poetry.dependencies]
+python = "^3.9"
+Pillow = "^9.2.0"
+schema = "^0.7.5"
+numpy = "^1.23.0"
+psutil = "^5.9.1"
+ImageHash = "^4.2.1"
+colorama = "^0.4.5"
+fonttools = "^4.33.3"
+rich = "^12.4.4"
+ray = "^1.13.0"
+PyAutoGUI = {version = "^0.9.53", optional = true }
+toml = "^0.10.2"
+blessed = "^1.19.1"
+
+[tool.poetry.extras]
+builder = ['PyAutoGUI']
+
+[tool.poetry.dev-dependencies]
+wheel = "^0.37.1"
+pip = "^22.1.2"
+
+[tool.poetry.scripts]
+renderer = 'renderer.__main__:cmd'
+
+[build-system]
+requires = ["poetry-core>=1.0.0"]
+build-backend = "poetry.core.masonry.api"
