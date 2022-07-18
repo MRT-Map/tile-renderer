@@ -275,7 +275,7 @@ def render_part1_ray(components: ComponentList,
             
     log.info(f"Rendering components in {len(tile_coords)} tiles...")
     ph = ProgressHandler.remote()
-    cursor = 15
+    cursor = 8
     futures = [ray.remote(_pre_draw_components).remote(ph,
                                                        tile_coord,
                                                        components,
