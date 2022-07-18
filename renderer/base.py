@@ -305,7 +305,7 @@ def render_part1_ray(components: ComponentList,
                 progress.remove_task(ids[id_])
                 del progresses[id_]
                 del ids[id_]
-                if cursor < len(tile_coords):
+                if batch_size < len(tile_coords):
                     futures.append(ray.remote(_pre_draw_components)
                                    .remote(ph,
                                            tile_coords[batch_size],
