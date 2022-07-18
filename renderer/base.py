@@ -265,7 +265,8 @@ def render_part1_ray(components: ComponentList,
                      zoom: ZoomParams,
                      export_id: str,
                      skin: Skin = Skin.from_name("default"),
-                     assets_dir: Path = Path(__file__).parent/"skins"/"assets") -> dict[TileCoord, list[_TextObject]]:
+                     assets_dir: Path = Path(__file__).parent/"skins"/"assets",
+                     batch_size: int = 8) -> dict[TileCoord, list[_TextObject]]:
     tile_coords = []
     for file in glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.0.pkl"))):
         re_result = re.search(fr"_(-?\d+), (-?\d+), (-?\d+)\.0\.pkl$", file)
@@ -275,7 +276,7 @@ def render_part1_ray(components: ComponentList,
             
     log.info(f"Rendering components in {len(tile_coords)} tiles...")
     ph = ProgressHandler.remote()
-    cursor = 8
+    batch_size = 8
     futures = [ray.remote(_pre_draw_components).remote(ph,
                                                        tile_coord,
                                                        components,
@@ -284,7 +285,7 @@ def render_part1_ray(components: ComponentList,
                                                        zoom,
                                                        assets_dir,
                                                        export_id)
-               for tile_coord in tile_coords[:cursor]]
+               for tile_coord in tile_coords[:batch_size]]
     with Progress() as progress:
         main_id = progress.add_task("Rendering components", total=sum(operations.values()))
         ids = {}
@@ -308,14 +309,14 @@ def render_part1_ray(components: ComponentList,
                 if cursor < len(tile_coords):
                     futures.append(ray.remote(_pre_draw_components)
                                    .remote(ph,
-                                           tile_coords[cursor],
+                                           tile_coords[batch_size],
                                            components,
                                            nodes,
                                            skin,
                                            zoom,
                                            assets_dir,
                                            export_id))
-                    cursor += 1
+                    batch_size += 1
     result: list[tuple[TileCoord, list[_TextObject]]] = ray.get(futures)
     return {r[0]: r[1] for r in result}
 
@@ -401,7 +402,8 @@ def render(components: ComponentList,
            assets_dir: Path = Path(__file__).parent/"skins"/"assets",
            processes: int = psutil.cpu_count(),
            tiles: list[TileCoord] | None = None,
-           offset: tuple[RealNum, RealNum] = (0, 0)) -> dict[TileCoord, Image.Image]:
+           offset: tuple[RealNum, RealNum] = (0, 0),
+           batch_size: int = 8) -> dict[TileCoord, Image.Image]:
     # noinspection GrazieInspection
     """
         Renders tiles from given coordinates and zoom values.
@@ -422,6 +424,7 @@ def render(components: ComponentList,
         :type tiles: list[TileCoord] | None
         :param offset: the offset to shift all node coordinates by, given as ``(x,y)``
         :type offset: tuple[RealNum, RealNum]
+        :param int batch_size: The batch size for part 1 of the rendering
 
         :returns: Given in the form of ``{tile_coord: image}``
         :rtype: dict[TileCoord, Image.Image]
@@ -430,6 +433,6 @@ def render(components: ComponentList,
 
     log.info("Initialising Ray...")
     ray.init(num_cpus=processes)
-    render_part1_ray(components, nodes, zoom, export_id, skin, assets_dir)
+    render_part1_ray(components, nodes, zoom, export_id, skin, assets_dir, batch_size)
     render_part2(export_id)
     return render_part3_ray(export_id, skin, save_images, save_dir)
