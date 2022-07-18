@@ -47,6 +47,7 @@ def merge_tiles(images: Path | dict[TileCoord, Image],
     :rtype: dict[int, Image.Image]
     """
     if zoom is None: zoom = []
+    logging.getLogger('PIL').setLevel(logging.CRITICAL)
     image_dict = {}
     tile_return = {}
     if isinstance(images, Path):
@@ -274,6 +275,7 @@ def render_part1_ray(components: ComponentList,
             
     log.info(f"Rendering components in {len(tile_coords)} tiles...")
     ph = ProgressHandler.remote()
+    cursor = 20
     futures = [ray.remote(_pre_draw_components).remote(ph,
                                                        tile_coord,
                                                        components,
@@ -282,7 +284,7 @@ def render_part1_ray(components: ComponentList,
                                                        zoom,
                                                        assets_dir,
                                                        export_id)
-               for tile_coord in track(tile_coords, description="Dispatching tasks")]
+               for tile_coord in tile_coords[:cursor]]
     with Progress() as progress:
         main_id = progress.add_task("Rendering components", total=sum(operations.values()))
         ids = {}
@@ -303,6 +305,17 @@ def render_part1_ray(components: ComponentList,
                 progress.remove_task(ids[id_])
                 del progresses[id_]
                 del ids[id_]
+                if cursor < len(tile_coords):
+                    futures.append(ray.remote(_pre_draw_components)
+                                   .remote(ph,
+                                           tile_coords[cursor],
+                                           components,
+                                           nodes,
+                                           skin,
+                                           zoom,
+                                           assets_dir,
+                                           export_id))
+                    cursor += 1
     result: list[tuple[TileCoord, list[_TextObject]]] = ray.get(futures)
     return {r[0]: r[1] for r in result}
 
@@ -337,7 +350,7 @@ def render_part3_ray(export_id: str,
                                                        save_dir,
                                                        skin,
                                                        export_id)
-               for tile_coord, text_list in new_texts.items()]
+               for tile_coord, text_list in track(new_texts.items(), description="Dispatching tasks")]
     with Progress() as progress:
         main_id = progress.add_task("Rendering texts", total=sum(len(l) for l in new_texts.values()))
         ids = {}
