@@ -106,16 +106,6 @@
     "rail_elevated",
     "intercityRail_elevated",
     "platform",
-    "pedestrianCrossing",
-    "railCrossing",
-    "parking",
-    "bikeRack",
-    "shop",
-    "restaurant",
-    "hotel",
-    "arcade",
-    "supermarket",
-    "clinic",
     "busStop",
     "ferryStop",
     "railStation",
@@ -777,21 +767,12 @@
       "tags": [],
       "type": "area",
       "style": {
-        "0, 1000": [
+        "6, 1000": [
           {
             "layer": "fill",
             "colour": "#dddddd",
             "outline": null,
             "stripe": null
-          },
-          {
-            "layer": "centertext",
-            "colour": "#808080",
-            "offset": [
-              0,
-              0
-            ],
-            "size": 50
           }
         ]
       }
@@ -7406,266 +7387,6 @@
         ]
       }
     },
-    "pedestrianCrossing": {
-      "tags": [],
-      "type": "point",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "image",
-            "file": "pedestriancrossing.png",
-            "offset": [
-              0,
-              0
-            ]
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "size": 32,
-            "offset": [
-              0,
-              32
-            ],
-            "anchor": "mm"
-          }
-        ]
-      }
-    },
-    "railCrossing": {
-      "tags": [],
-      "type": "point",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "image",
-            "file": "pedestriancrossing.png",
-            "offset": [
-              0,
-              0
-            ]
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "size": 32,
-            "offset": [
-              0,
-              32
-            ],
-            "anchor": "mm"
-          }
-        ]
-      }
-    },
-    "parking": {
-      "tags": [],
-      "type": "point",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "image",
-            "file": "parking.png",
-            "offset": [
-              0,
-              0
-            ]
-          },
-          {
-            "layer": "text",
-            "colour": "#0000dc",
-            "size": 32,
-            "offset": [
-              0,
-              32
-            ],
-            "anchor": "mm"
-          }
-        ]
-      }
-    },
-    "bikeRack": {
-      "tags": [],
-      "type": "point",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "image",
-            "file": "bikerack.png",
-            "offset": [
-              0,
-              0
-            ]
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "size": 32,
-            "offset": [
-              0,
-              32
-            ],
-            "anchor": "mm"
-          }
-        ]
-      }
-    },
-    "shop": {
-      "tags": [],
-      "type": "point",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "image",
-            "file": "shop.png",
-            "offset": [
-              0,
-              0
-            ]
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "size": 32,
-            "offset": [
-              0,
-              32
-            ],
-            "anchor": "mm"
-          }
-        ]
-      }
-    },
-    "restaurant": {
-      "tags": [],
-      "type": "point",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "image",
-            "file": "restaurant.png",
-            "offset": [
-              0,
-              0
-            ]
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "size": 32,
-            "offset": [
-              0,
-              32
-            ],
-            "anchor": "mm"
-          }
-        ]
-      }
-    },
-    "hotel": {
-      "tags": [],
-      "type": "point",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "image",
-            "file": "hotel.png",
-            "offset": [
-              0,
-              0
-            ]
-          },
-          {
-            "layer": "text",
-            "colour": "#0000fc",
-            "size": 32,
-            "offset": [
-              0,
-              32
-            ],
-            "anchor": "mm"
-          }
-        ]
-      }
-    },
-    "arcade": {
-      "tags": [],
-      "type": "point",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "image",
-            "file": "arcade.png",
-            "offset": [
-              0,
-              0
-            ]
-          },
-          {
-            "layer": "text",
-            "colour": "#ffdc00",
-            "size": 32,
-            "offset": [
-              0,
-              32
-            ],
-            "anchor": "mm"
-          }
-        ]
-      }
-    },
-    "supermarket": {
-      "tags": [],
-      "type": "point",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "image",
-            "file": "supermarket.png",
-            "offset": [
-              0,
-              0
-            ]
-          },
-          {
-            "layer": "text",
-            "colour": "#000000",
-            "size": 32,
-            "offset": [
-              0,
-              32
-            ],
-            "anchor": "mm"
-          }
-        ]
-      }
-    },
-    "clinic": {
-      "tags": [],
-      "type": "point",
-      "style": {
-        "0, 5": [
-          {
-            "layer": "image",
-            "file": "clinic.png",
-            "offset": [
-              0,
-              0
-            ]
-          },
-          {
-            "layer": "text",
-            "colour": "#ff0303",
-            "size": 32,
-            "offset": [
-              0,
-              32
-            ],
-            "anchor": "mm"
-          }
-        ]
-      }
-    },
     "busStop": {
       "tags": [],
       "type": "point",
@@ -7673,14 +7394,14 @@
         "0, 0": [
           {
             "layer": "square",
-            "colour": "#66ccff",
+            "colour": "#00aaff",
             "outline": null,
             "size": 10,
             "width": 6
           },
           {
             "layer": "text",
-            "colour": "#66ccff",
+            "colour": "#00aaff",
             "size": 12,
             "offset": [
               0,
@@ -7692,14 +7413,14 @@
         "1, 1": [
           {
             "layer": "square",
-            "colour": "#66ccff",
+            "colour": "#00aaff",
             "outline": null,
             "size": 10,
             "width": 6
           },
           {
             "layer": "text",
-            "colour": "#66ccff",
+            "colour": "#00aaff",
             "size": 12,
             "offset": [
               0,

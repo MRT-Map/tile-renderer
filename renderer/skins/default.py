@@ -82,10 +82,19 @@ def main():
     s['waterSmall'] = water_small
 
     land_large = CTI("area")
-    land_large[0:] = [
+    land_large[0:2] = [
         CS.area_fill(colour=0xdddddd),
         CS.area_centertext(colour=0x808080,
                            size=50)
+    ]
+    land_large[3:5] = [
+        CS.area_fill(colour=0xdddddd),
+        CS.area_centertext(colour=0x808080,
+                           size=50)
+    ]
+    land_large = CTI("area")
+    land_large[6:] = [
+        CS.area_fill(colour=0xdddddd)
     ]
     s['landLarge'] = land_large
 
@@ -643,7 +652,7 @@ def main():
     ]
     s['platform'] = platform
 
-    pedestrian_crossing = CTI("point")
+    '''pedestrian_crossing = CTI("point")
     pedestrian_crossing[0:5] = [
         CS.point_image(file=Path("pedestriancrossing.png")),
         CS.point_text(colour=0x000000,
@@ -743,7 +752,7 @@ def main():
     ]
     s['clinic'] = clinic
 
-    '''library = CTI("point")
+    library = CTI("point")
     library[0:5] = [
         CS.point_image(file=Path("library.png")),
         CS.point_text(colour=0x000000,
@@ -857,10 +866,10 @@ def main():
     for i, sq_size, text_size in [(0, 10, 12),
                                   (1, 10, 12)]:
         bus_stop[i] = [
-            CS.point_square(colour=0x66ccff,
+            CS.point_square(colour=0x00aaff,
                             size=sq_size,
                             width=int(2/3*sq_size)),
-            CS.point_text(colour=0x66ccff,
+            CS.point_text(colour=0x00aaff,
                           offset=Coord(0, 20),
                           size=text_size,
                           anchor="mm")
