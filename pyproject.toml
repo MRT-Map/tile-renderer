@@ -22,26 +22,26 @@ packages = [{ include = "renderer" }]
 include = ['skins/*', 'skins/assets/*', 'internals/*', 'builders/*', 'tools/*', 'objects/*', 'tmp/README.txt']
 
 [tool.poetry.dependencies]
-python = "^3.9"
-Pillow = "^9.2.0"
-schema = "^0.7.5"
-numpy = "^1.23.0"
-psutil = "^5.9.1"
-ImageHash = "^4.2.1"
-colorama = "^0.4.5"
-fonttools = "^4.33.3"
-rich = "^12.4.4"
-ray = "^1.13.0"
-PyAutoGUI = {version = "^0.9.53", optional = true }
-toml = "^0.10.2"
-blessed = "^1.19.1"
+python = "~3.9"
+Pillow = "~9.2.0"
+schema = "~0.7.5"
+numpy = "~1.23.1"
+psutil = "~5.9.1"
+ImageHash = "~4.2.1"
+colorama = "~0.4.5"
+fonttools = "~4.34.4"
+rich = "~12.5.1"
+ray = "~1.13.0"
+PyAutoGUI = {version = "~0.9.53", optional = true }
+toml = "~0.10.2"
+blessed = "~1.19.1"
 
 [tool.poetry.extras]
 builder = ['PyAutoGUI']
 
 [tool.poetry.dev-dependencies]
-wheel = "^0.37.1"
-pip = "^22.1.2"
+wheel = "~0.37.1"
+pip = "~22.1.2"
 
 [tool.poetry.scripts]
 renderer = 'renderer.__main__:cmd'
