@@ -160,7 +160,7 @@ def prepare_render(components: ComponentList,
     # offset
     for node in nodes.node_values():
         node.x += offset[0]
-    node.y += offset[1]
+        node.y += offset[1]
 
     log.info("Finding tiles...")
     # finds which tiles to render
