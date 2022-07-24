@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import gc
 import glob
 import logging
 import os
@@ -335,6 +336,7 @@ def render_part1_ray(
         )
 
     operations = _count_num_rendering_oprs(export_id, skin, zoom)
+    gc.collect()
 
     log.info(f"Rendering components in {len(tile_coords)} tiles...")
     ph = ProgressHandler.remote()
@@ -344,6 +346,8 @@ def render_part1_ray(
         )
         for tile_coord in tile_coords[:batch_size]
     ]
+    active_tasks = batch_size
+    cursor = batch_size
     with Progress() as progress:
         main_id = progress.add_task(
             "Rendering components", total=sum(operations.values())
@@ -351,6 +355,21 @@ def render_part1_ray(
         ids = {}
         progresses = {}
         while ray.get(ph.get_complete.remote()) != len(tile_coords):
+            while active_tasks < batch_size and cursor < len(tile_coords):
+                futures.append(
+                    ray.remote(_pre_draw_components).remote(
+                        ph,
+                        tile_coords[cursor],
+                        components,
+                        nodes,
+                        skin,
+                        zoom,
+                        assets_dir,
+                        export_id,
+                    )
+                )
+                cursor += 1
+                active_tasks += 1
             try:
                 id_ = ray.get(ph.get.remote())
             except Empty:
@@ -366,20 +385,7 @@ def render_part1_ray(
                 progress.remove_task(ids[id_])
                 del progresses[id_]
                 del ids[id_]
-                if batch_size < len(tile_coords):
-                    futures.append(
-                        ray.remote(_pre_draw_components).remote(
-                            ph,
-                            tile_coords[batch_size],
-                            components,
-                            nodes,
-                            skin,
-                            zoom,
-                            assets_dir,
-                            export_id,
-                        )
-                    )
-                    batch_size += 1
+                active_tasks -= 1
     result: list[tuple[TileCoord, list[_TextObject]]] = ray.get(futures)
     return {r[0]: r[1] for r in result}
 
@@ -395,7 +401,7 @@ def render_part2(export_id: str) -> tuple[dict[TileCoord, list[_TextObject]], in
     new_texts = rendering._prevent_text_overlap(in_)
     total_texts = sum(len(t) for t in new_texts.values())
     with open(_path_in_tmp(f"{export_id}.2.pkl"), "wb") as f:
-        pickle.dump((new_texts, total_texts), f)  # TODO clean up and dedup
+        pickle.dump((new_texts, total_texts), f)
     for file in track(
         glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.1.pkl"))),
         description="Loading data",
