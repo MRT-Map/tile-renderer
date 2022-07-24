@@ -10,6 +10,7 @@ from renderer.objects.zoom_params import *
 
 from importlib import metadata
 import toml
+
 try:
     __version__ = metadata.version(__package__)
 except metadata.PackageNotFoundError:

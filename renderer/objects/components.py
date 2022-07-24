@@ -16,22 +16,22 @@ class Component:
     def __init__(self, name: str, json: ComponentJson):
         self.name: str = name
         """The name of the component in the main component list."""
-        self.type: str = json['type'].split(" ")[0]
+        self.type: str = json["type"].split(" ")[0]
         """The type of the component."""
-        self.displayname: str = json['displayname']
+        self.displayname: str = json["displayname"]
         """The component's display name."""
-        self.description: str = json['description']
+        self.description: str = json["description"]
         """The component's internal description."""
-        self.layer: RealNum = json['layer']
+        self.layer: RealNum = json["layer"]
         """The layer of the component."""
-        self.nodes: list[str] = json['nodes']
+        self.nodes: list[str] = json["nodes"]
         """The list of nodes that the component is anchored on."""
-        self.hollows: list[list[str]] = [] if 'hollows' not in json else json['hollows']
+        self.hollows: list[list[str]] = [] if "hollows" not in json else json["hollows"]
         """A list of hollow areas, if the ``type`` is ``area``."""
-        self.attrs: dict = json['attrs']
+        self.attrs: dict = json["attrs"]
         """A dictionary of attributes."""
-        if len(json['type'].split(" ")) >= 1:
-            self.tags: list[str] = json['type'].split(" ")[1:]
+        if len(json["type"].split(" ")) >= 1:
+            self.tags: list[str] = json["type"].split(" ")[1:]
             """A list of tags appended at the end of the component's type."""
         else:
             self.tags: list[str] = []
@@ -45,21 +45,28 @@ class Component:
             "layer": self.layer,
             "nodes": self.nodes,
             "hollows": self.hollows,
-            "attrs": self.attrs
+            "attrs": self.attrs,
         }
+
 
 class ComponentList:
     """A list of components.
 
     :param ComponentListJson component_json: The JSON of the list of components.
     :param NodeListJson node_json: The JSON of the list of nodes for validation."""
-    def __init__(self, component_json: ComponentListJson, node_json: NodeListJson ):
-        try: self.components: dict[str, Component] = {name: Component(name, component) for name, component in
-                                                      component_json.items()}
+
+    def __init__(self, component_json: ComponentListJson, node_json: NodeListJson):
+        try:
+            self.components: dict[str, Component] = {
+                name: Component(name, component)
+                for name, component in component_json.items()
+            }
         except Exception:
             self.validate_json(component_json, node_json)
-            self.components: dict[str, Component] = {name: Component(name, component) for name, component in
-                                                     component_json.items()}
+            self.components: dict[str, Component] = {
+                name: Component(name, component)
+                for name, component in component_json.items()
+            }
         """A dictionary of component objects, in the form of ``{id: component}``."""
 
     def __getitem__(self, name: str) -> Component:
@@ -87,16 +94,24 @@ class ComponentList:
 
         :returns: Returns True if no errors
         """
-        schema = Schema({
-            str: {
-                "type": str,
-                "displayname": str,
-                "description": str,
-                "layer": Or(int, float),
-                "nodes": And(list, lambda i: validate.v_node_list(i, NodeList(node_json))),
-                Optional("hollows"): [And(list, lambda i: validate.v_node_list(i, NodeList(node_json)))],
-                "attrs": dict
+        schema = Schema(
+            {
+                str: {
+                    "type": str,
+                    "displayname": str,
+                    "description": str,
+                    "layer": Or(int, float),
+                    "nodes": And(
+                        list, lambda i: validate.v_node_list(i, NodeList(node_json))
+                    ),
+                    Optional("hollows"): [
+                        And(
+                            list, lambda i: validate.v_node_list(i, NodeList(node_json))
+                        )
+                    ],
+                    "attrs": dict,
+                }
             }
-        })
+        )
         schema.validate(component_json)
         return True

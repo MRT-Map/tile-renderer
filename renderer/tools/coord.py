@@ -6,7 +6,10 @@ from renderer.types import *
 
 term = blessed.Terminal()
 
-def to_tiles(coord: Coord, min_zoom: int, max_zoom: int, max_zoom_range: RealNum) -> list[TileCoord]:
+
+def to_tiles(
+    coord: Coord, min_zoom: int, max_zoom: int, max_zoom_range: RealNum
+) -> list[TileCoord]:
     """
     Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
 

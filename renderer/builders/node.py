@@ -4,21 +4,30 @@ import json
 from pyautogui import typewrite
 
 import renderer.internals.internal as internal
+
 term = blessed.Terminal()
+
 
 def input_default(msg: str, default: str):
     print(msg, end="")
     typewrite(default)
     return input()
 
-print(term.yellow("Welcome to the node JSON builder!\n--------------------------------"))
 
-nodes, file_path = internal._ask_file_name("NodeJson") # pylint: disable=no-member
+print(
+    term.yellow("Welcome to the node JSON builder!\n--------------------------------")
+)
 
-print(term.yellow("Ingame, press F3+C once, and paste it here.\n" +
-                  "Type '.exit' to exit\n" +
-                  "Type '.default <name>' to set default name\n" +
-                  "Type '.delete <node>' to delete node"))
+nodes, file_path = internal._ask_file_name("NodeJson")  # pylint: disable=no-member
+
+print(
+    term.yellow(
+        "Ingame, press F3+C once, and paste it here.\n"
+        + "Type '.exit' to exit\n"
+        + "Type '.default <name>' to set default name\n"
+        + "Type '.delete <node>' to delete node"
+    )
+)
 new_nodes = {}
 default_name = ""
 count = 1
@@ -62,10 +71,18 @@ while not e:
 
     name_confirmed = False
     while not name_confirmed:
-        name = input_default(term.yellow("NodeJson name: "), default_name.replace("{num}", str(count)))
+        name = input_default(
+            term.yellow("NodeJson name: "), default_name.replace("{num}", str(count))
+        )
         if name in nodes.keys() or name in new_nodes.keys():
-            print(term.red("NodeJson already exists; do you want to override its current value?"))
-            print(term.red(str(nodes[name] if name in nodes.keys() else new_nodes[name])))
+            print(
+                term.red(
+                    "NodeJson already exists; do you want to override its current value?"
+                )
+            )
+            print(
+                term.red(str(nodes[name] if name in nodes.keys() else new_nodes[name]))
+            )
             if input(term.red("Type 'y' to confirm: ")) != "y":
                 print(term.yellow("Overwritten"))
                 continue

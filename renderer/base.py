@@ -27,12 +27,15 @@ from renderer.objects.skin import Skin, _TextObject
 from renderer.objects.zoom_params import ZoomParams
 from renderer.types import RealNum, TileCoord
 
-_path_in_tmp = lambda file: Path(__file__).parent/"tmp"/file
+_path_in_tmp = lambda file: Path(__file__).parent / "tmp" / file
 
-def merge_tiles(images: Path | dict[TileCoord, Image],
-                save_images: bool=True,
-                save_dir: Path = Path.cwd(),
-                zoom: list[int] | None = None) -> dict[int, Image.Image]:
+
+def merge_tiles(
+    images: Path | dict[TileCoord, Image],
+    save_images: bool = True,
+    save_dir: Path = Path.cwd(),
+    zoom: list[int] | None = None,
+) -> dict[int, Image.Image]:
     """
     Merges tiles rendered by :py:func:`render`.
 
@@ -46,12 +49,15 @@ def merge_tiles(images: Path | dict[TileCoord, Image],
     :returns: Given in the form of ``(Zoom): (PIL Image)``
     :rtype: dict[int, Image.Image]
     """
-    if zoom is None: zoom = []
-    logging.getLogger('PIL').setLevel(logging.CRITICAL)
+    if zoom is None:
+        zoom = []
+    logging.getLogger("PIL").setLevel(logging.CRITICAL)
     image_dict = {}
     tile_return = {}
     if isinstance(images, Path):
-        for d in track(glob.glob(str(images/"*.png")), description="[green]Retrieving images..."):
+        for d in track(
+            glob.glob(str(images / "*.png")), description="[green]Retrieving images..."
+        ):
             regex = re.search(r"(-?\d+, -?\d+, -?\d+)\.png$", d)
             if regex is None:
                 continue
@@ -69,27 +75,36 @@ def merge_tiles(images: Path | dict[TileCoord, Image],
         tile_coords = list(to_merge.keys())
         x_max, x_min, y_max, y_min = tools_tile.find_ends(tile_coords)
         tile_size = list(image_dict.values())[0].size[0]
-        log.info(f"Zoom {z}: [dim white]Creating image {tile_size*(x_max-x_min+1)}x{tile_size*(y_max-y_min+1)}")
-        i = Image.new('RGBA', (tile_size*(x_max-x_min+1), tile_size*(y_max-y_min+1)), (0, 0, 0, 0))
+        log.info(
+            f"Zoom {z}: [dim white]Creating image {tile_size*(x_max-x_min+1)}x{tile_size*(y_max-y_min+1)}"
+        )
+        i = Image.new(
+            "RGBA",
+            (tile_size * (x_max - x_min + 1), tile_size * (y_max - y_min + 1)),
+            (0, 0, 0, 0),
+        )
         px = 0
         py = 0
         merged = 0
-        for x in track(range(x_min, x_max+1), description=f"Zoom {z}: [dim white]Pasting tiles"):
-            for y in range(y_min, y_max+1):
+        for x in track(
+            range(x_min, x_max + 1), description=f"Zoom {z}: [dim white]Pasting tiles"
+        ):
+            for y in range(y_min, y_max + 1):
                 if TileCoord(z, x, y) in to_merge.keys():
                     i.paste(to_merge[TileCoord(z, x, y)], (px, py))
                     merged += 1
                 py += tile_size
             px += tile_size
             py = 0
-        #tile_return[tile_components] = im
+        # tile_return[tile_components] = im
         if save_images:
             log.info(f"Zoom {z}: [dim white]Saving image")
-            i.save(save_dir/f'merge_{z}.png', 'PNG')
+            i.save(save_dir / f"merge_{z}.png", "PNG")
         tile_return[z] = i
 
     log.info("[green]All merges complete")
     return tile_return
+
 
 def _remove_unknown_component_types(components: ComponentList, skin: Skin) -> list[str]:
     remove_list: list[str] = []
@@ -100,8 +115,10 @@ def _remove_unknown_component_types(components: ComponentList, skin: Skin) -> li
         del components.components[component_name]
     return remove_list
 
-def _sort_by_tiles(tiles: list[TileCoord], components: ComponentList,
-                   nodes: NodeList, zoom: ZoomParams) -> dict[TileCoord, list[Component]]:
+
+def _sort_by_tiles(
+    tiles: list[TileCoord], components: ComponentList, nodes: NodeList, zoom: ZoomParams
+) -> dict[TileCoord, list[Component]]:
     tile_list: dict[TileCoord, list[Component]] = {}
     for tile in tiles:
         tile_list[tile] = []
@@ -114,9 +131,13 @@ def _sort_by_tiles(tiles: list[TileCoord], components: ComponentList,
     return tile_list
 
 
-def _process_tiles(tile_list: dict[TileCoord, list[Component]], skin: Skin) -> dict[TileCoord, list[list[Component]]]:
+def _process_tiles(
+    tile_list: dict[TileCoord, list[Component]], skin: Skin
+) -> dict[TileCoord, list[list[Component]]]:
     grouped_tile_list: dict[TileCoord, list[list[Component]]] = {}
-    for tile_coord, tile_components in track(tile_list.items(), description="Processing tiles"):
+    for tile_coord, tile_components in track(
+        tile_list.items(), description="Processing tiles"
+    ):
         # sort components in tiles by layer
         new_tile_components: dict[float, list[Component]] = {}
         for component in tile_components:
@@ -125,8 +146,10 @@ def _process_tiles(tile_list: dict[TileCoord, list[Component]], skin: Skin) -> d
             new_tile_components[component.layer].append(component)
 
         # sort components in layers in files by type
-        new_tile_components = {layer: sorted(component_list, key=lambda x: skin.order.index(x.type))
-                               for layer, component_list in new_tile_components.items()}
+        new_tile_components = {
+            layer: sorted(component_list, key=lambda x: skin.order.index(x.type))
+            for layer, component_list in new_tile_components.items()
+        }
 
         # merge layers
         tile_components = []
@@ -141,22 +164,26 @@ def _process_tiles(tile_list: dict[TileCoord, list[Component]], skin: Skin) -> d
         # for i in range(len(tile_list[tile_components])):
         for i, component in enumerate(tile_components):
             newer_tile_components[-1].append(component)
-            if i != len(tile_components) - 1 \
-                    and (tile_components[i + 1].type != component.type
-                         or "road" not in skin[component.type].tags):
+            if i != len(tile_components) - 1 and (
+                tile_components[i + 1].type != component.type
+                or "road" not in skin[component.type].tags
+            ):
                 newer_tile_components.append([])
         if newer_tile_components != [[]]:
             grouped_tile_list[tile_coord] = newer_tile_components
 
     return grouped_tile_list
 
-def prepare_render(components: ComponentList,
-                   nodes: NodeList,
-                   zoom: ZoomParams,
-                   export_id: str,
-                   skin: Skin = Skin.from_name("default"),
-                   tiles: list[TileCoord] | None = None,
-                   offset: tuple[RealNum, RealNum] = (0, 0)) -> dict[TileCoord, list[list[Component]]]:
+
+def prepare_render(
+    components: ComponentList,
+    nodes: NodeList,
+    zoom: ZoomParams,
+    export_id: str,
+    skin: Skin = Skin.from_name("default"),
+    tiles: list[TileCoord] | None = None,
+    offset: tuple[RealNum, RealNum] = (0, 0),
+) -> dict[TileCoord, list[list[Component]]]:
     # offset
     for node in nodes.node_values():
         node.x += offset[0]
@@ -167,7 +194,9 @@ def prepare_render(components: ComponentList,
     if tiles is not None:
         validate.v_tile_coords(tiles, zoom.min, zoom.max)
     else:  # finds box of tiles
-        tiles = tools_component_json.rendered_in(components, nodes, zoom.min, zoom.max, zoom.range)
+        tiles = tools_component_json.rendered_in(
+            components, nodes, zoom.min, zoom.max, zoom.range
+        )
 
     log.info("Removing components with unknown type...")
     remove_list = _remove_unknown_component_types(components, skin)
@@ -179,40 +208,59 @@ def prepare_render(components: ComponentList,
 
     grouped_tile_list = _process_tiles(tile_list, skin)
 
-    for coord, grouped_components in track(grouped_tile_list.items(), description="Dumping data"):
+    for coord, grouped_components in track(
+        grouped_tile_list.items(), description="Dumping data"
+    ):
         with open(_path_in_tmp(f"{export_id}_{coord}.0.pkl"), "wb") as f:
             pickle.dump(grouped_components, f)
 
     return grouped_tile_list
 
-def _count_num_rendering_oprs(export_id: str,
-                              skin: Skin,
-                              zoom: ZoomParams) -> dict[TileCoord, int]:
+
+def _count_num_rendering_oprs(
+    export_id: str, skin: Skin, zoom: ZoomParams
+) -> dict[TileCoord, int]:
     grouped_tile_list: dict[TileCoord, list[list[Component]]] = {}
-    for file in track(glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.0.pkl"))), description="Loading data"):
+    for file in track(
+        glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.0.pkl"))),
+        description="Loading data",
+    ):
         with open(file, "rb") as f:
-            result = re.search(fr"\b{re.escape(export_id)}_(-?\d+), (-?\d+), (-?\d+)\.0\.pkl$", file)
-            grouped_tile_list[TileCoord(int(result.group(1)), int(result.group(2)), int(result.group(3)))] \
-                = pickle.load(f)
+            result = re.search(
+                rf"\b{re.escape(export_id)}_(-?\d+), (-?\d+), (-?\d+)\.0\.pkl$", file
+            )
+            grouped_tile_list[
+                TileCoord(
+                    int(result.group(1)), int(result.group(2)), int(result.group(3))
+                )
+            ] = pickle.load(f)
 
     tile_operations = 0
     operations = {}
-    for tile_coord, tile_components in track(grouped_tile_list.items(), description="Counting operations"):
+    for tile_coord, tile_components in track(
+        grouped_tile_list.items(), description="Counting operations"
+    ):
         if not tile_components:
             operations[tile_coord] = 0
             continue
 
         for group in tile_components:
-            if not group: continue
+            if not group:
+                continue
             info = skin.types[group[0].type]
             for step in info[zoom.max - tile_coord.z]:
                 tile_operations += len(group)
-                if info.shape == "line" and "road" in info.tags and step.layer == "back":
+                if (
+                    info.shape == "line"
+                    and "road" in info.tags
+                    and step.layer == "back"
+                ):
                     tile_operations += 1
 
         operations[tile_coord] = tile_operations
         tile_operations = 0
     return operations
+
 
 @ray.remote
 class ProgressHandler:
@@ -232,61 +280,74 @@ class ProgressHandler:
     def get_complete(self):
         return self.completed
 
-def _pre_draw_components(ph: ProgressHandler,
-                         tile_coord: TileCoord,
-                         all_components: ComponentList,
-                         nodes: NodeList,
-                         skin: Skin,
-                         zoom: ZoomParams,
-                         assets_dir: Path,
-                         export_id: str) -> tuple[TileCoord, list[_TextObject]]:
+
+def _pre_draw_components(
+    ph: ProgressHandler,
+    tile_coord: TileCoord,
+    all_components: ComponentList,
+    nodes: NodeList,
+    skin: Skin,
+    zoom: ZoomParams,
+    assets_dir: Path,
+    export_id: str,
+) -> tuple[TileCoord, list[_TextObject]]:
     path = _path_in_tmp(f"{export_id}_{tile_coord}.0.pkl")
     with open(path, "rb") as f:
         tile_components = pickle.load(f)
-    logging.getLogger('fontTools').setLevel(logging.CRITICAL)
-    logging.getLogger('PIL').setLevel(logging.CRITICAL)
-    result = rendering._draw_components(ph,
-                                        tile_coord,
-                                        tile_components,
-                                        all_components,
-                                        nodes,
-                                        skin,
-                                        zoom,
-                                        assets_dir,
-                                        export_id)
+    logging.getLogger("fontTools").setLevel(logging.CRITICAL)
+    logging.getLogger("PIL").setLevel(logging.CRITICAL)
+    result = rendering._draw_components(
+        ph,
+        tile_coord,
+        tile_components,
+        all_components,
+        nodes,
+        skin,
+        zoom,
+        assets_dir,
+        export_id,
+    )
     os.remove(path)
     if result is not None:
         with open(_path_in_tmp(f"{export_id}_{tile_coord}.1.pkl"), "wb") as f:
             pickle.dump({result[0]: result[1]}, f)
     return result
 
-def render_part1_ray(components: ComponentList,
-                     nodes: NodeList,
-                     zoom: ZoomParams,
-                     export_id: str,
-                     skin: Skin = Skin.from_name("default"),
-                     assets_dir: Path = Path(__file__).parent/"skins"/"assets",
-                     batch_size: int = 8) -> dict[TileCoord, list[_TextObject]]:
+
+def render_part1_ray(
+    components: ComponentList,
+    nodes: NodeList,
+    zoom: ZoomParams,
+    export_id: str,
+    skin: Skin = Skin.from_name("default"),
+    assets_dir: Path = Path(__file__).parent / "skins" / "assets",
+    batch_size: int = 8,
+) -> dict[TileCoord, list[_TextObject]]:
     tile_coords = []
     for file in glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.0.pkl"))):
-        re_result = re.search(fr"_(-?\d+), (-?\d+), (-?\d+)\.0\.pkl$", file)
-        tile_coords.append(TileCoord(int(re_result.group(1)), int(re_result.group(2)), int(re_result.group(3))))
+        re_result = re.search(rf"_(-?\d+), (-?\d+), (-?\d+)\.0\.pkl$", file)
+        tile_coords.append(
+            TileCoord(
+                int(re_result.group(1)),
+                int(re_result.group(2)),
+                int(re_result.group(3)),
+            )
+        )
 
     operations = _count_num_rendering_oprs(export_id, skin, zoom)
-            
+
     log.info(f"Rendering components in {len(tile_coords)} tiles...")
     ph = ProgressHandler.remote()
-    futures = [ray.remote(_pre_draw_components).remote(ph,
-                                                       tile_coord,
-                                                       components,
-                                                       nodes,
-                                                       skin,
-                                                       zoom,
-                                                       assets_dir,
-                                                       export_id)
-               for tile_coord in tile_coords[:batch_size]]
+    futures = [
+        ray.remote(_pre_draw_components).remote(
+            ph, tile_coord, components, nodes, skin, zoom, assets_dir, export_id
+        )
+        for tile_coord in tile_coords[:batch_size]
+    ]
     with Progress() as progress:
-        main_id = progress.add_task("Rendering components", total=sum(operations.values()))
+        main_id = progress.add_task(
+            "Rendering components", total=sum(operations.values())
+        )
         ids = {}
         progresses = {}
         while ray.get(ph.get_complete.remote()) != len(tile_coords):
@@ -306,36 +367,49 @@ def render_part1_ray(components: ComponentList,
                 del progresses[id_]
                 del ids[id_]
                 if batch_size < len(tile_coords):
-                    futures.append(ray.remote(_pre_draw_components)
-                                   .remote(ph,
-                                           tile_coords[batch_size],
-                                           components,
-                                           nodes,
-                                           skin,
-                                           zoom,
-                                           assets_dir,
-                                           export_id))
+                    futures.append(
+                        ray.remote(_pre_draw_components).remote(
+                            ph,
+                            tile_coords[batch_size],
+                            components,
+                            nodes,
+                            skin,
+                            zoom,
+                            assets_dir,
+                            export_id,
+                        )
+                    )
                     batch_size += 1
     result: list[tuple[TileCoord, list[_TextObject]]] = ray.get(futures)
     return {r[0]: r[1] for r in result}
 
+
 def render_part2(export_id: str) -> tuple[dict[TileCoord, list[_TextObject]], int]:
     in_ = {}
-    for file in track(glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.1.pkl"))), description="Loading data"):
+    for file in track(
+        glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.1.pkl"))),
+        description="Loading data",
+    ):
         with open(file, "rb") as f:
             in_.update(pickle.load(f))
     new_texts = rendering._prevent_text_overlap(in_)
     total_texts = sum(len(t) for t in new_texts.values())
     with open(_path_in_tmp(f"{export_id}.2.pkl"), "wb") as f:
-        pickle.dump((new_texts, total_texts), f) # TODO clean up and dedup
-    for file in track(glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.1.pkl"))), description="Loading data"):
+        pickle.dump((new_texts, total_texts), f)  # TODO clean up and dedup
+    for file in track(
+        glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.1.pkl"))),
+        description="Loading data",
+    ):
         os.remove(file)
     return new_texts, total_texts
 
-def render_part3_ray(export_id: str,
-                     skin: Skin = Skin.from_name("default"),
-                     save_images: bool = True,
-                     save_dir: Path = Path.cwd()) -> dict[TileCoord, Image.Image]:
+
+def render_part3_ray(
+    export_id: str,
+    skin: Skin = Skin.from_name("default"),
+    save_images: bool = True,
+    save_dir: Path = Path.cwd(),
+) -> dict[TileCoord, Image.Image]:
     import ray
 
     with open(_path_in_tmp(f"{export_id}.2.pkl"), "rb") as f:
@@ -343,16 +417,18 @@ def render_part3_ray(export_id: str,
 
     log.info(f"Rendering images in {len(new_texts)} tiles...")
     ph = ProgressHandler.remote()
-    futures = [ray.remote(rendering._draw_text).remote(ph,
-                                                       tile_coord,
-                                                       text_list,
-                                                       save_images,
-                                                       save_dir,
-                                                       skin,
-                                                       export_id)
-               for tile_coord, text_list in track(new_texts.items(), description="Dispatching tasks")]
+    futures = [
+        ray.remote(rendering._draw_text).remote(
+            ph, tile_coord, text_list, save_images, save_dir, skin, export_id
+        )
+        for tile_coord, text_list in track(
+            new_texts.items(), description="Dispatching tasks"
+        )
+    ]
     with Progress() as progress:
-        main_id = progress.add_task("Rendering texts", total=sum(len(l) for l in new_texts.values()))
+        main_id = progress.add_task(
+            "Rendering texts", total=sum(len(l) for l in new_texts.values())
+        )
         ids = {}
         progresses = {}
         while ray.get(ph.get_complete.remote()) != len(new_texts):
@@ -380,54 +456,63 @@ def render_part3_ray(export_id: str,
         k, v = list(i.items())[0]
         result[k] = v
 
-    for file in track(glob.glob(str(Path(__file__).parent / f'tmp/{glob.escape(export_id)}_*.tmp.png')),
-                      description="Cleaning up", transient=True):
+    for file in track(
+        glob.glob(
+            str(Path(__file__).parent / f"tmp/{glob.escape(export_id)}_*.tmp.png")
+        ),
+        description="Cleaning up",
+        transient=True,
+    ):
         os.remove(file)
-    for file in track(glob.glob(str(Path(__file__).parent / f'tmp/{glob.escape(export_id)}.2.pkl')),
-                      description="Cleaning up"):
+    for file in track(
+        glob.glob(str(Path(__file__).parent / f"tmp/{glob.escape(export_id)}.2.pkl")),
+        description="Cleaning up",
+    ):
         os.remove(file)
     log.info("Render complete")
 
     return result
 
 
-def render(components: ComponentList,
-           nodes: NodeList,
-           zoom: ZoomParams,
-           skin: Skin = Skin.from_name("default"),
-           export_id: str = "unnamed",
-           save_images: bool = True,
-           save_dir: Path = Path.cwd(),
-           assets_dir: Path = Path(__file__).parent/"skins"/"assets",
-           processes: int = psutil.cpu_count(),
-           tiles: list[TileCoord] | None = None,
-           offset: tuple[RealNum, RealNum] = (0, 0),
-           batch_size: int = 8) -> dict[TileCoord, Image.Image]:
+def render(
+    components: ComponentList,
+    nodes: NodeList,
+    zoom: ZoomParams,
+    skin: Skin = Skin.from_name("default"),
+    export_id: str = "unnamed",
+    save_images: bool = True,
+    save_dir: Path = Path.cwd(),
+    assets_dir: Path = Path(__file__).parent / "skins" / "assets",
+    processes: int = psutil.cpu_count(),
+    tiles: list[TileCoord] | None = None,
+    offset: tuple[RealNum, RealNum] = (0, 0),
+    batch_size: int = 8,
+) -> dict[TileCoord, Image.Image]:
     # noinspection GrazieInspection
     """
-        Renders tiles from given coordinates and zoom values.
+    Renders tiles from given coordinates and zoom values.
 
-        .. warning::
-            Run this function under ``if __name__ == "__main__"`` if ``use_ray`` is False, or else there would be a lot of multiprocessing RuntimeErrors.
+    .. warning::
+        Run this function under ``if __name__ == "__main__"`` if ``use_ray`` is False, or else there would be a lot of multiprocessing RuntimeErrors.
 
-        :param ComponentList components: a JSON of components
-        :param NodeList nodes: a JSON of nodes
-        :param ZoomParams zoom: a ZoomParams object
-        :param Skin skin: The skin to use for rendering the tiles
-        :param str export_id: The name of the rendering task
-        :param int save_images: whether to save the tile images in a folder or not
-        :param Path save_dir: the directory to save tiles in
-        :param Path assets_dir: the asset directory for the skin
-        :param int processes: The amount of processes to run for rendering
-        :param tiles: a list of tiles to render
-        :type tiles: list[TileCoord] | None
-        :param offset: the offset to shift all node coordinates by, given as ``(x,y)``
-        :type offset: tuple[RealNum, RealNum]
-        :param int batch_size: The batch size for part 1 of the rendering
+    :param ComponentList components: a JSON of components
+    :param NodeList nodes: a JSON of nodes
+    :param ZoomParams zoom: a ZoomParams object
+    :param Skin skin: The skin to use for rendering the tiles
+    :param str export_id: The name of the rendering task
+    :param int save_images: whether to save the tile images in a folder or not
+    :param Path save_dir: the directory to save tiles in
+    :param Path assets_dir: the asset directory for the skin
+    :param int processes: The amount of processes to run for rendering
+    :param tiles: a list of tiles to render
+    :type tiles: list[TileCoord] | None
+    :param offset: the offset to shift all node coordinates by, given as ``(x,y)``
+    :type offset: tuple[RealNum, RealNum]
+    :param int batch_size: The batch size for part 1 of the rendering
 
-        :returns: Given in the form of ``{tile_coord: image}``
-        :rtype: dict[TileCoord, Image.Image]
-        """
+    :returns: Given in the form of ``{tile_coord: image}``
+    :rtype: dict[TileCoord, Image.Image]
+    """
     prepare_render(components, nodes, zoom, export_id, skin, tiles, offset)
 
     log.info("Initialising Ray...")

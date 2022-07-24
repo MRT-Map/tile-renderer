@@ -3,11 +3,12 @@ from typing import Tuple
 
 import blessed
 
-import renderer.internals.internal as internal # type: ignore
+import renderer.internals.internal as internal  # type: ignore
 import renderer.validate as validate
 from renderer.types import *
 
 term = blessed.Terminal()
+
 
 def find_ends(coords: list[TileCoord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]:
     """

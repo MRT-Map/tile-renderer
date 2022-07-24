@@ -9,6 +9,7 @@ from renderer.types import *
 
 term = blessed.Terminal()
 
+
 def find_ends(coords: list[Coord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]:
     """
     Find the minimum and maximum x/y values of a set of coords.
@@ -29,7 +30,10 @@ def find_ends(coords: list[Coord]) -> Tuple[RealNum, RealNum, RealNum, RealNum]:
         y_min = y if y < y_min else y_min
     return x_max, x_min, y_max, y_min
 
-def to_tiles(coords: list[Coord], min_zoom: int, max_zoom: int, max_zoom_range: RealNum) -> list[TileCoord]:
+
+def to_tiles(
+    coords: list[Coord], min_zoom: int, max_zoom: int, max_zoom_range: RealNum
+) -> list[TileCoord]:
     """
     Generates tile coordinates from list of regular coordinates using :py:func:`tools.coord.to_tiles()`. Mainly for rendering whole components.
 
@@ -67,6 +71,8 @@ def to_tiles(coords: list[Coord], min_zoom: int, max_zoom: int, max_zoom_range: 
     yr.append(y_max + 1)
     for x in xr:
         for y in yr:
-            tiles.extend(tools_coord.to_tiles(Coord(x, y), min_zoom, max_zoom, max_zoom_range))
+            tiles.extend(
+                tools_coord.to_tiles(Coord(x, y), min_zoom, max_zoom, max_zoom_range)
+            )
     tiles = list(dict.fromkeys(tiles))
     return tiles
