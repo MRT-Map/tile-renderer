@@ -211,7 +211,7 @@ class Skin:
                 pt_i = Image.new('RGBA', (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0))
                 pt_d = ImageDraw.Draw(pt_i)
                 pt_d.text((text_length, self.size + 4), displayname, fill=self.colour, font=font,
-                          anchor="mm", stroke_width=1, stroke_fill="#dddddd")
+                          anchor="mm", stroke_width=1, stroke_fill="#dddddd", spacing=1)
                 tw, th = pt_i.size
                 pt_i = pt_i.crop((0, 0, pt_i.width, pt_i.height))
                 points_text_list.append(_TextObject(pt_i,
@@ -297,7 +297,7 @@ class Skin:
                         lt_d = ImageDraw.Draw(lt_i)
                         lt_d.text((text_length, self.size + 4), text_to_print,
                                   fill=fill or self.colour, font=font, anchor="mm",
-                                  stroke_width=1, stroke_fill=stroke or "#dddddd")
+                                  stroke_width=1, stroke_fill=stroke or "#dddddd", spacing=1)
                         tw, th = lt_i.size[:]
                         trot = math.atan2(-c2.y+c1.y, c2.x-c1.x)/math.pi*180
                         lt_i = lt_i.rotate(trot, expand=True)
@@ -433,7 +433,7 @@ class Skin:
                             abt_d = ImageDraw.Draw(abt_i)
                             abt_d.text((text_length, self.size + 4), component.displayname.replace('\n', ''),
                                        fill=self.colour, font=font, anchor="mm",
-                                       stroke_width=1, stroke_fill="#dddddd")
+                                       stroke_width=1, stroke_fill="#dddddd", spacing=1)
                             tw, th = abt_i.size[:]
                             abt_ir = abt_i.rotate(trot, expand=True)
                             abt_ir = abt_ir.crop((0, 0, abt_ir.width, abt_ir.height))
@@ -533,7 +533,7 @@ class Skin:
 
                 if component.hollows is not None:
                     for n in component.hollows:
-                        n_coords = _node_list_to_image_coords([n], nodes, self._type_info._skin, tile_coord, size)
+                        n_coords = _node_list_to_image_coords(n, nodes, self._type_info._skin, tile_coord, size)
                         ad.polygon(n_coords, fill=(0, 0, 0, 0))
                 img.paste(ai, (0, 0), ai)
 
@@ -544,7 +544,7 @@ class Skin:
                     outlines = [exterior_outline]
                     if component.hollows is not None:
                         for n in component.hollows:
-                            n_coords = _node_list_to_image_coords([n], nodes, self._type_info._skin, tile_coord, size)
+                            n_coords = _node_list_to_image_coords(n, nodes, self._type_info._skin, tile_coord, size)
                             n_coords.append(n_coords[0])
                             outlines.append(n_coords)
                     for o_coords in outlines:
