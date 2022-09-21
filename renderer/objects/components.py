@@ -61,7 +61,7 @@ class ComponentList:
                 name: Component(name, component)
                 for name, component in component_json.items()
             }
-        except Exception:
+        except (IndexError, KeyError):
             self.validate_json(component_json, node_json)
             self.components: dict[str, Component] = {
                 name: Component(name, component)

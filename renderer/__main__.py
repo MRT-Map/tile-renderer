@@ -24,7 +24,6 @@ def cmd():
         formatter_class=argparse.MetavarTypeHelpFormatter,
     )
 
-
     p_validate = subparsers.add_parser(
         "validate",
         help="validate a JSON file",

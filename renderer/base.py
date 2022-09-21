@@ -28,7 +28,9 @@ from renderer.objects.skin import Skin, _TextObject
 from renderer.objects.zoom_params import ZoomParams
 from renderer.types import RealNum, TileCoord
 
-_path_in_tmp = lambda file: Path(__file__).parent / "tmp" / file
+
+def _path_in_tmp(file: str) -> Path:
+    return Path(__file__).parent / "tmp" / file
 
 
 def merge_tiles(
@@ -499,7 +501,8 @@ def render(
     Renders tiles from given coordinates and zoom values.
 
     .. warning::
-        Run this function under ``if __name__ == "__main__"`` if ``use_ray`` is False, or else there would be a lot of multiprocessing RuntimeErrors.
+        Run this function under ``if __name__ == "__main__"`` if ``use_ray`` is False, or else there would be a lot of
+        multiprocessing RuntimeErrors.
 
     :param ComponentList components: a JSON of components
     :param NodeList nodes: a JSON of nodes

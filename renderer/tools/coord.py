@@ -10,6 +10,7 @@ term = blessed.Terminal()
 def to_tiles(
     coord: Coord, min_zoom: int, max_zoom: int, max_zoom_range: RealNum
 ) -> list[TileCoord]:
+    # noinspection GrazieInspection
     """
     Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
 

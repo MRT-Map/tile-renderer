@@ -7,6 +7,7 @@ from renderer.objects.components import *
 from renderer.objects.skin import *
 from renderer.objects.skinbuilder import *
 from renderer.objects.zoom_params import *
+import renderer.internals
 
 from importlib import metadata
 import toml

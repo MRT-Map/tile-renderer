@@ -12,16 +12,19 @@ def midpoint(
     c1: Coord, c2: Coord, o: RealNum, n: int = 1, return_both: bool = False
 ) -> list[tuple[Coord, RealNum]] | list[list[tuple[Coord, RealNum]]]:
     """
-    Calculates the midpoint of two lines, offsets the distance away from the line, and calculates the rotation of the line.
+    Calculates the midpoint of two lines, offsets the distance away from the line,
+    and calculates the rotation of the line.
 
     :param RealNum c1: the 1st point
     :param RealNum c2: the 2nd point
-    :param RealNum o: the offset from the line. If positive, the point above the line is returned; if negative, the point below the line is returned
+    :param RealNum o: the offset from the line. If positive, the point above the line is returned;
+    if negative, the point below the line is returned
     :param int n: the number of midpoints on a single segment
     :param bool return_both: if True, it will return both possible points.
 
     :return: A list of *(lists of, when return_both=True)* tuples in the form of (Coord, rot)
-    :rtype: list[tuple[Coord, RealNum]] *when return_both=False,* list[list[tuple[Coord, RealNum]]] *when return_both=True*
+    :rtype: list[tuple[Coord, RealNum]] *when return_both=False,* list[list[tuple[Coord, RealNum]]]
+    *when return_both=True*
     """
     # print(c1.x, c1.y, c2.x, c2.y, o, n)
     points = []
@@ -84,7 +87,9 @@ def segments_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
     # https://stackoverflow.com/questions/20677795/how-do-i-compute-the-intersection-point-of-two-lines lol
     xdiff = (c1.x - c2.x, c3.x - c4.x)
     ydiff = (c1.y - c2.y, c3.y - c4.y)
-    det = lambda a, b: a[0] * b[1] - a[1] * b[0]
+
+    def det(a, b):
+        return a[0] * b[1] - a[1] * b[0]
     div = det(xdiff, ydiff)
     if div == 0:
         return False
@@ -240,7 +245,7 @@ def dash(
                 plotted_length += gap_length if is_gap else dash_length
                 is_gap = False if is_gap else True
         for i, (c3, c4) in enumerate(
-            internal._with_next(predashes[(1 if start_as_gap else 0) :])
+            internal._with_next(predashes[(1 if start_as_gap else 0):])
         ):
             if i % 2 == 0 and c3 != c4:
                 dashes.append((c3, c4))

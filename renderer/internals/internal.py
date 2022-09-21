@@ -57,11 +57,11 @@ def _ms_to_time(ms: int | float) -> str:
     s = round(ms / 1000, 1)
     # ms = round(ms % 1000, 2)
     m = math.floor(s / 60)
-    s = s % 60
+    s %= 60
     h = math.floor(m / 60)
-    m = m % 60
+    m %= 60
     d = math.floor(h / 24)
-    h = h % 24
+    h %= 24
     res = ""
     if d != 0:
         res = res + str(d) + "d "
@@ -76,10 +76,6 @@ def _ms_to_time(ms: int | float) -> str:
         res = res + zero + str(round(s, 1)) + "s "
     if res == "":
         res = "00.0s"
-    # if ms != 0:
-    #    pzero = "00" if ms < 10 else "0" if 10 <= ms < 100 else ""
-    #    szero = "0" if len(str(ms).split(".")[1]) == 1 else ""
-    #    res = res + pzero + str(ms) + szero + "ms "
     return res.strip()
 
 
@@ -96,40 +92,41 @@ def _time_remaining(start: int | float, c: int | float, t: int | float) -> float
 
 def _gen_id() -> str:
     def b10_b64(n: int):
-        BASE64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
+        base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
         q = n
         o = ""
         while True:
-            o += BASE64[q % 64]
+            o += base64[q % 64]
             q = math.floor(q / 64)
             if q == 0:
                 break
         return o[::-1]
 
-    decimalId = int(time.time() * 10000000)
-    return b10_b64(decimalId) + "-" + b10_b64(random.randint(1, 64**5))
+    decimal_id = int(time.time() * 10000000)
+    return b10_b64(decimal_id) + "-" + b10_b64(random.randint(1, 64**5))
 
 
 def _ask_file_name(name: str) -> tuple[dict, str]:
-    fileConfirmed = False
-    while not fileConfirmed:
-        filePath = input(
+    file_confirmed = False
+    file_path = ""
+    while not file_confirmed:
+        file_path = input(
             term.yellow(f"Which {name} JSON file are you writing to/referencing? ")
         )
         try:
-            open(filePath, "r")
-            if filePath.endswith(".json"):
-                fileConfirmed = True
+            open(file_path, "r")
+            if file_path.endswith(".json"):
+                file_confirmed = True
             else:
                 print(term.red("File is not a JSON file"))
         except FileNotFoundError:
             print(term.red("File does not exist"))
 
-    with open(filePath, "r") as f:
+    with open(file_path, "r") as f:
         data = json.load(f)
         f.close()
 
-    return data, filePath
+    return data, file_path
 
 
 _T = TypeVar("_T")
@@ -140,8 +137,8 @@ def _similar(s: _T, i: list[_T]):
         print(term.bright_red(f"Perhaps you mean: {', '.join(sim)}"))
 
 
-def _with_next(l: Sequence[_T]) -> Generator[tuple[_T, _T], None, None]:
-    if len(l) > 1:
-        for i, a in enumerate(l[:-1]):
-            b = l[i + 1]
+def _with_next(ls: Sequence[_T]) -> Generator[tuple[_T, _T], None, None]:
+    if len(ls) > 1:
+        for i, a in enumerate(ls[:-1]):
+            b = ls[i + 1]
             yield a, b

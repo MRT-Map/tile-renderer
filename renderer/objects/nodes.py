@@ -29,7 +29,7 @@ class NodeList:
             self.nodes: dict[str, Node] = {
                 name: Node(node) for name, node in json.items()
             }
-        except Exception:
+        except (IndexError, KeyError):
             self.validate_json(json)
             self.nodes: dict[str, Node] = {
                 name: Node(node) for name, node in json.items()
