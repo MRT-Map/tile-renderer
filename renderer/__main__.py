@@ -24,16 +24,6 @@ def cmd():
         formatter_class=argparse.MetavarTypeHelpFormatter,
     )
 
-    subparsers.add_parser(
-        "nodebuilder",
-        help="launch the node builder",
-        formatter_class=argparse.MetavarTypeHelpFormatter,
-    )
-    subparsers.add_parser(
-        "compbuilder",
-        help="launch the component builder",
-        formatter_class=argparse.MetavarTypeHelpFormatter,
-    )
 
     p_validate = subparsers.add_parser(
         "validate",
@@ -181,10 +171,6 @@ def cmd():
         print("PyPI: https://pypi.org/project/tile-renderer/")
         print("Docs: https://tile-renderer.readthedocs.io/en/latest/")
         print("More about OpenMRTMap: https://github.com/MRT-Map")
-    elif args.task == "nodebuilder":
-        import renderer.builders.node  # type: ignore
-    elif args.task == "compbuilder":
-        import renderer.builders.comp  # type: ignore
     elif args.task == "render" and __name__ == "__main__":
         print("Getting nodes...")
         node_json = renderer.internals.internal._read_json(args.nodes)
