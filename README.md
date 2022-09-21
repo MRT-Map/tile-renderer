@@ -21,12 +21,8 @@ Leaflet.js streetmap tile renderer, made by 7d
 
 **Documentation: https://tile-renderer.readthedocs.io/en/latest/**
 
-## Current version: v2.2
-* **v2.2 (13/5/22)**
-
-  * Multiline text is now centered
-  * Improve skin, especially for small zooms
-  * implement memory swapping for images to reduce RAM usage
+## Current version: v3.0
+* **v3.0 (/22)**
 
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**
 
