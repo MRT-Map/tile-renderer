@@ -1,10 +1,11 @@
 from typing import Literal
 
-from schema import Schema, Or, And, Optional
+from schema import And, Optional, Or, Schema
 
 from renderer import validate
 from renderer.objects.nodes import NodeList
-from renderer.types import RealNum, ComponentListJson, NodeListJson, ComponentJson
+from renderer.types import (ComponentJson, ComponentListJson, NodeListJson,
+                            RealNum)
 
 
 class Component:

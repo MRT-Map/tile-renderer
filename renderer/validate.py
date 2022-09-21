@@ -1,6 +1,6 @@
 import math
 
-from schema import Schema, And
+from schema import And, Schema
 
 from renderer.objects.nodes import NodeList
 from renderer.types import *
@@ -26,7 +26,9 @@ def v_coords(coords: list[Coord]) -> Literal[True]:
 
 
 def v_tile_coords(
-    tiles: list[TileCoord], min_zoom: int | Literal[-math.inf], max_zoom: int | Literal[math.inf]
+    tiles: list[TileCoord],
+    min_zoom: int | Literal[-math.inf],
+    max_zoom: int | Literal[math.inf],
 ) -> Literal[True]:
     """
     Validates a list of tile coordinates.

@@ -1,14 +1,15 @@
 from __future__ import annotations
 
-import math
-import json
-from pathlib import Path
-from typing import TypeVar, Any, Generator, Sequence
-import time
-import random
-import blessed
 import difflib
+import json
+import math
+import random
 import re
+import time
+from pathlib import Path
+from typing import Any, Generator, Sequence, TypeVar
+
+import blessed
 
 term = blessed.Terminal()
 

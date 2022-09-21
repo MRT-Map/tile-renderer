@@ -9,11 +9,11 @@ from rich.progress import Progress
 
 import renderer.mathtools as mathtools
 import renderer.tools as tools
-from renderer.objects.components import ComponentList, Component
+from renderer.objects.components import Component, ComponentList
 from renderer.objects.nodes import NodeList
-from renderer.objects.skin import Skin, _TextObject, _node_list_to_image_coords
+from renderer.objects.skin import Skin, _node_list_to_image_coords, _TextObject
 from renderer.objects.zoom_params import ZoomParams
-from renderer.types import TileCoord, Coord
+from renderer.types import Coord, TileCoord
 
 
 def _draw_components(

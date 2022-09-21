@@ -1,4 +1,5 @@
 import math
+
 import blessed
 
 import renderer.internals.internal as internal

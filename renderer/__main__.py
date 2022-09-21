@@ -3,7 +3,6 @@ import glob
 from pathlib import Path
 
 import blessed
-
 import psutil
 
 from renderer.objects.zoom_params import ZoomParams

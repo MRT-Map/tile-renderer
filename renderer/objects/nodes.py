@@ -1,8 +1,8 @@
 from typing import Literal
 
-from schema import Schema, Or
+from schema import Or, Schema
 
-from renderer.types import RealNum, NodeListJson, NodeJson
+from renderer.types import NodeJson, NodeListJson, RealNum
 
 
 class Node:

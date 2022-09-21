@@ -90,6 +90,7 @@ def segments_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
 
     def det(a, b):
         return a[0] * b[1] - a[1] * b[0]
+
     div = det(xdiff, ydiff)
     if div == 0:
         return False
@@ -245,7 +246,7 @@ def dash(
                 plotted_length += gap_length if is_gap else dash_length
                 is_gap = False if is_gap else True
         for i, (c3, c4) in enumerate(
-            internal._with_next(predashes[(1 if start_as_gap else 0):])
+            internal._with_next(predashes[(1 if start_as_gap else 0) :])
         ):
             if i % 2 == 0 and c3 != c4:
                 dashes.append((c3, c4))

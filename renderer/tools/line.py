@@ -3,8 +3,8 @@ from typing import Tuple
 
 import blessed
 
-import renderer.validate as validate
 import renderer.tools.coord as tools_coord
+import renderer.validate as validate
 from renderer.types import *
 
 term = blessed.Terminal()

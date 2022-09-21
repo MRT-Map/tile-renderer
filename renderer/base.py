@@ -7,12 +7,12 @@ import os
 import pickle
 import re
 from pathlib import Path
-from queue import Queue, Empty
+from queue import Empty, Queue
 
 import psutil
 import ray
 from PIL import Image
-from rich.progress import track, Progress
+from rich.progress import Progress, track
 
 import renderer.internals.internal as internal
 import renderer.internals.rendering as rendering
@@ -22,7 +22,7 @@ import renderer.tools.nodes as tools_nodes
 import renderer.tools.tile as tools_tile
 import renderer.validate as validate
 from renderer.internals.logger import log
-from renderer.objects.components import ComponentList, Component
+from renderer.objects.components import Component, ComponentList
 from renderer.objects.nodes import NodeList
 from renderer.objects.skin import Skin, _TextObject
 from renderer.objects.zoom_params import ZoomParams

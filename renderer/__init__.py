@@ -1,16 +1,17 @@
-from renderer.base import merge_tiles, render
+from importlib import metadata
+
+import toml
+
+import renderer.internals
 import renderer.mathtools
-import renderer.validate
 import renderer.types
-from renderer.objects.nodes import *
+import renderer.validate
+from renderer.base import merge_tiles, render
 from renderer.objects.components import *
+from renderer.objects.nodes import *
 from renderer.objects.skin import *
 from renderer.objects.skinbuilder import *
 from renderer.objects.zoom_params import *
-import renderer.internals
-
-from importlib import metadata
-import toml
 
 try:
     __version__ = metadata.version(__package__)

@@ -1,4 +1,4 @@
-from typing import Union, TypedDict, Literal, Any, NamedTuple
+from typing import Any, Literal, NamedTuple, TypedDict, Union
 
 from renderer.internals import internal
 
