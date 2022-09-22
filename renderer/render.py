@@ -18,11 +18,11 @@ import renderer.internals.rendering as rendering
 import renderer.tools.components as tools_component_json
 import renderer.tools.line as tools_line
 import renderer.tools.nodes as tools_nodes
+import renderer.types.pla2
 import renderer.validate as validate
 from renderer.internals.logger import log
 from renderer.types import RealNum, TileCoord
-from renderer.types.components import Component, ComponentList
-from renderer.types.nodes import NodeList
+from renderer.types.pla2 import Pla2File, Component
 from renderer.types.skin import Skin, _TextObject
 from renderer.types.zoom_params import ZoomParams
 
@@ -31,18 +31,18 @@ def _path_in_tmp(file: str) -> Path:
     return Path(__file__).parent / "tmp" / file
 
 
-def _remove_unknown_component_types(components: ComponentList, skin: Skin) -> list[str]:
+def _remove_unknown_component_types(components: Pla2File, skin: Skin) -> list[str]:
     remove_list: list[str] = []
-    for component in components.component_values():
+    for component in components.components:
         if component.type not in skin.order:
-            remove_list.append(component.name)
-    for component_name in remove_list:
-        del components.components[component_name]
+            remove_list.append(component.fid)
+    for component_id in remove_list:
+        del components[component_id]
     return remove_list
 
 
 def _sort_by_tiles(
-    tiles: list[TileCoord], components: ComponentList, nodes: NodeList, zoom: ZoomParams
+    tiles: list[TileCoord], components: Pla2File, zoom: ZoomParams
 ) -> dict[TileCoord, list[Component]]:
     tile_list: dict[TileCoord, list[Component]] = {}
     for tile in tiles:
@@ -57,14 +57,14 @@ def _sort_by_tiles(
 
 
 def _process_tiles(
-    tile_list: dict[TileCoord, list[Component]], skin: Skin
-) -> dict[TileCoord, list[list[Component]]]:
-    grouped_tile_list: dict[TileCoord, list[list[Component]]] = {}
+    tile_list: dict[TileCoord, Pla2File], skin: Skin
+) -> dict[TileCoord, list[Pla2File]]:
+    grouped_tile_list: dict[TileCoord, list[Pla2File]] = {}
     for tile_coord, tile_components in track(
         tile_list.items(), description="Processing tiles"
     ):
         # sort components in tiles by layer
-        new_tile_components: dict[float, list[Component]] = {}
+        new_tile_components: dict[float, Pla2File] = {}
         for component in tile_components:
             if component.layer not in new_tile_components.keys():
                 new_tile_components[component.layer] = []
@@ -84,7 +84,7 @@ def _process_tiles(
                 tile_components.append(component)
 
         # groups components of the same type if "road" tag present
-        newer_tile_components: list[list[Component]] = [[]]
+        newer_tile_components: list[Pla2File] = [[]]
         # keys = list(tile_list[tile_components].keys())
         # for i in range(len(tile_list[tile_components])):
         for i, component in enumerate(tile_components):
@@ -101,14 +101,14 @@ def _process_tiles(
 
 
 def prepare_render(
-    components: ComponentList,
+    components: Pla2File,
     nodes: NodeList,
     zoom: ZoomParams,
     export_id: str,
     skin: Skin = Skin.from_name("default"),
     tiles: list[TileCoord] | None = None,
     offset: tuple[RealNum, RealNum] = (0, 0),
-) -> dict[TileCoord, list[list[Component]]]:
+) -> dict[TileCoord, list[Pla2File]]:
     # offset
     for node in nodes.node_values():
         node.x += offset[0]
@@ -119,7 +119,7 @@ def prepare_render(
     if tiles is not None:
         validate.v_tile_coords(tiles, zoom.min, zoom.max)
     else:  # finds box of tiles
-        tiles = tools_component_json.rendered_in(
+        tiles = renderer.types.pla2.rendered_in(
             components, nodes, zoom.min, zoom.max, zoom.range
         )
 
@@ -145,7 +145,7 @@ def prepare_render(
 def _count_num_rendering_oprs(
     export_id: str, skin: Skin, zoom: ZoomParams
 ) -> dict[TileCoord, int]:
-    grouped_tile_list: dict[TileCoord, list[list[Component]]] = {}
+    grouped_tile_list: dict[TileCoord, list[Pla2File]] = {}
     for file in track(
         glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.0.pkl"))),
         description="Loading data",
@@ -209,7 +209,7 @@ class ProgressHandler:
 def _pre_draw_components(
     ph: ProgressHandler,
     tile_coord: TileCoord,
-    all_components: ComponentList,
+    all_components: Pla2File,
     nodes: NodeList,
     skin: Skin,
     zoom: ZoomParams,
@@ -240,7 +240,7 @@ def _pre_draw_components(
 
 
 def render_part1_ray(
-    components: ComponentList,
+    components: Pla2File,
     nodes: NodeList,
     zoom: ZoomParams,
     export_id: str,
@@ -405,7 +405,7 @@ def render_part3_ray(
 
 
 def render(
-    components: ComponentList,
+    components: Pla2File,
     nodes: NodeList,
     zoom: ZoomParams,
     skin: Skin = Skin.from_name("default"),
@@ -426,7 +426,7 @@ def render(
         Run this function under ``if __name__ == "__main__"`` if ``use_ray`` is False, or else there would be a lot of
         multiprocessing RuntimeErrors.
 
-    :param ComponentList components: a JSON of components
+    :param Pla2File components: a JSON of components
     :param NodeList nodes: a JSON of nodes
     :param ZoomParams zoom: a ZoomParams object
     :param Skin skin: The skin to use for rendering the tiles

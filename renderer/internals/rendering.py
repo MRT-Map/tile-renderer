@@ -19,7 +19,7 @@ from renderer.types.zoom_params import ZoomParams
 def _draw_components(
     ph,
     tile_coord: TileCoord,
-    tile_components: list[list[Component]],
+    tile_components: list[Pla2File],
     all_components: ComponentList,
     nodes: NodeList,
     skin: Skin,

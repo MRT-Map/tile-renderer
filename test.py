@@ -7,6 +7,7 @@ import pytest
 
 import renderer
 import renderer.merge_tiles
+import renderer.types.pla2
 from renderer.types.skin import Skin
 
 
@@ -41,14 +42,14 @@ def test_pytest():
         renderer.merge_tiles.merge_tiles(a, save_images=False)
         return
         # tools
-        renderer.tools.component_json.find_ends(p, n)
-        t = renderer.tools.component_json.rendered_in(p, n, 8, 8, 16)
+        renderer.types.pla2.find_ends(p, n)
+        t = renderer.types.pla2.rendered_in(p, n, 8, 8, 16)
         g = renderer.tools.component_json.to_geo_json(p, n, s)
         renderer.tools.geo_json.to_component_node_json(g)
 
         l = [(0, 0), (1, 1), (2, 2), (3, 3)]
-        renderer.tools.tile.find_ends(t)
-        renderer.tools.line.find_ends(l)
+        renderer.types.pla2.find_ends(t)
+        renderer.types.pla2.find_ends(l)
         renderer.tools.line.to_tiles(l, 8, 8, 16)
 
         nl = n.keys()
