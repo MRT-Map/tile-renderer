@@ -2,7 +2,6 @@ import math
 
 import blessed
 
-import renderer.internals.internal as internal
 from renderer.types import *
 
 term = blessed.Terminal()

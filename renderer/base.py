@@ -22,10 +22,10 @@ import renderer.tools.nodes as tools_nodes
 import renderer.tools.tile as tools_tile
 import renderer.validate as validate
 from renderer.internals.logger import log
-from renderer.objects.components import Component, ComponentList
-from renderer.objects.nodes import NodeList
-from renderer.objects.skin import Skin, _TextObject
-from renderer.objects.zoom_params import ZoomParams
+from renderer.types.components import Component, ComponentList
+from renderer.types.nodes import NodeList
+from renderer.types.skin import Skin, _TextObject
+from renderer.types.zoom_params import ZoomParams
 from renderer.types import RealNum, TileCoord
 
 

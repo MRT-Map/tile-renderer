@@ -2,8 +2,8 @@ import json
 from math import ceil
 from pathlib import Path
 
-from renderer.objects.skinbuilder import (CS, CTI, SkinBuilder, _darken,
-                                          _lighten)
+from renderer.types import (CS, CTI, SkinBuilder, _darken,
+                                  _lighten)
 from renderer.types import Coord
 
 A_ROAD = 0xFFAAAA

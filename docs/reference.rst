@@ -51,11 +51,11 @@ Types
 Objects
 -------
 
-.. automodule:: renderer.objects.components
+.. automodule:: renderer.types.components
    :members:
 
-.. automodule:: renderer.objects.nodes
+.. automodule:: renderer.types.nodes
    :members:
 
-.. automodule:: renderer.objects.skin
+.. automodule:: renderer.types.skin
    :members:

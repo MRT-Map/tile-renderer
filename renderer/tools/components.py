@@ -5,9 +5,9 @@ import blessed
 
 import renderer.internals.internal as internal  # type: ignore
 import renderer.tools as tools
-from renderer.objects.components import ComponentList
-from renderer.objects.nodes import NodeList
-from renderer.objects.skin import Skin
+from renderer.types.components import ComponentList
+from renderer.types.nodes import NodeList
+from renderer.types.skin import Skin
 from renderer.types import *
 
 term = blessed.Terminal()

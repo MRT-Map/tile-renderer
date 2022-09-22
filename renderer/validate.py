@@ -2,7 +2,7 @@ import math
 
 from schema import And, Schema
 
-from renderer.objects.nodes import NodeList
+from renderer.types import NodeList
 from renderer.types import *
 
 

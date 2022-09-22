@@ -3,8 +3,8 @@ from typing import List, Tuple
 import blessed
 
 import renderer.internals.internal as internal  # type: ignore
-from renderer.objects.components import Component, ComponentList
-from renderer.objects.nodes import NodeList
+from renderer.types.components import Component, ComponentList
+from renderer.types.nodes import NodeList
 from renderer.types import Coord
 
 term = blessed.Terminal()

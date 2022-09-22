@@ -5,7 +5,7 @@ from pathlib import Path
 import blessed
 import psutil
 
-from renderer.objects.zoom_params import ZoomParams
+from renderer.types import ZoomParams
 
 
 def cmd():

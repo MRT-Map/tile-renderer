@@ -6,7 +6,7 @@ from pathlib import Path
 import pytest
 
 import renderer
-from renderer.objects.skin import Skin
+from renderer.types.skin import Skin
 
 
 def exampleplaRead() -> dict:
