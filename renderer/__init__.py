@@ -5,11 +5,8 @@ import toml
 import renderer.mathtools
 import renderer.types
 import renderer.validate
-from renderer.base import merge_tiles, render
-from renderer.types import *
-from renderer.types import *
-from renderer.types import *
-from renderer.types import *
+from renderer.merge_tiles import merge_tiles
+from renderer.render import render
 from renderer.types import *
 
 try:

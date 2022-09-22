@@ -6,6 +6,7 @@ from pathlib import Path
 import pytest
 
 import renderer
+import renderer.merge_tiles
 from renderer.types.skin import Skin
 
 
@@ -37,7 +38,7 @@ def test_pytest():
         a = renderer.render(
             p, n, renderer.ZoomParams(8, 8, 8), save_dir=Path("tiles/"), processes=8
         )
-        renderer.merge_tiles(a, save_images=False)
+        renderer.merge_tiles.merge_tiles(a, save_images=False)
         return
         # tools
         renderer.tools.component_json.find_ends(p, n)

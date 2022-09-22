@@ -23,17 +23,18 @@ include = ['skins/*', 'skins/assets/*', 'internals/*', 'builders/*', 'tools/*', 
 
 [tool.poetry.dependencies]
 python = "^3.9,<3.12"
+pydantic = "^1.10.2"
 Pillow = "^9.2.0"
 schema = "^0.7.5"
 numpy = "^1.23.1"
 psutil = "^5.9.1"
 ImageHash = "^4.2.1"
-colorama = "^0.4.5"
 fonttools = "^4.34.4"
 rich = "^12.5.1"
 ray = "^2.0.0"
 toml = "^0.10.2"
 blessed = "^1.19.1"
+nptyping = "^2.3.1"
 
 [tool.poetry.group.dev.dependencies]
 wheel = "^0.37.1"

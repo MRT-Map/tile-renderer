@@ -17,9 +17,9 @@ from schema import And, Optional, Or, Regex, Schema
 
 import renderer.internals.internal as internal
 from renderer import mathtools, tools
-from renderer.types import Component
-from renderer.types import NodeList
 from renderer.types import Coord, RealNum, SkinJson, SkinType, TileCoord
+from renderer.types.components import Component
+from renderer.types.nodes import NodeList
 
 Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=16)
 

@@ -2,8 +2,8 @@ import math
 
 from schema import And, Schema
 
-from renderer.types import NodeList
 from renderer.types import *
+from renderer.types.nodes import NodeList
 
 
 def v_coords(coords: list[Coord]) -> Literal[True]:

@@ -5,6 +5,7 @@ from pathlib import Path
 import blessed
 import psutil
 
+import renderer.merge_tiles
 from renderer.types import ZoomParams
 
 
@@ -220,7 +221,9 @@ def cmd():
             renderer.NodeList.validate_json(nodes)
         print(term.green("Validated"))
     elif args.task == "merge":
-        renderer.merge_tiles(args.image_dir, save_dir=args.save_dir, zoom=args.zoom)
+        renderer.merge_tiles.merge_tiles(
+            args.image_dir, save_dir=args.save_dir, zoom=args.zoom
+        )
     else:
         parser.print_help()
 

@@ -3,9 +3,9 @@ from typing import Literal
 from schema import And, Optional, Or, Schema
 
 from renderer import validate
-from renderer.types.nodes import NodeList
 from renderer.types import (ComponentJson, ComponentListJson, NodeListJson,
-                                  RealNum)
+                            RealNum)
+from renderer.types.nodes import NodeList
 
 
 class Component:
