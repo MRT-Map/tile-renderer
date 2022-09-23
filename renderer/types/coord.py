@@ -6,36 +6,23 @@ from dataclasses import dataclass
 from typing import NamedTuple, TypeVar, Generic, Self
 
 import numpy as np
-from nptyping import NDArray, Shape, Int, Double
+import vector
+from nptyping import NDArray, Shape, Int
+from vector import Vector2D
 
 from renderer.internals import internal
 from renderer.types.zoom_params import ZoomParams
 
 
-class ImageCoord(NamedTuple):
-    x: float
-    y: float
-
-    def __str__(self) -> str:
-        return internal._tuple_to_str((self.x, self.y))
-
-    @functools.cached_property
-    def np(self) -> NDArray[Shape["2"], Double]:
-        return np.array([self.x, self.y])
+_T = TypeVar("_T")
 
 
-class WorldCoord(NamedTuple):
+class ImageCoord(Vector2D):
+    pass
+
+
+class WorldCoord(Vector2D):
     """Represents a coordinate in the form ``(x, y)``."""
-
-    x: int
-    y: int
-
-    def __str__(self) -> str:
-        return internal._tuple_to_str((self.x, self.y))
-
-    @functools.cached_property
-    def np(self) -> NDArray[Shape["2"], Int]:
-        return np.array(self)
 
     def tiles(self, z: ZoomParams) -> list[TileCoord]:
         # noinspection GrazieInspection
@@ -58,9 +45,6 @@ class WorldCoord(NamedTuple):
         return tiles
 
 
-_T = TypeVar("_T")
-
-
 @dataclass
 class Bounds(Generic[_T]):
     x_max: _T
@@ -73,9 +57,9 @@ class WorldLine:
     coords: list[WorldCoord]
 
     @classmethod
-    def validate(cls, v: list[WorldCoord]) -> Self:
+    def validate(cls, v: list[tuple[int, int]]) -> Self:
         c = cls()
-        c.coords = v
+        c.coords = [vector.arr(x, y) for x, y in v]
         return c
 
     @classmethod

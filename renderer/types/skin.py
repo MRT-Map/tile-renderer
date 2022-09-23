@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw, ImageFont
 from schema import And, Optional, Or, Regex, Schema
 
 import renderer.internals.internal as internal
-from renderer import mathtools, tools
+from renderer import math_utils, tools
 from renderer.types import RealNum, SkinJson, SkinType
 from renderer.types.coord import WorldCoord, TileCoord
 from renderer.types.components import Component

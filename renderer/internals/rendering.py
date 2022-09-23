@@ -7,7 +7,7 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 from rich.progress import Progress
 
-import renderer.mathtools as mathtools
+import renderer.math_utils as mathtools
 import renderer.tools as tools
 from renderer.types.coord import WorldCoord, TileCoord
 from renderer.types.components import Component, ComponentList

@@ -4,14 +4,22 @@ import math
 from itertools import product
 
 import numpy as np
+from vector import Vector2D
 
 from renderer.types import *
-from renderer.types.coord import WorldCoord
+
+def midpoint_both_sides(
+        c1: Vector2D,
+        c2: Vector2D,
+        o: int | float,
+        num_midpoints: int = 1
+) -> list[tuple[tuple[Vector2D, float], tuple[Vector2D, float]]]:
+    raise NotImplementedError # TODO
 
 
 def midpoint(
-    c1: WorldCoord, c2: WorldCoord, o: RealNum, n: int = 1, return_both: bool = False
-) -> list[tuple[WorldCoord, RealNum]] | list[list[tuple[WorldCoord, RealNum]]]:
+    c1: Vector2D, c2: Vector2D, o: RealNum, n: int = 1, return_both: bool = False
+) -> list[tuple[Vector2D, RealNum]] | list[list[tuple[Vector2D, RealNum]]]:
     """
     Calculates the midpoint of two lines, offsets the distance away from the line,
     and calculates the rotation of the line.
@@ -23,14 +31,14 @@ def midpoint(
     :param int n: the number of midpoints on a single segment
     :param bool return_both: if True, it will return both possible points.
 
-    :return: A list of *(lists of, when return_both=True)* tuples in the form of (WorldCoord, rot)
-    :rtype: list[tuple[WorldCoord, RealNum]] *when return_both=False,* list[list[tuple[WorldCoord, RealNum]]]
+    :return: A list of *(lists of, when return_both=True)* tuples in the form of (Vector2D, rot)
+    :rtype: list[tuple[Vector2D, RealNum]] *when return_both=False,* list[list[tuple[Vector2D, RealNum]]]
     *when return_both=True*
     """
     # print(c1.x, c1.y, c2.x, c2.y, o, n)
     points = []
     for p in range(1, n + 1):
-        c3 = WorldCoord(
+        c3 = Vector2D(
             c1.x + p * (c2.x - c1.x) / (n + 1), c1.y + p * (c2.y - c1.y) / (n + 1)
         )
         # print(c3.x, c3.y)
@@ -73,7 +81,7 @@ def midpoint(
     return points
 
 
-def segments_intersect(c1: WorldCoord, c2: WorldCoord, c3: WorldCoord, c4: WorldCoord) -> bool:
+def segments_intersect(c1: Vector2D, c2: Vector2D, c3: Vector2D, c4: Vector2D) -> bool:
     """
     Finds if two segments intersect.
 
@@ -106,22 +114,22 @@ def segments_intersect(c1: WorldCoord, c2: WorldCoord, c3: WorldCoord, c4: World
     )
 
 
-def point_in_poly(xp: RealNum, yp: RealNum, coords: list[WorldCoord]) -> bool:
+def point_in_poly(xp: RealNum, yp: RealNum, Vector2Ds: list[Vector2D]) -> bool:
     """
     Finds if a point is in a polygon.
 
-    :param RealNum xp: the x-coordinate of the point.
-    :param RealNum yp: the y-coordinate of the point.
-    :param list[renderer.types.coord.WorldCoord] coords: the coordinates of the polygon; give in ``(x,y)``
+    :param RealNum xp: the x-Vector2Dinate of the point.
+    :param RealNum yp: the y-Vector2Dinate of the point.
+    :param list[renderer.types.Vector2D.Vector2D] Vector2Ds: the Vector2Dinates of the polygon; give in ``(x,y)``
 
     :returns: Whether the point is inside the polygon.
     :rtype: bool
     """
-    if (xp, yp) in coords:
+    if (xp, yp) in Vector2Ds:
         return True
-    coords = np.array(coords)
-    xs = coords[:, 0] - xp
-    ys = coords[:, 1] - yp
+    Vector2Ds = np.array(Vector2Ds)
+    xs = Vector2Ds[:, 0] - xp
+    ys = Vector2Ds[:, 1] - yp
     bearings = np.diff(np.arctan2(ys, xs))
     bearings = np.where(bearings >= -math.pi, bearings, bearings + math.tau)
     bearings = np.where(bearings <= math.pi, bearings, bearings - math.tau)
@@ -129,10 +137,10 @@ def point_in_poly(xp: RealNum, yp: RealNum, coords: list[WorldCoord]) -> bool:
     return wind_num != 0
 
 
-def poly_intersect(poly1: list[WorldCoord], poly2: list[WorldCoord]) -> bool:
-    coords1 = [i for i in internal._with_next(poly1)]
-    coords2 = [i for i in internal._with_next(poly2)]
-    for (c1, c2), (c3, c4) in product(coords1, coords2):
+def poly_intersect(poly1: list[Vector2D], poly2: list[Vector2D]) -> bool:
+    Vector2Ds1 = [i for i in internal._with_next(poly1)]
+    Vector2Ds2 = [i for i in internal._with_next(poly2)]
+    for (c1, c2), (c3, c4) in product(Vector2Ds1, Vector2Ds2):
         if segments_intersect(c1, c2, c3, c4):
             return True
     if all(point_in_poly(x, y, poly2) for x, y in poly1):
@@ -142,30 +150,30 @@ def poly_intersect(poly1: list[WorldCoord], poly2: list[WorldCoord]) -> bool:
     return False
 
 
-def poly_center(coords: list[WorldCoord]) -> WorldCoord:
+def poly_center(Vector2Ds: list[Vector2D]) -> Vector2D:
     """
     Finds the center point of a polygon.
 
-    :param list[renderer.types.coord.WorldCoord] coords: the coordinates of the polygon; give in ``(x,y)``
+    :param list[renderer.types.Vector2D.Vector2D] Vector2Ds: the Vector2Dinates of the polygon; give in ``(x,y)``
 
     :returns: The center of the polygon, given in ``(x,y)``
-    :rtype: renderer.types.coord.WorldCoord
+    :rtype: renderer.types.Vector2D.Vector2D
     """
-    coords = np.array(coords)
-    xs = np.array(np.meshgrid(coords[:, 0], coords[:, 0])).T.reshape(-1, 2)
-    ys = np.array(np.meshgrid(coords[:, 1], coords[:, 1])).T.reshape(-1, 2)
+    Vector2Ds = np.array(Vector2Ds)
+    xs = np.array(np.meshgrid(Vector2Ds[:, 0], Vector2Ds[:, 0])).T.reshape(-1, 2)
+    ys = np.array(np.meshgrid(Vector2Ds[:, 1], Vector2Ds[:, 1])).T.reshape(-1, 2)
     mx = (xs[:, 0] + xs[:, 1]) / 2
     my = (ys[:, 0] + ys[:, 1]) / 2
-    return WorldCoord(mx.sum() / len(mx), my.sum() / len(my))
+    return Vector2D(mx.sum() / len(mx), my.sum() / len(my))
 
 
 def line_in_box(
-    line: list[WorldCoord], top: RealNum, bottom: RealNum, left: RealNum, right: RealNum
+    line: list[Vector2D], top: RealNum, bottom: RealNum, left: RealNum, right: RealNum
 ) -> bool:
     """
     Finds if any nodes of a line go within the box.
 
-    :param list[renderer.types.coord.WorldCoord] line: the line to check for
+    :param list[renderer.types.Vector2D.Vector2D] line: the line to check for
     :param RealNum top: the bounds of the box
     :param RealNum bottom: the bounds of the box
     :param RealNum left: the bounds of the box
@@ -178,10 +186,10 @@ def line_in_box(
         c1 = line[i]
         c2 = line[i + 1]
         for c3, c4 in [
-            (WorldCoord(top, left), WorldCoord(bottom, left)),
-            (WorldCoord(bottom, left), WorldCoord(bottom, right)),
-            (WorldCoord(bottom, right), WorldCoord(top, right)),
-            (WorldCoord(top, right), WorldCoord(top, left)),
+            (Vector2D(top, left), Vector2D(bottom, left)),
+            (Vector2D(bottom, left), Vector2D(bottom, right)),
+            (Vector2D(bottom, right), Vector2D(top, right)),
+            (Vector2D(top, right), Vector2D(top, left)),
         ]:
             if segments_intersect(c1, c2, c3, c4):
                 return True
@@ -192,22 +200,22 @@ def line_in_box(
 
 
 def dash(
-    coords: list[WorldCoord], dash_length: RealNum, gap_length: RealNum
-) -> list[tuple[WorldCoord, WorldCoord]]:
+    Vector2Ds: list[Vector2D], dash_length: RealNum, gap_length: RealNum
+) -> list[tuple[Vector2D, Vector2D]]:
     """
-    Takes a list of coordinates and returns a list of pairs of WorldCoord objects.
+    Takes a list of Vector2Dinates and returns a list of pairs of Vector2D objects.
 
-    :param list[renderer.types.coord.WorldCoord] coords: the coordinates
+    :param list[renderer.types.Vector2D.Vector2D] Vector2Ds: the Vector2Dinates
     :param RealNum dash_length: the length of each dash
     :param RealNum gap_length:RealNum: the length of the gap between dashes
-    :return: a list of pairs of Coords.
+    :return: a list of pairs of Vector2Ds.
     """
     if dash_length <= 0 or gap_length <= 0:
         raise ValueError("dash or gap length cannot be <= 0")
     dashes = []
     is_gap = False
     overflow = 0
-    for c1, c2 in internal._with_next(coords):
+    for c1, c2 in internal._with_next(Vector2Ds):
         predashes = [c1]
         plotted_length = 0
         start_as_gap = is_gap
@@ -225,7 +233,7 @@ def dash(
                 overflow_x = overflow * math.cos(theta)
                 overflow_y = overflow * math.sin(theta)
                 predashes.append(
-                    WorldCoord(predashes[-1].x + overflow_x, predashes[-1].y + overflow_y)
+                    Vector2D(predashes[-1].x + overflow_x, predashes[-1].y + overflow_y)
                 )
                 plotted_length += overflow
                 is_gap = False if is_gap else True
@@ -243,7 +251,7 @@ def dash(
                 )
                 predashes.append(c2)
             else:
-                predashes.append(WorldCoord(predashes[-1].x + dx, predashes[-1].y + dy))
+                predashes.append(Vector2D(predashes[-1].x + dx, predashes[-1].y + dy))
                 plotted_length += gap_length if is_gap else dash_length
                 is_gap = False if is_gap else True
         for i, (c3, c4) in enumerate(
@@ -254,39 +262,39 @@ def dash(
     return dashes
 
 
-def combine_edge_dashes(coords: list[tuple[WorldCoord, WorldCoord]]) -> list[tuple[WorldCoord, ...]]:
+def combine_edge_dashes(Vector2Ds: list[tuple[Vector2D, Vector2D]]) -> list[tuple[Vector2D, ...]]:
     """
     Combines dashes at joints from the output of dash().
 
-    :param coords: list of dashes.
-    :type coords: list[tuple[renderer.types.coord.WorldCoord, renderer.types.coord.WorldCoord]]
+    :param Vector2Ds: list of dashes.
+    :type Vector2Ds: list[tuple[renderer.types.Vector2D.Vector2D, renderer.types.Vector2D.Vector2D]]
     :return: list of combined dashes
     """
-    new_coords = []
-    prev_coord = None
-    for c1, c2 in coords:
-        if prev_coord != c1:
-            new_coords.append((c1, c2))
+    new_Vector2Ds = []
+    prev_Vector2D = None
+    for c1, c2 in Vector2Ds:
+        if prev_Vector2D != c1:
+            new_Vector2Ds.append((c1, c2))
         else:
-            new_coords[-1] = (*new_coords[-1], c2)
-        prev_coord = c2
-    return new_coords
+            new_Vector2Ds[-1] = (*new_Vector2Ds[-1], c2)
+        prev_Vector2D = c2
+    return new_Vector2Ds
 
 
 def rotate_around_pivot(
     x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta: RealNum
-) -> WorldCoord:
+) -> Vector2D:
     """
-    Rotates a set of coordinates around a pivot point.
+    Rotates a set of Vector2Dinates around a pivot point.
 
-    :param RealNum x: the x-coordinate to be rotated
-    :param RealNum y: the y-coordinate to be rotated
-    :param RealNum px: the x-coordinate of the pivot
-    :param RealNum py: the y-coordinate of the pivot
+    :param RealNum x: the x-Vector2Dinate to be rotated
+    :param RealNum y: the y-Vector2Dinate to be rotated
+    :param RealNum px: the x-Vector2Dinate of the pivot
+    :param RealNum py: the y-Vector2Dinate of the pivot
     :param RealNum theta: how many **degrees** to rotate
 
-    :returns: The rotated coordinates, given in ``(x,y)``
-    :rtype: renderer.types.coord.WorldCoord
+    :returns: The rotated Vector2Dinates, given in ``(x,y)``
+    :rtype: renderer.types.Vector2D.Vector2D
     """
     # provide θ in degrees
     theta = math.radians(theta)
@@ -296,7 +304,7 @@ def rotate_around_pivot(
     ny = y * math.cos(theta) + x * math.sin(theta)
     nx += px
     ny += py
-    return WorldCoord(nx, ny)
+    return Vector2D(nx, ny)
 
 
 def points_away(
@@ -305,12 +313,12 @@ def points_away(
     d: RealNum,
     m: RealNum | None = None,
     theta: RealNum | None = None,
-) -> tuple[WorldCoord, WorldCoord]:
+) -> tuple[Vector2D, Vector2D]:
     """
     Finds two points that are a specified distance away from a specified point, all on a straight line.
 
-    :param RealNum x: the x-coordinate of the original point
-    :param RealNum y: the y-coordinate of the original point
+    :param RealNum x: the x-Vector2Dinate of the original point
+    :param RealNum y: the y-Vector2Dinate of the original point
     :param RealNum d: the distance the two points from the original point
     :param m: the gradient of the line. Give ``None`` for a gradient of undefined.
     :type m: RealNum | None
@@ -318,26 +326,26 @@ def points_away(
     :type theta: RealNum | None
 
     :returns: Given in ``(c1, c2)``
-    :rtype: tuple(WorldCoord, WorldCoord)
+    :rtype: tuple(Vector2D, Vector2D)
     """
     theta = (
         theta if theta is not None else math.atan(m) if m is not None else math.pi / 2
     )
     dx = d * math.cos(theta)
     dy = d * math.sin(theta)
-    return WorldCoord(x + dx, y + dy), WorldCoord(x - dx, y - dy)
+    return Vector2D(x + dx, y + dy), Vector2D(x - dx, y - dy)
 
 
-def offset(coords: list[WorldCoord], d: RealNum) -> list[WorldCoord]:
+def offset(Vector2Ds: list[Vector2D], d: RealNum) -> list[Vector2D]:
     """
-    Returns a list of coordinates offset by d along its normal vector.
+    Returns a list of Vector2Dinates offset by d along its normal vector.
 
-    :param list[renderer.types.coord.WorldCoord] coords: the coordinates
+    :param list[renderer.types.Vector2D.Vector2D] Vector2Ds: the Vector2Dinates
     :param RealNum d: the offset distance
-    :rtype: list[renderer.types.coord.WorldCoord]
+    :rtype: list[renderer.types.Vector2D.Vector2D]
     """
     angles = [
-        math.atan2(c2.y - c1.y, c2.x - c1.x) for c1, c2 in internal._with_next(coords)
+        math.atan2(c2.y - c1.y, c2.x - c1.x) for c1, c2 in internal._with_next(Vector2Ds)
     ]
     offsetted_points_pairs = []
     for i, (a1, a2) in enumerate(
@@ -348,12 +356,12 @@ def offset(coords: list[WorldCoord], d: RealNum) -> list[WorldCoord]:
             bisect_angle = a1 + math.pi / 2 if a1 is not None else a2 + math.pi / 2
         else:
             bisect_angle = (a1 + a2 + math.pi) / 2
-        offsetted_points_pairs.append(points_away(*coords[i], d, theta=bisect_angle))
+        offsetted_points_pairs.append(points_away(*Vector2Ds[i], d, theta=bisect_angle))
     pc = (
         offsetted_points_pairs[0][0]
-        if offsetted_points_pairs[0][0].y > coords[0].y
+        if offsetted_points_pairs[0][0].y > Vector2Ds[0].y
         else offsetted_points_pairs[0][0]
-        if offsetted_points_pairs[0][0].x > coords[0].x
+        if offsetted_points_pairs[0][0].x > Vector2Ds[0].x
         else offsetted_points_pairs[0][1]
     )
     pc = (
@@ -369,7 +377,7 @@ def offset(coords: list[WorldCoord], d: RealNum) -> list[WorldCoord]:
     offsetted_points = [pc]
     for i, (c21, c22) in enumerate(offsetted_points_pairs[1:]):
         pc = offsetted_points[-1]
-        if segments_intersect(c22, pc, coords[i], coords[i + 1]):
+        if segments_intersect(c22, pc, Vector2Ds[i], Vector2Ds[i + 1]):
             offsetted_points.append(c21)
         else:
             offsetted_points.append(c22)

@@ -2,7 +2,7 @@ from importlib import metadata
 
 import toml
 
-import renderer.mathtools
+import renderer.math_utils
 import renderer.types
 import renderer.validate
 from renderer.merge_tiles import merge_tiles
