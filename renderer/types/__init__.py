@@ -1,6 +1,4 @@
-from typing import Any, Literal, NamedTuple, TypedDict, Union
-
-from renderer.internals import internal
+from typing import Any, Literal, TypedDict, Union
 
 try:
     from typing import TypeAlias
@@ -9,28 +7,6 @@ except ImportError:
 
 RealNum: TypeAlias = Union[int, float]
 """Represents a real number, either an integer or float."""
-
-
-class Coord(NamedTuple):
-    """Represents a coordinate in the form ``(x, y)``."""
-
-    x: RealNum
-    y: RealNum
-
-    def __str__(self) -> str:
-        return internal._tuple_to_str((self.x, self.y))
-
-
-class TileCoord(NamedTuple):
-    """Represents a tile coordinate in the form ``(z, x, y)``."""
-
-    z: int
-    x: int
-    y: int
-
-    def __str__(self) -> str:
-        return internal._tuple_to_str((self.z, self.x, self.y))
-
 
 NodeJson = TypedDict("NodeJson", {"x": int, "y": int, "connections": list})
 """Represents a node JSON object."""

@@ -9,7 +9,7 @@ from rich.progress import Progress
 
 import renderer.mathtools as mathtools
 import renderer.tools as tools
-from renderer.types import Coord, TileCoord
+from renderer.types.coord import WorldCoord, TileCoord
 from renderer.types.components import Component, ComponentList
 from renderer.types.nodes import NodeList
 from renderer.types.skin import Skin, _node_list_to_image_coords, _TextObject
@@ -198,7 +198,7 @@ def _prevent_text_overlap(
                 progress.advance(prep_id, 1)
             progress.update(prep_id, visible=False)
 
-            no_intersect: list[tuple[Coord]] = []
+            no_intersect: list[tuple[WorldCoord]] = []
             operations = len(text_dict)
             filter_id = progress.add_task(
                 f"Zoom {z}: [dim white]Filtering text", total=operations

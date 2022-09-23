@@ -21,7 +21,8 @@ import renderer.tools.nodes as tools_nodes
 import renderer.types.pla2
 import renderer.validate as validate
 from renderer.internals.logger import log
-from renderer.types import RealNum, TileCoord
+from renderer.types import RealNum
+from renderer.types.coord import TileCoord
 from renderer.types.pla2 import Pla2File, Component
 from renderer.types.skin import Skin, _TextObject
 from renderer.types.zoom_params import ZoomParams

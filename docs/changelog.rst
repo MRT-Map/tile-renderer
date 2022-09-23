@@ -12,7 +12,7 @@ Changelog
   * Moved bulk of rendering code to ComponentStyle classes
   * Redid stud drawing
   * Fix text overlapping with _prevent_text_overlap
-  * most mathtools functions now use Coord and TileCoord
+  * most mathtools functions now use WorldCoord and TileCoord
   * logging improvements
   * _TextObjects now store their bounds instead of their width/heights
   * new dashing algorithm ``mathtools.dash()``

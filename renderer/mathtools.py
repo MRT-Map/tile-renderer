@@ -6,11 +6,12 @@ from itertools import product
 import numpy as np
 
 from renderer.types import *
+from renderer.types.coord import WorldCoord
 
 
 def midpoint(
-    c1: Coord, c2: Coord, o: RealNum, n: int = 1, return_both: bool = False
-) -> list[tuple[Coord, RealNum]] | list[list[tuple[Coord, RealNum]]]:
+    c1: WorldCoord, c2: WorldCoord, o: RealNum, n: int = 1, return_both: bool = False
+) -> list[tuple[WorldCoord, RealNum]] | list[list[tuple[WorldCoord, RealNum]]]:
     """
     Calculates the midpoint of two lines, offsets the distance away from the line,
     and calculates the rotation of the line.
@@ -22,14 +23,14 @@ def midpoint(
     :param int n: the number of midpoints on a single segment
     :param bool return_both: if True, it will return both possible points.
 
-    :return: A list of *(lists of, when return_both=True)* tuples in the form of (Coord, rot)
-    :rtype: list[tuple[Coord, RealNum]] *when return_both=False,* list[list[tuple[Coord, RealNum]]]
+    :return: A list of *(lists of, when return_both=True)* tuples in the form of (WorldCoord, rot)
+    :rtype: list[tuple[WorldCoord, RealNum]] *when return_both=False,* list[list[tuple[WorldCoord, RealNum]]]
     *when return_both=True*
     """
     # print(c1.x, c1.y, c2.x, c2.y, o, n)
     points = []
     for p in range(1, n + 1):
-        c3 = Coord(
+        c3 = WorldCoord(
             c1.x + p * (c2.x - c1.x) / (n + 1), c1.y + p * (c2.y - c1.y) / (n + 1)
         )
         # print(c3.x, c3.y)
@@ -72,7 +73,7 @@ def midpoint(
     return points
 
 
-def segments_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
+def segments_intersect(c1: WorldCoord, c2: WorldCoord, c3: WorldCoord, c4: WorldCoord) -> bool:
     """
     Finds if two segments intersect.
 
@@ -105,13 +106,13 @@ def segments_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
     )
 
 
-def point_in_poly(xp: RealNum, yp: RealNum, coords: list[Coord]) -> bool:
+def point_in_poly(xp: RealNum, yp: RealNum, coords: list[WorldCoord]) -> bool:
     """
     Finds if a point is in a polygon.
 
     :param RealNum xp: the x-coordinate of the point.
     :param RealNum yp: the y-coordinate of the point.
-    :param list[Coord] coords: the coordinates of the polygon; give in ``(x,y)``
+    :param list[renderer.types.coord.WorldCoord] coords: the coordinates of the polygon; give in ``(x,y)``
 
     :returns: Whether the point is inside the polygon.
     :rtype: bool
@@ -128,7 +129,7 @@ def point_in_poly(xp: RealNum, yp: RealNum, coords: list[Coord]) -> bool:
     return wind_num != 0
 
 
-def poly_intersect(poly1: list[Coord], poly2: list[Coord]) -> bool:
+def poly_intersect(poly1: list[WorldCoord], poly2: list[WorldCoord]) -> bool:
     coords1 = [i for i in internal._with_next(poly1)]
     coords2 = [i for i in internal._with_next(poly2)]
     for (c1, c2), (c3, c4) in product(coords1, coords2):
@@ -141,30 +142,30 @@ def poly_intersect(poly1: list[Coord], poly2: list[Coord]) -> bool:
     return False
 
 
-def poly_center(coords: list[Coord]) -> Coord:
+def poly_center(coords: list[WorldCoord]) -> WorldCoord:
     """
     Finds the center point of a polygon.
 
-    :param list[Coord] coords: the coordinates of the polygon; give in ``(x,y)``
+    :param list[renderer.types.coord.WorldCoord] coords: the coordinates of the polygon; give in ``(x,y)``
 
     :returns: The center of the polygon, given in ``(x,y)``
-    :rtype: Coord
+    :rtype: renderer.types.coord.WorldCoord
     """
     coords = np.array(coords)
     xs = np.array(np.meshgrid(coords[:, 0], coords[:, 0])).T.reshape(-1, 2)
     ys = np.array(np.meshgrid(coords[:, 1], coords[:, 1])).T.reshape(-1, 2)
     mx = (xs[:, 0] + xs[:, 1]) / 2
     my = (ys[:, 0] + ys[:, 1]) / 2
-    return Coord(mx.sum() / len(mx), my.sum() / len(my))
+    return WorldCoord(mx.sum() / len(mx), my.sum() / len(my))
 
 
 def line_in_box(
-    line: list[Coord], top: RealNum, bottom: RealNum, left: RealNum, right: RealNum
+    line: list[WorldCoord], top: RealNum, bottom: RealNum, left: RealNum, right: RealNum
 ) -> bool:
     """
     Finds if any nodes of a line go within the box.
 
-    :param list[Coord] line: the line to check for
+    :param list[renderer.types.coord.WorldCoord] line: the line to check for
     :param RealNum top: the bounds of the box
     :param RealNum bottom: the bounds of the box
     :param RealNum left: the bounds of the box
@@ -177,10 +178,10 @@ def line_in_box(
         c1 = line[i]
         c2 = line[i + 1]
         for c3, c4 in [
-            (Coord(top, left), Coord(bottom, left)),
-            (Coord(bottom, left), Coord(bottom, right)),
-            (Coord(bottom, right), Coord(top, right)),
-            (Coord(top, right), Coord(top, left)),
+            (WorldCoord(top, left), WorldCoord(bottom, left)),
+            (WorldCoord(bottom, left), WorldCoord(bottom, right)),
+            (WorldCoord(bottom, right), WorldCoord(top, right)),
+            (WorldCoord(top, right), WorldCoord(top, left)),
         ]:
             if segments_intersect(c1, c2, c3, c4):
                 return True
@@ -191,12 +192,12 @@ def line_in_box(
 
 
 def dash(
-    coords: list[Coord], dash_length: RealNum, gap_length: RealNum
-) -> list[tuple[Coord, Coord]]:
+    coords: list[WorldCoord], dash_length: RealNum, gap_length: RealNum
+) -> list[tuple[WorldCoord, WorldCoord]]:
     """
-    Takes a list of coordinates and returns a list of pairs of Coord objects.
+    Takes a list of coordinates and returns a list of pairs of WorldCoord objects.
 
-    :param list[Coord] coords: the coordinates
+    :param list[renderer.types.coord.WorldCoord] coords: the coordinates
     :param RealNum dash_length: the length of each dash
     :param RealNum gap_length:RealNum: the length of the gap between dashes
     :return: a list of pairs of Coords.
@@ -224,7 +225,7 @@ def dash(
                 overflow_x = overflow * math.cos(theta)
                 overflow_y = overflow * math.sin(theta)
                 predashes.append(
-                    Coord(predashes[-1].x + overflow_x, predashes[-1].y + overflow_y)
+                    WorldCoord(predashes[-1].x + overflow_x, predashes[-1].y + overflow_y)
                 )
                 plotted_length += overflow
                 is_gap = False if is_gap else True
@@ -242,7 +243,7 @@ def dash(
                 )
                 predashes.append(c2)
             else:
-                predashes.append(Coord(predashes[-1].x + dx, predashes[-1].y + dy))
+                predashes.append(WorldCoord(predashes[-1].x + dx, predashes[-1].y + dy))
                 plotted_length += gap_length if is_gap else dash_length
                 is_gap = False if is_gap else True
         for i, (c3, c4) in enumerate(
@@ -253,12 +254,12 @@ def dash(
     return dashes
 
 
-def combine_edge_dashes(coords: list[tuple[Coord, Coord]]) -> list[tuple[Coord, ...]]:
+def combine_edge_dashes(coords: list[tuple[WorldCoord, WorldCoord]]) -> list[tuple[WorldCoord, ...]]:
     """
     Combines dashes at joints from the output of dash().
 
     :param coords: list of dashes.
-    :type coords: list[tuple[Coord, Coord]]
+    :type coords: list[tuple[renderer.types.coord.WorldCoord, renderer.types.coord.WorldCoord]]
     :return: list of combined dashes
     """
     new_coords = []
@@ -274,7 +275,7 @@ def combine_edge_dashes(coords: list[tuple[Coord, Coord]]) -> list[tuple[Coord, 
 
 def rotate_around_pivot(
     x: RealNum, y: RealNum, px: RealNum, py: RealNum, theta: RealNum
-) -> Coord:
+) -> WorldCoord:
     """
     Rotates a set of coordinates around a pivot point.
 
@@ -285,7 +286,7 @@ def rotate_around_pivot(
     :param RealNum theta: how many **degrees** to rotate
 
     :returns: The rotated coordinates, given in ``(x,y)``
-    :rtype: Coord
+    :rtype: renderer.types.coord.WorldCoord
     """
     # provide θ in degrees
     theta = math.radians(theta)
@@ -295,7 +296,7 @@ def rotate_around_pivot(
     ny = y * math.cos(theta) + x * math.sin(theta)
     nx += px
     ny += py
-    return Coord(nx, ny)
+    return WorldCoord(nx, ny)
 
 
 def points_away(
@@ -304,7 +305,7 @@ def points_away(
     d: RealNum,
     m: RealNum | None = None,
     theta: RealNum | None = None,
-) -> tuple[Coord, Coord]:
+) -> tuple[WorldCoord, WorldCoord]:
     """
     Finds two points that are a specified distance away from a specified point, all on a straight line.
 
@@ -317,23 +318,23 @@ def points_away(
     :type theta: RealNum | None
 
     :returns: Given in ``(c1, c2)``
-    :rtype: tuple(Coord, Coord)
+    :rtype: tuple(WorldCoord, WorldCoord)
     """
     theta = (
         theta if theta is not None else math.atan(m) if m is not None else math.pi / 2
     )
     dx = d * math.cos(theta)
     dy = d * math.sin(theta)
-    return Coord(x + dx, y + dy), Coord(x - dx, y - dy)
+    return WorldCoord(x + dx, y + dy), WorldCoord(x - dx, y - dy)
 
 
-def offset(coords: list[Coord], d: RealNum) -> list[Coord]:
+def offset(coords: list[WorldCoord], d: RealNum) -> list[WorldCoord]:
     """
     Returns a list of coordinates offset by d along its normal vector.
 
-    :param list[Coord] coords: the coordinates
+    :param list[renderer.types.coord.WorldCoord] coords: the coordinates
     :param RealNum d: the offset distance
-    :rtype: list[Coord]
+    :rtype: list[renderer.types.coord.WorldCoord]
     """
     angles = [
         math.atan2(c2.y - c1.y, c2.x - c1.x) for c1, c2 in internal._with_next(coords)

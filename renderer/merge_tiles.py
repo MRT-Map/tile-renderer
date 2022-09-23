@@ -8,7 +8,7 @@ from pathlib import Path
 from PIL import Image
 from rich.progress import track
 
-from renderer import TileCoord
+from renderer.types.coord import TileCoord
 from renderer.internals import internal as internal
 from renderer.internals.logger import log
 from renderer.tools import tile as tools_tile

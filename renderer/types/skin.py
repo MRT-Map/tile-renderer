@@ -17,7 +17,8 @@ from schema import And, Optional, Or, Regex, Schema
 
 import renderer.internals.internal as internal
 from renderer import mathtools, tools
-from renderer.types import Coord, RealNum, SkinJson, SkinType, TileCoord
+from renderer.types import RealNum, SkinJson, SkinType
+from renderer.types.coord import WorldCoord, TileCoord
 from renderer.types.components import Component
 from renderer.types.nodes import NodeList
 
@@ -27,8 +28,8 @@ Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=
 @dataclass(eq=True, unsafe_hash=True)
 class _TextObject:
     image: tuple[Image.Image, ...]
-    center: tuple[Coord, ...]
-    bounds: tuple[tuple[Coord, ...]]
+    center: tuple[WorldCoord, ...]
+    bounds: tuple[tuple[WorldCoord, ...]]
 
     def __init__(
         self,
@@ -51,7 +52,7 @@ class _TextObject:
         )
         self.image = (image,)
         self.center = (
-            Coord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),
+            WorldCoord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),
         )
         self.bounds = (
             (
@@ -109,14 +110,14 @@ def _node_list_to_image_coords(
     skin: Skin,
     tile_coord: TileCoord,
     size: RealNum,
-) -> list[Coord]:
+) -> list[WorldCoord]:
     image_coords = []
     for x, y in tools.nodes.to_coords(node_list, nodes):
         xc = x - tile_coord.x * size
         yc = y - tile_coord.y * size
         xs = int(skin.tile_size / size * xc)
         ys = int(skin.tile_size / size * yc)
-        image_coords.append(Coord(xs, ys))
+        image_coords.append(WorldCoord(xs, ys))
     return image_coords
 
 
@@ -281,7 +282,7 @@ class Skin:
                 self.size: int = json["size"]
                 self.width: int = json["width"]
 
-            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord], **_):
+            def render(self, imd: ImageDraw.ImageDraw, coords: list[WorldCoord], **_):
                 imd.ellipse(
                     (
                         coords[0].x - self.size / 2 + 1,
@@ -301,13 +302,13 @@ class Skin:
                 self.layer = "text"
                 self.colour: str | None = json["colour"]
                 self.size: int = json["size"]
-                self.offset: Coord = Coord(*json["offset"])
+                self.offset: WorldCoord = WorldCoord(*json["offset"])
                 self.anchor: str = json["anchor"]
 
             def render(
                 self,
                 imd: ImageDraw,
-                coords: list[Coord],
+                coords: list[WorldCoord],
                 displayname: str,
                 assets_dir: Path,
                 points_text_list: list[_TextObject],
@@ -362,7 +363,7 @@ class Skin:
                 self.size: int = json["size"]
                 self.width: int = json["width"]
 
-            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord], **_):
+            def render(self, imd: ImageDraw.ImageDraw, coords: list[WorldCoord], **_):
                 imd.rectangle(
                     (
                         coords[0].x - self.size / 2 + 1,
@@ -381,10 +382,10 @@ class Skin:
                 self._type_info = type_info
                 self.layer = "image"
                 self.file: Path = Path(json["file"])
-                self.offset: Coord = Coord(*json["offset"])
+                self.offset: WorldCoord = WorldCoord(*json["offset"])
 
             def render(
-                self, img: Image.Image, coords: list[Coord], assets_dir: Path, **_
+                self, img: Image.Image, coords: list[WorldCoord], assets_dir: Path, **_
             ):
                 icon = Image.open(assets_dir / self.file)
                 img.paste(
@@ -412,7 +413,7 @@ class Skin:
                 img: Image.Image,
                 font: ImageFont.FreeTypeFont,
                 text: str,
-                coords: list[Coord],
+                coords: list[WorldCoord],
                 tile_coord: TileCoord,
                 tile_size: int,
                 fill: str | None = None,
@@ -524,7 +525,7 @@ class Skin:
                 self,
                 imd: ImageDraw.ImageDraw,
                 img: Image.Image,
-                coords: list[Coord],
+                coords: list[WorldCoord],
                 assets_dir: Path,
                 component: Component,
                 text_list: list[_TextObject],
@@ -626,7 +627,7 @@ class Skin:
                 self.width: int = json["width"]
                 self.dash: tuple[int, int] = json["dash"]
 
-            def render(self, imd: ImageDraw.ImageDraw, coords: list[Coord], **_):
+            def render(self, imd: ImageDraw.ImageDraw, coords: list[WorldCoord], **_):
                 if self.dash is None:
                     imd.line(coords, fill=self.colour, width=self.width, joint="curve")
                     if "unroundedEnds" not in self._type_info.tags:
@@ -672,7 +673,7 @@ class Skin:
             def render(
                 self,
                 imd: ImageDraw.ImageDraw,
-                coords: list[Coord],
+                coords: list[WorldCoord],
                 component: Component,
                 assets_dir: Path,
                 text_list: list[_TextObject],
@@ -699,7 +700,7 @@ class Skin:
                         t = math.floor(math.dist(c1, c2) / (4 * text_length))
                         t = 1 if t == 0 else t
                         all_points: list[
-                            list[tuple[Coord, RealNum]]
+                            list[tuple[WorldCoord, RealNum]]
                         ] = mathtools.midpoint(
                             c1, c2, self.offset, n=t, return_both=True
                         )
@@ -759,13 +760,13 @@ class Skin:
                 self._type_info = type_info
                 self.layer = "centertext"
                 self.colour: str | None = json["colour"]
-                self.offset: Coord = Coord(*json["offset"])
+                self.offset: WorldCoord = WorldCoord(*json["offset"])
                 self.size: int = json["size"]
 
             def render(
                 self,
                 imd: ImageDraw.ImageDraw,
-                coords: list[Coord],
+                coords: list[WorldCoord],
                 component: Component,
                 assets_dir: Path,
                 text_list: list[_TextObject],
@@ -859,7 +860,7 @@ class Skin:
                 self,
                 imd: ImageDraw.ImageDraw,
                 img: Image.Image,
-                coords: list[Coord],
+                coords: list[WorldCoord],
                 component: Component,
                 nodes: NodeList,
                 tile_coord: TileCoord,
@@ -957,10 +958,10 @@ class Skin:
                 self.type_info: Skin.ComponentTypeInfo = type_info
                 self.layer = "centerimage"
                 self.file: Path = Path(json["file"])
-                self.offset: Coord = Coord(*json["offset"])
+                self.offset: WorldCoord = WorldCoord(*json["offset"])
 
             def render(
-                self, img: Image.Image, coords: list[Coord], assets_dir: Path, **_
+                self, img: Image.Image, coords: list[WorldCoord], assets_dir: Path, **_
             ):
                 cx, cy = mathtools.poly_center(coords)
                 icon = Image.open(assets_dir / self.file)

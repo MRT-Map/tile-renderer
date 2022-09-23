@@ -8,7 +8,8 @@ import numpy as np
 from nptyping import Int, NDArray, Shape
 from pydantic import BaseModel, validator
 
-from renderer import RealNum, tools as tools, TileCoord
+from renderer import RealNum, tools as tools
+from renderer.types.coord import TileCoord, WorldLine, Bounds, WorldCoord
 from renderer.types.zoom_params import ZoomParams
 
 
@@ -19,7 +20,7 @@ class Component(BaseModel):
     description: str
     type: str
     layer: float
-    nodes: list[tuple[int, int]]
+    nodes: WorldLine
     attrs: dict
     tags: list[str]
 
@@ -31,10 +32,16 @@ class Component(BaseModel):
     def fid(self) -> str:
         return f"{self.namespace}-{self.id}"
 
+    def find_components_attached(self, other_components: Pla2File) -> list[tuple[Component, WorldCoord]]:
+        return [(other_component, coord)
+                for other_component in other_components.components
+                for coord in self.nodes
+                if coord in other_component.nodes]
+
     @staticmethod
     def find_ends(
             components: list[Component]
-    ) -> Tuple[RealNum, RealNum, RealNum, RealNum]:
+    ) -> Bounds[int]:
         """
         Finds the minimum and maximum X and Y values of a JSON of components
 
@@ -44,17 +51,13 @@ class Component(BaseModel):
         :returns: Returns in the form `(x_max, x_min, y_max, y_min)`
         :rtype: Tuple[RealNum, RealNum, RealNum, RealNum]
         """
-        x_max = -math.inf
-        x_min = math.inf
-        y_max = -math.inf
-        y_min = math.inf
-        for component in components:
-            for x, y in component.nodes:
-                x_max = x if x > x_max else x_max
-                x_min = x if x < x_min else x_min
-                y_max = y if y > y_max else y_max
-                y_min = y if y < y_min else y_min
-        return x_max, x_min, y_max, y_min
+        bounds = [component.nodes.bounds for component in components]
+        return Bounds(
+            x_max=max(b.x_max for b in bounds),
+            x_min=min(b.x_min for b in bounds),
+            y_max=max(b.y_max for b in bounds),
+            y_min=min(b.y_min for b in bounds)
+        )
 
     @staticmethod
     def rendered_in(
@@ -76,7 +79,7 @@ class Component(BaseModel):
         :raises ValueError: if max_zoom < min_zoom
         """
 
-        return list(set(**tools.line.to_tiles(component.nodes, zoom_params) for component in components))
+        return list(set(*component.nodes.to_tiles(zoom_params) for component in components))
 
 
 class Pla2File(BaseModel):

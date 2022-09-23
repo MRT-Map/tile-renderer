@@ -5,12 +5,14 @@ from schema import And, Schema
 from renderer.types import *
 from renderer.types.nodes import NodeList
 
+from renderer.types.coord import WorldCoord, TileCoord
 
-def v_coords(coords: list[Coord]) -> Literal[True]:
+
+def v_coords(coords: list[WorldCoord]) -> Literal[True]:
     """
     Validates a list of coordinates.
 
-    :param list[Coord] coords: a list of coordinates.
+    :param list[renderer.types.coord.WorldCoord] coords: a list of coordinates.
 
     :returns: Returns True if no errors
     """
@@ -33,7 +35,7 @@ def v_tile_coords(
     """
     Validates a list of tile coordinates.
 
-    :param list[TileCoord] tiles: a list of tile coordinates.
+    :param list[renderer.types.coord.TileCoord] tiles: a list of tile coordinates.
     :param int min_zoom: minimum zoom value
     :param int max_zoom: maximum zoom value
 
