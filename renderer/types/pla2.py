@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import itertools
 import math
 from collections import Counter
 from typing import Tuple
@@ -8,8 +9,9 @@ import numpy as np
 from nptyping import Int, NDArray, Shape
 from pydantic import BaseModel, validator
 
-from renderer import RealNum, tools as tools
-from renderer.types.coord import TileCoord, WorldLine, Bounds, WorldCoord
+from renderer import RealNum
+from renderer import tools as tools
+from renderer.types.coord import Bounds, TileCoord, WorldCoord, WorldLine
 from renderer.types.zoom_params import ZoomParams
 
 
@@ -27,21 +29,23 @@ class Component(BaseModel):
     @property
     def nodes_as_ndarray(self) -> NDArray[Shape["*, 2"], Int]:
         return np.array(self.nodes)
-    
+
     @property
     def fid(self) -> str:
         return f"{self.namespace}-{self.id}"
 
-    def find_components_attached(self, other_components: Pla2File) -> list[tuple[Component, WorldCoord]]:
-        return [(other_component, coord)
-                for other_component in other_components.components
-                for coord in self.nodes
-                if coord in other_component.nodes]
+    def find_components_attached(
+        self, other_components: Pla2File
+    ) -> list[tuple[Component, WorldCoord]]:
+        return [
+            (other_component, coord)
+            for other_component in other_components.components
+            for coord in self.nodes
+            if coord in other_component.nodes
+        ]
 
     @staticmethod
-    def find_ends(
-            components: list[Component]
-    ) -> Bounds[int]:
+    def find_ends(components: list[Component]) -> Bounds[int]:
         """
         Finds the minimum and maximum X and Y values of a JSON of components
 
@@ -56,13 +60,12 @@ class Component(BaseModel):
             x_max=max(b.x_max for b in bounds),
             x_min=min(b.x_min for b in bounds),
             y_max=max(b.y_max for b in bounds),
-            y_min=min(b.y_min for b in bounds)
+            y_min=min(b.y_min for b in bounds),
         )
 
     @staticmethod
     def rendered_in(
-            components: list[Component],
-            zoom_params: ZoomParams
+        components: list[Component], zoom_params: ZoomParams
     ) -> list[TileCoord]:
         """
         Like :py:func:`tools.line.to_tiles`, but for a JSON of components.
@@ -78,8 +81,8 @@ class Component(BaseModel):
 
         :raises ValueError: if max_zoom < min_zoom
         """
-
-        return list(set(*component.nodes.to_tiles(zoom_params) for component in components))
+        tiles = [component.nodes.to_tiles(zoom_params) for component in components]
+        return list(set(itertools.chain(*tiles)))
 
 
 class Pla2File(BaseModel):
@@ -100,7 +103,7 @@ class Pla2File(BaseModel):
 
     def __getitem__(self, id_: str) -> Component:
         return [comp for comp in self.components if comp.fid == id_][0]
-    
+
     def __delitem__(self, id_: str):
         self.components.remove(self[id_])
 

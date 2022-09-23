@@ -9,8 +9,8 @@ from rich.progress import Progress
 
 import renderer.math_utils as mathtools
 import renderer.tools as tools
-from renderer.types.coord import WorldCoord, TileCoord
 from renderer.types.components import Component, ComponentList
+from renderer.types.coord import TileCoord, WorldCoord
 from renderer.types.nodes import NodeList
 from renderer.types.skin import Skin, _node_list_to_image_coords, _TextObject
 from renderer.types.zoom_params import ZoomParams

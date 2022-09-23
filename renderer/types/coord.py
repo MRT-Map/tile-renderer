@@ -3,16 +3,15 @@ from __future__ import annotations
 import functools
 import math
 from dataclasses import dataclass
-from typing import NamedTuple, TypeVar, Generic, Self
+from typing import Generic, NamedTuple, Self, TypeVar
 
 import numpy as np
 import vector
-from nptyping import NDArray, Shape, Int
+from nptyping import Int, NDArray, Shape
 from vector import Vector2D
 
 from renderer.internals import internal
 from renderer.types.zoom_params import ZoomParams
-
 
 _T = TypeVar("_T")
 
@@ -23,6 +22,9 @@ class ImageCoord(Vector2D):
 
 class WorldCoord(Vector2D):
     """Represents a coordinate in the form ``(x, y)``."""
+
+    def __new__(cls, x: int, y: int, **kwargs):
+        return vector.arr(x, y)
 
     def tiles(self, z: ZoomParams) -> list[TileCoord]:
         # noinspection GrazieInspection
@@ -85,12 +87,10 @@ class WorldLine:
             x_max=max(c.x for c in self.coords),
             x_min=min(c.x for c in self.coords),
             y_max=max(c.y for c in self.coords),
-            y_min=min(c.y for c in self.coords)
+            y_min=min(c.y for c in self.coords),
         )
 
-    def to_tiles(
-        self, z: ZoomParams
-    ) -> list[TileCoord]:
+    def to_tiles(self, z: ZoomParams) -> list[TileCoord]:
         """
         Generates tile coordinates from list of regular coordinates using :py:func:`tools.coord.to_tiles()`. Mainly for rendering whole components.
 
@@ -107,13 +107,14 @@ class WorldLine:
             x_max=max(c.x for c in self.coords) + 10,
             x_min=min(c.x for c in self.coords) - 10,
             y_max=max(c.y for c in self.coords) + 10,
-            y_min=min(c.y for c in self.coords) - 10
+            y_min=min(c.y for c in self.coords) - 10,
         )
         xr = list(range(bounds.x_min, bounds.x_max + 1, int(z.range / 2)))
         xr.append(bounds.x_max + 1)
         yr = list(range(bounds.y_min, bounds.y_max + 1, int(z.range / 2)))
         yr.append(bounds.y_max + 1)
-        tiles = list(set(*WorldCoord(x, y).tiles(z) for x in xr for y in yr))
+        tiles = [WorldCoord(x, y).tiles(z) for x in xr for y in yr]
+        tiles = list(set(*tiles))
         return tiles
 
 
@@ -142,5 +143,5 @@ class TileCoord(NamedTuple):
             x_max=max(c.x for c in tile_coords),
             x_min=min(c.x for c in tile_coords),
             y_max=max(c.y for c in tile_coords),
-            y_min=min(c.y for c in tile_coords)
+            y_min=min(c.y for c in tile_coords),
         )

@@ -8,13 +8,11 @@ from vector import Vector2D
 
 from renderer.types import *
 
+
 def midpoint_both_sides(
-        c1: Vector2D,
-        c2: Vector2D,
-        o: int | float,
-        num_midpoints: int = 1
+    c1: Vector2D, c2: Vector2D, o: int | float, num_midpoints: int = 1
 ) -> list[tuple[tuple[Vector2D, float], tuple[Vector2D, float]]]:
-    raise NotImplementedError # TODO
+    raise NotImplementedError  # TODO
 
 
 def midpoint(
@@ -262,7 +260,9 @@ def dash(
     return dashes
 
 
-def combine_edge_dashes(Vector2Ds: list[tuple[Vector2D, Vector2D]]) -> list[tuple[Vector2D, ...]]:
+def combine_edge_dashes(
+    Vector2Ds: list[tuple[Vector2D, Vector2D]]
+) -> list[tuple[Vector2D, ...]]:
     """
     Combines dashes at joints from the output of dash().
 
@@ -345,7 +345,8 @@ def offset(Vector2Ds: list[Vector2D], d: RealNum) -> list[Vector2D]:
     :rtype: list[renderer.types.Vector2D.Vector2D]
     """
     angles = [
-        math.atan2(c2.y - c1.y, c2.x - c1.x) for c1, c2 in internal._with_next(Vector2Ds)
+        math.atan2(c2.y - c1.y, c2.x - c1.x)
+        for c1, c2 in internal._with_next(Vector2Ds)
     ]
     offsetted_points_pairs = []
     for i, (a1, a2) in enumerate(

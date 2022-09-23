@@ -331,7 +331,9 @@ class SkinBuilder:
                 return cs
 
             @classmethod
-            def area_centerimage(cls, *, file: Path, offset: WorldCoord = WorldCoord(0, 0)):
+            def area_centerimage(
+                cls, *, file: Path, offset: WorldCoord = WorldCoord(0, 0)
+            ):
                 cs = cls()
                 cs.json = {"layer": "centerimage", "file": str(file), "offset": offset}
                 return cs
