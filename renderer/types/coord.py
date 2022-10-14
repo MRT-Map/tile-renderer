@@ -3,7 +3,7 @@ from __future__ import annotations
 import functools
 import math
 from dataclasses import dataclass
-from typing import Any, Generator, Generic, NamedTuple, TypeVar, TYPE_CHECKING
+from typing import TYPE_CHECKING, Any, Generator, Generic, NamedTuple, TypeVar
 
 import numpy as np
 from nptyping import Int, NDArray, Shape
@@ -11,8 +11,10 @@ from shapely.geometry import LineString, Point
 
 from renderer import math_utils
 from renderer.internals import internal
+
 if TYPE_CHECKING:
     from renderer.types.skin import Skin
+
 from renderer.types.zoom_params import ZoomParams
 
 _T = TypeVar("_T")

@@ -9,7 +9,6 @@ from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
 
-import blessed
 import imagehash
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont
@@ -1112,9 +1111,7 @@ class Skin:
                         try:
                             schemas[t["type"]][step["layer"]].validate(step)
                         except Exception as e:
-                            term = blessed.Terminal()
-                            print(
-                                term.red(f"Type {n}, range {z}, step {step['layer']}")
-                            )
-                            raise e
+                            raise type(e)(
+                                "Error at type {n}, range {z}, step {step['layer']}"
+                            ) from e
         return True

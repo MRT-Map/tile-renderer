@@ -1,17 +1,16 @@
 import argparse
-import glob
 from pathlib import Path
 
-import blessed
 import psutil
+import vector
 
-from renderer.internals.logger import log
 
-
-def cmd():
+def main():
     import renderer
-
-    term = blessed.Terminal()
+    from renderer.internals.logger import log
+    from renderer.types.pla2 import Pla2File
+    from renderer.types.skin import Skin
+    from renderer.types.zoom_params import ZoomParams
 
     parser = argparse.ArgumentParser()
 
@@ -72,14 +71,11 @@ def cmd():
         "render", help="render tiles", formatter_class=argparse.MetavarTypeHelpFormatter
     )
     p_render.add_argument(
-        "-c",
-        "--components",
+        "-f",
+        "--file",
         required=True,
         type=Path,
-        help="the component JSON file directory",
-    )
-    p_render.add_argument(
-        "-n", "--nodes", required=True, type=Path, help="the node JSON file directory"
+        help="the PLA 2 file to render from",
     )
     p_render.add_argument(
         "-min", "--min_zoom", type=int, required=True, help="minimum zoom value"
@@ -131,13 +127,6 @@ def cmd():
         default=False,
         action="store_true",
     )
-    p_render.add_argument(
-        "-noray",
-        "--no_ray",
-        help="Whether to use Python's multiprocessing instead of ray",
-        default=True,
-        action="store_true",
-    )
 
     p_merge = subparsers.add_parser(
         "merge", help="merge tiles", formatter_class=argparse.MetavarTypeHelpFormatter
@@ -163,65 +152,36 @@ def cmd():
     args = parser.parse_args()
 
     if args.task == "info":
-        log.info(term.yellow(f"tile-renderer v{renderer.__version__}"))
-        log.info(term.yellow("Made by 7d for the OpenMRTMap project"))
+        log.info(f"[yellow]tile-renderer v{renderer.__version__}")
+        log.info(
+            "[yellow]Made by 7d for the OpenMRTMap project of the Minecart Rapid Transit Mapping Services"
+        )
         log.info("Github: https://github.com/MRT-Map/tile-renderer")
         log.info("PyPI: https://pypi.org/project/tile-renderer/")
         log.info("Docs: https://tile-renderer.readthedocs.io/en/latest/")
         log.info("More about OpenMRTMap: https://github.com/MRT-Map")
-    elif args.task == "render" and __name__ == "__main__":
+    elif args.task == "render":
         log.info("Getting components...")
-        comps = renderer.ComponentList(
-            renderer.internals.internal._read_json(args.components), node_json
-        )
+        file = Pla2File(renderer.internals.internal._read_json(args.components))
         log.info("Getting skin...")
-        skin = renderer.Skin.from_name(args.skin)
+        skin = Skin.from_name(args.skin)
         log.info("Starting rendering...")
         renderer.render(
-            comps,
-            nodes,
+            file,
             ZoomParams(args.min_zoom, args.max_zoom, args.max_zoom_range),
             skin=skin,
             save_dir=args.save_dir,
             processes=args.processes,
             tiles=args.tiles,
-            offset=args.offset,
+            offset=vector.obj(x=args.offset[0], y=args.offset[1]),
         )
     elif args.task == "validate":
-        n = renderer.internals.internal._read_json(args.nodes)
-        if args.components is not None:
-            p = renderer.internals.internal._read_json(args.components)
-            renderer.ComponentList.validate_json(p, n)
-        else:
-            renderer.NodeList.validate_json(n)
-        log.info(term.green("Validated"))
+        pass  # TODO
     elif args.task == "vdir":
-        if args.components is not None:
-            if not args.components.endswith("/"):
-                args.components += "/"
-            components = {}
-            for d in glob.glob(glob.escape(args.components)):
-                if d.endswith(args.components_suffix):
-                    components.update(renderer.internals.internal._read_json(d))
-
-        if not args.nodes.endswith("/"):
-            args.nodes += "/"
-        nodes = {}
-        for d in glob.glob(glob.escape(args.nodes) + "*.json"):
-            if d.endswith(args.nodes_suffix + ".json"):
-                nodes.update(renderer.internals.internal._read_json(d))
-
-        if args.components is not None:
-            renderer.ComponentList.validate_json(components, nodes)
-        else:
-            renderer.NodeList.validate_json(nodes)
-        log.info(term.green("Validated"))
-    elif args.task == "merge":
-        renderer.merge_tiles.merge_tiles(
-            args.image_dir, save_dir=args.save_dir, zoom=args.zoom
-        )
+        pass  # TODO
     else:
-        parser.log.info_help()
+        parser.print_help()
 
 
-cmd()
+if __name__ == "__main__":
+    main()

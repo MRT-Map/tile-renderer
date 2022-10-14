@@ -2,8 +2,10 @@ from __future__ import annotations
 
 import itertools
 from collections import Counter
+from pathlib import Path
 from typing import Any, Generator, Tuple
 
+import msgspec.json
 import numpy as np
 from msgspec import Struct
 from nptyping import Int, NDArray, Shape
@@ -80,6 +82,18 @@ class Component(Struct):
 
 class Pla2File(Struct):
     components: list[Component]
+
+    @staticmethod
+    def from_json(file: Path) -> Pla2File:
+        with open(file, "rb") as f:
+            b = f.read()
+        return msgspec.json.Decoder(Pla2File).decode(b).validate()
+
+    @staticmethod
+    def from_msgpack(file: Path) -> Pla2File:
+        with open(file, "rb") as f:
+            b = f.read()
+        return msgspec.msgpack.Decoder(Pla2File).decode(b).validate()
 
     def validate(self) -> Pla2File:
         count = {

@@ -1,17 +1,12 @@
 from __future__ import annotations
 
-import difflib
 import json
 import math
 import random
 import re
 import time
 from pathlib import Path
-from typing import Any, Generator, Iterable, Sequence, TypeVar
-
-import blessed
-
-term = blessed.Terminal()
+from typing import Any, Generator, Iterable, TypeVar
 
 
 def _dedent(text: str) -> str:
@@ -105,37 +100,6 @@ def _gen_id() -> str:
 
     decimal_id = int(time.time() * 10000000)
     return b10_b64(decimal_id) + "-" + b10_b64(random.randint(1, 64**5))
-
-
-def _ask_file_name(name: str) -> tuple[dict, str]:
-    file_confirmed = False
-    file_path = ""
-    while not file_confirmed:
-        file_path = input(
-            term.yellow(f"Which {name} JSON file are you writing to/referencing? ")
-        )
-        try:
-            open(file_path, "r")
-            if file_path.endswith(".json"):
-                file_confirmed = True
-            else:
-                print(term.red("File is not a JSON file"))
-        except FileNotFoundError:
-            print(term.red("File does not exist"))
-
-    with open(file_path, "r") as f:
-        data = json.load(f)
-        f.close()
-
-    return data, file_path
-
-
-_T = TypeVar("_T")
-
-
-def _similar(s: _T, i: list[_T]):
-    if len(sim := difflib.get_close_matches(s, i)) != 0:
-        print(term.bright_red(f"Perhaps you mean: {', '.join(sim)}"))
 
 
 def _with_next(ls: Iterable[_T]) -> Generator[tuple[_T, _T], None, None]:

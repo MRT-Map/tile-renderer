@@ -18,15 +18,10 @@ from vector import Vector2D
 
 import renderer.internals.rendering as rendering
 from renderer.internals.logger import log
-from renderer.types import RealNum
 from renderer.types.coord import TileCoord, WorldCoord, WorldLine
 from renderer.types.pla2 import Component, Pla2File
 from renderer.types.skin import Skin, _TextObject
 from renderer.types.zoom_params import ZoomParams
-
-
-def _path_in_tmp(file: str) -> Path:
-    return Path(__file__).parent / "tmp" / file
 
 
 def _remove_unknown_component_types(components: Pla2File, skin: Skin) -> list[str]:
@@ -104,6 +99,7 @@ def prepare_render(
     skin: Skin = Skin.from_name("default"),
     tiles: list[TileCoord] | None = None,
     offset: Vector2D = vector.obj(x=0, y=0),
+    temp_dir: Path = Path.cwd() / "temp",
 ) -> dict[TileCoord, list[list[Component]]]:
     log.info("Offsetting coordinates...")
     for component in components:
@@ -131,18 +127,18 @@ def prepare_render(
     for coord, grouped_components in track(
         grouped_tile_list.items(), description="Dumping data"
     ):
-        with open(_path_in_tmp(f"{export_id}_{coord}.0.pkl"), "wb") as f:
+        with open(temp_dir / f"{export_id}_{coord}.0.pkl", "wb") as f:
             pickle.dump(grouped_components, f)
 
     return grouped_tile_list
 
 
 def _count_num_rendering_oprs(
-    export_id: str, skin: Skin, zoom: ZoomParams
+    export_id: str, skin: Skin, zoom: ZoomParams, temp_dir: Path
 ) -> dict[TileCoord, int]:
     grouped_tile_list: dict[TileCoord, list[Pla2File]] = {}
     for file in track(
-        glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.0.pkl"))),
+        glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.0.pkl")),
         description="Loading data",
     ):
         with open(file, "rb") as f:
@@ -209,8 +205,9 @@ def _pre_draw_components(
     zoom: ZoomParams,
     assets_dir: Path,
     export_id: str,
+    temp_dir: Path,
 ) -> tuple[TileCoord, list[_TextObject]]:
-    path = _path_in_tmp(f"{export_id}_{tile_coord}.0.pkl")
+    path = temp_dir / f"{export_id}_{tile_coord}.0.pkl"
     with open(path, "rb") as f:
         tile_components = pickle.load(f)
     logging.getLogger("fontTools").setLevel(logging.CRITICAL)
@@ -227,7 +224,7 @@ def _pre_draw_components(
     )
     os.remove(path)
     if result is not None:
-        with open(_path_in_tmp(f"{export_id}_{tile_coord}.1.pkl"), "wb") as f:
+        with open(temp_dir / f"{export_id}_{tile_coord}.1.pkl", "wb") as f:
             pickle.dump({result[0]: result[1]}, f)
     return result
 
@@ -239,9 +236,10 @@ def render_part1_ray(
     skin: Skin = Skin.from_name("default"),
     assets_dir: Path = Path(__file__).parent / "skins" / "assets",
     batch_size: int = 8,
+    temp_dir: Path = Path.cwd() / "temp",
 ) -> dict[TileCoord, list[_TextObject]]:
     tile_coords = []
-    for file in glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.0.pkl"))):
+    for file in glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.0.pkl")):
         re_result = re.search(rf"_(-?\d+), (-?\d+), (-?\d+)\.0\.pkl$", file)
         tile_coords.append(
             TileCoord(
@@ -251,7 +249,7 @@ def render_part1_ray(
             )
         )
 
-    operations = _count_num_rendering_oprs(export_id, skin, zoom)
+    operations = _count_num_rendering_oprs(export_id, skin, zoom, temp_dir)
     gc.collect()
 
     log.info(f"Rendering components in {len(tile_coords)} tiles...")
@@ -305,20 +303,22 @@ def render_part1_ray(
     return {r[0]: r[1] for r in result}
 
 
-def render_part2(export_id: str) -> tuple[dict[TileCoord, list[_TextObject]], int]:
+def render_part2(
+    export_id: str, temp_dir: Path
+) -> tuple[dict[TileCoord, list[_TextObject]], int]:
     in_ = {}
     for file in track(
-        glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.1.pkl"))),
+        glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.1.pkl")),
         description="Loading data",
     ):
         with open(file, "rb") as f:
             in_.update(pickle.load(f))
     new_texts = rendering._prevent_text_overlap(in_)
     total_texts = sum(len(t) for t in new_texts.values())
-    with open(_path_in_tmp(f"{export_id}.2.pkl"), "wb") as f:
+    with open(temp_dir / f"{export_id}.2.pkl", "wb") as f:
         pickle.dump((new_texts, total_texts), f)
     for file in track(
-        glob.glob(str(_path_in_tmp(f"{glob.escape(export_id)}_*.1.pkl"))),
+        glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.1.pkl")),
         description="Loading data",
     ):
         os.remove(file)
@@ -330,11 +330,14 @@ def render_part3_ray(
     skin: Skin = Skin.from_name("default"),
     save_images: bool = True,
     save_dir: Path = Path.cwd(),
+    temp_dir: Path = Path.cwd() / "temp",
 ) -> dict[TileCoord, Image.Image]:
     import ray
 
-    with open(_path_in_tmp(f"{export_id}.2.pkl"), "rb") as f:
+    with open(temp_dir / f"{export_id}.2.pkl", "rb") as f:
         new_texts, total_texts = pickle.load(f)
+    new_texts: dict[TileCoord, list[_TextObject]]
+    total_texts: int
 
     log.info(f"Rendering images in {len(new_texts)} tiles...")
     ph = ProgressHandler.remote()
@@ -348,7 +351,7 @@ def render_part3_ray(
     ]
     with Progress() as progress:
         main_id = progress.add_task(
-            "Rendering texts", total=sum(len(l) for l in new_texts.values())
+            "Rendering texts", total=sum(len(ls) for ls in new_texts.values())
         )
         ids = {}
         progresses = {}
@@ -401,11 +404,12 @@ def render(
     skin: Skin = Skin.from_name("default"),
     export_id: str = "unnamed",
     save_images: bool = True,
-    save_dir: Path = Path.cwd(),
+    save_dir: Path = Path.cwd() / "tiles",
     assets_dir: Path = Path(__file__).parent / "skins" / "assets",
+    temp_dir: Path = Path.cwd() / "temp",
     processes: int = psutil.cpu_count(),
     tiles: list[TileCoord] | None = None,
-    offset: tuple[RealNum, RealNum] = (0, 0),
+    offset: Vector2D = vector.obj(x=0, y=0),
     batch_size: int = 8,
 ) -> dict[TileCoord, Image.Image]:
     # noinspection GrazieInspection
@@ -423,6 +427,7 @@ def render(
     :param int save_images: whether to save the tile images in a folder or not
     :param Path save_dir: the directory to save tiles in
     :param Path assets_dir: the asset directory for the skin
+    :param Path temp_dir: TODO
     :param int processes: The amount of processes to run for rendering
     :param tiles: a list of tiles to render
     :type tiles: list[TileCoord] | None
@@ -433,10 +438,17 @@ def render(
     :returns: Given in the form of ``{tile_coord: image}``
     :rtype: dict[TileCoord, Image.Image]
     """
-    prepare_render(components, zoom, export_id, skin, tiles, offset)
+
+    log.debug("Creating save & temp directories")
+    save_dir.mkdir(exist_ok=True)
+    temp_dir.mkdir(exist_ok=True)
+
+    prepare_render(components, zoom, export_id, skin, tiles, offset, temp_dir)
 
     log.info("Initialising Ray...")
     ray.init(num_cpus=processes)
-    render_part1_ray(components, zoom, export_id, skin, assets_dir, batch_size)
-    render_part2(export_id)
-    return render_part3_ray(export_id, skin, save_images, save_dir)
+    render_part1_ray(
+        components, zoom, export_id, skin, assets_dir, batch_size, temp_dir
+    )
+    render_part2(export_id, temp_dir)
+    return render_part3_ray(export_id, skin, save_images, save_dir, temp_dir)

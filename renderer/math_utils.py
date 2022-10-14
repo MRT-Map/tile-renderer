@@ -8,7 +8,7 @@ import vector
 
 from renderer.internals import internal
 from renderer.types import *
-from renderer.types.coord import Coord, Line, ImageLine
+from renderer.types.coord import Coord, ImageLine, Line
 
 
 def segments_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
@@ -80,7 +80,9 @@ def poly_intersect(poly1: Line, poly2: Line) -> bool:
     return False
 
 
-def dash(coords: ImageLine, dash_length: RealNum, gap_length: RealNum) -> list[ImageLine]:
+def dash(
+    coords: ImageLine, dash_length: RealNum, gap_length: RealNum
+) -> list[ImageLine]:
     """
     Takes a list of coordinates and returns a list of lines.
 
