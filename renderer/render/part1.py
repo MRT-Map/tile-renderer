@@ -1,17 +1,176 @@
 from __future__ import annotations
 
+import gc
+import glob
 import logging
+import os
+import pickle
+import re
 from itertools import chain
 from pathlib import Path
+from queue import Empty
 
+import ray
 from PIL import Image, ImageDraw
-from rich.progress import Progress
+from rich.progress import Progress, track
 
-import renderer.math_utils as math_utils
-from renderer.types.coord import Line, TileCoord, WorldCoord
+from renderer.internals.logger import log
+from renderer.render.utils import ProgressHandler
+from renderer.types.coord import TileCoord, WorldCoord
 from renderer.types.pla2 import Component, Pla2File
 from renderer.types.skin import Skin, _TextObject
 from renderer.types.zoom_params import ZoomParams
+
+
+def _pre_draw_components(
+    ph: ProgressHandler,
+    tile_coord: TileCoord,
+    all_components: Pla2File,
+    skin: Skin,
+    zoom: ZoomParams,
+    assets_dir: Path,
+    export_id: str,
+    temp_dir: Path,
+) -> tuple[TileCoord, list[_TextObject]]:
+    path = temp_dir / f"{export_id}_{tile_coord}.0.pkl"
+    with open(path, "rb") as f:
+        tile_components = pickle.load(f)
+    logging.getLogger("fontTools").setLevel(logging.CRITICAL)
+    logging.getLogger("PIL").setLevel(logging.CRITICAL)
+    result = _draw_components(
+        ph,
+        tile_coord,
+        tile_components,
+        all_components,
+        skin,
+        zoom,
+        assets_dir,
+        export_id,
+    )
+    os.remove(path)
+    if result is not None:
+        with open(temp_dir / f"{export_id}_{tile_coord}.1.pkl", "wb") as f:
+            pickle.dump({result[0]: result[1]}, f)
+    return result
+
+
+def render_part1_ray(
+    components: Pla2File,
+    zoom: ZoomParams,
+    export_id: str,
+    skin: Skin = Skin.from_name("default"),
+    assets_dir: Path = Path(__file__).parent / "skins" / "assets",
+    batch_size: int = 8,
+    temp_dir: Path = Path.cwd() / "temp",
+) -> dict[TileCoord, list[_TextObject]]:
+    tile_coords = []
+    for file in glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.0.pkl")):
+        re_result = re.search(rf"_(-?\d+), (-?\d+), (-?\d+)\.0\.pkl$", file)
+        tile_coords.append(
+            TileCoord(
+                int(re_result.group(1)),
+                int(re_result.group(2)),
+                int(re_result.group(3)),
+            )
+        )
+
+    operations = _count_num_rendering_oprs(export_id, skin, zoom, temp_dir)
+    gc.collect()
+
+    log.info(f"Rendering components in {len(tile_coords)} tiles...")
+    ph = ProgressHandler.remote()
+    futures = [
+        ray.remote(_pre_draw_components).remote(
+            ph, tile_coord, components, skin, zoom, assets_dir, export_id
+        )
+        for tile_coord in tile_coords[:batch_size]
+    ]
+    active_tasks = batch_size
+    cursor = batch_size
+    with Progress() as progress:
+        main_id = progress.add_task(
+            "Rendering components", total=sum(operations.values())
+        )
+        ids = {}
+        progresses = {}
+        while ray.get(ph.get_complete.remote()) != len(tile_coords):
+            while active_tasks < batch_size and cursor < len(tile_coords):
+                futures.append(
+                    ray.remote(_pre_draw_components).remote(
+                        ph,
+                        tile_coords[cursor],
+                        components,
+                        skin,
+                        zoom,
+                        assets_dir,
+                        export_id,
+                    )
+                )
+                cursor += 1
+                active_tasks += 1
+            try:
+                id_ = ray.get(ph.get.remote())
+            except Empty:
+                continue
+            if id_ not in ids:
+                ids[id_] = progress.add_task(str(id_), total=operations[id_])
+                progresses[id_] = 0
+            progress.advance(ids[id_], 1)
+            progress.advance(main_id, 1)
+            progresses[id_] += 1
+            if operations[id_] <= progresses[id_]:
+                progress.update(ids[id_], visible=False)
+                progress.remove_task(ids[id_])
+                del progresses[id_]
+                del ids[id_]
+                active_tasks -= 1
+    result: list[tuple[TileCoord, list[_TextObject]]] = ray.get(futures)
+    return {r[0]: r[1] for r in result}
+
+
+def _count_num_rendering_oprs(
+    export_id: str, skin: Skin, zoom: ZoomParams, temp_dir: Path
+) -> dict[TileCoord, int]:
+    grouped_tile_list: dict[TileCoord, list[Pla2File]] = {}
+    for file in track(
+        glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.0.pkl")),
+        description="Loading data",
+    ):
+        with open(file, "rb") as f:
+            result = re.search(
+                rf"\b{re.escape(export_id)}_(-?\d+), (-?\d+), (-?\d+)\.0\.pkl$", file
+            )
+            grouped_tile_list[
+                TileCoord(
+                    int(result.group(1)), int(result.group(2)), int(result.group(3))
+                )
+            ] = pickle.load(f)
+
+    tile_operations = 0
+    operations = {}
+    for tile_coord, tile_components in track(
+        grouped_tile_list.items(), description="Counting operations"
+    ):
+        if not tile_components:
+            operations[tile_coord] = 0
+            continue
+
+        for group in tile_components:
+            if not group:
+                continue
+            info = skin.types[group[0].type]
+            for step in info[zoom.max - tile_coord.z]:
+                tile_operations += len(group)
+                if (
+                    info.shape == "line"
+                    and "road" in info.tags
+                    and step.layer == "back"
+                ):
+                    tile_operations += 1
+
+        operations[tile_coord] = tile_operations
+        tile_operations = 0
+    return operations
 
 
 def _draw_components(
@@ -157,99 +316,3 @@ def _draw_components(
     ph.complete.remote()
 
     return tile_coord, text_list
-
-
-def _prevent_text_overlap(
-    texts: dict[TileCoord, list[_TextObject]]
-) -> dict[TileCoord, list[_TextObject]]:
-    out = {}
-    with Progress() as progress:
-        zoom_id = progress.add_task(
-            "[green]Eliminating overlapping text",
-            total=len(zooms := set(c.z for c in texts.keys())),
-        )
-        for z in zooms:
-            z: int
-            text_dict: dict[_TextObject, list[TileCoord]] = {}
-            prep_id = progress.add_task(
-                f"Zoom {z}: [dim white]Preparing text", total=len(texts)
-            )
-            for tile_coord, text_objects in texts.items():
-                if tile_coord.z != z:
-                    continue
-                for text in text_objects:
-                    if text not in text_dict:
-                        text_dict[text] = []
-                    text_dict[text].append(tile_coord)
-                progress.advance(prep_id, 1)
-            progress.update(prep_id, visible=False)
-
-            no_intersect: list[tuple[WorldCoord]] = []
-            operations = len(text_dict)
-            filter_id = progress.add_task(
-                f"Zoom {z}: [dim white]Filtering text", total=operations
-            )
-            for i, text in enumerate(text_dict.copy().keys()):
-                is_rendered = True
-                for other in no_intersect:
-                    for bound in text.bounds:
-                        if math_utils.poly_intersect(Line(bound), Line(other)):
-                            is_rendered = False
-                            del text_dict[text]
-                            break
-                        if not is_rendered:
-                            break
-                    if not is_rendered:
-                        break
-                progress.advance(filter_id, 1)
-            progress.update(filter_id, visible=False)
-
-            operations = len(text_dict)
-            sort_id = progress.add_task(
-                f"Zoom {z}: [dim white]Sorting remaining text", total=operations
-            )
-            for i, (text, tile_coords) in enumerate(text_dict.items()):
-                for tile_coord in tile_coords:
-                    if tile_coord not in out:
-                        out[tile_coord] = []
-                    out[tile_coord].append(text)
-                progress.advance(sort_id, 1)
-
-            progress.advance(zoom_id, 1)
-        default = {tc: [] for tc in texts.keys()}
-    return {**default, **out}
-
-
-def _draw_text(
-    ph,
-    tile_coord: TileCoord,
-    text_list: list[_TextObject],
-    save_images: bool,
-    save_dir: Path,
-    skin: Skin,
-    export_id: str,
-) -> dict[TileCoord, Image.Image]:
-    logging.getLogger("PIL").setLevel(logging.CRITICAL)
-    image = Image.open(
-        Path(__file__).parent.parent / f"tmp/{export_id}_{tile_coord}.tmp.png"
-    )
-    # print(text_list)
-    for text in text_list:
-        # logger.log(f"Text {processed}/{len(text_list)} pasted")
-        for img, center in zip(text.image, text.center):
-            image.paste(
-                img,
-                (
-                    int(center.x - tile_coord.x * skin.tile_size - img.width / 2),
-                    int(center.y - tile_coord.y * skin.tile_size - img.height / 2),
-                ),
-                img,
-            )
-        ph.add.remote(tile_coord)
-
-    # tileReturn[tile_coord] = im
-    if save_images:
-        image.save(save_dir / f"{tile_coord}.png", "PNG")
-    ph.complete.remote()
-
-    return {tile_coord: image}

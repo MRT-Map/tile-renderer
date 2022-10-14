@@ -7,6 +7,7 @@ import pytest
 
 import renderer
 import renderer.merge_tiles
+import renderer.render
 import renderer.types.pla2
 from renderer.types.skin import Skin
 
@@ -36,7 +37,7 @@ def test_pytest():
         s = Skin.from_name("default")
 
         # base
-        a = renderer.render(
+        a = renderer.render.render(
             p, n, renderer.ZoomParams(8, 8, 8), save_dir=Path("tiles/"), processes=8
         )
         renderer.merge_tiles.merge_tiles(a, save_images=False)

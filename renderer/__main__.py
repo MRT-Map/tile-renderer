@@ -4,6 +4,8 @@ from pathlib import Path
 import psutil
 import vector
 
+import renderer.render
+
 
 def main():
     import renderer
@@ -166,7 +168,7 @@ def main():
         log.info("Getting skin...")
         skin = Skin.from_name(args.skin)
         log.info("Starting rendering...")
-        renderer.render(
+        renderer.render.render(
             file,
             ZoomParams(args.min_zoom, args.max_zoom, args.max_zoom_range),
             skin=skin,
