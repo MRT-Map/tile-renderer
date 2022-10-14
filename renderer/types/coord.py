@@ -108,7 +108,7 @@ class Line(LineString):
         return tiles
 
     def in_bounds(self, bounds: Bounds[int]) -> bool:
-        for c1, c2 in internal._with_next(a for a in self):
+        for c1, c2 in internal._with_next([a for a in self]):
             for c3, c4 in [
                 (Coord(bounds.y_max, bounds.x_min), Coord(bounds.y_min, bounds.x_min)),
                 (Coord(bounds.y_min, bounds.x_min), Coord(bounds.y_min, bounds.x_max)),

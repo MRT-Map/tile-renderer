@@ -537,7 +537,7 @@ class Skin:
                     coord_lines
                     and sum(
                         c1.distance(c2)
-                        for c1, c2 in internal._with_next(coord_lines[-1])
+                        for c1, c2 in internal._with_next([a for a in coord_lines[-1]])
                     )
                     < text_length
                 ):
@@ -573,7 +573,9 @@ class Skin:
                     )
                     if arrow_coord_lines and sum(
                         c1.distance(c2)
-                        for c1, c2 in internal._with_next(arrow_coord_lines[-1])
+                        for c1, c2 in internal._with_next(
+                            [a for a in arrow_coord_lines[-1]]
+                        )
                     ) < int(imd.textlength("→", font)):
                         arrow_coord_lines = arrow_coord_lines[:-1]
                     text_list.extend(

@@ -68,8 +68,8 @@ def point_in_poly(xp: RealNum, yp: RealNum, line: Line) -> bool:
 
 
 def poly_intersect(poly1: Line, poly2: Line) -> bool:
-    coords1 = [i for i in internal._with_next(poly1)]
-    coords2 = [i for i in internal._with_next(poly2)]
+    coords1 = [i for i in internal._with_next([a for a in poly1])]
+    coords2 = [i for i in internal._with_next([a for a in poly2])]
     for (c1, c2), (c3, c4) in product(coords1, coords2):
         if segments_intersect(c1, c2, c3, c4):
             return True
@@ -96,7 +96,7 @@ def dash(
     dashes = []
     is_gap = False
     overflow = 0
-    for c1, c2 in internal._with_next(a for a in coords):
+    for c1, c2 in internal._with_next([a for a in coords]):
         predashes = [c1]
         plotted_length = 0
         start_as_gap = is_gap
@@ -145,9 +145,9 @@ def dash(
     prev_coord = None
     for c1, c2 in dashes:
         if prev_coord != c1:
-            new_dashes.append(Line([c1, c2]))
+            new_dashes.append(ImageLine([c1, c2]))
         else:
-            new_dashes[-1] = Line([*new_dashes[-1], c2])
+            new_dashes[-1] = ImageLine([*new_dashes[-1], c2])
         prev_coord = c2
     return new_dashes
 
@@ -156,14 +156,12 @@ def rotate_around_pivot(coord: Coord, pivot: Coord, theta: float) -> Coord:
     """
     Rotates a set of Vector2Dinates around a pivot point.
 
-    :param RealNum x: the x-Vector2Dinate to be rotated
-    :param RealNum y: the y-Vector2Dinate to be rotated
-    :param RealNum px: the x-Vector2Dinate of the pivot
-    :param RealNum py: the y-Vector2Dinate of the pivot
-    :param RealNum theta: how many **radians** to rotate
+    :param RealNum coord: the coordinate to be rotated
+    :param RealNum pivot: the pivot to be rotated about
+    :param RealNum theta: angle to rotate in radians
 
     :returns: The rotated coordinates, given in ``(x,y)``
-    :rtype: renderer.types.Vector2D.Vector2D
+    :rtype: renderer.types.coord.Coord
     """
     coord = vector.obj(x=coord.x, y=coord.y)
     pivot = vector.obj(x=pivot.x, y=pivot.y)
