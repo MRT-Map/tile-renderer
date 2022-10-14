@@ -8,13 +8,13 @@ except ImportError:
 RealNum: TypeAlias = Union[int, float]
 """Represents a real number, either an integer or float."""
 
-NodeJson = TypedDict("NodeJson", {"x": int, "y": int, "connections": list})
+Pla1NodeJson = TypedDict("Pla1NodeJson", {"x": int, "y": int, "connections": list})
 """Represents a node JSON object."""
-NodeListJson: TypeAlias = dict[str, NodeJson]
+Pla1NodeListJson: TypeAlias = dict[str, Pla1NodeJson]
 """Represents a node list JSON."""
 
-ComponentJson = TypedDict(
-    "ComponentJson",
+Pla1ComponentJson = TypedDict(
+    "Pla1ComponentJson",
     {
         "type": str,
         "displayname": str,
@@ -27,7 +27,7 @@ ComponentJson = TypedDict(
     total=False,
 )
 """Represents a component JSON object."""
-ComponentListJson: TypeAlias = dict[str, ComponentJson]
+Pla1ComponentListJson: TypeAlias = dict[str, Pla1ComponentJson]
 """Represents a component list JSON."""
 
 SkinInfo = TypedDict(

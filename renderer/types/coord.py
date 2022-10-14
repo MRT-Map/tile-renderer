@@ -21,7 +21,13 @@ _T = TypeVar("_T")
 
 
 class Coord(Point):
-    pass
+    @staticmethod
+    def enc_hook(obj: Coord) -> tuple[float, float]:
+        return obj.x, obj.y
+
+    @staticmethod
+    def dec_hook(obj: tuple[float, float]) -> Coord:
+        return Coord(*obj)
 
 
 class ImageCoord(Coord):
