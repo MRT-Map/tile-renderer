@@ -1,0 +1,12 @@
+repos:
+  - repo: https://github.com/python-poetry/poetry
+    rev: ''
+    hooks:
+      - id: poetry-check
+      - id: poetry-lock
+      - id: black-isort
+        name: black & isort
+        entry: poetry run black .; poetry run isort .
+        language: system
+        types: [ python ]
+        pass_filenames: false
