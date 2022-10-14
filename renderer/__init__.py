@@ -4,7 +4,6 @@ import toml
 
 import renderer.math_utils
 import renderer.types
-import renderer.validate
 from renderer.merge_tiles import merge_tiles
 from renderer.render import render
 from renderer.types import *

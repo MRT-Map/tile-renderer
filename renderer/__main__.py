@@ -5,8 +5,7 @@ from pathlib import Path
 import blessed
 import psutil
 
-import renderer.merge_tiles
-from renderer.types import ZoomParams
+from renderer.internals.logger import log
 
 
 def cmd():
@@ -128,7 +127,7 @@ def cmd():
     p_render.add_argument(
         "-dbg",
         "--debug",
-        help="Prints extra debug information on tiles",
+        help="log.infos extra debug information on tiles",
         default=False,
         action="store_true",
     )
@@ -164,23 +163,20 @@ def cmd():
     args = parser.parse_args()
 
     if args.task == "info":
-        print(term.yellow(f"tile-renderer v{renderer.__version__}"))
-        print(term.yellow("Made by 7d for the OpenMRTMap project"))
-        print("Github: https://github.com/MRT-Map/tile-renderer")
-        print("PyPI: https://pypi.org/project/tile-renderer/")
-        print("Docs: https://tile-renderer.readthedocs.io/en/latest/")
-        print("More about OpenMRTMap: https://github.com/MRT-Map")
+        log.info(term.yellow(f"tile-renderer v{renderer.__version__}"))
+        log.info(term.yellow("Made by 7d for the OpenMRTMap project"))
+        log.info("Github: https://github.com/MRT-Map/tile-renderer")
+        log.info("PyPI: https://pypi.org/project/tile-renderer/")
+        log.info("Docs: https://tile-renderer.readthedocs.io/en/latest/")
+        log.info("More about OpenMRTMap: https://github.com/MRT-Map")
     elif args.task == "render" and __name__ == "__main__":
-        print("Getting nodes...")
-        node_json = renderer.internals.internal._read_json(args.nodes)
-        nodes = renderer.NodeList(renderer.internals.internal._read_json(args.nodes))
-        print("Getting components...")
+        log.info("Getting components...")
         comps = renderer.ComponentList(
             renderer.internals.internal._read_json(args.components), node_json
         )
-        print("Getting skin...")
+        log.info("Getting skin...")
         skin = renderer.Skin.from_name(args.skin)
-        print("Starting rendering...")
+        log.info("Starting rendering...")
         renderer.render(
             comps,
             nodes,
@@ -198,7 +194,7 @@ def cmd():
             renderer.ComponentList.validate_json(p, n)
         else:
             renderer.NodeList.validate_json(n)
-        print(term.green("Validated"))
+        log.info(term.green("Validated"))
     elif args.task == "vdir":
         if args.components is not None:
             if not args.components.endswith("/"):
@@ -219,13 +215,13 @@ def cmd():
             renderer.ComponentList.validate_json(components, nodes)
         else:
             renderer.NodeList.validate_json(nodes)
-        print(term.green("Validated"))
+        log.info(term.green("Validated"))
     elif args.task == "merge":
         renderer.merge_tiles.merge_tiles(
             args.image_dir, save_dir=args.save_dir, zoom=args.zoom
         )
     else:
-        parser.print_help()
+        parser.log.info_help()
 
 
 cmd()

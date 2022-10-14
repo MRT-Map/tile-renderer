@@ -11,18 +11,15 @@ from queue import Empty, Queue
 
 import psutil
 import ray
+import vector
 from PIL import Image
 from rich.progress import Progress, track
+from vector import Vector2D
 
 import renderer.internals.rendering as rendering
-import renderer.tools.components as tools_component_json
-import renderer.tools.line as tools_line
-import renderer.tools.nodes as tools_nodes
-import renderer.types.pla2
-import renderer.validate as validate
 from renderer.internals.logger import log
 from renderer.types import RealNum
-from renderer.types.coord import TileCoord
+from renderer.types.coord import TileCoord, WorldCoord, WorldLine
 from renderer.types.pla2 import Component, Pla2File
 from renderer.types.skin import Skin, _TextObject
 from renderer.types.zoom_params import ZoomParams
@@ -48,9 +45,8 @@ def _sort_by_tiles(
     tile_list: dict[TileCoord, list[Component]] = {}
     for tile in tiles:
         tile_list[tile] = []
-    for component in components.component_values():
-        coords = tools_nodes.to_coords(component.nodes, nodes)
-        rendered_in = tools_line.to_tiles(coords, zoom.min, zoom.max, zoom.range)
+    for component in components:
+        rendered_in = component.nodes.to_tiles(zoom)
         for tile in rendered_in:
             if tile in tile_list.keys():
                 tile_list[tile].append(component)
@@ -58,14 +54,14 @@ def _sort_by_tiles(
 
 
 def _process_tiles(
-    tile_list: dict[TileCoord, Pla2File], skin: Skin
-) -> dict[TileCoord, list[Pla2File]]:
-    grouped_tile_list: dict[TileCoord, list[Pla2File]] = {}
+    tile_list: dict[TileCoord, list[Component]], skin: Skin
+) -> dict[TileCoord, list[list[Component]]]:
+    grouped_tile_list: dict[TileCoord, list[list[Component]]] = {}
     for tile_coord, tile_components in track(
         tile_list.items(), description="Processing tiles"
     ):
         # sort components in tiles by layer
-        new_tile_components: dict[float, Pla2File] = {}
+        new_tile_components: dict[float, list[Component]] = {}
         for component in tile_components:
             if component.layer not in new_tile_components.keys():
                 new_tile_components[component.layer] = []
@@ -85,7 +81,7 @@ def _process_tiles(
                 tile_components.append(component)
 
         # groups components of the same type if "road" tag present
-        newer_tile_components: list[Pla2File] = [[]]
+        newer_tile_components: list[list[Component]] = [[]]
         # keys = list(tile_list[tile_components].keys())
         # for i in range(len(tile_list[tile_components])):
         for i, component in enumerate(tile_components):
@@ -103,26 +99,24 @@ def _process_tiles(
 
 def prepare_render(
     components: Pla2File,
-    nodes: NodeList,
     zoom: ZoomParams,
     export_id: str,
     skin: Skin = Skin.from_name("default"),
     tiles: list[TileCoord] | None = None,
-    offset: tuple[RealNum, RealNum] = (0, 0),
-) -> dict[TileCoord, list[Pla2File]]:
-    # offset
-    for node in nodes.node_values():
-        node.x += offset[0]
-        node.y += offset[1]
-
-    log.info("Finding tiles...")
-    # finds which tiles to render
-    if tiles is not None:
-        validate.v_tile_coords(tiles, zoom.min, zoom.max)
-    else:  # finds box of tiles
-        tiles = renderer.types.pla2.rendered_in(
-            components, nodes, zoom.min, zoom.max, zoom.range
+    offset: Vector2D = vector.obj(x=0, y=0),
+) -> dict[TileCoord, list[list[Component]]]:
+    log.info("Offsetting coordinates...")
+    for component in components:
+        component.nodes = WorldLine(
+            [
+                WorldCoord(coord.x + offset.x, coord.y + offset.y)
+                for coord in component.nodes
+            ]
         )
+
+    if tiles is None:
+        log.info("Finding tiles...")
+        tiles = Component.rendered_in(components.components, zoom)
 
     log.info("Removing components with unknown type...")
     remove_list = _remove_unknown_component_types(components, skin)
@@ -130,7 +124,7 @@ def prepare_render(
         log.warning("The following components were removed:" + " | ".join(remove_list))
 
     log.info("Sorting components by tiles...")
-    tile_list = _sort_by_tiles(tiles, components, nodes, zoom)
+    tile_list = _sort_by_tiles(tiles, components, zoom)
 
     grouped_tile_list = _process_tiles(tile_list, skin)
 
@@ -211,7 +205,6 @@ def _pre_draw_components(
     ph: ProgressHandler,
     tile_coord: TileCoord,
     all_components: Pla2File,
-    nodes: NodeList,
     skin: Skin,
     zoom: ZoomParams,
     assets_dir: Path,
@@ -227,7 +220,6 @@ def _pre_draw_components(
         tile_coord,
         tile_components,
         all_components,
-        nodes,
         skin,
         zoom,
         assets_dir,
@@ -242,7 +234,6 @@ def _pre_draw_components(
 
 def render_part1_ray(
     components: Pla2File,
-    nodes: NodeList,
     zoom: ZoomParams,
     export_id: str,
     skin: Skin = Skin.from_name("default"),
@@ -267,7 +258,7 @@ def render_part1_ray(
     ph = ProgressHandler.remote()
     futures = [
         ray.remote(_pre_draw_components).remote(
-            ph, tile_coord, components, nodes, skin, zoom, assets_dir, export_id
+            ph, tile_coord, components, skin, zoom, assets_dir, export_id
         )
         for tile_coord in tile_coords[:batch_size]
     ]
@@ -286,7 +277,6 @@ def render_part1_ray(
                         ph,
                         tile_coords[cursor],
                         components,
-                        nodes,
                         skin,
                         zoom,
                         assets_dir,
@@ -407,7 +397,6 @@ def render_part3_ray(
 
 def render(
     components: Pla2File,
-    nodes: NodeList,
     zoom: ZoomParams,
     skin: Skin = Skin.from_name("default"),
     export_id: str = "unnamed",
@@ -428,7 +417,6 @@ def render(
         multiprocessing RuntimeErrors.
 
     :param Pla2File components: a JSON of components
-    :param NodeList nodes: a JSON of nodes
     :param ZoomParams zoom: a ZoomParams object
     :param Skin skin: The skin to use for rendering the tiles
     :param str export_id: The name of the rendering task
@@ -445,10 +433,10 @@ def render(
     :returns: Given in the form of ``{tile_coord: image}``
     :rtype: dict[TileCoord, Image.Image]
     """
-    prepare_render(components, nodes, zoom, export_id, skin, tiles, offset)
+    prepare_render(components, zoom, export_id, skin, tiles, offset)
 
     log.info("Initialising Ray...")
     ray.init(num_cpus=processes)
-    render_part1_ray(components, nodes, zoom, export_id, skin, assets_dir, batch_size)
+    render_part1_ray(components, zoom, export_id, skin, assets_dir, batch_size)
     render_part2(export_id)
     return render_part3_ray(export_id, skin, save_images, save_dir)

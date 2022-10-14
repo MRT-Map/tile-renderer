@@ -1,21 +1,18 @@
 from __future__ import annotations
 
 import itertools
-import math
 from collections import Counter
-from typing import Tuple
+from typing import Any, Generator, Tuple
 
 import numpy as np
+from msgspec import Struct
 from nptyping import Int, NDArray, Shape
-from pydantic import BaseModel, validator
 
-from renderer import RealNum
-from renderer import tools as tools
 from renderer.types.coord import Bounds, TileCoord, WorldCoord, WorldLine
 from renderer.types.zoom_params import ZoomParams
 
 
-class Component(BaseModel):
+class Component(Struct):
     namespace: str
     id: str
     display_name: str
@@ -50,9 +47,8 @@ class Component(BaseModel):
         Finds the minimum and maximum X and Y values of a JSON of components
 
         :param ComponentList components: a JSON of components
-        :param NodeList nodes: a JSON of nodes
 
-        :returns: Returns in the form `(x_max, x_min, y_max, y_min)`
+        :returns: TODO
         :rtype: Tuple[RealNum, RealNum, RealNum, RealNum]
         """
         bounds = [component.nodes.bounds for component in components]
@@ -71,10 +67,7 @@ class Component(BaseModel):
         Like :py:func:`tools.line.to_tiles`, but for a JSON of components.
 
         :param ComponentList components: a JSON of components
-        :param NodeList nodes: a JSON of nodes
-        :param int min_zoom: minimum zoom value
-        :param int max_zoom: maximum zoom value
-        :param RealNum max_zoom_range: actual distance covered by a tile in the maximum zoom
+        :param zoom_params: TODO
 
         :returns: A list of tile coordinates
         :rtype: List[TileCoord]
@@ -85,27 +78,30 @@ class Component(BaseModel):
         return list(set(itertools.chain(*tiles)))
 
 
-class Pla2File(BaseModel):
+class Pla2File(Struct):
     components: list[Component]
 
-    @validator("components")
-    def unique_ns_id(cls, components: list[Component]) -> list[Component]:
+    def validate(self) -> Pla2File:
         count = {
             k: v
-            for k, v in Counter(component.fid for component in components).items()
+            for k, v in Counter(component.fid for component in self).items()
             if v >= 2
         }
         if count:
             raise ValueError(
                 f"IDs {', '.join(f'`{id_}`' for id_ in count)} is duplicated"
             )
-        return components
+        return self
 
     def __getitem__(self, id_: str) -> Component:
         return [comp for comp in self.components if comp.fid == id_][0]
 
     def __delitem__(self, id_: str):
         self.components.remove(self[id_])
+
+    def __iter__(self) -> Generator[Component, Any, None]:
+        for component in self.components:
+            yield component
 
     @property
     def ids(self) -> list[str]:

@@ -7,21 +7,18 @@ from pathlib import Path
 from PIL import Image, ImageDraw
 from rich.progress import Progress
 
-import renderer.math_utils as mathtools
-import renderer.tools as tools
-from renderer.types.components import Component, ComponentList
-from renderer.types.coord import TileCoord, WorldCoord
-from renderer.types.nodes import NodeList
-from renderer.types.skin import Skin, _node_list_to_image_coords, _TextObject
+import renderer.math_utils as math_utils
+from renderer.types.coord import Line, TileCoord, WorldCoord
+from renderer.types.pla2 import Component, Pla2File
+from renderer.types.skin import Skin, _TextObject
 from renderer.types.zoom_params import ZoomParams
 
 
 def _draw_components(
     ph,
     tile_coord: TileCoord,
-    tile_components: list[Pla2File],
-    all_components: ComponentList,
-    nodes: NodeList,
+    tile_components: list[list[Component]],
+    all_components: Pla2File,
     skin: Skin,
     zoom: ZoomParams,
     assets_dir: Path,
@@ -38,9 +35,7 @@ def _draw_components(
         style = type_info[zoom.max - tile_coord[0]]
         for step in style:
             for component in group:
-                coords = _node_list_to_image_coords(
-                    component.nodes, nodes, skin, tile_coord, size
-                )
+                coords = component.nodes.to_image_line(skin, tile_coord, size)
 
                 args = {
                     "point": {
@@ -48,7 +43,7 @@ def _draw_components(
                         "text": (
                             imd,
                             coords,
-                            component.displayname,
+                            component.display_name,
                             assets_dir,
                             points_text_list,
                             tile_coord,
@@ -90,7 +85,7 @@ def _draw_components(
                             tile_coord,
                             skin.tile_size,
                         ),
-                        "fill": (imd, img, coords, component, nodes, tile_coord, size),
+                        "fill": (imd, img, coords, component, tile_coord, size),
                         "centerimage": (img, coords, assets_dir),
                     },
                 }
@@ -108,18 +103,15 @@ def _draw_components(
                 and step.layer == "back"
             ):
                 # logger.log("Rendering studs")
-                con_nodes: list[str] = list(
-                    chain(*(component.nodes for component in group))
-                )
-                connected: list[tuple[Component, int]] = list(
+                attached: list[tuple[Component, WorldCoord]] = list(
                     chain(
                         *(
-                            tools.nodes.find_components_attached(x, all_components)
-                            for x in con_nodes
+                            comp.find_components_attached(all_components)
+                            for comp in group
                         )
                     )
                 )
-                for con_component, index in connected:
+                for con_component, coord in attached:
                     if "road" not in skin[con_component.type].tags:
                         continue
                     con_info = skin[con_component.type]
@@ -127,8 +119,8 @@ def _draw_components(
                         if con_step.layer in ["back", "text"]:
                             continue
 
-                        con_coords = _node_list_to_image_coords(
-                            con_component.nodes, nodes, skin, tile_coord, size
+                        con_coords = con_component.nodes.to_image_line(
+                            skin, tile_coord, size
                         )
 
                         con_img = Image.new("RGBA", (skin.tile_size,) * 2, (0,) * 4)
@@ -142,16 +134,10 @@ def _draw_components(
                         con_mask_imd = ImageDraw.Draw(con_mask_img)
                         con_mask_imd.ellipse(
                             (
-                                con_coords[index].x
-                                - (max(con_step.width, step.width) * 2) / 2
-                                + 1,
-                                con_coords[index].y
-                                - (max(con_step.width, step.width) * 2) / 2
-                                + 1,
-                                con_coords[index].x
-                                + (max(con_step.width, step.width) * 2) / 2,
-                                con_coords[index].y
-                                + (max(con_step.width, step.width) * 2) / 2,
+                                coord.x - (max(con_step.width, step.width) * 2) / 2 + 1,
+                                coord.y - (max(con_step.width, step.width) * 2) / 2 + 1,
+                                coord.x + (max(con_step.width, step.width) * 2) / 2,
+                                coord.y + (max(con_step.width, step.width) * 2) / 2,
                             ),
                             fill="#000000",
                         )
@@ -207,7 +193,7 @@ def _prevent_text_overlap(
                 is_rendered = True
                 for other in no_intersect:
                     for bound in text.bounds:
-                        if mathtools.poly_intersect(list(bound), list(other)):
+                        if math_utils.poly_intersect(Line(bound), Line(other)):
                             is_rendered = False
                             del text_dict[text]
                             break

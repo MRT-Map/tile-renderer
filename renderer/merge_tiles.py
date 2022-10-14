@@ -10,7 +10,6 @@ from rich.progress import track
 
 from renderer.internals import internal as internal
 from renderer.internals.logger import log
-from renderer.tools import tile as tools_tile
 from renderer.types.coord import TileCoord
 
 
@@ -57,7 +56,7 @@ def merge_tiles(
         to_merge = {k: v for k, v in image_dict.items() if k.z == z}
 
         tile_coords = list(to_merge.keys())
-        x_max, x_min, y_max, y_min = tools_tile.find_ends(tile_coords)
+        x_max, x_min, y_max, y_min = TileCoord.bounds(tile_coords)
         tile_size = list(image_dict.values())[0].size[0]
         log.info(
             f"Zoom {z}: [dim white]Creating image {tile_size*(x_max-x_min+1)}x{tile_size*(y_max-y_min+1)}"

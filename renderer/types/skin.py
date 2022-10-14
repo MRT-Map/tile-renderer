@@ -16,11 +16,10 @@ from PIL import Image, ImageDraw, ImageFont
 from schema import And, Optional, Or, Regex, Schema
 
 import renderer.internals.internal as internal
-from renderer import math_utils, tools
+from renderer import math_utils
 from renderer.types import RealNum, SkinJson, SkinType
-from renderer.types.components import Component
-from renderer.types.coord import TileCoord, WorldCoord
-from renderer.types.nodes import NodeList
+from renderer.types.coord import ImageCoord, ImageLine, TileCoord
+from renderer.types.pla2 import Component
 
 Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=16)
 
@@ -28,8 +27,8 @@ Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=
 @dataclass(eq=True, unsafe_hash=True)
 class _TextObject:
     image: tuple[Image.Image, ...]
-    center: tuple[WorldCoord, ...]
-    bounds: tuple[tuple[WorldCoord, ...]]
+    center: tuple[ImageCoord, ...]
+    bounds: tuple[tuple[ImageCoord, ...]]
 
     def __init__(
         self,
@@ -45,14 +44,14 @@ class _TextObject:
         debug: bool = False,
     ):
         r = functools.partial(
-            mathtools.rotate_around_pivot,
+            math_utils.rotate_around_pivot,
             px=tile_coord.x * tile_size + x,
             py=tile_coord.y * tile_size + y,
             theta=-rot,
         )
         self.image = (image,)
         self.center = (
-            WorldCoord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),
+            ImageCoord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),
         )
         self.bounds = (
             (
@@ -80,7 +79,7 @@ class _TextObject:
         )
         if debug:
             nr = functools.partial(
-                mathtools.rotate_around_pivot, px=x, py=y, theta=-rot
+                math_utils.rotate_around_pivot, px=x, py=y, theta=-rot
             )
             imd.line(
                 [
@@ -102,23 +101,6 @@ class _TextObject:
         to.center = tuple(itertools.chain(*[sto.center for sto in textobject]))
 
         return to
-
-
-def _node_list_to_image_coords(
-    node_list: list[str],
-    nodes: NodeList,
-    skin: Skin,
-    tile_coord: TileCoord,
-    size: RealNum,
-) -> list[WorldCoord]:
-    image_coords = []
-    for x, y in tools.nodes.to_coords(node_list, nodes):
-        xc = x - tile_coord.x * size
-        yc = y - tile_coord.y * size
-        xs = int(skin.tile_size / size * xc)
-        ys = int(skin.tile_size / size * yc)
-        image_coords.append(WorldCoord(xs, ys))
-    return image_coords
 
 
 class Skin:
@@ -282,13 +264,14 @@ class Skin:
                 self.size: int = json["size"]
                 self.width: int = json["width"]
 
-            def render(self, imd: ImageDraw.ImageDraw, coords: list[WorldCoord], **_):
+            def render(self, imd: ImageDraw.ImageDraw, coords: ImageLine, **_):
+                coord = coords.coords[0]
                 imd.ellipse(
                     (
-                        coords[0].x - self.size / 2 + 1,
-                        coords[0].y - self.size / 2 + 1,
-                        coords[0].x + self.size / 2,
-                        coords[0].y + self.size / 2,
+                        coord.x - self.size / 2 + 1,
+                        coord.y - self.size / 2 + 1,
+                        coord.x + self.size / 2,
+                        coord.y + self.size / 2,
                     ),
                     fill=self.colour,
                     outline=self.outline,
@@ -302,33 +285,34 @@ class Skin:
                 self.layer = "text"
                 self.colour: str | None = json["colour"]
                 self.size: int = json["size"]
-                self.offset: WorldCoord = WorldCoord(*json["offset"])
+                self.offset: ImageCoord = ImageCoord(*json["offset"])
                 self.anchor: str = json["anchor"]
 
             def render(
                 self,
                 imd: ImageDraw,
-                coords: list[WorldCoord],
-                displayname: str,
+                coords: ImageLine,
+                display_name: str,
                 assets_dir: Path,
                 points_text_list: list[_TextObject],
                 tile_coord: TileCoord,
                 tile_size: int,
                 debug: bool = False,
             ):
-                if len(displayname.strip()) == 0:
+                coord = coords.coords[0]
+                if len(display_name.strip()) == 0:
                     return
                 font = self._type_info._skin.get_font(
-                    "", self.size + 2, assets_dir, displayname
+                    "", self.size + 2, assets_dir, display_name
                 )
-                text_length = int(imd.textlength(displayname, font))
+                text_length = int(imd.textlength(display_name, font))
                 pt_i = Image.new(
                     "RGBA", (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0)
                 )
                 pt_d = ImageDraw.Draw(pt_i)
                 pt_d.text(
                     (text_length, self.size + 4),
-                    displayname,
+                    display_name,
                     fill=self.colour,
                     font=font,
                     anchor="mm",
@@ -341,8 +325,8 @@ class Skin:
                 points_text_list.append(
                     _TextObject(
                         pt_i,
-                        coords[0].x + self.offset[0],
-                        coords[0].y + self.offset[1],
+                        coord.x + self.offset.x,
+                        coord.y + self.offset.y,
                         tw / 2,
                         th / 2,
                         0,
@@ -363,13 +347,14 @@ class Skin:
                 self.size: int = json["size"]
                 self.width: int = json["width"]
 
-            def render(self, imd: ImageDraw.ImageDraw, coords: list[WorldCoord], **_):
+            def render(self, imd: ImageDraw.ImageDraw, coords: ImageLine, **_):
+                coord = coords.coords[0]
                 imd.rectangle(
                     (
-                        coords[0].x - self.size / 2 + 1,
-                        coords[0].y - self.size / 2 + 1,
-                        coords[0].x + self.size / 2,
-                        coords[0].y + self.size / 2,
+                        coord.x - self.size / 2 + 1,
+                        coord.y - self.size / 2 + 1,
+                        coord.x + self.size / 2,
+                        coord.y + self.size / 2,
                     ),
                     fill=self.colour,
                     outline=self.outline,
@@ -382,17 +367,18 @@ class Skin:
                 self._type_info = type_info
                 self.layer = "image"
                 self.file: Path = Path(json["file"])
-                self.offset: WorldCoord = WorldCoord(*json["offset"])
+                self.offset: ImageCoord = ImageCoord(*json["offset"])
 
             def render(
-                self, img: Image.Image, coords: list[WorldCoord], assets_dir: Path, **_
+                self, img: Image.Image, coords: ImageLine, assets_dir: Path, **_
             ):
+                coord = coords.coords[0]
                 icon = Image.open(assets_dir / self.file)
                 img.paste(
                     icon,
                     (
-                        int(coords[0].x - icon.width / 2 + self.offset[0]),
-                        int(coords[0].y - icon.height / 2 + self.offset[1]),
+                        int(coord.x - icon.width / 2 + self.offset.x),
+                        int(coord.y - icon.height / 2 + self.offset.y),
                     ),
                     icon,
                 )
@@ -413,7 +399,7 @@ class Skin:
                 img: Image.Image,
                 font: ImageFont.FreeTypeFont,
                 text: str,
-                coords: list[WorldCoord],
+                coords: ImageLine,
                 tile_coord: TileCoord,
                 tile_size: int,
                 fill: str | None = None,
@@ -426,7 +412,7 @@ class Skin:
                 text_to_print = ""
                 overflow = 0
                 text_objects = []
-                swap = coords[-1].x < coords[0].x
+                swap = coords.coords[-1].x < coords.coords[0].x
                 if swap and upright:
                     coords = coords[::-1]
                 for c1, c2 in internal._with_next(coords):
@@ -437,7 +423,7 @@ class Skin:
                     else:
                         while overflow + imd.textlength(
                             text_to_print, font
-                        ) < math.dist(c1, c2) and char_cursor < len(text):
+                        ) < c1.distance(c2) and char_cursor < len(text):
                             text_to_print += text[char_cursor]
                             char_cursor += 1
                     if char_cursor != len(text):
@@ -480,7 +466,7 @@ class Skin:
                             )
                             if debug:
                                 nr = functools.partial(
-                                    mathtools.rotate_around_pivot,
+                                    math_utils.rotate_around_pivot,
                                     px=tx,
                                     py=ty,
                                     theta=-trot,
@@ -512,7 +498,7 @@ class Skin:
                             )
 
                     text_to_print = ""
-                    overflow = text_length - (math.dist(c1, c2) - overflow)
+                    overflow = text_length - (c1.distance(c2) - overflow)
 
                     if char_cursor >= len(text):
                         break
@@ -525,7 +511,7 @@ class Skin:
                 self,
                 imd: ImageDraw.ImageDraw,
                 img: Image.Image,
-                coords: list[WorldCoord],
+                coords: ImageLine,
                 assets_dir: Path,
                 component: Component,
                 text_list: list[_TextObject],
@@ -533,34 +519,32 @@ class Skin:
                 tile_size: int,
                 debug: bool = False,
             ):
-                if len(component.displayname) == 0:
+                if len(component.display_name) == 0:
                     return
                 # logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating text length")
                 font = self._type_info._skin.get_font(
-                    "", self.size + 2, assets_dir, component.displayname
+                    "", self.size + 2, assets_dir, component.display_name
                 )
-                text_length = int(imd.textlength(component.displayname, font))
+                text_length = int(imd.textlength(component.display_name, font))
                 if text_length == 0:
                     text_length = int(imd.textlength("----------", font))
 
-                coord_lines = mathtools.combine_edge_dashes(
-                    mathtools.dash(
-                        mathtools.offset(coords, self.offset),
-                        text_length,
-                        text_length * 1.5,
-                    )
+                coord_lines = math_utils.dash(
+                    coords.parallel_offset(self.offset),
+                    text_length,
+                    text_length * 1.5,
                 )
                 if (
                     coord_lines
                     and sum(
-                        math.dist(c1, c2)
+                        c1.distance(c2)
                         for c1, c2 in internal._with_next(coord_lines[-1])
                     )
                     < text_length
                 ):
                     coord_lines = coord_lines[:-1]
                 if debug:
-                    imd.line(mathtools.offset(coords, self.offset), fill="#ff0000")
+                    imd.line(coords.parallel_offset(self.offset), fill="#ff0000")
                 text_list.extend(
                     e
                     for e in (
@@ -568,8 +552,8 @@ class Skin:
                             imd,
                             img,
                             font,
-                            component.displayname,
-                            list(cs),
+                            component.display_name,
+                            cs,
                             tile_coord,
                             tile_size,
                             debug=debug,
@@ -583,15 +567,13 @@ class Skin:
                     font = self._type_info._skin.get_font(
                         "", self.size + 2, assets_dir, "→"
                     )
-                    arrow_coord_lines = mathtools.combine_edge_dashes(
-                        mathtools.dash(
-                            mathtools.offset(coords, self.offset + self.size * 3 / 16),
-                            text_length / 2,
-                            text_length * 0.75,
-                        )
+                    arrow_coord_lines = math_utils.dash(
+                        coords.parallel_offset(self.offset + self.size * 3 / 16),
+                        text_length / 2,
+                        text_length * 0.75,
                     )
                     if arrow_coord_lines and sum(
-                        math.dist(c1, c2)
+                        c1.distance(c2)
                         for c1, c2 in internal._with_next(arrow_coord_lines[-1])
                     ) < int(imd.textlength("→", font)):
                         arrow_coord_lines = arrow_coord_lines[:-1]
@@ -603,7 +585,7 @@ class Skin:
                                 img,
                                 font,
                                 "→",
-                                list(cs),
+                                cs,
                                 tile_coord,
                                 tile_size,
                                 fill=self.arrow_colour,
@@ -627,33 +609,38 @@ class Skin:
                 self.width: int = json["width"]
                 self.dash: tuple[int, int] = json["dash"]
 
-            def render(self, imd: ImageDraw.ImageDraw, coords: list[WorldCoord], **_):
+            def render(self, imd: ImageDraw.ImageDraw, coords: ImageLine, **_):
                 if self.dash is None:
-                    imd.line(coords, fill=self.colour, width=self.width, joint="curve")
+                    imd.line(
+                        [(c.x, c.y) for c in coords],
+                        fill=self.colour,
+                        width=self.width,
+                        joint="curve",
+                    )
                     if "unroundedEnds" not in self._type_info.tags:
                         imd.ellipse(
                             [
-                                coords[0].x - self.width / 2 + 1,
-                                coords[0].y - self.width / 2 + 1,
-                                coords[0].x + self.width / 2 - 1,
-                                coords[0].y + self.width / 2 - 1,
+                                coords.coords[0].x - self.width / 2 + 1,
+                                coords.coords[0].y - self.width / 2 + 1,
+                                coords.coords[0].x + self.width / 2 - 1,
+                                coords.coords[0].y + self.width / 2 - 1,
                             ],
                             fill=self.colour,
                         )
                         imd.ellipse(
                             [
-                                coords[-1].x - self.width / 2 + 1,
-                                coords[-1].y - self.width / 2 + 1,
-                                coords[-1].x + self.width / 2 - 1,
-                                coords[-1].y + self.width / 2 - 1,
+                                coords.coords[-1].x - self.width / 2 + 1,
+                                coords.coords[-1].y - self.width / 2 + 1,
+                                coords.coords[-1].x + self.width / 2 - 1,
+                                coords.coords[-1].y + self.width / 2 - 1,
                             ],
                             fill=self.colour,
                         )
                 else:
-                    for dash_coords in mathtools.dash(
+                    for dash_coords in math_utils.dash(
                         coords, self.dash[0], self.dash[1]
                     ):
-                        imd.line(dash_coords, fill=self.colour, width=self.width)
+                        imd.line(dash_coords.coords, fill=self.colour, width=self.width)
 
         class LineFore(LineBack):
             # noinspection PyInitNewSignature
@@ -673,7 +660,7 @@ class Skin:
             def render(
                 self,
                 imd: ImageDraw.ImageDraw,
-                coords: list[WorldCoord],
+                coords: ImageLine,
                 component: Component,
                 assets_dir: Path,
                 text_list: list[_TextObject],
@@ -681,27 +668,29 @@ class Skin:
                 tile_size: int,
                 debug: bool = False,
             ):
-                if len(component.displayname.strip()) == 0:
+                """TODO fix
+                if len(component.display_name.strip()) == 0:
                     return
                 font = self._type_info._skin.get_font(
-                    "", self.size + 2, assets_dir, component.displayname
+                    "", self.size + 2, assets_dir, component.display_name
                 )
                 text_length = int(
-                    imd.textlength(component.displayname.replace("\n", ""), font)
+                    imd.textlength(component.display_name.replace("\n", ""), font)
                 )
-                for c1, c2 in internal._with_next(coords):
-                    if mathtools.line_in_box(
-                        coords,
-                        0,
-                        self._type_info._skin.tile_size,
-                        0,
-                        self._type_info._skin.tile_size,
-                    ) and 2 * text_length <= math.dist(c1, c2):
-                        t = math.floor(math.dist(c1, c2) / (4 * text_length))
+                for c1, c2 in internal._with_next(coords.coords):
+                    if coords.in_bounds(
+                        Bounds(
+                            x_min=0,
+                            x_max=self._type_info._skin.tile_size,
+                            y_max=self._type_info._skin.tile_size,
+                            y_min=0,
+                        )
+                    ) and 2 * text_length <= c1.distance(c2):
+                        t = math.floor(c1.distance(c2) / (4 * text_length))
                         t = 1 if t == 0 else t
                         all_points: list[
-                            list[tuple[WorldCoord, RealNum]]
-                        ] = mathtools.midpoint(
+                            list[tuple[ImageCoord, RealNum]]
+                        ] = math_utils.midpoint(
                             c1, c2, self.offset, n=t, return_both=True
                         )
                         for n in range(0, len(all_points), 2):
@@ -709,7 +698,7 @@ class Skin:
                             if self.offset < 0:
                                 (tx, ty), trot = (
                                     p1
-                                    if not mathtools.point_in_poly(
+                                    if not math_utils.point_in_poly(
                                         p1[0].x, p1[0].y, coords
                                     )
                                     else p2
@@ -717,7 +706,9 @@ class Skin:
                             else:
                                 (tx, ty), trot = (
                                     p1
-                                    if mathtools.point_in_poly(p1[0].x, p1[0].y, coords)
+                                    if math_utils.point_in_poly(
+                                        p1[0].x, p1[0].y, coords
+                                    )
                                     else p2
                                 )
                             abt_i = Image.new(
@@ -728,7 +719,7 @@ class Skin:
                             abt_d = ImageDraw.Draw(abt_i)
                             abt_d.text(
                                 (text_length, self.size + 4),
-                                component.displayname.replace("\n", ""),
+                                component.display_name.replace("\n", ""),
                                 fill=self.colour,
                                 font=font,
                                 anchor="mm",
@@ -752,7 +743,7 @@ class Skin:
                                     imd,
                                     debug=debug,
                                 )
-                            )
+                            )"""
 
         class AreaCenterText(ComponentStyle):
             # noinspection PyInitNewSignature
@@ -760,13 +751,13 @@ class Skin:
                 self._type_info = type_info
                 self.layer = "centertext"
                 self.colour: str | None = json["colour"]
-                self.offset: WorldCoord = WorldCoord(*json["offset"])
+                self.offset: ImageCoord = ImageCoord(*json["offset"])
                 self.size: int = json["size"]
 
             def render(
                 self,
                 imd: ImageDraw.ImageDraw,
-                coords: list[WorldCoord],
+                coords: ImageLine,
                 component: Component,
                 assets_dir: Path,
                 text_list: list[_TextObject],
@@ -774,18 +765,18 @@ class Skin:
                 tile_size: int,
                 debug: bool = False,
             ):
-                if len(component.displayname.strip()) == 0:
+                if len(component.display_name.strip()) == 0:
                     return
-                cx, cy = mathtools.poly_center(coords)
-                cx += self.offset[0]
-                cy += self.offset[1]
+                c = coords.centroid
+                c.x += self.offset.x
+                c.y += self.offset.y
                 font = self._type_info._skin.get_font(
-                    "", self.size + 2, assets_dir, component.displayname
+                    "", self.size + 2, assets_dir, component.display_name
                 )
                 text_length = int(
                     min(
                         imd.textlength(x, font)
-                        for x in component.displayname.split("\n")
+                        for x in component.display_name.split("\n")
                     )
                 )
 
@@ -794,8 +785,8 @@ class Skin:
                 delta = right - left
                 if text_length > delta:
                     # logger.log(f"{style.index(self) + 1}/{len(style)} {component.name}: Breaking up string")
-                    tokens = component.displayname.split()
-                    wss = re.findall(r"\s+", component.displayname)
+                    tokens = component.display_name.split()
+                    wss = re.findall(r"\s+", component.display_name)
                     text = ""
                     for token, ws in list(
                         itertools.zip_longest(tokens, wss, fillvalue="")
@@ -811,7 +802,7 @@ class Skin:
                     )
                     text_size = int(imd.textsize(text, font)[1] + 4)
                 else:
-                    text = component.displayname
+                    text = component.display_name
                     text_size = self.size + 4
 
                 act_i = Image.new(
@@ -833,8 +824,8 @@ class Skin:
                 text_list.append(
                     _TextObject(
                         act_i,
-                        cx,
-                        cy,
+                        c.x,
+                        c.y,
                         cw / 2,
                         ch / 2,
                         0,
@@ -860,9 +851,8 @@ class Skin:
                 self,
                 imd: ImageDraw.ImageDraw,
                 img: Image.Image,
-                coords: list[WorldCoord],
+                coords: ImageLine,
                 component: Component,
-                nodes: NodeList,
                 tile_coord: TileCoord,
                 size: int,
                 **_,
@@ -876,11 +866,11 @@ class Skin:
 
                 if self.stripe is not None:
                     # logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Generating stripes")
-                    x_max, x_min, y_max, y_min = tools.line.find_ends(coords)
-                    x_max += x_max - x_min
-                    x_min -= y_max - y_min
-                    y_max += x_max - x_min
-                    y_min -= y_max - y_min
+                    bounds = coords.bounds
+                    bounds.x_max += bounds.x_max - bounds.x_min
+                    bounds.x_min -= bounds.y_max - bounds.y_min
+                    bounds.y_max += bounds.x_max - bounds.x_min
+                    bounds.y_min -= bounds.y_max - bounds.y_min
                     af_i = Image.new(
                         "RGBA",
                         (
@@ -890,21 +880,19 @@ class Skin:
                         (0, 0, 0, 0),
                     )
                     af_d = ImageDraw.Draw(af_i)
-                    tlx = x_min - 1
-                    while tlx <= x_max:
+                    tlx = bounds.x_min - 1
+                    while tlx <= bounds.x_max:
                         af_d.polygon(
                             [
-                                (tlx, y_min),
-                                (tlx + self.stripe[0], y_min),
-                                (tlx + self.stripe[0], y_max),
-                                (tlx, y_max),
+                                (tlx, bounds.y_min),
+                                (tlx + self.stripe[0], bounds.y_min),
+                                (tlx + self.stripe[0], bounds.y_max),
+                                (tlx, bounds.y_max),
                             ],
                             fill=self.colour,
                         )
                         tlx += self.stripe[0] + self.stripe[1]
-                    af_i = af_i.rotate(
-                        self.stripe[2], center=mathtools.poly_center(coords)
-                    )
+                    af_i = af_i.rotate(self.stripe[2], center=coords.centroid)
                     mi = Image.new(
                         "RGBA",
                         (
@@ -914,7 +902,7 @@ class Skin:
                         (0, 0, 0, 0),
                     )
                     md = ImageDraw.Draw(mi)
-                    md.polygon(coords, fill=self.colour)
+                    md.polygon(coords.coords, fill=self.colour)
                     pi = Image.new(
                         "RGBA",
                         (
@@ -927,14 +915,14 @@ class Skin:
                     ai.paste(pi, (0, 0), pi)
                 else:
                     # logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Filling area")
-                    ad.polygon(coords, fill=self.colour, outline=self.outline)
+                    ad.polygon(coords.coords, fill=self.colour, outline=self.outline)
 
-                if component.hollows is not None:
+                """if component.hollows is not None:
                     for n in component.hollows:
                         n_coords = _node_list_to_image_coords(
                             n, nodes, self._type_info._skin, tile_coord, size
                         )
-                        ad.polygon(n_coords, fill=(0, 0, 0, 0))
+                        ad.polygon(n_coords, fill=(0, 0, 0, 0))       """
                 img.paste(ai, (0, 0), ai)
 
                 if self.outline is not None:
@@ -942,13 +930,13 @@ class Skin:
                     exterior_outline = coords[:]
                     exterior_outline.append(exterior_outline[0])
                     outlines = [exterior_outline]
-                    if component.hollows is not None:
+                    """if component.hollows is not None:
                         for n in component.hollows:
                             n_coords = _node_list_to_image_coords(
                                 n, nodes, self._type_info._skin, tile_coord, size
                             )
                             n_coords.append(n_coords[0])
-                            outlines.append(n_coords)
+                            outlines.append(n_coords)  """
                     for o_coords in outlines:
                         imd.line(o_coords, fill=self.outline, width=2, joint="curve")
 
@@ -958,14 +946,14 @@ class Skin:
                 self.type_info: Skin.ComponentTypeInfo = type_info
                 self.layer = "centerimage"
                 self.file: Path = Path(json["file"])
-                self.offset: WorldCoord = WorldCoord(*json["offset"])
+                self.offset: ImageCoord = ImageCoord(*json["offset"])
 
             def render(
-                self, img: Image.Image, coords: list[WorldCoord], assets_dir: Path, **_
+                self, img: Image.Image, coords: ImageLine, assets_dir: Path, **_
             ):
-                cx, cy = mathtools.poly_center(coords)
+                cx, cy = coords.centroid
                 icon = Image.open(assets_dir / self.file)
-                img.paste(icon, (cx + self.offset[0], cy + self.offset[1]), icon)
+                img.paste(icon, (cx + self.offset.x, cy + self.offset.y), icon)
 
     @classmethod
     def from_name(cls, name: str = "default") -> Skin:

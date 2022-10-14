@@ -7,7 +7,7 @@ import random
 import re
 import time
 from pathlib import Path
-from typing import Any, Generator, Sequence, TypeVar
+from typing import Any, Generator, Iterable, Sequence, TypeVar
 
 import blessed
 
@@ -138,7 +138,7 @@ def _similar(s: _T, i: list[_T]):
         print(term.bright_red(f"Perhaps you mean: {', '.join(sim)}"))
 
 
-def _with_next(ls: Sequence[_T]) -> Generator[tuple[_T, _T], None, None]:
+def _with_next(ls: Iterable[_T]) -> Generator[tuple[_T, _T], None, None]:
     if len(ls) > 1:
         for i, a in enumerate(ls[:-1]):
             b = ls[i + 1]
