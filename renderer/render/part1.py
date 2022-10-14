@@ -46,6 +46,7 @@ def _pre_draw_components(
         zoom,
         assets_dir,
         export_id,
+        temp_dir,
     )
     os.remove(path)
     if result is not None:
@@ -182,6 +183,7 @@ def _draw_components(
     zoom: ZoomParams,
     assets_dir: Path,
     export_id: str,
+    temp_dir: Path,
 ) -> tuple[TileCoord, list[_TextObject]]:
     size = zoom.range * 2 ** (zoom.max - tile_coord[0])
     img = Image.new(mode="RGBA", size=(skin.tile_size,) * 2, color=skin.background)
@@ -310,9 +312,7 @@ def _draw_components(
     text_list += points_text_list
     text_list.reverse()
 
-    img.save(
-        Path(__file__).parent.parent / f"tmp/{export_id}_{tile_coord}.tmp.png", "PNG"
-    )
+    img.save(temp_dir / f"{export_id}_{tile_coord}.tmp.webp", "webp")
     ph.complete.remote()
 
     return tile_coord, text_list

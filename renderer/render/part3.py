@@ -34,7 +34,7 @@ def render_part3_ray(
     ph = ProgressHandler.remote()
     futures = [
         ray.remote(_draw_text).remote(
-            ph, tile_coord, text_list, save_images, save_dir, skin, export_id
+            ph, tile_coord, text_list, save_images, save_dir, skin, export_id, temp_dir
         )
         for tile_coord, text_list in track(
             new_texts.items(), description="Dispatching tasks"
@@ -72,15 +72,13 @@ def render_part3_ray(
         result[k] = v
 
     for file in track(
-        glob.glob(
-            str(Path(__file__).parent / f"tmp/{glob.escape(export_id)}_*.tmp.png")
-        ),
+        glob.glob(str(temp_dir / f"tmp/{glob.escape(export_id)}_*.tmp.webp")),
         description="Cleaning up",
         transient=True,
     ):
         os.remove(file)
     for file in track(
-        glob.glob(str(Path(__file__).parent / f"tmp/{glob.escape(export_id)}.2.pkl")),
+        glob.glob(str(temp_dir / f"{glob.escape(export_id)}.2.pkl")),
         description="Cleaning up",
     ):
         os.remove(file)
@@ -97,11 +95,10 @@ def _draw_text(
     save_dir: Path,
     skin: Skin,
     export_id: str,
+    temp_dir: Path,
 ) -> dict[TileCoord, Image.Image]:
     logging.getLogger("PIL").setLevel(logging.CRITICAL)
-    image = Image.open(
-        Path(__file__).parent.parent / f"tmp/{export_id}_{tile_coord}.tmp.png"
-    )
+    image = Image.open(temp_dir / f"tmp/{export_id}_{tile_coord}.tmp.webp")
     # print(text_list)
     for text in text_list:
         # logger.log(f"Text {processed}/{len(text_list)} pasted")
@@ -118,7 +115,7 @@ def _draw_text(
 
     # tileReturn[tile_coord] = im
     if save_images:
-        image.save(save_dir / f"{tile_coord}.png", "PNG")
+        image.save(save_dir / f"{tile_coord}.webp", "webp")
     ph.complete.remote()
 
     return {tile_coord: image}
