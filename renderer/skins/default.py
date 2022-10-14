@@ -3,7 +3,7 @@ from math import ceil
 from pathlib import Path
 
 from renderer.types.coord import WorldCoord
-from renderer.types.skinbuilder import CS, CTI, SkinBuilder, _darken, _lighten
+from renderer.types.skin_builder import CS, CTI, SkinBuilder, _darken, _lighten
 
 A_ROAD = 0xFFAAAA
 B_ROAD = 0xFF8000
