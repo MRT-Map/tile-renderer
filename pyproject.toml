@@ -19,7 +19,6 @@ classifiers = [
     'Programming Language :: Python :: 3.10',
 ]
 packages = [{ include = "renderer" }]
-build = "build.py"
 
 
 [tool.poetry.dependencies]
