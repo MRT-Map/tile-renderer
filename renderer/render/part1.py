@@ -123,8 +123,8 @@ def render_part1(
     ph = ProgressHandler.remote()
 
     futures = [
-        ray.remote(_pre_draw_components).remote(ph, tile_coord, consts)
-        for tile_coord in track(tile_chunks[:batch_size], "Spawning initial tasks")
+        ray.remote(_pre_draw_components).remote(ph, tile_coords, consts)
+        for tile_coords in track(tile_chunks[:batch_size], "Spawning initial tasks")
     ]
     active_tasks = batch_size
     cursor = batch_size
@@ -135,7 +135,7 @@ def render_part1(
         ids = {}
         progresses = {}
         while ray.get(ph.get_complete.remote()) != len(tile_coords):
-            while active_tasks < batch_size and cursor < len(tile_coords):
+            while active_tasks < batch_size and cursor < len(tile_chunks):
                 futures.append(
                     ray.remote(_pre_draw_components).remote(
                         ph, tile_chunks[cursor], consts
