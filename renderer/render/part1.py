@@ -59,10 +59,13 @@ def _pre_draw_components(
                 ) as f:
                     pickle.dump({out[0]: out[1]}, f)
             results[out[0]] = out[1]
+        if ph:
+            ph.request_new_task.remote()
         return results
     except Exception as e:
         log.error(f"Error in ray task: {e!r}")
         log.error(traceback.format_exc())
+        ph.request_new_task.remote()
 
 
 def render_part1(
@@ -126,7 +129,6 @@ def render_part1(
         ray.remote(_pre_draw_components).remote(ph, tile_coords, consts)
         for tile_coords in track(tile_chunks[:batch_size], "Spawning initial tasks")
     ]
-    active_tasks = batch_size
     cursor = batch_size
     with Progress() as progress:
         main_id = progress.add_task(
@@ -135,14 +137,13 @@ def render_part1(
         ids = {}
         progresses = {}
         while ray.get(ph.get_complete.remote()) != len(tile_coords):
-            while active_tasks < batch_size and cursor < len(tile_chunks):
+            while ph.needs_new_task.remote() and cursor < len(tile_chunks):
                 futures.append(
                     ray.remote(_pre_draw_components).remote(
                         ph, tile_chunks[cursor], consts
                     )
                 )
                 cursor += 1
-                active_tasks += 1
             try:
                 id_ = ray.get(ph.get.remote())
             except Empty:
@@ -158,7 +159,6 @@ def render_part1(
                 progress.remove_task(ids[id_])
                 del progresses[id_]
                 del ids[id_]
-                active_tasks -= 1
     preresult: list[dict[TileCoord, list[_TextObject]]] = ray.get(futures)
     result = {}
     for a in preresult:
