@@ -74,7 +74,7 @@ def _prevent_text_overlap(
     ):
         tile_coords.add(tile_coord)
         for text in text_objects:
-            poly = unary_union(Polygon(b) for b in text.bounds)
+            poly = unary_union([Polygon(b) for b in text.bounds])
             if not any(poly.intersects(ni) for ni in no_intersect):
                 out.setdefault(tile_coord, []).append(text)
                 no_intersect.append(poly)
