@@ -163,6 +163,7 @@ def render_part1(
     result = {}
     for a in preresult:
         result.update(a)
+    (temp_dir / f"{export_id}.processed.0.pkl").unlink(missing_ok=True)
     return result
 
 

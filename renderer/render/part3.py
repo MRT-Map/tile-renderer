@@ -82,7 +82,7 @@ def render_part3(
     ):
         os.remove(file)
     for file in track(
-        glob.glob(str(temp_dir / f"{glob.escape(export_id)}.2.pkl")),
+        glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.2.pkl")),
         description="Cleaning up",
     ):
         os.remove(file)
