@@ -26,10 +26,13 @@ def render_part3(
 ) -> dict[TileCoord, Image.Image]:
     import ray
 
-    with open(temp_dir / f"{export_id}.2.pkl", "rb") as f:
-        new_texts, total_texts = pickle.load(f)
-    new_texts: dict[TileCoord, list[_TextObject]]
-    total_texts: int
+    new_texts = {}
+    total_texts = 0
+    for file in glob.glob(str(temp_dir / f"{export_id}_*.2.pkl")):
+        with open(file, "rb") as f:
+            z_new_texts, z_total_texts = pickle.load(f)
+            new_texts.update(z_new_texts)
+            total_texts += z_total_texts
 
     log.info(f"Rendering images in {len(new_texts)} tiles...")
     ph = ProgressHandler.remote()
