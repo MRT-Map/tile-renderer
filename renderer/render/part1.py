@@ -7,12 +7,14 @@ import os
 import pickle
 import re
 import traceback
+from dataclasses import dataclass
 from itertools import chain
 from pathlib import Path
 from queue import Empty
 
 import ray
 from PIL import Image, ImageDraw
+from ray import ObjectRef
 from rich.progress import Progress, track
 from rich.traceback import install
 
@@ -24,38 +26,35 @@ from renderer.types.skin import Skin, _TextObject
 from renderer.types.zoom_params import ZoomParams
 
 
+@dataclass(frozen=True, init=True)
+class Part1Consts:
+    coord_to_comp: dict[WorldCoord, list[Component]]
+    skin: Skin
+    zoom: ZoomParams
+    assets_dir: Path
+    export_id: str
+    temp_dir: Path
+
+
 def _pre_draw_components(
-    ph: ProgressHandler | None,
-    tile_coord: TileCoord,
-    coord_to_comp: dict[WorldCoord, list[Component]],
-    skin: Skin,
-    zoom: ZoomParams,
-    assets_dir: Path,
-    export_id: str,
-    temp_dir: Path,
+    ph: ProgressHandler | None, tile_coord: TileCoord, consts: Part1Consts
 ) -> tuple[TileCoord, list[_TextObject]]:
     # noinspection PyBroadException
     try:
         install(show_locals=True)
         logging.getLogger("fontTools").setLevel(logging.CRITICAL)
         logging.getLogger("PIL").setLevel(logging.CRITICAL)
-        path = temp_dir / f"{export_id}_{tile_coord}.0.pkl"
+        path = consts.temp_dir / f"{consts.export_id}_{tile_coord}.0.pkl"
         with open(path, "rb") as f:
             tile_components = pickle.load(f)
-        result = _draw_components(
-            ph,
-            tile_coord,
-            tile_components,
-            coord_to_comp,
-            skin,
-            zoom,
-            assets_dir,
-            export_id,
-            temp_dir,
-        )
+
+        result = _draw_components(ph, tile_coord, tile_components, consts)
+
         os.remove(path)
         if result is not None:
-            with open(temp_dir / f"{export_id}_{tile_coord}.1.pkl", "wb") as f:
+            with open(
+                consts.temp_dir / f"{consts.export_id}_{tile_coord}.1.pkl", "wb"
+            ) as f:
                 pickle.dump({result[0]: result[1]}, f)
         return result
     except Exception as e:
@@ -94,6 +93,18 @@ def render_part1(
         for node in comp.nodes:
             coord_to_comp.setdefault(node, []).append(comp)
 
+    # noinspection PyTypeChecker,PydanticTypeChecker
+    consts: Part1Consts = ray.put(
+        Part1Consts(
+            coord_to_comp,
+            skin,
+            zoom,
+            assets_dir,
+            export_id,
+            temp_dir,
+        )
+    )
+
     log.info(
         f"Rendering components in {len(tile_coords)} tiles ({sum(operations.values())} operations)..."
     )
@@ -101,24 +112,13 @@ def render_part1(
     if serial:
         out = {}
         for tile_coord in track(tile_coords, "Rendering components"):
-            (tc, lto) = _pre_draw_components(
-                None,
-                tile_coord,
-                coord_to_comp,
-                skin,
-                zoom,
-                assets_dir,
-                export_id,
-                temp_dir,
-            )
+            (tc, lto) = _pre_draw_components(None, tile_coord, consts)
             out[tc] = lto
         return out
 
     ph = ProgressHandler.remote()
     futures = [
-        ray.remote(_pre_draw_components).remote(
-            ph, tile_coord, coord_to_comp, skin, zoom, assets_dir, export_id, temp_dir
-        )
+        ray.remote(_pre_draw_components).remote(ph, tile_coord, consts)
         for tile_coord in track(tile_coords[:batch_size], "Spawning initial tasks")
     ]
     active_tasks = batch_size
@@ -133,14 +133,7 @@ def render_part1(
             while active_tasks < batch_size and cursor < len(tile_coords):
                 futures.append(
                     ray.remote(_pre_draw_components).remote(
-                        ph,
-                        tile_coords[cursor],
-                        coord_to_comp,
-                        skin,
-                        zoom,
-                        assets_dir,
-                        export_id,
-                        temp_dir,
+                        ph, tile_coords[cursor], consts
                     )
                 )
                 cursor += 1
@@ -214,25 +207,22 @@ def _draw_components(
     ph: ProgressHandler | None,
     tile_coord: TileCoord,
     tile_components: list[list[Component]],
-    coord_to_comp: dict[WorldCoord, list[Component]],
-    skin: Skin,
-    zoom: ZoomParams,
-    assets_dir: Path,
-    export_id: str,
-    temp_dir: Path,
+    consts: Part1Consts,
 ) -> tuple[TileCoord, list[_TextObject]]:
-    size = zoom.range * 2 ** (zoom.max - tile_coord[0])
-    img = Image.new(mode="RGBA", size=(skin.tile_size,) * 2, color=skin.background)
+    size = consts.zoom.range * 2 ** (consts.zoom.max - tile_coord[0])
+    img = Image.new(
+        mode="RGBA", size=(consts.skin.tile_size,) * 2, color=consts.skin.background
+    )
     imd = ImageDraw.Draw(img)
     text_list: list[_TextObject] = []
     points_text_list: list[_TextObject] = []
 
     for group in tile_components:
-        type_info = skin[group[0].type]
-        style = type_info[zoom.max - tile_coord[0]]
+        type_info = consts.skin[group[0].type]
+        style = type_info[consts.zoom.max - tile_coord[0]]
         for step in style:
             for component in group:
-                coords = component.nodes.to_image_line(skin, tile_coord, size)
+                coords = component.nodes.to_image_line(consts.skin, tile_coord, size)
 
                 args = {
                     "point": {
@@ -241,24 +231,24 @@ def _draw_components(
                             imd,
                             coords,
                             component.display_name,
-                            assets_dir,
+                            consts.assets_dir,
                             points_text_list,
                             tile_coord,
-                            skin.tile_size,
+                            consts.skin.tile_size,
                         ),
                         "square": (imd, coords),
-                        "image": (img, coords, assets_dir),
+                        "image": (img, coords, consts.assets_dir),
                     },
                     "line": {
                         "text": (
                             imd,
                             img,
                             coords,
-                            assets_dir,
+                            consts.assets_dir,
                             component,
                             text_list,
                             tile_coord,
-                            skin.tile_size,
+                            consts.skin.tile_size,
                         ),
                         "back": (imd, coords),
                         "fore": (imd, coords),
@@ -268,22 +258,22 @@ def _draw_components(
                             imd,
                             coords,
                             component,
-                            assets_dir,
+                            consts.assets_dir,
                             text_list,
                             tile_coord,
-                            skin.tile_size,
+                            consts.skin.tile_size,
                         ),
                         "centertext": (
                             imd,
                             coords,
                             component,
-                            assets_dir,
+                            consts.assets_dir,
                             text_list,
                             tile_coord,
-                            skin.tile_size,
+                            consts.skin.tile_size,
                         ),
                         "fill": (imd, img, coords, component, tile_coord, size),
-                        "centerimage": (img, coords, assets_dir),
+                        "centerimage": (img, coords, consts.assets_dir),
                     },
                 }
 
@@ -302,26 +292,28 @@ def _draw_components(
             ):
                 for coord in chain(*(c.nodes.coords for c in group)):
                     coord: WorldCoord
-                    inter = Image.new("RGBA", (skin.tile_size,) * 2, (0,) * 4)
-                    for con_component in coord_to_comp[coord]:
-                        if "road" not in skin[con_component.type].tags:
+                    inter = Image.new("RGBA", (consts.skin.tile_size,) * 2, (0,) * 4)
+                    for con_component in consts.coord_to_comp[coord]:
+                        if "road" not in consts.skin[con_component.type].tags:
                             continue
-                        con_info = skin[con_component.type]
-                        for con_step in con_info[zoom.max - tile_coord.z]:
+                        con_info = consts.skin[con_component.type]
+                        for con_step in con_info[consts.zoom.max - tile_coord.z]:
                             if con_step.layer != "fore":
                                 continue
 
                             con_coords = con_component.nodes.to_image_line(
-                                skin, tile_coord, size
+                                consts.skin, tile_coord, size
                             )
 
-                            con_img = Image.new("RGBA", (skin.tile_size,) * 2, (0,) * 4)
+                            con_img = Image.new(
+                                "RGBA", (consts.skin.tile_size,) * 2, (0,) * 4
+                            )
                             con_imd = ImageDraw.Draw(con_img)
                             con_step: Skin.ComponentTypeInfo.LineFore
                             con_step.render(con_imd, con_coords)
 
                             con_mask_img = Image.new(
-                                "RGBA", (skin.tile_size,) * 2, (0,) * 4
+                                "RGBA", (consts.skin.tile_size,) * 2, (0,) * 4
                             )
                             con_mask_imd = ImageDraw.Draw(con_mask_img)
                             con_mask_imd.ellipse(
@@ -347,7 +339,7 @@ def _draw_components(
     text_list += points_text_list
     text_list.reverse()
 
-    img.save(temp_dir / f"{export_id}_{tile_coord}.tmp.webp", "webp")
+    img.save(consts.temp_dir / f"{consts.export_id}_{tile_coord}.tmp.webp", "webp")
     if ph:
         ph.complete.remote()
 
