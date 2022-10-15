@@ -107,7 +107,7 @@ def prepare_render(
     log.info("Removing components with unknown type...")
     remove_list = _remove_unknown_component_types(components, skin)
     if remove_list:
-        log.warning("The following components were removed:" + " | ".join(remove_list))
+        log.warning("The following components were removed: " + " | ".join(remove_list))
 
     log.info("Sorting components by tiles...")
     tile_list = _sort_by_tiles(tiles, components, zoom)

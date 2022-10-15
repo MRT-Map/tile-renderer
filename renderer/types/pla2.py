@@ -87,8 +87,12 @@ def _enc_hook(obj: Any) -> Any:
 
 
 def _dec_hook(type_: Type, obj: Any) -> Any:
-    if type_ == Coord:
+    if type_ == WorldCoord:
         return Coord.dec_hook(obj)
+    elif type_ == WorldLine:
+        if len(obj) == 1:
+            obj.append(obj[0])
+        return WorldLine([_dec_hook(WorldCoord, o) for o in obj])
     return TypeError
 
 

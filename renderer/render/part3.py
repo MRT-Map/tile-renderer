@@ -4,6 +4,7 @@ import glob
 import logging
 import os
 import pickle
+import traceback
 from pathlib import Path
 from queue import Empty
 
@@ -98,24 +99,30 @@ def _draw_text(
     temp_dir: Path,
 ) -> dict[TileCoord, Image.Image]:
     logging.getLogger("PIL").setLevel(logging.CRITICAL)
-    image = Image.open(temp_dir / f"tmp/{export_id}_{tile_coord}.tmp.webp")
-    # print(text_list)
-    for text in text_list:
-        # logger.log(f"Text {processed}/{len(text_list)} pasted")
-        for img, center in zip(text.image, text.center):
-            image.paste(
-                img,
-                (
-                    int(center.x - tile_coord.x * skin.tile_size - img.width / 2),
-                    int(center.y - tile_coord.y * skin.tile_size - img.height / 2),
-                ),
-                img,
-            )
-        ph.add.remote(tile_coord)
+    # noinspection PyBroadException
+    try:
+        image = Image.open(temp_dir / f"{export_id}_{tile_coord}.tmp.webp")
+        # print(text_list)
+        for text in text_list:
+            # logger.log(f"Text {processed}/{len(text_list)} pasted")
+            for img, center in zip(text.image, text.center):
+                image.paste(
+                    img,
+                    (
+                        int(center.x - tile_coord.x * skin.tile_size - img.width / 2),
+                        int(center.y - tile_coord.y * skin.tile_size - img.height / 2),
+                    ),
+                    img,
+                )
+            ph.add.remote(tile_coord)
 
-    # tileReturn[tile_coord] = im
-    if save_images:
-        image.save(save_dir / f"{tile_coord}.webp", "webp")
-    ph.complete.remote()
+        # tileReturn[tile_coord] = im
+        if save_images:
+            image.save(save_dir / f"{tile_coord}.webp", "webp")
+        (temp_dir / f"{export_id}_{tile_coord}.tmp.webp").unlink(missing_ok=True)
+        ph.complete.remote()
 
-    return {tile_coord: image}
+        return {tile_coord: image}
+    except Exception as e:
+        log.error(f"Error in ray task: {e!r}")
+        log.error(traceback.format_exc())

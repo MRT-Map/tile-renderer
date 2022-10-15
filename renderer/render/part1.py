@@ -6,13 +6,16 @@ import logging
 import os
 import pickle
 import re
+import traceback
 from itertools import chain
 from pathlib import Path
 from queue import Empty
 
 import ray
 from PIL import Image, ImageDraw
+from rich.console import Console
 from rich.progress import Progress, track
+from rich.traceback import install
 
 from renderer.internals.logger import log
 from renderer.render.utils import ProgressHandler
@@ -32,27 +35,33 @@ def _pre_draw_components(
     export_id: str,
     temp_dir: Path,
 ) -> tuple[TileCoord, list[_TextObject]]:
-    path = temp_dir / f"{export_id}_{tile_coord}.0.pkl"
-    with open(path, "rb") as f:
-        tile_components = pickle.load(f)
-    logging.getLogger("fontTools").setLevel(logging.CRITICAL)
-    logging.getLogger("PIL").setLevel(logging.CRITICAL)
-    result = _draw_components(
-        ph,
-        tile_coord,
-        tile_components,
-        all_components,
-        skin,
-        zoom,
-        assets_dir,
-        export_id,
-        temp_dir,
-    )
-    os.remove(path)
-    if result is not None:
-        with open(temp_dir / f"{export_id}_{tile_coord}.1.pkl", "wb") as f:
-            pickle.dump({result[0]: result[1]}, f)
-    return result
+    # noinspection PyBroadException
+    try:
+        install(show_locals=True)
+        logging.getLogger("fontTools").setLevel(logging.CRITICAL)
+        logging.getLogger("PIL").setLevel(logging.CRITICAL)
+        path = temp_dir / f"{export_id}_{tile_coord}.0.pkl"
+        with open(path, "rb") as f:
+            tile_components = pickle.load(f)
+        result = _draw_components(
+            ph,
+            tile_coord,
+            tile_components,
+            all_components,
+            skin,
+            zoom,
+            assets_dir,
+            export_id,
+            temp_dir,
+        )
+        os.remove(path)
+        if result is not None:
+            with open(temp_dir / f"{export_id}_{tile_coord}.1.pkl", "wb") as f:
+                pickle.dump({result[0]: result[1]}, f)
+        return result
+    except Exception as e:
+        log.error(f"Error in ray task: {e!r}")
+        log.error(traceback.format_exc())
 
 
 def render_part1_ray(
@@ -60,7 +69,7 @@ def render_part1_ray(
     zoom: ZoomParams,
     export_id: str,
     skin: Skin = Skin.from_name("default"),
-    assets_dir: Path = Path(__file__).parent / "skins" / "assets",
+    assets_dir: Path = Path(__file__).parent.parent / "skins" / "assets",
     batch_size: int = 8,
     temp_dir: Path = Path.cwd() / "temp",
 ) -> dict[TileCoord, list[_TextObject]]:
@@ -82,9 +91,9 @@ def render_part1_ray(
     ph = ProgressHandler.remote()
     futures = [
         ray.remote(_pre_draw_components).remote(
-            ph, tile_coord, components, skin, zoom, assets_dir, export_id
+            ph, tile_coord, components, skin, zoom, assets_dir, export_id, temp_dir
         )
-        for tile_coord in tile_coords[:batch_size]
+        for tile_coord in track(tile_coords[:batch_size], "Spawning initial tasks")
     ]
     active_tasks = batch_size
     cursor = batch_size
@@ -105,6 +114,7 @@ def render_part1_ray(
                         zoom,
                         assets_dir,
                         export_id,
+                        temp_dir,
                     )
                 )
                 cursor += 1

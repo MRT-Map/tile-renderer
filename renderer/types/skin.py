@@ -17,7 +17,7 @@ from schema import And, Optional, Or, Regex, Schema
 import renderer.internals.internal as internal
 from renderer import math_utils
 from renderer.types import RealNum, SkinJson, SkinType
-from renderer.types.coord import ImageCoord, ImageLine, TileCoord
+from renderer.types.coord import Coord, ImageCoord, ImageLine, TileCoord
 from renderer.types.pla2 import Component
 
 Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=16)
@@ -42,10 +42,10 @@ class _TextObject:
         imd: ImageDraw,
         debug: bool = False,
     ):
+        rot *= math.pi / 180
         r = functools.partial(
             math_utils.rotate_around_pivot,
-            px=tile_coord.x * tile_size + x,
-            py=tile_coord.y * tile_size + y,
+            pivot=Coord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),
             theta=-rot,
         )
         self.image = (image,)
@@ -55,24 +55,34 @@ class _TextObject:
         self.bounds = (
             (
                 r(
-                    tile_coord.x * tile_size + x - w / 2,
-                    tile_coord.y * tile_size + y - h / 2,
+                    Coord(
+                        tile_coord.x * tile_size + x - w / 2,
+                        tile_coord.y * tile_size + y - h / 2,
+                    )
                 ),
                 r(
-                    tile_coord.x * tile_size + x - w / 2,
-                    tile_coord.y * tile_size + y + h / 2,
+                    Coord(
+                        tile_coord.x * tile_size + x - w / 2,
+                        tile_coord.y * tile_size + y + h / 2,
+                    )
                 ),
                 r(
-                    tile_coord.x * tile_size + x + w / 2,
-                    tile_coord.y * tile_size + y + h / 2,
+                    Coord(
+                        tile_coord.x * tile_size + x + w / 2,
+                        tile_coord.y * tile_size + y + h / 2,
+                    )
                 ),
                 r(
-                    tile_coord.x * tile_size + x + w / 2,
-                    tile_coord.y * tile_size + y - h / 2,
+                    Coord(
+                        tile_coord.x * tile_size + x + w / 2,
+                        tile_coord.y * tile_size + y - h / 2,
+                    )
                 ),
                 r(
-                    tile_coord.x * tile_size + x - w / 2,
-                    tile_coord.y * tile_size + y - h / 2,
+                    Coord(
+                        tile_coord.x * tile_size + x - w / 2,
+                        tile_coord.y * tile_size + y - h / 2,
+                    )
                 ),
             ),
         )
@@ -413,9 +423,9 @@ class Skin:
                 text_objects = []
                 swap = coords.coords[-1].x < coords.coords[0].x
                 if swap and upright:
-                    coords = coords[::-1]
-                for c1, c2 in internal._with_next(coords):
-                    if c2 == coords[-1]:
+                    coords = ImageLine(coords.coords[::-1])
+                for c1, c2 in internal._with_next([a for a in coords]):
+                    if c2 == coords.coords[-1]:
                         while char_cursor < len(text):
                             text_to_print += text[char_cursor]
                             char_cursor += 1
@@ -641,7 +651,11 @@ class Skin:
                     for dash_coords in math_utils.dash(
                         coords, self.dash[0], self.dash[1]
                     ):
-                        imd.line(dash_coords.coords, fill=self.colour, width=self.width)
+                        imd.line(
+                            [(c.x, c.y) for c in dash_coords],
+                            fill=self.colour,
+                            width=self.width,
+                        )
 
         class LineFore(LineBack):
             # noinspection PyInitNewSignature
@@ -768,9 +782,9 @@ class Skin:
             ):
                 if len(component.display_name.strip()) == 0:
                     return
-                c = coords.centroid
-                c.x += self.offset.x
-                c.y += self.offset.y
+                c = ImageCoord(
+                    coords.centroid.x + self.offset.x, coords.centroid.y + self.offset.y
+                )
                 font = self._type_info._skin.get_font(
                     "", self.size + 2, assets_dir, component.display_name
                 )
@@ -893,7 +907,9 @@ class Skin:
                             fill=self.colour,
                         )
                         tlx += self.stripe[0] + self.stripe[1]
-                    af_i = af_i.rotate(self.stripe[2], center=coords.centroid)
+                    af_i = af_i.rotate(
+                        self.stripe[2], center=(coords.centroid.x, coords.centroid.y)
+                    )
                     mi = Image.new(
                         "RGBA",
                         (
@@ -903,7 +919,7 @@ class Skin:
                         (0, 0, 0, 0),
                     )
                     md = ImageDraw.Draw(mi)
-                    md.polygon(coords.coords, fill=self.colour)
+                    md.polygon([(c.x, c.y) for c in coords.coords], fill=self.colour)
                     pi = Image.new(
                         "RGBA",
                         (
@@ -916,7 +932,11 @@ class Skin:
                     ai.paste(pi, (0, 0), pi)
                 else:
                     # logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Filling area")
-                    ad.polygon(coords.coords, fill=self.colour, outline=self.outline)
+                    ad.polygon(
+                        [(c.x, c.y) for c in coords.coords],
+                        fill=self.colour,
+                        outline=self.outline,
+                    )
 
                 """if component.hollows is not None:
                     for n in component.hollows:
@@ -928,7 +948,7 @@ class Skin:
 
                 if self.outline is not None:
                     # logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Drawing outline")
-                    exterior_outline = coords[:]
+                    exterior_outline = coords.coords[:]
                     exterior_outline.append(exterior_outline[0])
                     outlines = [exterior_outline]
                     """if component.hollows is not None:
@@ -939,7 +959,12 @@ class Skin:
                             n_coords.append(n_coords[0])
                             outlines.append(n_coords)  """
                     for o_coords in outlines:
-                        imd.line(o_coords, fill=self.outline, width=2, joint="curve")
+                        imd.line(
+                            [(c.x, c.y) for c in o_coords],
+                            fill=self.outline,
+                            width=2,
+                            joint="curve",
+                        )
 
         class AreaCenterImage(ComponentStyle):
             # noinspection PyInitNewSignature
@@ -952,7 +977,7 @@ class Skin:
             def render(
                 self, img: Image.Image, coords: ImageLine, assets_dir: Path, **_
             ):
-                cx, cy = coords.centroid
+                cx, cy = (coords.centroid.x, coords.centroid.y)
                 icon = Image.open(assets_dir / self.file)
                 img.paste(icon, (cx + self.offset.x, cy + self.offset.y), icon)
 

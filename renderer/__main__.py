@@ -6,8 +6,11 @@ from pathlib import Path
 import psutil
 import vector
 from rich.progress import track
+from rich.traceback import install
 
 from renderer.pla1to2 import pla1to2
+
+install(show_locals=True)
 
 
 def p_validate(p: argparse.ArgumentParser):
@@ -217,17 +220,17 @@ def main():
     args = parser.parse_args()
 
     if args.task == "info":
-        log.info(f"[yellow]tile-renderer v{renderer.__version__}")
+        log.info(f"[yellow]tile-renderer [cyan]v{renderer.__version__}")
         log.info(
             "[yellow]Made by 7d for the OpenMRTMap project of the Minecart Rapid Transit Mapping Services"
         )
-        log.info("Github: https://github.com/MRT-Map/tile-renderer")
+        log.info("GitHub: https://github.com/MRT-Map/tile-renderer")
         log.info("PyPI: https://pypi.org/project/tile-renderer/")
         log.info("Docs: https://tile-renderer.readthedocs.io/en/latest/")
         log.info("More about OpenMRTMap: https://github.com/MRT-Map")
     elif args.task == "render":
         log.info("Getting components...")
-        file = Pla2File(renderer.internals.internal._read_json(args.components))
+        file = Pla2File.from_file(args.file)
         log.info("Getting skin...")
         skin = Skin.from_name(args.skin)
         log.info("Starting rendering...")

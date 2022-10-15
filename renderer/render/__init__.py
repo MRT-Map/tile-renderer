@@ -26,7 +26,7 @@ def render(
     export_id: str = "unnamed",
     save_images: bool = True,
     save_dir: Path = Path.cwd() / "tiles",
-    assets_dir: Path = Path(__file__).parent / "skins" / "assets",
+    assets_dir: Path = Path(__file__).parent.parent / "skins" / "assets",
     temp_dir: Path = Path.cwd() / "temp",
     processes: int = psutil.cpu_count(),
     tiles: list[TileCoord] | None = None,
@@ -66,7 +66,7 @@ def render(
 
     prepare_render(components, zoom, export_id, skin, tiles, offset, temp_dir)
 
-    log.info("Initialising Ray...")
+    log.info(f"Initialising Ray with {processes=}...")
     ray.init(num_cpus=processes)
     render_part1_ray(
         components, zoom, export_id, skin, assets_dir, batch_size, temp_dir

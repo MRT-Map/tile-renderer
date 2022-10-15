@@ -3,6 +3,7 @@ from __future__ import annotations
 import functools
 import math
 from dataclasses import dataclass
+from itertools import chain
 from typing import TYPE_CHECKING, Any, Generator, Generic, NamedTuple, TypeVar
 
 import numpy as np
@@ -28,6 +29,9 @@ class Coord(Point):
     @staticmethod
     def dec_hook(obj: tuple[float, float]) -> Coord:
         return Coord(*obj)
+
+    def __hash__(self):
+        return hash((self.x, self.y))
 
 
 class ImageCoord(Coord):
@@ -71,12 +75,16 @@ class Line(LineString):
     def np(self) -> NDArray[Shape["*, 2"], Int]:
         return np.array(self.coords)
 
+    @property
+    def coords(self) -> list[Coord]:
+        return [c for c in self]
+
     def __iter__(self) -> Generator[WorldCoord, Any, None]:
-        for c in self.coords:
+        for c in super().coords:
             yield WorldCoord(c)
 
     @functools.cached_property
-    def bounds(self) -> Bounds[int]:
+    def bounds(self) -> Bounds[float]:
         """
         Find the minimum and maximum x/y values of a set of coords.
 
@@ -89,6 +97,9 @@ class Line(LineString):
             y_min=min(c.y for c in self.coords),
         )
 
+    def parallel_offset(self, *args, **kwargs):
+        return Line(super().parallel_offset(*args, **kwargs))
+
     def to_tiles(self, z: ZoomParams) -> list[TileCoord]:
         """
         Generates tile coordinates from list of regular coordinates using :py:func:`tools.coord.to_tiles()`. Mainly for rendering whole components.
@@ -100,17 +111,17 @@ class Line(LineString):
         """
 
         bounds = Bounds(
-            x_max=max(c.x for c in self.coords) + 10,
-            x_min=min(c.x for c in self.coords) - 10,
-            y_max=max(c.y for c in self.coords) + 10,
-            y_min=min(c.y for c in self.coords) - 10,
+            x_max=int(max(c.x for c in self.coords)) + 10,
+            x_min=int(min(c.x for c in self.coords)) - 10,
+            y_max=int(max(c.y for c in self.coords)) + 10,
+            y_min=int(min(c.y for c in self.coords)) - 10,
         )
         xr = list(range(bounds.x_min, bounds.x_max + 1, int(z.range / 2)))
         xr.append(bounds.x_max + 1)
         yr = list(range(bounds.y_min, bounds.y_max + 1, int(z.range / 2)))
         yr.append(bounds.y_max + 1)
-        tiles = [WorldCoord(x, y).tiles(z) for x in xr for y in yr]
-        tiles = list(set(*tiles))
+        tiles = (WorldCoord(x, y).tiles(z) for x in xr for y in yr)
+        tiles = list(set(chain(*tiles)))
         return tiles
 
     def in_bounds(self, bounds: Bounds[int]) -> bool:
