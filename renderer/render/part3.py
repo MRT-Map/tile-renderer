@@ -17,7 +17,7 @@ from renderer.types.coord import TileCoord
 from renderer.types.skin import Skin, _TextObject
 
 
-def render_part3_ray(
+def render_part3(
     export_id: str,
     skin: Skin = Skin.from_name("default"),
     save_images: bool = True,
@@ -89,7 +89,7 @@ def render_part3_ray(
 
 
 def _draw_text(
-    ph,
+    ph: ProgressHandler | None,
     tile_coord: TileCoord,
     text_list: list[_TextObject],
     save_images: bool,
@@ -114,13 +114,15 @@ def _draw_text(
                     ),
                     img,
                 )
-            ph.add.remote(tile_coord)
+            if ph:
+                ph.add.remote(tile_coord)
 
         # tileReturn[tile_coord] = im
         if save_images:
             image.save(save_dir / f"{tile_coord}.webp", "webp")
         (temp_dir / f"{export_id}_{tile_coord}.tmp.webp").unlink(missing_ok=True)
-        ph.complete.remote()
+        if ph:
+            ph.complete.remote()
 
         return {tile_coord: image}
     except Exception as e:

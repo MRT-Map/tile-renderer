@@ -9,9 +9,9 @@ from PIL import Image
 from vector import Vector2D
 
 from renderer.internals.logger import log
-from renderer.render.part1 import render_part1_ray
+from renderer.render.part1 import render_part1
 from renderer.render.part2 import render_part2
-from renderer.render.part3 import render_part3_ray
+from renderer.render.part3 import render_part3
 from renderer.render.prepare import prepare_render
 from renderer.types.coord import TileCoord
 from renderer.types.pla2 import Pla2File
@@ -32,6 +32,7 @@ def render(
     tiles: list[TileCoord] | None = None,
     offset: Vector2D = vector.obj(x=0, y=0),
     batch_size: int = 8,
+    part1_serial: bool = False,
 ) -> dict[TileCoord, Image.Image]:
     # noinspection GrazieInspection
     """
@@ -68,8 +69,15 @@ def render(
 
     log.info(f"Initialising Ray with {processes=}...")
     ray.init(num_cpus=processes)
-    render_part1_ray(
-        components, zoom, export_id, skin, assets_dir, batch_size, temp_dir
+    render_part1(
+        components,
+        zoom,
+        export_id,
+        skin,
+        assets_dir,
+        batch_size,
+        temp_dir,
+        part1_serial,
     )
     render_part2(export_id, temp_dir)
-    return render_part3_ray(export_id, skin, save_images, save_dir, temp_dir)
+    return render_part3(export_id, skin, save_images, save_dir, temp_dir)

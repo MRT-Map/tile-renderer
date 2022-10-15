@@ -13,7 +13,7 @@ from renderer.types.skin import _TextObject
 
 
 def render_part2(
-    export_id: str, temp_dir: Path
+    export_id: str, temp_dir: Path = Path.cwd() / "temp"
 ) -> tuple[dict[TileCoord, list[_TextObject]], int]:
     in_ = {}
     for file in track(

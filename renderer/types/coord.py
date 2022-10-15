@@ -77,6 +77,9 @@ class Line(LineString):
         for c in super().coords:
             yield WorldCoord(c)
 
+    def __len__(self):
+        return len(super().coords)
+
     @functools.cached_property
     def bounds(self) -> Bounds[float]:
         """

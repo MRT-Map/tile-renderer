@@ -25,9 +25,9 @@ from renderer.types.zoom_params import ZoomParams
 
 
 def _pre_draw_components(
-    ph: ProgressHandler,
+    ph: ProgressHandler | None,
     tile_coord: TileCoord,
-    all_components: Pla2File,
+    coord_to_comp: dict[WorldCoord, list[Component]],
     skin: Skin,
     zoom: ZoomParams,
     assets_dir: Path,
@@ -46,7 +46,7 @@ def _pre_draw_components(
             ph,
             tile_coord,
             tile_components,
-            all_components,
+            coord_to_comp,
             skin,
             zoom,
             assets_dir,
@@ -63,7 +63,7 @@ def _pre_draw_components(
         log.error(traceback.format_exc())
 
 
-def render_part1_ray(
+def render_part1(
     components: Pla2File,
     zoom: ZoomParams,
     export_id: str,
@@ -71,6 +71,7 @@ def render_part1_ray(
     assets_dir: Path = Path(__file__).parent.parent / "skins" / "assets",
     batch_size: int = 8,
     temp_dir: Path = Path.cwd() / "temp",
+    serial: bool = False,
 ) -> dict[TileCoord, list[_TextObject]]:
     tile_coords = []
     for file in glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.0.pkl")):
@@ -86,11 +87,35 @@ def render_part1_ray(
     operations = _count_num_rendering_oprs(export_id, skin, zoom, temp_dir)
     gc.collect()
 
-    log.info(f"Rendering components in {len(tile_coords)} tiles...")
+    coord_to_comp: dict[WorldCoord, list[Component]] = {}
+    for comp in track(components, "Generating coord_to_comp"):
+        for node in comp.nodes:
+            coord_to_comp.setdefault(node, []).append(comp)
+
+    log.info(
+        f"Rendering components in {len(tile_coords)} tiles ({sum(operations.values())} operations)..."
+    )
+
+    if serial:
+        out = {}
+        for tile_coord in track(tile_coords, "Rendering components"):
+            (tc, lto) = _pre_draw_components(
+                None,
+                tile_coord,
+                coord_to_comp,
+                skin,
+                zoom,
+                assets_dir,
+                export_id,
+                temp_dir,
+            )
+            out[tc] = lto
+        return out
+
     ph = ProgressHandler.remote()
     futures = [
         ray.remote(_pre_draw_components).remote(
-            ph, tile_coord, components, skin, zoom, assets_dir, export_id, temp_dir
+            ph, tile_coord, coord_to_comp, skin, zoom, assets_dir, export_id, temp_dir
         )
         for tile_coord in track(tile_coords[:batch_size], "Spawning initial tasks")
     ]
@@ -108,7 +133,7 @@ def render_part1_ray(
                     ray.remote(_pre_draw_components).remote(
                         ph,
                         tile_coords[cursor],
-                        components,
+                        coord_to_comp,
                         skin,
                         zoom,
                         assets_dir,
@@ -184,10 +209,10 @@ def _count_num_rendering_oprs(
 
 
 def _draw_components(
-    ph,
+    ph: ProgressHandler | None,
     tile_coord: TileCoord,
     tile_components: list[list[Component]],
-    all_components: Pla2File,
+    coord_to_comp: dict[WorldCoord, list[Component]],
     skin: Skin,
     zoom: ZoomParams,
     assets_dir: Path,
@@ -265,63 +290,63 @@ def _draw_components(
                 # logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}")
                 step.render(*args[type_info.shape][step.layer])
 
-                ph.add.remote(tile_coord)
+                if ph:
+                    ph.add.remote(tile_coord)
 
             if (
                 type_info.shape == "line"
                 and "road" in type_info.tags
                 and step.layer == "back"
             ):
-                # logger.log("Rendering studs")
-                attached: list[tuple[Component, WorldCoord]] = list(
-                    chain(
-                        *(
-                            comp.find_components_attached(all_components)
-                            for comp in group
-                        )
-                    )
-                )
-                for con_component, coord in attached:
-                    if "road" not in skin[con_component.type].tags:
-                        continue
-                    con_info = skin[con_component.type]
-                    for con_step in con_info[zoom.max - tile_coord.z]:
-                        if con_step.layer in ["back", "text"]:
+                for coord in chain(*(c.nodes.coords for c in group)):
+                    coord: WorldCoord
+                    inter = Image.new("RGBA", (skin.tile_size,) * 2, (0,) * 4)
+                    for con_component in coord_to_comp[coord]:
+                        if "road" not in skin[con_component.type].tags:
                             continue
+                        con_info = skin[con_component.type]
+                        for con_step in con_info[zoom.max - tile_coord.z]:
+                            if con_step.layer != "fore":
+                                continue
 
-                        con_coords = con_component.nodes.to_image_line(
-                            skin, tile_coord, size
-                        )
+                            con_coords = con_component.nodes.to_image_line(
+                                skin, tile_coord, size
+                            )
 
-                        con_img = Image.new("RGBA", (skin.tile_size,) * 2, (0,) * 4)
-                        con_imd = ImageDraw.Draw(con_img)
-                        con_step: Skin.ComponentTypeInfo.LineFore
-                        con_step.render(con_imd, con_coords)
+                            con_img = Image.new("RGBA", (skin.tile_size,) * 2, (0,) * 4)
+                            con_imd = ImageDraw.Draw(con_img)
+                            con_step: Skin.ComponentTypeInfo.LineFore
+                            con_step.render(con_imd, con_coords)
 
-                        con_mask_img = Image.new(
-                            "RGBA", (skin.tile_size,) * 2, (0,) * 4
-                        )
-                        con_mask_imd = ImageDraw.Draw(con_mask_img)
-                        con_mask_imd.ellipse(
-                            (
-                                coord.x - (max(con_step.width, step.width) * 2) / 2 + 1,
-                                coord.y - (max(con_step.width, step.width) * 2) / 2 + 1,
-                                coord.x + (max(con_step.width, step.width) * 2) / 2,
-                                coord.y + (max(con_step.width, step.width) * 2) / 2,
-                            ),
-                            fill="#000000",
-                        )
+                            con_mask_img = Image.new(
+                                "RGBA", (skin.tile_size,) * 2, (0,) * 4
+                            )
+                            con_mask_imd = ImageDraw.Draw(con_mask_img)
+                            con_mask_imd.ellipse(
+                                (
+                                    coord.x
+                                    - (max(con_step.width, step.width) * 2) / 2
+                                    + 1,
+                                    coord.y
+                                    - (max(con_step.width, step.width) * 2) / 2
+                                    + 1,
+                                    coord.x + (max(con_step.width, step.width) * 2) / 2,
+                                    coord.y + (max(con_step.width, step.width) * 2) / 2,
+                                ),
+                                fill="#000000",
+                            )
 
-                        inter = Image.new("RGBA", (skin.tile_size,) * 2, (0,) * 4)
-                        inter.paste(con_img, (0, 0), con_mask_img)
-                        img.paste(inter, (0, 0), inter)
+                            inter.paste(con_img, (0, 0), con_mask_img)
+                    img.paste(inter, (0, 0), inter)
 
-                ph.add.remote(tile_coord)
+                if ph:
+                    ph.add.remote(tile_coord)
 
     text_list += points_text_list
     text_list.reverse()
 
     img.save(temp_dir / f"{export_id}_{tile_coord}.tmp.webp", "webp")
-    ph.complete.remote()
+    if ph:
+        ph.complete.remote()
 
     return tile_coord, text_list

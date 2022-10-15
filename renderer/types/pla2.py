@@ -27,16 +27,6 @@ class Component(Struct):
     def fid(self) -> str:
         return f"{self.namespace}-{self.id}"
 
-    def find_components_attached(
-        self, other_components: Pla2File
-    ) -> list[tuple[Component, WorldCoord]]:
-        return [
-            (other_component, coord)
-            for other_component in other_components.components
-            for coord in self.nodes
-            if coord in other_component.nodes
-        ]
-
     @staticmethod
     def find_ends(components: list[Component]) -> Bounds[int]:
         """
@@ -155,6 +145,9 @@ class Pla2File(Struct):
     def __iter__(self) -> Generator[Component, Any, None]:
         for component in self.components:
             yield component
+
+    def __len__(self):
+        return len(self.components)
 
     @property
     def ids(self) -> list[str]:
