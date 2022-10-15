@@ -1,7 +1,5 @@
 from dataclasses import dataclass
 
-from renderer.types import float
-
 
 @dataclass(frozen=True)
 class ZoomParams:

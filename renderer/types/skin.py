@@ -16,7 +16,7 @@ from schema import And, Optional, Or, Regex, Schema
 
 import renderer.internals.internal as internal
 from renderer import math_utils
-from renderer.types import SkinJson, SkinType, float
+from renderer.types import SkinJson, SkinType
 from renderer.types.coord import Coord, ImageCoord, ImageLine, TileCoord
 from renderer.types.pla2 import Component
 
