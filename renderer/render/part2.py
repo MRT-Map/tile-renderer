@@ -68,23 +68,16 @@ def _prevent_text_overlap(
     out = {}
     tile_coords = set()
 
-    no_intersect = unary_union([])
+    no_intersect: list[Polygon] = []
     for tile_coord, text_objects in progress.track(
         texts, description=f"Zoom {zoom}: [dim white]Filtering text", total=length
     ):
         tile_coords.add(tile_coord)
         for text in text_objects:
-            is_rendered = True
-            polys = []
-            for bound in text.bounds:
-                poly = Polygon(bound)
-                if Polygon(bound).intersects(no_intersect):
-                    is_rendered = False
-                    break
-                polys.append(poly)
-            if is_rendered:
+            poly = unary_union(Polygon(b) for b in text.bounds)
+            if not any(poly.intersects(ni) for ni in no_intersect):
                 out.setdefault(tile_coord, []).append(text)
-                no_intersect = unary_union([no_intersect, *polys])
+                no_intersect.append(poly)
 
     default = {tc: [] for tc in tile_coords}
     return {**default, **out}
