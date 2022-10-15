@@ -37,26 +37,29 @@ class Part1Consts:
 
 
 def _pre_draw_components(
-    ph: ProgressHandler | None, tile_coord: TileCoord, consts: Part1Consts
-) -> tuple[TileCoord, list[_TextObject]]:
+    ph: ProgressHandler | None, tile_coords: list[TileCoord], consts: Part1Consts
+) -> dict[TileCoord, list[_TextObject]]:
     # noinspection PyBroadException
     try:
         install(show_locals=True)
         logging.getLogger("fontTools").setLevel(logging.CRITICAL)
         logging.getLogger("PIL").setLevel(logging.CRITICAL)
-        path = consts.temp_dir / f"{consts.export_id}_{tile_coord}.0.pkl"
-        with open(path, "rb") as f:
-            tile_components = pickle.load(f)
+        results = {}
+        for tile_coord in tile_coords:
+            path = consts.temp_dir / f"{consts.export_id}_{tile_coord}.0.pkl"
+            with open(path, "rb") as f:
+                tile_components = pickle.load(f)
 
-        result = _draw_components(ph, tile_coord, tile_components, consts)
+            out = _draw_components(ph, tile_coord, tile_components, consts)
 
-        os.remove(path)
-        if result is not None:
-            with open(
-                consts.temp_dir / f"{consts.export_id}_{tile_coord}.1.pkl", "wb"
-            ) as f:
-                pickle.dump({result[0]: result[1]}, f)
-        return result
+            os.remove(path)
+            if out is not None:
+                with open(
+                    consts.temp_dir / f"{consts.export_id}_{tile_coord}.1.pkl", "wb"
+                ) as f:
+                    pickle.dump({out[0]: out[1]}, f)
+            results[out[0]] = out[1]
+        return results
     except Exception as e:
         log.error(f"Error in ray task: {e!r}")
         log.error(traceback.format_exc())
@@ -93,8 +96,7 @@ def render_part1(
         for node in comp.nodes:
             coord_to_comp.setdefault(node, []).append(comp)
 
-    # noinspection PyTypeChecker,PydanticTypeChecker
-    consts: Part1Consts = ray.put(
+    consts: ObjectRef[Part1Consts] = ray.put(
         Part1Consts(
             coord_to_comp,
             skin,
@@ -112,14 +114,17 @@ def render_part1(
     if serial:
         out = {}
         for tile_coord in track(tile_coords, "Rendering components"):
-            (tc, lto) = _pre_draw_components(None, tile_coord, consts)
+            (tc, lto) = _pre_draw_components(None, [tile_coord], ray.get(consts))
             out[tc] = lto
         return out
 
+    n = 5  # TODO param for this
+    tile_chunks = [tile_coords[i : i + n] for i in range(0, len(tile_coords), n)]
     ph = ProgressHandler.remote()
+
     futures = [
         ray.remote(_pre_draw_components).remote(ph, tile_coord, consts)
-        for tile_coord in track(tile_coords[:batch_size], "Spawning initial tasks")
+        for tile_coord in track(tile_chunks[:batch_size], "Spawning initial tasks")
     ]
     active_tasks = batch_size
     cursor = batch_size
@@ -133,7 +138,7 @@ def render_part1(
             while active_tasks < batch_size and cursor < len(tile_coords):
                 futures.append(
                     ray.remote(_pre_draw_components).remote(
-                        ph, tile_coords[cursor], consts
+                        ph, tile_chunks[cursor], consts
                     )
                 )
                 cursor += 1
@@ -154,8 +159,11 @@ def render_part1(
                 del progresses[id_]
                 del ids[id_]
                 active_tasks -= 1
-    result: list[tuple[TileCoord, list[_TextObject]]] = ray.get(futures)
-    return {r[0]: r[1] for r in result}
+    preresult: list[dict[TileCoord, list[_TextObject]]] = ray.get(futures)
+    result = {}
+    for a in preresult:
+        result.update(a)
+    return result
 
 
 def _count_num_rendering_oprs(
