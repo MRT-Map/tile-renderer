@@ -157,3 +157,4 @@ __pycache__
 renderer/tmp/*.tmp.png
 renderer/tmp/*.pkl
 renderer/skins/Noto_Sans.zip
+temp/*

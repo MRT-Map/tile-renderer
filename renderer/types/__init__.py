@@ -5,9 +5,6 @@ try:
 except ImportError:
     TypeAlias = type
 
-RealNum: TypeAlias = Union[int, float]
-"""Represents a real number, either an integer or float."""
-
 Pla1NodeJson = TypedDict("Pla1NodeJson", {"x": int, "y": int, "connections": list})
 """Represents a node JSON object."""
 Pla1NodeListJson: TypeAlias = dict[str, Pla1NodeJson]
@@ -19,7 +16,7 @@ Pla1ComponentJson = TypedDict(
         "type": str,
         "displayname": str,
         "description": str,
-        "layer": RealNum,
+        "layer": float,
         "nodes": list[str],
         "attrs": dict[str, Any],
         "hollows": list[list[str]],

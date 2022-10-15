@@ -6,9 +6,7 @@ from pathlib import Path
 from typing import Any, Generator, Tuple, Type
 
 import msgspec.json
-import numpy as np
 from msgspec import Struct
-from nptyping import Int, NDArray, Shape
 
 from renderer.types.coord import Bounds, Coord, TileCoord, WorldCoord, WorldLine
 from renderer.types.zoom_params import ZoomParams
@@ -24,10 +22,6 @@ class Component(Struct):
     nodes: WorldLine
     attrs: dict
     tags: list[str]
-
-    @property
-    def nodes_as_ndarray(self) -> NDArray[Shape["*, 2"], Int]:
-        return np.array(self.nodes)
 
     @property
     def fid(self) -> str:
@@ -51,7 +45,7 @@ class Component(Struct):
         :param ComponentList components: a JSON of components
 
         :returns: TODO
-        :rtype: Tuple[RealNum, RealNum, RealNum, RealNum]
+        :rtype: Tuple[float, float, float, float]
         """
         bounds = [component.nodes.bounds for component in components]
         return Bounds(

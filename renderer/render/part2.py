@@ -6,9 +6,9 @@ import pickle
 from pathlib import Path
 
 from rich.progress import Progress, track
+from shapely.geometry import Polygon
 
-from renderer import math_utils as math_utils
-from renderer.types.coord import Line, TileCoord, WorldCoord
+from renderer.types.coord import TileCoord, WorldCoord
 from renderer.types.skin import _TextObject
 
 
@@ -68,7 +68,7 @@ def _prevent_text_overlap(
                 is_rendered = True
                 for other in no_intersect:
                     for bound in text.bounds:
-                        if math_utils.poly_intersect(Line(bound), Line(other)):
+                        if Polygon(bound).intersects(Polygon(other)):
                             is_rendered = False
                             del text_dict[text]
                             break

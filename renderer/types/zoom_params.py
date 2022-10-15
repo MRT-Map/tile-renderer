@@ -1,6 +1,6 @@
 from dataclasses import dataclass
 
-from renderer.types import RealNum
+from renderer.types import float
 
 
 @dataclass(frozen=True)
@@ -11,13 +11,13 @@ class ZoomParams:
 
     :param int min: minimum zoom value
     :param int max: maximum zoom value
-    :param RealNum range: actual distance covered by a tile in the maximum zoom
+    :param float range: actual distance covered by a tile in the maximum zoom
 
     :raises ValueError: if min > max
     """
     min: int
     max: int
-    range: RealNum
+    range: float
 
     def __post_init__(self):
         if self.min > self.max:

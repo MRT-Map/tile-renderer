@@ -53,7 +53,7 @@ def render(
     :param tiles: a list of tiles to render
     :type tiles: list[TileCoord] | None
     :param offset: the offset to shift all node coordinates by, given as ``(x,y)``
-    :type offset: tuple[RealNum, RealNum]
+    :type offset: tuple[float, float]
     :param int batch_size: The batch size for part 1 of the rendering
 
     :returns: Given in the form of ``{tile_coord: image}``

@@ -6,8 +6,6 @@ from dataclasses import dataclass
 from itertools import chain
 from typing import TYPE_CHECKING, Any, Generator, Generic, NamedTuple, TypeVar
 
-import numpy as np
-from nptyping import Int, NDArray, Shape
 from shapely.geometry import LineString, Point
 
 from renderer import math_utils
@@ -71,10 +69,6 @@ class Bounds(Generic[_T]):
 
 
 class Line(LineString):
-    @functools.cached_property
-    def np(self) -> NDArray[Shape["*, 2"], Int]:
-        return np.array(self.coords)
-
     @property
     def coords(self) -> list[Coord]:
         return [c for c in self]
@@ -89,7 +83,7 @@ class Line(LineString):
         Find the minimum and maximum x/y values of a set of coords.
 
         :returns: Returns in the form ``(x_max, x_min, y_max, y_min)``
-        :rtype: Tuple[RealNum, RealNum, RealNum, RealNum]"""
+        :rtype: Tuple[float, float, float, float]"""
         return Bounds(
             x_max=max(c.x for c in self.coords),
             x_min=min(c.x for c in self.coords),
@@ -176,7 +170,7 @@ class TileCoord(NamedTuple):
         :param List[TileCoord] tile_coords: a list of tile coordinates, provide in a tuple of ``(z,x,y)``
 
         :returns: Returns in the form ``(x_max, x_min, y_max, y_min)``
-        :rtype: Tuple[RealNum, RealNum, RealNum, RealNum]
+        :rtype: Tuple[float, float, float, float]
         """
 
         return Bounds(

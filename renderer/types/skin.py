@@ -16,7 +16,7 @@ from schema import And, Optional, Or, Regex, Schema
 
 import renderer.internals.internal as internal
 from renderer import math_utils
-from renderer.types import RealNum, SkinJson, SkinType
+from renderer.types import SkinJson, SkinType, float
 from renderer.types.coord import Coord, ImageCoord, ImageLine, TileCoord
 from renderer.types.pla2 import Component
 
@@ -32,11 +32,11 @@ class _TextObject:
     def __init__(
         self,
         image: Image.Image,
-        x: RealNum,
-        y: RealNum,
-        w: RealNum,
-        h: RealNum,
-        rot: RealNum,
+        x: float,
+        y: float,
+        w: float,
+        h: float,
+        rot: float,
         tile_coord: TileCoord,
         tile_size: int,
         imd: ImageDraw,
@@ -704,7 +704,7 @@ class Skin:
                         t = math.floor(c1.distance(c2) / (4 * text_length))
                         t = 1 if t == 0 else t
                         all_points: list[
-                            list[tuple[ImageCoord, RealNum]]
+                            list[tuple[ImageCoord, float]]
                         ] = math_utils.midpoint(
                             c1, c2, self.offset, n=t, return_both=True
                         )
