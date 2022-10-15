@@ -13,7 +13,6 @@ from queue import Empty
 
 import ray
 from PIL import Image, ImageDraw
-from rich.console import Console
 from rich.progress import Progress, track
 from rich.traceback import install
 
