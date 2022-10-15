@@ -88,7 +88,7 @@ def render_part1(
     gc.collect()
 
     coord_to_comp: dict[WorldCoord, list[Component]] = {}
-    for comp in track(components, "Generating coord_to_comp"):
+    for comp in track(components.components, "Generating coord_to_comp"):
         for node in comp.nodes:
             coord_to_comp.setdefault(node, []).append(comp)
 
