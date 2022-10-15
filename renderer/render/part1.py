@@ -64,7 +64,6 @@ def _pre_draw_components(
 
 
 def render_part1(
-    components: Pla2File,
     zoom: ZoomParams,
     export_id: str,
     skin: Skin = Skin.from_name("default"),
@@ -74,6 +73,9 @@ def render_part1(
     serial: bool = False,
 ) -> dict[TileCoord, list[_TextObject]]:
     tile_coords = []
+    with open(temp_dir / f"{export_id}.processed.0.pkl", "rb") as f:
+        components = pickle.load(f)
+
     for file in glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.0.pkl")):
         re_result = re.search(rf"_(-?\d+), (-?\d+), (-?\d+)\.0\.pkl$", file)
         tile_coords.append(

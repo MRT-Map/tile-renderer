@@ -70,7 +70,6 @@ def render(
     log.info(f"Initialising Ray with {processes=}...")
     ray.init(num_cpus=processes)
     render_part1(
-        components,
         zoom,
         export_id,
         skin,

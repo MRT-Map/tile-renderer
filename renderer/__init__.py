@@ -5,7 +5,7 @@ import toml
 import renderer.math_utils
 import renderer.types
 from renderer.merge_tiles import merge_tiles
-from renderer.render import render
+from renderer.render import *
 from renderer.types import *
 
 try:

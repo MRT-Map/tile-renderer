@@ -119,5 +119,7 @@ def prepare_render(
     ):
         with open(temp_dir / f"{export_id}_{coord}.0.pkl", "wb") as f:
             pickle.dump(grouped_components, f)
+    with open(temp_dir / f"{export_id}.processed.0.pkl", "wb") as f:
+        pickle.dump(components, f)
 
     return grouped_tile_list
