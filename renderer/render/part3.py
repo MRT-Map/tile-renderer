@@ -11,8 +11,9 @@ from PIL import Image
 from rich.progress import track
 
 from renderer.internals.logger import log
+from renderer.render.utils import _TextObject
 from renderer.types.coord import TileCoord
-from renderer.types.skin import Skin, _TextObject
+from renderer.types.skin import Skin
 
 
 def render_part3(
@@ -78,6 +79,7 @@ def _draw_text(
         image = Image.open(temp_dir / f"{export_id}_{tile_coord}.tmp.png")
         for text in text_list:
             for img, center in zip(text.image, text.center):
+                img = _TextObject.uuid_to_img(img, temp_dir)
                 image.paste(
                     img,
                     (

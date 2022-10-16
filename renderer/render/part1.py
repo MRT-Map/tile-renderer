@@ -18,10 +18,10 @@ from rich.progress import Progress, track
 from rich.traceback import install
 
 from renderer.internals.logger import log
-from renderer.render.utils import ProgressHandler
+from renderer.render.utils import ProgressHandler, _TextObject
 from renderer.types.coord import TileCoord, WorldCoord
 from renderer.types.pla2 import Component, Pla2File
-from renderer.types.skin import Skin, _TextObject
+from renderer.types.skin import Skin
 from renderer.types.zoom_params import ZoomParams
 
 

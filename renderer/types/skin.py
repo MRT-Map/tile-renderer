@@ -4,8 +4,6 @@ import functools
 import itertools
 import math
 import re
-from copy import copy
-from dataclasses import dataclass
 from pathlib import Path
 from typing import Literal
 
@@ -13,109 +11,15 @@ import imagehash
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont
 from schema import And, Optional, Or, Regex, Schema
-from shapely import LineString
-from shapely.geometry import Polygon
 
 import renderer.internals.internal as internal
 from renderer import math_utils
+from renderer.render.utils import _TextObject
 from renderer.types import SkinJson, SkinType
-from renderer.types.coord import Coord, ImageCoord, ImageLine, TileCoord
+from renderer.types.coord import ImageCoord, ImageLine, TileCoord
 from renderer.types.pla2 import Component
 
 Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=16)
-
-
-@dataclass(eq=True, unsafe_hash=True)
-class _TextObject:
-    image: list[Image.Image]
-    center: list[ImageCoord]
-    bounds: list[Polygon]
-
-    def __init__(
-        self,
-        image: Image.Image,
-        x: float,
-        y: float,
-        w: float,
-        h: float,
-        rot: float,
-        tile_coord: TileCoord,
-        tile_size: int,
-        imd: ImageDraw,
-        debug: bool = False,
-    ):
-        rot *= math.pi / 180
-        r = functools.partial(
-            math_utils.rotate_around_pivot,
-            pivot=Coord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),
-            theta=-rot,
-        )
-        self.image = [image]
-        self.center = [
-            ImageCoord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),
-        ]
-        self.bounds = [
-            Polygon(
-                LineString(
-                    [
-                        r(
-                            Coord(
-                                tile_coord.x * tile_size + x - w / 2,
-                                tile_coord.y * tile_size + y - h / 2,
-                            )
-                        ).point,
-                        r(
-                            Coord(
-                                tile_coord.x * tile_size + x - w / 2,
-                                tile_coord.y * tile_size + y + h / 2,
-                            )
-                        ).point,
-                        r(
-                            Coord(
-                                tile_coord.x * tile_size + x + w / 2,
-                                tile_coord.y * tile_size + y + h / 2,
-                            )
-                        ).point,
-                        r(
-                            Coord(
-                                tile_coord.x * tile_size + x + w / 2,
-                                tile_coord.y * tile_size + y - h / 2,
-                            )
-                        ).point,
-                        r(
-                            Coord(
-                                tile_coord.x * tile_size + x - w / 2,
-                                tile_coord.y * tile_size + y - h / 2,
-                            )
-                        ).point,
-                    ]
-                )
-            )
-        ]
-        if debug:
-            nr = functools.partial(
-                math_utils.rotate_around_pivot, pivot=Coord(x, y), theta=-rot
-            )
-            imd.line(
-                [
-                    nr(x - w / 2, y - h / 2),
-                    nr(x - w / 2, y + h / 2),
-                    nr(x + w / 2, y + h / 2),
-                    nr(x + w / 2, y - h / 2),
-                    nr(x - w / 2, y - h / 2),
-                ],
-                fill="#ff0000",
-            )
-
-    @classmethod
-    def from_multiple(cls, *textobject: _TextObject):
-        to = copy(textobject[0])
-
-        to.bounds = list(itertools.chain(*[sto.bounds for sto in textobject]))
-        to.image = list(itertools.chain(*[sto.image for sto in textobject]))
-        to.center = list(itertools.chain(*[sto.center for sto in textobject]))
-
-        return to
 
 
 class Skin:

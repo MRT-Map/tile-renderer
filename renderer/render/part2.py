@@ -13,8 +13,8 @@ from shapely.geometry import Polygon
 from shapely.ops import unary_union
 
 from renderer.internals.logger import log
+from renderer.render.utils import _TextObject
 from renderer.types.coord import TileCoord
-from renderer.types.skin import _TextObject
 
 
 def file_loader(
