@@ -3,6 +3,7 @@ from __future__ import annotations
 import glob
 import os
 import re
+from itertools import product
 from pathlib import Path
 from typing import Any, Generator
 
@@ -68,16 +69,23 @@ def _prevent_text_overlap(
     out = {}
     tile_coords = set()
 
-    no_intersect: list[Polygon] = []
+    no_intersect: dict[TileCoord, set[Polygon]] = {}
     for tile_coord, text_objects in progress.track(
         texts, description=f"Zoom {zoom}: [dim white]Filtering text", total=length
     ):
         tile_coords.add(tile_coord)
         for text in text_objects:
-            polys = [Polygon(b) for b in text.bounds]
-            if not any(poly.intersects(ni) for ni in no_intersect for poly in polys):
+            if not any(
+                poly.overlaps(ni)
+                for ni in no_intersect.get(tile_coord) or []
+                for poly in text.bounds
+            ):
                 out.setdefault(tile_coord, []).append(text)
-                no_intersect.extend(prepare(poly) for poly in polys)
+                for dx, dy in product((-1, 0, 1), (-1, 0, 1)):
+                    no_intersect.setdefault(
+                        TileCoord(tile_coord.z, tile_coord.x + dx, tile_coord.y + dy),
+                        set(),
+                    ).update(prepare(poly) for poly in text.bounds)
 
     default = {tc: [] for tc in tile_coords}
     return {**default, **out}
