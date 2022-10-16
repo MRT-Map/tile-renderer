@@ -3,8 +3,12 @@ from __future__ import annotations
 from queue import Empty, Queue
 
 import ray
+from ray import ObjectRef
+from rich.console import Console
+from rich.progress import Progress
 
 from renderer.types.coord import TileCoord
+from renderer.types.skin import _TextObject
 
 
 @ray.remote

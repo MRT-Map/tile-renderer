@@ -15,6 +15,7 @@ import dill
 import ray
 from PIL import Image, ImageDraw
 from ray import ObjectRef
+from rich.console import Console
 from rich.progress import Progress, track
 from rich.traceback import install
 
@@ -24,6 +25,24 @@ from renderer.types.coord import TileCoord, WorldCoord
 from renderer.types.pla2 import Component, Pla2File
 from renderer.types.skin import Skin, _TextObject
 from renderer.types.zoom_params import ZoomParams
+
+
+@ray.remote
+def task_spawner(
+    ph: ObjectRef[ProgressHandler],
+    tile_chunks: list[list[TileCoord]],
+    tile_coords: list[TileCoord],
+    futures: list[ObjectRef[dict[TileCoord, list[_TextObject]]]],
+    cursor: int,
+    consts: Part1Consts,
+) -> list[ObjectRef[dict[TileCoord, list[_TextObject]]]]:
+    while ray.get(ph.get_complete.remote()) < len(tile_coords):
+        if ray.get(ph.needs_new_task.remote()) and cursor < len(tile_chunks):
+            futures.append(
+                ray.remote(_pre_draw_components).remote(ph, tile_chunks[cursor], consts)
+            )
+            cursor += 1
+    return futures
 
 
 @dataclass(frozen=True, init=True)
@@ -100,6 +119,9 @@ def render_part1(
         for tile_coords in track(tile_chunks[:batch_size], "Spawning initial tasks")
     ]
     cursor = batch_size
+    future_refs = task_spawner.remote(
+        ph, tile_chunks, tile_coords, futures, cursor, consts
+    )
     with Progress() as progress:
         main_id = progress.add_task(
             "Rendering components", total=sum(operations.values())
@@ -107,13 +129,6 @@ def render_part1(
         ids = {}
         progresses = {}
         while ray.get(ph.get_complete.remote()) != len(tile_coords):
-            if ray.get(ph.needs_new_task.remote()) and cursor < len(tile_chunks):
-                futures.append(
-                    ray.remote(_pre_draw_components).remote(
-                        ph, tile_chunks[cursor], consts
-                    )
-                )
-                cursor += 1
             try:
                 id_ = ray.get(ph.get.remote())
             except Empty:
@@ -132,7 +147,8 @@ def render_part1(
         for id_ in ids:
             progress.remove_task(ids[id_])
         progress.update(main_id, completed=sum(operations.values()))
-    preresult: list[dict[TileCoord, list[_TextObject]]] = ray.get(futures)
+
+    preresult: list[dict[TileCoord, list[_TextObject]]] = ray.get(ray.get(future_refs))
     result = {}
     for a in preresult:
         result.update(a)
