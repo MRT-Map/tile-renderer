@@ -133,7 +133,7 @@ def render_part1(
     result = {}
     for a in preresult:
         result.update(a)
-    (temp_dir / f"{export_id}.processed.0.dill").unlink(missing_ok=True)
+    os.remove((temp_dir / f"{export_id}.processed.0.dill"))
     return result
 
 

@@ -126,7 +126,7 @@ def _draw_text(
 
         if save_images:
             image.save(save_dir / f"{tile_coord}.webp", "webp", quality=95)
-        (temp_dir / f"{export_id}_{tile_coord}.tmp.webp").unlink(missing_ok=True)
+        os.remove((temp_dir / f"{export_id}_{tile_coord}.tmp.webp"))
         if ph:
             ph.complete.remote()
 
