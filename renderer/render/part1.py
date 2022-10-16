@@ -64,7 +64,7 @@ def render_part1(
 ) -> dict[TileCoord, list[_TextObject]]:
     tile_coords = []
     with open(temp_dir / f"{export_id}.processed.0.dill", "rb") as f:
-        components = dill.load(f)
+        components: Pla2File = dill.load(f)
 
     for file in glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.0.dill")):
         re_result = re.search(rf"_(-?\d+), (-?\d+), (-?\d+)\.0\.dill$", file)

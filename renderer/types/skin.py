@@ -13,6 +13,7 @@ import imagehash
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont
 from schema import And, Optional, Or, Regex, Schema
+from shapely import LineString
 from shapely.geometry import Polygon
 
 import renderer.internals.internal as internal
@@ -55,38 +56,40 @@ class _TextObject:
         ]
         self.bounds = [
             Polygon(
-                [
-                    r(
-                        Coord(
-                            tile_coord.x * tile_size + x - w / 2,
-                            tile_coord.y * tile_size + y - h / 2,
-                        )
-                    ),
-                    r(
-                        Coord(
-                            tile_coord.x * tile_size + x - w / 2,
-                            tile_coord.y * tile_size + y + h / 2,
-                        )
-                    ),
-                    r(
-                        Coord(
-                            tile_coord.x * tile_size + x + w / 2,
-                            tile_coord.y * tile_size + y + h / 2,
-                        )
-                    ),
-                    r(
-                        Coord(
-                            tile_coord.x * tile_size + x + w / 2,
-                            tile_coord.y * tile_size + y - h / 2,
-                        )
-                    ),
-                    r(
-                        Coord(
-                            tile_coord.x * tile_size + x - w / 2,
-                            tile_coord.y * tile_size + y - h / 2,
-                        )
-                    ),
-                ]
+                LineString(
+                    [
+                        r(
+                            Coord(
+                                tile_coord.x * tile_size + x - w / 2,
+                                tile_coord.y * tile_size + y - h / 2,
+                            )
+                        ).point,
+                        r(
+                            Coord(
+                                tile_coord.x * tile_size + x - w / 2,
+                                tile_coord.y * tile_size + y + h / 2,
+                            )
+                        ).point,
+                        r(
+                            Coord(
+                                tile_coord.x * tile_size + x + w / 2,
+                                tile_coord.y * tile_size + y + h / 2,
+                            )
+                        ).point,
+                        r(
+                            Coord(
+                                tile_coord.x * tile_size + x + w / 2,
+                                tile_coord.y * tile_size + y - h / 2,
+                            )
+                        ).point,
+                        r(
+                            Coord(
+                                tile_coord.x * tile_size + x - w / 2,
+                                tile_coord.y * tile_size + y - h / 2,
+                            )
+                        ).point,
+                    ]
+                )
             )
         ]
         if debug:
@@ -435,7 +438,7 @@ class Skin:
                     else:
                         while overflow + imd.textlength(
                             text_to_print, font
-                        ) < c1.distance(c2) and char_cursor < len(text):
+                        ) < c1.point.distance(c2.point) and char_cursor < len(text):
                             text_to_print += text[char_cursor]
                             char_cursor += 1
                     if char_cursor != len(text):
@@ -510,7 +513,7 @@ class Skin:
                             )
 
                     text_to_print = ""
-                    overflow = text_length - (c1.distance(c2) - overflow)
+                    overflow = text_length - (c1.point.distance(c2.point) - overflow)
 
                     if char_cursor >= len(text):
                         break
@@ -549,7 +552,7 @@ class Skin:
                 if (
                     coord_lines
                     and sum(
-                        c1.distance(c2)
+                        c1.point.distance(c2.point)
                         for c1, c2 in internal._with_next([a for a in coord_lines[-1]])
                     )
                     < text_length
@@ -585,7 +588,7 @@ class Skin:
                         text_length * 0.75,
                     )
                     if arrow_coord_lines and sum(
-                        c1.distance(c2)
+                        c1.point.distance(c2.point)
                         for c1, c2 in internal._with_next(
                             [a for a in arrow_coord_lines[-1]]
                         )
@@ -703,8 +706,8 @@ class Skin:
                             y_max=self._type_info._skin.tile_size,
                             y_min=0,
                         )
-                    ) and 2 * text_length <= c1.distance(c2):
-                        t = math.floor(c1.distance(c2) / (4 * text_length))
+                    ) and 2 * text_length <= c1.point.distance(c2.point):
+                        t = math.floor(c1.point.distance(c2.point) / (4 * text_length))
                         t = 1 if t == 0 else t
                         all_points: list[
                             list[tuple[ImageCoord, float]]

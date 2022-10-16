@@ -7,6 +7,7 @@ from typing import Any, Generator, Tuple, Type
 
 import msgspec.json
 from msgspec import Struct
+from shapely import LineString
 
 from renderer.types.coord import Bounds, Coord, TileCoord, WorldCoord, WorldLine
 from renderer.types.zoom_params import ZoomParams
@@ -73,7 +74,7 @@ def _enc_hook(obj: Any) -> Any:
 def _dec_hook(type_: Type, obj: Any) -> Any:
     if type_ == WorldCoord:
         return Coord.dec_hook(obj)
-    elif type_ == WorldLine:
+    elif type_ == WorldLine or type_ == LineString:
         if len(obj) == 1:
             obj.append(obj[0])
         return WorldLine([_dec_hook(WorldCoord, o) for o in obj])

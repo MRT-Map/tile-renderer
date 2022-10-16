@@ -19,10 +19,30 @@ from renderer.types.zoom_params import ZoomParams
 _T = TypeVar("_T")
 
 
-class Coord(Point):
+class Coord:
+    def __init__(self, *args: float | Point):
+        self.point = Point(*args)
+
+    def __repr__(self):
+        return f"{type(self).__name__} <{repr(self.point)}>"
+
+    def __eq__(self, other):
+        if isinstance(other, type(self)):
+            return self.point == other.point
+        else:
+            return False
+
+    @property
+    def x(self) -> float:
+        return self.point.x
+
+    @property
+    def y(self) -> float:
+        return self.point.y
+
     @staticmethod
     def enc_hook(obj: Coord) -> tuple[float, float]:
-        return obj.x, obj.y
+        return obj.point.x, obj.point.y
 
     @staticmethod
     def dec_hook(obj: tuple[float, float]) -> Coord:
@@ -68,17 +88,32 @@ class Bounds(Generic[_T]):
     y_min: _T
 
 
-class Line(LineString):
+class Line:
+    def __init__(self, line: list[ImageCoord] | LineString):
+        if isinstance(line, LineString):
+            self.line = line
+        else:
+            self.line = LineString(p.point for p in line)
+
+    def __repr__(self):
+        return f"{type(self).__name__} <{repr(self.line)}>"
+
+    def __eq__(self, other):
+        if isinstance(other, type(self)):
+            return self.line == other.line
+        else:
+            return False
+
     @property
     def coords(self) -> list[Coord]:
         return [c for c in self]
 
-    def __iter__(self) -> Generator[WorldCoord, Any, None]:
-        for c in super().coords:
-            yield WorldCoord(c)
+    def __iter__(self) -> Generator[Coord, Any, None]:
+        for c in self.line.coords:
+            yield Coord(*c)
 
     def __len__(self):
-        return len(super().coords)
+        return len(self.line.coords)
 
     @functools.cached_property
     def bounds(self) -> Bounds[float]:
@@ -95,7 +130,11 @@ class Line(LineString):
         )
 
     def parallel_offset(self, *args, **kwargs):
-        return Line(super().parallel_offset(*args, **kwargs))
+        return Line(self.line.parallel_offset(*args, **kwargs))
+
+    @property
+    def centroid(self):
+        return self.line.centroid
 
     def to_tiles(self, z: ZoomParams) -> list[TileCoord]:
         """
@@ -150,9 +189,23 @@ class WorldLine(Line):
             image_coords.append(ImageCoord(xs, ys))
         return ImageLine(image_coords)
 
+    @property
+    def coords(self) -> list[WorldCoord]:
+        return [c for c in self]
+
+    def __iter__(self) -> Generator[WorldCoord, Any, None]:
+        for c in self.line.coords:
+            yield WorldCoord(*c)
+
 
 class ImageLine(Line):
-    pass
+    @property
+    def coords(self) -> list[ImageCoord]:
+        return [c for c in self]
+
+    def __iter__(self) -> Generator[ImageCoord, Any, None]:
+        for c in self.line.coords:
+            yield ImageCoord(*c)
 
 
 class TileCoord(NamedTuple):

@@ -32,7 +32,7 @@ fonttools = "^4.34.4"
 rich = "^12.5.1"
 ray = "^2.0.0"
 toml = "^0.10.2"
-Shapely = "^1.8.5.post1"
+Shapely = "^2.0a1"
 msgspec = "^0.9.0"
 dill = "^0.3.5.1"
 

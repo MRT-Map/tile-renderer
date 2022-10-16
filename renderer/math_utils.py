@@ -5,7 +5,7 @@ import math
 import vector
 
 from renderer.internals import internal
-from renderer.types.coord import Coord, ImageLine, WorldCoord
+from renderer.types.coord import Coord, ImageCoord, ImageLine
 
 
 def segments_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
@@ -65,10 +65,10 @@ def dash(coords: ImageLine, dash_length: float, gap_length: float) -> list[Image
         gap_dx = gap_length * math.cos(theta)
         gap_dy = gap_length * math.sin(theta)
         if overflow != 0.0:
-            if overflow > c1.distance(c2):
+            if overflow > c1.point.distance(c2.point):
                 predashes.append(c2)
-                overflow -= c1.distance(c2)
-                plotted_length += c1.distance(c2)
+                overflow -= c1.point.distance(c2.point)
+                plotted_length += c1.point.distance(c2.point)
             else:
                 overflow_x = overflow * math.cos(theta)
                 overflow_y = overflow * math.sin(theta)
@@ -85,8 +85,10 @@ def dash(coords: ImageLine, dash_length: float, gap_length: float) -> list[Image
             else:
                 dx = dash_dx
                 dy = dash_dy
-            if math.hypot(dx, dy) > c1.distance(c2) - plotted_length:
-                overflow = math.hypot(dx, dy) - (c1.distance(c2) - plotted_length)
+            if math.hypot(dx, dy) > c1.point.distance(c2.point) - plotted_length:
+                overflow = math.hypot(dx, dy) - (
+                    c1.point.distance(c2.point) - plotted_length
+                )
                 predashes.append(c2)
             else:
                 predashes.append(Coord(predashes[-1].x + dx, predashes[-1].y + dy))
@@ -99,7 +101,7 @@ def dash(coords: ImageLine, dash_length: float, gap_length: float) -> list[Image
                 dashes.append((c3, c4))
 
     new_dashes = []
-    prev_coord: WorldCoord | None = None
+    prev_coord: ImageCoord | None = None
     for c1, c2 in dashes:
         if prev_coord != c1:
             new_dashes.append(ImageLine([c1, c2]))
