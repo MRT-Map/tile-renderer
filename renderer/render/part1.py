@@ -130,7 +130,8 @@ def render_part1(
                 del progresses[id_]
                 del ids[id_]
         for id_ in ids:
-            del progresses[id_]
+            progress.remove_task(ids[id_])
+        progress.update(main_id, completed=sum(operations.values()))
     preresult: list[dict[TileCoord, list[_TextObject]]] = ray.get(futures)
     result = {}
     for a in preresult:
