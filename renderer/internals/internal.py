@@ -1,25 +1,10 @@
 from __future__ import annotations
 
 import json
-import math
-import random
-import re
-import time
 from pathlib import Path
 from typing import Any, Generator, Sequence, TypeVar
 
-
-def _dedent(text: str) -> str:
-    return re.sub("\n ", "\n", re.sub(" +", " ", text))
-
-
-_K = TypeVar("_K")
-_V = TypeVar("_V")
 _T = TypeVar("_T")
-
-
-def _dict_index(d: dict[_K, _V], v: _V) -> _K:
-    return list(d.keys())[list(d.values()).index(v)]
 
 
 def _read_json(file: Path | str) -> Any:
@@ -40,67 +25,8 @@ def _write_json(file: Path | str, data: dict, pp: bool = False):
         f.close()
 
 
-def _tuple_to_str(t: tuple) -> str:
-    return str(t)[1:-1]
-
-
 def _str_to_tuple(s: str) -> tuple:
     return tuple([int(x) for x in s.split(", ")])
-
-
-def _ms_to_time(ms: int | float) -> str:
-    if ms == 0:
-        return "00.0s"
-    s = round(ms / 1000, 1)
-    # ms = round(ms % 1000, 2)
-    m = math.floor(s / 60)
-    s %= 60
-    h = math.floor(m / 60)
-    m %= 60
-    d = math.floor(h / 24)
-    h %= 24
-    res = ""
-    if d != 0:
-        res = res + str(d) + "d "
-    if h != 0:
-        zero = "0" if h < 10 else ""
-        res = res + zero + str(h) + "h "
-    if m != 0:
-        zero = "0" if m < 10 else ""
-        res = res + zero + str(m) + "min "
-    if s != 0:
-        zero = "0" if s < 10 else ""
-        res = res + zero + str(round(s, 1)) + "s "
-    if res == "":
-        res = "00.0s"
-    return res.strip()
-
-
-def _percentage(c: int | float, t: int | float) -> str:
-    res = round(c / t * 100, 2)
-    pzero = "0" if res < 10 else ""
-    szero = "0" if len(str(res).split(".")[1]) == 1 else ""
-    return pzero + str(res) + szero
-
-
-def _time_remaining(start: int | float, c: int | float, t: int | float) -> float:
-    return round(((int(round(time.time() * 1000)) - start) / c * (t - c)), 2)
-
-
-def _gen_id() -> str:
-    def b10_b64(n: int):
-        base64 = "ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/"
-        q = n
-        o = ""
-        while True:
-            o += base64[q % 64]
-            q = math.floor(q / 64)
-            if q == 0:
-                break
-        return o[::-1]
-
-    decimal_id = int(time.time() * 10000000)
-    return b10_b64(decimal_id) + "-" + b10_b64(random.randint(1, 64**5))
 
 
 def _with_next(ls: Sequence[_T]) -> Generator[tuple[_T, _T], None, None]:

@@ -44,7 +44,7 @@ def main():
         0xDDDDDD,
     )
 
-    for name, col in [
+    for name, col in (
         ("residentialArea", 0xB3CBCB),
         ("industrialArea", 0xFFCCB3),
         ("commercialArea", 0xE7B1CA),
@@ -54,9 +54,9 @@ def main():
         ("healthArea", 0xFF9999),
         ("agricultureArea", 0xCCFF99),
         ("militaryArea", 0xC2C2A3),
-    ]:
+    ):
         area = CTI("area")
-        for i, size in [(0, 30), (1, 20), (2, 10)]:
+        for i, size in ((0, 30), (1, 20), (2, 10)):
             area[i] = [
                 CS.area_fill(colour=col),
                 CS.area_centertext(colour=_darken(col), size=size),
@@ -101,7 +101,7 @@ def main():
     s["landSmall"] = land_small
 
     waterway = CTI("line")
-    for i, width, size in [(0, 10, 20), (1, 7, 13), (2, 5, 10)]:
+    for i, width, size in ((0, 10, 20), (1, 7, 13), (2, 5, 10)):
         waterway[i] = [
             CS.line_fore(colour=0x87CEEB, width=width),
             CS.line_text(
@@ -122,15 +122,15 @@ def main():
     ]
     s["ferryLine"] = ferry_line
 
-    for name, colour in [
+    for name, colour in (
         ("grass", 0xBBFF99),
         ("shrub", 0x99FF99),
         ("forest", 0x5CA904),
         ("stone", 0xAAAAAA),
         ("sand", 0xF7E1A1),
-    ]:
+    ):
         area = CTI("area")
-        for i, size in [(0, 25), (1, 20), (2, 15), (3, 10)]:
+        for i, size in ((0, 25), (1, 20), (2, 15), (3, 10)):
             area[i] = [
                 CS.area_fill(colour=colour, outline=_darken(colour, 0.1)),
                 CS.area_centertext(colour=_darken(colour), size=size),
@@ -158,33 +158,33 @@ def main():
     s["apron"] = apron
 
     taxiway = CTI("line")
-    for i, width, size in [(0, 50, 20), (1, 25, 10), (2, 13, 5)]:
+    for i, width, size in ((0, 50, 20), (1, 25, 10), (2, 13, 5)):
 
         taxiway[i] = [
             CS.line_fore(colour=0x8F8FA3, width=width),
             CS.line_text(colour=0x33334D, arrow_colour=0x8F8FA3, size=size),
         ]
-    for i, width in [(3, 10), (4, 7), (5, 5)]:
+    for i, width in ((3, 10), (4, 7), (5, 5)):
         taxiway[i] = [CS.line_fore(colour=0x8F8FA3, width=width)]
     s["taxiway"] = taxiway
 
     runway = CTI("line", ["unroundedEnds"])
-    for i, width, size in [(0, 100, 20), (1, 50, 10)]:
+    for i, width, size in ((0, 100, 20), (1, 50, 10)):
         runway[i] = [
             CS.line_fore(colour=0x73738C, width=width),
             CS.line_text(colour=0x33334D, arrow_colour=0x73738C, size=size),
         ]
-    for i, width in [(2, 25), (3, 13), (4, 6), (5, 3)]:
+    for i, width in ((2, 25), (3, 13), (4, 6), (5, 3)):
         runway[i] = [CS.line_fore(colour=0x73738C, width=width)]
     s["runway"] = runway
 
     wide_runway = CTI("line", ["unroundedEnds"])
-    for i, width, size in [(0, 200, 40), (1, 100, 20), (2, 50, 10)]:
+    for i, width, size in ((0, 200, 40), (1, 100, 20), (2, 50, 10)):
         wide_runway[i] = [
             CS.line_fore(colour=0x73738C, width=width),
             CS.line_text(colour=0x33334D, arrow_colour=0x73738C, size=size),
         ]
-    for i, width in [(3, 25), (4, 13), (5, 6)]:
+    for i, width in ((3, 25), (4, 13), (5, 6)):
         wide_runway[i] = [CS.line_fore(colour=0x73738C, width=width)]
     s["wideRunway"] = wide_runway
 
@@ -243,13 +243,13 @@ def main():
     s["park"] = park
 
     pathway_underground = CTI("line", ["road"])
-    for i, width, dash, size, offset in [
+    for i, width, dash, size, offset in (
         (0, 4, 16, 16, 10),
         (1, 4, 16, 16, 10),
         (2, 3, 12, 0, 0),
         (3, 2, 8, 0, 0),
         (4, 1, 4, 0, 0),
-    ]:
+    ):
         pathway_underground[i] = [
             CS.line_back(colour=0xEEEEEE, width=width * 2),
             CS.line_fore(colour=0x66FF66, width=width, dash=(dash, dash)),
@@ -265,7 +265,7 @@ def main():
         ]
     s["pathway_underground"] = pathway_underground
 
-    for name, col, width, small_width in [
+    for name, col, width, small_width in (
         ("localHighwaySlip_underground", LOCAL_HIGHWAY, 20, 1),
         ("bRoadSlip_underground", B_ROAD, 24, 2),
         ("aRoadSlip_underground", A_ROAD, 32, 3),
@@ -278,9 +278,9 @@ def main():
         ("localHighway_underground", LOCAL_HIGHWAY, 36, 3),
         ("bRoad_underground", B_ROAD, 40, 4),
         ("aRoad_underground", A_ROAD, 48, 4),
-    ]:
+    ):
         area = CTI("line", ["road"])
-        for i in [0, 1, 2, 3, 4]:
+        for i in (0, 1, 2, 3, 4):
             area[i] = [
                 CS.line_back(colour=col, width=int((width + 8) * (2 / 3) ** i)),
                 CS.line_fore(colour=_lighten(col), width=int(width * (2 / 3) ** i)),
@@ -296,7 +296,7 @@ def main():
                     else []
                 ),
             ]
-        for i in [5, 6, 7, 8, 9]:
+        for i in (5, 6, 7, 8, 9):
             area[i] = (
                 [
                     CS.line_back(colour=col, width=(small_width - i + 5) * 2),
@@ -308,7 +308,7 @@ def main():
         s[name] = area
 
     rail_underground = CTI("line", ["road"])
-    for i, width, dash, size in [(0, 8, 50, 16), (1, 6, 40, 13), (2, 4, 30, 10)]:
+    for i, width, dash, size in ((0, 8, 50, 16), (1, 6, 40, 13), (2, 4, 30, 10)):
         rail_underground[i] = [
             CS.line_fore(colour=0x808080, width=width, dash=(dash, dash // 2)),
             CS.line_text(
@@ -319,7 +319,7 @@ def main():
     s["rail_underground"] = rail_underground
 
     intercity_rail_underground = CTI("line", ["road"])
-    for i, width, dash, size in [(0, 8, 50, 16), (1, 6, 40, 13), (2, 4, 30, 10)]:
+    for i, width, dash, size in ((0, 8, 50, 16), (1, 6, 40, 13), (2, 4, 30, 10)):
         intercity_rail_underground[i] = [
             CS.line_fore(colour=0x808080, width=width * 2, dash=(dash, dash)),
             CS.line_text(
@@ -370,13 +370,13 @@ def main():
     s["transportBuilding"] = transport_building
 
     pathway = CTI("line", ["road"])
-    for i, width, dash, size, offset in [
+    for i, width, dash, size, offset in (
         (0, 4, 16, 16, 10),
         (1, 4, 16, 16, 10),
         (2, 3, 12, 0, 0),
         (3, 2, 8, 0, 0),
         (4, 1, 4, 0, 0),
-    ]:
+    ):
         pathway[i] = [
             CS.line_back(colour=0xEEEEEE, width=width * 2),
             CS.line_fore(colour=0x008000, width=width, dash=(dash, dash)),
@@ -392,7 +392,7 @@ def main():
         ]
     s["pathway"] = pathway
 
-    for name, col, width, small_width in [
+    for name, col, width, small_width in (
         ("localHighwaySlip", LOCAL_HIGHWAY, 20, 1),
         ("bRoadSlip", B_ROAD, 24, 2),
         ("aRoadSlip", A_ROAD, 32, 3),
@@ -405,9 +405,9 @@ def main():
         ("localHighway", LOCAL_HIGHWAY, 36, 3),
         ("bRoad", B_ROAD, 40, 4),
         ("aRoad", A_ROAD, 48, 4),
-    ]:
+    ):
         area = CTI("line", ["road"])
-        for i in [0, 1, 2, 3, 4]:
+        for i in (0, 1, 2, 3, 4):
             area[i] = [
                 CS.line_back(
                     colour=_darken(col, 0.25), width=int((width + 8) * (2 / 3) ** i)
@@ -425,7 +425,7 @@ def main():
                     else []
                 ),
             ]
-        for i in [5, 6, 7, 8, 9]:
+        for i in (5, 6, 7, 8, 9):
             area[i] = (
                 [
                     CS.line_back(
@@ -439,7 +439,7 @@ def main():
         s[name] = area
 
     rail = CTI("line", ["road"])
-    for i, width, size in [(0, 8, 16), (1, 6, 13), (2, 4, 10)]:
+    for i, width, size in ((0, 8, 16), (1, 6, 13), (2, 4, 10)):
         rail[i] = [
             CS.line_fore(colour=0x808080, width=width),
             CS.line_text(
@@ -450,7 +450,7 @@ def main():
     s["rail"] = rail
 
     intercity_rail = CTI("line", ["road"])
-    for i, width, dash, size in [(0, 8, 50, 16), (1, 6, 40, 13), (2, 4, 30, 10)]:
+    for i, width, dash, size in ((0, 8, 50, 16), (1, 6, 40, 13), (2, 4, 30, 10)):
         intercity_rail[i] = [
             CS.line_back(colour=0x808080, width=width * 2),
             CS.line_fore(colour=0xFFFFFF, width=width, dash=(dash, dash)),
@@ -465,13 +465,13 @@ def main():
     s["intercityRail"] = intercity_rail
 
     pathway_elevated = CTI("line", ["road"])
-    for i, width, dash, size, offset in [
+    for i, width, dash, size, offset in (
         (0, 4, 16, 16, 10),
         (1, 4, 16, 16, 10),
         (2, 3, 12, 0, 0),
         (3, 2, 8, 0, 0),
         (4, 1, 4, 0, 0),
-    ]:
+    ):
         pathway_elevated[i] = [
             CS.line_back(colour=0x000000, width=width * 3),
             CS.line_back(colour=0xEEEEEE, width=width * 2),
@@ -488,7 +488,7 @@ def main():
         ]
     s["pathway_elevated"] = pathway_elevated
 
-    for name, col, width, small_width in [
+    for name, col, width, small_width in (
         ("localHighwaySlip_elevated", LOCAL_HIGHWAY, 20, 1),
         ("bRoadSlip_elevated", B_ROAD, 24, 2),
         ("aRoadSlip_elevated", A_ROAD, 32, 3),
@@ -501,9 +501,9 @@ def main():
         ("localHighway_elevated", LOCAL_HIGHWAY, 36, 3),
         ("bRoad_elevated", B_ROAD, 40, 4),
         ("aRoad_elevated", A_ROAD, 48, 4),
-    ]:
+    ):
         area = CTI("line", ["road"])
-        for i in [0, 1, 2, 3, 4]:
+        for i in (0, 1, 2, 3, 4):
             area[i] = [
                 CS.line_back(colour=0x000000, width=int((width + 8) * (2 / 3) ** i)),
                 CS.line_fore(colour=col, width=int(width * (2 / 3) ** i)),
@@ -519,7 +519,7 @@ def main():
                     else []
                 ),
             ]
-        for i in [5, 6, 7, 8, 9]:
+        for i in (5, 6, 7, 8, 9):
             area[i] = (
                 [
                     CS.line_back(colour=0x000000, width=(small_width - i + 5) * 2),
@@ -531,7 +531,7 @@ def main():
         s[name] = area
 
     rail_elevated = CTI("line", ["road"])
-    for i, width, size in [(0, 8, 16), (1, 6, 13), (2, 4, 10)]:
+    for i, width, size in ((0, 8, 16), (1, 6, 13), (2, 4, 10)):
         rail_elevated[i] = [
             CS.line_back(colour=0x000000, width=ceil(1.5 * width)),
             CS.line_fore(colour=0x808080, width=width),
@@ -546,7 +546,7 @@ def main():
     s["rail_elevated"] = rail_elevated
 
     intercity_rail_elevated = CTI("line", ["road"])
-    for i, width, dash, size in [(0, 8, 50, 16), (1, 6, 40, 13), (2, 4, 30, 10)]:
+    for i, width, dash, size in ((0, 8, 50, 16), (1, 6, 40, 13), (2, 4, 30, 10)):
         intercity_rail_elevated[i] = [
             CS.line_back(colour=0x000000, width=width * 2),
             CS.line_fore(colour=0xFFFFFF, width=width, dash=(dash, dash)),
@@ -781,7 +781,7 @@ def main():
     s['pickUpDropOff'] = pick_up_drop_off"""
 
     bus_stop = CTI("point")
-    for i, sq_size, text_size in [(0, 10, 12), (1, 10, 12)]:
+    for i, sq_size, text_size in ((0, 10, 12), (1, 10, 12)):
         bus_stop[i] = [
             CS.point_square(colour=0x00AAFF, size=sq_size, width=int(2 / 3 * sq_size)),
             CS.point_text(
@@ -794,7 +794,7 @@ def main():
     s["busStop"] = bus_stop
 
     ferry_stop = CTI("point")
-    for i, sq_size, text_size in [(0, 10, 12), (1, 10, 12)]:
+    for i, sq_size, text_size in ((0, 10, 12), (1, 10, 12)):
         ferry_stop[i] = [
             CS.point_square(colour=0x1E85AE, size=sq_size, width=int(2 / 3 * sq_size)),
             CS.point_text(
@@ -807,7 +807,7 @@ def main():
     s["ferryStop"] = ferry_stop
 
     rail_station = CTI("point")
-    for i, sq_size, text_size in [(0, 15, 15), (1, 15, 15), (2, 10, 13)]:
+    for i, sq_size, text_size in ((0, 15, 15), (1, 15, 15), (2, 10, 13)):
         rail_station[i] = [
             CS.point_square(colour=0x1F3D7A, size=sq_size, width=int(2 / 3 * sq_size)),
             CS.point_text(

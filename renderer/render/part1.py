@@ -37,7 +37,9 @@ class Part1Consts:
 
 
 def _pre_draw_components(
-    ph: ProgressHandler | None, tile_coords: list[TileCoord], consts: Part1Consts
+    ph: ObjectRef[ProgressHandler] | None,
+    tile_coords: list[TileCoord],
+    consts: Part1Consts,
 ) -> dict[TileCoord, list[_TextObject]]:
     # noinspection PyBroadException
     try:
@@ -65,7 +67,8 @@ def _pre_draw_components(
     except Exception as e:
         log.error(f"Error in ray task: {e!r}")
         log.error(traceback.format_exc())
-        ph.request_new_task.remote()
+        if ph:
+            ph.request_new_task.remote()
 
 
 def render_part1(
@@ -74,6 +77,7 @@ def render_part1(
     skin: Skin = Skin.from_name("default"),
     assets_dir: Path = Path(__file__).parent.parent / "skins" / "assets",
     batch_size: int = 8,
+    chunk_size: int = 8,
     temp_dir: Path = Path.cwd() / "temp",
     serial: bool = False,
 ) -> dict[TileCoord, list[_TextObject]]:
@@ -121,8 +125,9 @@ def render_part1(
             out[tc] = lto
         return out
 
-    n = 5  # TODO param for this
-    tile_chunks = [tile_coords[i : i + n] for i in range(0, len(tile_coords), n)]
+    tile_chunks = [
+        tile_coords[i : i + chunk_size] for i in range(0, len(tile_coords), chunk_size)
+    ]
     ph = ProgressHandler.remote()
 
     futures = [
@@ -213,7 +218,7 @@ def _count_num_rendering_oprs(
 
 
 def _draw_components(
-    ph: ProgressHandler | None,
+    ph: ObjectRef[ProgressHandler] | None,
     tile_coord: TileCoord,
     tile_components: list[list[Component]],
     consts: Part1Consts,

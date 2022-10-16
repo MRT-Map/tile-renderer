@@ -123,12 +123,12 @@ class Line(LineString):
 
     def in_bounds(self, bounds: Bounds[int]) -> bool:
         for c1, c2 in internal._with_next([a for a in self]):
-            for c3, c4 in [
+            for c3, c4 in (
                 (Coord(bounds.y_max, bounds.x_min), Coord(bounds.y_min, bounds.x_min)),
                 (Coord(bounds.y_min, bounds.x_min), Coord(bounds.y_min, bounds.x_max)),
                 (Coord(bounds.y_min, bounds.x_max), Coord(bounds.y_max, bounds.x_max)),
                 (Coord(bounds.y_max, bounds.x_max), Coord(bounds.y_max, bounds.x_min)),
-            ]:
+            ):
                 if math_utils.segments_intersect(c1, c2, c3, c4):
                     return True
         for c in self:
@@ -163,7 +163,7 @@ class TileCoord(NamedTuple):
     y: int
 
     def __str__(self) -> str:
-        return internal._tuple_to_str((self.z, self.x, self.y))
+        return f"{self.z}, {self.x}, {self.y}"
 
     @staticmethod
     def bounds(tile_coords: list[TileCoord]) -> Bounds[int]:

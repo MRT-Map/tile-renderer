@@ -9,6 +9,7 @@ from queue import Empty
 
 import dill
 from PIL import Image
+from ray import ObjectRef
 from rich.progress import Progress, track
 
 from renderer.internals.logger import log
@@ -92,7 +93,7 @@ def render_part3(
 
 
 def _draw_text(
-    ph: ProgressHandler | None,
+    ph: ObjectRef[ProgressHandler] | None,
     tile_coord: TileCoord,
     text_list: list[_TextObject],
     save_images: bool,

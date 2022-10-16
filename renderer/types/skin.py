@@ -1025,7 +1025,7 @@ class Skin:
                 "types": {
                     str: {
                         "tags": list,
-                        "type": lambda t_: t_ in ["point", "line", "area"],
+                        "type": lambda t_: t_ in ("point", "line", "area"),
                         "style": {Optional(str): list},
                     }
                 },

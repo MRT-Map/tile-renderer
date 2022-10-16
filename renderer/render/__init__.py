@@ -31,7 +31,8 @@ def render(
     processes: int = psutil.cpu_count(),
     tiles: list[TileCoord] | None = None,
     offset: Vector2D = vector.obj(x=0, y=0),
-    batch_size: int = 8,
+    part1_batch_size: int = 8,
+    part1_chunk_size: int = 8,
     part1_serial: bool = False,
 ) -> dict[TileCoord, Image.Image]:
     # noinspection GrazieInspection
@@ -55,7 +56,9 @@ def render(
     :type tiles: list[TileCoord] | None
     :param offset: the offset to shift all node coordinates by, given as ``(x,y)``
     :type offset: tuple[float, float]
-    :param int batch_size: The batch size for part 1 of the rendering
+    :param int part1_batch_size: The batch size for part 1 of the rendering
+    :param int part1_chunk_size: The chunk size for part 1 of the rendering
+    :param int part1_serial: TODO
 
     :returns: Given in the form of ``{tile_coord: image}``
     :rtype: dict[TileCoord, Image.Image]
@@ -74,7 +77,8 @@ def render(
         export_id,
         skin,
         assets_dir,
-        batch_size,
+        part1_batch_size,
+        part1_chunk_size,
         temp_dir,
         part1_serial,
     )
