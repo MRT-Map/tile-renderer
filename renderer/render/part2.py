@@ -8,6 +8,7 @@ from typing import Any, Generator
 
 import dill
 from rich.progress import Progress
+from shapely import prepare
 from shapely.geometry import Polygon
 from shapely.ops import unary_union
 
@@ -77,7 +78,7 @@ def _prevent_text_overlap(
             poly = unary_union([Polygon(b) for b in text.bounds])
             if not any(poly.intersects(ni) for ni in no_intersect):
                 out.setdefault(tile_coord, []).append(text)
-                no_intersect.append(poly)
+                no_intersect.append(prepare(poly))
 
     default = {tc: [] for tc in tile_coords}
     return {**default, **out}
