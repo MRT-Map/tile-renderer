@@ -106,9 +106,7 @@ def _draw_text(
     # noinspection PyBroadException
     try:
         image = Image.open(temp_dir / f"{export_id}_{tile_coord}.tmp.webp")
-        # print(text_list)
         for text in text_list:
-            # logger.log(f"Text {processed}/{len(text_list)} pasted")
             for img, center in zip(text.image, text.center):
                 image.paste(
                     img,
@@ -121,9 +119,13 @@ def _draw_text(
             if ph:
                 ph.add.remote(tile_coord)
 
-        # tileReturn[tile_coord] = im
+        # antialiasing
+        image = image.resize(
+            (image.width * 4, image.height * 4), resample=Image.BOX
+        ).resize(image.size, resample=Image.ANTIALIAS)
+
         if save_images:
-            image.save(save_dir / f"{tile_coord}.webp", "webp")
+            image.save(save_dir / f"{tile_coord}.webp", "webp", quality=95)
         (temp_dir / f"{export_id}_{tile_coord}.tmp.webp").unlink(missing_ok=True)
         if ph:
             ph.complete.remote()

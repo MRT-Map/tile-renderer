@@ -36,41 +36,6 @@ class Part1Consts:
     temp_dir: Path
 
 
-def _pre_draw_components(
-    ph: ObjectRef[ProgressHandler] | None,
-    tile_coords: list[TileCoord],
-    consts: Part1Consts,
-) -> dict[TileCoord, list[_TextObject]]:
-    # noinspection PyBroadException
-    try:
-        install(show_locals=True)
-        logging.getLogger("fontTools").setLevel(logging.CRITICAL)
-        logging.getLogger("PIL").setLevel(logging.CRITICAL)
-        results = {}
-        for tile_coord in tile_coords:
-            path = consts.temp_dir / f"{consts.export_id}_{tile_coord}.0.dill"
-            with open(path, "rb") as f:
-                tile_components = dill.load(f)
-
-            out = _draw_components(ph, tile_coord, tile_components, consts)
-
-            os.remove(path)
-            if out is not None:
-                with open(
-                    consts.temp_dir / f"{consts.export_id}_{tile_coord}.1.dill", "wb"
-                ) as f:
-                    dill.dump({out[0]: out[1]}, f)
-            results[out[0]] = out[1]
-        if ph:
-            ph.request_new_task.remote()
-        return results
-    except Exception as e:
-        log.error(f"Error in ray task: {e!r}")
-        log.error(traceback.format_exc())
-        if ph:
-            ph.request_new_task.remote()
-
-
 def render_part1(
     zoom: ZoomParams,
     export_id: str,
@@ -170,6 +135,41 @@ def render_part1(
         result.update(a)
     (temp_dir / f"{export_id}.processed.0.dill").unlink(missing_ok=True)
     return result
+
+
+def _pre_draw_components(
+    ph: ObjectRef[ProgressHandler] | None,
+    tile_coords: list[TileCoord],
+    consts: Part1Consts,
+) -> dict[TileCoord, list[_TextObject]]:
+    # noinspection PyBroadException
+    try:
+        install(show_locals=True)
+        logging.getLogger("fontTools").setLevel(logging.CRITICAL)
+        logging.getLogger("PIL").setLevel(logging.CRITICAL)
+        results = {}
+        for tile_coord in tile_coords:
+            path = consts.temp_dir / f"{consts.export_id}_{tile_coord}.0.dill"
+            with open(path, "rb") as f:
+                tile_components = dill.load(f)
+
+            out = _draw_components(ph, tile_coord, tile_components, consts)
+
+            os.remove(path)
+            if out is not None:
+                with open(
+                    consts.temp_dir / f"{consts.export_id}_{tile_coord}.1.dill", "wb"
+                ) as f:
+                    dill.dump({out[0]: out[1]}, f)
+            results[out[0]] = out[1]
+        if ph:
+            ph.request_new_task.remote()
+        return results
+    except Exception as e:
+        log.error(f"Error in ray task: {e!r}")
+        log.error(traceback.format_exc())
+        if ph:
+            ph.request_new_task.remote()
 
 
 def _count_num_rendering_oprs(
@@ -353,7 +353,11 @@ def _draw_components(
     text_list += points_text_list
     text_list.reverse()
 
-    img.save(consts.temp_dir / f"{consts.export_id}_{tile_coord}.tmp.webp", "webp")
+    img.save(
+        consts.temp_dir / f"{consts.export_id}_{tile_coord}.tmp.webp",
+        "webp",
+        lossless=True,
+    )
     if ph:
         ph.complete.remote()
 

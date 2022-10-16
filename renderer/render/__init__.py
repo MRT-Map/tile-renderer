@@ -70,8 +70,10 @@ def render(
 
     prepare_render(components, zoom, export_id, skin, tiles, offset, temp_dir)
 
-    log.info(f"Initialising Ray with {processes=}...")
-    ray.init(num_cpus=processes)
+    if not part1_serial:
+        log.info(f"Initialising Ray with {processes=}...")
+        ray.init(num_cpus=processes)
+
     render_part1(
         zoom,
         export_id,
