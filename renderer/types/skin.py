@@ -13,6 +13,7 @@ import imagehash
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont
 from schema import And, Optional, Or, Regex, Schema
+from shapely.geometry import Polygon
 
 import renderer.internals.internal as internal
 from renderer import math_utils
@@ -25,9 +26,9 @@ Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=
 
 @dataclass(eq=True, unsafe_hash=True)
 class _TextObject:
-    image: tuple[Image.Image, ...]
-    center: tuple[ImageCoord, ...]
-    bounds: tuple[tuple[ImageCoord, ...]]
+    image: list[Image.Image]
+    center: list[ImageCoord]
+    bounds: list[Polygon]
 
     def __init__(
         self,
@@ -48,47 +49,49 @@ class _TextObject:
             pivot=Coord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),
             theta=-rot,
         )
-        self.image = (image,)
-        self.center = (
+        self.image = [image]
+        self.center = [
             ImageCoord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),
-        )
-        self.bounds = (
-            (
-                r(
-                    Coord(
-                        tile_coord.x * tile_size + x - w / 2,
-                        tile_coord.y * tile_size + y - h / 2,
-                    )
-                ),
-                r(
-                    Coord(
-                        tile_coord.x * tile_size + x - w / 2,
-                        tile_coord.y * tile_size + y + h / 2,
-                    )
-                ),
-                r(
-                    Coord(
-                        tile_coord.x * tile_size + x + w / 2,
-                        tile_coord.y * tile_size + y + h / 2,
-                    )
-                ),
-                r(
-                    Coord(
-                        tile_coord.x * tile_size + x + w / 2,
-                        tile_coord.y * tile_size + y - h / 2,
-                    )
-                ),
-                r(
-                    Coord(
-                        tile_coord.x * tile_size + x - w / 2,
-                        tile_coord.y * tile_size + y - h / 2,
-                    )
-                ),
-            ),
-        )
+        ]
+        self.bounds = [
+            Polygon(
+                [
+                    r(
+                        Coord(
+                            tile_coord.x * tile_size + x - w / 2,
+                            tile_coord.y * tile_size + y - h / 2,
+                        )
+                    ),
+                    r(
+                        Coord(
+                            tile_coord.x * tile_size + x - w / 2,
+                            tile_coord.y * tile_size + y + h / 2,
+                        )
+                    ),
+                    r(
+                        Coord(
+                            tile_coord.x * tile_size + x + w / 2,
+                            tile_coord.y * tile_size + y + h / 2,
+                        )
+                    ),
+                    r(
+                        Coord(
+                            tile_coord.x * tile_size + x + w / 2,
+                            tile_coord.y * tile_size + y - h / 2,
+                        )
+                    ),
+                    r(
+                        Coord(
+                            tile_coord.x * tile_size + x - w / 2,
+                            tile_coord.y * tile_size + y - h / 2,
+                        )
+                    ),
+                ]
+            )
+        ]
         if debug:
             nr = functools.partial(
-                math_utils.rotate_around_pivot, px=x, py=y, theta=-rot
+                math_utils.rotate_around_pivot, pivot=Coord(x, y), theta=-rot
             )
             imd.line(
                 [
@@ -105,9 +108,9 @@ class _TextObject:
     def from_multiple(cls, *textobject: _TextObject):
         to = copy(textobject[0])
 
-        to.bounds = tuple(itertools.chain(*[sto.bounds for sto in textobject]))
-        to.image = tuple(itertools.chain(*[sto.image for sto in textobject]))
-        to.center = tuple(itertools.chain(*[sto.center for sto in textobject]))
+        to.bounds = list(itertools.chain(*[sto.bounds for sto in textobject]))
+        to.image = list(itertools.chain(*[sto.image for sto in textobject]))
+        to.center = list(itertools.chain(*[sto.center for sto in textobject]))
 
         return to
 
