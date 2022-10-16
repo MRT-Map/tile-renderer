@@ -7,11 +7,14 @@ import traceback
 from pathlib import Path
 
 import dill
+import psutil
+import ray
 from PIL import Image
-from rich.progress import track
+from ray import ObjectRef
+from rich.progress import Progress, track
 
 from renderer.internals.logger import log
-from renderer.render.utils import _TextObject
+from renderer.render.utils import ProgressHandler, _TextObject
 from renderer.types.coord import TileCoord
 from renderer.types.skin import Skin
 
@@ -22,8 +25,10 @@ def render_part3(
     save_images: bool = True,
     save_dir: Path = Path.cwd(),
     temp_dir: Path = Path.cwd() / "temp",
+    processes: int = psutil.cpu_count(),
+    serial: bool = False,
 ) -> dict[TileCoord, Image.Image]:
-    new_texts = {}
+    new_texts: dict[TileCoord, list[_TextObject]] = {}
     total_texts = 0
     for file in glob.glob(str(temp_dir / f"{export_id}_*.2.dill")):
         with open(file, "rb") as f:
@@ -32,14 +37,37 @@ def render_part3(
             total_texts += z_total_texts
 
     log.info(f"Rendering texts in {len(new_texts)} tiles...")
-    preresult = [
-        _draw_text(
-            tile_coord, text_list, save_images, save_dir, skin, export_id, temp_dir
-        )
-        for tile_coord, text_list in track(
-            new_texts.items(), description="[green]Rendering texts"
-        )
-    ]
+    if serial:
+        preresult = [
+            _draw_text(None, {tc: tl}, save_images, save_dir, skin, export_id, temp_dir)
+            for tc, tl in track(new_texts.items(), description="[green]Rendering texts")
+        ]
+    else:
+        chunks = []
+        for i in range(0, len(new_texts), processes):
+            d = {}
+            for k, v in list(new_texts.items())[i : i + processes]:
+                d[k] = v
+            chunks.append(d)
+
+        ph = ProgressHandler.remote()
+        futures = [
+            ray.remote(_draw_text).remote(
+                ph, text_lists, save_images, save_dir, skin, export_id, temp_dir
+            )
+            for text_lists in track(chunks, "Spawning initial tasks")
+        ]
+        with Progress() as progress:
+            main_id = progress.add_task("[green]Rendering texts", total=len(new_texts))
+            num_complete = 0
+            while num_complete < len(new_texts):
+                id_: TileCoord | None = ray.get(ph.get.remote())
+                if id_ is None:
+                    continue
+                progress.advance(main_id, 1)
+                num_complete += 1
+            progress.update(main_id, completed=len(new_texts))
+        preresult = ray.get(futures)
 
     result = {}
     for i in preresult:
@@ -49,13 +77,7 @@ def render_part3(
         result[k] = v
 
     for file in track(
-        glob.glob(str(temp_dir / f"tmp/{glob.escape(export_id)}_*.tmp.png")),
-        description="Cleaning up",
-        transient=True,
-    ):
-        os.remove(file)
-    for file in track(
-        glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.2.dill")),
+        glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*")),
         description="Cleaning up",
     ):
         os.remove(file)
@@ -65,8 +87,8 @@ def render_part3(
 
 
 def _draw_text(
-    tile_coord: TileCoord,
-    text_list: list[_TextObject],
+    ph: ObjectRef[ProgressHandler] | None,
+    text_lists: dict[TileCoord, list[_TextObject]],
     save_images: bool,
     save_dir: Path,
     skin: Skin,
@@ -76,29 +98,41 @@ def _draw_text(
     logging.getLogger("PIL").setLevel(logging.CRITICAL)
     # noinspection PyBroadException
     try:
-        image = Image.open(temp_dir / f"{export_id}_{tile_coord}.tmp.png")
-        for text in text_list:
-            for img, center in zip(text.image, text.center):
-                img = _TextObject.uuid_to_img(img, temp_dir)
-                image.paste(
-                    img,
-                    (
-                        int(center.x - tile_coord.x * skin.tile_size - img.width / 2),
-                        int(center.y - tile_coord.y * skin.tile_size - img.height / 2),
-                    ),
-                    img,
-                )
+        out = {}
+        for tile_coord, text_list in text_lists.items():
+            image = Image.open(temp_dir / f"{export_id}_{tile_coord}.tmp.png")
+            for text in text_list:
+                for img, center in zip(text.image, text.center):
+                    img = _TextObject.uuid_to_img(img, temp_dir)
+                    image.paste(
+                        img,
+                        (
+                            int(
+                                center.x - tile_coord.x * skin.tile_size - img.width / 2
+                            ),
+                            int(
+                                center.y
+                                - tile_coord.y * skin.tile_size
+                                - img.height / 2
+                            ),
+                        ),
+                        img,
+                    )
 
-        # antialiasing
-        image = image.resize(
-            (image.width * 4, image.height * 4), resample=Image.BOX
-        ).resize(image.size, resample=Image.ANTIALIAS)
+            # antialiasing
+            image = image.resize(
+                (image.width * 4, image.height * 4), resample=Image.BOX
+            ).resize(image.size, resample=Image.ANTIALIAS)
 
-        if save_images:
-            image.save(save_dir / f"{tile_coord}.webp", "webp", quality=95)
-        os.remove((temp_dir / f"{export_id}_{tile_coord}.tmp.png"))
+            if save_images:
+                image.save(save_dir / f"{tile_coord}.webp", "webp", quality=95)
+            os.remove((temp_dir / f"{export_id}_{tile_coord}.tmp.png"))
+            out[tile_coord] = image
 
-        return {tile_coord: image}
+            if ph:
+                ph.add.remote(tile_coord)
+
+        return out
     except Exception as e:
         log.error(f"Error in ray task: {e!r}")
         log.error(traceback.format_exc())
