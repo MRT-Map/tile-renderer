@@ -4,7 +4,6 @@ import gc
 import glob
 import logging
 import os
-import pickle
 import re
 import traceback
 from dataclasses import dataclass
@@ -12,6 +11,7 @@ from itertools import chain
 from pathlib import Path
 from queue import Empty
 
+import dill
 import ray
 from PIL import Image, ImageDraw
 from ray import ObjectRef
@@ -46,18 +46,18 @@ def _pre_draw_components(
         logging.getLogger("PIL").setLevel(logging.CRITICAL)
         results = {}
         for tile_coord in tile_coords:
-            path = consts.temp_dir / f"{consts.export_id}_{tile_coord}.0.pkl"
+            path = consts.temp_dir / f"{consts.export_id}_{tile_coord}.0.dill"
             with open(path, "rb") as f:
-                tile_components = pickle.load(f)
+                tile_components = dill.load(f)
 
             out = _draw_components(ph, tile_coord, tile_components, consts)
 
             os.remove(path)
             if out is not None:
                 with open(
-                    consts.temp_dir / f"{consts.export_id}_{tile_coord}.1.pkl", "wb"
+                    consts.temp_dir / f"{consts.export_id}_{tile_coord}.1.dill", "wb"
                 ) as f:
-                    pickle.dump({out[0]: out[1]}, f)
+                    dill.dump({out[0]: out[1]}, f)
             results[out[0]] = out[1]
         if ph:
             ph.request_new_task.remote()
@@ -78,11 +78,11 @@ def render_part1(
     serial: bool = False,
 ) -> dict[TileCoord, list[_TextObject]]:
     tile_coords = []
-    with open(temp_dir / f"{export_id}.processed.0.pkl", "rb") as f:
-        components = pickle.load(f)
+    with open(temp_dir / f"{export_id}.processed.0.dill", "rb") as f:
+        components = dill.load(f)
 
-    for file in glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.0.pkl")):
-        re_result = re.search(rf"_(-?\d+), (-?\d+), (-?\d+)\.0\.pkl$", file)
+    for file in glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.0.dill")):
+        re_result = re.search(rf"_(-?\d+), (-?\d+), (-?\d+)\.0\.dill$", file)
         tile_coords.append(
             TileCoord(
                 int(re_result.group(1)),
@@ -163,7 +163,7 @@ def render_part1(
     result = {}
     for a in preresult:
         result.update(a)
-    (temp_dir / f"{export_id}.processed.0.pkl").unlink(missing_ok=True)
+    (temp_dir / f"{export_id}.processed.0.dill").unlink(missing_ok=True)
     return result
 
 
@@ -172,18 +172,18 @@ def _count_num_rendering_oprs(
 ) -> dict[TileCoord, int]:
     grouped_tile_list: dict[TileCoord, list[Pla2File]] = {}
     for file in track(
-        glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.0.pkl")),
+        glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.0.dill")),
         description="Loading data",
     ):
         with open(file, "rb") as f:
             result = re.search(
-                rf"\b{re.escape(export_id)}_(-?\d+), (-?\d+), (-?\d+)\.0\.pkl$", file
+                rf"\b{re.escape(export_id)}_(-?\d+), (-?\d+), (-?\d+)\.0\.dill$", file
             )
             grouped_tile_list[
                 TileCoord(
                     int(result.group(1)), int(result.group(2)), int(result.group(3))
                 )
-            ] = pickle.load(f)
+            ] = dill.load(f)
 
     tile_operations = 0
     operations = {}

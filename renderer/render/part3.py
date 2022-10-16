@@ -3,11 +3,11 @@ from __future__ import annotations
 import glob
 import logging
 import os
-import pickle
 import traceback
 from pathlib import Path
 from queue import Empty
 
+import dill
 from PIL import Image
 from rich.progress import Progress, track
 
@@ -28,9 +28,9 @@ def render_part3(
 
     new_texts = {}
     total_texts = 0
-    for file in glob.glob(str(temp_dir / f"{export_id}_*.2.pkl")):
+    for file in glob.glob(str(temp_dir / f"{export_id}_*.2.dill")):
         with open(file, "rb") as f:
-            z_new_texts, z_total_texts = pickle.load(f)
+            z_new_texts, z_total_texts = dill.load(f)
             new_texts.update(z_new_texts)
             total_texts += z_total_texts
 
@@ -82,7 +82,7 @@ def render_part3(
     ):
         os.remove(file)
     for file in track(
-        glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.2.pkl")),
+        glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.2.dill")),
         description="Cleaning up",
     ):
         os.remove(file)

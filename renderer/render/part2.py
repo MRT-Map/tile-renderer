@@ -2,11 +2,11 @@ from __future__ import annotations
 
 import glob
 import os
-import pickle
 import re
 from pathlib import Path
 from typing import Any, Generator
 
+import dill
 from rich.progress import Progress
 from shapely.geometry import Polygon
 from shapely.ops import unary_union
@@ -19,9 +19,9 @@ from renderer.types.skin import _TextObject
 def file_loader(
     zoom: int, temp_dir: Path, export_id: str
 ) -> Generator[tuple[TileCoord, list[_TextObject]], Any, None]:
-    for file in glob.glob(str(temp_dir / f"{glob.escape(export_id)}_{zoom},*.1.pkl")):
+    for file in glob.glob(str(temp_dir / f"{glob.escape(export_id)}_{zoom},*.1.dill")):
         with open(file, "rb") as f:
-            data = pickle.load(f)
+            data = dill.load(f)
         for tile_coord, text_objects in data.items():
             yield tile_coord, text_objects
 
@@ -31,7 +31,7 @@ def render_part2(
 ) -> tuple[dict[TileCoord, list[_TextObject]], int]:
     zooms = {}
     log.info("Determining zoom levels...")
-    for file in glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.1.pkl")):
+    for file in glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.1.dill")):
         zoom = re.search(r"_(\d+),", file).group(1)
         if zoom not in zooms:
             zooms[zoom] = 0
@@ -47,10 +47,10 @@ def render_part2(
                 zoom, file_loader(zoom, temp_dir, export_id), length, progress
             )
             total_texts = sum(len(t) for t in new_texts.values())
-            with open(temp_dir / f"{export_id}_{zoom}.2.pkl", "wb") as f:
-                pickle.dump((new_texts, total_texts), f)
+            with open(temp_dir / f"{export_id}_{zoom}.2.dill", "wb") as f:
+                dill.dump((new_texts, total_texts), f)
             for file in progress.track(
-                glob.glob(str(temp_dir / f"{glob.escape(export_id)}_{zoom},*.1.pkl")),
+                glob.glob(str(temp_dir / f"{glob.escape(export_id)}_{zoom},*.1.dill")),
                 description="Cleaning up",
             ):
                 os.remove(file)

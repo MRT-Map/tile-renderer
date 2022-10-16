@@ -1,8 +1,8 @@
 from __future__ import annotations
 
-import pickle
 from pathlib import Path
 
+import dill
 import vector
 from rich.progress import track
 from vector import Vector2D
@@ -117,9 +117,9 @@ def prepare_render(
     for coord, grouped_components in track(
         grouped_tile_list.items(), description="Dumping data"
     ):
-        with open(temp_dir / f"{export_id}_{coord}.0.pkl", "wb") as f:
-            pickle.dump(grouped_components, f)
-    with open(temp_dir / f"{export_id}.processed.0.pkl", "wb") as f:
-        pickle.dump(components, f)
+        with open(temp_dir / f"{export_id}_{coord}.0.dill", "wb") as f:
+            dill.dump(grouped_components, f)
+    with open(temp_dir / f"{export_id}.processed.0.dill", "wb") as f:
+        dill.dump(components, f)
 
     return grouped_tile_list
