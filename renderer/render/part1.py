@@ -107,7 +107,7 @@ def render_part1(
         ids = {}
         progresses = {}
         while ray.get(ph.get_complete.remote()) != len(tile_coords):
-            while ph.needs_new_task.remote() and cursor < len(tile_chunks):
+            while ray.get(ph.needs_new_task.remote()) and cursor < len(tile_chunks):
                 futures.append(
                     ray.remote(_pre_draw_components).remote(
                         ph, tile_chunks[cursor], consts
