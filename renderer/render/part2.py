@@ -10,7 +10,6 @@ import dill
 from rich.progress import Progress
 from shapely import prepare
 from shapely.geometry import Polygon
-from shapely.ops import unary_union
 
 from renderer.internals.logger import log
 from renderer.render.utils import _TextObject
@@ -75,10 +74,10 @@ def _prevent_text_overlap(
     ):
         tile_coords.add(tile_coord)
         for text in text_objects:
-            poly = unary_union([Polygon(b) for b in text.bounds])
-            if not any(poly.intersects(ni) for ni in no_intersect):
+            polys = [Polygon(b) for b in text.bounds]
+            if not any(poly.intersects(ni) for ni in no_intersect for poly in polys):
                 out.setdefault(tile_coord, []).append(text)
-                no_intersect.append(prepare(poly))
+                no_intersect.extend(prepare(poly) for poly in polys)
 
     default = {tc: [] for tc in tile_coords}
     return {**default, **out}
