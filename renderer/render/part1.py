@@ -9,7 +9,6 @@ import traceback
 from dataclasses import dataclass
 from itertools import chain
 from pathlib import Path
-from queue import Empty
 
 import dill
 import ray
@@ -30,13 +29,12 @@ from renderer.types.zoom_params import ZoomParams
 def task_spawner(
     ph: ObjectRef[ProgressHandler],
     tile_chunks: list[list[TileCoord]],
-    tile_coords: list[TileCoord],
     futures: list[ObjectRef[dict[TileCoord, list[_TextObject]]]],
     cursor: int,
     consts: Part1Consts,
 ) -> list[ObjectRef[dict[TileCoord, list[_TextObject]]]]:
-    while ray.get(ph.get_complete.remote()) < len(tile_coords):
-        if ray.get(ph.needs_new_task.remote()) and cursor < len(tile_chunks):
+    while cursor < len(tile_chunks):
+        if ray.get(ph.needs_new_task.remote()):
             futures.append(
                 ray.remote(_pre_draw_components).remote(ph, tile_chunks[cursor], consts)
             )
@@ -118,33 +116,20 @@ def render_part1(
         for tile_coords in track(tile_chunks[:batch_size], "Spawning initial tasks")
     ]
     cursor = batch_size
-    future_refs = task_spawner.remote(
-        ph, tile_chunks, tile_coords, futures, cursor, consts
-    )
+    future_refs = task_spawner.remote(ph, tile_chunks, futures, cursor, consts)
     with Progress() as progress:
         main_id = progress.add_task(
-            "Rendering components", total=sum(operations.values())
+            "[green]Rendering components", total=sum(operations.values())
         )
-        ids = {}
-        progresses = {}
-        while ray.get(ph.get_complete.remote()) != len(tile_coords):
-            try:
-                id_ = ray.get(ph.get.remote())
-            except Empty:
+        num_complete = 0
+        while num_complete < len(tile_coords):
+            id_: TileCoord | None = ray.get(ph.get_complete.remote())
+            if id_ is not None:
+                num_complete += 1
+            id_: TileCoord | None = ray.get(ph.get.remote())
+            if id_ is None:
                 continue
-            if id_ not in ids:
-                ids[id_] = progress.add_task(str(id_), total=operations[id_])
-                progresses[id_] = 0
-            progress.advance(ids[id_], 1)
             progress.advance(main_id, 1)
-            progresses[id_] += 1
-            if operations[id_] <= progresses[id_]:
-                progress.update(ids[id_], visible=False)
-                progress.remove_task(ids[id_])
-                del progresses[id_]
-                del ids[id_]
-        for id_ in ids:
-            progress.remove_task(ids[id_])
         progress.update(main_id, completed=sum(operations.values()))
 
     preresult: list[dict[TileCoord, list[_TextObject]]] = ray.get(ray.get(future_refs))
@@ -372,11 +357,10 @@ def _draw_components(
     text_list.reverse()
 
     img.save(
-        consts.temp_dir / f"{consts.export_id}_{tile_coord}.tmp.webp",
-        "webp",
-        lossless=True,
+        consts.temp_dir / f"{consts.export_id}_{tile_coord}.tmp.png",
+        "png",
     )
     if ph:
-        ph.complete.remote()
+        ph.complete.remote(tile_coord)
 
     return tile_coord, text_list

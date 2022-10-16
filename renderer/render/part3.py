@@ -5,15 +5,12 @@ import logging
 import os
 import traceback
 from pathlib import Path
-from queue import Empty
 
 import dill
 from PIL import Image
-from ray import ObjectRef
-from rich.progress import Progress, track
+from rich.progress import track
 
 from renderer.internals.logger import log
-from renderer.render.utils import ProgressHandler
 from renderer.types.coord import TileCoord
 from renderer.types.skin import Skin, _TextObject
 
@@ -25,8 +22,6 @@ def render_part3(
     save_dir: Path = Path.cwd(),
     temp_dir: Path = Path.cwd() / "temp",
 ) -> dict[TileCoord, Image.Image]:
-    import ray
-
     new_texts = {}
     total_texts = 0
     for file in glob.glob(str(temp_dir / f"{export_id}_*.2.dill")):
@@ -35,39 +30,15 @@ def render_part3(
             new_texts.update(z_new_texts)
             total_texts += z_total_texts
 
-    log.info(f"Rendering images in {len(new_texts)} tiles...")
-    ph = ProgressHandler.remote()
-    futures = [
-        ray.remote(_draw_text).remote(
-            ph, tile_coord, text_list, save_images, save_dir, skin, export_id, temp_dir
+    log.info(f"Rendering texts in {len(new_texts)} tiles...")
+    preresult = [
+        _draw_text(
+            tile_coord, text_list, save_images, save_dir, skin, export_id, temp_dir
         )
         for tile_coord, text_list in track(
-            new_texts.items(), description="Dispatching tasks"
+            new_texts.items(), description="[green]Rendering texts"
         )
     ]
-    with Progress() as progress:
-        main_id = progress.add_task(
-            "Rendering texts", total=sum(len(ls) for ls in new_texts.values())
-        )
-        ids = {}
-        progresses = {}
-        while ray.get(ph.get_complete.remote()) != len(new_texts):
-            try:
-                id_ = ray.get(ph.get.remote())
-            except Empty:
-                continue
-            if id_ not in ids:
-                ids[id_] = progress.add_task(str(id_), total=len(new_texts[id_]))
-                progresses[id_] = 0
-            progress.advance(ids[id_], 1)
-            progress.advance(main_id, 1)
-            progresses[id_] += 1
-            if len(new_texts[id_]) <= progresses[id_]:
-                progress.update(ids[id_], visible=False)
-                progress.remove_task(ids[id_])
-                del progresses[id_]
-                del ids[id_]
-    preresult = ray.get(futures)
 
     result = {}
     for i in preresult:
@@ -77,7 +48,7 @@ def render_part3(
         result[k] = v
 
     for file in track(
-        glob.glob(str(temp_dir / f"tmp/{glob.escape(export_id)}_*.tmp.webp")),
+        glob.glob(str(temp_dir / f"tmp/{glob.escape(export_id)}_*.tmp.png")),
         description="Cleaning up",
         transient=True,
     ):
@@ -93,7 +64,6 @@ def render_part3(
 
 
 def _draw_text(
-    ph: ObjectRef[ProgressHandler] | None,
     tile_coord: TileCoord,
     text_list: list[_TextObject],
     save_images: bool,
@@ -105,7 +75,7 @@ def _draw_text(
     logging.getLogger("PIL").setLevel(logging.CRITICAL)
     # noinspection PyBroadException
     try:
-        image = Image.open(temp_dir / f"{export_id}_{tile_coord}.tmp.webp")
+        image = Image.open(temp_dir / f"{export_id}_{tile_coord}.tmp.png")
         for text in text_list:
             for img, center in zip(text.image, text.center):
                 image.paste(
@@ -116,8 +86,6 @@ def _draw_text(
                     ),
                     img,
                 )
-            if ph:
-                ph.add.remote(tile_coord)
 
         # antialiasing
         image = image.resize(
@@ -126,9 +94,7 @@ def _draw_text(
 
         if save_images:
             image.save(save_dir / f"{tile_coord}.webp", "webp", quality=95)
-        os.remove((temp_dir / f"{export_id}_{tile_coord}.tmp.webp"))
-        if ph:
-            ph.complete.remote()
+        os.remove((temp_dir / f"{export_id}_{tile_coord}.tmp.png"))
 
         return {tile_coord: image}
     except Exception as e:
