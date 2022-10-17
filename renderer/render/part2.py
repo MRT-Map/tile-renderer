@@ -31,7 +31,7 @@ def file_loader(
 
 def render_part2(
     export_id: str, temp_dir: Path = Path.cwd() / "temp"
-) -> tuple[dict[TileCoord, list[_TextObject]], int]:
+) -> dict[TileCoord, list[_TextObject]]:
     zooms = {}
     log.info("Determining zoom levels...")
     for file in glob.glob(str(part_dir(temp_dir, export_id, 1) / f"tile_*.dill")):
@@ -41,7 +41,6 @@ def render_part2(
         zooms[zoom] += 1
 
     all_new_texts = {}
-    all_total_texts = 0
     with Progress() as progress:
         for zoom, length in progress.track(
             zooms.items(), description="[green]Eliminating overlapping text"
@@ -54,9 +53,6 @@ def render_part2(
                 temp_dir,
                 export_id,
             )
-            total_texts = sum(len(t) for t in new_texts.values())
-            with open(part_dir(temp_dir, export_id, 2) / f"{zoom}.dill", "wb") as f:
-                dill.dump((new_texts, total_texts), f)
             for file in progress.track(
                 glob.glob(
                     str(part_dir(temp_dir, export_id, 1) / f"tile_{zoom},*.dill")
@@ -65,8 +61,7 @@ def render_part2(
             ):
                 os.remove(file)
             all_new_texts.update(new_texts)
-            all_total_texts += total_texts
-    return all_new_texts, all_total_texts
+    return all_new_texts
 
 
 def _prevent_text_overlap(
@@ -103,4 +98,10 @@ def _prevent_text_overlap(
                     _TextObject.remove_img(id_, temp_dir, export_id)
 
     default = {tc: [] for tc in tile_coords}
-    return {**default, **out}
+    out = {**default, **out}
+    for tile_coord, text_objects in out.items():
+        with open(
+            part_dir(temp_dir, export_id, 2) / f"tile_{tile_coord}.dill", "wb"
+        ) as f:
+            dill.dump(text_objects, f)
+    return out

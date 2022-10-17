@@ -4,6 +4,7 @@ import gc
 import glob
 import logging
 import os
+import re
 import shutil
 import traceback
 from pathlib import Path
@@ -23,7 +24,7 @@ from renderer.types.skin import Skin
 @ray.remote
 def task_spawner(
     ph: ObjectRef[ProgressHandler] | None,
-    chunks: list[dict[TileCoord, list[_TextObject]]],
+    chunks: list[list[TileCoord]],
     save_images: bool,
     save_dir: Path,
     skin: Skin,
@@ -57,26 +58,28 @@ def render_part3(
     temp_dir: Path = Path.cwd() / "temp",
     serial: bool = False,
 ) -> dict[TileCoord, Image.Image]:
-    new_texts: dict[TileCoord, list[_TextObject]] = {}
-    total_texts = 0
-    for file in glob.glob(str(part_dir(temp_dir, export_id, 2) / "*.dill")):
-        with open(file, "rb") as f:
-            z_new_texts, z_total_texts = dill.load(f)
-            new_texts.update(z_new_texts)
-            total_texts += z_total_texts
+    tile_coords = []
+    for file in glob.glob(str(part_dir(temp_dir, export_id, 2) / f"tile_*.dill")):
+        re_result = re.search(rf"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)
+        tile_coords.append(
+            TileCoord(
+                int(re_result.group(1)),
+                int(re_result.group(2)),
+                int(re_result.group(3)),
+            )
+        )
 
-    log.info(f"Rendering texts in {len(new_texts)} tiles...")
+    log.info(f"Rendering texts in {len(tile_coords)} tiles...")
     if serial:
         preresult = [
-            _draw_text(None, {tc: tl}, save_images, save_dir, skin, export_id, temp_dir)
-            for tc, tl in track(new_texts.items(), description="[green]Rendering texts")
+            _draw_text(
+                None, [tile_coord], save_images, save_dir, skin, export_id, temp_dir
+            )
+            for tile_coord in track(tile_coords, description="[green]Rendering texts")
         ]
     else:
         batch_size = 8
-        chunks = [
-            {k: v for k, v in list(new_texts.items())[i : i + 10]}
-            for i in range(0, len(new_texts), 10)
-        ]
+        chunks = [tile_coords[i : i + 10] for i in range(0, len(tile_coords), 10)]
         gc.collect()
 
         ph = ProgressHandler.remote()
@@ -104,15 +107,17 @@ def render_part3(
             futures,
         )
         with Progress() as progress:
-            main_id = progress.add_task("[green]Rendering texts", total=len(new_texts))
+            main_id = progress.add_task(
+                "[green]Rendering texts", total=len(tile_coords)
+            )
             num_complete = 0
-            while num_complete < len(new_texts):
+            while num_complete < len(tile_coords):
                 id_: TileCoord | None = ray.get(ph.get.remote())
                 if id_ is None:
                     continue
                 progress.advance(main_id, 1)
                 num_complete += 1
-            progress.update(main_id, completed=len(new_texts))
+            progress.update(main_id, completed=len(tile_coords))
 
         preresult = ray.get(ray.get(future_refs))
     result = {}
@@ -127,7 +132,7 @@ def render_part3(
 
 def _draw_text(
     ph: ObjectRef[ProgressHandler] | None,
-    text_lists: dict[TileCoord, list[_TextObject]],
+    tile_coords: list[TileCoord],
     save_images: bool,
     save_dir: Path,
     skin: Skin,
@@ -138,7 +143,11 @@ def _draw_text(
     # noinspection PyBroadException
     try:
         out = {}
-        for tile_coord, text_list in text_lists.items():
+        for tile_coord in tile_coords:
+            with open(
+                part_dir(temp_dir, export_id, 2) / f"tile_{tile_coord}.dill", "rb"
+            ) as f:
+                text_list = dill.load(f)
             try:
                 image = Image.open(
                     wip_tiles_dir(temp_dir, export_id) / f"{tile_coord}.png"
