@@ -55,7 +55,7 @@ def render_part3(
         futures = [
             ray.remote(_draw_text).remote(
                 ph,
-                ray.get(text_lists),
+                text_lists,
                 save_images,
                 save_dir,
                 skin,
