@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import gc
 import glob
 import logging
 import os
@@ -44,12 +45,23 @@ def render_part3(
             for tc, tl in track(new_texts.items(), description="[green]Rendering texts")
         ]
     else:
-        chunks: list[ObjectRef[dict[TileCoord, list[_TextObject]]]] = []
-        for i in range(0, processes):
-            d = {}
-            for k, v in list(new_texts.items())[i::processes]:
-                d[k] = v
-            chunks.append(ray.put(d))
+        with Progress() as progress:
+            chunks: list[ObjectRef[dict[TileCoord, list[_TextObject]]]] = []
+            for i in progress.track(
+                range(0, processes), description="Generating chunks"
+            ):
+                chunks.append(
+                    ray.put(
+                        {
+                            k: v
+                            for k, v in progress.track(
+                                list(new_texts.items())[i::processes],
+                                description=f"Process {i}",
+                            )
+                        }
+                    )
+                )
+        gc.collect()
 
         ph = ProgressHandler.remote()
         futures = [
