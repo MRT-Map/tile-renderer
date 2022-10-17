@@ -7,6 +7,7 @@ import os
 import shutil
 import traceback
 from pathlib import Path
+from typing import Iterable
 
 import dill
 import psutil
@@ -41,40 +42,29 @@ def render_part3(
     log.info(f"Rendering texts in {len(new_texts)} tiles...")
     if serial:
         preresult = [
-            _draw_text(None, {tc: tl}, save_images, save_dir, skin, export_id, temp_dir)
+            _draw_text(
+                None, {tc: tl}.items(), save_images, save_dir, skin, export_id, temp_dir
+            )
             for tc, tl in track(new_texts.items(), description="[green]Rendering texts")
         ]
     else:
-        with Progress() as progress:
-            chunks: list[ObjectRef[dict[TileCoord, list[_TextObject]]]] = []
-            for i in progress.track(
-                range(0, processes), description="Generating chunks"
-            ):
-                chunks.append(
-                    ray.put(
-                        {
-                            k: v
-                            for k, v in progress.track(
-                                list(new_texts.items())[i::processes],
-                                description=f"Process {i}",
-                            )
-                        }
-                    )
-                )
+        new_texts_ref = ray.put(new_texts)
         gc.collect()
 
         ph = ProgressHandler.remote()
         futures = [
-            ray.remote(_draw_text).remote(
+            ray.remote(_pre_draw_text).remote(
+                processes,
+                i,
+                new_texts_ref,
                 ph,
-                text_lists,
                 save_images,
                 save_dir,
                 skin,
                 export_id,
                 temp_dir,
             )
-            for text_lists in track(chunks, "Spawning initial tasks")
+            for i in track(range(processes), "Spawning initial tasks")
         ]
         with Progress() as progress:
             main_id = progress.add_task("[green]Rendering texts", total=len(new_texts))
@@ -98,9 +88,24 @@ def render_part3(
     return result
 
 
+def _pre_draw_text(
+    processes: int,
+    process_no: int,
+    all_new_texts: dict[TileCoord, list[_TextObject]],
+    ph: ObjectRef[ProgressHandler] | None,
+    save_images: bool,
+    save_dir: Path,
+    skin: Skin,
+    export_id: str,
+    temp_dir: Path,
+) -> dict[TileCoord, Image.Image]:
+    text_lists = list(all_new_texts.items())[process_no::processes]
+    return _draw_text(ph, text_lists, save_images, save_dir, skin, export_id, temp_dir)
+
+
 def _draw_text(
     ph: ObjectRef[ProgressHandler] | None,
-    text_lists: dict[TileCoord, list[_TextObject]],
+    text_lists: Iterable[tuple[TileCoord, list[_TextObject]]],
     save_images: bool,
     save_dir: Path,
     skin: Skin,
@@ -111,7 +116,7 @@ def _draw_text(
     # noinspection PyBroadException
     try:
         out = {}
-        for tile_coord, text_list in text_lists.items():
+        for tile_coord, text_list in text_lists:
             try:
                 image = Image.open(
                     wip_tiles_dir(temp_dir, export_id) / f"{tile_coord}.png"
