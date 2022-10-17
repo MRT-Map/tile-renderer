@@ -147,7 +147,7 @@ def _draw_text(
             with open(
                 part_dir(temp_dir, export_id, 2) / f"tile_{tile_coord}.dill", "rb"
             ) as f:
-                text_list = dill.load(f)
+                text_list: list[_TextObject] = dill.load(f)
             try:
                 image = Image.open(
                     wip_tiles_dir(temp_dir, export_id) / f"{tile_coord}.png"
