@@ -44,17 +44,23 @@ def render_part3(
             for tc, tl in track(new_texts.items(), description="[green]Rendering texts")
         ]
     else:
-        chunks = []
+        chunks: list[ObjectRef[dict[TileCoord, list[_TextObject]]]] = []
         for i in range(0, processes):
             d = {}
             for k, v in list(new_texts.items())[i::processes]:
                 d[k] = v
-            chunks.append(d)
+            chunks.append(ray.put(d))
 
         ph = ProgressHandler.remote()
         futures = [
             ray.remote(_draw_text).remote(
-                ph, text_lists, save_images, save_dir, skin, export_id, temp_dir
+                ph,
+                ray.get(text_lists),
+                save_images,
+                save_dir,
+                skin,
+                export_id,
+                temp_dir,
             )
             for text_lists in track(chunks, "Spawning initial tasks")
         ]
