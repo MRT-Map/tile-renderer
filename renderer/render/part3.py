@@ -7,10 +7,8 @@ import os
 import shutil
 import traceback
 from pathlib import Path
-from typing import Iterable
 
 import dill
-import psutil
 import ray
 from PIL import Image
 from ray import ObjectRef
@@ -22,13 +20,41 @@ from renderer.types.coord import TileCoord
 from renderer.types.skin import Skin
 
 
+@ray.remote
+def task_spawner(
+    ph: ObjectRef[ProgressHandler] | None,
+    chunks: list[dict[TileCoord, list[_TextObject]]],
+    save_images: bool,
+    save_dir: Path,
+    skin: Skin,
+    export_id: str,
+    temp_dir: Path,
+    cursor: int,
+    futures: list[ObjectRef[dict[TileCoord, Image.Image]]],
+) -> list[ObjectRef[dict[TileCoord, Image.Image]]]:
+    while cursor < len(chunks):
+        if ray.get(ph.needs_new_task.remote()):
+            futures.append(
+                ray.remote(_draw_text).remote(
+                    ph,
+                    chunks[cursor],
+                    save_images,
+                    save_dir,
+                    skin,
+                    export_id,
+                    temp_dir,
+                )
+            )
+            cursor += 1
+    return futures
+
+
 def render_part3(
     export_id: str,
     skin: Skin = Skin.from_name("default"),
     save_images: bool = True,
     save_dir: Path = Path.cwd(),
     temp_dir: Path = Path.cwd() / "temp",
-    processes: int = psutil.cpu_count(),
     serial: bool = False,
 ) -> dict[TileCoord, Image.Image]:
     new_texts: dict[TileCoord, list[_TextObject]] = {}
@@ -42,30 +68,41 @@ def render_part3(
     log.info(f"Rendering texts in {len(new_texts)} tiles...")
     if serial:
         preresult = [
-            _draw_text(
-                None, {tc: tl}.items(), save_images, save_dir, skin, export_id, temp_dir
-            )
+            _draw_text(None, {tc: tl}, save_images, save_dir, skin, export_id, temp_dir)
             for tc, tl in track(new_texts.items(), description="[green]Rendering texts")
         ]
     else:
-        new_texts_ref = ray.put(new_texts)
+        batch_size = 8
+        chunks = [
+            {k: v for k, v in list(new_texts.items())[i : i + 10]}
+            for i in range(0, len(new_texts), 10)
+        ]
         gc.collect()
 
         ph = ProgressHandler.remote()
         futures = [
-            ray.remote(_pre_draw_text).remote(
-                processes,
-                i,
-                new_texts_ref,
+            ray.remote(_draw_text).remote(
                 ph,
+                text_lists,
                 save_images,
                 save_dir,
                 skin,
                 export_id,
                 temp_dir,
             )
-            for i in track(range(processes), "Spawning initial tasks")
+            for text_lists in track(chunks[:batch_size], "Spawning initial tasks")
         ]
+        future_refs = task_spawner.remote(
+            ph,
+            chunks,
+            save_images,
+            save_dir,
+            skin,
+            export_id,
+            temp_dir,
+            batch_size,
+            futures,
+        )
         with Progress() as progress:
             main_id = progress.add_task("[green]Rendering texts", total=len(new_texts))
             num_complete = 0
@@ -76,8 +113,8 @@ def render_part3(
                 progress.advance(main_id, 1)
                 num_complete += 1
             progress.update(main_id, completed=len(new_texts))
-        preresult = ray.get(futures)
 
+        preresult = ray.get(ray.get(future_refs))
     result = {}
     for i in preresult:
         result.update(i)
@@ -88,24 +125,9 @@ def render_part3(
     return result
 
 
-def _pre_draw_text(
-    processes: int,
-    process_no: int,
-    all_new_texts: dict[TileCoord, list[_TextObject]],
-    ph: ObjectRef[ProgressHandler] | None,
-    save_images: bool,
-    save_dir: Path,
-    skin: Skin,
-    export_id: str,
-    temp_dir: Path,
-) -> dict[TileCoord, Image.Image]:
-    text_lists = list(all_new_texts.items())[process_no::processes]
-    return _draw_text(ph, text_lists, save_images, save_dir, skin, export_id, temp_dir)
-
-
 def _draw_text(
     ph: ObjectRef[ProgressHandler] | None,
-    text_lists: Iterable[tuple[TileCoord, list[_TextObject]]],
+    text_lists: dict[TileCoord, list[_TextObject]],
     save_images: bool,
     save_dir: Path,
     skin: Skin,
@@ -116,7 +138,7 @@ def _draw_text(
     # noinspection PyBroadException
     try:
         out = {}
-        for tile_coord, text_list in text_lists:
+        for tile_coord, text_list in text_lists.items():
             try:
                 image = Image.open(
                     wip_tiles_dir(temp_dir, export_id) / f"{tile_coord}.png"
