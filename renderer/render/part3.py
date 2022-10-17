@@ -111,7 +111,7 @@ def render_part3(
                 "[green]Rendering texts", total=len(tile_coords)
             )
             num_complete = 0
-            while num_complete < len(tile_coords):
+            while num_complete < len(chunks):
                 id_: TileCoord | None = ray.get(ph.get.remote())
                 if id_ is None:
                     continue
