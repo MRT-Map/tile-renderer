@@ -45,9 +45,9 @@ def render_part3(
         ]
     else:
         chunks = []
-        for i in range(0, len(new_texts), processes):
+        for i in range(0, processes):
             d = {}
-            for k, v in list(new_texts.items())[i : i + processes]:
+            for k, v in list(new_texts.items())[i::processes]:
                 d[k] = v
             chunks.append(d)
 
