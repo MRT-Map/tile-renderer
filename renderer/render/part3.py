@@ -10,6 +10,7 @@ import traceback
 from pathlib import Path
 
 import dill
+import psutil
 import ray
 from PIL import Image
 from ray import ObjectRef
@@ -57,6 +58,7 @@ def render_part3(
     save_dir: Path = Path.cwd(),
     temp_dir: Path = Path.cwd() / "temp",
     serial: bool = False,
+    batch_size: int = psutil.cpu_count(),
 ) -> dict[TileCoord, Image.Image]:
     tile_coords = []
     for file in glob.glob(str(part_dir(temp_dir, export_id, 2) / f"tile_*.dill")):
@@ -78,7 +80,6 @@ def render_part3(
             for tile_coord in track(tile_coords, description="[green]Rendering texts")
         ]
     else:
-        batch_size = 8
         chunks = [tile_coords[i : i + 10] for i in range(0, len(tile_coords), 10)]
         gc.collect()
 
