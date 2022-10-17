@@ -166,9 +166,9 @@ def _draw_text(
                     )
 
             # antialiasing
-            image = image.resize(
-                (image.width * 4, image.height * 4), resample=Image.BOX
-            ).resize(image.size, resample=Image.ANTIALIAS)
+            # image = image.resize(
+            #    (image.width * 4, image.height * 4), resample=Image.BOX
+            # ).resize(image.size, resample=Image.ANTIALIAS)
 
             if save_images:
                 image.save(save_dir / f"{tile_coord}.webp", "webp", quality=95)
