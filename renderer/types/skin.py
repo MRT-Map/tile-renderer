@@ -216,6 +216,8 @@ class Skin:
                 points_text_list: list[_TextObject],
                 tile_coord: TileCoord,
                 tile_size: int,
+                temp_dir: Path,
+                export_id: str,
                 debug: bool = False,
             ):
                 coord = coords.coords[0]
@@ -253,6 +255,8 @@ class Skin:
                         tile_size,
                         imd,
                         debug=debug,
+                        temp_dir=temp_dir,
+                        export_id=export_id,
                     )
                 )
 
@@ -321,6 +325,8 @@ class Skin:
                 coords: ImageLine,
                 tile_coord: TileCoord,
                 tile_size: int,
+                temp_dir: Path,
+                export_id: str,
                 fill: str | None = None,
                 stroke: str | None = None,
                 debug: bool = False,
@@ -413,6 +419,8 @@ class Skin:
                                     tile_size,
                                     imd,
                                     debug=debug,
+                                    temp_dir=temp_dir,
+                                    export_id=export_id,
                                 )
                             )
 
@@ -436,6 +444,8 @@ class Skin:
                 text_list: list[_TextObject],
                 tile_coord: TileCoord,
                 tile_size: int,
+                temp_dir: Path,
+                export_id: str,
                 debug: bool = False,
             ):
                 if len(component.display_name) == 0:
@@ -475,6 +485,8 @@ class Skin:
                             cs,
                             tile_coord,
                             tile_size,
+                            temp_dir,
+                            export_id,
                             debug=debug,
                         )
                         for cs in coord_lines
@@ -509,6 +521,8 @@ class Skin:
                                 cs,
                                 tile_coord,
                                 tile_size,
+                                temp_dir,
+                                export_id,
                                 fill=self.arrow_colour,
                                 stroke="#00000000",
                                 debug=debug,
@@ -667,6 +681,8 @@ class Skin:
                                     tile_size,
                                     imd,
                                     debug=debug,
+                        temp_dir=temp_dir,
+                        export_id=export_id
                                 )
                             )"""
 
@@ -688,6 +704,8 @@ class Skin:
                 text_list: list[_TextObject],
                 tile_coord: TileCoord,
                 tile_size: int,
+                temp_dir: Path,
+                export_id: str,
                 debug: bool = False,
             ):
                 if len(component.display_name.strip()) == 0:
@@ -758,6 +776,8 @@ class Skin:
                         tile_size,
                         imd,
                         debug=debug,
+                        temp_dir=temp_dir,
+                        export_id=export_id,
                     )
                 )
 

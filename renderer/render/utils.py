@@ -61,18 +61,25 @@ class _TextObject:
     center: list[ImageCoord]
     bounds: list[Polygon]
     temp_dir: Path = Path.cwd() / "temp"  # TODO
+    export_id: str = "unnamed"
 
     @staticmethod
-    def img_to_uuid(img: Image.Image, temp_dir: Path) -> UUID:
+    def img_to_uuid(img: Image.Image, temp_dir: Path, export_dir: str) -> UUID:
         u = uuid.uuid4()
-        img.save(temp_dir / f"to.{u}.png")
+        path = text_object_path(temp_dir, export_dir, u)
+        img.save(path)
         return u
 
     @staticmethod
-    def uuid_to_img(u: UUID, temp_dir: Path) -> Image.Image:
-        img = Image.open(temp_dir / f"to.{u}.png")
-        os.remove(temp_dir / f"to.{u}.png")
+    def uuid_to_img(u: UUID, temp_dir: Path, export_id: str) -> Image.Image:
+        path = text_object_path(temp_dir, export_id, u)
+        img = Image.open(path)
         return img
+
+    @staticmethod
+    def remove_img(u: UUID, temp_dir: Path, export_id: str):
+        path = text_object_path(temp_dir, export_id, u)
+        os.remove(path)
 
     def __init__(
         self,
@@ -87,6 +94,7 @@ class _TextObject:
         imd: ImageDraw,
         debug: bool = False,
         temp_dir: Path = Path.cwd() / "temp",
+        export_id: str = "unnamed",
     ):
         if debug:
             nr = functools.partial(
@@ -103,13 +111,14 @@ class _TextObject:
                 fill="#ff0000",
             )
         self.temp_dir = temp_dir
+        self.export_id = export_id
         rot *= math.pi / 180
         r = functools.partial(
             math_utils.rotate_around_pivot,
             pivot=Coord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),
             theta=-rot,
         )
-        self.image = [_TextObject.img_to_uuid(image, temp_dir)]
+        self.image = [_TextObject.img_to_uuid(image, temp_dir, export_id)]
         self.center = [
             ImageCoord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),
         ]
@@ -161,3 +170,26 @@ class _TextObject:
         to.center = list(itertools.chain(*[sto.center for sto in textobject]))
 
         return to
+
+
+def wip_tiles_dir(temp_dir: Path, export_id: str) -> Path:
+    p = temp_dir / export_id / "wip_tiles"
+    p.mkdir(parents=True, exist_ok=True)
+    return p
+
+
+def part_dir(temp_dir: Path, export_id: str, part: int) -> Path:
+    p = temp_dir / export_id / str(part)
+    p.mkdir(parents=True, exist_ok=True)
+    return p
+
+
+def text_object_path(temp_dir: Path, export_id: str, id_: UUID) -> Path:
+    dir1 = id_.hex[0:2]
+    dir2 = id_.hex[2:4]
+    dir3 = id_.hex[4:6]
+    dir4 = id_.hex[6:8]
+    rest = id_.hex[8:] + ".png"
+    dir_ = temp_dir / export_id / "to" / dir1 / dir2 / dir3 / dir4
+    dir_.mkdir(parents=True, exist_ok=True)
+    return dir_ / rest

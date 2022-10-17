@@ -18,7 +18,7 @@ from rich.progress import Progress, track
 from rich.traceback import install
 
 from renderer.internals.logger import log
-from renderer.render.utils import ProgressHandler, _TextObject
+from renderer.render.utils import ProgressHandler, _TextObject, part_dir, wip_tiles_dir
 from renderer.types.coord import TileCoord, WorldCoord
 from renderer.types.pla2 import Component, Pla2File
 from renderer.types.skin import Skin
@@ -63,11 +63,11 @@ def render_part1(
     serial: bool = False,
 ) -> dict[TileCoord, list[_TextObject]]:
     tile_coords = []
-    with open(temp_dir / f"{export_id}.processed.0.dill", "rb") as f:
+    with open(part_dir(temp_dir, export_id, 0) / f"processed.dill", "rb") as f:
         components: Pla2File = dill.load(f)
 
-    for file in glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.0.dill")):
-        re_result = re.search(rf"_(-?\d+), (-?\d+), (-?\d+)\.0\.dill$", file)
+    for file in glob.glob(str(part_dir(temp_dir, export_id, 0) / f"tile_*.dill")):
+        re_result = re.search(rf"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)
         tile_coords.append(
             TileCoord(
                 int(re_result.group(1)),
@@ -136,7 +136,7 @@ def render_part1(
     result = {}
     for a in preresult:
         result.update(a)
-    os.remove((temp_dir / f"{export_id}.processed.0.dill"))
+    os.remove(part_dir(temp_dir, export_id, 0) / f"processed.dill")
     return result
 
 
@@ -152,7 +152,10 @@ def _pre_draw_components(
         logging.getLogger("PIL").setLevel(logging.CRITICAL)
         results = {}
         for tile_coord in tile_coords:
-            path = consts.temp_dir / f"{consts.export_id}_{tile_coord}.0.dill"
+            path = (
+                part_dir(consts.temp_dir, consts.export_id, 0)
+                / f"tile_{tile_coord}.dill"
+            )
             with open(path, "rb") as f:
                 tile_components = dill.load(f)
 
@@ -161,7 +164,9 @@ def _pre_draw_components(
             os.remove(path)
             if out is not None:
                 with open(
-                    consts.temp_dir / f"{consts.export_id}_{tile_coord}.1.dill", "wb"
+                    part_dir(consts.temp_dir, consts.export_id, 1)
+                    / f"tile_{tile_coord}.dill",
+                    "wb",
                 ) as f:
                     dill.dump({out[0]: out[1]}, f)
             results[out[0]] = out[1]
@@ -180,13 +185,11 @@ def _count_num_rendering_oprs(
 ) -> dict[TileCoord, int]:
     grouped_tile_list: dict[TileCoord, list[Pla2File]] = {}
     for file in track(
-        glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.0.dill")),
+        glob.glob(str(part_dir(temp_dir, export_id, 0) / f"tile_*.dill")),
         description="Loading data",
     ):
         with open(file, "rb") as f:
-            result = re.search(
-                rf"\b{re.escape(export_id)}_(-?\d+), (-?\d+), (-?\d+)\.0\.dill$", file
-            )
+            result = re.search(rf"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)
             grouped_tile_list[
                 TileCoord(
                     int(result.group(1)), int(result.group(2)), int(result.group(3))
@@ -252,6 +255,8 @@ def _draw_components(
                             points_text_list,
                             tile_coord,
                             consts.skin.tile_size,
+                            consts.temp_dir,
+                            consts.export_id,
                         ),
                         "square": (imd, coords),
                         "image": (img, coords, consts.assets_dir),
@@ -266,6 +271,8 @@ def _draw_components(
                             text_list,
                             tile_coord,
                             consts.skin.tile_size,
+                            consts.temp_dir,
+                            consts.export_id,
                         ),
                         "back": (imd, coords),
                         "fore": (imd, coords),
@@ -288,6 +295,8 @@ def _draw_components(
                             text_list,
                             tile_coord,
                             consts.skin.tile_size,
+                            consts.temp_dir,
+                            consts.export_id,
                         ),
                         "fill": (imd, img, coords, component, tile_coord, size),
                         "centerimage": (img, coords, consts.assets_dir),
@@ -357,7 +366,7 @@ def _draw_components(
     text_list.reverse()
 
     img.save(
-        consts.temp_dir / f"{consts.export_id}_{tile_coord}.tmp.png",
+        wip_tiles_dir(consts.temp_dir, consts.export_id) / f"{tile_coord}.png",
         "png",
     )
     if ph:

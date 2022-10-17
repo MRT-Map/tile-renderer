@@ -3,6 +3,7 @@ from __future__ import annotations
 import glob
 import logging
 import os
+import shutil
 import traceback
 from pathlib import Path
 
@@ -14,7 +15,7 @@ from ray import ObjectRef
 from rich.progress import Progress, track
 
 from renderer.internals.logger import log
-from renderer.render.utils import ProgressHandler, _TextObject
+from renderer.render.utils import ProgressHandler, _TextObject, part_dir, wip_tiles_dir
 from renderer.types.coord import TileCoord
 from renderer.types.skin import Skin
 
@@ -30,7 +31,7 @@ def render_part3(
 ) -> dict[TileCoord, Image.Image]:
     new_texts: dict[TileCoord, list[_TextObject]] = {}
     total_texts = 0
-    for file in glob.glob(str(temp_dir / f"{export_id}_*.2.dill")):
+    for file in glob.glob(str(part_dir(temp_dir, export_id, 2) / "*.dill")):
         with open(file, "rb") as f:
             z_new_texts, z_total_texts = dill.load(f)
             new_texts.update(z_new_texts)
@@ -71,16 +72,9 @@ def render_part3(
 
     result = {}
     for i in preresult:
-        if i is None:
-            continue
-        k, v = list(i.items())[0]
-        result[k] = v
+        result.update(i)
 
-    for file in track(
-        glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*")),
-        description="Cleaning up",
-    ):
-        os.remove(file)
+    shutil.rmtree(temp_dir / export_id)
     log.info("Render complete")
 
     return result
@@ -100,10 +94,17 @@ def _draw_text(
     try:
         out = {}
         for tile_coord, text_list in text_lists.items():
-            image = Image.open(temp_dir / f"{export_id}_{tile_coord}.tmp.png")
+            try:
+                image = Image.open(
+                    wip_tiles_dir(temp_dir, export_id) / f"{tile_coord}.png"
+                )
+            except FileNotFoundError:
+                if ph:
+                    ph.add.remote(tile_coord)
+                continue
             for text in text_list:
                 for img, center in zip(text.image, text.center):
-                    img = _TextObject.uuid_to_img(img, temp_dir)
+                    img = _TextObject.uuid_to_img(img, temp_dir, export_id)
                     image.paste(
                         img,
                         (
@@ -126,7 +127,7 @@ def _draw_text(
 
             if save_images:
                 image.save(save_dir / f"{tile_coord}.webp", "webp", quality=95)
-            os.remove((temp_dir / f"{export_id}_{tile_coord}.tmp.png"))
+            os.remove(wip_tiles_dir(temp_dir, export_id) / f"{tile_coord}.png")
             out[tile_coord] = image
 
             if ph:

@@ -13,14 +13,16 @@ from shapely import prepare
 from shapely.geometry import Polygon
 
 from renderer.internals.logger import log
-from renderer.render.utils import _TextObject
+from renderer.render.utils import _TextObject, part_dir
 from renderer.types.coord import TileCoord
 
 
 def file_loader(
     zoom: int, temp_dir: Path, export_id: str
 ) -> Generator[tuple[TileCoord, list[_TextObject]], Any, None]:
-    for file in glob.glob(str(temp_dir / f"{glob.escape(export_id)}_{zoom},*.1.dill")):
+    for file in glob.glob(
+        str(part_dir(temp_dir, export_id, 1) / f"tile_{zoom},*.dill")
+    ):
         with open(file, "rb") as f:
             data = dill.load(f)
         for tile_coord, text_objects in data.items():
@@ -32,7 +34,7 @@ def render_part2(
 ) -> tuple[dict[TileCoord, list[_TextObject]], int]:
     zooms = {}
     log.info("Determining zoom levels...")
-    for file in glob.glob(str(temp_dir / f"{glob.escape(export_id)}_*.1.dill")):
+    for file in glob.glob(str(part_dir(temp_dir, export_id, 1) / f"tile_*.dill")):
         zoom = re.search(r"_(\d+),", file).group(1)
         if zoom not in zooms:
             zooms[zoom] = 0
@@ -45,13 +47,20 @@ def render_part2(
             zooms.items(), description="[green]Eliminating overlapping text"
         ):
             new_texts = _prevent_text_overlap(
-                zoom, file_loader(zoom, temp_dir, export_id), length, progress
+                zoom,
+                file_loader(zoom, temp_dir, export_id),
+                length,
+                progress,
+                temp_dir,
+                export_id,
             )
             total_texts = sum(len(t) for t in new_texts.values())
-            with open(temp_dir / f"{export_id}_{zoom}.2.dill", "wb") as f:
+            with open(part_dir(temp_dir, export_id, 2) / f"{zoom}.dill", "wb") as f:
                 dill.dump((new_texts, total_texts), f)
             for file in progress.track(
-                glob.glob(str(temp_dir / f"{glob.escape(export_id)}_{zoom},*.1.dill")),
+                glob.glob(
+                    str(part_dir(temp_dir, export_id, 1) / f"tile_{zoom},*.dill")
+                ),
                 description="Cleaning up",
             ):
                 os.remove(file)
@@ -65,6 +74,8 @@ def _prevent_text_overlap(
     texts: Generator[tuple[TileCoord, list[_TextObject]], Any, None],
     length: int,
     progress: Progress,
+    temp_dir: Path,
+    export_id: str,
 ) -> dict[TileCoord, list[_TextObject]]:
     out = {}
     tile_coords = set()
@@ -76,16 +87,20 @@ def _prevent_text_overlap(
         tile_coords.add(tile_coord)
         for text in text_objects:
             if not any(
-                poly.overlaps(ni)
-                for ni in no_intersect.get(tile_coord) or []
+                poly.intersects(ni)
+                for ni in no_intersect.get(tile_coord, set())
                 for poly in text.bounds
             ):
-                out.setdefault(tile_coord, []).append(text)
                 for dx, dy in product((-1, 0, 1), (-1, 0, 1)):
+                    tc = TileCoord(tile_coord.z, tile_coord.x + dx, tile_coord.y + dy)
+                    out.setdefault(tc, []).append(text)
                     no_intersect.setdefault(
-                        TileCoord(tile_coord.z, tile_coord.x + dx, tile_coord.y + dy),
+                        tc,
                         set(),
                     ).update(prepare(poly) for poly in text.bounds)
+            else:
+                for id_ in text.image:
+                    _TextObject.remove_img(id_, temp_dir, export_id)
 
     default = {tc: [] for tc in tile_coords}
     return {**default, **out}

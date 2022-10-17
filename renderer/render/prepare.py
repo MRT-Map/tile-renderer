@@ -8,6 +8,7 @@ from rich.progress import track
 from vector import Vector2D
 
 from renderer.internals.logger import log
+from renderer.render.utils import part_dir
 from renderer.types.coord import TileCoord, WorldCoord, WorldLine
 from renderer.types.pla2 import Component, Pla2File
 from renderer.types.skin import Skin
@@ -117,9 +118,9 @@ def prepare_render(
     for coord, grouped_components in track(
         grouped_tile_list.items(), description="Dumping data"
     ):
-        with open(temp_dir / f"{export_id}_{coord}.0.dill", "wb") as f:
+        with open(part_dir(temp_dir, export_id, 0) / f"tile_{coord}.dill", "wb") as f:
             dill.dump(grouped_components, f)
-    with open(temp_dir / f"{export_id}.processed.0.dill", "wb") as f:
+    with open(part_dir(temp_dir, export_id, 0) / f"processed.dill", "wb") as f:
         dill.dump(components, f)
 
     return grouped_tile_list

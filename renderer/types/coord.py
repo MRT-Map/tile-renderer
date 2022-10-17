@@ -20,6 +20,8 @@ _T = TypeVar("_T")
 
 
 class Coord:
+    __slots__ = ("point",)
+
     def __init__(self, *args: float | Point):
         self.point = Point(*args)
 
@@ -82,6 +84,7 @@ class WorldCoord(Coord):
 
 @dataclass
 class Bounds(Generic[_T]):
+    __slots__ = "x_max", "x_min", "y_max", "y_min"
     x_max: _T
     x_min: _T
     y_max: _T
@@ -89,7 +92,9 @@ class Bounds(Generic[_T]):
 
 
 class Line:
-    def __init__(self, line: list[ImageCoord] | LineString):
+    __slots__ = ("line",)
+
+    def __init__(self, line: list[Coord] | LineString):
         if isinstance(line, LineString):
             self.line = line
         else:
