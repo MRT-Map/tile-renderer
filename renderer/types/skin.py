@@ -3,6 +3,7 @@ from __future__ import annotations
 import functools
 import itertools
 import math
+import os
 import re
 from pathlib import Path
 from typing import Literal
@@ -218,7 +219,6 @@ class Skin:
                 tile_size: int,
                 temp_dir: Path,
                 export_id: str,
-                debug: bool = False,
             ):
                 coord = coords.coords[0]
                 if len(display_name.strip()) == 0:
@@ -239,7 +239,7 @@ class Skin:
                     anchor="mm",
                     stroke_width=1,
                     stroke_fill="#dddddd",
-                    spacing=1,
+                    spacing=-self.size / 2,
                 )
                 tw, th = pt_i.size
                 pt_i = pt_i.crop((0, 0, pt_i.width, pt_i.height))
@@ -254,7 +254,6 @@ class Skin:
                         tile_coord,
                         tile_size,
                         imd,
-                        debug=debug,
                         temp_dir=temp_dir,
                         export_id=export_id,
                     )
@@ -329,7 +328,6 @@ class Skin:
                 export_id: str,
                 fill: str | None = None,
                 stroke: str | None = None,
-                debug: bool = False,
                 paste_direct: bool = False,
                 upright: bool = True,
             ) -> _TextObject | None:
@@ -389,7 +387,7 @@ class Skin:
                                 (int(tx - lt_i.width / 2), int(ty - lt_i.height / 2)),
                                 lt_i,
                             )
-                            if debug:
+                            if os.environ.get("DEBUG"):
                                 nr = functools.partial(
                                     math_utils.rotate_around_pivot,
                                     px=tx,
@@ -418,14 +416,15 @@ class Skin:
                                     tile_coord,
                                     tile_size,
                                     imd,
-                                    debug=debug,
                                     temp_dir=temp_dir,
                                     export_id=export_id,
                                 )
                             )
 
                     text_to_print = ""
-                    overflow = text_length - (c1.point.distance(c2.point) - overflow)
+                    overflow = (
+                        text_length - (c1.point.distance(c2.point) - overflow)
+                    ) * 2
 
                     if char_cursor >= len(text):
                         break
@@ -446,7 +445,6 @@ class Skin:
                 tile_size: int,
                 temp_dir: Path,
                 export_id: str,
-                debug: bool = False,
             ):
                 if len(component.display_name) == 0:
                     return
@@ -472,8 +470,11 @@ class Skin:
                     < text_length
                 ):
                     coord_lines = coord_lines[:-1]
-                if debug:
-                    imd.line(coords.parallel_offset(self.offset), fill="#ff0000")
+                if os.environ.get("DEBUG"):
+                    imd.line(
+                        [c.tuple() for c in coords.parallel_offset(self.offset)],
+                        fill="#ff0000",
+                    )
                 text_list.extend(
                     e
                     for e in (
@@ -487,7 +488,6 @@ class Skin:
                             tile_size,
                             temp_dir,
                             export_id,
-                            debug=debug,
                         )
                         for cs in coord_lines
                     )
@@ -525,7 +525,6 @@ class Skin:
                                 export_id,
                                 fill=self.arrow_colour,
                                 stroke="#00000000",
-                                debug=debug,
                                 paste_direct=True,
                                 upright=False,
                             )
@@ -547,7 +546,7 @@ class Skin:
             def render(self, imd: ImageDraw.ImageDraw, coords: ImageLine, **_):
                 if self.dash is None:
                     imd.line(
-                        [(c.x, c.y) for c in coords],
+                        [c.tuple() for c in coords],
                         fill=self.colour,
                         width=self.width,
                         joint="curve",
@@ -576,7 +575,7 @@ class Skin:
                         coords, self.dash[0], self.dash[1]
                     ):
                         imd.line(
-                            [(c.x, c.y) for c in dash_coords],
+                            [c.tuple() for c in dash_coords],
                             fill=self.colour,
                             width=self.width,
                         )
@@ -605,7 +604,6 @@ class Skin:
                 text_list: list[_TextObject],
                 tile_coord: TileCoord,
                 tile_size: int,
-                debug: bool = False,
             ):
                 """TODO fix
                 if len(component.display_name.strip()) == 0:
@@ -680,7 +678,7 @@ class Skin:
                                     tile_coord,
                                     tile_size,
                                     imd,
-                                    debug=debug,
+                                    ,
                         temp_dir=temp_dir,
                         export_id=export_id
                                 )
@@ -706,7 +704,6 @@ class Skin:
                 tile_size: int,
                 temp_dir: Path,
                 export_id: str,
-                debug: bool = False,
             ):
                 if len(component.display_name.strip()) == 0:
                     return
@@ -743,10 +740,10 @@ class Skin:
                     text_length = int(
                         max(imd.textlength(x, font) for x in text.split("\n"))
                     )
-                    text_size = int(imd.textsize(text, font)[1] + 4)
+                    text_size = int(imd.textsize(text, font)[1] * 2)
                 else:
                     text = component.display_name
-                    text_size = self.size + 4
+                    text_size = self.size * 2
 
                 act_i = Image.new(
                     "RGBA", (2 * text_length, 2 * text_size), (0, 0, 0, 0)
@@ -761,6 +758,7 @@ class Skin:
                     stroke_width=1,
                     stroke_fill="#dddddd",
                     align="center",
+                    spacing=-self.size / 2,
                 )
                 cw, ch = act_i.size[:]
                 act_i = act_i.crop((0, 0, act_i.width, act_i.height))
@@ -775,7 +773,6 @@ class Skin:
                         tile_coord,
                         tile_size,
                         imd,
-                        debug=debug,
                         temp_dir=temp_dir,
                         export_id=export_id,
                     )
@@ -849,7 +846,7 @@ class Skin:
                         (0, 0, 0, 0),
                     )
                     md = ImageDraw.Draw(mi)
-                    md.polygon([(c.x, c.y) for c in coords.coords], fill=self.colour)
+                    md.polygon([c.tuple() for c in coords.coords], fill=self.colour)
                     pi = Image.new(
                         "RGBA",
                         (
@@ -863,7 +860,7 @@ class Skin:
                 else:
                     # logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Filling area")
                     ad.polygon(
-                        [(c.x, c.y) for c in coords.coords],
+                        [c.tuple() for c in coords.coords],
                         fill=self.colour,
                         outline=self.outline,
                     )
@@ -890,7 +887,7 @@ class Skin:
                             outlines.append(n_coords)  """
                     for o_coords in outlines:
                         imd.line(
-                            [(c.x, c.y) for c in o_coords],
+                            [c.tuple() for c in o_coords],
                             fill=self.outline,
                             width=2,
                             joint="curve",

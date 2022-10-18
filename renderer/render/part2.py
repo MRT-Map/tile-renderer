@@ -89,10 +89,12 @@ def _prevent_text_overlap(
                 for dx, dy in product((-1, 0, 1), (-1, 0, 1)):
                     tc = TileCoord(tile_coord.z, tile_coord.x + dx, tile_coord.y + dy)
                     out.setdefault(tc, []).append(text)
+                    for poly in text.bounds:
+                        prepare(poly)
                     no_intersect.setdefault(
                         tc,
                         set(),
-                    ).update(prepare(poly) for poly in text.bounds)
+                    ).update(text.bounds)
             else:
                 for id_ in text.image:
                     _TextObject.remove_img(id_, temp_dir, export_id)

@@ -103,13 +103,6 @@ def p_render(p: argparse.ArgumentParser):
         help="the offset of node coordinates, given as (x,y)",
         default=[0, 0],
     )
-    p.add_argument(
-        "-dbg",
-        "--debug",
-        help="prints extra debug information on tiles",
-        default=False,
-        action="store_true",
-    )
 
 
 def p_merge(p: argparse.ArgumentParser):

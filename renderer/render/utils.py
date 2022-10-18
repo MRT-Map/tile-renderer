@@ -92,27 +92,26 @@ class _TextObject:
         tile_coord: TileCoord,
         tile_size: int,
         imd: ImageDraw,
-        debug: bool = False,
         temp_dir: Path = Path.cwd() / "temp",
         export_id: str = "unnamed",
     ):
-        if debug:
+        rot *= math.pi / 180
+        if os.environ.get("DEBUG"):
             nr = functools.partial(
                 math_utils.rotate_around_pivot, pivot=Coord(x, y), theta=-rot
             )
             imd.line(
                 [
-                    nr(x - w / 2, y - h / 2),
-                    nr(x - w / 2, y + h / 2),
-                    nr(x + w / 2, y + h / 2),
-                    nr(x + w / 2, y - h / 2),
-                    nr(x - w / 2, y - h / 2),
+                    nr(Coord(x - w / 2, y - h / 2)).tuple(),
+                    nr(Coord(x - w / 2, y + h / 2)).tuple(),
+                    nr(Coord(x + w / 2, y + h / 2)).tuple(),
+                    nr(Coord(x + w / 2, y - h / 2)).tuple(),
+                    nr(Coord(x - w / 2, y - h / 2)).tuple(),
                 ],
                 fill="#ff0000",
             )
         self.temp_dir = temp_dir
         self.export_id = export_id
-        rot *= math.pi / 180
         r = functools.partial(
             math_utils.rotate_around_pivot,
             pivot=Coord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),
