@@ -61,6 +61,15 @@ class ImageCoord(Coord):
 class WorldCoord(Coord):
     """Represents a coordinate in the form ``(x, y)``."""
 
+    def to_image_coord(
+        self, skin: Skin, tile_coord: TileCoord, size: float | int
+    ) -> ImageCoord:
+        xc = self.x - tile_coord.x * size
+        yc = self.y - tile_coord.y * size
+        xs = int(skin.tile_size / size * xc)
+        ys = int(skin.tile_size / size * yc)
+        return ImageCoord(xs, ys)
+
     def tiles(self, z: ZoomParams) -> list[TileCoord]:
         # noinspection GrazieInspection
         """

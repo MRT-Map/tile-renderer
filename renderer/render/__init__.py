@@ -68,7 +68,7 @@ def render(
     save_dir.mkdir(exist_ok=True)
     temp_dir.mkdir(exist_ok=True)
 
-    prepare_render(components, zoom, export_id, skin, tiles, offset, temp_dir)
+    prepare_render(components, zoom, export_id, skin, tiles, None, offset, temp_dir)
 
     if not part1_serial:
         log.info(f"Initialising Ray with {processes=}...")

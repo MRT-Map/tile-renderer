@@ -152,15 +152,23 @@ def _draw_text(
             try:
                 image = Image.open(
                     wip_tiles_dir(temp_dir, export_id) / f"{tile_coord}.png"
-                )
+                ).convert("RGBA")
             except FileNotFoundError:
                 if ph:
                     ph.add.remote(tile_coord)
                 continue
+
+            # antialiasing
+            image = image.resize(
+                (image.width * 4, image.height * 4), resample=Image.BOX
+            ).resize(image.size, resample=Image.ANTIALIAS)
+
             for text in text_list:
                 for img, center in zip(text.image, text.center):
-                    img = _TextObject.uuid_to_img(img, temp_dir, export_id)
-                    image.paste(
+                    img = _TextObject.uuid_to_img(img, temp_dir, export_id).convert(
+                        "RGBA"
+                    )
+                    image.alpha_composite(
                         img,
                         (
                             int(
@@ -172,13 +180,7 @@ def _draw_text(
                                 - img.height / 2
                             ),
                         ),
-                        img,
                     )
-
-            # antialiasing
-            image = image.resize(
-                (image.width * 4, image.height * 4), resample=Image.BOX
-            ).resize(image.size, resample=Image.ANTIALIAS)
 
             if save_images:
                 image.save(save_dir / f"{tile_coord}.webp", "webp", quality=95)

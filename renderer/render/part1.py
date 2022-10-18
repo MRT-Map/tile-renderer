@@ -318,12 +318,13 @@ def _draw_components(
             ):
                 for coord in chain(*(c.nodes.coords for c in group)):
                     coord: WorldCoord
-                    inter = Image.new("RGBA", (consts.skin.tile_size,) * 2, (0,) * 4)
                     for con_component in consts.coord_to_comp[coord]:
-                        if con_component in group:
-                            continue
                         if "road" not in consts.skin[con_component.type].tags:
                             continue
+
+                        inter = Image.new(
+                            "RGBA", (consts.skin.tile_size,) * 2, (0,) * 4
+                        )
                         con_info = consts.skin[con_component.type]
                         for con_step in con_info[consts.zoom.max - tile_coord.z]:
                             if con_step.layer != "fore":
@@ -346,20 +347,30 @@ def _draw_components(
                             con_mask_imd = ImageDraw.Draw(con_mask_img)
                             con_mask_imd.ellipse(
                                 (
-                                    coord.x
+                                    coord.to_image_coord(
+                                        consts.skin, tile_coord, size
+                                    ).x
                                     - (max(con_step.width, step.width) * 2) / 2
                                     + 1,
-                                    coord.y
+                                    coord.to_image_coord(
+                                        consts.skin, tile_coord, size
+                                    ).y
                                     - (max(con_step.width, step.width) * 2) / 2
                                     + 1,
-                                    coord.x + (max(con_step.width, step.width) * 2) / 2,
-                                    coord.y + (max(con_step.width, step.width) * 2) / 2,
+                                    coord.to_image_coord(
+                                        consts.skin, tile_coord, size
+                                    ).x
+                                    + (max(con_step.width, step.width) * 2) / 2,
+                                    coord.to_image_coord(
+                                        consts.skin, tile_coord, size
+                                    ).y
+                                    + (max(con_step.width, step.width) * 2) / 2,
                                 ),
                                 fill="#000000",
                             )
 
                             inter.paste(con_img, (0, 0), con_mask_img)
-                    img.paste(inter, (0, 0), inter)
+                        img.paste(inter, (0, 0), inter)
 
                 if ph:
                     ph.add.remote(tile_coord)

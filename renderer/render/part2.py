@@ -57,7 +57,7 @@ def render_part2(
                 glob.glob(
                     str(part_dir(temp_dir, export_id, 1) / f"tile_{zoom},*.dill")
                 ),
-                description="Cleaning up",
+                description=f"Zoom {zoom}: [dim white]Cleaning up",
             ):
                 os.remove(file)
             all_new_texts.update(new_texts)
@@ -99,7 +99,10 @@ def _prevent_text_overlap(
 
     default = {tc: [] for tc in tile_coords}
     out = {**default, **out}
-    for tile_coord, text_objects in out.items():
+    for tile_coord, text_objects in progress.track(
+        out.items(),
+        description=f"Zoom {zoom}: [dim white]Saving remaining text objects",
+    ):
         with open(
             part_dir(temp_dir, export_id, 2) / f"tile_{tile_coord}.dill", "wb"
         ) as f:
