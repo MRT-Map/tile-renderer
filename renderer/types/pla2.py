@@ -66,9 +66,11 @@ class Component(Struct):
 
 
 def _enc_hook(obj: Any) -> Any:
-    if isinstance(obj, Coord):
+    if isinstance(obj, WorldLine):
+        return [_enc_hook(c) for c in obj.coords]
+    elif isinstance(obj, Coord):
         return Coord.enc_hook(obj)
-    return TypeError
+    raise TypeError(type(obj))
 
 
 def _dec_hook(type_: Type, obj: Any) -> Any:
@@ -78,7 +80,7 @@ def _dec_hook(type_: Type, obj: Any) -> Any:
         if len(obj) == 1:
             obj.append(obj[0])
         return WorldLine([_dec_hook(WorldCoord, o) for o in obj])
-    return TypeError
+    raise TypeError(type(obj))
 
 
 _json_decoder = msgspec.json.Decoder(list[Component], dec_hook=_dec_hook)

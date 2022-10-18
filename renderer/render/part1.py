@@ -320,6 +320,8 @@ def _draw_components(
                     coord: WorldCoord
                     inter = Image.new("RGBA", (consts.skin.tile_size,) * 2, (0,) * 4)
                     for con_component in consts.coord_to_comp[coord]:
+                        if con_component in group:
+                            continue
                         if "road" not in consts.skin[con_component.type].tags:
                             continue
                         con_info = consts.skin[con_component.type]

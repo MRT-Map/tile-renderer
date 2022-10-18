@@ -3,8 +3,6 @@ from __future__ import annotations
 from pathlib import Path
 from typing import Literal
 
-from renderer.types.coord import WorldCoord
-
 
 def _hex_to_colour(h: int | None) -> str | None:
     if h is None:
@@ -191,7 +189,7 @@ class SkinBuilder:
                 cls,
                 *,
                 colour: int | None = None,
-                offset: WorldCoord = WorldCoord(0, 0),
+                offset: tuple[int, int] = (0, 0),
                 size: int = 10,
                 anchor: str | None = None,
             ):
@@ -225,7 +223,7 @@ class SkinBuilder:
                 return cs
 
             @classmethod
-            def point_image(cls, *, file: Path, offset: WorldCoord = WorldCoord(0, 0)):
+            def point_image(cls, *, file: Path, offset: tuple[int, int] = (0, 0)):
                 cs = cls()
                 cs.json = {"layer": "image", "file": str(file), "offset": offset}
                 return cs
@@ -302,7 +300,7 @@ class SkinBuilder:
                 *,
                 colour: int | None = None,
                 size: int = 1,
-                offset: WorldCoord = WorldCoord(0, 0),
+                offset: tuple[int, int] = (0, 0),
             ):
                 cs = cls()
                 cs.json = {
@@ -331,9 +329,7 @@ class SkinBuilder:
                 return cs
 
             @classmethod
-            def area_centerimage(
-                cls, *, file: Path, offset: WorldCoord = WorldCoord(0, 0)
-            ):
+            def area_centerimage(cls, *, file: Path, offset: tuple[int, int] = (0, 0)):
                 cs = cls()
                 cs.json = {"layer": "centerimage", "file": str(file), "offset": offset}
                 return cs

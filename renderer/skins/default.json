@@ -767,6 +767,40 @@
       "tags": [],
       "type": "area",
       "style": {
+        "0, 2": [
+          {
+            "layer": "fill",
+            "colour": "#dddddd",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#808080",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 50
+          }
+        ],
+        "3, 5": [
+          {
+            "layer": "fill",
+            "colour": "#dddddd",
+            "outline": null,
+            "stripe": null
+          },
+          {
+            "layer": "centertext",
+            "colour": "#808080",
+            "offset": [
+              0,
+              0
+            ],
+            "size": 50
+          }
+        ],
         "6, 1000": [
           {
             "layer": "fill",

@@ -2,7 +2,6 @@ import json
 from math import ceil
 from pathlib import Path
 
-from renderer.types.coord import WorldCoord
 from renderer.types.skin_builder import CS, CTI, SkinBuilder, _darken, _lighten
 
 A_ROAD = 0xFFAAAA
@@ -88,7 +87,6 @@ def main():
         CS.area_fill(colour=0xDDDDDD),
         CS.area_centertext(colour=0x808080, size=50),
     ]
-    land_large = CTI("area")
     land_large[6:] = [CS.area_fill(colour=0xDDDDDD)]
     s["landLarge"] = land_large
 
@@ -574,7 +572,7 @@ def main():
     pedestrian_crossing[0:5] = [
         CS.point_image(file=Path("pedestriancrossing.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -584,7 +582,7 @@ def main():
     rail_crossing[0:5] = [
         CS.point_image(file=Path("pedestriancrossing.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -594,7 +592,7 @@ def main():
     parking[0:5] = [
         CS.point_image(file=Path("parking.png")),
         CS.point_text(colour=0x0000dc,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -604,7 +602,7 @@ def main():
     bike_rack[0:5] = [
         CS.point_image(file=Path("bikerack.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -614,7 +612,7 @@ def main():
     shop[0:5] = [
         CS.point_image(file=Path("shop.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -624,7 +622,7 @@ def main():
     restaurant[0:5] = [
         CS.point_image(file=Path("restaurant.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -634,7 +632,7 @@ def main():
     hotel[0:5] = [
         CS.point_image(file=Path("hotel.png")),
         CS.point_text(colour=0x0000fc,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -644,7 +642,7 @@ def main():
     arcade[0:5] = [
         CS.point_image(file=Path("arcade.png")),
         CS.point_text(colour=0xffdc00,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -654,7 +652,7 @@ def main():
     supermarket[0:5] = [
         CS.point_image(file=Path("supermarket.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -664,7 +662,7 @@ def main():
     clinic[0:5] = [
         CS.point_image(file=Path("clinic.png")),
         CS.point_text(colour=0xff0303,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -674,7 +672,7 @@ def main():
     library[0:5] = [
         CS.point_image(file=Path("library.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -684,7 +682,7 @@ def main():
     place_of_worship[0:5] = [
         CS.point_image(file=Path("placeofworship.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -694,7 +692,7 @@ def main():
     petrol[0:5] = [
         CS.point_image(file=Path("petrol.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -704,7 +702,7 @@ def main():
     cinema[0:5] = [
         CS.point_image(file=Path("cinema.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -714,7 +712,7 @@ def main():
     bank[0:5] = [
         CS.point_image(file=Path("bank.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -724,7 +722,7 @@ def main():
     gym[0:5] = [
         CS.point_image(file=Path("gym.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -734,7 +732,7 @@ def main():
     shelter[0:5] = [
         CS.point_image(file=Path("shelter.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -744,7 +742,7 @@ def main():
     playground[0:5] = [
         CS.point_image(file=Path("playground.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -754,7 +752,7 @@ def main():
     fountain[0:5] = [
         CS.point_image(file=Path("fountain.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -764,7 +762,7 @@ def main():
     taxi_stand[0:5] = [
         CS.point_image(file=Path("taxistand.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -774,7 +772,7 @@ def main():
     pick_up_drop_off[0:5] = [
         CS.point_image(file=Path("pickupdropoff.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm")
     ]
@@ -784,9 +782,7 @@ def main():
     for i, sq_size, text_size in ((0, 10, 12), (1, 10, 12)):
         bus_stop[i] = [
             CS.point_square(colour=0x00AAFF, size=sq_size, width=int(2 / 3 * sq_size)),
-            CS.point_text(
-                colour=0x00AAFF, offset=WorldCoord(0, 20), size=text_size, anchor="mm"
-            ),
+            CS.point_text(colour=0x00AAFF, offset=(0, 20), size=text_size, anchor="mm"),
         ]
     bus_stop[2:3] = [
         CS.point_square(colour=0x66CCFF, size=7, width=5),
@@ -797,9 +793,7 @@ def main():
     for i, sq_size, text_size in ((0, 10, 12), (1, 10, 12)):
         ferry_stop[i] = [
             CS.point_square(colour=0x1E85AE, size=sq_size, width=int(2 / 3 * sq_size)),
-            CS.point_text(
-                colour=0x1E85AE, offset=WorldCoord(0, 20), size=text_size, anchor="mm"
-            ),
+            CS.point_text(colour=0x1E85AE, offset=(0, 20), size=text_size, anchor="mm"),
         ]
     ferry_stop[2:3] = [
         CS.point_square(colour=0x1E85AE, size=7, width=5),
@@ -810,9 +804,7 @@ def main():
     for i, sq_size, text_size in ((0, 15, 15), (1, 15, 15), (2, 10, 13)):
         rail_station[i] = [
             CS.point_square(colour=0x1F3D7A, size=sq_size, width=int(2 / 3 * sq_size)),
-            CS.point_text(
-                colour=0x1F3D7A, offset=WorldCoord(0, 20), size=text_size, anchor="mm"
-            ),
+            CS.point_text(colour=0x1F3D7A, offset=(0, 20), size=text_size, anchor="mm"),
         ]
     rail_station[3:4] = [
         CS.point_square(colour=0x1F3D7A, size=10, width=7),
@@ -823,7 +815,7 @@ def main():
     transport_exit[0:5] = [
         CS.point_image(file=Path("transportexit.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm"
     ]
@@ -833,7 +825,7 @@ def main():
     attraction[0:5] = [
         CS.point_image(file=Path("attraction.png")),
         CS.point_text(colour=0x000000,
-                      offset=WorldCoord(0, 32),
+                      offset=(0, 32),
                       size=32,
                       anchor="mm"
     ]
@@ -951,7 +943,7 @@ def main():
     simple_point = CTI("point")
     simple_point[0:5] = [
         CS.point_circle(colour=0xFFFFFF, outline=0x000000, size=30, width=6),
-        CS.point_text(colour=0x000000, offset=WorldCoord(10, 10), size=25),
+        CS.point_text(colour=0x000000, offset=(10, 10), size=25),
     ]
     s["simplePoint"] = simple_point
 

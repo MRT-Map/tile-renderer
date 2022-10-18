@@ -43,8 +43,8 @@ class Coord:
         return self.point.y
 
     @staticmethod
-    def enc_hook(obj: Coord) -> tuple[float, float]:
-        return obj.point.x, obj.point.y
+    def enc_hook(obj: Coord) -> tuple[int, int]:
+        return int(obj.point.x), int(obj.point.y)
 
     @staticmethod
     def dec_hook(obj: tuple[float, float]) -> Coord:
