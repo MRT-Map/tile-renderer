@@ -349,18 +349,20 @@ class Skin:
                         ) < c1.point.distance(c2.point) and char_cursor < len(text):
                             text_to_print += text[char_cursor]
                             char_cursor += 1
-                    if char_cursor != len(text):
-                        text_to_print = text_to_print[:-1]
-                        char_cursor -= 1
-                    text_length = int(imd.textlength(text_to_print, font))
+                    # if char_cursor != len(text):
+                    #    text_to_print = text_to_print[:-1]
+                    #    char_cursor -= 1
+                    text_length = imd.textlength(text_to_print, font)
 
                     if text_length != 0:
                         lt_i = Image.new(
-                            "RGBA", (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0)
+                            "RGBA",
+                            (2 * int(text_length), 2 * (self.size + 4)),
+                            (0, 0, 0, 0),
                         )
                         lt_d = ImageDraw.Draw(lt_i)
                         lt_d.text(
-                            (text_length, self.size + 4),
+                            (int(text_length), self.size + 4),
                             text_to_print,
                             fill=fill or self.colour,
                             font=font,
@@ -373,8 +375,8 @@ class Skin:
                         trot = math.atan2(-c2.y + c1.y, c2.x - c1.x)
                         lt_i = lt_i.rotate(trot * 180 / math.pi, expand=True)
                         lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
-                        tx = c1.x + (-overflow + text_length / 2) * math.cos(trot)
-                        ty = c1.y - (-overflow + text_length / 2) * math.sin(trot)
+                        tx = c1.x - (-overflow / 2 - text_length / 2) * math.cos(trot)
+                        ty = c1.y + (-overflow / 2 - text_length / 2) * math.sin(trot)
                         if paste_direct:
                             img.paste(
                                 lt_i,
