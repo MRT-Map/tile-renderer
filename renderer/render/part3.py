@@ -108,9 +108,7 @@ def render_part3(
             futures,
         )
         with Progress() as progress:
-            main_id = progress.add_task(
-                "[green]Rendering texts", total=len(tile_coords)
-            )
+            main_id = progress.add_task("[green]Rendering texts", total=len(chunks))
             num_complete = 0
             while num_complete < len(chunks):
                 id_: TileCoord | None = ray.get(ph.get.remote())
