@@ -21,7 +21,7 @@ class Component(Struct):
     type: str
     layer: float
     nodes: WorldLine
-    attrs: dict
+    attrs: dict | None = None
     tags: list[str]
 
     @property
@@ -135,7 +135,7 @@ class Pla2File(Struct):
         }
         if count:
             raise ValueError(
-                f"IDs {', '.join(f'`{id_}`' for id_ in count)} is duplicated"
+                f"IDs {', '.join(f'`{id_}`' for id_ in count)} are duplicated"
             )
         return comps
 

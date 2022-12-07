@@ -373,8 +373,8 @@ class Skin:
                         trot = math.atan2(-c2.y + c1.y, c2.x - c1.x)
                         lt_i = lt_i.rotate(trot * 180 / math.pi, expand=True)
                         lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
-                        tx = c1.x + (overflow + text_length / 2) * math.cos(trot)
-                        ty = c1.y - (overflow + text_length / 2) * math.sin(trot)
+                        tx = c1.x + (-overflow + text_length / 2) * math.cos(trot)
+                        ty = c1.y - (-overflow + text_length / 2) * math.sin(trot)
                         if paste_direct:
                             img.paste(
                                 lt_i,
