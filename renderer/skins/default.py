@@ -2,7 +2,7 @@ import json
 from math import ceil
 from pathlib import Path
 
-from renderer.types.skin_builder import CS, CTI, SkinBuilder, _darken, _lighten
+from renderer.types.skin_builder import CS, CTI, SkinBuilder, darken, lighten
 
 A_ROAD = 0xFFAAAA
 B_ROAD = 0xFF8000
@@ -58,7 +58,7 @@ def main():
         for i, size in ((0, 30), (1, 20), (2, 10)):
             area[i] = [
                 CS.area_fill(colour=col),
-                CS.area_centertext(colour=_darken(col), size=size),
+                CS.area_centertext(colour=darken(col), size=size),
             ]
         area[3:6] = [CS.area_fill(colour=col)]
         s[name] = area
@@ -66,14 +66,14 @@ def main():
     water_large = CTI("area")
     water_large[0:] = [
         CS.area_fill(colour=0x87CEEB),
-        CS.area_centertext(colour=_darken(0x87CEEB), size=50),
+        CS.area_centertext(colour=darken(0x87CEEB), size=50),
     ]
     s["waterLarge"] = water_large
 
     water_small = CTI("area")
     water_small[0:2] = [
         CS.area_fill(colour=0x87CEEB),
-        CS.area_centertext(colour=_darken(0x87CEEB), size=25),
+        CS.area_centertext(colour=darken(0x87CEEB), size=25),
     ]
     water_small[3:] = [CS.area_fill(colour=0x87CEEB)]
     s["waterSmall"] = water_small
@@ -103,8 +103,8 @@ def main():
         waterway[i] = [
             CS.line_fore(colour=0x87CEEB, width=width),
             CS.line_text(
-                colour=_darken(0x87CEEB),
-                arrow_colour=_darken(0x87CEEB, 0.25),
+                colour=darken(0x87CEEB),
+                arrow_colour=darken(0x87CEEB, 0.25),
                 size=size,
             ),
         ]
@@ -116,7 +116,7 @@ def main():
     ferry_line = CTI("line")
     ferry_line[0:3] = [
         CS.line_fore(colour=0x25A7DA, width=5),
-        CS.line_text(colour=_darken(0x25A7DA), arrow_colour=0x25A7DA, size=12),
+        CS.line_text(colour=darken(0x25A7DA), arrow_colour=0x25A7DA, size=12),
     ]
     s["ferryLine"] = ferry_line
 
@@ -130,11 +130,11 @@ def main():
         area = CTI("area")
         for i, size in ((0, 25), (1, 20), (2, 15), (3, 10)):
             area[i] = [
-                CS.area_fill(colour=colour, outline=_darken(colour, 0.1)),
-                CS.area_centertext(colour=_darken(colour), size=size),
+                CS.area_fill(colour=colour, outline=darken(colour, 0.1)),
+                CS.area_centertext(colour=darken(colour), size=size),
             ]
         area[4:6] = [
-            CS.area_fill(colour=colour, outline=_darken(colour, 0.1)),
+            CS.area_fill(colour=colour, outline=darken(colour, 0.1)),
         ]
         s[name] = area
 
@@ -157,7 +157,6 @@ def main():
 
     taxiway = CTI("line")
     for i, width, size in ((0, 50, 20), (1, 25, 10), (2, 13, 5)):
-
         taxiway[i] = [
             CS.line_fore(colour=0x8F8FA3, width=width),
             CS.line_text(colour=0x33334D, arrow_colour=0x8F8FA3, size=size),
@@ -202,41 +201,41 @@ def main():
 
     building_underground = CTI("area")
     building_underground[0:1] = [
-        CS.area_fill(colour=_lighten(BUILDING), outline=BUILDING),
-        CS.area_centertext(colour=_darken(BUILDING), size=15),
+        CS.area_fill(colour=lighten(BUILDING), outline=BUILDING),
+        CS.area_centertext(colour=darken(BUILDING), size=15),
     ]
     building_underground[2:3] = [
-        CS.area_fill(colour=_lighten(BUILDING), outline=BUILDING)
+        CS.area_fill(colour=lighten(BUILDING), outline=BUILDING)
     ]
     s["building_underground"] = building_underground
 
     city_hall = CTI("area")
     city_hall[0:1] = [
-        CS.area_fill(colour=_lighten(0xFFAAAA), outline=0xFFAAAA),
-        CS.area_centertext(colour=_darken(0xFFAAAA), size=15),
+        CS.area_fill(colour=lighten(0xFFAAAA), outline=0xFFAAAA),
+        CS.area_centertext(colour=darken(0xFFAAAA), size=15),
     ]
     city_hall[2:3] = [
-        CS.area_fill(colour=_lighten(0xFFAAAA), outline=0xFFAAAA),
+        CS.area_fill(colour=lighten(0xFFAAAA), outline=0xFFAAAA),
     ]
     s["cityHall"] = city_hall
 
     transport_building_underground = CTI("area")
     transport_building_underground[0:1] = [
-        CS.area_fill(colour=_lighten(TRANSPORT_BUILDING), outline=TRANSPORT_BUILDING),
-        CS.area_centertext(colour=_darken(TRANSPORT_BUILDING), size=15),
+        CS.area_fill(colour=lighten(TRANSPORT_BUILDING), outline=TRANSPORT_BUILDING),
+        CS.area_centertext(colour=darken(TRANSPORT_BUILDING), size=15),
     ]
     transport_building_underground[2:3] = [
-        CS.area_fill(colour=_lighten(TRANSPORT_BUILDING), outline=TRANSPORT_BUILDING)
+        CS.area_fill(colour=lighten(TRANSPORT_BUILDING), outline=TRANSPORT_BUILDING)
     ]
     s["transportBuilding_underground"] = transport_building_underground
 
     park = CTI("area")
     park[0:2] = [
-        CS.area_fill(colour=0x669900, outline=_darken(0x669900, 0.1)),
-        CS.area_centertext(colour=_darken(0x669900), size=20),
+        CS.area_fill(colour=0x669900, outline=darken(0x669900, 0.1)),
+        CS.area_centertext(colour=darken(0x669900), size=20),
     ]
     park[3:6] = [
-        CS.area_fill(colour=0x669900, outline=_darken(0x669900, 0.1)),
+        CS.area_fill(colour=0x669900, outline=darken(0x669900, 0.1)),
     ]
     s["park"] = park
 
@@ -281,7 +280,7 @@ def main():
         for i in (0, 1, 2, 3, 4):
             area[i] = [
                 CS.line_back(colour=col, width=int((width + 8) * (2 / 3) ** i)),
-                CS.line_fore(colour=_lighten(col), width=int(width * (2 / 3) ** i)),
+                CS.line_fore(colour=lighten(col), width=int(width * (2 / 3) ** i)),
                 *(
                     [
                         CS.line_text(
@@ -298,7 +297,7 @@ def main():
             area[i] = (
                 [
                     CS.line_back(colour=col, width=(small_width - i + 5) * 2),
-                    CS.line_fore(colour=_lighten(col), width=small_width - i + 5),
+                    CS.line_fore(colour=lighten(col), width=small_width - i + 5),
                 ]
                 if small_width - i + 5 >= 1
                 else []
@@ -331,39 +330,39 @@ def main():
 
     platform_underground = CTI("area")
     platform_underground[0:1] = [
-        CS.area_fill(colour=0xAAAAAA, outline=_darken(0xAAAAAA)),
-        CS.area_centertext(colour=_darken(0xAAAAAA), size=10),
+        CS.area_fill(colour=0xAAAAAA, outline=darken(0xAAAAAA)),
+        CS.area_centertext(colour=darken(0xAAAAAA), size=10),
     ]
     platform_underground[2:3] = [
-        CS.area_fill(colour=0xAAAAAA, outline=_darken(0xAAAAAA))
+        CS.area_fill(colour=0xAAAAAA, outline=darken(0xAAAAAA))
     ]
     s["platform_underground"] = platform_underground
 
     building = CTI("area")
     building[0:1] = [
-        CS.area_fill(colour=BUILDING, outline=_darken(BUILDING)),
-        CS.area_centertext(colour=_darken(BUILDING), size=15),
+        CS.area_fill(colour=BUILDING, outline=darken(BUILDING)),
+        CS.area_centertext(colour=darken(BUILDING), size=15),
     ]
-    building[2:3] = [CS.area_fill(colour=BUILDING, outline=_darken(BUILDING))]
+    building[2:3] = [CS.area_fill(colour=BUILDING, outline=darken(BUILDING))]
     s["building"] = building
 
     city_hall = CTI("area")
     city_hall[0:1] = [
-        CS.area_fill(colour=0xFFAAAA, outline=_darken(0xFFAAAA)),
-        CS.area_centertext(colour=_darken(0xFFAAAA), size=15),
+        CS.area_fill(colour=0xFFAAAA, outline=darken(0xFFAAAA)),
+        CS.area_centertext(colour=darken(0xFFAAAA), size=15),
     ]
     city_hall[2:3] = [
-        CS.area_fill(colour=0xFFAAAA, outline=_darken(0xFFAAAA)),
+        CS.area_fill(colour=0xFFAAAA, outline=darken(0xFFAAAA)),
     ]
     s["cityHall"] = city_hall
 
     transport_building = CTI("area")
     transport_building[0:1] = [
-        CS.area_fill(colour=TRANSPORT_BUILDING, outline=_darken(TRANSPORT_BUILDING)),
-        CS.area_centertext(colour=_darken(TRANSPORT_BUILDING), size=15),
+        CS.area_fill(colour=TRANSPORT_BUILDING, outline=darken(TRANSPORT_BUILDING)),
+        CS.area_centertext(colour=darken(TRANSPORT_BUILDING), size=15),
     ]
     transport_building[2:3] = [
-        CS.area_fill(colour=TRANSPORT_BUILDING, outline=_darken(TRANSPORT_BUILDING)),
+        CS.area_fill(colour=TRANSPORT_BUILDING, outline=darken(TRANSPORT_BUILDING)),
     ]
     s["transportBuilding"] = transport_building
 
@@ -408,14 +407,14 @@ def main():
         for i in (0, 1, 2, 3, 4):
             area[i] = [
                 CS.line_back(
-                    colour=_darken(col, 0.25), width=int((width + 8) * (2 / 3) ** i)
+                    colour=darken(col, 0.25), width=int((width + 8) * (2 / 3) ** i)
                 ),
                 CS.line_fore(colour=col, width=int(width * (2 / 3) ** i)),
                 *(
                     [
                         CS.line_text(
                             colour=0x000000,
-                            arrow_colour=_darken(col, 0.25),
+                            arrow_colour=darken(col, 0.25),
                             size=int(width * (2 / 3) ** i),
                         )
                     ]
@@ -427,7 +426,7 @@ def main():
             area[i] = (
                 [
                     CS.line_back(
-                        colour=_darken(col, 0.25), width=(small_width - i + 5) * 2
+                        colour=darken(col, 0.25), width=(small_width - i + 5) * 2
                     ),
                     CS.line_fore(colour=col, width=small_width - i + 5),
                 ]
@@ -509,7 +508,7 @@ def main():
                     [
                         CS.line_text(
                             colour=0x000000,
-                            arrow_colour=_darken(col, 0.25),
+                            arrow_colour=darken(col, 0.25),
                             size=int(width * (2 / 3) ** i),
                         )
                     ]

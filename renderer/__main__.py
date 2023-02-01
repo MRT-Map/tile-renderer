@@ -8,48 +8,9 @@ import vector
 from rich.progress import track
 from rich.traceback import install
 
-from renderer.pla1to2 import pla1to2
+from .pla1to2 import pla1to2
 
 install(show_locals=True)
-
-
-def p_validate(p: argparse.ArgumentParser):
-    p.add_argument(
-        "-c", "--components", type=Path, help="component JSON file to validate"
-    )
-    p.add_argument(
-        "-n", "--nodes", required=True, type=Path, help="node JSON file to validate"
-    )
-
-
-def p_vdir(p: argparse.ArgumentParser):
-    p.add_argument(
-        "-c",
-        "--components",
-        type=Path,
-        help="directory of folder of component JSON files to validate",
-    )
-    p.add_argument(
-        "-n",
-        "--nodes",
-        required=True,
-        type=Path,
-        help="directory of folder of node JSON files to validate",
-    )
-    p.add_argument(
-        "-cs",
-        "--components_suffix",
-        type=str,
-        help="The suffix for component files' names",
-        default=".comps.pla",
-    )
-    p.add_argument(
-        "-ns",
-        "--nodes_suffix",
-        type=str,
-        help="The suffix for node files' names",
-        default=".nodes.pla",
-    )
 
 
 def p_render(p: argparse.ArgumentParser):
@@ -170,22 +131,6 @@ def main():
         formatter_class=argparse.MetavarTypeHelpFormatter,
     )
 
-    p_validate(
-        subparsers.add_parser(
-            "validate",
-            help="validate a JSON file",
-            formatter_class=argparse.MetavarTypeHelpFormatter,
-        )
-    )
-
-    p_vdir(
-        subparsers.add_parser(
-            "vdir",
-            help="validate a directory of JSON files",
-            formatter_class=argparse.MetavarTypeHelpFormatter,
-        )
-    )
-
     p_render(
         subparsers.add_parser(
             "render",
@@ -236,10 +181,6 @@ def main():
             tiles=args.tiles,
             offset=vector.obj(x=args.offset[0], y=args.offset[1]),
         )
-    elif args.task == "validate":
-        pass  # TODO
-    elif args.task == "vdir":
-        pass  # TODO
     elif args.task == "1to2":
         comps = {}
         for file in track(

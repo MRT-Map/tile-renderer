@@ -4,9 +4,10 @@ import toml
 
 import renderer.math_utils
 import renderer.types
-from renderer.merge_tiles import merge_tiles
-from renderer.render import *
-from renderer.types import *
+
+from .merge_tiles import merge_tiles
+from .render import *
+from .types import *
 
 try:
     __version__ = metadata.version(__package__)

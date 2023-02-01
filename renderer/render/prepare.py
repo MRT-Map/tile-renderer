@@ -7,12 +7,12 @@ import vector
 from rich.progress import track
 from vector import Vector2D
 
-from renderer.internals.logger import log
-from renderer.render.utils import part_dir
-from renderer.types.coord import TileCoord, WorldCoord, WorldLine
-from renderer.types.pla2 import Component, Pla2File
-from renderer.types.skin import Skin
-from renderer.types.zoom_params import ZoomParams
+from .._internal.logger import log
+from ..types.coord import TileCoord, WorldCoord, WorldLine
+from ..types.pla2 import Component, Pla2File
+from ..types.skin import Skin
+from ..types.zoom_params import ZoomParams
+from .utils import part_dir
 
 
 def _remove_unknown_component_types(components: Pla2File, skin: Skin) -> list[str]:

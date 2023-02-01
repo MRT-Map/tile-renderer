@@ -7,14 +7,14 @@ from typing import Any, Generator, Sequence, TypeVar
 _T = TypeVar("_T")
 
 
-def _read_json(file: Path | str) -> Any:
+def read_json(file: Path | str) -> Any:
     with open(file, "r", encoding="utf-8") as f:
         data = json.load(f)
         f.close()
         return data
 
 
-def _write_json(file: Path | str, data: dict, pp: bool = False):
+def write_json(file: Path | str, data: dict, pp: bool = False):
     with open(file, "r+") as f:
         f.seek(0)
         f.truncate()
@@ -25,11 +25,11 @@ def _write_json(file: Path | str, data: dict, pp: bool = False):
         f.close()
 
 
-def _str_to_tuple(s: str) -> tuple:
+def str_to_tuple(s: str) -> tuple:
     return tuple([int(x) for x in s.split(", ")])
 
 
-def _with_next(ls: Sequence[_T]) -> Generator[tuple[_T, _T], None, None]:
+def with_next(ls: Sequence[_T]) -> Generator[tuple[_T, _T], None, None]:
     if len(ls) > 1:
         for i, a in enumerate(ls[:-1]):
             b = ls[i + 1]

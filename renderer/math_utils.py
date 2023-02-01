@@ -4,8 +4,8 @@ import math
 
 import vector
 
-from renderer.internals import internal
-from renderer.types.coord import Coord, ImageCoord, ImageLine
+from ._internal import with_next
+from .types.coord import Coord, ImageCoord, ImageLine
 
 
 def segments_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
@@ -43,7 +43,7 @@ def segments_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
 
 def dash(coords: ImageLine, dash_length: float, gap_length: float) -> list[ImageLine]:
     """
-    Takes a list of coordinates and returns a list of lines.
+    Takes a list of coordinates and returns a list of lines that make up a dashed line.
 
     :param list[renderer.types.Vector2D.Vector2D] coords: the coordinates
     :param float dash_length: the length of each dash
@@ -55,8 +55,8 @@ def dash(coords: ImageLine, dash_length: float, gap_length: float) -> list[Image
     dashes = []
     is_gap = False
     overflow = 0.0
-    for c1, c2 in internal._with_next([a for a in coords]):
-        predashes = [c1]
+    for c1, c2 in with_next([a for a in coords]):
+        pre_dashes = [c1]
         plotted_length = 0.0
         start_as_gap = is_gap
         theta = math.atan2(c2.y - c1.y, c2.x - c1.x)
@@ -66,14 +66,14 @@ def dash(coords: ImageLine, dash_length: float, gap_length: float) -> list[Image
         gap_dy = gap_length * math.sin(theta)
         if overflow != 0.0:
             if overflow > c1.point.distance(c2.point):
-                predashes.append(c2)
+                pre_dashes.append(c2)
                 overflow -= c1.point.distance(c2.point)
                 plotted_length += c1.point.distance(c2.point)
             else:
                 overflow_x = overflow * math.cos(theta)
                 overflow_y = overflow * math.sin(theta)
-                predashes.append(
-                    Coord(predashes[-1].x + overflow_x, predashes[-1].y + overflow_y)
+                pre_dashes.append(
+                    Coord(pre_dashes[-1].x + overflow_x, pre_dashes[-1].y + overflow_y)
                 )
                 plotted_length += overflow
                 is_gap = False if is_gap else True
@@ -89,13 +89,13 @@ def dash(coords: ImageLine, dash_length: float, gap_length: float) -> list[Image
                 overflow = math.hypot(dx, dy) - (
                     c1.point.distance(c2.point) - plotted_length
                 )
-                predashes.append(c2)
+                pre_dashes.append(c2)
             else:
-                predashes.append(Coord(predashes[-1].x + dx, predashes[-1].y + dy))
+                pre_dashes.append(Coord(pre_dashes[-1].x + dx, pre_dashes[-1].y + dy))
                 plotted_length += gap_length if is_gap else dash_length
                 is_gap = False if is_gap else True
         for i, (c3, c4) in enumerate(
-            internal._with_next(predashes[(1 if start_as_gap else 0) :])
+            with_next(pre_dashes[(1 if start_as_gap else 0) :])
         ):
             if i % 2 == 0 and c3 != c4:
                 dashes.append((c3, c4))

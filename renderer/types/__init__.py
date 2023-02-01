@@ -1,4 +1,4 @@
-from typing import Any, Literal, TypedDict, Union
+from typing import Any, Literal, TypedDict
 
 try:
     from typing import TypeAlias

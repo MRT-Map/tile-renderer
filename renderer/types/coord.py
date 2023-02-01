@@ -8,8 +8,8 @@ from typing import TYPE_CHECKING, Any, Generator, Generic, NamedTuple, TypeVar
 
 from shapely.geometry import LineString, Point
 
-from renderer import math_utils
-from renderer.internals import internal
+from .. import math_utils
+from .._internal import with_next
 
 if TYPE_CHECKING:
     from renderer.types.skin import Skin
@@ -135,7 +135,7 @@ class Line:
     @functools.cached_property
     def bounds(self) -> Bounds[float]:
         """
-        Find the minimum and maximum x/y values of a set of coords.
+        Find the minimum and maximum x/y values in a list of coords.
 
         :returns: Returns in the form ``(x_max, x_min, y_max, y_min)``
         :rtype: Tuple[float, float, float, float]"""
@@ -178,7 +178,7 @@ class Line:
         return tiles
 
     def in_bounds(self, bounds: Bounds[int]) -> bool:
-        for c1, c2 in internal._with_next([a for a in self]):
+        for c1, c2 in with_next([a for a in self]):
             for c3, c4 in (
                 (Coord(bounds.y_max, bounds.x_min), Coord(bounds.y_min, bounds.x_min)),
                 (Coord(bounds.y_min, bounds.x_min), Coord(bounds.y_min, bounds.x_max)),

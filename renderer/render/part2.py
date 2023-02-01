@@ -12,14 +12,14 @@ from rich.progress import Progress
 from shapely import prepare
 from shapely.geometry import Polygon
 
-from renderer.internals.logger import log
-from renderer.render.utils import _TextObject, part_dir
-from renderer.types.coord import TileCoord
+from .._internal.logger import log
+from ..types.coord import TileCoord
+from .utils import TextObject, part_dir
 
 
 def file_loader(
     zoom: int, temp_dir: Path, export_id: str
-) -> Generator[tuple[TileCoord, list[_TextObject]], Any, None]:
+) -> Generator[tuple[TileCoord, list[TextObject]], Any, None]:
     for file in glob.glob(
         str(part_dir(temp_dir, export_id, 1) / f"tile_{zoom},*.dill")
     ):
@@ -31,7 +31,7 @@ def file_loader(
 
 def render_part2(
     export_id: str, temp_dir: Path = Path.cwd() / "temp"
-) -> dict[TileCoord, list[_TextObject]]:
+) -> dict[TileCoord, list[TextObject]]:
     zooms = {}
     log.info("Determining zoom levels...")
     for file in glob.glob(str(part_dir(temp_dir, export_id, 1) / f"tile_*.dill")):
@@ -66,12 +66,12 @@ def render_part2(
 
 def _prevent_text_overlap(
     zoom: int,
-    texts: Generator[tuple[TileCoord, list[_TextObject]], Any, None],
+    texts: Generator[tuple[TileCoord, list[TextObject]], Any, None],
     length: int,
     progress: Progress,
     temp_dir: Path,
     export_id: str,
-) -> dict[TileCoord, list[_TextObject]]:
+) -> dict[TileCoord, list[TextObject]]:
     out = {}
     tile_coords = set()
 
@@ -97,7 +97,7 @@ def _prevent_text_overlap(
                     ).update(text.bounds)
             else:
                 for id_ in text.image:
-                    _TextObject.remove_img(id_, temp_dir, export_id)
+                    TextObject.remove_img(id_, temp_dir, export_id)
 
     default = {tc: [] for tc in tile_coords}
     out = {**default, **out}

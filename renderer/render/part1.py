@@ -17,22 +17,22 @@ from ray import ObjectRef
 from rich.progress import Progress, track
 from rich.traceback import install
 
-from renderer.internals.logger import log
-from renderer.render.utils import ProgressHandler, _TextObject, part_dir, wip_tiles_dir
-from renderer.types.coord import TileCoord, WorldCoord
-from renderer.types.pla2 import Component, Pla2File
-from renderer.types.skin import Skin
-from renderer.types.zoom_params import ZoomParams
+from .._internal.logger import log
+from ..types.coord import TileCoord, WorldCoord
+from ..types.pla2 import Component, Pla2File
+from ..types.skin import Skin
+from ..types.zoom_params import ZoomParams
+from .utils import ProgressHandler, TextObject, part_dir, wip_tiles_dir
 
 
 @ray.remote
 def task_spawner(
     ph: ObjectRef[ProgressHandler],
     tile_chunks: list[list[TileCoord]],
-    futures: list[ObjectRef[dict[TileCoord, list[_TextObject]]]],
+    futures: list[ObjectRef[dict[TileCoord, list[TextObject]]]],
     cursor: int,
     consts: Part1Consts,
-) -> list[ObjectRef[dict[TileCoord, list[_TextObject]]]]:
+) -> list[ObjectRef[dict[TileCoord, list[TextObject]]]]:
     while cursor < len(tile_chunks):
         if ray.get(ph.needs_new_task.remote()):
             futures.append(
@@ -61,7 +61,7 @@ def render_part1(
     chunk_size: int = 8,
     temp_dir: Path = Path.cwd() / "temp",
     serial: bool = False,
-) -> dict[TileCoord, list[_TextObject]]:
+) -> dict[TileCoord, list[TextObject]]:
     tile_coords = []
     with open(part_dir(temp_dir, export_id, 0) / f"processed.dill", "rb") as f:
         components: Pla2File = dill.load(f)
@@ -76,7 +76,7 @@ def render_part1(
             )
         )
 
-    operations = _count_num_rendering_oprs(export_id, skin, zoom, temp_dir)
+    operations = _count_num_rendering_ops(export_id, skin, zoom, temp_dir)
     gc.collect()
 
     coord_to_comp: dict[WorldCoord, list[Component]] = {}
@@ -132,9 +132,9 @@ def render_part1(
             progress.advance(main_id, 1)
         progress.update(main_id, completed=sum(operations.values()))
 
-    preresult: list[dict[TileCoord, list[_TextObject]]] = ray.get(ray.get(future_refs))
+    pre_result: list[dict[TileCoord, list[TextObject]]] = ray.get(ray.get(future_refs))
     result = {}
-    for a in preresult:
+    for a in pre_result:
         result.update(a)
     os.remove(part_dir(temp_dir, export_id, 0) / f"processed.dill")
     return result
@@ -144,7 +144,7 @@ def _pre_draw_components(
     ph: ObjectRef[ProgressHandler] | None,
     tile_coords: list[TileCoord],
     consts: Part1Consts,
-) -> dict[TileCoord, list[_TextObject]]:
+) -> dict[TileCoord, list[TextObject]]:
     # noinspection PyBroadException
     try:
         install(show_locals=True)
@@ -180,7 +180,7 @@ def _pre_draw_components(
             ph.request_new_task.remote()
 
 
-def _count_num_rendering_oprs(
+def _count_num_rendering_ops(
     export_id: str, skin: Skin, zoom: ZoomParams, temp_dir: Path
 ) -> dict[TileCoord, int]:
     grouped_tile_list: dict[TileCoord, list[Pla2File]] = {}
@@ -228,14 +228,14 @@ def _draw_components(
     tile_coord: TileCoord,
     tile_components: list[list[Component]],
     consts: Part1Consts,
-) -> tuple[TileCoord, list[_TextObject]]:
+) -> tuple[TileCoord, list[TextObject]]:
     size = consts.zoom.range * 2 ** (consts.zoom.max - tile_coord[0])
     img = Image.new(
         mode="RGBA", size=(consts.skin.tile_size,) * 2, color=consts.skin.background
     )
     imd = ImageDraw.Draw(img)
-    text_list: list[_TextObject] = []
-    points_text_list: list[_TextObject] = []
+    text_list: list[TextObject] = []
+    points_text_list: list[TextObject] = []
 
     for group in tile_components:
         type_info = consts.skin[group[0].type]

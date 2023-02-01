@@ -8,9 +8,9 @@ from pathlib import Path
 from PIL import Image
 from rich.progress import track
 
-from renderer.internals import internal as internal
-from renderer.internals.logger import log
-from renderer.types.coord import TileCoord
+from ._internal import str_to_tuple
+from ._internal.logger import log
+from .types.coord import TileCoord
 
 
 def merge_tiles(
@@ -22,11 +22,13 @@ def merge_tiles(
     """
     Merges tiles rendered by :py:func:`render`.
 
-    :param images: Give in the form of ``(tile coord): (PIL Image)``, like the return value of :py:func:`render`, or as a path to a directory.
+    :param images: Give in the form of ``(tile coord): (PIL Image)``, like the return value of :py:func:`render`,
+        or as a path to a directory.
     :type images: Path | dict[TileCoord, Image]
     :param bool save_images: whether to save the tile images in a folder or not
     :param Path save_dir: the directory to save tiles in
-    :param zoom: if left empty, automatically calculates all zoom values based on tiles; otherwise, the layers of zoom to merge.
+    :param zoom: if left empty, automatically calculates all zoom values based on tiles;
+        otherwise, the layers of zoom to merge.
     :type zoom: list[int] | None
 
     :returns: Given in the form of ``(Zoom): (PIL Image)``
@@ -44,7 +46,7 @@ def merge_tiles(
             regex = re.search(r"(-?\d+, -?\d+, -?\d+)\.png$", d)
             if regex is None:
                 continue
-            coord = TileCoord(*internal._str_to_tuple(regex.group(1)))
+            coord = TileCoord(*str_to_tuple(regex.group(1)))
             image_dict[coord] = Image.open(d)
     else:
         image_dict = images

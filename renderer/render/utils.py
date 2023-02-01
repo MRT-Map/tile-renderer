@@ -15,8 +15,8 @@ import ray
 from PIL import Image, ImageDraw
 from shapely import LineString, Polygon
 
-from renderer import math_utils
-from renderer.types.coord import Coord, ImageCoord, TileCoord
+from .. import math_utils
+from ..types.coord import Coord, ImageCoord, TileCoord
 
 
 @ray.remote
@@ -56,7 +56,7 @@ class ProgressHandler:
 
 
 @dataclass(eq=True, unsafe_hash=True)
-class _TextObject:
+class TextObject:
     image: list[UUID]
     center: list[ImageCoord]
     bounds: list[Polygon]
@@ -117,7 +117,7 @@ class _TextObject:
             pivot=Coord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),
             theta=-rot,
         )
-        self.image = [_TextObject.img_to_uuid(image, temp_dir, export_id)]
+        self.image = [TextObject.img_to_uuid(image, temp_dir, export_id)]
         self.center = [
             ImageCoord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),
         ]
@@ -161,12 +161,12 @@ class _TextObject:
         ]
 
     @classmethod
-    def from_multiple(cls, *textobject: _TextObject):
-        to = copy(textobject[0])
+    def from_multiple(cls, *text_object: TextObject):
+        to = copy(text_object[0])
 
-        to.bounds = list(itertools.chain(*[sto.bounds for sto in textobject]))
-        to.image = list(itertools.chain(*[sto.image for sto in textobject]))
-        to.center = list(itertools.chain(*[sto.center for sto in textobject]))
+        to.bounds = list(itertools.chain(*[sto.bounds for sto in text_object]))
+        to.image = list(itertools.chain(*[sto.image for sto in text_object]))
+        to.center = list(itertools.chain(*[sto.center for sto in text_object]))
 
         return to
 

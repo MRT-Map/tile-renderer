@@ -13,12 +13,12 @@ from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont
 from schema import And, Optional, Or, Regex, Schema
 
-import renderer.internals.internal as internal
-from renderer import math_utils
-from renderer.render.utils import _TextObject
-from renderer.types import SkinJson, SkinType
-from renderer.types.coord import ImageCoord, ImageLine, TileCoord
-from renderer.types.pla2 import Component
+from .. import math_utils
+from .._internal import read_json, str_to_tuple, with_next
+from ..render.utils import TextObject
+from . import SkinJson, SkinType
+from .coord import ImageCoord, ImageLine, TileCoord
+from .pla2 import Component
 
 Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=16)
 
@@ -51,7 +51,8 @@ class Skin:
     ) -> ImageFont.FreeTypeFont:
         """Gets a font, given the style and size.
 
-        :param str style: The style of the font needed, eg. bold, italic etc
+        :param str style: The style of the font needed, eg.
+            bold, italic etc.
         :param int size: The size of the font
         :param Path assets_dir: Where the font is stored
         :param str rendered_text: The text that is rendered with the font, to allow for fallbacks
@@ -59,6 +60,7 @@ class Skin:
         :rtype: ImageFont.FreeTypeFont
         :raises FileNotFoundError: if font is not found"""
         if style in self.fonts.keys():
+            pil_font = None
             for font in self.fonts[style]:
                 try:
                     pil_font = ImageFont.truetype(str(assets_dir / font), size)
@@ -71,13 +73,15 @@ class Skin:
                     if all((ord(char) in table.cmap.keys()) for char in rendered_text):
                         return pil_font
             else:
+                if pil_font is None:
+                    raise FileNotFoundError(f"Font for {style} not found")
                 return pil_font
         raise FileNotFoundError(f"Font for {style} not found")
 
     class ComponentTypeInfo:
         """An object representing a component type in the ``types`` portion of a skin.
 
-        :param str name: Will set  ``name``
+        :param str name: Will set ``name``
         :param SkinType json: The JSON of the component type
         :param list[str] order: Will set ``_order``"""
 
@@ -93,7 +97,7 @@ class Skin:
             self.styles: dict[
                 tuple[int, int], list[Skin.ComponentTypeInfo.ComponentStyle]
             ] = {
-                internal._str_to_tuple(range_): [
+                str_to_tuple(range_): [
                     self.ComponentStyle(v, self, shape=self.shape) for v in value
                 ]
                 for range_, value in json["style"].items()
@@ -112,7 +116,8 @@ class Skin:
             """Represents the ``styles`` portion of a ComponentTypeInfo. Base class for all types of ComponentStyle.
 
             :param dict json: JSON dictionary as input
-            :param CompnentTypeInfo type_info: The type_info that the ComponentStyle is under"""
+            :param ComponentTypeInfo type_info: The type_info that the ComponentStyle is under
+            """
 
             def __new__(
                 cls,
@@ -214,7 +219,7 @@ class Skin:
                 coords: ImageLine,
                 display_name: str,
                 assets_dir: Path,
-                points_text_list: list[_TextObject],
+                points_text_list: list[TextObject],
                 tile_coord: TileCoord,
                 tile_size: int,
                 temp_dir: Path,
@@ -244,7 +249,7 @@ class Skin:
                 tw, th = pt_i.size
                 pt_i = pt_i.crop((0, 0, pt_i.width, pt_i.height))
                 points_text_list.append(
-                    _TextObject(
+                    TextObject(
                         pt_i,
                         coord.x + self.offset.x,
                         coord.y + self.offset.y,
@@ -330,7 +335,7 @@ class Skin:
                 stroke: str | None = None,
                 paste_direct: bool = False,
                 upright: bool = True,
-            ) -> _TextObject | None:
+            ) -> TextObject | None:
                 char_cursor = 0
                 text_to_print = ""
                 overflow = 0
@@ -338,7 +343,7 @@ class Skin:
                 swap = coords.coords[-1].x < coords.coords[0].x
                 if swap and upright:
                     coords = ImageLine(coords.coords[::-1])
-                for c1, c2 in internal._with_next([a for a in coords]):
+                for c1, c2 in with_next([a for a in coords]):
                     if c2 == coords.coords[-1]:
                         while char_cursor < len(text):
                             text_to_print += text[char_cursor]
@@ -401,7 +406,7 @@ class Skin:
                                 )
                         else:
                             text_objects.append(
-                                _TextObject(
+                                TextObject(
                                     lt_i,
                                     tx,
                                     ty,
@@ -424,7 +429,7 @@ class Skin:
                     if char_cursor >= len(text):
                         break
                 if text_objects:
-                    return _TextObject.from_multiple(*text_objects)
+                    return TextObject.from_multiple(*text_objects)
                 else:
                     return None
 
@@ -435,7 +440,7 @@ class Skin:
                 coords: ImageLine,
                 assets_dir: Path,
                 component: Component,
-                text_list: list[_TextObject],
+                text_list: list[TextObject],
                 tile_coord: TileCoord,
                 tile_size: int,
                 temp_dir: Path,
@@ -460,7 +465,7 @@ class Skin:
                     coord_lines
                     and sum(
                         c1.point.distance(c2.point)
-                        for c1, c2 in internal._with_next([a for a in coord_lines[-1]])
+                        for c1, c2 in with_next([a for a in coord_lines[-1]])
                     )
                     < text_length
                 ):
@@ -500,9 +505,7 @@ class Skin:
                     )
                     if arrow_coord_lines and sum(
                         c1.point.distance(c2.point)
-                        for c1, c2 in internal._with_next(
-                            [a for a in arrow_coord_lines[-1]]
-                        )
+                        for c1, c2 in with_next([a for a in arrow_coord_lines[-1]])
                     ) < int(imd.textlength("→", font)):
                         arrow_coord_lines = arrow_coord_lines[:-1]
                     text_list.extend(
@@ -596,7 +599,7 @@ class Skin:
                 coords: ImageLine,
                 component: Component,
                 assets_dir: Path,
-                text_list: list[_TextObject],
+                text_list: list[TextObject],
                 tile_coord: TileCoord,
                 tile_size: int,
             ):
@@ -663,7 +666,7 @@ class Skin:
                             abt_ir = abt_i.rotate(trot, expand=True)
                             abt_ir = abt_ir.crop((0, 0, abt_ir.width, abt_ir.height))
                             text_list.append(
-                                _TextObject(
+                                TextObject(
                                     abt_ir,
                                     tx,
                                     ty,
@@ -694,7 +697,7 @@ class Skin:
                 coords: ImageLine,
                 component: Component,
                 assets_dir: Path,
-                text_list: list[_TextObject],
+                text_list: list[TextObject],
                 tile_coord: TileCoord,
                 tile_size: int,
                 temp_dir: Path,
@@ -758,7 +761,7 @@ class Skin:
                 cw, ch = act_i.size[:]
                 act_i = act_i.crop((0, 0, act_i.width, act_i.height))
                 text_list.append(
-                    _TextObject(
+                    TextObject(
                         act_i,
                         c.x,
                         c.y,
@@ -917,9 +920,7 @@ class Skin:
         """
         try:
             return cls(
-                internal._read_json(
-                    Path(__file__).parent.parent / "skins" / (name + ".json")
-                )
+                read_json(Path(__file__).parent.parent / "skins" / (name + ".json"))
             )
         except FileNotFoundError:
             raise FileNotFoundError(f"Skin '{name}' not found")
@@ -980,7 +981,7 @@ class Skin:
         point_image = Schema(
             {"layer": "image", "file": str, "offset": And([int], lambda o: len(o) == 2)}
         )
-        line_backfore = Schema(
+        line_back_fore = Schema(
             {
                 "layer": Or("back", "fore"),
                 "colour": Or(None, And(str, Regex(r"^#[a-f,0-9]{3,6}$"))),
@@ -1036,7 +1037,7 @@ class Skin:
                 "square": point_square,
                 "image": point_image,
             },
-            "line": {"text": line_text, "back": line_backfore, "fore": line_backfore},
+            "line": {"text": line_text, "back": line_back_fore, "fore": line_back_fore},
             "area": {
                 "bordertext": area_bordertext,
                 "centertext": area_centertext,
@@ -1051,7 +1052,7 @@ class Skin:
                 raise ValueError(f"Type {n} is not in order list")
             s = t["style"]
             for z, steps in s.items():
-                if internal._str_to_tuple(z)[0] > internal._str_to_tuple(z)[1]:
+                if str_to_tuple(z)[0] > str_to_tuple(z)[1]:
                     raise ValueError(f"Invalid range '{z}'")
                 for step in steps:
                     if not step["layer"] in schemas[t["type"]]:

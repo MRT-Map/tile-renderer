@@ -8,15 +8,15 @@ import vector
 from PIL import Image
 from vector import Vector2D
 
-from renderer.internals.logger import log
-from renderer.render.part1 import render_part1
-from renderer.render.part2 import render_part2
-from renderer.render.part3 import render_part3
-from renderer.render.prepare import prepare_render
-from renderer.types.coord import TileCoord
-from renderer.types.pla2 import Pla2File
-from renderer.types.skin import Skin
-from renderer.types.zoom_params import ZoomParams
+from .._internal.logger import log
+from ..types.coord import TileCoord
+from ..types.pla2 import Pla2File
+from ..types.skin import Skin
+from ..types.zoom_params import ZoomParams
+from .part1 import render_part1
+from .part2 import render_part2
+from .part3 import render_part3
+from .prepare import prepare_render
 
 
 def render(

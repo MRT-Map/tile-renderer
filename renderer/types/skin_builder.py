@@ -4,7 +4,7 @@ from pathlib import Path
 from typing import Literal
 
 
-def _hex_to_colour(h: int | None) -> str | None:
+def hex_to_colour(h: int | None) -> str | None:
     if h is None:
         return None
     nh = hex(h)[2:]
@@ -13,7 +13,7 @@ def _hex_to_colour(h: int | None) -> str | None:
     return "#" + nh
 
 
-def _blend(h1: int, h2: int, prop: float = 0.5) -> int:
+def blend(h1: int, h2: int, prop: float = 0.5) -> int:
     nh1 = hex(h1)[2:].zfill(6)
     nh2 = hex(h2)[2:].zfill(6)
     r = hex(round(int(nh1[0:2], base=16) * (1 - prop) + int(nh2[0:2], base=16) * prop))[
@@ -28,7 +28,7 @@ def _blend(h1: int, h2: int, prop: float = 0.5) -> int:
     return int(r + g + b, base=16)
 
 
-def _darken(h1: int, strength: float = 0.5) -> int:
+def darken(h1: int, strength: float = 0.5) -> int:
     nh1 = hex(h1)[2:].zfill(6)
     r = int(nh1[0:2], base=16) / 255
     g = int(nh1[2:4], base=16) / 255
@@ -46,25 +46,25 @@ def _darken(h1: int, strength: float = 0.5) -> int:
     return int(r + g + b, base=16)
 
 
-def _lighten(h1: int, strength: float = 0.5) -> int:
+def lighten(h1: int, strength: float = 0.5) -> int:
     nh1 = hex(h1)[2:].zfill(6)
     r = int(nh1[0:2], base=16) / 255
     g = int(nh1[2:4], base=16) / 255
     b = int(nh1[4:6], base=16) / 255
-    cmin = min(r, g, b)
-    cmax = max(r, g, b)
-    delta = cmax - cmin
+    c_min = min(r, g, b)
+    c_max = max(r, g, b)
+    delta = c_max - c_min
     h = (
         0
         if delta == 0
         else 60 * ((g - b) / delta % 6)
-        if cmax == r
+        if c_max == r
         else 60 * ((b - r) / delta + 2)
-        if cmax == g
+        if c_max == g
         else 60 * ((r - g) / delta + 4)
     )
-    s = 0 if cmax == 0 else delta / cmax
-    v = cmax
+    s = 0 if c_max == 0 else delta / c_max
+    v = c_max
 
     s *= 1 - strength
 
@@ -107,7 +107,7 @@ class SkinBuilder:
     def __init__(self, tile_size: int, fonts: dict[str, list[Path]], background: int):
         self.tile_size = tile_size
         self.fonts = fonts
-        self.background = _hex_to_colour(background)
+        self.background = hex_to_colour(background)
         self.types = {}
 
     def __setitem__(self, key: str, value: ComponentTypeInfo):
@@ -177,8 +177,8 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "circle",
-                    "colour": _hex_to_colour(colour),
-                    "outline": _hex_to_colour(outline),
+                    "colour": hex_to_colour(colour),
+                    "outline": hex_to_colour(outline),
                     "size": size,
                     "width": width,
                 }
@@ -196,7 +196,7 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "text",
-                    "colour": _hex_to_colour(colour),
+                    "colour": hex_to_colour(colour),
                     "size": size,
                     "offset": offset,
                     "anchor": anchor,
@@ -215,8 +215,8 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "square",
-                    "colour": _hex_to_colour(colour),
-                    "outline": _hex_to_colour(outline),
+                    "colour": hex_to_colour(colour),
+                    "outline": hex_to_colour(outline),
                     "size": size,
                     "width": width,
                 }
@@ -240,8 +240,8 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "text",
-                    "colour": _hex_to_colour(colour),
-                    "arrow_colour": _hex_to_colour(arrow_colour),
+                    "colour": hex_to_colour(colour),
+                    "arrow_colour": hex_to_colour(arrow_colour),
                     "size": size,
                     "offset": offset,
                 }
@@ -258,7 +258,7 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "back",
-                    "colour": _hex_to_colour(colour),
+                    "colour": hex_to_colour(colour),
                     "width": width,
                     "dash": dash,
                 }
@@ -275,7 +275,7 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "fore",
-                    "colour": _hex_to_colour(colour),
+                    "colour": hex_to_colour(colour),
                     "width": width,
                     "dash": dash,
                 }
@@ -288,7 +288,7 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "bordertext",
-                    "colour": _hex_to_colour(colour),
+                    "colour": hex_to_colour(colour),
                     "offset": offset,
                     "size": size,
                 }
@@ -305,7 +305,7 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "centertext",
-                    "colour": _hex_to_colour(colour),
+                    "colour": hex_to_colour(colour),
                     "offset": offset,
                     "size": size,
                 }
@@ -322,8 +322,8 @@ class SkinBuilder:
                 cs = cls()
                 cs.json = {
                     "layer": "fill",
-                    "colour": _hex_to_colour(colour),
-                    "outline": _hex_to_colour(outline),
+                    "colour": hex_to_colour(colour),
+                    "outline": hex_to_colour(outline),
                     "stripe": stripe,
                 }
                 return cs

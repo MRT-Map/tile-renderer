@@ -1,9 +1,9 @@
 from rich.progress import track
 
-from renderer import Pla1ComponentListJson, Pla1NodeListJson
-from renderer.internals.logger import log
-from renderer.types.coord import WorldCoord
-from renderer.types.pla2 import Component, Pla2File
+from . import Pla1ComponentListJson, Pla1NodeListJson
+from ._internal.logger import log
+from .types.coord import WorldCoord
+from .types.pla2 import Component, Pla2File
 
 
 def pla1to2(

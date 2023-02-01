@@ -16,10 +16,10 @@ from PIL import Image
 from ray import ObjectRef
 from rich.progress import Progress, track
 
-from renderer.internals.logger import log
-from renderer.render.utils import ProgressHandler, _TextObject, part_dir, wip_tiles_dir
-from renderer.types.coord import TileCoord
-from renderer.types.skin import Skin
+from .._internal.logger import log
+from ..types.coord import TileCoord
+from ..types.skin import Skin
+from .utils import ProgressHandler, TextObject, part_dir, wip_tiles_dir
 
 
 @ray.remote
@@ -73,7 +73,7 @@ def render_part3(
 
     log.info(f"Rendering texts in {len(tile_coords)} tiles...")
     if serial:
-        preresult = [
+        pre_result = [
             _draw_text(
                 None, [tile_coord], save_images, save_dir, skin, export_id, temp_dir
             )
@@ -118,9 +118,9 @@ def render_part3(
                 num_complete += 1
             progress.update(main_id, completed=len(tile_coords))
 
-        preresult = ray.get(ray.get(future_refs))
+        pre_result = ray.get(ray.get(future_refs))
     result = {}
-    for i in preresult:
+    for i in pre_result:
         result.update(i)
 
     shutil.rmtree(temp_dir / export_id)
@@ -146,7 +146,7 @@ def _draw_text(
             with open(
                 part_dir(temp_dir, export_id, 2) / f"tile_{tile_coord}.dill", "rb"
             ) as f:
-                text_list: list[_TextObject] = dill.load(f)
+                text_list: list[TextObject] = dill.load(f)
             try:
                 image = Image.open(
                     wip_tiles_dir(temp_dir, export_id) / f"{tile_coord}.png"
@@ -163,7 +163,7 @@ def _draw_text(
 
             for text in text_list:
                 for img, center in zip(text.image, text.center):
-                    img = _TextObject.uuid_to_img(img, temp_dir, export_id).convert(
+                    img = TextObject.uuid_to_img(img, temp_dir, export_id).convert(
                         "RGBA"
                     )
                     image.alpha_composite(

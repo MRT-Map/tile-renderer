@@ -9,8 +9,8 @@ import msgspec.json
 from msgspec import Struct
 from shapely import LineString
 
-from renderer.types.coord import Bounds, Coord, TileCoord, WorldCoord, WorldLine
-from renderer.types.zoom_params import ZoomParams
+from .coord import Bounds, Coord, TileCoord, WorldCoord, WorldLine
+from .zoom_params import ZoomParams
 
 
 class Component(Struct):
@@ -21,8 +21,8 @@ class Component(Struct):
     type: str
     layer: float
     nodes: WorldLine
-    attrs: dict | None = None
     tags: list[str]
+    attrs: dict | None = None
 
     @property
     def fid(self) -> str:
