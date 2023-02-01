@@ -91,7 +91,7 @@ class TextObject:
         rot: float,
         tile_coord: TileCoord,
         tile_size: int,
-        imd: ImageDraw,
+        imd: ImageDraw.ImageDraw,
         temp_dir: Path = Path.cwd() / "temp",
         export_id: str = "unnamed",
     ):
@@ -102,11 +102,11 @@ class TextObject:
             )
             imd.line(
                 [
-                    nr(Coord(x - w / 2, y - h / 2)).tuple(),
-                    nr(Coord(x - w / 2, y + h / 2)).tuple(),
-                    nr(Coord(x + w / 2, y + h / 2)).tuple(),
-                    nr(Coord(x + w / 2, y - h / 2)).tuple(),
-                    nr(Coord(x - w / 2, y - h / 2)).tuple(),
+                    nr(Coord(x - w / 2, y - h / 2)).as_tuple(),
+                    nr(Coord(x - w / 2, y + h / 2)).as_tuple(),
+                    nr(Coord(x + w / 2, y + h / 2)).as_tuple(),
+                    nr(Coord(x + w / 2, y - h / 2)).as_tuple(),
+                    nr(Coord(x - w / 2, y - h / 2)).as_tuple(),
                 ],
                 fill="#ff0000",
             )

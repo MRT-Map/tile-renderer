@@ -35,7 +35,10 @@ def render_part2(
     zooms = {}
     log.info("Determining zoom levels...")
     for file in glob.glob(str(part_dir(temp_dir, export_id, 1) / f"tile_*.dill")):
-        zoom = re.search(r"_(\d+),", file).group(1)
+        regex = re.search(r"_(\d+),", file)
+        if regex is None:
+            raise ValueError("Dill object is not saved properly")
+        zoom = regex.group(1)
         if zoom not in zooms:
             zooms[zoom] = 0
         zooms[zoom] += 1
@@ -46,8 +49,8 @@ def render_part2(
             zooms.items(), description="[green]Eliminating overlapping text"
         ):
             new_texts = _prevent_text_overlap(
-                zoom,
-                file_loader(zoom, temp_dir, export_id),
+                int(zoom),
+                file_loader(int(zoom), temp_dir, export_id),
                 length,
                 progress,
                 temp_dir,
@@ -72,7 +75,7 @@ def _prevent_text_overlap(
     temp_dir: Path,
     export_id: str,
 ) -> dict[TileCoord, list[TextObject]]:
-    out = {}
+    out: dict[TileCoord, list[TextObject]] = {}
     tile_coords = set()
 
     no_intersect: dict[TileCoord, set[Polygon]] = {}
@@ -99,7 +102,7 @@ def _prevent_text_overlap(
                 for id_ in text.image:
                     TextObject.remove_img(id_, temp_dir, export_id)
 
-    default = {tc: [] for tc in tile_coords}
+    default: dict[TileCoord, list[TextObject]] = {tc: [] for tc in tile_coords}
     out = {**default, **out}
     for tile_coord, text_objects in progress.track(
         out.items(),

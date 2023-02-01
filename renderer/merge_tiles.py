@@ -14,7 +14,7 @@ from .types.coord import TileCoord
 
 
 def merge_tiles(
-    images: Path | dict[TileCoord, Image],
+    images: Path | dict[TileCoord, Image.Image],
     save_images: bool = True,
     save_dir: Path = Path.cwd(),
     zoom: list[int] | None = None,
@@ -58,23 +58,27 @@ def merge_tiles(
         to_merge = {k: v for k, v in image_dict.items() if k.z == z}
 
         tile_coords = list(to_merge.keys())
-        x_max, x_min, y_max, y_min = TileCoord.bounds(tile_coords)
+        bounds = TileCoord.bounds(tile_coords)
         tile_size = list(image_dict.values())[0].size[0]
         log.info(
-            f"Zoom {z}: [dim white]Creating image {tile_size*(x_max-x_min+1)}x{tile_size*(y_max-y_min+1)}"
+            f"Zoom {z}: [dim white]Creating image {tile_size*(bounds.x_max-bounds.x_min+1)}x{tile_size*(bounds.y_max-bounds.y_min+1)}"
         )
         i = Image.new(
             "RGBA",
-            (tile_size * (x_max - x_min + 1), tile_size * (y_max - y_min + 1)),
+            (
+                tile_size * (bounds.x_max - bounds.x_min + 1),
+                tile_size * (bounds.y_max - bounds.y_min + 1),
+            ),
             (0, 0, 0, 0),
         )
         px = 0
         py = 0
         merged = 0
         for x in track(
-            range(x_min, x_max + 1), description=f"Zoom {z}: [dim white]Pasting tiles"
+            range(bounds.x_min, bounds.x_max + 1),
+            description=f"Zoom {z}: [dim white]Pasting tiles",
         ):
-            for y in range(y_min, y_max + 1):
+            for y in range(bounds.y_min, bounds.y_max + 1):
                 if TileCoord(z, x, y) in to_merge.keys():
                     i.paste(to_merge[TileCoord(z, x, y)], (px, py))
                     merged += 1

@@ -73,7 +73,9 @@ def dash(coords: ImageLine, dash_length: float, gap_length: float) -> list[Image
                 overflow_x = overflow * math.cos(theta)
                 overflow_y = overflow * math.sin(theta)
                 pre_dashes.append(
-                    Coord(pre_dashes[-1].x + overflow_x, pre_dashes[-1].y + overflow_y)
+                    ImageCoord(
+                        pre_dashes[-1].x + overflow_x, pre_dashes[-1].y + overflow_y
+                    )
                 )
                 plotted_length += overflow
                 is_gap = False if is_gap else True
@@ -91,7 +93,9 @@ def dash(coords: ImageLine, dash_length: float, gap_length: float) -> list[Image
                 )
                 pre_dashes.append(c2)
             else:
-                pre_dashes.append(Coord(pre_dashes[-1].x + dx, pre_dashes[-1].y + dy))
+                pre_dashes.append(
+                    ImageCoord(pre_dashes[-1].x + dx, pre_dashes[-1].y + dy)
+                )
                 plotted_length += gap_length if is_gap else dash_length
                 is_gap = False if is_gap else True
         for i, (c3, c4) in enumerate(

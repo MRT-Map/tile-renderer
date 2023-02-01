@@ -29,9 +29,9 @@ class Component(Struct):
         return f"{self.namespace}-{self.id}"
 
     @staticmethod
-    def find_ends(components: list[Component]) -> Bounds[int]:
+    def find_ends(components: list[Component]) -> Bounds[float]:
         """
-        Finds the minimum and maximum X and Y values of a JSON of components
+        Finds the minimum and maximum X and Y values in a JSON of components
 
         :param ComponentList components: a JSON of components
 

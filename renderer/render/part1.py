@@ -35,9 +35,11 @@ def task_spawner(
 ) -> list[ObjectRef[dict[TileCoord, list[TextObject]]]]:
     while cursor < len(tile_chunks):
         if ray.get(ph.needs_new_task.remote()):
-            futures.append(
-                ray.remote(_pre_draw_components).remote(ph, tile_chunks[cursor], consts)
+            output = ray.remote(_pre_draw_components).remote(
+                ph, tile_chunks[cursor], consts
             )
+            if output is not None:
+                futures.append(output)
             cursor += 1
     return futures
 
@@ -68,6 +70,8 @@ def render_part1(
 
     for file in glob.glob(str(part_dir(temp_dir, export_id, 0) / f"tile_*.dill")):
         re_result = re.search(rf"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)
+        if re_result is None:
+            raise ValueError("Dill object not saved properly")
         tile_coords.append(
             TileCoord(
                 int(re_result.group(1)),
@@ -102,8 +106,9 @@ def render_part1(
     if serial:
         out = {}
         for tile_coord in track(tile_coords, "Rendering components"):
-            (tc, lto) = _pre_draw_components(None, [tile_coord], ray.get(consts))
-            out[tc] = lto
+            output = _pre_draw_components(None, [tile_coord], ray.get(consts))
+            if output is not None:
+                out.update(output)
         return out
 
     tile_chunks = [
@@ -126,8 +131,8 @@ def render_part1(
             id_: TileCoord | None = ray.get(ph.get_complete.remote())
             if id_ is not None:
                 num_complete += 1
-            id_: TileCoord | None = ray.get(ph.get.remote())
-            if id_ is None:
+            id2: TileCoord | None = ray.get(ph.get.remote())
+            if id2 is None:
                 continue
             progress.advance(main_id, 1)
         progress.update(main_id, completed=sum(operations.values()))
@@ -144,7 +149,7 @@ def _pre_draw_components(
     ph: ObjectRef[ProgressHandler] | None,
     tile_coords: list[TileCoord],
     consts: Part1Consts,
-) -> dict[TileCoord, list[TextObject]]:
+) -> dict[TileCoord, list[TextObject]] | None:
     # noinspection PyBroadException
     try:
         install(show_locals=True)
@@ -178,6 +183,7 @@ def _pre_draw_components(
         log.error(traceback.format_exc())
         if ph:
             ph.request_new_task.remote()
+        return None
 
 
 def _count_num_rendering_ops(
@@ -190,6 +196,8 @@ def _count_num_rendering_ops(
     ):
         with open(file, "rb") as f:
             result = re.search(rf"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)
+            if result is None:
+                raise ValueError("Dill object is not saved properly")
             grouped_tile_list[
                 TileCoord(
                     int(result.group(1)), int(result.group(2)), int(result.group(3))
@@ -201,6 +209,8 @@ def _count_num_rendering_ops(
     for tile_coord, tile_components in track(
         grouped_tile_list.items(), description="Counting operations"
     ):
+        tile_coord: TileCoord
+        tile_components: list[Pla2File]
         if not tile_components:
             operations[tile_coord] = 0
             continue
@@ -208,7 +218,7 @@ def _count_num_rendering_ops(
         for group in tile_components:
             if not group:
                 continue
-            info = skin.types[group[0].type]
+            info = skin.types[group.components[0].type]
             for step in info[zoom.max - tile_coord.z]:
                 tile_operations += len(group)
                 if (

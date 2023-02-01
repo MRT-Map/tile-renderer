@@ -24,7 +24,7 @@ from .utils import ProgressHandler, TextObject, part_dir, wip_tiles_dir
 
 @ray.remote
 def task_spawner(
-    ph: ObjectRef[ProgressHandler] | None,
+    ph: ObjectRef[ProgressHandler],
     chunks: list[list[TileCoord]],
     save_images: bool,
     save_dir: Path,
@@ -32,7 +32,7 @@ def task_spawner(
     export_id: str,
     temp_dir: Path,
     cursor: int,
-    futures: list[ObjectRef[dict[TileCoord, Image.Image]]],
+    futures: list[ObjectRef[dict[TileCoord, Image.Image] | None]],
 ) -> list[ObjectRef[dict[TileCoord, Image.Image]]]:
     while cursor < len(chunks):
         if ray.get(ph.needs_new_task.remote()):
@@ -63,6 +63,8 @@ def render_part3(
     tile_coords = []
     for file in glob.glob(str(part_dir(temp_dir, export_id, 2) / f"tile_*.dill")):
         re_result = re.search(rf"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)
+        if re_result is None:
+            raise ValueError("Dill object was not saved properly")
         tile_coords.append(
             TileCoord(
                 int(re_result.group(1)),
@@ -119,7 +121,7 @@ def render_part3(
             progress.update(main_id, completed=len(tile_coords))
 
         pre_result = ray.get(ray.get(future_refs))
-    result = {}
+    result: dict[TileCoord, Image.Image] = {}
     for i in pre_result:
         result.update(i)
 
@@ -137,7 +139,7 @@ def _draw_text(
     skin: Skin,
     export_id: str,
     temp_dir: Path,
-) -> dict[TileCoord, Image.Image]:
+) -> dict[TileCoord, Image.Image] | None:
     logging.getLogger("PIL").setLevel(logging.CRITICAL)
     # noinspection PyBroadException
     try:
@@ -162,8 +164,8 @@ def _draw_text(
             ).resize(image.size, resample=Image.ANTIALIAS)
 
             for text in text_list:
-                for img, center in zip(text.image, text.center):
-                    img = TextObject.uuid_to_img(img, temp_dir, export_id).convert(
+                for img_uuid, center in zip(text.image, text.center):
+                    img = TextObject.uuid_to_img(img_uuid, temp_dir, export_id).convert(
                         "RGBA"
                     )
                     image.alpha_composite(
@@ -194,3 +196,4 @@ def _draw_text(
     except Exception as e:
         log.error(f"Error in ray task: {e!r}")
         log.error(traceback.format_exc())
+        return None

@@ -6,7 +6,7 @@ from dataclasses import dataclass
 from itertools import chain
 from typing import TYPE_CHECKING, Any, Generator, Generic, NamedTuple, TypeVar
 
-from shapely.geometry import LineString, Point
+from shapely.geometry import LineString, Point  # type: ignore
 
 from .. import math_utils
 from .._internal import with_next
@@ -42,7 +42,7 @@ class Coord:
     def y(self) -> float:
         return self.point.y
 
-    def tuple(self) -> tuple[float, float]:
+    def as_tuple(self) -> tuple[float, float]:
         return self.point.x, self.point.y
 
     @staticmethod
@@ -73,19 +73,19 @@ class WorldCoord(Coord):
         ys = int(skin.tile_size / size * yc)
         return ImageCoord(xs, ys)
 
-    def tiles(self, z: ZoomParams) -> list[TileCoord]:
+    def tiles(self, zoom_params: ZoomParams) -> list[TileCoord]:
         # noinspection GrazieInspection
         """
         Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
 
-        :param ZoomParams z: TODO
+        :param ZoomParams zoom_params: TODO
 
         :returns: A list of tile coordinates
         :rtype: List[TileCoord]
         """
         tiles = []
-        range_ = z.range
-        for z in reversed(range(z.min, z.max + 1)):
+        range_ = zoom_params.range
+        for z in reversed(range(zoom_params.min, zoom_params.max + 1)):
             x = math.floor(self.x / range_)
             y = math.floor(self.y / range_)
             tiles.append(TileCoord(z, x, y))
@@ -155,7 +155,8 @@ class Line:
 
     def to_tiles(self, z: ZoomParams) -> list[TileCoord]:
         """
-        Generates tile coordinates from list of regular coordinates using :py:func:`tools.coord.to_tiles()`. Mainly for rendering whole components.
+        Generates tile coordinates from list of regular coordinates using :py:func:`tools.coord.to_tiles()`.
+            Mainly for rendering whole components.
 
         :param ZoomParams z: TODO
 
@@ -174,8 +175,7 @@ class Line:
         yr = list(range(bounds.y_min, bounds.y_max + 1, int(z.range / 2)))
         yr.append(bounds.y_max + 1)
         tiles = (WorldCoord(x, y).tiles(z) for x in xr for y in yr)
-        tiles = list(set(chain(*tiles)))
-        return tiles
+        return list(set(chain(*tiles)))
 
     def in_bounds(self, bounds: Bounds[int]) -> bool:
         for c1, c2 in with_next([a for a in self]):
@@ -206,7 +206,7 @@ class WorldLine(Line):
             image_coords.append(ImageCoord(xs, ys))
         return ImageLine(image_coords)
 
-    @property
+    @property  # type: ignore
     def coords(self) -> list[WorldCoord]:
         return [c for c in self]
 
@@ -216,7 +216,7 @@ class WorldLine(Line):
 
 
 class ImageLine(Line):
-    @property
+    @property  # type: ignore
     def coords(self) -> list[ImageCoord]:
         return [c for c in self]
 
@@ -238,7 +238,7 @@ class TileCoord(NamedTuple):
     @staticmethod
     def bounds(tile_coords: list[TileCoord]) -> Bounds[int]:
         """
-        Find the minimum and maximum x/y values of a set of TileCoords.
+        Find the minimum and maximum x/y values in a set of TileCoords.
 
         :param List[TileCoord] tile_coords: a list of tile coordinates, provide in a tuple of ``(z,x,y)``
 

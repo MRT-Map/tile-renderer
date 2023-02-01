@@ -8,7 +8,11 @@ import vector
 from rich.progress import track
 from rich.traceback import install
 
+from ._internal.logger import log
 from .pla1to2 import pla1to2
+from .types.pla2 import Pla2File
+from .types.skin import Skin
+from .types.zoom_params import ZoomParams
 
 install(show_locals=True)
 
@@ -54,13 +58,13 @@ def p_render(p: argparse.ArgumentParser):
     p.add_argument(
         "-t",
         "--tiles",
-        type=list,
+        type=list[str],
         help="a list of tiles to render, given in tuples of (z,x,y)",
     )
     p.add_argument(
         "-o",
         "--offset",
-        type=tuple,
+        type=tuple[int, int],  # type: ignore
         help="the offset of node coordinates, given as (x,y)",
         default=[0, 0],
     )
@@ -115,12 +119,6 @@ def p_1to2(p: argparse.ArgumentParser):
 
 
 def main():
-    import renderer
-    from renderer.internals.logger import log
-    from renderer.types.pla2 import Pla2File
-    from renderer.types.skin import Skin
-    from renderer.types.zoom_params import ZoomParams
-
     parser = argparse.ArgumentParser()
 
     subparsers = parser.add_subparsers(help="task to run", dest="task")

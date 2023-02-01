@@ -20,7 +20,7 @@ from . import SkinJson, SkinType
 from .coord import ImageCoord, ImageLine, TileCoord
 from .pla2 import Component
 
-Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=16)
+Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=16)  # type: ignore
 
 
 class Skin:
@@ -118,6 +118,7 @@ class Skin:
             :param dict json: JSON dictionary as input
             :param ComponentTypeInfo type_info: The type_info that the ComponentStyle is under
             """
+            layer: str
 
             def __new__(
                 cls,
@@ -127,6 +128,7 @@ class Skin:
             ):
                 if cls != Skin.ComponentTypeInfo.ComponentStyle:
                     return super().__new__(cls)
+                json = json or {}
                 if shape == "point":
                     if json["layer"] == "circle":
                         return Skin.ComponentTypeInfo.PointCircle.__new__(
@@ -215,7 +217,7 @@ class Skin:
 
             def render(
                 self,
-                imd: ImageDraw,
+                imd: ImageDraw.ImageDraw,
                 coords: ImageLine,
                 display_name: str,
                 assets_dir: Path,
@@ -396,11 +398,21 @@ class Skin:
                                 )
                                 imd.line(
                                     [
-                                        nr(ImageCoord(tx - tw / 4, ty - th / 4)),
-                                        nr(ImageCoord(tx - tw / 4, ty + th / 4)),
-                                        nr(ImageCoord(tx + tw / 4, ty + th / 4)),
-                                        nr(ImageCoord(tx + tw / 4, ty - th / 4)),
-                                        nr(ImageCoord(tx - tw / 4, ty - th / 4)),
+                                        nr(
+                                            ImageCoord(tx - tw / 4, ty - th / 4)
+                                        ).as_tuple(),
+                                        nr(
+                                            ImageCoord(tx - tw / 4, ty + th / 4)
+                                        ).as_tuple(),
+                                        nr(
+                                            ImageCoord(tx + tw / 4, ty + th / 4)
+                                        ).as_tuple(),
+                                        nr(
+                                            ImageCoord(tx + tw / 4, ty - th / 4)
+                                        ).as_tuple(),
+                                        nr(
+                                            ImageCoord(tx - tw / 4, ty - th / 4)
+                                        ).as_tuple(),
                                     ],
                                     fill="#ff0000",
                                 )
@@ -472,7 +484,7 @@ class Skin:
                     coord_lines = coord_lines[:-1]
                 if os.environ.get("DEBUG"):
                     imd.line(
-                        [c.tuple() for c in coords.parallel_offset(self.offset)],
+                        [c.as_tuple() for c in coords.parallel_offset(self.offset)],
                         fill="#ff0000",
                     )
                 text_list.extend(
@@ -544,7 +556,7 @@ class Skin:
             def render(self, imd: ImageDraw.ImageDraw, coords: ImageLine, **_):
                 if self.dash is None:
                     imd.line(
-                        [c.tuple() for c in coords],
+                        [c.as_tuple() for c in coords],
                         fill=self.colour,
                         width=self.width,
                         joint="curve",
@@ -573,7 +585,7 @@ class Skin:
                         coords, self.dash[0], self.dash[1]
                     ):
                         imd.line(
-                            [c.tuple() for c in dash_coords],
+                            [c.as_tuple() for c in dash_coords],
                             fill=self.colour,
                             width=self.width,
                         )
@@ -844,7 +856,7 @@ class Skin:
                         (0, 0, 0, 0),
                     )
                     md = ImageDraw.Draw(mi)
-                    md.polygon([c.tuple() for c in coords.coords], fill=self.colour)
+                    md.polygon([c.as_tuple() for c in coords.coords], fill=self.colour)
                     pi = Image.new(
                         "RGBA",
                         (
@@ -858,7 +870,7 @@ class Skin:
                 else:
                     # logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Filling area")
                     ad.polygon(
-                        [c.tuple() for c in coords.coords],
+                        [c.as_tuple() for c in coords.coords],
                         fill=self.colour,
                         outline=self.outline,
                     )
@@ -885,7 +897,7 @@ class Skin:
                             outlines.append(n_coords)  """
                     for o_coords in outlines:
                         imd.line(
-                            [c.tuple() for c in o_coords],
+                            [c.as_tuple() for c in o_coords],
                             fill=self.outline,
                             width=2,
                             joint="curve",
@@ -926,7 +938,7 @@ class Skin:
             raise FileNotFoundError(f"Skin '{name}' not found")
 
     @staticmethod
-    def validate_json(json: dict) -> Literal[True]:
+    def validate_json(json: SkinJson) -> Literal[True]:
         """
         Validates a skin JSON file.
 

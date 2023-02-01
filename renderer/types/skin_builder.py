@@ -40,10 +40,10 @@ def darken(h1: int, strength: float = 0.5) -> int:
 
     k += strength * (1 - k)
 
-    r = hex(round(255 * (1 - c) * (1 - k)))[2:].zfill(2)
-    g = hex(round(255 * (1 - m) * (1 - k)))[2:].zfill(2)
-    b = hex(round(255 * (1 - y) * (1 - k)))[2:].zfill(2)
-    return int(r + g + b, base=16)
+    nr = hex(round(255 * (1 - c) * (1 - k)))[2:].zfill(2)
+    ng = hex(round(255 * (1 - m) * (1 - k)))[2:].zfill(2)
+    nb = hex(round(255 * (1 - y) * (1 - k)))[2:].zfill(2)
+    return int(nr + ng + nb, base=16)
 
 
 def lighten(h1: int, strength: float = 0.5) -> int:
@@ -85,10 +85,10 @@ def lighten(h1: int, strength: float = 0.5) -> int:
         else (c, 0, x)
     )
 
-    r = hex(round((r + m) * 255))[2:].zfill(2)
-    g = hex(round((g + m) * 255))[2:].zfill(2)
-    b = hex(round((b + m) * 255))[2:].zfill(2)
-    return int(r + g + b, base=16)
+    nr = hex(round((r + m) * 255))[2:].zfill(2)
+    ng = hex(round((g + m) * 255))[2:].zfill(2)
+    nb = hex(round((b + m) * 255))[2:].zfill(2)
+    return int(nr + ng + nb, base=16)
 
 
 class SkinBuilder:
@@ -107,7 +107,7 @@ class SkinBuilder:
     def __init__(self, tile_size: int, fonts: dict[str, list[Path]], background: int):
         self.tile_size = tile_size
         self.fonts = fonts
-        self.background = hex_to_colour(background)
+        self.background = hex_to_colour(background) or "#000000"
         self.types = {}
 
     def __setitem__(self, key: str, value: ComponentTypeInfo):
