@@ -189,7 +189,7 @@ def _pre_draw_components(
 def _count_num_rendering_ops(
     export_id: str, skin: Skin, zoom: ZoomParams, temp_dir: Path
 ) -> dict[TileCoord, int]:
-    grouped_tile_list: dict[TileCoord, list[Pla2File]] = {}
+    grouped_tile_list: dict[TileCoord, list[list[Pla2File]]] = {}
     for file in track(
         glob.glob(str(part_dir(temp_dir, export_id, 0) / f"tile_*.dill")),
         description="Loading data",
@@ -209,8 +209,6 @@ def _count_num_rendering_ops(
     for tile_coord, tile_components in track(
         grouped_tile_list.items(), description="Counting operations"
     ):
-        tile_coord: TileCoord
-        tile_components: list[Pla2File]
         if not tile_components:
             operations[tile_coord] = 0
             continue
@@ -218,7 +216,7 @@ def _count_num_rendering_ops(
         for group in tile_components:
             if not group:
                 continue
-            info = skin.types[group.components[0].type]
+            info = skin.types[group[0].type]
             for step in info[zoom.max - tile_coord.z]:
                 tile_operations += len(group)
                 if (

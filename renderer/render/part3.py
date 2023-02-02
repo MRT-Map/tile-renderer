@@ -33,20 +33,19 @@ def task_spawner(
     temp_dir: Path,
     cursor: int,
     futures: list[ObjectRef[dict[TileCoord, Image.Image] | None]],
-) -> list[ObjectRef[dict[TileCoord, Image.Image]]]:
+) -> list[ObjectRef[dict[TileCoord, Image.Image] | None]]:
     while cursor < len(chunks):
         if ray.get(ph.needs_new_task.remote()):
-            futures.append(
-                ray.remote(_draw_text).remote(
-                    ph,
-                    chunks[cursor],
-                    save_images,
-                    save_dir,
-                    skin,
-                    export_id,
-                    temp_dir,
-                )
+            output = ray.remote(_draw_text).remote(
+                ph,
+                chunks[cursor],
+                save_images,
+                save_dir,
+                skin,
+                export_id,
+                temp_dir,
             )
+            futures.append(output)
             cursor += 1
     return futures
 
@@ -123,7 +122,8 @@ def render_part3(
         pre_result = ray.get(ray.get(future_refs))
     result: dict[TileCoord, Image.Image] = {}
     for i in pre_result:
-        result.update(i)
+        if i is not None:
+            result.update(i)
 
     shutil.rmtree(temp_dir / export_id)
     log.info("Render complete")

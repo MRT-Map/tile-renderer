@@ -8,6 +8,7 @@ import vector
 from rich.progress import track
 from rich.traceback import install
 
+from . import render
 from ._internal.logger import log
 from .pla1to2 import pla1to2
 from .types.pla2 import Pla2File
@@ -170,7 +171,7 @@ def main():
         log.info("Getting skin...")
         skin = Skin.from_name(args.skin)
         log.info("Starting rendering...")
-        renderer.render(
+        render(
             file,
             ZoomParams(args.min_zoom, args.max_zoom, args.max_zoom_range),
             skin=skin,
