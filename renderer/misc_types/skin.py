@@ -38,13 +38,13 @@ class Skin:
         self.background: str = json["info"]["background"]
 
         self.order: list[str] = json["order"]
-        self.types: dict[str, Skin.ComponentTypeInfo] = {
+        self.misc_types: dict[str, Skin.ComponentTypeInfo] = {
             name: self.ComponentTypeInfo(name, value, self.order, self)
             for name, value in json["types"].items()
         }
 
     def __getitem__(self, type_name: str) -> ComponentTypeInfo:
-        return self.types[type_name]
+        return self.misc_types[type_name]
 
     def get_font(
         self, style: str, size: int, assets_dir: Path, rendered_text: str = ""

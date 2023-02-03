@@ -12,9 +12,9 @@ from .. import math_utils
 from .._internal import with_next
 
 if TYPE_CHECKING:
-    from renderer.types.skin import Skin
+    from .skin import Skin
 
-from renderer.types.zoom_params import ZoomParams
+from .zoom_params import ZoomParams
 
 _T = TypeVar("_T")
 

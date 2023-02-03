@@ -17,8 +17,8 @@ from ray import ObjectRef
 from rich.progress import Progress, track
 
 from .._internal.logger import log
-from ..types.coord import TileCoord
-from ..types.skin import Skin
+from ..misc_types.coord import TileCoord
+from ..misc_types.skin import Skin
 from .utils import ProgressHandler, TextObject, part_dir, wip_tiles_dir
 
 

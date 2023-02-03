@@ -8,12 +8,14 @@ import vector
 from rich.progress import track
 from rich.traceback import install
 
-from . import render
-from ._internal.logger import log
-from .pla1to2 import pla1to2
-from .types.pla2 import Pla2File
-from .types.skin import Skin
-from .types.zoom_params import ZoomParams
+from renderer import render
+
+# noinspection PyProtectedMember
+from renderer._internal.logger import log
+from renderer.misc_types.pla2 import Pla2File
+from renderer.misc_types.skin import Skin
+from renderer.misc_types.zoom_params import ZoomParams
+from renderer.pla1to2 import pla1to2
 
 install(show_locals=True)
 

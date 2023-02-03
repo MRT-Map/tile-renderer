@@ -3,11 +3,11 @@ from importlib import metadata
 import toml
 
 import renderer.math_utils
-import renderer.types
+import renderer.misc_types
 
 from .merge_tiles import merge_tiles
+from .misc_types import *
 from .render import *
-from .types import *
 
 try:
     __version__ = metadata.version(__package__)

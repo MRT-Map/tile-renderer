@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 from shapely import LineString, Polygon
 
 from .. import math_utils
-from ..types.coord import Coord, ImageCoord, TileCoord
+from ..misc_types.coord import Coord, ImageCoord, TileCoord
 
 
 @ray.remote

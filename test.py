@@ -7,9 +7,9 @@ import pytest
 
 import renderer
 import renderer.merge_tiles
+import renderer.misc_types.pla2
 import renderer.render
-import renderer.types.pla2
-from renderer.types.skin import Skin
+from renderer.misc_types.skin import Skin
 
 
 def exampleplaRead() -> dict:
@@ -43,14 +43,14 @@ def test_pytest():
         renderer.merge_tiles.merge_tiles(a, save_images=False)
         return
         # tools
-        renderer.types.pla2.find_ends(p, n)
-        t = renderer.types.pla2.rendered_in(p, n, 8, 8, 16)
+        renderer.misc_types.pla2.find_ends(p, n)
+        t = renderer.misc_types.pla2.rendered_in(p, n, 8, 8, 16)
         g = renderer.tools.component_json.to_geo_json(p, n, s)
         renderer.tools.geo_json.to_component_node_json(g)
 
         l = [(0, 0), (1, 1), (2, 2), (3, 3)]
-        renderer.types.pla2.find_ends(t)
-        renderer.types.pla2.find_ends(l)
+        renderer.misc_types.pla2.find_ends(t)
+        renderer.misc_types.pla2.find_ends(l)
         renderer.tools.line.to_tiles(l, 8, 8, 16)
 
         nl = n.keys()

@@ -2,7 +2,7 @@ import json
 from math import ceil
 from pathlib import Path
 
-from renderer.types.skin_builder import CS, CTI, SkinBuilder, darken, lighten
+from renderer.misc_types.skin_builder import CS, CTI, SkinBuilder, darken, lighten
 
 A_ROAD = 0xFFAAAA
 B_ROAD = 0xFF8000

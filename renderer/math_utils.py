@@ -5,7 +5,7 @@ import math
 import vector
 
 from ._internal import with_next
-from .types.coord import Coord, ImageCoord, ImageLine
+from .misc_types.coord import Coord, ImageCoord, ImageLine
 
 
 def segments_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
@@ -45,7 +45,7 @@ def dash(coords: ImageLine, dash_length: float, gap_length: float) -> list[Image
     """
     Takes a list of coordinates and returns a list of lines that make up a dashed line.
 
-    :param list[renderer.types.Vector2D.Vector2D] coords: the coordinates
+    :param list[renderer.misc_types.Vector2D.Vector2D] coords: the coordinates
     :param float dash_length: the length of each dash
     :param float gap_length: the length of the gap between dashes
     :return: a list of pairs of Vector2Ds.
@@ -124,7 +124,7 @@ def rotate_around_pivot(coord: Coord, pivot: Coord, theta: float) -> Coord:
     :param float theta: angle to rotate in radians
 
     :returns: The rotated coordinates, given in ``(x,y)``
-    :rtype: renderer.types.coord.Coord
+    :rtype: renderer.misc_types.coord.Coord
     """
     coord_vec = vector.obj(x=coord.x, y=coord.y)
     pivot_vec = vector.obj(x=pivot.x, y=pivot.y)

@@ -10,7 +10,7 @@ from rich.progress import track
 
 from ._internal import str_to_tuple
 from ._internal.logger import log
-from .types.coord import TileCoord
+from .misc_types.coord import TileCoord
 
 
 def merge_tiles(

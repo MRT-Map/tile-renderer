@@ -8,10 +8,10 @@ from rich.progress import track
 from vector import Vector2D
 
 from .._internal.logger import log
-from ..types.coord import TileCoord, WorldCoord, WorldLine
-from ..types.pla2 import Component, Pla2File
-from ..types.skin import Skin
-from ..types.zoom_params import ZoomParams
+from ..misc_types.coord import TileCoord, WorldCoord, WorldLine
+from ..misc_types.pla2 import Component, Pla2File
+from ..misc_types.skin import Skin
+from ..misc_types.zoom_params import ZoomParams
 from .utils import part_dir
 
 

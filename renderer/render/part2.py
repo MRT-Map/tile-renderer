@@ -13,7 +13,7 @@ from shapely import prepare
 from shapely.geometry import Polygon
 
 from .._internal.logger import log
-from ..types.coord import TileCoord
+from ..misc_types.coord import TileCoord
 from .utils import TextObject, part_dir
 
 

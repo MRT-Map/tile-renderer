@@ -45,17 +45,17 @@ Validate
 
 Types
 -----
-.. automodule:: renderer.types
+.. automodule:: renderer.misc_types
    :members:
 
 Objects
 -------
 
-.. automodule:: renderer.types.components
+.. automodule:: renderer.misc_types.components
    :members:
 
-.. automodule:: renderer.types.nodes
+.. automodule:: renderer.misc_types.nodes
    :members:
 
-.. automodule:: renderer.types.skin
+.. automodule:: renderer.misc_types.skin
    :members:

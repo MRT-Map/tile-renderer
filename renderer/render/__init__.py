@@ -9,10 +9,10 @@ from PIL import Image
 from vector import Vector2D
 
 from .._internal.logger import log
-from ..types.coord import TileCoord
-from ..types.pla2 import Pla2File
-from ..types.skin import Skin
-from ..types.zoom_params import ZoomParams
+from ..misc_types.coord import TileCoord
+from ..misc_types.pla2 import Pla2File
+from ..misc_types.skin import Skin
+from ..misc_types.zoom_params import ZoomParams
 from .part1 import render_part1
 from .part2 import render_part2
 from .part3 import render_part3

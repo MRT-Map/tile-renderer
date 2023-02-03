@@ -18,10 +18,10 @@ from rich.progress import Progress, track
 from rich.traceback import install
 
 from .._internal.logger import log
-from ..types.coord import TileCoord, WorldCoord
-from ..types.pla2 import Component, Pla2File
-from ..types.skin import Skin
-from ..types.zoom_params import ZoomParams
+from ..misc_types.coord import TileCoord, WorldCoord
+from ..misc_types.pla2 import Component, Pla2File
+from ..misc_types.skin import Skin
+from ..misc_types.zoom_params import ZoomParams
 from .utils import ProgressHandler, TextObject, part_dir, wip_tiles_dir
 
 
@@ -216,7 +216,7 @@ def _count_num_rendering_ops(
         for group in tile_components:
             if not group:
                 continue
-            info = skin.types[group[0].type]
+            info = skin.misc_types[group[0].type]
             for step in info[zoom.max - tile_coord.z]:
                 tile_operations += len(group)
                 if (
