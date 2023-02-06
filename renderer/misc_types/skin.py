@@ -6,7 +6,7 @@ import math
 import os
 import re
 from pathlib import Path
-from typing import Literal
+from typing import TYPE_CHECKING, Literal
 
 import imagehash
 from fontTools.ttLib import TTFont
@@ -19,6 +19,9 @@ from ..render.utils import TextObject
 from . import SkinJson, SkinType
 from .coord import ImageCoord, ImageLine, TileCoord
 from .pla2 import Component
+
+if TYPE_CHECKING:
+    from ..render.part1 import Part1Consts
 
 Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=16)  # type: ignore
 
@@ -178,7 +181,17 @@ class Skin:
                         )
                 raise ValueError(f"No layer `{json['layer']}` in shape `{shape}`")
 
-            def render(self, *args, **kwargs):
+            def render(
+                self,
+                component: Component,
+                imd: ImageDraw.ImageDraw,
+                img: Image.Image,
+                coords: ImageLine,
+                consts: Part1Consts,
+                tile_coord: TileCoord,
+                text_list: list[TextObject],
+                points_text_list: list[TextObject],
+            ):
                 """Renders the component into an ImageDraw instance."""
 
         class PointCircle(ComponentStyle):
@@ -191,7 +204,17 @@ class Skin:
                 self.size: int = json["size"]
                 self.width: int = json["width"]
 
-            def render(self, imd: ImageDraw.ImageDraw, coords: ImageLine, **_):
+            def render(
+                self,
+                component: Component,
+                imd: ImageDraw.ImageDraw,
+                img: Image.Image,
+                coords: ImageLine,
+                consts: Part1Consts,
+                tile_coord: TileCoord,
+                text_list: list[TextObject],
+                points_text_list: list[TextObject],
+            ):
                 coord = coords.coords[0]
                 imd.ellipse(
                     (
@@ -217,30 +240,29 @@ class Skin:
 
             def render(
                 self,
+                component: Component,
                 imd: ImageDraw.ImageDraw,
+                img: Image.Image,
                 coords: ImageLine,
-                display_name: str,
-                assets_dir: Path,
-                points_text_list: list[TextObject],
+                consts: Part1Consts,
                 tile_coord: TileCoord,
-                tile_size: int,
-                temp_dir: Path,
-                export_id: str,
+                text_list: list[TextObject],
+                points_text_list: list[TextObject],
             ):
                 coord = coords.coords[0]
-                if len(display_name.strip()) == 0:
+                if len(component.display_name.strip()) == 0:
                     return
                 font = self._type_info._skin.get_font(
-                    "", self.size + 2, assets_dir, display_name
+                    "", self.size + 2, consts.assets_dir, component.display_name
                 )
-                text_length = int(imd.textlength(display_name, font))
+                text_length = int(imd.textlength(component.display_name, font))
                 pt_i = Image.new(
                     "RGBA", (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0)
                 )
                 pt_d = ImageDraw.Draw(pt_i)
                 pt_d.text(
                     (text_length, self.size + 4),
-                    display_name,
+                    component.display_name,
                     fill=self.colour,
                     font=font,
                     anchor="mm",
@@ -253,16 +275,12 @@ class Skin:
                 points_text_list.append(
                     TextObject(
                         pt_i,
-                        coord.x + self.offset.x,
-                        coord.y + self.offset.y,
-                        tw / 2,
-                        th / 2,
+                        imd,
+                        ImageCoord(coord.x + self.offset.x, coord.y + self.offset.y),
+                        (tw / 2, th / 2),
                         0,
                         tile_coord,
-                        tile_size,
-                        imd,
-                        temp_dir=temp_dir,
-                        export_id=export_id,
+                        consts,
                     )
                 )
 
@@ -276,7 +294,17 @@ class Skin:
                 self.size: int = json["size"]
                 self.width: int = json["width"]
 
-            def render(self, imd: ImageDraw.ImageDraw, coords: ImageLine, **_):
+            def render(
+                self,
+                component: Component,
+                imd: ImageDraw.ImageDraw,
+                img: Image.Image,
+                coords: ImageLine,
+                consts: Part1Consts,
+                tile_coord: TileCoord,
+                text_list: list[TextObject],
+                points_text_list: list[TextObject],
+            ):
                 coord = coords.coords[0]
                 imd.rectangle(
                     (
@@ -299,10 +327,18 @@ class Skin:
                 self.offset: ImageCoord = ImageCoord(*json["offset"])
 
             def render(
-                self, img: Image.Image, coords: ImageLine, assets_dir: Path, **_
+                self,
+                component: Component,
+                imd: ImageDraw.ImageDraw,
+                img: Image.Image,
+                coords: ImageLine,
+                consts: Part1Consts,
+                tile_coord: TileCoord,
+                text_list: list[TextObject],
+                points_text_list: list[TextObject],
             ):
                 coord = coords.coords[0]
-                icon = Image.open(assets_dir / self.file)
+                icon = Image.open(consts.assets_dir / self.file)
                 img.paste(
                     icon,
                     (
@@ -328,11 +364,9 @@ class Skin:
                 img: Image.Image,
                 font: ImageFont.FreeTypeFont,
                 text: str,
-                coords: ImageLine,
                 tile_coord: TileCoord,
-                tile_size: int,
-                temp_dir: Path,
-                export_id: str,
+                coords: ImageLine,
+                consts: Part1Consts,
                 fill: str | None = None,
                 stroke: str | None = None,
                 paste_direct: bool = False,
@@ -420,16 +454,12 @@ class Skin:
                             text_objects.append(
                                 TextObject(
                                     lt_i,
-                                    tx,
-                                    ty,
-                                    tw / 2,
-                                    th / 2,
+                                    imd,
+                                    ImageCoord(tx, ty),
+                                    (tw / 2, th / 2),
                                     trot,
                                     tile_coord,
-                                    tile_size,
-                                    imd,
-                                    temp_dir=temp_dir,
-                                    export_id=export_id,
+                                    consts,
                                 )
                             )
 
@@ -447,22 +477,20 @@ class Skin:
 
             def render(
                 self,
+                component: Component,
                 imd: ImageDraw.ImageDraw,
                 img: Image.Image,
                 coords: ImageLine,
-                assets_dir: Path,
-                component: Component,
-                text_list: list[TextObject],
+                consts: Part1Consts,
                 tile_coord: TileCoord,
-                tile_size: int,
-                temp_dir: Path,
-                export_id: str,
+                text_list: list[TextObject],
+                points_text_list: list[TextObject],
             ):
                 if len(component.display_name) == 0:
                     return
                 # logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating text length")
                 font = self._type_info._skin.get_font(
-                    "", self.size + 2, assets_dir, component.display_name
+                    "", self.size + 2, consts.assets_dir, component.display_name
                 )
                 text_length = int(imd.textlength(component.display_name, font))
                 if text_length == 0:
@@ -495,11 +523,9 @@ class Skin:
                             img,
                             font,
                             component.display_name,
-                            cs,
                             tile_coord,
-                            tile_size,
-                            temp_dir,
-                            export_id,
+                            cs,
+                            consts,
                         )
                         for cs in coord_lines
                     )
@@ -508,7 +534,7 @@ class Skin:
 
                 if "oneWay" in component.tags:
                     font = self._type_info._skin.get_font(
-                        "", self.size + 2, assets_dir, "→"
+                        "", self.size + 2, consts.assets_dir, "→"
                     )
                     arrow_coord_lines = math_utils.dash(
                         coords.parallel_offset(self.offset + self.size * 3 / 16),
@@ -528,11 +554,9 @@ class Skin:
                                 img,
                                 font,
                                 "→",
-                                cs,
                                 tile_coord,
-                                tile_size,
-                                temp_dir,
-                                export_id,
+                                cs,
+                                consts,
                                 fill=self.arrow_colour,
                                 stroke="#00000000",
                                 paste_direct=True,
@@ -553,7 +577,17 @@ class Skin:
                 self.width: int = json["width"]
                 self.dash: tuple[int, int] = json["dash"]
 
-            def render(self, imd: ImageDraw.ImageDraw, coords: ImageLine, **_):
+            def render(
+                self,
+                component: Component,
+                imd: ImageDraw.ImageDraw,
+                img: Image.Image,
+                coords: ImageLine,
+                consts: Part1Consts,
+                tile_coord: TileCoord,
+                text_list: list[TextObject],
+                points_text_list: list[TextObject],
+            ):
                 if self.dash is None:
                     imd.line(
                         [c.as_tuple() for c in coords],
@@ -607,13 +641,14 @@ class Skin:
 
             def render(
                 self,
-                imd: ImageDraw.ImageDraw,
-                coords: ImageLine,
                 component: Component,
-                assets_dir: Path,
-                text_list: list[TextObject],
+                imd: ImageDraw.ImageDraw,
+                img: Image.Image,
+                coords: ImageLine,
+                consts: Part1Consts,
                 tile_coord: TileCoord,
-                tile_size: int,
+                text_list: list[TextObject],
+                points_text_list: list[TextObject],
             ):
                 """TODO fix
                 if len(component.display_name.strip()) == 0:
@@ -705,15 +740,14 @@ class Skin:
 
             def render(
                 self,
-                imd: ImageDraw.ImageDraw,
-                coords: ImageLine,
                 component: Component,
-                assets_dir: Path,
-                text_list: list[TextObject],
+                imd: ImageDraw.ImageDraw,
+                img: Image.Image,
+                coords: ImageLine,
+                consts: Part1Consts,
                 tile_coord: TileCoord,
-                tile_size: int,
-                temp_dir: Path,
-                export_id: str,
+                text_list: list[TextObject],
+                points_text_list: list[TextObject],
             ):
                 if len(component.display_name.strip()) == 0:
                     return
@@ -721,7 +755,7 @@ class Skin:
                     coords.centroid.x + self.offset.x, coords.centroid.y + self.offset.y
                 )
                 font = self._type_info._skin.get_font(
-                    "", self.size + 2, assets_dir, component.display_name
+                    "", self.size + 2, consts.assets_dir, component.display_name
                 )
                 text_length = int(
                     min(
@@ -773,19 +807,7 @@ class Skin:
                 cw, ch = act_i.size[:]
                 act_i = act_i.crop((0, 0, act_i.width, act_i.height))
                 text_list.append(
-                    TextObject(
-                        act_i,
-                        c.x,
-                        c.y,
-                        cw / 2,
-                        ch / 2,
-                        0,
-                        tile_coord,
-                        tile_size,
-                        imd,
-                        temp_dir=temp_dir,
-                        export_id=export_id,
-                    )
+                    TextObject(act_i, imd, c, (cw / 2, ch / 2), 0, tile_coord, consts)
                 )
 
         class AreaFill(ComponentStyle):
@@ -801,13 +823,14 @@ class Skin:
 
             def render(
                 self,
+                component: Component,
                 imd: ImageDraw.ImageDraw,
                 img: Image.Image,
                 coords: ImageLine,
-                component: Component,
+                consts: Part1Consts,
                 tile_coord: TileCoord,
-                size: int,
-                **_,
+                text_list: list[TextObject],
+                points_text_list: list[TextObject],
             ):
                 ai = Image.new(
                     "RGBA",
@@ -912,10 +935,18 @@ class Skin:
                 self.offset: ImageCoord = ImageCoord(*json["offset"])
 
             def render(
-                self, img: Image.Image, coords: ImageLine, assets_dir: Path, **_
+                self,
+                component: Component,
+                imd: ImageDraw.ImageDraw,
+                img: Image.Image,
+                coords: ImageLine,
+                consts: Part1Consts,
+                tile_coord: TileCoord,
+                text_list: list[TextObject],
+                points_text_list: list[TextObject],
             ):
                 cx, cy = (coords.centroid.x, coords.centroid.y)
-                icon = Image.open(assets_dir / self.file)
+                icon = Image.open(consts.assets_dir / self.file)
                 img.paste(icon, (cx + self.offset.x, cy + self.offset.y), icon)
 
     @classmethod

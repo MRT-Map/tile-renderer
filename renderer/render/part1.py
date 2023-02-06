@@ -252,69 +252,16 @@ def _draw_components(
             for component in group:
                 coords = component.nodes.to_image_line(consts.skin, tile_coord, size)
 
-                args = {
-                    "point": {
-                        "circle": (imd, coords),
-                        "text": (
-                            imd,
-                            coords,
-                            component.display_name,
-                            consts.assets_dir,
-                            points_text_list,
-                            tile_coord,
-                            consts.skin.tile_size,
-                            consts.temp_dir,
-                            consts.export_id,
-                        ),
-                        "square": (imd, coords),
-                        "image": (img, coords, consts.assets_dir),
-                    },
-                    "line": {
-                        "text": (
-                            imd,
-                            img,
-                            coords,
-                            consts.assets_dir,
-                            component,
-                            text_list,
-                            tile_coord,
-                            consts.skin.tile_size,
-                            consts.temp_dir,
-                            consts.export_id,
-                        ),
-                        "back": (imd, coords),
-                        "fore": (imd, coords),
-                    },
-                    "area": {
-                        "bordertext": (
-                            imd,
-                            coords,
-                            component,
-                            consts.assets_dir,
-                            text_list,
-                            tile_coord,
-                            consts.skin.tile_size,
-                        ),
-                        "centertext": (
-                            imd,
-                            coords,
-                            component,
-                            consts.assets_dir,
-                            text_list,
-                            tile_coord,
-                            consts.skin.tile_size,
-                            consts.temp_dir,
-                            consts.export_id,
-                        ),
-                        "fill": (imd, img, coords, component, tile_coord, size),
-                        "centerimage": (img, coords, consts.assets_dir),
-                    },
-                }
-
-                if step.layer not in args[type_info.shape].keys():
-                    raise KeyError(f"{step.layer} is not a valid layer")
-                # logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}")
-                step.render(*args[type_info.shape][step.layer])
+                step.render(
+                    component,
+                    imd,
+                    img,
+                    coords,
+                    consts,
+                    tile_coord,
+                    text_list,
+                    points_text_list,
+                )
 
                 if ph:
                     ph.add.remote(tile_coord)
@@ -347,7 +294,16 @@ def _draw_components(
                             )
                             con_imd = ImageDraw.Draw(con_img)
                             con_step: Skin.ComponentTypeInfo.LineFore
-                            con_step.render(con_imd, con_coords)
+                            con_step.render(
+                                con_component,
+                                con_imd,
+                                con_img,
+                                con_coords,
+                                consts,
+                                tile_coord,
+                                text_list,
+                                points_text_list,
+                            )
 
                             con_mask_img = Image.new(
                                 "RGBA", (consts.skin.tile_size,) * 2, (0,) * 4

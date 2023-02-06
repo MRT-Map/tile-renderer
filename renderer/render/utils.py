@@ -2,13 +2,13 @@ from __future__ import annotations
 
 import functools
 import itertools
-import math
 import os
 import uuid
 from copy import copy
 from dataclasses import dataclass
 from pathlib import Path
 from queue import Empty, Queue
+from typing import TYPE_CHECKING
 from uuid import UUID
 
 import ray
@@ -17,6 +17,9 @@ from shapely import LineString, Polygon
 
 from .. import math_utils
 from ..misc_types.coord import Coord, ImageCoord, TileCoord
+
+if TYPE_CHECKING:
+    from ..render.part1 import Part1Consts
 
 
 @ray.remote
@@ -83,42 +86,45 @@ class TextObject:
 
     def __init__(
         self,
-        image: Image.Image,
-        x: float,
-        y: float,
-        w: float,
-        h: float,
+        img: Image.Image,
+        imd: ImageDraw.ImageDraw,
+        center: ImageCoord,
+        width_height: tuple[float, float],
         rot: float,
         tile_coord: TileCoord,
-        tile_size: int,
-        imd: ImageDraw.ImageDraw,
-        temp_dir: Path = Path.cwd() / "temp",
-        export_id: str = "unnamed",
+        consts: Part1Consts,
     ):
+        w, h = width_height
         if os.environ.get("DEBUG"):
             nr = functools.partial(
-                math_utils.rotate_around_pivot, pivot=Coord(x, y), theta=-rot
+                math_utils.rotate_around_pivot, pivot=center, theta=-rot
             )
             imd.line(
                 [
-                    nr(Coord(x - w / 2, y - h / 2)).as_tuple(),
-                    nr(Coord(x - w / 2, y + h / 2)).as_tuple(),
-                    nr(Coord(x + w / 2, y + h / 2)).as_tuple(),
-                    nr(Coord(x + w / 2, y - h / 2)).as_tuple(),
-                    nr(Coord(x - w / 2, y - h / 2)).as_tuple(),
+                    nr(Coord(center.x - w / 2, center.y - h / 2)).as_tuple(),
+                    nr(Coord(center.x - w / 2, center.y + h / 2)).as_tuple(),
+                    nr(Coord(center.x + w / 2, center.y + h / 2)).as_tuple(),
+                    nr(Coord(center.x + w / 2, center.y - h / 2)).as_tuple(),
+                    nr(Coord(center.x - w / 2, center.y - h / 2)).as_tuple(),
                 ],
                 fill="#ff0000",
             )
-        self.temp_dir = temp_dir
-        self.export_id = export_id
+        self.temp_dir = consts.temp_dir
+        self.export_id = consts.export_id
         r = functools.partial(
             math_utils.rotate_around_pivot,
-            pivot=Coord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),
+            pivot=Coord(
+                tile_coord.x * consts.skin.tile_size + center.x,
+                tile_coord.y * consts.skin.tile_size + center.y,
+            ),
             theta=-rot,
         )
-        self.image = [TextObject.img_to_uuid(image, temp_dir, export_id)]
+        self.image = [TextObject.img_to_uuid(img, consts.temp_dir, consts.export_id)]
         self.center = [
-            ImageCoord(tile_coord.x * tile_size + x, tile_coord.y * tile_size + y),
+            ImageCoord(
+                tile_coord.x * consts.skin.tile_size + center.x,
+                tile_coord.y * consts.skin.tile_size + center.y,
+            ),
         ]
         self.bounds = [
             Polygon(
@@ -126,32 +132,32 @@ class TextObject:
                     [
                         r(
                             Coord(
-                                tile_coord.x * tile_size + x - w / 2,
-                                tile_coord.y * tile_size + y - h / 2,
+                                tile_coord.x * consts.skin.tile_size + center.x - w / 2,
+                                tile_coord.y * consts.skin.tile_size + center.y - h / 2,
                             )
                         ).point,
                         r(
                             Coord(
-                                tile_coord.x * tile_size + x - w / 2,
-                                tile_coord.y * tile_size + y + h / 2,
+                                tile_coord.x * consts.skin.tile_size + center.x - w / 2,
+                                tile_coord.y * consts.skin.tile_size + center.y + h / 2,
                             )
                         ).point,
                         r(
                             Coord(
-                                tile_coord.x * tile_size + x + w / 2,
-                                tile_coord.y * tile_size + y + h / 2,
+                                tile_coord.x * consts.skin.tile_size + center.x + w / 2,
+                                tile_coord.y * consts.skin.tile_size + center.y + h / 2,
                             )
                         ).point,
                         r(
                             Coord(
-                                tile_coord.x * tile_size + x + w / 2,
-                                tile_coord.y * tile_size + y - h / 2,
+                                tile_coord.x * consts.skin.tile_size + center.x + w / 2,
+                                tile_coord.y * consts.skin.tile_size + center.y - h / 2,
                             )
                         ).point,
                         r(
                             Coord(
-                                tile_coord.x * tile_size + x - w / 2,
-                                tile_coord.y * tile_size + y - h / 2,
+                                tile_coord.x * consts.skin.tile_size + center.x - w / 2,
+                                tile_coord.y * consts.skin.tile_size + center.y - h / 2,
                             )
                         ).point,
                     ]
