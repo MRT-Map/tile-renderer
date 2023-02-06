@@ -237,7 +237,6 @@ def _draw_components(
     tile_components: list[list[Component]],
     consts: Part1Consts,
 ) -> tuple[TileCoord, list[TextObject]]:
-    size = consts.zoom.range * 2 ** (consts.zoom.max - tile_coord[0])
     img = Image.new(
         mode="RGBA", size=(consts.skin.tile_size,) * 2, color=consts.skin.background
     )
@@ -250,7 +249,9 @@ def _draw_components(
         style = type_info[consts.zoom.max - tile_coord[0]]
         for step in style:
             for component in group:
-                coords = component.nodes.to_image_line(consts.skin, tile_coord, size)
+                coords = component.nodes.to_image_line(
+                    consts.skin, tile_coord, consts.zoom
+                )
 
                 step.render(
                     component,
@@ -286,7 +287,7 @@ def _draw_components(
                                 continue
 
                             con_coords = con_component.nodes.to_image_line(
-                                consts.skin, tile_coord, size
+                                consts.skin, tile_coord, consts.zoom
                             )
 
                             con_img = Image.new(
@@ -312,21 +313,21 @@ def _draw_components(
                             con_mask_imd.ellipse(
                                 (
                                     coord.to_image_coord(
-                                        consts.skin, tile_coord, size
+                                        consts.skin, tile_coord, consts.zoom
                                     ).x
                                     - (max(con_step.width, step.width) * 2) / 2
                                     + 1,
                                     coord.to_image_coord(
-                                        consts.skin, tile_coord, size
+                                        consts.skin, tile_coord, consts.zoom
                                     ).y
                                     - (max(con_step.width, step.width) * 2) / 2
                                     + 1,
                                     coord.to_image_coord(
-                                        consts.skin, tile_coord, size
+                                        consts.skin, tile_coord, consts.zoom
                                     ).x
                                     + (max(con_step.width, step.width) * 2) / 2,
                                     coord.to_image_coord(
-                                        consts.skin, tile_coord, size
+                                        consts.skin, tile_coord, consts.zoom
                                     ).y
                                     + (max(con_step.width, step.width) * 2) / 2,
                                 ),

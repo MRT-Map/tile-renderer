@@ -16,7 +16,7 @@ from PIL import Image, ImageDraw
 from shapely import LineString, Polygon
 
 from .. import math_utils
-from ..misc_types.coord import Coord, ImageCoord, TileCoord
+from ..misc_types.coord import Coord, ImageCoord, TileCoord, WorldCoord
 
 if TYPE_CHECKING:
     from ..render.part1 import Part1Consts
@@ -61,7 +61,7 @@ class ProgressHandler:
 @dataclass(eq=True, unsafe_hash=True)
 class TextObject:
     image: list[UUID]
-    center: list[ImageCoord]
+    center: list[WorldCoord]
     bounds: list[Polygon]
     temp_dir: Path = Path.cwd() / "temp"  # TODO
     export_id: str = "unnamed"
@@ -111,53 +111,51 @@ class TextObject:
             )
         self.temp_dir = consts.temp_dir
         self.export_id = consts.export_id
+
+        self.image = [TextObject.img_to_uuid(img, consts.temp_dir, consts.export_id)]
+        center = center.to_world_coord(consts.skin, tile_coord, consts.zoom)
+        self.center = [center]
         r = functools.partial(
             math_utils.rotate_around_pivot,
-            pivot=Coord(
-                tile_coord.x * consts.skin.tile_size + center.x,
-                tile_coord.y * consts.skin.tile_size + center.y,
-            ),
+            pivot=center,
             theta=-rot,
         )
-        self.image = [TextObject.img_to_uuid(img, consts.temp_dir, consts.export_id)]
-        self.center = [
-            ImageCoord(
-                tile_coord.x * consts.skin.tile_size + center.x,
-                tile_coord.y * consts.skin.tile_size + center.y,
-            ),
-        ]
+        width_height = ImageCoord(w, h).to_world_coord(
+            consts.skin, tile_coord, consts.zoom
+        )
+        w, h = width_height.x, width_height.y
         self.bounds = [
             Polygon(
                 LineString(
                     [
                         r(
                             Coord(
-                                tile_coord.x * consts.skin.tile_size + center.x - w / 2,
-                                tile_coord.y * consts.skin.tile_size + center.y - h / 2,
+                                center.x - w / 2,
+                                center.y - h / 2,
                             )
                         ).point,
                         r(
                             Coord(
-                                tile_coord.x * consts.skin.tile_size + center.x - w / 2,
-                                tile_coord.y * consts.skin.tile_size + center.y + h / 2,
+                                center.x - w / 2,
+                                center.y + h / 2,
                             )
                         ).point,
                         r(
                             Coord(
-                                tile_coord.x * consts.skin.tile_size + center.x + w / 2,
-                                tile_coord.y * consts.skin.tile_size + center.y + h / 2,
+                                center.x + w / 2,
+                                center.y + h / 2,
                             )
                         ).point,
                         r(
                             Coord(
-                                tile_coord.x * consts.skin.tile_size + center.x + w / 2,
-                                tile_coord.y * consts.skin.tile_size + center.y - h / 2,
+                                center.x + w / 2,
+                                center.y - h / 2,
                             )
                         ).point,
                         r(
                             Coord(
-                                tile_coord.x * consts.skin.tile_size + center.x - w / 2,
-                                tile_coord.y * consts.skin.tile_size + center.y - h / 2,
+                                center.x - w / 2,
+                                center.y - h / 2,
                             )
                         ).point,
                     ]

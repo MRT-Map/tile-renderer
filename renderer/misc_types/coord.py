@@ -58,15 +58,24 @@ class Coord:
 
 
 class ImageCoord(Coord):
-    pass
+    def to_world_coord(
+        self, skin: Skin, tile_coord: TileCoord, zoom: ZoomParams
+    ) -> WorldCoord:
+        size = zoom.range * 2 ** (zoom.max - tile_coord[0])
+        xc = size / skin.tile_size * self.x
+        yc = size / skin.tile_size * self.y
+        xs = xc + tile_coord.x * size
+        ys = yc + tile_coord.y * size
+        return WorldCoord(xs, ys)
 
 
 class WorldCoord(Coord):
     """Represents a coordinate in the form ``(x, y)``."""
 
     def to_image_coord(
-        self, skin: Skin, tile_coord: TileCoord, size: float | int
+        self, skin: Skin, tile_coord: TileCoord, zoom: ZoomParams
     ) -> ImageCoord:
+        size = zoom.range * 2 ** (zoom.max - tile_coord[0])
         xc = self.x - tile_coord.x * size
         yc = self.y - tile_coord.y * size
         xs = int(skin.tile_size / size * xc)
@@ -195,15 +204,9 @@ class Line:
 
 class WorldLine(Line):
     def to_image_line(
-        self, skin: Skin, tile_coord: TileCoord, size: float | int
+        self, skin: Skin, tile_coord: TileCoord, zoom: ZoomParams
     ) -> ImageLine:
-        image_coords = []
-        for coord in self:
-            xc = coord.x - tile_coord.x * size
-            yc = coord.y - tile_coord.y * size
-            xs = int(skin.tile_size / size * xc)
-            ys = int(skin.tile_size / size * yc)
-            image_coords.append(ImageCoord(xs, ys))
+        image_coords = [a.to_image_coord(skin, tile_coord, zoom) for a in self]
         return ImageLine(image_coords)
 
     @property  # type: ignore
@@ -216,6 +219,12 @@ class WorldLine(Line):
 
 
 class ImageLine(Line):
+    def to_world_line(
+        self, skin: Skin, tile_coord: TileCoord, zoom: ZoomParams
+    ) -> ImageLine:
+        image_coords = [a.to_world_coord(skin, tile_coord, zoom) for a in self]
+        return ImageLine(image_coords)
+
     @property  # type: ignore
     def coords(self) -> list[ImageCoord]:
         return [c for c in self]

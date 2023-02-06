@@ -85,4 +85,4 @@ def render(
         part1_serial,
     )
     render_part2(export_id, temp_dir)
-    return render_part3(export_id, skin, save_images, save_dir, temp_dir)
+    return render_part3(export_id, zoom, skin, save_images, save_dir, temp_dir)

@@ -8,6 +8,7 @@ import re
 import shutil
 import traceback
 from pathlib import Path
+from typing import TYPE_CHECKING
 
 import dill
 import psutil
@@ -16,6 +17,8 @@ from PIL import Image
 from ray import ObjectRef
 from rich.progress import Progress, track
 
+if TYPE_CHECKING:
+    from .. import ZoomParams
 from .._internal.logger import log
 from ..misc_types.coord import TileCoord
 from ..misc_types.skin import Skin
@@ -52,6 +55,7 @@ def task_spawner(
 
 def render_part3(
     export_id: str,
+    zoom: ZoomParams,
     skin: Skin = Skin.from_name("default"),
     save_images: bool = True,
     save_dir: Path = Path.cwd(),
@@ -76,7 +80,14 @@ def render_part3(
     if serial:
         pre_result = [
             _draw_text(
-                None, [tile_coord], save_images, save_dir, skin, export_id, temp_dir
+                None,
+                [tile_coord],
+                zoom,
+                save_images,
+                save_dir,
+                skin,
+                export_id,
+                temp_dir,
             )
             for tile_coord in track(tile_coords, description="[green]Rendering texts")
         ]
@@ -89,6 +100,7 @@ def render_part3(
             ray.remote(_draw_text).remote(
                 ph,
                 text_lists,
+                zoom,
                 save_images,
                 save_dir,
                 skin,
@@ -134,6 +146,7 @@ def render_part3(
 def _draw_text(
     ph: ObjectRef[ProgressHandler] | None,
     tile_coords: list[TileCoord],
+    zoom: ZoomParams,
     save_images: bool,
     save_dir: Path,
     skin: Skin,
@@ -168,17 +181,12 @@ def _draw_text(
                     img = TextObject.uuid_to_img(img_uuid, temp_dir, export_id).convert(
                         "RGBA"
                     )
+                    center = center.to_image_coord(skin, tile_coord, zoom)
                     image.alpha_composite(
                         img,
                         (
-                            int(
-                                center.x - tile_coord.x * skin.tile_size - img.width / 2
-                            ),
-                            int(
-                                center.y
-                                - tile_coord.y * skin.tile_size
-                                - img.height / 2
-                            ),
+                            int(center.x - img.width / 2),
+                            int(center.y - img.height / 2),
                         ),
                     )
 
