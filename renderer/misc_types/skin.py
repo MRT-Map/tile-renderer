@@ -424,7 +424,7 @@ class Skin:
                                     ty,
                                     tw / 2,
                                     th / 2,
-                                    trot * 180 / math.pi,
+                                    trot,
                                     tile_coord,
                                     tile_size,
                                     imd,

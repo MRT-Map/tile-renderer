@@ -95,7 +95,6 @@ class TextObject:
         temp_dir: Path = Path.cwd() / "temp",
         export_id: str = "unnamed",
     ):
-        rot *= math.pi / 180
         if os.environ.get("DEBUG"):
             nr = functools.partial(
                 math_utils.rotate_around_pivot, pivot=Coord(x, y), theta=-rot
