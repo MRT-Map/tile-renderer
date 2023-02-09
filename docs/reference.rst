@@ -13,49 +13,47 @@ Main
 
 .. autofunction:: merge_tiles
 
-Tools
------
-.. automodule:: renderer.tools.components
-   :members:
-
-.. automodule:: renderer.tools.coord
-   :members:
-
-.. automodule:: renderer.tools.geo_json
-   :members:
-
-.. automodule:: renderer.tools.line
-   :members:
-
-.. automodule:: renderer.tools.nodes
-   :members:
-
-.. automodule:: renderer.tools.tile
-   :members:
-
-Math Tools
-----------
-.. automodule:: renderer.mathtools
-   :members:
-
-Validate
---------
-.. automodule:: renderer.validate
-   :members:
-
 Types
 -----
 .. automodule:: renderer.misc_types
    :members:
 
-Objects
--------
-
-.. automodule:: renderer.misc_types.components
+.. automodule:: renderer.misc_types.coord
    :members:
 
-.. automodule:: renderer.misc_types.nodes
+.. automodule:: renderer.misc_types.pla2
    :members:
 
 .. automodule:: renderer.misc_types.skin
+   :members:
+
+.. automodule:: renderer.misc_types.skin_builder
+   :members:
+
+.. automodule:: renderer.misc_types.zoom_params
+   :members:
+
+Math Utils
+----------
+.. automodule:: renderer.math_utils
+   :members:
+
+Rendering
+---------
+.. automodule:: renderer.render
+   :members:
+
+.. automodule:: renderer.render.prepare
+   :members:
+
+.. automodule:: renderer.render.part1
+   :members:
+
+.. automodule:: renderer.render.part2
+   :members:
+
+.. automodule:: renderer.render.part3
+   :members:
+
+.. automodule:: renderer.render.utils
    :members:

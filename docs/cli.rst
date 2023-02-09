@@ -6,32 +6,11 @@ For more help, run ``renderer <task> -h``
  .. program-output:: python -m renderer -h
     :cwd: ..
 
-.. describe:: renderer nodebuilder
+.. describe:: renderer 1to2
 
-   Run the node builder for Minecraft.
+   Converts PLA1 files to PLA2 format.
 
-   .. program-output:: python -m renderer nodebuilder -h
-      :cwd: ..
-
-.. describe:: renderer compbuilder
-
-   Run the component builder for nodes.
-
-    .. program-output:: python -m renderer compbuilder -h
-       :cwd: ..
-
-.. describe:: renderer validate
-
-   Validate a single JSON file.
-
-    .. program-output:: python -m renderer validate -h
-       :cwd: ..
-
-.. describe:: renderer vdir
-
-   Validate a folder of JSON files.
-
-    .. program-output:: python -m renderer vdir -h
+    .. program-output:: python -m renderer 1to2 -h
        :cwd: ..
 
 .. describe:: renderer render
@@ -46,4 +25,11 @@ For more help, run ``renderer <task> -h``
    Merge tiles.
 
     .. program-output:: python -m renderer merge -h
+       :cwd: ..
+
+.. describe:: renderer info
+
+   Get renderer info.
+
+    .. program-output:: python -m renderer info -h
        :cwd: ..

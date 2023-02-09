@@ -1,5 +1,12 @@
 Changelog
 =========
+* **v3.0 (/23)**
+
+  * Massive amounts of API refactoring
+  * Move entire project to Poetry
+  * implement PLA2 format
+  * TODO list all bug fixes
+
 * **v2.2 (13/5/22)**
 
   * Multiline text is now centered
