@@ -20,6 +20,14 @@ from .utils import TextObject, part_dir
 def file_loader(
     zoom: int, temp_dir: Path, export_id: str
 ) -> Generator[tuple[TileCoord, list[TextObject]], Any, None]:
+    """
+    Loads the intermediate files for a certain zoom level
+
+    :param zoom: The zoom to look for
+    :param temp_dir: The temporary directory to look into
+    :param export_id: The export ID to look into
+    :return: The files
+    """
     for file in glob.glob(
         str(part_dir(temp_dir, export_id, 1) / f"tile_{zoom},*.dill")
     ):
@@ -32,6 +40,7 @@ def file_loader(
 def render_part2(
     export_id: str, temp_dir: Path = Path.cwd() / "temp"
 ) -> dict[TileCoord, list[TextObject]]:
+    """Part 2 of the rendering job. Check render() for the full list of parameters"""
     zooms = {}
     log.info("Determining zoom levels...")
     for file in glob.glob(str(part_dir(temp_dir, export_id, 1) / f"tile_*.dill")):

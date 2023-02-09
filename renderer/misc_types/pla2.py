@@ -3,7 +3,7 @@ from __future__ import annotations
 import itertools
 from collections import Counter
 from pathlib import Path
-from typing import Any, Generator, Tuple, Type
+from typing import Any, Generator, Type
 
 import msgspec.json
 from msgspec import Struct
@@ -14,18 +14,30 @@ from .zoom_params import ZoomParams
 
 
 class Component(Struct):
+    """A component to be rendered"""
+
     namespace: str
+    """The namespace that the coordinate belongs to"""
     id: str
+    """The ID of the component"""
     display_name: str
+    """This will appear on the map itself, if the component type's style has a Text layer"""
     description: str
+    """The description of the component"""
     type: str
+    """The component type of the map"""
     layer: float
+    """The layer of the component. Higher numbers mean further in front"""
     nodes: WorldLine
+    """The nodes of the component"""
     tags: list[str]
+    """The tags of the component"""
     attrs: dict | None = None
+    """Additional attributes of the component, will probably be used in newer versions"""
 
     @property
     def fid(self) -> str:
+        """The full ID of the component (<namespace>-<id>)"""
         return f"{self.namespace}-{self.id}"
 
     @staticmethod
@@ -36,7 +48,6 @@ class Component(Struct):
         :param ComponentList components: a JSON of components
 
         :returns: The minimum and maximum X and Y values
-        :rtype: Tuple[float, float, float, float]
         """
         bounds = [component.nodes.bounds for component in components]
         return Bounds(
@@ -57,9 +68,6 @@ class Component(Struct):
         :param zoom_params: The zoom parameters
 
         :returns: A list of tile coordinates
-        :rtype: List[TileCoord]
-
-        :raises ValueError: if max_zoom < min_zoom
         """
         tiles = [component.nodes.to_tiles(zoom_params) for component in components]
         return list(set(itertools.chain(*tiles)))
@@ -90,11 +98,22 @@ _msgpack_encoder = msgspec.msgpack.Encoder(enc_hook=_enc_hook)
 
 
 class Pla2File(Struct):
+    """Represents a PLA2 file"""
+
     namespace: str
+    """The namespace of the file, all components included belong to this namespace"""
     components: list[Component]
+    """The components in the file"""
 
     @staticmethod
     def from_file(file: Path) -> Pla2File:
+        """
+        Load a PLA2 file, can be either in JSON or MessagePack format
+
+        :param file: The file to load from
+
+        :return: The PLA2 file
+        """
         if file.suffix == ".msgpack":
             return Pla2File.from_msgpack(file)
         else:
@@ -102,6 +121,13 @@ class Pla2File(Struct):
 
     @staticmethod
     def from_json(file: Path) -> Pla2File:
+        """
+        Load a PLA2 file, must be in JSON
+
+        :param file: The file to load from
+
+        :return: The PLA2 file
+        """
         with open(file, "rb") as f:
             b = f.read()
         return Pla2File(
@@ -111,6 +137,13 @@ class Pla2File(Struct):
 
     @staticmethod
     def from_msgpack(file: Path) -> Pla2File:
+        """
+        Load a PLA2 file, must be in MessagePack
+
+        :param file: The file to load from
+
+        :return: The PLA2 file
+        """
         with open(file, "rb") as f:
             b = f.read()
         return Pla2File(
@@ -119,15 +152,32 @@ class Pla2File(Struct):
         )
 
     def save_json(self, directory: Path):
+        """
+        Save the PLA2 file in JSON format
+
+        :param directory: The directory to save the file in
+        """
         with open(directory / f"{self.namespace}.pla2.json", "wb+") as f:
             f.write(_json_encoder.encode(self.components))
 
     def save_msgpack(self, directory: Path):
+        """
+        Save the PLA2 file in MessagePack format
+
+        :param directory: The directory to save the file in
+        """
         with open(directory / f"{self.namespace}.pla2.msgpack", "wb+") as f:
             f.write(_msgpack_encoder.encode(self.components))
 
     @staticmethod
     def validate(comps: list[Component]) -> list[Component]:
+        """
+        Check for duplicate IDs
+
+        :param comps: The list of components to look for
+        :return: The same list of components
+        :raises ValueError: if a duplicated ID is found
+        """
         count = {
             k: v
             for k, v in Counter(component.fid for component in comps).items()
@@ -154,4 +204,5 @@ class Pla2File(Struct):
 
     @property
     def ids(self) -> list[str]:
+        """A list of IDs that all the components have"""
         return [comp.fid for comp in self.components]

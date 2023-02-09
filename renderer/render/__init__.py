@@ -35,7 +35,6 @@ def render(
     part1_chunk_size: int = 8,
     part1_serial: bool = False,
 ) -> dict[TileCoord, Image.Image]:
-    # noinspection GrazieInspection
     """
     Renders tiles from given coordinates and zoom values.
 
@@ -56,8 +55,8 @@ def render(
     :type tiles: list[TileCoord] | None
     :param offset: the offset to shift all node coordinates by, given as ``(x,y)``
     :type offset: tuple[float, float]
-    :param int part1_batch_size: The batch size for part 1 of the rendering
-    :param int part1_chunk_size: The chunk size for part 1 of the rendering
+    :param int part1_batch_size: The batch size for part 1
+    :param int part1_chunk_size: The chunk size for part 1
     :param int part1_serial: Whether part 1 will be run serially
 
     :returns: Given in the form of ``{tile_coord: image}``

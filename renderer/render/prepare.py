@@ -93,6 +93,7 @@ def prepare_render(
     offset: Vector2D = vector.obj(x=0, y=0),
     temp_dir: Path = Path.cwd() / "temp",
 ) -> dict[TileCoord, list[list[Component]]]:
+    """The data-preparing step of the rendering job. Check render() for the full list of parameters"""
     log.info("Offsetting coordinates...")
     for component in components:
         component.nodes = WorldLine(

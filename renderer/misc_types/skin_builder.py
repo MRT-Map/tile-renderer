@@ -1,10 +1,25 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import Literal
+from typing import Literal, overload
+
+
+@overload
+def hex_to_colour(h: int) -> str:
+    pass
+
+
+@overload
+def hex_to_colour(h: None) -> None:
+    pass
 
 
 def hex_to_colour(h: int | None) -> str | None:
+    """
+    Converts a hex colour, represented as an integer, into a string of format ``#XXXXXX``
+    :param h: The hex code (``0xXXXXXX``)
+    :return: The string
+    """
     if h is None:
         return None
     nh = hex(h)[2:]
@@ -14,6 +29,15 @@ def hex_to_colour(h: int | None) -> str | None:
 
 
 def blend(h1: int, h2: int, prop: float = 0.5) -> int:
+    """
+    Blend two colours together
+
+    :param h1: The first colour
+    :param h2: The second colour
+    :param prop: The proportion of the second colour, between 0.0 and 1.0
+
+    :return: The final colour
+    """
     nh1 = hex(h1)[2:].zfill(6)
     nh2 = hex(h2)[2:].zfill(6)
     r = hex(round(int(nh1[0:2], base=16) * (1 - prop) + int(nh2[0:2], base=16) * prop))[
@@ -29,6 +53,14 @@ def blend(h1: int, h2: int, prop: float = 0.5) -> int:
 
 
 def darken(h1: int, strength: float = 0.5) -> int:
+    """
+    Darken a colour
+
+    :param h1: The colour
+    :param strength: The strength of the darkening, between 0.0 and 1.0
+
+    :return: The final colour
+    """
     nh1 = hex(h1)[2:].zfill(6)
     r = int(nh1[0:2], base=16) / 255
     g = int(nh1[2:4], base=16) / 255
@@ -47,6 +79,14 @@ def darken(h1: int, strength: float = 0.5) -> int:
 
 
 def lighten(h1: int, strength: float = 0.5) -> int:
+    """
+    Lighten a colour
+
+    :param h1: The colour
+    :param strength: The strength of the lightening, between 0.0 and 1.0
+
+    :return: The final colour
+    """
     nh1 = hex(h1)[2:].zfill(6)
     r = int(nh1[0:2], base=16) / 255
     g = int(nh1[2:4], base=16) / 255

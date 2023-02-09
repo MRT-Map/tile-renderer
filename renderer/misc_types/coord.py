@@ -20,6 +20,8 @@ _T = TypeVar("_T")
 
 
 class Coord:
+    """Represents a 2-dimensional point. Wrapper of shapely.Point"""
+
     __slots__ = ("point",)
 
     def __init__(self, *args: float | Point):
@@ -36,13 +38,16 @@ class Coord:
 
     @property
     def x(self) -> float:
+        """The x-coordinate of the point"""
         return self.point.x
 
     @property
     def y(self) -> float:
+        """The y-coordinate of the point"""
         return self.point.y
 
     def as_tuple(self) -> tuple[float, float]:
+        """Represent the coordinates as a tuple"""
         return self.point.x, self.point.y
 
     @staticmethod
@@ -58,9 +63,20 @@ class Coord:
 
 
 class ImageCoord(Coord):
+    """Represents a 2-dimensional coordinate on an image"""
+
     def to_world_coord(
         self, skin: Skin, tile_coord: TileCoord, zoom: ZoomParams
     ) -> WorldCoord:
+        """
+        Converts the coordinate to a WorldCoord
+
+        :param skin: The skin that the render job is using
+        :param tile_coord: The tile coordinate that the coordinate is part of
+        :param zoom: The zoom parameters
+
+        :return: The world coordinate
+        """
         size = zoom.range * 2 ** (zoom.max - tile_coord[0])
         xc = size / skin.tile_size * self.x
         yc = size / skin.tile_size * self.y
@@ -70,11 +86,20 @@ class ImageCoord(Coord):
 
 
 class WorldCoord(Coord):
-    """Represents a coordinate in the form ``(x, y)``."""
+    """Represents a 2-dimensional coordinate in the world"""
 
     def to_image_coord(
         self, skin: Skin, tile_coord: TileCoord, zoom: ZoomParams
     ) -> ImageCoord:
+        """
+        Converts the coordinate to an ImageCoord
+
+        :param skin: The skin that the render job is using
+        :param tile_coord: The tile coordinate that the coordinate is part of
+        :param zoom: The zoom parameters
+
+        :return: The image coordinate
+        """
         size = zoom.range * 2 ** (zoom.max - tile_coord[0])
         xc = self.x - tile_coord.x * size
         yc = self.y - tile_coord.y * size
@@ -83,14 +108,12 @@ class WorldCoord(Coord):
         return ImageCoord(xs, ys)
 
     def tiles(self, zoom_params: ZoomParams) -> list[TileCoord]:
-        # noinspection GrazieInspection
         """
         Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
 
         :param ZoomParams zoom_params: The zoom parameters
 
         :returns: A list of tile coordinates
-        :rtype: List[TileCoord]
         """
         tiles = []
         range_ = zoom_params.range
@@ -105,6 +128,8 @@ class WorldCoord(Coord):
 
 @dataclass
 class Bounds(Generic[_T]):
+    """Represents a bounding box, like a rectangle"""
+
     __slots__ = "x_max", "x_min", "y_max", "y_min"
     x_max: _T
     x_min: _T
@@ -113,6 +138,8 @@ class Bounds(Generic[_T]):
 
 
 class Line:
+    """Represents a 2-dimensional line. Wrapper of shapely.LineString"""
+
     __slots__ = ("line",)
 
     def __init__(self, line: list[Coord] | LineString):
@@ -132,6 +159,7 @@ class Line:
 
     @property
     def coords(self) -> list[Coord]:
+        """The coordinates in the line"""
         return [c for c in self]
 
     def __iter__(self) -> Generator[Coord, Any, None]:
@@ -147,7 +175,7 @@ class Line:
         Find the minimum and maximum x/y values in a list of coords.
 
         :returns: Returns in the form ``(x_max, x_min, y_max, y_min)``
-        :rtype: Tuple[float, float, float, float]"""
+        """
         return Bounds(
             x_max=max(c.x for c in self.coords),
             x_min=min(c.x for c in self.coords),
@@ -155,22 +183,23 @@ class Line:
             y_min=min(c.y for c in self.coords),
         )
 
-    def parallel_offset(self, *args, **kwargs):
+    def parallel_offset(self, *args, **kwargs) -> Line:
+        """Calls shapely.LineString.parallel_offset()"""
         return Line(self.line.parallel_offset(*args, **kwargs))
 
     @property
     def centroid(self):
+        """Calls shapely.LineString.centroid()"""
         return self.line.centroid
 
     def to_tiles(self, z: ZoomParams) -> list[TileCoord]:
         """
-        Generates tile coordinates from list of regular coordinates using :py:func:`tools.coord.to_tiles()`.
+        Generates tile coordinates from a list of regular coordinates.
             Mainly for rendering whole components.
 
         :param ZoomParams z: The zoom params
 
         :returns: A list of tile coordinates
-        :rtype: List[TileCoord]
         """
 
         bounds = Bounds(
@@ -187,6 +216,13 @@ class Line:
         return list(set(chain(*tiles)))
 
     def in_bounds(self, bounds: Bounds[int]) -> bool:
+        """
+        Finds whether any part of the LineString is entirely within a bound
+
+        :param bounds: The bounds to check for
+
+        :return: If the above is true
+        """
         for c1, c2 in with_next([a for a in self]):
             for c3, c4 in (
                 (Coord(bounds.y_max, bounds.x_min), Coord(bounds.y_min, bounds.x_min)),
@@ -203,17 +239,29 @@ class Line:
 
 
 class WorldLine(Line):
+    """Represents a line in the world"""
+
     def __init__(self, line: list[WorldCoord] | LineString):
         super().__init__(line)  # type: ignore
 
     def to_image_line(
         self, skin: Skin, tile_coord: TileCoord, zoom: ZoomParams
     ) -> ImageLine:
+        """
+        Converts the line into an ImageLine
+
+        :param skin: The skin that the render job is using
+        :param tile_coord: The tile coordinate that the coordinate is part of
+        :param zoom: The zoom parameters
+
+        :return: The image line
+        """
         image_coords = [a.to_image_coord(skin, tile_coord, zoom) for a in self]
         return ImageLine(image_coords)
 
     @property  # type: ignore
     def coords(self) -> list[WorldCoord]:
+        """The coordinates in the line"""
         return [c for c in self]
 
     def __iter__(self) -> Generator[WorldCoord, Any, None]:
@@ -228,11 +276,21 @@ class ImageLine(Line):
     def to_world_line(
         self, skin: Skin, tile_coord: TileCoord, zoom: ZoomParams
     ) -> WorldLine:
+        """
+        Converts the line into a WorldLine
+
+        :param skin: The skin that the render job is using
+        :param tile_coord: The tile coordinate that the coordinate is part of
+        :param zoom: The zoom parameters
+
+        :return: The world coordinate
+        """
         image_coords = [a.to_world_coord(skin, tile_coord, zoom) for a in self]
         return WorldLine(image_coords)
 
     @property  # type: ignore
     def coords(self) -> list[ImageCoord]:
+        """The coordinates in the line"""
         return [c for c in self]
 
     def __iter__(self) -> Generator[ImageCoord, Any, None]:
@@ -244,8 +302,11 @@ class TileCoord(NamedTuple):
     """Represents a tile coordinate in the form ``(z, x, y)``."""
 
     z: int
+    """Represents zoom"""
     x: int
+    """Represents x-coordinate"""
     y: int
+    """Represents y-coordinate"""
 
     def __str__(self) -> str:
         return f"{self.z}, {self.x}, {self.y}"
@@ -258,7 +319,6 @@ class TileCoord(NamedTuple):
         :param List[TileCoord] tile_coords: a list of tile coordinates, provide in a tuple of ``(z,x,y)``
 
         :returns: Returns in the form ``(x_max, x_min, y_max, y_min)``
-        :rtype: Tuple[float, float, float, float]
         """
 
         return Bounds(

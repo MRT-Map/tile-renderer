@@ -33,6 +33,7 @@ def task_spawner(
     cursor: int,
     consts: Part1Consts,
 ) -> list[ObjectRef[dict[TileCoord, list[TextObject]] | None]]:  # type: ignore
+    """The task spawner used for part 1"""
     while cursor < len(tile_chunks):
         if ray.get(ph.needs_new_task.remote()):  # type: ignore
             output: ObjectRef[dict[TileCoord, list[TextObject]] | None]  # type: ignore
@@ -47,6 +48,8 @@ def task_spawner(
 
 @dataclass(frozen=True, init=True)
 class Part1Consts:
+    """The constants used for part 1"""
+
     coord_to_comp: dict[WorldCoord, list[Component]]
     skin: Skin
     zoom: ZoomParams
@@ -65,6 +68,7 @@ def render_part1(
     temp_dir: Path = Path.cwd() / "temp",
     serial: bool = False,
 ) -> dict[TileCoord, list[TextObject]]:
+    """Part 1 of the rendering job. Check render() for the full list of parameters"""
     tile_coords = []
     with open(part_dir(temp_dir, export_id, 0) / f"processed.dill", "rb") as f:
         components: Pla2File = dill.load(f)

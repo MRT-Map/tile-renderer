@@ -38,6 +38,7 @@ def task_spawner(
     cursor: int,
     futures: list[ObjectRef[dict[TileCoord, Image.Image] | None]],  # type: ignore
 ) -> list[ObjectRef[dict[TileCoord, Image.Image] | None]]:  # type: ignore
+    """The task spawner used for part 3"""
     while cursor < len(chunks):
         if ray.get(ph.needs_new_task.remote()):  # type: ignore
             output = ray.remote(_draw_text).remote(
@@ -65,6 +66,7 @@ def render_part3(
     serial: bool = False,
     batch_size: int = psutil.cpu_count(),
 ) -> dict[TileCoord, Image.Image]:
+    """Part 3 of the rendering job. Check render() for the full list of parameters"""
     tile_coords = []
     for file in glob.glob(str(part_dir(temp_dir, export_id, 2) / f"tile_*.dill")):
         re_result = re.search(rf"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)

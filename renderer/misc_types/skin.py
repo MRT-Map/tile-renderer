@@ -60,7 +60,6 @@ class Skin:
         :param Path assets_dir: Where the font is stored
         :param str rendered_text: The text that is rendered with the font, to allow for fallbacks
         :return: The font
-        :rtype: ImageFont.FreeTypeFont
         :raises FileNotFoundError: if font is not found"""
         if style in self.fonts.keys():
             pil_font = None
@@ -86,7 +85,9 @@ class Skin:
 
         :param str name: Will set ``name``
         :param SkinType json: The JSON of the component type
-        :param list[str] order: Will set ``_order``"""
+        :param list[str] order: Will set ``_order``
+        :param skin: The skin that the render job is using
+        """
 
         def __init__(self, name: str, json: SkinType, order: list[str], skin: Skin):
             self.name: str = name
@@ -195,6 +196,8 @@ class Skin:
                 """Renders the component into an ImageDraw instance."""
 
         class PointCircle(ComponentStyle):
+            """Represents a circle of a point"""
+
             # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info = type_info
@@ -229,6 +232,8 @@ class Skin:
                 )
 
         class PointText(ComponentStyle):
+            """Represents a text of a point"""
+
             # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info = type_info
@@ -285,6 +290,8 @@ class Skin:
                 )
 
         class PointSquare(ComponentStyle):
+            """Represents a square of a point"""
+
             # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info = type_info
@@ -319,6 +326,8 @@ class Skin:
                 )
 
         class PointImage(ComponentStyle):
+            """Represents an image of a point"""
+
             # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info = type_info
@@ -349,6 +358,8 @@ class Skin:
                 )
 
         class LineText(ComponentStyle):
+            """Represents text of a point"""
+
             # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info: Skin.ComponentTypeInfo = type_info
@@ -569,6 +580,8 @@ class Skin:
                     )
 
         class LineBack(ComponentStyle):
+            """Represents the back layer of a line"""
+
             # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info = type_info
@@ -625,12 +638,16 @@ class Skin:
                         )
 
         class LineFore(LineBack):
+            """Represent the front layer of a line"""
+
             # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 super().__init__(json, type_info)
                 self.layer = "fore"
 
         class AreaBorderText(ComponentStyle):
+            """Represent the border text of an area. Will be rendered in the future"""
+
             # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info = type_info
@@ -730,6 +747,8 @@ class Skin:
                             )"""
 
         class AreaCenterText(ComponentStyle):
+            """Represents the text at the centre of an area"""
+
             # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info = type_info
@@ -811,6 +830,8 @@ class Skin:
                 )
 
         class AreaFill(ComponentStyle):
+            """Represents the fill and outline of an area"""
+
             # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info = type_info
@@ -927,6 +948,8 @@ class Skin:
                         )
 
         class AreaCenterImage(ComponentStyle):
+            """Represents the image at the centre of an area"""
+
             # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self.type_info: Skin.ComponentTypeInfo = type_info
@@ -957,7 +980,6 @@ class Skin:
         :param str name: the name of the skin
 
         :returns: The skin
-        :rtype: Skin
 
         :raises FileNotFoundError: if skin does not exist
         """
