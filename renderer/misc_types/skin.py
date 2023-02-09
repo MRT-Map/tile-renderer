@@ -9,6 +9,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Literal
 
 import imagehash
+import methodtools
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont
 from schema import And, Optional, Or, Regex, Schema
@@ -49,6 +50,7 @@ class Skin:
     def __getitem__(self, type_name: str) -> ComponentTypeInfo:
         return self.misc_types[type_name]
 
+    @methodtools.lru_cache()
     def get_font(
         self, style: str, size: int, assets_dir: Path, rendered_text: str = ""
     ) -> ImageFont.FreeTypeFont:

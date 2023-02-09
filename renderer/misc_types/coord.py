@@ -6,6 +6,7 @@ from dataclasses import dataclass
 from itertools import chain
 from typing import TYPE_CHECKING, Any, Generator, Generic, NamedTuple, TypeVar
 
+import methodtools as methodtools
 from shapely.geometry import LineString, Point  # type: ignore
 
 from .. import math_utils
@@ -19,13 +20,18 @@ from .zoom_params import ZoomParams
 _T = TypeVar("_T")
 
 
+@functools.cache
+def _inner(*args: float | Point):
+    return Point(*args)
+
+
 class Coord:
     """Represents a 2-dimensional point. Wrapper of shapely.Point"""
 
     __slots__ = ("point",)
 
     def __init__(self, *args: float | Point):
-        self.point = Point(*args)
+        self.point = _inner(*args)
 
     def __repr__(self):
         return f"{type(self).__name__} <{repr(self.point)}>"
@@ -88,6 +94,7 @@ class ImageCoord(Coord):
 class WorldCoord(Coord):
     """Represents a 2-dimensional coordinate in the world"""
 
+    @methodtools.lru_cache()
     def to_image_coord(
         self, skin: Skin, tile_coord: TileCoord, zoom: ZoomParams
     ) -> ImageCoord:
@@ -237,6 +244,9 @@ class Line:
                 return True
         return False
 
+    def __hash__(self):
+        return hash(self.coords)
+
 
 class WorldLine(Line):
     """Represents a line in the world"""
@@ -259,7 +269,7 @@ class WorldLine(Line):
         image_coords = [a.to_image_coord(skin, tile_coord, zoom) for a in self]
         return ImageLine(image_coords)
 
-    @property  # type: ignore
+    @functools.cached_property  # type: ignore
     def coords(self) -> list[WorldCoord]:
         """The coordinates in the line"""
         return [c for c in self]
@@ -288,7 +298,7 @@ class ImageLine(Line):
         image_coords = [a.to_world_coord(skin, tile_coord, zoom) for a in self]
         return WorldLine(image_coords)
 
-    @property  # type: ignore
+    @functools.cached_property  # type: ignore
     def coords(self) -> list[ImageCoord]:
         """The coordinates in the line"""
         return [c for c in self]

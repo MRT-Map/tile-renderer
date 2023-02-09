@@ -33,9 +33,10 @@ rich = "^13.3.1"
 ray = "^2.2.0"
 toml = "^0.10.2"
 Shapely = "^2.0a1"
-msgspec = "^0.12.0"
+msgspec = "^0.13.0"
 dill = "^0.3.5.1"
 six = "^1.16.0"
+methodtools = "^0.4.7"
 
 [tool.poetry.group.dev.dependencies]
 wheel = "^0.37.1"
