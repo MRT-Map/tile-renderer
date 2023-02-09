@@ -278,6 +278,9 @@ class WorldLine(Line):
         for c in self.line.coords:
             yield WorldCoord(*c)
 
+    def parallel_offset(self, *args, **kwargs) -> WorldLine:
+        return WorldLine(super().parallel_offset(*args, **kwargs).line)
+
 
 class ImageLine(Line):
     def __init__(self, line: list[ImageCoord] | LineString):
@@ -306,6 +309,9 @@ class ImageLine(Line):
     def __iter__(self) -> Generator[ImageCoord, Any, None]:
         for c in self.line.coords:
             yield ImageCoord(*c)
+
+    def parallel_offset(self, *args, **kwargs) -> ImageLine:
+        return ImageLine(super().parallel_offset(*args, **kwargs).line)
 
 
 class TileCoord(NamedTuple):
