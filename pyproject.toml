@@ -58,8 +58,3 @@ build-backend = "poetry.core.masonry.api"
 
 [tool.mypy]
 mypy_path = "$MYPY_CONFIG_FILE_DIR/stubs"
-exclude = ["stubs"]
-
-[[tools.mypy.overrides]]
-modules = ["stubs"]
-ignore_missing_imports = true

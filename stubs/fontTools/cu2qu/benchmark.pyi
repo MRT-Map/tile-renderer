@@ -1,0 +1,16 @@
+from .cu2qu import *
+
+MAX_ERR: int
+
+def generate_curve(): ...
+def setup_curve_to_quadratic(): ...
+def setup_curves_to_quadratic(): ...
+def run_benchmark(
+    benchmark_module,
+    module,
+    function,
+    setup_suffix: str = ...,
+    repeat: int = ...,
+    number: int = ...,
+): ...
+def main() -> None: ...

@@ -1,0 +1,9 @@
+from _typeshed import Incomplete
+from fontTools.ttLib.ttVisitor import TTVisitor
+
+class ScalerVisitor(TTVisitor):
+    scaleFactor: Incomplete
+    def __init__(self, scaleFactor) -> None: ...
+    def scale(self, v): ...
+
+def scale_upem(font, new_upem) -> None: ...

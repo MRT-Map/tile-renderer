@@ -27,14 +27,15 @@ from .utils import ProgressHandler, TextObject, part_dir, wip_tiles_dir
 
 @ray.remote
 def task_spawner(
-    ph: ObjectRef[ProgressHandler],
+    ph: ObjectRef[ProgressHandler],  # type: ignore
     tile_chunks: list[list[TileCoord]],
-    futures: list[ObjectRef[dict[TileCoord, list[TextObject]]]],
+    futures: list[ObjectRef[dict[TileCoord, list[TextObject]] | None]],  # type: ignore
     cursor: int,
     consts: Part1Consts,
-) -> list[ObjectRef[dict[TileCoord, list[TextObject]]]]:
+) -> list[ObjectRef[dict[TileCoord, list[TextObject]] | None]]:  # type: ignore
     while cursor < len(tile_chunks):
-        if ray.get(ph.needs_new_task.remote()):
+        if ray.get(ph.needs_new_task.remote()):  # type: ignore
+            output: ObjectRef[dict[TileCoord, list[TextObject]] | None]  # type: ignore
             output = ray.remote(_pre_draw_components).remote(
                 ph, tile_chunks[cursor], consts
             )
@@ -88,7 +89,7 @@ def render_part1(
         for node in comp.nodes:
             coord_to_comp.setdefault(node, []).append(comp)
 
-    consts: ObjectRef[Part1Consts] = ray.put(
+    consts: ObjectRef[Part1Consts] = ray.put(  # type: ignore
         Part1Consts(
             coord_to_comp,
             skin,
@@ -114,13 +115,15 @@ def render_part1(
     tile_chunks = [
         tile_coords[i : i + chunk_size] for i in range(0, len(tile_coords), chunk_size)
     ]
-    ph = ProgressHandler.remote()
+    ph = ProgressHandler.remote()  # type: ignore
 
+    futures: list[ObjectRef[dict[TileCoord, list[TextObject]] | None]]  # type: ignore
     futures = [
         ray.remote(_pre_draw_components).remote(ph, tile_coords, consts)
         for tile_coords in track(tile_chunks[:batch_size], "Spawning initial tasks")
     ]
     cursor = batch_size
+    future_refs: ObjectRef[list[ObjectRef[dict[TileCoord, list[TextObject]] | None]]]  # type: ignore
     future_refs = task_spawner.remote(ph, tile_chunks, futures, cursor, consts)
     with Progress() as progress:
         main_id = progress.add_task(
@@ -137,16 +140,19 @@ def render_part1(
             progress.advance(main_id, 1)
         progress.update(main_id, completed=sum(operations.values()))
 
-    pre_result: list[dict[TileCoord, list[TextObject]]] = ray.get(ray.get(future_refs))
+    pre_pre_result: list[ObjectRef[dict[TileCoord, list[TextObject]] | None]]  # type: ignore
+    pre_pre_result = ray.get(future_refs)
+    pre_result: list[dict[TileCoord, list[TextObject]] | None] = ray.get(pre_pre_result)
     result = {}
     for a in pre_result:
-        result.update(a)
+        if a is not None:
+            result.update(a)
     os.remove(part_dir(temp_dir, export_id, 0) / f"processed.dill")
     return result
 
 
 def _pre_draw_components(
-    ph: ObjectRef[ProgressHandler] | None,
+    ph: ObjectRef[ProgressHandler] | None,  # type: ignore
     tile_coords: list[TileCoord],
     consts: Part1Consts,
 ) -> dict[TileCoord, list[TextObject]] | None:
@@ -176,20 +182,20 @@ def _pre_draw_components(
                     dill.dump({out[0]: out[1]}, f)
             results[out[0]] = out[1]
         if ph:
-            ph.request_new_task.remote()
+            ph.request_new_task.remote()  # type: ignore
         return results
     except Exception as e:
         log.error(f"Error in ray task: {e!r}")
         log.error(traceback.format_exc())
         if ph:
-            ph.request_new_task.remote()
+            ph.request_new_task.remote()  # type: ignore
         return None
 
 
 def _count_num_rendering_ops(
     export_id: str, skin: Skin, zoom: ZoomParams, temp_dir: Path
 ) -> dict[TileCoord, int]:
-    grouped_tile_list: dict[TileCoord, list[list[Pla2File]]] = {}
+    grouped_tile_list: dict[TileCoord, list[list[Component]]] = {}
     for file in track(
         glob.glob(str(part_dir(temp_dir, export_id, 0) / f"tile_*.dill")),
         description="Loading data",
@@ -206,6 +212,9 @@ def _count_num_rendering_ops(
 
     tile_operations = 0
     operations = {}
+
+    tile_coord: TileCoord
+    tile_components: list[list[Component]]
     for tile_coord, tile_components in track(
         grouped_tile_list.items(), description="Counting operations"
     ):
@@ -232,7 +241,7 @@ def _count_num_rendering_ops(
 
 
 def _draw_components(
-    ph: ObjectRef[ProgressHandler] | None,
+    ph: ObjectRef[ProgressHandler] | None,  # type: ignore
     tile_coord: TileCoord,
     tile_components: list[list[Component]],
     consts: Part1Consts,
@@ -265,15 +274,15 @@ def _draw_components(
                 )
 
                 if ph:
-                    ph.add.remote(tile_coord)
+                    ph.add.remote(tile_coord)  # type: ignore
 
             if (
                 type_info.shape == "line"
                 and "road" in type_info.tags
-                and step.layer == "back"
+                and isinstance(step, Skin.ComponentTypeInfo.LineBack)
             ):
+                coord: WorldCoord
                 for coord in chain(*(c.nodes.coords for c in group)):
-                    coord: WorldCoord
                     for con_component in consts.coord_to_comp[coord]:
                         if "road" not in consts.skin[con_component.type].tags:
                             continue
@@ -283,7 +292,9 @@ def _draw_components(
                         )
                         con_info = consts.skin[con_component.type]
                         for con_step in con_info[consts.zoom.max - tile_coord.z]:
-                            if con_step.layer != "fore":
+                            if not isinstance(
+                                con_step, Skin.ComponentTypeInfo.LineFore
+                            ):
                                 continue
 
                             con_coords = con_component.nodes.to_image_line(
@@ -294,7 +305,6 @@ def _draw_components(
                                 "RGBA", (consts.skin.tile_size,) * 2, (0,) * 4
                             )
                             con_imd = ImageDraw.Draw(con_img)
-                            con_step: Skin.ComponentTypeInfo.LineFore
                             con_step.render(
                                 con_component,
                                 con_imd,
@@ -338,7 +348,7 @@ def _draw_components(
                         img.paste(inter, (0, 0), inter)
 
                 if ph:
-                    ph.add.remote(tile_coord)
+                    ph.add.remote(tile_coord)  # type: ignore
 
     text_list += points_text_list
     text_list.reverse()
@@ -348,6 +358,6 @@ def _draw_components(
         "png",
     )
     if ph:
-        ph.complete.remote(tile_coord)
+        ph.complete.remote(tile_coord)  # type: ignore
 
     return tile_coord, text_list

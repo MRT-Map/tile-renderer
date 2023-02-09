@@ -3,7 +3,7 @@ from typing import Any, Literal, TypedDict
 try:
     from typing import TypeAlias
 except ImportError:
-    TypeAlias = type
+    TypeAlias = type  # type: ignore
 
 Pla1NodeJson = TypedDict("Pla1NodeJson", {"x": int, "y": int, "connections": list})
 """Represents a node JSON object."""

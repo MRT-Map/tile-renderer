@@ -113,49 +113,49 @@ class TextObject:
         self.export_id = consts.export_id
 
         self.image = [TextObject.img_to_uuid(img, consts.temp_dir, consts.export_id)]
-        center = center.to_world_coord(consts.skin, tile_coord, consts.zoom)
-        self.center = [center]
+        new_center = center.to_world_coord(consts.skin, tile_coord, consts.zoom)
+        self.center = [new_center]
         r = functools.partial(
             math_utils.rotate_around_pivot,
-            pivot=center,
+            pivot=new_center,
             theta=-rot,
         )
-        width_height = ImageCoord(w, h).to_world_coord(
+        new_width_height = ImageCoord(w, h).to_world_coord(
             consts.skin, tile_coord, consts.zoom
         )
-        w, h = width_height.x, width_height.y
+        w, h = new_width_height.x, new_width_height.y
         self.bounds = [
             Polygon(
                 LineString(
                     [
                         r(
                             Coord(
-                                center.x - w / 2,
-                                center.y - h / 2,
+                                new_center.x - w / 2,
+                                new_center.y - h / 2,
                             )
                         ).point,
                         r(
                             Coord(
-                                center.x - w / 2,
-                                center.y + h / 2,
+                                new_center.x - w / 2,
+                                new_center.y + h / 2,
                             )
                         ).point,
                         r(
                             Coord(
-                                center.x + w / 2,
-                                center.y + h / 2,
+                                new_center.x + w / 2,
+                                new_center.y + h / 2,
                             )
                         ).point,
                         r(
                             Coord(
-                                center.x + w / 2,
-                                center.y - h / 2,
+                                new_center.x + w / 2,
+                                new_center.y - h / 2,
                             )
                         ).point,
                         r(
                             Coord(
-                                center.x - w / 2,
-                                center.y - h / 2,
+                                new_center.x - w / 2,
+                                new_center.y - h / 2,
                             )
                         ).point,
                     ]

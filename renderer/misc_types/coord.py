@@ -203,6 +203,9 @@ class Line:
 
 
 class WorldLine(Line):
+    def __init__(self, line: list[WorldCoord] | LineString):
+        super().__init__(line)  # type: ignore
+
     def to_image_line(
         self, skin: Skin, tile_coord: TileCoord, zoom: ZoomParams
     ) -> ImageLine:
@@ -219,11 +222,14 @@ class WorldLine(Line):
 
 
 class ImageLine(Line):
+    def __init__(self, line: list[ImageCoord] | LineString):
+        super().__init__(line)  # type: ignore
+
     def to_world_line(
         self, skin: Skin, tile_coord: TileCoord, zoom: ZoomParams
-    ) -> ImageLine:
+    ) -> WorldLine:
         image_coords = [a.to_world_coord(skin, tile_coord, zoom) for a in self]
-        return ImageLine(image_coords)
+        return WorldLine(image_coords)
 
     @property  # type: ignore
     def coords(self) -> list[ImageCoord]:

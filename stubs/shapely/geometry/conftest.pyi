@@ -1,0 +1,3 @@
+from .linestring import LineString as LineString
+
+def add_linestring(doctest_namespace) -> None: ...

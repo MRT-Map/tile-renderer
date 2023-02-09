@@ -100,7 +100,7 @@ class Skin:
             self.styles: dict[
                 tuple[int, int], list[Skin.ComponentTypeInfo.ComponentStyle]
             ] = {
-                str_to_tuple(range_): [
+                str_to_tuple(range_): [  # type: ignore
                     self.ComponentStyle(v, self, shape=self.shape) for v in value
                 ]
                 for range_, value in json["style"].items()
@@ -817,9 +817,9 @@ class Skin:
                 self.layer = "fill"
                 self.colour: str | None = json["colour"]
                 self.outline: str | None = json["outline"]
-                self.stripe: tuple[int, int, int] | None = (
-                    None if json["stripe"] is None else tuple(json["stripe"])
-                )
+                self.stripe: tuple[int, int, int] | None = (  # type: ignore
+                    None if json["stripe"] is None else tuple(json["stripe"])  # type: ignore
+                )  # TODO find way to typecheck this
 
             def render(
                 self,

@@ -27,21 +27,23 @@ from .utils import ProgressHandler, TextObject, part_dir, wip_tiles_dir
 
 @ray.remote
 def task_spawner(
-    ph: ObjectRef[ProgressHandler],
+    ph: ObjectRef[ProgressHandler],  # type: ignore
     chunks: list[list[TileCoord]],
+    zoom: ZoomParams,
     save_images: bool,
     save_dir: Path,
     skin: Skin,
     export_id: str,
     temp_dir: Path,
     cursor: int,
-    futures: list[ObjectRef[dict[TileCoord, Image.Image] | None]],
-) -> list[ObjectRef[dict[TileCoord, Image.Image] | None]]:
+    futures: list[ObjectRef[dict[TileCoord, Image.Image] | None]],  # type: ignore
+) -> list[ObjectRef[dict[TileCoord, Image.Image] | None]]:  # type: ignore
     while cursor < len(chunks):
-        if ray.get(ph.needs_new_task.remote()):
+        if ray.get(ph.needs_new_task.remote()):  # type: ignore
             output = ray.remote(_draw_text).remote(
                 ph,
                 chunks[cursor],
+                zoom,
                 save_images,
                 save_dir,
                 skin,
@@ -78,7 +80,7 @@ def render_part3(
 
     log.info(f"Rendering texts in {len(tile_coords)} tiles...")
     if serial:
-        pre_result = [
+        pre_result: list[dict[TileCoord, Image.Image] | None] = [
             _draw_text(
                 None,
                 [tile_coord],
@@ -95,7 +97,7 @@ def render_part3(
         chunks = [tile_coords[i : i + 10] for i in range(0, len(tile_coords), 10)]
         gc.collect()
 
-        ph = ProgressHandler.remote()
+        ph = ProgressHandler.remote()  # type: ignore
         futures = [
             ray.remote(_draw_text).remote(
                 ph,
@@ -109,9 +111,11 @@ def render_part3(
             )
             for text_lists in track(chunks[:batch_size], "Spawning initial tasks")
         ]
+        future_refs: ObjectRef[list[ObjectRef[dict[TileCoord, Image.Image] | None]]]  # type: ignore
         future_refs = task_spawner.remote(
             ph,
             chunks,
+            zoom,
             save_images,
             save_dir,
             skin,
@@ -131,7 +135,9 @@ def render_part3(
                 num_complete += 1
             progress.update(main_id, completed=len(tile_coords))
 
-        pre_result = ray.get(ray.get(future_refs))
+        pre_pre_result: list[ObjectRef[dict[TileCoord, Image.Image] | None]]  # type: ignore
+        pre_pre_result = ray.get(future_refs)
+        pre_result = ray.get(pre_pre_result)
     result: dict[TileCoord, Image.Image] = {}
     for i in pre_result:
         if i is not None:
@@ -144,7 +150,7 @@ def render_part3(
 
 
 def _draw_text(
-    ph: ObjectRef[ProgressHandler] | None,
+    ph: ObjectRef[ProgressHandler] | None,  # type: ignore
     tile_coords: list[TileCoord],
     zoom: ZoomParams,
     save_images: bool,
@@ -168,7 +174,7 @@ def _draw_text(
                 ).convert("RGBA")
             except FileNotFoundError:
                 if ph:
-                    ph.add.remote(tile_coord)
+                    ph.add.remote(tile_coord)  # type: ignore
                 continue
 
             # antialiasing
@@ -181,12 +187,12 @@ def _draw_text(
                     img = TextObject.uuid_to_img(img_uuid, temp_dir, export_id).convert(
                         "RGBA"
                     )
-                    center = center.to_image_coord(skin, tile_coord, zoom)
+                    new_center = center.to_image_coord(skin, tile_coord, zoom)
                     image.alpha_composite(
                         img,
                         (
-                            int(center.x - img.width / 2),
-                            int(center.y - img.height / 2),
+                            int(new_center.x - img.width / 2),
+                            int(new_center.y - img.height / 2),
                         ),
                     )
 
@@ -196,9 +202,9 @@ def _draw_text(
             out[tile_coord] = image
 
             if ph:
-                ph.add.remote(tile_coord)
+                ph.add.remote(tile_coord)  # type: ignore
         if ph:
-            ph.request_new_task.remote()
+            ph.request_new_task.remote()  # type: ignore
 
         return out
     except Exception as e:

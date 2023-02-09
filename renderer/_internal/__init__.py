@@ -25,7 +25,7 @@ def write_json(file: Path | str, data: dict, pp: bool = False):
         f.close()
 
 
-def str_to_tuple(s: str) -> tuple:
+def str_to_tuple(s: str) -> tuple[int, ...]:
     return tuple([int(x) for x in s.split(", ")])
 
 
