@@ -89,7 +89,7 @@ def prepare_render(
     export_id: str,
     skin: Skin = Skin.from_name("default"),
     tiles: list[TileCoord] | None = None,
-    zooms: list[int] | None = None,  # TODO
+    zooms: list[int] | None = None,
     offset: Vector2D = vector.obj(x=0, y=0),
     temp_dir: Path = Path.cwd() / "temp",
 ) -> dict[TileCoord, list[list[Component]]]:

@@ -87,7 +87,7 @@ class WorldCoord(Coord):
         """
         Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
 
-        :param ZoomParams zoom_params: TODO
+        :param ZoomParams zoom_params: The zoom parameters
 
         :returns: A list of tile coordinates
         :rtype: List[TileCoord]
@@ -167,7 +167,7 @@ class Line:
         Generates tile coordinates from list of regular coordinates using :py:func:`tools.coord.to_tiles()`.
             Mainly for rendering whole components.
 
-        :param ZoomParams z: TODO
+        :param ZoomParams z: The zoom params
 
         :returns: A list of tile coordinates
         :rtype: List[TileCoord]

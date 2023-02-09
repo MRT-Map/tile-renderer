@@ -50,7 +50,7 @@ def render(
     :param int save_images: whether to save the tile images in a folder or not
     :param Path save_dir: the directory to save tiles in
     :param Path assets_dir: the asset directory for the skin
-    :param Path temp_dir: TODO
+    :param Path temp_dir: the temporary data folder that will be used to save data
     :param int processes: The amount of processes to run for rendering
     :param tiles: a list of tiles to render
     :type tiles: list[TileCoord] | None
@@ -58,7 +58,7 @@ def render(
     :type offset: tuple[float, float]
     :param int part1_batch_size: The batch size for part 1 of the rendering
     :param int part1_chunk_size: The chunk size for part 1 of the rendering
-    :param int part1_serial: TODO
+    :param int part1_serial: Whether part 1 will be run serially
 
     :returns: Given in the form of ``{tile_coord: image}``
     :rtype: dict[TileCoord, Image.Image]

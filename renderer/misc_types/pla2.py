@@ -35,7 +35,7 @@ class Component(Struct):
 
         :param ComponentList components: a JSON of components
 
-        :returns: TODO
+        :returns: The minimum and maximum X and Y values
         :rtype: Tuple[float, float, float, float]
         """
         bounds = [component.nodes.bounds for component in components]
@@ -54,7 +54,7 @@ class Component(Struct):
         Like :py:func:`tools.line.to_tiles`, but for a JSON of components.
 
         :param ComponentList components: a JSON of components
-        :param zoom_params: TODO
+        :param zoom_params: The zoom parameters
 
         :returns: A list of tile coordinates
         :rtype: List[TileCoord]

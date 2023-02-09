@@ -63,7 +63,7 @@ class TextObject:
     image: list[UUID]
     center: list[WorldCoord]
     bounds: list[Polygon]
-    temp_dir: Path = Path.cwd() / "temp"  # TODO
+    temp_dir: Path = Path.cwd() / "temp"
     export_id: str = "unnamed"
 
     @staticmethod
