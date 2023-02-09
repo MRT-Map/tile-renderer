@@ -8,7 +8,7 @@ import vector
 from rich.progress import track
 from rich.traceback import install
 
-from renderer import render
+from renderer import __version__, merge_tiles, render
 
 # noinspection PyProtectedMember
 from renderer._internal.logger import log
@@ -159,7 +159,7 @@ def main():
     args = parser.parse_args()
 
     if args.task == "info":
-        log.info(f"[yellow]tile-renderer [cyan]v{renderer.__version__}")
+        log.info(f"[yellow]tile-renderer [cyan]v{__version__}")
         log.info(
             "[yellow]Made by 7d for the OpenMRTMap project of the Minecart Rapid Transit Mapping Services"
         )
@@ -182,6 +182,8 @@ def main():
             tiles=args.tiles,
             offset=vector.obj(x=args.offset[0], y=args.offset[1]),
         )
+    elif args.task == "merge":
+        merge_tiles(args.image_dir, True, args.save_dir, args.zoom)
     elif args.task == "1to2":
         comps = {}
         for file in track(

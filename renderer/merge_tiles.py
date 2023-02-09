@@ -32,7 +32,6 @@ def merge_tiles(
     :type zoom: list[int] | None
 
     :returns: Given in the form of ``(Zoom): (PIL Image)``
-    :rtype: dict[int, Image.Image]
     """
     if zoom is None:
         zoom = []
@@ -60,9 +59,10 @@ def merge_tiles(
         tile_coords = list(to_merge.keys())
         bounds = TileCoord.bounds(tile_coords)
         tile_size = list(image_dict.values())[0].size[0]
-        log.info(
-            f"Zoom {z}: [dim white]Creating image {tile_size*(bounds.x_max-bounds.x_min+1)}x{tile_size*(bounds.y_max-bounds.y_min+1)}"
+        x, y = tile_size * (bounds.x_max - bounds.x_min + 1), tile_size * (
+            bounds.y_max - bounds.y_min + 1
         )
+        log.info(f"Zoom {z}: [dim white]Creating image {x}x{y}")
         i = Image.new(
             "RGBA",
             (
