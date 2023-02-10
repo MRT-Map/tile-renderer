@@ -1,11 +1,26 @@
 Changelog
 =========
-* **v3.0 (/23)**
+* **v3.0.0 (10/2/23)**
 
-  * Massive amounts of API refactoring
-  * Move entire project to Poetry
-  * implement PLA2 format
-  * TODO list all bug fixes
+  * Add NotoSans and NotoSans-SC to rendering typefaces
+  * Fix parts of the default skin
+  * Lots of API changes, reorganisation and refactoring
+  * Now uses ``rich`` to print logs and progress bars
+  * Migrate project to use Poetry
+  * Each Ray task now renders multiple tiles at once instead of one per task
+  * Builders are now removed (use stencil instead!)
+  * Implement PLA2 format
+  * Add PLA1 to PLA2 converter
+  * Project now uses ``pre-commit``
+  * ``temp`` file is now moved out of package to present working directory
+  * Image is now a ``webp`` instead of a ``png``
+  * Task managers for parallel parts 1 and 3
+  * Images are now antialised
+  * Replace ``pickle`` with ``dill``
+  * Further fix text overlapping
+  * Attempts to fix diagonal text offsets (may not be working :( )
+  * ``mypy`` is now used for better type checking
+  * Docs are now working again
 
 * **v2.2 (13/5/22)**
 
