@@ -1,0 +1,16 @@
+from _typeshed import Incomplete
+
+from . import DefaultTable as DefaultTable
+
+tsi0Format: str
+
+def fixlongs(glyphID, textLength, textOffset): ...
+
+class table_T_S_I__0(DefaultTable.DefaultTable):
+    dependencies: Incomplete
+    indices: Incomplete
+    extra_indices: Incomplete
+    def decompile(self, data, ttFont) -> None: ...
+    def compile(self, ttFont): ...
+    def set(self, indices, extra_indices) -> None: ...
+    def toXML(self, writer, ttFont) -> None: ...

@@ -1,0 +1,23 @@
+from _typeshed import Incomplete
+from fontTools import ttLib as ttLib
+from fontTools.misc.roundTools import otRound as otRound
+from fontTools.misc.textTools import safeEval as safeEval
+
+from . import DefaultTable as DefaultTable
+
+log: Incomplete
+
+class table__h_m_t_x(DefaultTable.DefaultTable):
+    headerTag: str
+    advanceName: str
+    sideBearingName: str
+    numberOfMetricsName: str
+    longMetricFormat: str
+    metrics: Incomplete
+    def decompile(self, data, ttFont) -> None: ...
+    def compile(self, ttFont): ...
+    def toXML(self, writer, ttFont) -> None: ...
+    def fromXML(self, name, attrs, content, ttFont) -> None: ...
+    def __delitem__(self, glyphName) -> None: ...
+    def __getitem__(self, glyphName): ...
+    def __setitem__(self, glyphName, advance_sb_pair) -> None: ...

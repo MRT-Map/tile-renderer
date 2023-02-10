@@ -1,11 +1,18 @@
-from renderer.base import merge_tiles, render
-import renderer.mathtools
-import renderer.validate
-import renderer.types
-from renderer.objects.nodes import *
-from renderer.objects.components import *
-from renderer.objects.skin import *
-from renderer.objects.skinbuilder import *
-from renderer.objects.zoom_params import *
+from importlib import metadata
 
-__version__ = '2.2'
+import toml
+
+import renderer.math_utils
+import renderer.misc_types
+
+from .merge_tiles import *
+from .misc_types import *
+from .render import *
+
+try:
+    __version__ = metadata.version(__package__)
+except metadata.PackageNotFoundError:
+    try:
+        __version__ = toml.load("pyproject.toml")["tool"]["poetry"]["version"]
+    except FileNotFoundError:
+        __version__ = "unknown"

@@ -1,7 +1,7 @@
 Tutorials
 =========
 
-**Note: still under construction**
+**Note: horrendously outdated**
 
 Below is a set of tutorials to help you to build and render leaflet.js tiles.
 

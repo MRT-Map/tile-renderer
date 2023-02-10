@@ -1,0 +1,343 @@
+from collections import namedtuple as namedtuple
+from enum import IntEnum
+
+from _typeshed import Incomplete
+from fontTools.feaLib.lookupDebugInfo import (
+    LOOKUP_DEBUG_INFO_KEY as LOOKUP_DEBUG_INFO_KEY,
+)
+from fontTools.feaLib.lookupDebugInfo import LookupDebugInfo as LookupDebugInfo
+from fontTools.misc.roundTools import otRound as otRound
+from fontTools.misc.textTools import bytesjoin as bytesjoin
+from fontTools.misc.textTools import pad as pad
+from fontTools.misc.textTools import safeEval as safeEval
+
+from .otBase import BaseTable as BaseTable
+from .otBase import CountReference as CountReference
+from .otBase import FormatSwitchingBaseTable as FormatSwitchingBaseTable
+from .otBase import ValueRecord as ValueRecord
+from .otBase import getFormatSwitchingBaseTableClass as getFormatSwitchingBaseTableClass
+
+log: Incomplete
+
+class AATStateTable:
+    GlyphClasses: Incomplete
+    States: Incomplete
+    PerGlyphLookups: Incomplete
+    def __init__(self) -> None: ...
+
+class AATState:
+    Transitions: Incomplete
+    def __init__(self) -> None: ...
+
+class AATAction:
+    @staticmethod
+    def compileActions(font, states): ...
+
+class RearrangementMorphAction(AATAction):
+    staticSize: int
+    actionHeaderSize: int
+    NewState: int
+    Verb: int
+    MarkFirst: bool
+    DontAdvance: bool
+    MarkLast: bool
+    ReservedFlags: int
+    def __init__(self) -> None: ...
+    def compile(self, writer, font, actionIndex) -> None: ...
+    def decompile(self, reader, font, actionReader) -> None: ...
+    def toXML(self, xmlWriter, font, attrs, name) -> None: ...
+    def fromXML(self, name, attrs, content, font) -> None: ...
+
+class ContextualMorphAction(AATAction):
+    staticSize: int
+    actionHeaderSize: int
+    NewState: int
+    ReservedFlags: int
+    def __init__(self) -> None: ...
+    def compile(self, writer, font, actionIndex) -> None: ...
+    SetMark: Incomplete
+    DontAdvance: Incomplete
+    MarkIndex: Incomplete
+    CurrentIndex: Incomplete
+    def decompile(self, reader, font, actionReader) -> None: ...
+    def toXML(self, xmlWriter, font, attrs, name) -> None: ...
+    def fromXML(self, name, attrs, content, font) -> None: ...
+
+class LigAction:
+    Store: bool
+    GlyphIndexDelta: int
+    def __init__(self) -> None: ...
+
+class LigatureMorphAction(AATAction):
+    staticSize: int
+    actionHeaderSize: int
+    NewState: int
+    ReservedFlags: int
+    Actions: Incomplete
+    def __init__(self) -> None: ...
+    def compile(self, writer, font, actionIndex) -> None: ...
+    SetComponent: Incomplete
+    DontAdvance: Incomplete
+    def decompile(self, reader, font, actionReader) -> None: ...
+    @staticmethod
+    def compileActions(font, states): ...
+    def compileLigActions(self): ...
+    def fromXML(self, name, attrs, content, font) -> None: ...
+    def toXML(self, xmlWriter, font, attrs, name) -> None: ...
+
+class InsertionMorphAction(AATAction):
+    staticSize: int
+    actionHeaderSize: int
+    NewState: int
+    ReservedFlags: int
+    def __init__(self) -> None: ...
+    def compile(self, writer, font, actionIndex) -> None: ...
+    SetMark: Incomplete
+    DontAdvance: Incomplete
+    CurrentIsKashidaLike: Incomplete
+    MarkedIsKashidaLike: Incomplete
+    CurrentInsertBefore: Incomplete
+    MarkedInsertBefore: Incomplete
+    CurrentInsertionAction: Incomplete
+    MarkedInsertionAction: Incomplete
+    def decompile(self, reader, font, actionReader) -> None: ...
+    def toXML(self, xmlWriter, font, attrs, name) -> None: ...
+    def fromXML(self, name, attrs, content, font) -> None: ...
+    @staticmethod
+    def compileActions(font, states): ...
+
+class FeatureParams(BaseTable):
+    def compile(self, writer, font) -> None: ...
+    def toXML(
+        self,
+        xmlWriter,
+        font,
+        attrs: Incomplete | None = ...,
+        name: Incomplete | None = ...,
+    ) -> None: ...
+
+class FeatureParamsSize(FeatureParams): ...
+class FeatureParamsStylisticSet(FeatureParams): ...
+class FeatureParamsCharacterVariants(FeatureParams): ...
+
+class Coverage(FormatSwitchingBaseTable):
+    glyphs: Incomplete
+    def populateDefaults(self, propagator: Incomplete | None = ...) -> None: ...
+    def postRead(self, rawTable, font): ...
+    Format: Incomplete
+    def preWrite(self, font): ...
+    def toXML2(self, xmlWriter, font) -> None: ...
+    def fromXML(self, name, attrs, content, font) -> None: ...
+
+NO_VARIATION_INDEX: int
+
+class DeltaSetIndexMap:
+    mapping: Incomplete
+    def populateDefaults(self, propagator: Incomplete | None = ...) -> None: ...
+    def postRead(self, rawTable, font) -> None: ...
+    @staticmethod
+    def getEntryFormat(mapping): ...
+    Format: Incomplete
+    def preWrite(self, font): ...
+    def toXML2(self, xmlWriter, font) -> None: ...
+    def fromXML(self, name, attrs, content, font) -> None: ...
+
+class VarIdxMap(BaseTable):
+    mapping: Incomplete
+    def populateDefaults(self, propagator: Incomplete | None = ...) -> None: ...
+    def postRead(self, rawTable, font) -> None: ...
+    def preWrite(self, font): ...
+    def toXML2(self, xmlWriter, font) -> None: ...
+    def fromXML(self, name, attrs, content, font) -> None: ...
+
+class VarRegionList(BaseTable):
+    RegionAxisCount: Incomplete
+    def preWrite(self, font): ...
+
+class SingleSubst(FormatSwitchingBaseTable):
+    mapping: Incomplete
+    def populateDefaults(self, propagator: Incomplete | None = ...) -> None: ...
+    def postRead(self, rawTable, font) -> None: ...
+    Format: Incomplete
+    def preWrite(self, font): ...
+    def toXML2(self, xmlWriter, font) -> None: ...
+    def fromXML(self, name, attrs, content, font) -> None: ...
+
+class MultipleSubst(FormatSwitchingBaseTable):
+    mapping: Incomplete
+    def populateDefaults(self, propagator: Incomplete | None = ...) -> None: ...
+    def postRead(self, rawTable, font) -> None: ...
+    Format: int
+    def preWrite(self, font): ...
+    def toXML2(self, xmlWriter, font) -> None: ...
+    old_coverage_: Incomplete
+    def fromXML(self, name, attrs, content, font) -> None: ...
+    @staticmethod
+    def makeSequence_(g): ...
+
+class ClassDef(FormatSwitchingBaseTable):
+    classDefs: Incomplete
+    def populateDefaults(self, propagator: Incomplete | None = ...) -> None: ...
+    def postRead(self, rawTable, font) -> None: ...
+    Format: Incomplete
+    def preWrite(self, font): ...
+    def toXML2(self, xmlWriter, font) -> None: ...
+    def fromXML(self, name, attrs, content, font) -> None: ...
+
+class AlternateSubst(FormatSwitchingBaseTable):
+    alternates: Incomplete
+    def populateDefaults(self, propagator: Incomplete | None = ...) -> None: ...
+    def postRead(self, rawTable, font) -> None: ...
+    Format: int
+    sortCoverageLast: int
+    def preWrite(self, font): ...
+    def toXML2(self, xmlWriter, font) -> None: ...
+    def fromXML(self, name, attrs, content, font) -> None: ...
+
+class LigatureSubst(FormatSwitchingBaseTable):
+    ligatures: Incomplete
+    def populateDefaults(self, propagator: Incomplete | None = ...) -> None: ...
+    def postRead(self, rawTable, font) -> None: ...
+    Format: int
+    sortCoverageLast: int
+    def preWrite(self, font): ...
+    def toXML2(self, xmlWriter, font) -> None: ...
+    def fromXML(self, name, attrs, content, font) -> None: ...
+
+class COLR(BaseTable):
+    def decompile(self, reader, font): ...
+    LayerRecordCount: Incomplete
+    def preWrite(self, font): ...
+
+class LookupList(BaseTable):
+    @property
+    def table(self): ...
+    def toXML2(self, xmlWriter, font): ...
+
+class BaseGlyphRecordArray(BaseTable):
+    BaseGlyphRecord: Incomplete
+    def preWrite(self, font): ...
+
+class BaseGlyphList(BaseTable):
+    BaseGlyphPaintRecord: Incomplete
+    def preWrite(self, font): ...
+
+class ClipBoxFormat(IntEnum):
+    Static: int
+    Variable: int
+    def is_variable(self): ...
+    def as_variable(self): ...
+
+class ClipBox:
+    formatEnum: Incomplete
+    def as_tuple(self): ...
+
+class ClipList:
+    clips: Incomplete
+    def populateDefaults(self, propagator: Incomplete | None = ...) -> None: ...
+    def postRead(self, rawTable, font) -> None: ...
+    def groups(self): ...
+    def preWrite(self, font): ...
+    def toXML(
+        self,
+        xmlWriter,
+        font,
+        attrs: Incomplete | None = ...,
+        name: Incomplete | None = ...,
+    ): ...
+    def fromXML(self, name, attrs, content, font) -> None: ...
+
+class ExtendMode(IntEnum):
+    PAD: int
+    REPEAT: int
+    REFLECT: int
+
+class CompositeMode(IntEnum):
+    CLEAR: int
+    SRC: int
+    DEST: int
+    SRC_OVER: int
+    DEST_OVER: int
+    SRC_IN: int
+    DEST_IN: int
+    SRC_OUT: int
+    DEST_OUT: int
+    SRC_ATOP: int
+    DEST_ATOP: int
+    XOR: int
+    PLUS: int
+    SCREEN: int
+    OVERLAY: int
+    DARKEN: int
+    LIGHTEN: int
+    COLOR_DODGE: int
+    COLOR_BURN: int
+    HARD_LIGHT: int
+    SOFT_LIGHT: int
+    DIFFERENCE: int
+    EXCLUSION: int
+    MULTIPLY: int
+    HSL_HUE: int
+    HSL_SATURATION: int
+    HSL_COLOR: int
+    HSL_LUMINOSITY: int
+
+class PaintFormat(IntEnum):
+    PaintColrLayers: int
+    PaintSolid: int
+    PaintVarSolid: Incomplete
+    PaintLinearGradient: int
+    PaintVarLinearGradient: int
+    PaintRadialGradient: int
+    PaintVarRadialGradient: int
+    PaintSweepGradient: int
+    PaintVarSweepGradient: int
+    PaintGlyph: int
+    PaintColrGlyph: int
+    PaintTransform: int
+    PaintVarTransform: int
+    PaintTranslate: int
+    PaintVarTranslate: int
+    PaintScale: int
+    PaintVarScale: int
+    PaintScaleAroundCenter: int
+    PaintVarScaleAroundCenter: int
+    PaintScaleUniform: int
+    PaintVarScaleUniform: int
+    PaintScaleUniformAroundCenter: int
+    PaintVarScaleUniformAroundCenter: int
+    PaintRotate: int
+    PaintVarRotate: int
+    PaintRotateAroundCenter: int
+    PaintVarRotateAroundCenter: int
+    PaintSkew: int
+    PaintVarSkew: int
+    PaintSkewAroundCenter: int
+    PaintVarSkewAroundCenter: int
+    PaintComposite: int
+    def is_variable(self): ...
+    def as_variable(self): ...
+
+class Paint:
+    formatEnum: Incomplete
+    def getFormatName(self): ...
+    def toXML(
+        self,
+        xmlWriter,
+        font,
+        attrs: Incomplete | None = ...,
+        name: Incomplete | None = ...,
+    ) -> None: ...
+    def getChildren(self, colr): ...
+    def traverse(self, colr: COLR, callback): ...
+
+def fixLookupOverFlows(ttf, overflowRecord): ...
+def splitMultipleSubst(oldSubTable, newSubTable, overflowRecord): ...
+def splitAlternateSubst(oldSubTable, newSubTable, overflowRecord): ...
+def splitLigatureSubst(oldSubTable, newSubTable, overflowRecord): ...
+def splitPairPos(oldSubTable, newSubTable, overflowRecord): ...
+def splitMarkBasePos(oldSubTable, newSubTable, overflowRecord): ...
+
+splitTable: Incomplete
+
+def fixSubTableOverFlows(ttf, overflowRecord): ...

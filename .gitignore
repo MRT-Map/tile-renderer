@@ -139,7 +139,6 @@ dmypy.json
 cython_debug/
 
 .replit
-pyproject.toml
 poetry.lock
 *.pyc
 tiles/*
@@ -155,4 +154,9 @@ tile_renderer.egg-info
 __pycache__
 .idea/*
 .DS_Store
-renderer/tmp/*
+renderer/tmp/*.tmp.png
+renderer/tmp/*.pkl
+renderer/skins/Noto_Sans.zip
+temp/*
+temp.py
+temp.txt
