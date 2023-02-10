@@ -6,7 +6,6 @@ import renderer.math_utils
 import renderer.misc_types
 
 from .merge_tiles import *
-from .merge_tiles import merge_tiles
 from .misc_types import *
 from .render import *
 
