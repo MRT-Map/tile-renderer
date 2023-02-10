@@ -22,7 +22,7 @@ sys.path.insert(0, os.path.abspath("../renderer"))
 # -- Project information -----------------------------------------------------
 
 project = "tile-renderer"
-copyright = "2022, The MRT Mapping Team"
+copyright = "2023, The MRT Mapping Team"
 author = "7d"
 
 # The full version, including alpha/beta/rc tags
@@ -36,7 +36,7 @@ release = "v" + renderer.__version__
 extensions = [
     "sphinx_rtd_theme",
     "sphinxcontrib.programoutput",
-    "sphinxcontrib.codeautolink",
+    "sphinx_codeautolink",
     "sphinx.ext.autodoc",
 ]
 

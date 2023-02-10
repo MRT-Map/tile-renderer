@@ -7,7 +7,7 @@ from itertools import chain
 from typing import TYPE_CHECKING, Any, Generator, Generic, NamedTuple, TypeVar
 
 import methodtools as methodtools
-from shapely.geometry import LineString, Point  # type: ignore
+from shapely.geometry import LineString, Point
 
 from .. import math_utils
 from .._internal import with_next

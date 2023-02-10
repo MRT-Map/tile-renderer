@@ -30,7 +30,8 @@ Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=
 class Skin:
     """Represents a skin.
 
-    :param SkinJson json: The JSON of the skin."""
+    :param SkinJson json: The JSON of the skin.
+    """
 
     def __init__(self, json: SkinJson):
         self.validate_json(json)
@@ -122,7 +123,7 @@ class Skin:
             """Represents the ``styles`` portion of a ComponentTypeInfo. Base class for all types of ComponentStyle.
 
             :param dict json: JSON dictionary as input
-            :param ComponentTypeInfo type_info: The type_info that the ComponentStyle is under
+            :param Skin.ComponentTypeInfo type_info: The type_info that the ComponentStyle is under
             """
             layer: str
 
@@ -669,7 +670,8 @@ class Skin:
                 text_list: list[TextObject],
                 points_text_list: list[TextObject],
             ):
-                """TODO fix
+                """TODO fix"""
+                """
                 if len(component.display_name.strip()) == 0:
                     return
                 font = self._type_info._skin.get_font(
