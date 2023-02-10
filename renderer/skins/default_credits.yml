@@ -1,8 +1,9 @@
-- https://www.fontsquirrel.com/fonts/clear-sans, https://01.org/clear-sans
-  - ClearSans-Bold.ttf
-  - ClearSans-BoldItalic.ttf
-  - ClearSans-Medium.ttf
-  - ClearSans-MediumItalic.ttf
+- https://github.com/intel/clear-sans
+  - ClearSans*.ttf
+  - License can be found at https://github.com/intel/clear-sans/blob/main/LICENSE.txt
+- https://fonts.google.com/noto/specimen/Noto+Sans+SC, https://fonts.google.com/noto/specimen/Noto+Sans
+  - NotosSans*.ttf
+  - License can be found at https://scripts.sil.org/cms/scripts/render_download.php?format=file&media_id=OFL-FAQ_plaintext&filename=OFL-FAQ.txt
 - Weier
   - clinic.png
 - Airplaneguy9
