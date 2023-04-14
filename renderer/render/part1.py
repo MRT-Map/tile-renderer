@@ -6,9 +6,8 @@ import logging
 import os
 import re
 import traceback
-from dataclasses import dataclass
+from dataclasses import dataclass, field
 from itertools import chain
-from pathlib import Path
 
 import dill
 import ray
@@ -18,10 +17,10 @@ from rich.progress import Progress, track
 from rich.traceback import install
 
 from .._internal.logger import log
+from ..misc_types.config import Config
 from ..misc_types.coord import TileCoord, WorldCoord
 from ..misc_types.pla2 import Component, Pla2File
 from ..misc_types.skin import Skin
-from ..misc_types.zoom_params import ZoomParams
 from .utils import ProgressHandler, TextObject, part_dir, wip_tiles_dir
 
 
@@ -47,33 +46,37 @@ def task_spawner(
 
 
 @dataclass(frozen=True, init=True)
-class Part1Consts:
+class Part1Consts(Config):
     """The constants used for part 1"""
 
-    coord_to_comp: dict[WorldCoord, list[Component]]
-    skin: Skin
-    zoom: ZoomParams
-    assets_dir: Path
-    export_id: str
-    temp_dir: Path
+    coord_to_comp: dict[WorldCoord, list[Component]] = field(default_factory=dict)
+
+    @classmethod
+    def from_config(
+        cls, config: Config, coord_to_comp: dict[WorldCoord, list[Component]]
+    ) -> Part1Consts:
+        return cls(
+            zoom=config.zoom,
+            export_id=config.export_id,
+            assets_dir=config.assets_dir,
+            skin=config.skin,
+            temp_dir=config.temp_dir,
+            coord_to_comp=coord_to_comp,
+        )
 
 
 def render_part1(
-    zoom: ZoomParams,
-    export_id: str,
-    skin: Skin = Skin.from_name("default"),
-    assets_dir: Path = Path(__file__).parent.parent / "skins" / "assets",
+    config: Config,
     batch_size: int = 8,
     chunk_size: int = 8,
-    temp_dir: Path = Path.cwd() / "temp",
     serial: bool = False,
 ) -> dict[TileCoord, list[TextObject]]:
     """Part 1 of the rendering job. Check render() for the full list of parameters"""
     tile_coords = []
-    with open(part_dir(temp_dir, export_id, 0) / f"processed.dill", "rb") as f:
+    with open(part_dir(config, 0) / f"processed.dill", "rb") as f:
         components: Pla2File = dill.load(f)
 
-    for file in glob.glob(str(part_dir(temp_dir, export_id, 0) / f"tile_*.dill")):
+    for file in glob.glob(str(part_dir(config, 0) / f"tile_*.dill")):
         re_result = re.search(rf"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)
         if re_result is None:
             raise ValueError("Dill object not saved properly")
@@ -85,7 +88,7 @@ def render_part1(
             )
         )
 
-    operations = _count_num_rendering_ops(export_id, skin, zoom, temp_dir)
+    operations = _count_num_rendering_ops(config)
     gc.collect()
 
     coord_to_comp: dict[WorldCoord, list[Component]] = {}
@@ -94,13 +97,9 @@ def render_part1(
             coord_to_comp.setdefault(node, []).append(comp)
 
     consts: ObjectRef[Part1Consts] = ray.put(  # type: ignore
-        Part1Consts(
+        Part1Consts.from_config(
+            config,
             coord_to_comp,
-            skin,
-            zoom,
-            assets_dir,
-            export_id,
-            temp_dir,
         )
     )
 
@@ -151,7 +150,7 @@ def render_part1(
     for a in pre_result:
         if a is not None:
             result.update(a)
-    os.remove(part_dir(temp_dir, export_id, 0) / f"processed.dill")
+    os.remove(part_dir(config, 0) / f"processed.dill")
     return result
 
 
@@ -165,12 +164,9 @@ def _pre_draw_components(
         install(show_locals=True)
         logging.getLogger("fontTools").setLevel(logging.CRITICAL)
         logging.getLogger("PIL").setLevel(logging.CRITICAL)
-        results = {}
+        results: dict[TileCoord | list[TextObject]] = {}
         for tile_coord in tile_coords:
-            path = (
-                part_dir(consts.temp_dir, consts.export_id, 0)
-                / f"tile_{tile_coord}.dill"
-            )
+            path = part_dir(consts, 0) / f"tile_{tile_coord}.dill"
             with open(path, "rb") as f:
                 tile_components = dill.load(f)
 
@@ -179,8 +175,7 @@ def _pre_draw_components(
             os.remove(path)
             if out is not None:
                 with open(
-                    part_dir(consts.temp_dir, consts.export_id, 1)
-                    / f"tile_{tile_coord}.dill",
+                    part_dir(consts, 1) / f"tile_{tile_coord}.dill",
                     "wb",
                 ) as f:
                     dill.dump({out[0]: out[1]}, f)
@@ -196,12 +191,10 @@ def _pre_draw_components(
         return None
 
 
-def _count_num_rendering_ops(
-    export_id: str, skin: Skin, zoom: ZoomParams, temp_dir: Path
-) -> dict[TileCoord, int]:
+def _count_num_rendering_ops(config: Config) -> dict[TileCoord, int]:
     grouped_tile_list: dict[TileCoord, list[list[Component]]] = {}
     for file in track(
-        glob.glob(str(part_dir(temp_dir, export_id, 0) / f"tile_*.dill")),
+        glob.glob(str(part_dir(config, 0) / f"tile_*.dill")),
         description="Loading data",
     ):
         with open(file, "rb") as f:
@@ -229,8 +222,8 @@ def _count_num_rendering_ops(
         for group in tile_components:
             if not group:
                 continue
-            info = skin.misc_types[group[0].type]
-            for step in info[zoom.max - tile_coord.z]:
+            info = config.skin.misc_types[group[0].type]
+            for step in info[config.zoom.max - tile_coord.z]:
                 tile_operations += len(group)
                 if (
                     info.shape == "line"
@@ -262,9 +255,7 @@ def _draw_components(
         style = type_info[consts.zoom.max - tile_coord[0]]
         for step in style:
             for component in group:
-                coords = component.nodes.to_image_line(
-                    consts.skin, tile_coord, consts.zoom
-                )
+                coords = component.nodes.to_image_line(tile_coord, consts)
 
                 step.render(
                     component,
@@ -302,7 +293,7 @@ def _draw_components(
                                 continue
 
                             con_coords = con_component.nodes.to_image_line(
-                                consts.skin, tile_coord, consts.zoom
+                                tile_coord, consts
                             )
 
                             con_img = Image.new(
@@ -326,23 +317,15 @@ def _draw_components(
                             con_mask_imd = ImageDraw.Draw(con_mask_img)
                             con_mask_imd.ellipse(
                                 (
-                                    coord.to_image_coord(
-                                        consts.skin, tile_coord, consts.zoom
-                                    ).x
+                                    coord.to_image_coord(tile_coord, consts).x
                                     - (max(con_step.width, step.width) * 2) / 2
                                     + 1,
-                                    coord.to_image_coord(
-                                        consts.skin, tile_coord, consts.zoom
-                                    ).y
+                                    coord.to_image_coord(tile_coord, consts).y
                                     - (max(con_step.width, step.width) * 2) / 2
                                     + 1,
-                                    coord.to_image_coord(
-                                        consts.skin, tile_coord, consts.zoom
-                                    ).x
+                                    coord.to_image_coord(tile_coord, consts).x
                                     + (max(con_step.width, step.width) * 2) / 2,
-                                    coord.to_image_coord(
-                                        consts.skin, tile_coord, consts.zoom
-                                    ).y
+                                    coord.to_image_coord(tile_coord, consts).y
                                     + (max(con_step.width, step.width) * 2) / 2,
                                 ),
                                 fill="#000000",
@@ -358,7 +341,7 @@ def _draw_components(
     text_list.reverse()
 
     img.save(
-        wip_tiles_dir(consts.temp_dir, consts.export_id) / f"{tile_coord}.png",
+        wip_tiles_dir(consts) / f"{tile_coord}.png",
         "png",
     )
     if ph:

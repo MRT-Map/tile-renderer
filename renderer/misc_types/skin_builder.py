@@ -78,12 +78,12 @@ def darken(h1: int, strength: float = 0.5) -> int:
     return int(nr + ng + nb, base=16)
 
 
-def lighten(h1: int, strength: float = 0.5) -> int:
+def brighten(h1: int, strength: float = 0.5) -> int:
     """
     Lighten a colour
 
     :param h1: The colour
-    :param strength: The strength of the lightening, between 0.0 and 1.0
+    :param strength: The strength of the brightening, between 0.0 and 1.0
 
     :return: The final colour
     """
@@ -155,8 +155,9 @@ class SkinBuilder:
         self.types[key] = value
 
     def json(self) -> dict:
-        """Returns a JSON representation of the skin.
-        :rtype: dict"""
+        """
+        Returns a JSON representation of the skin.
+        """
         return {
             "info": {
                 "size": self.tile_size,
@@ -171,7 +172,6 @@ class SkinBuilder:
         """Utility class for building the component type info for the skin.
 
         :param shape: The shape of the component. Must be either `point`, `line` or `area`.
-        :type shape: str
         :param list[str] tags: A list of tags for the component"""
 
         shape: Literal["point", "line", "area"]
@@ -192,8 +192,7 @@ class SkinBuilder:
                 self.style[f"{key.start}, {key.stop or 1000}"] = value
 
         def json(self) -> dict:
-            """Returns a JSON representation of the skin.
-            :rtype: dict"""
+            """Returns a JSON representation of the skin."""
             return {
                 "tags": self.tags,
                 "type": self.shape,

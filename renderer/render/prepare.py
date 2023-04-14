@@ -1,12 +1,14 @@
 from __future__ import annotations
 
-from pathlib import Path
+from typing import TYPE_CHECKING
 
 import dill
 import vector
 from rich.progress import track
 from vector import Vector2D
 
+if TYPE_CHECKING:
+    from .. import Config
 from .._internal.logger import log
 from ..misc_types.coord import TileCoord, WorldCoord, WorldLine
 from ..misc_types.pla2 import Component, Pla2File
@@ -85,13 +87,10 @@ def _process_tiles(
 
 def prepare_render(
     components: Pla2File,
-    zoom: ZoomParams,
-    export_id: str,
-    skin: Skin = Skin.from_name("default"),
+    config: Config,
     tiles: list[TileCoord] | None = None,
     zooms: list[int] | None = None,
     offset: Vector2D = vector.obj(x=0, y=0),
-    temp_dir: Path = Path.cwd() / "temp",
 ) -> dict[TileCoord, list[list[Component]]]:
     """The data-preparing step of the rendering job. Check render() for the full list of parameters"""
     log.info("Offsetting coordinates...")
@@ -105,26 +104,26 @@ def prepare_render(
 
     if tiles is None:
         log.info("Finding tiles...")
-        tiles = Component.rendered_in(components.components, zoom)
-        if zooms is not None:
-            tiles = [tc for tc in tiles if tc.z in zooms]
+        tiles = Component.rendered_in(components.components, config.zoom)
+    if zooms is not None:
+        tiles = [tc for tc in tiles if tc.z in zooms]
 
     log.info("Removing components with unknown type...")
-    remove_list = _remove_unknown_component_types(components, skin)
+    remove_list = _remove_unknown_component_types(components, config.skin)
     if remove_list:
         log.warning("The following components were removed: " + " | ".join(remove_list))
 
     log.info("Sorting components by tiles...")
-    tile_list = _sort_by_tiles(tiles, components, zoom)
+    tile_list = _sort_by_tiles(tiles, components, config.zoom)
 
-    grouped_tile_list = _process_tiles(tile_list, skin)
+    grouped_tile_list = _process_tiles(tile_list, config.skin)
 
     for coord, grouped_components in track(
         grouped_tile_list.items(), description="Dumping data"
     ):
-        with open(part_dir(temp_dir, export_id, 0) / f"tile_{coord}.dill", "wb") as f:
+        with open(part_dir(config, 0) / f"tile_{coord}.dill", "wb") as f:
             dill.dump(grouped_components, f)
-    with open(part_dir(temp_dir, export_id, 0) / f"processed.dill", "wb") as f:
+    with open(part_dir(config, 0) / f"processed.dill", "wb") as f:
         dill.dump(components, f)
 
     return grouped_tile_list

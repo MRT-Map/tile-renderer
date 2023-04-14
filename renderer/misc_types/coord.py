@@ -14,6 +14,7 @@ from .._internal import with_next
 
 if TYPE_CHECKING:
     from .skin import Skin
+    from .config import Config
 
 from .zoom_params import ZoomParams
 
@@ -72,20 +73,21 @@ class ImageCoord(Coord):
     """Represents a 2-dimensional coordinate on an image"""
 
     def to_world_coord(
-        self, skin: Skin, tile_coord: TileCoord, zoom: ZoomParams
+        self,
+        tile_coord: TileCoord,
+        config: Config,
     ) -> WorldCoord:
         """
         Converts the coordinate to a WorldCoord
 
-        :param skin: The skin that the render job is using
         :param tile_coord: The tile coordinate that the coordinate is part of
-        :param zoom: The zoom parameters
+        :param config: The configuration
 
         :return: The world coordinate
         """
-        size = zoom.range * 2 ** (zoom.max - tile_coord[0])
-        xc = size / skin.tile_size * self.x
-        yc = size / skin.tile_size * self.y
+        size = config.zoom.range * 2 ** (config.zoom.max - tile_coord[0])
+        xc = size / config.skin.tile_size * self.x
+        yc = size / config.skin.tile_size * self.y
         xs = xc + tile_coord.x * size
         ys = yc + tile_coord.y * size
         return WorldCoord(xs, ys)
@@ -94,25 +96,26 @@ class ImageCoord(Coord):
 class WorldCoord(Coord):
     """Represents a 2-dimensional coordinate in the world"""
 
-    @methodtools.lru_cache()
-    def to_image_coord(
-        self, skin: Skin, tile_coord: TileCoord, zoom: ZoomParams
-    ) -> ImageCoord:
+    def to_image_coord(self, tile_coord: TileCoord, config: Config) -> ImageCoord:
         """
         Converts the coordinate to an ImageCoord
 
-        :param skin: The skin that the render job is using
         :param tile_coord: The tile coordinate that the coordinate is part of
-        :param zoom: The zoom parameters
+        :param config: The configuration
 
         :return: The image coordinate
         """
-        size = zoom.range * 2 ** (zoom.max - tile_coord[0])
-        xc = self.x - tile_coord.x * size
-        yc = self.y - tile_coord.y * size
-        xs = int(skin.tile_size / size * xc)
-        ys = int(skin.tile_size / size * yc)
-        return ImageCoord(xs, ys)
+
+        @methodtools.lru_cache()
+        def inner(tc: TileCoord, skin: Skin, zoom: ZoomParams):
+            size = zoom.range * 2 ** (zoom.max - tc[0])
+            xc = self.x - tc.x * size
+            yc = self.y - tc.y * size
+            xs = int(skin.tile_size / size * xc)
+            ys = int(skin.tile_size / size * yc)
+            return ImageCoord(xs, ys)
+
+        return inner(tile_coord, config.skin, config.zoom)
 
     def tiles(self, zoom_params: ZoomParams) -> list[TileCoord]:
         """
@@ -254,19 +257,16 @@ class WorldLine(Line):
     def __init__(self, line: list[WorldCoord] | LineString):
         super().__init__(line)  # type: ignore
 
-    def to_image_line(
-        self, skin: Skin, tile_coord: TileCoord, zoom: ZoomParams
-    ) -> ImageLine:
+    def to_image_line(self, tile_coord: TileCoord, config: Config) -> ImageLine:
         """
         Converts the line into an ImageLine
 
-        :param skin: The skin that the render job is using
         :param tile_coord: The tile coordinate that the coordinate is part of
-        :param zoom: The zoom parameters
+        :param config: The configuration
 
         :return: The image line
         """
-        image_coords = [a.to_image_coord(skin, tile_coord, zoom) for a in self]
+        image_coords = [a.to_image_coord(tile_coord, config) for a in self]
         return ImageLine(image_coords)
 
     @functools.cached_property  # type: ignore
@@ -286,19 +286,16 @@ class ImageLine(Line):
     def __init__(self, line: list[ImageCoord] | LineString):
         super().__init__(line)  # type: ignore
 
-    def to_world_line(
-        self, skin: Skin, tile_coord: TileCoord, zoom: ZoomParams
-    ) -> WorldLine:
+    def to_world_line(self, tile_coord: TileCoord, config: Config) -> WorldLine:
         """
         Converts the line into a WorldLine
 
-        :param skin: The skin that the render job is using
         :param tile_coord: The tile coordinate that the coordinate is part of
-        :param zoom: The zoom parameters
+        :param config: The configuration
 
         :return: The world coordinate
         """
-        image_coords = [a.to_world_coord(skin, tile_coord, zoom) for a in self]
+        image_coords = [a.to_world_coord(tile_coord, config) for a in self]
         return WorldLine(image_coords)
 
     @functools.cached_property  # type: ignore
@@ -332,9 +329,7 @@ class TileCoord(NamedTuple):
         """
         Find the minimum and maximum x/y values in a set of TileCoords.
 
-        :param List[TileCoord] tile_coords: a list of tile coordinates, provide in a tuple of ``(z,x,y)``
-
-        :returns: Returns in the form ``(x_max, x_min, y_max, y_min)``
+        :param List[TileCoord] tile_coords: A list of tile coordinates
         """
 
         return Bounds(
@@ -343,3 +338,6 @@ class TileCoord(NamedTuple):
             y_max=max(c.y for c in tile_coords),
             y_min=min(c.y for c in tile_coords),
         )
+
+    def __hash__(self):
+        return hash((self.z, self.x, self.y))

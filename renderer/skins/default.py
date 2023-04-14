@@ -2,7 +2,7 @@ import json
 from math import ceil
 from pathlib import Path
 
-from renderer.misc_types.skin_builder import CS, CTI, SkinBuilder, darken, lighten
+from renderer.misc_types.skin_builder import CS, CTI, SkinBuilder, brighten, darken
 
 A_ROAD = 0xFFAAAA
 B_ROAD = 0xFF8000
@@ -201,31 +201,31 @@ def main():
 
     building_underground = CTI("area")
     building_underground[0:1] = [
-        CS.area_fill(colour=lighten(BUILDING), outline=BUILDING),
+        CS.area_fill(colour=brighten(BUILDING), outline=BUILDING),
         CS.area_centertext(colour=darken(BUILDING), size=15),
     ]
     building_underground[2:3] = [
-        CS.area_fill(colour=lighten(BUILDING), outline=BUILDING)
+        CS.area_fill(colour=brighten(BUILDING), outline=BUILDING)
     ]
     s["building_underground"] = building_underground
 
     city_hall = CTI("area")
     city_hall[0:1] = [
-        CS.area_fill(colour=lighten(0xFFAAAA), outline=0xFFAAAA),
+        CS.area_fill(colour=brighten(0xFFAAAA), outline=0xFFAAAA),
         CS.area_centertext(colour=darken(0xFFAAAA), size=15),
     ]
     city_hall[2:3] = [
-        CS.area_fill(colour=lighten(0xFFAAAA), outline=0xFFAAAA),
+        CS.area_fill(colour=brighten(0xFFAAAA), outline=0xFFAAAA),
     ]
     s["cityHall"] = city_hall
 
     transport_building_underground = CTI("area")
     transport_building_underground[0:1] = [
-        CS.area_fill(colour=lighten(TRANSPORT_BUILDING), outline=TRANSPORT_BUILDING),
+        CS.area_fill(colour=brighten(TRANSPORT_BUILDING), outline=TRANSPORT_BUILDING),
         CS.area_centertext(colour=darken(TRANSPORT_BUILDING), size=15),
     ]
     transport_building_underground[2:3] = [
-        CS.area_fill(colour=lighten(TRANSPORT_BUILDING), outline=TRANSPORT_BUILDING)
+        CS.area_fill(colour=brighten(TRANSPORT_BUILDING), outline=TRANSPORT_BUILDING)
     ]
     s["transportBuilding_underground"] = transport_building_underground
 
@@ -280,7 +280,7 @@ def main():
         for i in (0, 1, 2, 3, 4):
             area[i] = [
                 CS.line_back(colour=col, width=int((width + 8) * (2 / 3) ** i)),
-                CS.line_fore(colour=lighten(col), width=int(width * (2 / 3) ** i)),
+                CS.line_fore(colour=brighten(col), width=int(width * (2 / 3) ** i)),
                 *(
                     [
                         CS.line_text(
@@ -297,7 +297,7 @@ def main():
             area[i] = (
                 [
                     CS.line_back(colour=col, width=(small_width - i + 5) * 2),
-                    CS.line_fore(colour=lighten(col), width=small_width - i + 5),
+                    CS.line_fore(colour=brighten(col), width=small_width - i + 5),
                 ]
                 if small_width - i + 5 >= 1
                 else []

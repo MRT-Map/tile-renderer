@@ -7,11 +7,11 @@ class ZoomParams:
     """
     Utility object for storing zoom parameters.
 
-    :param int min: minimum zoom value
-    :param int max: maximum zoom value
-    :param float range: actual distance covered by a tile in the maximum zoom
+    :param int min: Minimum zoom value
+    :param int max: Maximum zoom value
+    :param float range: Actual distance covered by a tile in the maximum zoom
 
-    :raises ValueError: if min > max
+    :raises ValueError: If min > max
     """
     min: int
     max: int

@@ -4,7 +4,6 @@ import glob
 import os
 import re
 from itertools import product
-from pathlib import Path
 from typing import Any, Generator
 
 import dill
@@ -13,37 +12,33 @@ from shapely import prepare
 from shapely.geometry import Polygon
 
 from .._internal.logger import log
+from ..misc_types.config import Config
 from ..misc_types.coord import TileCoord
 from .utils import TextObject, part_dir
 
 
 def file_loader(
-    zoom: int, temp_dir: Path, export_id: str
+    config: Config, zoom: int
 ) -> Generator[tuple[TileCoord, list[TextObject]], Any, None]:
     """
     Loads the intermediate files for a certain zoom level
 
+    :param config: The configuration
     :param zoom: The zoom to look for
-    :param temp_dir: The temporary directory to look into
-    :param export_id: The export ID to look into
     :return: The files
     """
-    for file in glob.glob(
-        str(part_dir(temp_dir, export_id, 1) / f"tile_{zoom},*.dill")
-    ):
+    for file in glob.glob(str(part_dir(config, 1) / f"tile_{zoom},*.dill")):
         with open(file, "rb") as f:
             data = dill.load(f)
         for tile_coord, text_objects in data.items():
             yield tile_coord, text_objects
 
 
-def render_part2(
-    export_id: str, temp_dir: Path = Path.cwd() / "temp"
-) -> dict[TileCoord, list[TextObject]]:
+def render_part2(config: Config) -> dict[TileCoord, list[TextObject]]:
     """Part 2 of the rendering job. Check render() for the full list of parameters"""
     zooms = {}
     log.info("Determining zoom levels...")
-    for file in glob.glob(str(part_dir(temp_dir, export_id, 1) / f"tile_*.dill")):
+    for file in glob.glob(str(part_dir(config, 1) / f"tile_*.dill")):
         regex = re.search(r"_(\d+),", file)
         if regex is None:
             raise ValueError("Dill object is not saved properly")
@@ -58,17 +53,14 @@ def render_part2(
             zooms.items(), description="[green]Eliminating overlapping text"
         ):
             new_texts = _prevent_text_overlap(
+                config,
                 int(zoom),
-                file_loader(int(zoom), temp_dir, export_id),
+                file_loader(config, int(zoom)),
                 length,
                 progress,
-                temp_dir,
-                export_id,
             )
             for file in progress.track(
-                glob.glob(
-                    str(part_dir(temp_dir, export_id, 1) / f"tile_{zoom},*.dill")
-                ),
+                glob.glob(str(part_dir(config, 1) / f"tile_{zoom},*.dill")),
                 description=f"Zoom {zoom}: [dim white]Cleaning up",
             ):
                 os.remove(file)
@@ -77,12 +69,11 @@ def render_part2(
 
 
 def _prevent_text_overlap(
+    config: Config,
     zoom: int,
     texts: Generator[tuple[TileCoord, list[TextObject]], Any, None],
     length: int,
     progress: Progress,
-    temp_dir: Path,
-    export_id: str,
 ) -> dict[TileCoord, list[TextObject]]:
     out: dict[TileCoord, list[TextObject]] = {}
     tile_coords = set()
@@ -109,7 +100,7 @@ def _prevent_text_overlap(
                     ).update(text.bounds)
             else:
                 for id_ in text.image:
-                    TextObject.remove_img(id_, temp_dir, export_id)
+                    TextObject.remove_img(id_, config)
 
     default: dict[TileCoord, list[TextObject]] = {tc: [] for tc in tile_coords}
     out = {**default, **out}
@@ -117,8 +108,6 @@ def _prevent_text_overlap(
         out.items(),
         description=f"Zoom {zoom}: [dim white]Saving remaining text objects",
     ):
-        with open(
-            part_dir(temp_dir, export_id, 2) / f"tile_{tile_coord}.dill", "wb"
-        ) as f:
+        with open(part_dir(config, 2) / f"tile_{tile_coord}.dill", "wb") as f:
             dill.dump(text_objects, f)
     return out

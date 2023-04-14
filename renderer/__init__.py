@@ -7,6 +7,7 @@ import renderer.misc_types
 
 from .merge_tiles import *
 from .misc_types import *
+from .misc_types.config import Config
 from .render import *
 
 try:

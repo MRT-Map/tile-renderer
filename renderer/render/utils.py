@@ -16,10 +16,11 @@ from PIL import Image, ImageDraw
 from shapely import LineString, Polygon
 
 from .. import math_utils
-from ..misc_types.coord import Coord, ImageCoord, TileCoord, WorldCoord
 
 if TYPE_CHECKING:
-    from ..render.part1 import Part1Consts
+    from ..misc_types.config import Config
+
+from ..misc_types.coord import Coord, ImageCoord, TileCoord, WorldCoord
 
 
 @ray.remote
@@ -85,49 +86,46 @@ class TextObject:
     """The export ID of the render job"""
 
     @staticmethod
-    def img_to_uuid(img: Image.Image, temp_dir: Path, export_id: str) -> UUID:
+    def img_to_uuid(img: Image.Image, config: Config) -> UUID:
         """
         Puts the image into the temporary directory and returns the UUID corresponding to the image
 
         :param img: The image to save
-        :param temp_dir: The temporary directory to save into
-        :param export_id: The export ID of the render job
+        :param config: The configuration
 
         :return: The UUID
         """
         u = uuid.uuid4()
-        path = text_object_path(temp_dir, export_id, u)
+        path = text_object_path(config, u)
         img.save(path)
         return u
 
     @staticmethod
-    def uuid_to_img(u: UUID, temp_dir: Path, export_id: str) -> Image.Image:
+    def uuid_to_img(u: UUID, config: Config) -> Image.Image:
         """
         Retrieves an image object, given its corresponding UUID
 
-        :param u: The UUID
-        :param temp_dir: The temporary directory to save into
-        :param export_id: The export ID of the render job
+        :param u: The UUID.
+        :param config: The configuration
 
         :return: The image object
         :raises FileNotFoundError: if the UUID is invalid
         """
-        path = text_object_path(temp_dir, export_id, u)
+        path = text_object_path(config, u)
         img = Image.open(path)
         return img
 
     @staticmethod
-    def remove_img(u: UUID, temp_dir: Path, export_id: str):
+    def remove_img(u: UUID, config: Config):
         """
         Remove the image from the temporary directory
 
-        :param u: The UUID
-        :param temp_dir: The temporary directory to save into
-        :param export_id: The export ID of the render job
+        :param u: The UUID.
+        :param config: The configuration
 
-        :raises FileNotFoundError: if the UUID is invalid
+        :raises FileNotFoundError: If the UUID is invalid
         """
-        path = text_object_path(temp_dir, export_id, u)
+        path = text_object_path(config, u)
         os.remove(path)
 
     def __init__(
@@ -138,7 +136,7 @@ class TextObject:
         width_height: tuple[float, float],
         rot: float,
         tile_coord: TileCoord,
-        consts: Part1Consts,
+        config: Config,
     ):
         """
         :param img: The Image object of the current tile
@@ -147,7 +145,7 @@ class TextObject:
         :param width_height: The width and height of the text
         :param rot: The rotation of the text
         :param tile_coord: The tile coordinate that the text belongs to
-        :param consts: The constants of part 1
+        :param config: The constants of part 1
         """
         w, h = width_height
         if os.environ.get("DEBUG"):
@@ -164,20 +162,18 @@ class TextObject:
                 ],
                 fill="#ff0000",
             )
-        self.temp_dir = consts.temp_dir
-        self.export_id = consts.export_id
+        self.temp_dir = config.temp_dir
+        self.export_id = config.export_id
 
-        self.image = [TextObject.img_to_uuid(img, consts.temp_dir, consts.export_id)]
-        new_center = center.to_world_coord(consts.skin, tile_coord, consts.zoom)
+        self.image = [TextObject.img_to_uuid(img, config)]
+        new_center = center.to_world_coord(tile_coord, config)
         self.center = [new_center]
         r = functools.partial(
             math_utils.rotate_around_pivot,
             pivot=new_center,
             theta=-rot,
         )
-        new_width_height = ImageCoord(w, h).to_world_coord(
-            consts.skin, tile_coord, consts.zoom
-        )
+        new_width_height = ImageCoord(w, h).to_world_coord(tile_coord, config)
         w, h = new_width_height.x, new_width_height.y
         self.bounds = [
             Polygon(
@@ -230,39 +226,36 @@ class TextObject:
         return to
 
 
-def wip_tiles_dir(temp_dir: Path, export_id: str) -> Path:
+def wip_tiles_dir(config: Config) -> Path:
     """
     Retrieve the directory for half-complete tiles
 
-    :param temp_dir: The temporary directory
-    :param export_id: The export ID of the render job
+    :param config: The configuration
     :return: The path of the directory
     """
-    p = temp_dir / export_id / "wip_tiles"
+    p = config.temp_dir / config.export_id / "wip_tiles"
     p.mkdir(parents=True, exist_ok=True)
     return p
 
 
-def part_dir(temp_dir: Path, export_id: str, part: int) -> Path:
+def part_dir(config: Config, part: int) -> Path:
     """
     Retrieve the directory for data from each of the parts
 
-    :param temp_dir: The temporary directory
-    :param export_id: The export ID of the render job
+    :param config: The configuration
     :param part: The part number (0, 1, 2)
     :return: The path of the directory
     """
-    p = temp_dir / export_id / str(part)
+    p = config.temp_dir / config.export_id / str(part)
     p.mkdir(parents=True, exist_ok=True)
     return p
 
 
-def text_object_path(temp_dir: Path, export_id: str, id_: UUID) -> Path:
+def text_object_path(config: Config, id_: UUID) -> Path:
     """
     Retrieve the directory for a text object
 
-    :param temp_dir: The temporary directory
-    :param export_id: The export ID of the render job
+    :param config: The configuration.
     :param id_: The UUID of the text object
 
     :return: The path of the directory
@@ -272,6 +265,6 @@ def text_object_path(temp_dir: Path, export_id: str, id_: UUID) -> Path:
     dir3 = id_.hex[4:6]
     dir4 = id_.hex[6:8]
     rest = id_.hex[8:] + ".png"
-    dir_ = temp_dir / export_id / "to" / dir1 / dir2 / dir3 / dir4
+    dir_ = config.temp_dir / config.export_id / "to" / dir1 / dir2 / dir3 / dir4
     dir_.mkdir(parents=True, exist_ok=True)
     return dir_ / rest

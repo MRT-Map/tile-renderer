@@ -8,7 +8,7 @@ import vector
 from rich.progress import track
 from rich.traceback import install
 
-from renderer import __version__, merge_tiles, render
+from renderer import Config, TileCoord, __version__, merge_tiles, render
 
 # noinspection PyProtectedMember
 from renderer._internal.logger import log
@@ -29,47 +29,122 @@ def p_render(p: argparse.ArgumentParser):
         help="the PLA 2 file to render from",
     )
     p.add_argument(
-        "-min", "--min_zoom", type=int, required=True, help="minimum zoom value"
+        "-m", "--min_zoom", type=int, required=True, help="Minimum zoom value"
     )
     p.add_argument(
-        "-max", "--max_zoom", type=int, required=True, help="maximum zoom value"
+        "-M", "--max_zoom", type=int, required=True, help="Maximum zoom value"
     )
     p.add_argument(
         "-r",
         "--max_zoom_range",
         type=float,
         required=True,
-        help="range of coordinates covered by a tile in the maximum zoom",
+        help="Actual distance covered by a tile in the maximum zoom",
     )
     p.add_argument(
-        "-s", "--skin", type=str, help="the name of the skin to use", default="default"
+        "-e",
+        "--export_id",
+        type=str,
+        help="The name of the rendering task",
+        default="unnamed",
     )
     p.add_argument(
-        "-d",
+        "-td",
+        "--temp_dir",
+        type=Path,
+        help="the temporary data folder that will be used to save data",
+        default=Path.cwd() / "temp",
+    )
+    p.add_argument(
+        "-s",
+        "--skin",
+        type=str,
+        help="The skin to use for rendering the tiles",
+        default="default",
+    )
+    p.add_argument(
+        "-ad",
+        "--assets_dir",
+        type=Path,
+        help="The asset directory for the skin",
+        default=Path(__file__).parent.parent / "skins" / "assets",
+    )
+    p.add_argument(
+        "-sd",
         "--save_dir",
         type=Path,
-        help="the directory to save tiles in",
-        default=Path.cwd(),
+        help="The directory to save tiles to",
+        default=Path.cwd() / "tiles",
     )
     p.add_argument(
-        "-m",
+        "-p",
         "--processes",
         type=int,
-        help="the amount of processes to run for rendering",
+        help="The number of processes to run for rendering",
         default=psutil.cpu_count(),
     )
+
+    def tile_coord(x: str):
+        return TileCoord(
+            int(x.split(",")[0]), int(x.split(",")[1]), int(x.split(",")[2])
+        )
+
     p.add_argument(
         "-t",
         "--tiles",
-        type=list[str],
-        help="a list of tiles to render, given in tuples of (z,x,y)",
+        nargs="+",
+        type=tile_coord,
+        help="a list of tiles to render, given as `z,x,y [z,x,y...]`",
+        default=[],
+    )
+    p.add_argument(
+        "-z",
+        "--zooms",
+        nargs="+",
+        type=int,
+        help="a list of zooms to render, given as `z [z...]`",
+        default=[],
     )
     p.add_argument(
         "-o",
         "--offset",
-        type=tuple[int, int],  # type: ignore
-        help="the offset of node coordinates, given as (x,y)",
+        nargs=2,
+        type=int,
+        help="the offset of node coordinates, given as `x y`",
         default=[0, 0],
+    )
+    p.add_argument(
+        "-p1b",
+        "--part1_batch_size",
+        type=int,
+        help="The batch size for part 1",
+        default=8,
+    )
+    p.add_argument(
+        "-p1c",
+        "--part1_chunk_size",
+        type=int,
+        help="The chunk size for part 1",
+        default=8,
+    )
+    p.add_argument(
+        "-p1s",
+        "--part1_serial",
+        help="Whether part 1 will be run serially",
+        action="store_true",
+    )
+    p.add_argument(
+        "-p3b",
+        "--part3_batch_size",
+        type=int,
+        help="The batch size for part 3",
+        default=8,
+    )
+    p.add_argument(
+        "-p3s",
+        "--part3_serial",
+        help="Whether part 3 will be run serially",
+        action="store_true",
     )
 
 
@@ -175,12 +250,23 @@ def main():
         log.info("Starting rendering...")
         render(
             file,
-            ZoomParams(args.min_zoom, args.max_zoom, args.max_zoom_range),
-            skin=skin,
+            Config(
+                ZoomParams(args.min_zoom, args.max_zoom, args.max_zoom_range),
+                args.export_id,
+                args.temp_dir,
+                skin,
+                args.assets_dir,
+            ),
             save_dir=args.save_dir,
             processes=args.processes,
             tiles=args.tiles,
+            zooms=args.zooms,
             offset=vector.obj(x=args.offset[0], y=args.offset[1]),
+            part1_batch_size=args.part1_batch_size,
+            part1_chunk_size=args.part1_chunk_size,
+            part1_serial=args.part1_serial,
+            part3_batch_size=args.part3_batch_size,
+            part3_serial=args.part3_serial,
         )
     elif args.task == "merge":
         merge_tiles(args.image_dir, True, args.save_dir, args.zoom)

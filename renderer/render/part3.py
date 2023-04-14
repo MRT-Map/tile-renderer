@@ -18,23 +18,18 @@ from ray import ObjectRef
 from rich.progress import Progress, track
 
 if TYPE_CHECKING:
-    from .. import ZoomParams
+    from .. import Config
 from .._internal.logger import log
 from ..misc_types.coord import TileCoord
-from ..misc_types.skin import Skin
 from .utils import ProgressHandler, TextObject, part_dir, wip_tiles_dir
 
 
 @ray.remote
 def task_spawner(
     ph: ObjectRef[ProgressHandler],  # type: ignore
+    config: Config,
     chunks: list[list[TileCoord]],
-    zoom: ZoomParams,
-    save_images: bool,
     save_dir: Path,
-    skin: Skin,
-    export_id: str,
-    temp_dir: Path,
     cursor: int,
     futures: list[ObjectRef[dict[TileCoord, Image.Image] | None]],  # type: ignore
 ) -> list[ObjectRef[dict[TileCoord, Image.Image] | None]]:  # type: ignore
@@ -43,13 +38,9 @@ def task_spawner(
         if ray.get(ph.needs_new_task.remote()):  # type: ignore
             output = ray.remote(_draw_text).remote(
                 ph,
+                config,
                 chunks[cursor],
-                zoom,
-                save_images,
                 save_dir,
-                skin,
-                export_id,
-                temp_dir,
             )
             futures.append(output)
             cursor += 1
@@ -57,18 +48,14 @@ def task_spawner(
 
 
 def render_part3(
-    export_id: str,
-    zoom: ZoomParams,
-    skin: Skin = Skin.from_name("default"),
-    save_images: bool = True,
-    save_dir: Path = Path.cwd(),
-    temp_dir: Path = Path.cwd() / "temp",
+    config: Config,
+    save_dir: Path | None = None,
     serial: bool = False,
     batch_size: int = psutil.cpu_count(),
 ) -> dict[TileCoord, Image.Image]:
     """Part 3 of the rendering job. Check render() for the full list of parameters"""
     tile_coords = []
-    for file in glob.glob(str(part_dir(temp_dir, export_id, 2) / f"tile_*.dill")):
+    for file in glob.glob(str(part_dir(config, 2) / f"tile_*.dill")):
         re_result = re.search(rf"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)
         if re_result is None:
             raise ValueError("Dill object was not saved properly")
@@ -85,13 +72,9 @@ def render_part3(
         pre_result: list[dict[TileCoord, Image.Image] | None] = [
             _draw_text(
                 None,
+                config,
                 [tile_coord],
-                zoom,
-                save_images,
                 save_dir,
-                skin,
-                export_id,
-                temp_dir,
             )
             for tile_coord in track(tile_coords, description="[green]Rendering texts")
         ]
@@ -103,26 +86,18 @@ def render_part3(
         futures = [
             ray.remote(_draw_text).remote(
                 ph,
+                config,
                 text_lists,
-                zoom,
-                save_images,
                 save_dir,
-                skin,
-                export_id,
-                temp_dir,
             )
             for text_lists in track(chunks[:batch_size], "Spawning initial tasks")
         ]
         future_refs: ObjectRef[list[ObjectRef[dict[TileCoord, Image.Image] | None]]]  # type: ignore
         future_refs = task_spawner.remote(
             ph,
+            config,
             chunks,
-            zoom,
-            save_images,
             save_dir,
-            skin,
-            export_id,
-            temp_dir,
             batch_size,
             futures,
         )
@@ -145,7 +120,7 @@ def render_part3(
         if i is not None:
             result.update(i)
 
-    shutil.rmtree(temp_dir / export_id)
+    shutil.rmtree(config.temp_dir / config.export_id)
     log.info("Render complete")
 
     return result
@@ -153,27 +128,21 @@ def render_part3(
 
 def _draw_text(
     ph: ObjectRef[ProgressHandler] | None,  # type: ignore
+    config: Config,
     tile_coords: list[TileCoord],
-    zoom: ZoomParams,
-    save_images: bool,
-    save_dir: Path,
-    skin: Skin,
-    export_id: str,
-    temp_dir: Path,
+    save_dir: Path | None = None,
 ) -> dict[TileCoord, Image.Image] | None:
     logging.getLogger("PIL").setLevel(logging.CRITICAL)
     # noinspection PyBroadException
     try:
         out = {}
         for tile_coord in tile_coords:
-            with open(
-                part_dir(temp_dir, export_id, 2) / f"tile_{tile_coord}.dill", "rb"
-            ) as f:
+            with open(part_dir(config, 2) / f"tile_{tile_coord}.dill", "rb") as f:
                 text_list: list[TextObject] = dill.load(f)
             try:
-                image = Image.open(
-                    wip_tiles_dir(temp_dir, export_id) / f"{tile_coord}.png"
-                ).convert("RGBA")
+                image = Image.open(wip_tiles_dir(config) / f"{tile_coord}.png").convert(
+                    "RGBA"
+                )
             except FileNotFoundError:
                 if ph:
                     ph.add.remote(tile_coord)  # type: ignore
@@ -186,10 +155,8 @@ def _draw_text(
 
             for text in text_list:
                 for img_uuid, center in zip(text.image, text.center):
-                    img = TextObject.uuid_to_img(img_uuid, temp_dir, export_id).convert(
-                        "RGBA"
-                    )
-                    new_center = center.to_image_coord(skin, tile_coord, zoom)
+                    img = TextObject.uuid_to_img(img_uuid, config).convert("RGBA")
+                    new_center = center.to_image_coord(tile_coord, config)
                     image.alpha_composite(
                         img,
                         (
@@ -198,9 +165,9 @@ def _draw_text(
                         ),
                     )
 
-            if save_images:
+            if save_dir is not None:
                 image.save(save_dir / f"{tile_coord}.webp", "webp", quality=95)
-            os.remove(wip_tiles_dir(temp_dir, export_id) / f"{tile_coord}.png")
+            os.remove(wip_tiles_dir(config) / f"{tile_coord}.png")
             out[tile_coord] = image
 
             if ph:

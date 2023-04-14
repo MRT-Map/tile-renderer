@@ -45,7 +45,7 @@ class Component(Struct):
         """
         Finds the minimum and maximum X and Y values in a JSON of components
 
-        :param ComponentList components: a JSON of components
+        :param ComponentList components: A JSON of components
 
         :returns: The minimum and maximum X and Y values
         """
@@ -64,7 +64,7 @@ class Component(Struct):
         """
         Like :py:func:`tools.line.to_tiles`, but for a JSON of components.
 
-        :param ComponentList components: a JSON of components
+        :param ComponentList components: A JSON of components
         :param zoom_params: The zoom parameters
 
         :returns: A list of tile coordinates
