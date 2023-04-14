@@ -2,7 +2,7 @@ from rich.progress import track
 
 from . import Pla1ComponentListJson, Pla1NodeListJson
 from ._internal.logger import log
-from .misc_types.coord import WorldCoord
+from .misc_types.coord import WorldCoord, WorldLine
 from .misc_types.pla2 import Component, Pla2File
 
 
@@ -31,7 +31,7 @@ def pla1to2(
             log.warn(
                 f"Hollow data found in `{comp_name}`, PLA 2 doesn't support hollows"
             )
-        nodes = [get_coord(n) for n in comp["nodes"]]
+        nodes = WorldLine([get_coord(n) for n in comp["nodes"]])
         comps.setdefault(ns, []).append(
             Component(
                 namespace=ns,
