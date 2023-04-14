@@ -20,58 +20,31 @@ from .zoom_params import ZoomParams
 _T = TypeVar("_T")
 
 
-@functools.lru_cache
-def _inner(x: float, y: float):
-    return Point(x, y)
-
-
+@dataclass(frozen=True, init=True, unsafe_hash=True, slots=True, eq=True)
 class Coord:
-    """Represents a 2-dimensional point. Wrapper of shapely.Point"""
+    """Represents a 2-dimensional point"""
 
-    __slots__ = ("point",)
-
-    def __init__(self, x: float, y: float):
-        self.point = _inner(x, y)
-
-    @classmethod
-    def from_point(cls, point: Point) -> Coord:
-        c = cls.__new__(cls)
-        c.point = point
-        return c
+    x: float
+    y: float
 
     def __repr__(self):
-        return f"{type(self).__name__} <{repr(self.point)}>"
-
-    def __eq__(self, other):
-        if isinstance(other, type(self)):
-            return self.point == other.point
-        else:
-            return False
-
-    @property
-    def x(self) -> float:
-        """The x-coordinate of the point"""
-        return self.point.x
-
-    @property
-    def y(self) -> float:
-        """The y-coordinate of the point"""
-        return self.point.y
+        return f"{type(self).__name__}({self.x}, {self.y})"
 
     def as_tuple(self) -> tuple[float, float]:
         """Represent the coordinates as a tuple"""
-        return self.point.x, self.point.y
+        return self.x, self.y
+
+    @property
+    def point(self) -> Point:
+        return Point(self.x, self.y)
 
     @staticmethod
     def enc_hook(obj: Coord) -> tuple[int, int]:
-        return int(obj.point.x), int(obj.point.y)
+        return int(obj.x), int(obj.y)
 
     @staticmethod
     def dec_hook(obj: tuple[float, float]) -> Coord:
         return Coord(*obj)
-
-    def __hash__(self):
-        return hash((self.x, self.y))
 
 
 class ImageCoord(Coord):
@@ -154,47 +127,35 @@ class Bounds(Generic[_T]):
 
 
 class Line:
-    """Represents a 2-dimensional line. Wrapper of shapely.LineString"""
+    """Represents a 2-dimensional line"""
 
-    __slots__ = ("line",)
+    coords: list[Coord]
 
-    def __init__(self, line: list[Coord] | LineString):
-        if isinstance(line, LineString):
-            self.line = line
-        else:
-            self.line = LineString(p.point for p in line)
+    __slots__ = ("coords",)
+
+    def __init__(self, coords: list[Coord]):
+        self.coords = coords
 
     def __repr__(self):
-        return f"{type(self).__name__} <{repr(self.line)}>"
-
-    def __eq__(self, other):
-        if isinstance(other, type(self)):
-            return self.line == other.line
-        else:
-            return False
-
-    @property
-    def coords(self) -> list[Coord]:
-        """The coordinates in the line"""
-        return [c for c in self]
+        return f"{type(self).__name__} <{';'.join(str(a) for a in self.coords)}>"
 
     @property
     def first_coord(self) -> Coord:
         """The first coordinate in the line"""
-        return Coord(*self.line.coords[0])
+        return self.coords[0]
 
     @property
     def last_coord(self) -> Coord:
         """The last coordinate in the line"""
-        return Coord(*self.line.coords[-1])
+        return self.coords[-1]
 
     @methodtools.lru_cache
     def __iter__(self) -> Generator[Coord, Any, None]:
-        for c in self.line.coords:
-            yield Coord(*c)
+        for c in self.coords:
+            yield c
 
     def __len__(self):
-        return len(self.line.coords)
+        return len(self.coords)
 
     @functools.cached_property
     def bounds(self) -> Bounds[float]:
@@ -212,12 +173,19 @@ class Line:
 
     def parallel_offset(self, *args, **kwargs) -> Line:
         """Calls shapely.LineString.parallel_offset()"""
-        return Line(self.line.parallel_offset(*args, **kwargs))
+        return Line(
+            [
+                Coord(*a)
+                for a in LineString(a.as_tuple() for a in self.coords)
+                .parallel_offset(*args, **kwargs)
+                .coords
+            ]
+        )
 
     @property
     def centroid(self) -> Point:
         """Calls shapely.LineString.centroid()"""
-        return self.line.centroid
+        return LineString(a.as_tuple() for a in self.coords).centroid
 
     def to_tiles(self, z: ZoomParams) -> list[TileCoord]:
         """
@@ -271,8 +239,10 @@ class Line:
 class WorldLine(Line):
     """Represents a line in the world"""
 
+    coords: list[WorldCoord]
+
     def __init__(self, line: list[WorldCoord] | LineString):
-        super().__init__(line)  # type: ignore
+        super().__init__(line)
 
     def to_image_line(self, tile_coord: TileCoord, config: Config) -> ImageLine:
         """
@@ -286,22 +256,26 @@ class WorldLine(Line):
         image_coords = [a.to_image_coord(tile_coord, config) for a in self]
         return ImageLine(image_coords)
 
-    @functools.cached_property  # type: ignore
-    def coords(self) -> list[WorldCoord]:
-        """The coordinates in the line"""
-        return [c for c in self]
-
     def __iter__(self) -> Generator[WorldCoord, Any, None]:
-        for c in self.line.coords:
-            yield WorldCoord(*c)
+        for c in self.coords:
+            yield c
 
     def parallel_offset(self, *args, **kwargs) -> WorldLine:
-        return WorldLine(super().parallel_offset(*args, **kwargs).line)
+        return WorldLine(
+            [
+                WorldCoord(*a)
+                for a in LineString(a.as_tuple() for a in self.coords)
+                .parallel_offset(*args, **kwargs)
+                .coords
+            ]
+        )
 
 
 class ImageLine(Line):
+    coords: list[ImageCoord]
+
     def __init__(self, line: list[ImageCoord] | LineString):
-        super().__init__(line)  # type: ignore
+        super().__init__(line)
 
     def to_world_line(self, tile_coord: TileCoord, config: Config) -> WorldLine:
         """
@@ -315,17 +289,19 @@ class ImageLine(Line):
         image_coords = [a.to_world_coord(tile_coord, config) for a in self]
         return WorldLine(image_coords)
 
-    @functools.cached_property  # type: ignore
-    def coords(self) -> list[ImageCoord]:
-        """The coordinates in the line"""
-        return [c for c in self]
-
     def __iter__(self) -> Generator[ImageCoord, Any, None]:
-        for c in self.line.coords:
-            yield ImageCoord(*c)
+        for c in self.coords:
+            yield c
 
     def parallel_offset(self, *args, **kwargs) -> ImageLine:
-        return ImageLine(super().parallel_offset(*args, **kwargs).line)
+        return ImageLine(
+            [
+                ImageCoord(*a)
+                for a in LineString(a.as_tuple() for a in self.coords)
+                .parallel_offset(*args, **kwargs)
+                .coords
+            ]
+        )
 
 
 class TileCoord(NamedTuple):
