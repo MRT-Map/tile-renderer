@@ -181,7 +181,7 @@ def _draw_text(
 
             # antialiasing
             image = image.resize(
-                (image.width * 4, image.height * 4), resample=Image.BOX
+                (image.width * 16, image.height * 16), resample=Image.BOX
             ).resize(image.size, resample=Image.ANTIALIAS)
 
             for text in text_list:
