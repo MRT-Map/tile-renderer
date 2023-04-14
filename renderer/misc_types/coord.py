@@ -6,13 +6,13 @@ from dataclasses import dataclass
 from itertools import chain
 from typing import TYPE_CHECKING, Any, Generator, Generic, NamedTuple, TypeVar
 
+import methodtools
 from shapely.geometry import LineString, Point
 
 from .. import math_utils
 from .._internal import with_next
 
 if TYPE_CHECKING:
-    from .skin import Skin
     from .config import Config
 
 from .zoom_params import ZoomParams
@@ -20,9 +20,9 @@ from .zoom_params import ZoomParams
 _T = TypeVar("_T")
 
 
-@functools.cache
-def _inner(*args: float | Point):
-    return Point(*args)
+@functools.lru_cache
+def _inner(x: float, y: float):
+    return Point(x, y)
 
 
 class Coord:
@@ -30,8 +30,14 @@ class Coord:
 
     __slots__ = ("point",)
 
-    def __init__(self, *args: float | Point):
-        self.point = _inner(*args)
+    def __init__(self, x: float, y: float):
+        self.point = _inner(x, y)
+
+    @classmethod
+    def from_point(cls, point: Point) -> Coord:
+        c = cls.__new__(cls)
+        c.point = point
+        return c
 
     def __repr__(self):
         return f"{type(self).__name__} <{repr(self.point)}>"
@@ -93,12 +99,12 @@ class ImageCoord(Coord):
 
 
 @functools.lru_cache()
-def _to_image_coord(wc: WorldCoord, tc: TileCoord, skin: Skin, zoom: ZoomParams):
+def _to_image_coord(wc: WorldCoord, tc: TileCoord, tile_size: int, zoom: ZoomParams):
     size = zoom.range * 2 ** (zoom.max - tc.z)
     xc = wc.x - tc.x * size
     yc = wc.y - tc.y * size
-    xs = int(skin.tile_size / size * xc)
-    ys = int(skin.tile_size / size * yc)
+    xs = int(tile_size / size * xc)
+    ys = int(tile_size / size * yc)
     return ImageCoord(xs, ys)
 
 
@@ -115,7 +121,7 @@ class WorldCoord(Coord):
         :return: The image coordinate
         """
 
-        return _to_image_coord(self, tile_coord, config.skin, config.zoom)
+        return _to_image_coord(self, tile_coord, config.skin.tile_size, config.zoom)
 
     def tiles(self, zoom_params: ZoomParams) -> list[TileCoord]:
         """
@@ -172,6 +178,17 @@ class Line:
         """The coordinates in the line"""
         return [c for c in self]
 
+    @property
+    def first_coord(self) -> Coord:
+        """The first coordinate in the line"""
+        return Coord(*self.line.coords[0])
+
+    @property
+    def last_coord(self) -> Coord:
+        """The last coordinate in the line"""
+        return Coord(*self.line.coords[-1])
+
+    @methodtools.lru_cache
     def __iter__(self) -> Generator[Coord, Any, None]:
         for c in self.line.coords:
             yield Coord(*c)
@@ -198,7 +215,7 @@ class Line:
         return Line(self.line.parallel_offset(*args, **kwargs))
 
     @property
-    def centroid(self):
+    def centroid(self) -> Point:
         """Calls shapely.LineString.centroid()"""
         return self.line.centroid
 

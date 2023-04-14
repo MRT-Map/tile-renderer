@@ -164,22 +164,21 @@ def _pre_draw_components(
         install(show_locals=True)
         logging.getLogger("fontTools").setLevel(logging.CRITICAL)
         logging.getLogger("PIL").setLevel(logging.CRITICAL)
-        results: dict[TileCoord | list[TextObject]] = {}
+        results: dict[TileCoord, list[TextObject]] = {}
         for tile_coord in tile_coords:
             path = part_dir(consts, 0) / f"tile_{tile_coord}.dill"
             with open(path, "rb") as f:
                 tile_components = dill.load(f)
 
-            out = _draw_components(ph, tile_coord, tile_components, consts)
+            (out_tc, out_to) = _draw_components(ph, tile_coord, tile_components, consts)
 
             os.remove(path)
-            if out is not None:
-                with open(
-                    part_dir(consts, 1) / f"tile_{tile_coord}.dill",
-                    "wb",
-                ) as f:
-                    dill.dump({out[0]: out[1]}, f)
-            results[out[0]] = out[1]
+            with open(
+                part_dir(consts, 1) / f"tile_{tile_coord}.dill",
+                "wb",
+            ) as f:
+                dill.dump({out_tc: out_to}, f)
+            results[out_tc] = out_to
         if ph:
             ph.request_new_task.remote()  # type: ignore
         return results
@@ -278,9 +277,15 @@ def _draw_components(
             ):
                 coord: WorldCoord
                 for coord in chain(*(c.nodes.coords for c in group)):
+                    con_img_coord = coord.to_image_coord(tile_coord, consts)
+
                     for con_component in consts.coord_to_comp[coord]:
                         if "road" not in consts.skin[con_component.type].tags:
                             continue
+
+                        con_coords = con_component.nodes.to_image_line(
+                            tile_coord, consts
+                        )
 
                         inter = Image.new(
                             "RGBA", (consts.skin.tile_size,) * 2, (0,) * 4
@@ -289,12 +294,8 @@ def _draw_components(
                         for con_step in con_info[consts.zoom.max - tile_coord.z]:
                             if not isinstance(
                                 con_step, Skin.ComponentTypeInfo.LineFore
-                            ):
+                            ) or isinstance(con_step, Skin.ComponentTypeInfo.LineBack):
                                 continue
-
-                            con_coords = con_component.nodes.to_image_line(
-                                tile_coord, consts
-                            )
 
                             con_img = Image.new(
                                 "RGBA", (consts.skin.tile_size,) * 2, (0,) * 4
@@ -317,16 +318,14 @@ def _draw_components(
                             con_mask_imd = ImageDraw.Draw(con_mask_img)
                             con_mask_imd.ellipse(
                                 (
-                                    coord.to_image_coord(tile_coord, consts).x
-                                    - (max(con_step.width, step.width) * 2) / 2
+                                    con_img_coord.x
+                                    - max(con_step.width, step.width)
                                     + 1,
-                                    coord.to_image_coord(tile_coord, consts).y
-                                    - (max(con_step.width, step.width) * 2) / 2
+                                    con_img_coord.y
+                                    - max(con_step.width, step.width)
                                     + 1,
-                                    coord.to_image_coord(tile_coord, consts).x
-                                    + (max(con_step.width, step.width) * 2) / 2,
-                                    coord.to_image_coord(tile_coord, consts).y
-                                    + (max(con_step.width, step.width) * 2) / 2,
+                                    con_img_coord.x + max(con_step.width, step.width),
+                                    con_img_coord.y + max(con_step.width, step.width),
                                 ),
                                 fill="#000000",
                             )

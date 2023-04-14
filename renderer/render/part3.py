@@ -29,14 +29,14 @@ def task_spawner(
     ph: ObjectRef[ProgressHandler],  # type: ignore
     config: Config,
     chunks: list[list[TileCoord]],
-    save_dir: Path,
+    save_dir: Path | None,
     cursor: int,
     futures: list[ObjectRef[dict[TileCoord, Image.Image] | None]],  # type: ignore
 ) -> list[ObjectRef[dict[TileCoord, Image.Image] | None]]:  # type: ignore
     """The task spawner used for part 3"""
     while cursor < len(chunks):
         if ray.get(ph.needs_new_task.remote()):  # type: ignore
-            output = ray.remote(_draw_text).remote(
+            output = ray.remote(_draw_text).remote(  # type: ignore
                 ph,
                 config,
                 chunks[cursor],
@@ -84,7 +84,7 @@ def render_part3(
 
         ph = ProgressHandler.remote()  # type: ignore
         futures = [
-            ray.remote(_draw_text).remote(
+            ray.remote(_draw_text).remote(  # type: ignore
                 ph,
                 config,
                 text_lists,

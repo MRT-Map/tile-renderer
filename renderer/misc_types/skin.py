@@ -221,7 +221,7 @@ class Skin:
                 text_list: list[TextObject],
                 points_text_list: list[TextObject],
             ):
-                coord = coords.coords[0]
+                coord = coords.first_coord
                 imd.ellipse(
                     (
                         coord.x - self.size / 2 + 1,
@@ -257,7 +257,7 @@ class Skin:
                 text_list: list[TextObject],
                 points_text_list: list[TextObject],
             ):
-                coord = coords.coords[0]
+                coord = coords.first_coord
                 if len(component.display_name.strip()) == 0:
                     return
                 font = self._type_info._skin.get_font(
@@ -315,7 +315,7 @@ class Skin:
                 text_list: list[TextObject],
                 points_text_list: list[TextObject],
             ):
-                coord = coords.coords[0]
+                coord = coords.first_coord
                 imd.rectangle(
                     (
                         coord.x - self.size / 2 + 1,
@@ -349,7 +349,7 @@ class Skin:
                 text_list: list[TextObject],
                 points_text_list: list[TextObject],
             ):
-                coord = coords.coords[0]
+                coord = coords.first_coord
                 icon = Image.open(consts.assets_dir / self.file)
                 img.paste(
                     icon,
@@ -390,11 +390,11 @@ class Skin:
                 text_to_print = ""
                 overflow = 0
                 text_objects = []
-                swap = coords.coords[-1].x < coords.coords[0].x
+                swap = coords.last_coord.x < coords.first_coord.x
                 if swap and upright:
                     coords = ImageLine(coords.coords[::-1])
                 for c1, c2 in with_next([a for a in coords]):
-                    if c2 == coords.coords[-1]:
+                    if c2 == coords.last_coord:
                         while char_cursor < len(text):
                             text_to_print += text[char_cursor]
                             char_cursor += 1
@@ -582,13 +582,13 @@ class Skin:
                         if e is not None
                     )
 
-        class LineBack(ComponentStyle):
-            """Represents the back layer of a line"""
+        class LineFore(ComponentStyle):
+            """Represents the front layer of a line"""
 
             # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 self._type_info = type_info
-                self.layer = "back"
+                self.layer = "fore"
                 self.colour: str | None = json["colour"]
                 self.width: int = json["width"]
                 self.dash: tuple[int, int] = json["dash"]
@@ -614,19 +614,19 @@ class Skin:
                     if "unroundedEnds" not in self._type_info.tags:
                         imd.ellipse(
                             [
-                                coords.coords[0].x - self.width / 2 + 1,
-                                coords.coords[0].y - self.width / 2 + 1,
-                                coords.coords[0].x + self.width / 2 - 1,
-                                coords.coords[0].y + self.width / 2 - 1,
+                                coords.first_coord.x - self.width / 2 + 1,
+                                coords.first_coord.y - self.width / 2 + 1,
+                                coords.first_coord.x + self.width / 2 - 1,
+                                coords.first_coord.y + self.width / 2 - 1,
                             ],
                             fill=self.colour,
                         )
                         imd.ellipse(
                             [
-                                coords.coords[-1].x - self.width / 2 + 1,
-                                coords.coords[-1].y - self.width / 2 + 1,
-                                coords.coords[-1].x + self.width / 2 - 1,
-                                coords.coords[-1].y + self.width / 2 - 1,
+                                coords.last_coord.x - self.width / 2 + 1,
+                                coords.last_coord.y - self.width / 2 + 1,
+                                coords.last_coord.x + self.width / 2 - 1,
+                                coords.last_coord.y + self.width / 2 - 1,
                             ],
                             fill=self.colour,
                         )
@@ -640,13 +640,13 @@ class Skin:
                             width=self.width,
                         )
 
-        class LineFore(LineBack):
-            """Represent the front layer of a line"""
+        class LineBack(LineFore):
+            """Represent the back layer of a line"""
 
             # noinspection PyInitNewSignature
             def __init__(self, json: dict, type_info: Skin.ComponentTypeInfo, *_, **__):
                 super().__init__(json, type_info)
-                self.layer = "fore"
+                self.layer = "back"
 
         class AreaBorderText(ComponentStyle):
             """Represent the border text of an area. Will be rendered in the future"""
