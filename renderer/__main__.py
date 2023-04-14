@@ -8,10 +8,11 @@ import vector
 from rich.progress import track
 from rich.traceback import install
 
-from renderer import Config, TileCoord, __version__, merge_tiles, render
+from renderer import TileCoord, __version__, merge_tiles, render
 
 # noinspection PyProtectedMember
 from renderer._internal.logger import log
+from renderer.misc_types.config import Config
 from renderer.misc_types.pla2 import Pla2File
 from renderer.misc_types.skin import Skin
 from renderer.misc_types.zoom_params import ZoomParams
@@ -67,7 +68,7 @@ def p_render(p: argparse.ArgumentParser):
         "--assets_dir",
         type=Path,
         help="The asset directory for the skin",
-        default=Path(__file__).parent.parent / "skins" / "assets",
+        default=Path(__file__).parent / "skins" / "assets",
     )
     p.add_argument(
         "-sd",
@@ -269,7 +270,7 @@ def main():
             part3_serial=args.part3_serial,
         )
     elif args.task == "merge":
-        merge_tiles(args.image_dir, True, args.save_dir, args.zoom)
+        merge_tiles(args.image_dir, args.save_dir, args.zoom)
     elif args.task == "1to2":
         comps = {}
         for file in track(

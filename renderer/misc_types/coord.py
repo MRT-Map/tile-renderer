@@ -6,7 +6,6 @@ from dataclasses import dataclass
 from itertools import chain
 from typing import TYPE_CHECKING, Any, Generator, Generic, NamedTuple, TypeVar
 
-import methodtools as methodtools
 from shapely.geometry import LineString, Point
 
 from .. import math_utils
@@ -93,6 +92,16 @@ class ImageCoord(Coord):
         return WorldCoord(xs, ys)
 
 
+@functools.lru_cache()
+def _to_image_coord(wc: WorldCoord, tc: TileCoord, skin: Skin, zoom: ZoomParams):
+    size = zoom.range * 2 ** (zoom.max - tc.z)
+    xc = wc.x - tc.x * size
+    yc = wc.y - tc.y * size
+    xs = int(skin.tile_size / size * xc)
+    ys = int(skin.tile_size / size * yc)
+    return ImageCoord(xs, ys)
+
+
 class WorldCoord(Coord):
     """Represents a 2-dimensional coordinate in the world"""
 
@@ -106,16 +115,7 @@ class WorldCoord(Coord):
         :return: The image coordinate
         """
 
-        @methodtools.lru_cache()
-        def inner(tc: TileCoord, skin: Skin, zoom: ZoomParams):
-            size = zoom.range * 2 ** (zoom.max - tc[0])
-            xc = self.x - tc.x * size
-            yc = self.y - tc.y * size
-            xs = int(skin.tile_size / size * xc)
-            ys = int(skin.tile_size / size * yc)
-            return ImageCoord(xs, ys)
-
-        return inner(tile_coord, config.skin, config.zoom)
+        return _to_image_coord(self, tile_coord, config.skin, config.zoom)
 
     def tiles(self, zoom_params: ZoomParams) -> list[TileCoord]:
         """

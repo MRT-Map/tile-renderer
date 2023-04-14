@@ -102,10 +102,10 @@ def prepare_render(
             ]
         )
 
-    if tiles is None:
+    if tiles is None or len(tiles) == 0:
         log.info("Finding tiles...")
         tiles = Component.rendered_in(components.components, config.zoom)
-    if zooms is not None:
+    if zooms is not None and len(zooms) != 0:
         tiles = [tc for tc in tiles if tc.z in zooms]
 
     log.info("Removing components with unknown type...")
