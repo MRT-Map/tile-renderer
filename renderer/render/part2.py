@@ -18,11 +18,15 @@ from ..misc_types.config import Config
 from ..misc_types.coord import TileCoord
 from ..misc_types.pla2 import Component, Pla2File
 from ..misc_types.skin import AreaBorderText, AreaCenterText, LineText, PointText
-from .multiprocess import ProgressHandler, multiprocess
+from .multiprocess import MultiprocessConfig, ProgressHandler, multiprocess
 from .utils import TextObject, part_dir
 
 
-def render_part2(config: Config) -> dict[TileCoord, list[TextObject]]:
+def render_part2(
+    config: Config,
+    mp_config1: MultiprocessConfig = MultiprocessConfig(),
+    mp_config2: MultiprocessConfig = MultiprocessConfig(),
+) -> dict[TileCoord, list[TextObject]]:
     """Part 2 of the rendering job. Check render() for the full list of parameters"""
     zooms = set()
     log.info("Determining zoom levels...")
@@ -46,6 +50,7 @@ def render_part2(config: Config) -> dict[TileCoord, list[TextObject]]:
         _find_text_objects,
         "[green]Finding text",
         len(components.components),
+        mp_config1,
     )
     text_objects: dict[int, list[TextObject]] = {}
     for li in pre_text_objects:
@@ -58,6 +63,7 @@ def render_part2(config: Config) -> dict[TileCoord, list[TextObject]]:
         _prevent_text_overlap,
         "[green]Eliminating overlapping text",
         sum(len(to) for to in text_objects.values()),
+        mp_config2,
     )
     result = {}
     for a in pre_result:

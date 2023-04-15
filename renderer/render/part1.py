@@ -21,7 +21,7 @@ from ..misc_types.config import Config
 from ..misc_types.coord import TileCoord, WorldCoord
 from ..misc_types.pla2 import Component, Pla2File
 from ..misc_types.skin import LineBack, LineFore
-from .multiprocess import ProgressHandler, multiprocess
+from .multiprocess import MultiprocessConfig, ProgressHandler, multiprocess
 from .utils import TextObject, part_dir, wip_tiles_dir
 
 
@@ -45,12 +45,7 @@ class Part1Consts(Config):
         )
 
 
-def render_part1(
-    config: Config,
-    batch_size: int = 8,
-    chunk_size: int = 8,
-    serial: bool = False,
-):
+def render_part1(config: Config, mp_config: MultiprocessConfig = MultiprocessConfig()):
     """Part 1 of the rendering job. Check render() for the full list of parameters"""
     tile_coords = []
     with open(part_dir(config, 0) / f"processed.dill", "rb") as f:
@@ -91,9 +86,7 @@ def render_part1(
         _pre_draw_components,
         "[green]Rendering components",
         sum(operations.values()),
-        batch_size,
-        chunk_size,
-        serial,
+        mp_config,
     )
     result = {a: b for a, b in pre_result}
 

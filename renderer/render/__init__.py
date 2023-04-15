@@ -8,6 +8,7 @@ import ray
 from PIL import Image
 
 from .._internal.logger import log
+from .multiprocess import MultiprocessConfig
 
 if TYPE_CHECKING:
     from ..misc_types.config import Config
@@ -28,11 +29,10 @@ def render(
     tiles: list[TileCoord] | None = None,
     zooms: list[int] | None = None,
     offset: Vector = Vector(0, 0),
-    part1_batch_size: int = 8,
-    part1_chunk_size: int = 8,
-    part1_serial: bool = False,
-    part3_batch_size: int = psutil.cpu_count(),
-    part3_serial: bool = False,
+    part1_mp_config: MultiprocessConfig = MultiprocessConfig(),
+    part2_mp_config1: MultiprocessConfig = MultiprocessConfig(),
+    part2_mp_config2: MultiprocessConfig = MultiprocessConfig(),
+    part3_mp_config: MultiprocessConfig = MultiprocessConfig(),
 ) -> dict[TileCoord, Image.Image]:
     """
     Renders tiles from given coordinates and zoom values.
@@ -61,15 +61,15 @@ def render(
 
     prepare_render(components, config, tiles, zooms, offset)
 
-    if not part1_serial:
+    if (
+        not part1_mp_config.serial
+        and not part2_mp_config1.serial
+        and not part2_mp_config2.serial
+        and not part3_mp_config.serial
+    ):
         log.info(f"Initialising Ray with {processes=}...")
         ray.init(num_cpus=processes)
 
-    render_part1(
-        config,
-        part1_batch_size,
-        part1_chunk_size,
-        part1_serial,
-    )
-    render_part2(config)
-    return render_part3(config, save_dir, part3_serial, part3_batch_size)
+    render_part1(config, part1_mp_config)
+    render_part2(config, part2_mp_config1, part2_mp_config2)
+    return render_part3(config, save_dir, part3_mp_config)

@@ -1,9 +1,11 @@
 from __future__ import annotations
 
 import traceback
+from dataclasses import dataclass
 from queue import Empty, Queue
 from typing import Callable, Generic, TypeVar
 
+import psutil
 import ray
 import rich
 from rich.progress import Progress, track
@@ -83,17 +85,22 @@ def task_spawner(
     return futures
 
 
+@dataclass(frozen=True, init=True, unsafe_hash=True)
+class MultiprocessConfig:
+    batch_size: int = psutil.cpu_count()
+    chunk_size: int = (8,)
+    serial: bool = False
+
+
 def multiprocess(
     iterated: list[_I],
     const_data: _D,
     f: Callable[[ProgressHandler[_I] | None, _I, _D], _R | None],
     msg: str,
     num_operations: int | None = None,
-    batch_size: int = 8,
-    chunk_size: int = 8,
-    serial: bool = False,
+    mp_config: MultiprocessConfig = MultiprocessConfig,
 ) -> list[_R]:
-    if serial:
+    if mp_config.serial:
         out_ = []
         for i_ in track(iterated, msg):
             o_ = f(None, i_, const_data)
@@ -103,7 +110,10 @@ def multiprocess(
 
     const_data = ray.put(const_data)
 
-    chunks = [iterated[i : i + chunk_size] for i in range(0, len(iterated), chunk_size)]
+    chunks = [
+        iterated[i : i + mp_config.chunk_size]
+        for i in range(0, len(iterated), mp_config.chunk_size)
+    ]
 
     def new_f(p: ProgressHandler[_I] | None, i: list[_I], d: _D) -> list[_R] | None:
         try:
@@ -128,9 +138,9 @@ def multiprocess(
     futures: list[ObjectRef[_R]]  # type: ignore
     futures = [
         ray.remote(new_f).remote(ph, chunk, const_data)
-        for chunk in track(chunks[:batch_size], "Spawning initial tasks")
+        for chunk in track(chunks[: mp_config.batch_size], "Spawning initial tasks")
     ]
-    cursor = batch_size
+    cursor = mp_config.batch_size
     future_refs: ObjectRef[list[ObjectRef[list[_R] | None]]]  # type: ignore
     future_refs = task_spawner.remote(ph, chunks, const_data, new_f, futures, cursor)
     with Progress() as progress:

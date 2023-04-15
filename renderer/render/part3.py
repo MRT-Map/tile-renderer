@@ -22,15 +22,14 @@ if TYPE_CHECKING:
 
 from .._internal.logger import log
 from ..misc_types.coord import TileCoord
-from .multiprocess import ProgressHandler, multiprocess
+from .multiprocess import MultiprocessConfig, ProgressHandler, multiprocess
 from .utils import TextObject, part_dir, wip_tiles_dir
 
 
 def render_part3(
     config: Config,
     save_dir: Path | None = None,
-    serial: bool = False,
-    batch_size: int = psutil.cpu_count(),
+    mp_config: MultiprocessConfig = MultiprocessConfig(),
 ) -> dict[TileCoord, Image.Image]:
     """Part 3 of the rendering job. Check render() for the full list of parameters"""
     tile_coords = []
@@ -54,9 +53,7 @@ def render_part3(
         _draw_text,
         "[green]Rendering texts",
         len(tile_coords),
-        batch_size,
-        8,
-        serial,
+        mp_config,
     )
     result = {a: b for a, b in pre_result}
 
@@ -82,9 +79,9 @@ def _draw_text(
         text_list = []
 
     # antialiasing
-    image = image.resize(
-        (image.width * 16, image.height * 16), resample=Image.BOX
-    ).resize(image.size, resample=Image.ANTIALIAS)
+    # image = image.resize(
+    #    (image.width * 16, image.height * 16), resample=Image.BOX
+    # ).resize(image.size, resample=Image.ANTIALIAS)
 
     for text in text_list:
         for img_uuid, center in zip(text.image, text.center):
@@ -99,7 +96,7 @@ def _draw_text(
             )
 
     if save_dir is not None:
-        image.save(save_dir / f"{tile_coord}.webp", "webp", quality=95)
+        image.save(save_dir / f"{tile_coord}.webp", "webp", quality=75)
     os.remove(wip_tiles_dir(config) / f"{tile_coord}.png")
 
     if ph:

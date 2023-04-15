@@ -7,7 +7,7 @@ import psutil
 from rich.progress import track
 from rich.traceback import install
 
-from renderer import TileCoord, __version__, merge_tiles, render
+from renderer import MultiprocessConfig, TileCoord, __version__, merge_tiles, render
 
 # noinspection PyProtectedMember
 from renderer._internal.logger import log
@@ -114,39 +114,28 @@ def p_render(p: argparse.ArgumentParser):
         help="the offset of node coordinates, given as `x y`",
         default=[0, 0],
     )
-    p.add_argument(
-        "-p1b",
-        "--part1_batch_size",
-        type=int,
-        help="The batch size for part 1",
-        default=8,
-    )
-    p.add_argument(
-        "-p1c",
-        "--part1_chunk_size",
-        type=int,
-        help="The chunk size for part 1",
-        default=8,
-    )
-    p.add_argument(
-        "-p1s",
-        "--part1_serial",
-        help="Whether part 1 will be run serially",
-        action="store_true",
-    )
-    p.add_argument(
-        "-p3b",
-        "--part3_batch_size",
-        type=int,
-        help="The batch size for part 3",
-        default=8,
-    )
-    p.add_argument(
-        "-p3s",
-        "--part3_serial",
-        help="Whether part 3 will be run serially",
-        action="store_true",
-    )
+
+    for part in ("1", "2a", "2b", "3"):
+        p.add_argument(
+            f"-p{part}b",
+            f"--part{part}_batch_size",
+            type=int,
+            help=f"The batch size for part {part}",
+            default=psutil.cpu_count(),
+        )
+        p.add_argument(
+            f"-p{part}c",
+            f"--part{part}_chunk_size",
+            type=int,
+            help=f"The chunk size for part {part}",
+            default=8,
+        )
+        p.add_argument(
+            f"-p{part}s",
+            f"--part{part}_serial",
+            help=f"Whether part {part} will be run serially",
+            action="store_true",
+        )
 
 
 def p_merge(p: argparse.ArgumentParser):
@@ -263,11 +252,26 @@ def main():
             tiles=args.tiles,
             zooms=args.zooms,
             offset=Vector(args.offset[0], args.offset[1]),
-            part1_batch_size=args.part1_batch_size,
-            part1_chunk_size=args.part1_chunk_size,
-            part1_serial=args.part1_serial,
-            part3_batch_size=args.part3_batch_size,
-            part3_serial=args.part3_serial,
+            part1_mp_config=MultiprocessConfig(
+                batch_size=args.part1_batch_size,
+                chunk_size=args.part1_chunk_size,
+                serial=args.part1_serial,
+            ),
+            part2_mp_config1=MultiprocessConfig(
+                batch_size=args.part2a_batch_size,
+                chunk_size=args.part2a_chunk_size,
+                serial=args.part2a_serial,
+            ),
+            part2_mp_config2=MultiprocessConfig(
+                batch_size=args.part2b_batch_size,
+                chunk_size=args.part2b_chunk_size,
+                serial=args.part2b_serial,
+            ),
+            part3_mp_config=MultiprocessConfig(
+                batch_size=args.part3_batch_size,
+                chunk_size=args.part3_chunk_size,
+                serial=args.part3_serial,
+            ),
         )
     elif args.task == "merge":
         merge_tiles(args.image_dir, args.save_dir, args.zoom)
