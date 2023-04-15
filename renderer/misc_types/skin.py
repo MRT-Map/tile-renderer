@@ -560,8 +560,8 @@ class LineText(ComponentStyle):
                 trot = math.atan2(-c2.y + c1.y, c2.x - c1.x)
                 lt_i = lt_i.rotate(trot * 180 / math.pi, expand=True)
                 lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
-                tx = c1.x - (-overflow / 2 - text_length / 2) * math.cos(trot)
-                ty = c1.y + (-overflow / 2 - text_length / 2) * math.sin(trot)
+                tx = c1.x - (-overflow / 2.5 - text_length / 2) * math.cos(trot)
+                ty = c1.y + (-overflow / 2.5 - text_length / 2) * math.sin(trot)
 
                 text_objects.append(
                     TextObject(
@@ -574,8 +574,8 @@ class LineText(ComponentStyle):
                     )
                 )
 
-            text_to_print = ""
-            overflow = (text_length - (c1.point.distance(c2.point) - overflow)) * 2
+            text_to_print = " "
+            overflow = (text_length - (c1.point.distance(c2.point) - overflow)) / 2
 
             if char_cursor >= len(text):
                 break
@@ -887,7 +887,10 @@ class AreaCenterText(ComponentStyle):
             "", self.size + 2, config.assets_dir, component.display_name
         )
         text_length = int(
-            min(imd.textlength(x, font) for x in component.display_name.split("\n"))
+            min(
+                imd.textlength(x.strip(), font)
+                for x in component.display_name.split("\n")
+            )
         )
 
         left = min(cl.x for cl in coords)
@@ -905,7 +908,9 @@ class AreaCenterText(ComponentStyle):
                     text += "\n" + token + ws
                 else:
                     text += token + ws
-            text_length = int(max(imd.textlength(x, font) for x in text.split("\n")))
+            text_length = int(
+                max(imd.textlength(x.strip(), font) for x in text.split("\n"))
+            )
             text_size = int(imd.textsize(text, font)[1] * 2)
         else:
             text = component.display_name
@@ -915,7 +920,7 @@ class AreaCenterText(ComponentStyle):
         act_d = ImageDraw.Draw(act_i)
         act_d.multiline_text(
             (text_length, text_size),
-            text,
+            "\n".join(x.strip() for x in text.split("\n")),
             fill=self.colour,
             font=font,
             anchor="mm",
