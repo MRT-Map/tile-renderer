@@ -83,7 +83,8 @@ def _enc_hook(obj: Any) -> Any:
 
 def _dec_hook(type_: Type, obj: Any) -> Any:
     if type_ == WorldCoord:
-        return Coord.dec_hook(obj)
+        c = Coord.dec_hook(obj)
+        return WorldCoord(c.x, c.y)
     elif type_ == WorldLine or type_ == LineString:
         if len(obj) == 1:
             obj.append(obj[0])

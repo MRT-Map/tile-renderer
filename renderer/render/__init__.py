@@ -5,17 +5,15 @@ from typing import TYPE_CHECKING
 
 import psutil
 import ray
-import vector
 from PIL import Image
-from vector import Vector2D
 
 from .._internal.logger import log
 
 if TYPE_CHECKING:
     from ..misc_types.config import Config
-    from ..misc_types.coord import TileCoord
     from ..misc_types.pla2 import Pla2File
 
+from ..misc_types.coord import TileCoord, Vector
 from .part1 import render_part1
 from .part2 import render_part2
 from .part3 import render_part3
@@ -29,7 +27,7 @@ def render(
     processes: int = psutil.cpu_count(),
     tiles: list[TileCoord] | None = None,
     zooms: list[int] | None = None,
-    offset: Vector2D = vector.obj(x=0, y=0),
+    offset: Vector = Vector(0, 0),
     part1_batch_size: int = 8,
     part1_chunk_size: int = 8,
     part1_serial: bool = False,

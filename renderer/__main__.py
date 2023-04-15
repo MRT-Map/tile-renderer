@@ -4,7 +4,6 @@ import json
 from pathlib import Path
 
 import psutil
-import vector
 from rich.progress import track
 from rich.traceback import install
 
@@ -13,6 +12,7 @@ from renderer import TileCoord, __version__, merge_tiles, render
 # noinspection PyProtectedMember
 from renderer._internal.logger import log
 from renderer.misc_types.config import Config
+from renderer.misc_types.coord import Vector
 from renderer.misc_types.pla2 import Pla2File
 from renderer.misc_types.skin import Skin
 from renderer.misc_types.zoom_params import ZoomParams
@@ -262,7 +262,7 @@ def main():
             processes=args.processes,
             tiles=args.tiles,
             zooms=args.zooms,
-            offset=vector.obj(x=args.offset[0], y=args.offset[1]),
+            offset=Vector(args.offset[0], args.offset[1]),
             part1_batch_size=args.part1_batch_size,
             part1_chunk_size=args.part1_chunk_size,
             part1_serial=args.part1_serial,

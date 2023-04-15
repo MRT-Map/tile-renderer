@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import math
+import functools
 
 import vector
 
@@ -52,67 +52,42 @@ def dash(coords: ImageLine, dash_length: float, gap_length: float) -> list[Image
     """
     if dash_length <= 0.0 or gap_length <= 0.0:
         raise ValueError("dash or gap length cannot be <= 0")
-    dashes = []
-    is_gap = False
-    overflow = 0.0
-    for c1, c2 in with_next([a for a in coords]):
-        pre_dashes = [c1]
-        plotted_length = 0.0
-        start_as_gap = is_gap
-        theta = math.atan2(c2.y - c1.y, c2.x - c1.x)
-        dash_dx = dash_length * math.cos(theta)
-        dash_dy = dash_length * math.sin(theta)
-        gap_dx = gap_length * math.cos(theta)
-        gap_dy = gap_length * math.sin(theta)
-        if overflow != 0.0:
-            if overflow > c1.point.distance(c2.point):
-                pre_dashes.append(c2)
-                overflow -= c1.point.distance(c2.point)
-                plotted_length += c1.point.distance(c2.point)
-            else:
-                overflow_x = overflow * math.cos(theta)
-                overflow_y = overflow * math.sin(theta)
-                pre_dashes.append(
-                    ImageCoord(
-                        pre_dashes[-1].x + overflow_x, pre_dashes[-1].y + overflow_y
-                    )
-                )
-                plotted_length += overflow
-                is_gap = False if is_gap else True
-                overflow = 0.0
-        while overflow == 0.0:
-            if is_gap:
-                dx = gap_dx
-                dy = gap_dy
-            else:
-                dx = dash_dx
-                dy = dash_dy
-            if math.hypot(dx, dy) > c1.point.distance(c2.point) - plotted_length:
-                overflow = math.hypot(dx, dy) - (
-                    c1.point.distance(c2.point) - plotted_length
-                )
-                pre_dashes.append(c2)
-            else:
-                pre_dashes.append(
-                    ImageCoord(pre_dashes[-1].x + dx, pre_dashes[-1].y + dy)
-                )
-                plotted_length += gap_length if is_gap else dash_length
-                is_gap = False if is_gap else True
-        for i, (c3, c4) in enumerate(
-            with_next(pre_dashes[(1 if start_as_gap else 0) :])
-        ):
-            if i % 2 == 0 and c3 != c4:
-                dashes.append((c3, c4))
+    o_coords = tuple([c - coords.coords[0] for c in coords])
+    return [
+        ImageLine([a + coords.coords[0] for a in d])
+        for d in _dash(o_coords, dash_length, gap_length)
+    ]
 
-    new_dashes = []
-    prev_coord: ImageCoord | None = None
-    for c1, c2 in dashes:
-        if prev_coord != c1:
-            new_dashes.append(ImageLine([c1, c2]))
-        else:
-            new_dashes[-1] = ImageLine([*new_dashes[-1], c2])
-        prev_coord = c2
-    return new_dashes
+
+@functools.cache
+def _dash(
+    coords: tuple[ImageCoord, ...], dash_length: float, gap_length: float
+) -> list[list[ImageCoord]]:
+    dashes = []
+    next_dash = []
+    is_dash = True
+    next_len = dash_length
+    for c1, c2 in with_next(coords):
+        cursor = c1
+        while True:
+            if is_dash:
+                next_dash.append(cursor)
+            new_cursor = cursor + (c2 - c1).unit() * next_len
+            if (new_cursor - c2).dot(c2 - c1) >= 0:
+                next_len -= abs(c2 - cursor)
+                break
+            else:
+                cursor = new_cursor
+                if is_dash:
+                    next_dash.append(cursor)
+                    dashes.append(next_dash.copy())
+                    next_dash.clear()
+                is_dash = not is_dash
+                next_len = dash_length if is_dash else gap_length
+    if is_dash and len(coords) >= 1:
+        next_dash.append(coords[-1])
+        dashes.append(next_dash.copy())
+    return dashes
 
 
 def rotate_around_pivot(coord: Coord, pivot: Coord, theta: float) -> Coord:

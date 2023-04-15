@@ -2,12 +2,14 @@ from __future__ import annotations
 
 import functools
 import math
+from copy import copy
 from dataclasses import dataclass
 from itertools import chain
-from typing import TYPE_CHECKING, Any, Generator, Generic, NamedTuple, TypeVar
+from typing import TYPE_CHECKING, Any, Generator, Generic, NamedTuple, TypeVar, overload
 
 import methodtools
 from shapely.geometry import LineString, Point
+from typing_extensions import Self
 
 from .. import math_utils
 from .._internal import with_next
@@ -20,19 +22,67 @@ from .zoom_params import ZoomParams
 _T = TypeVar("_T")
 
 
-@dataclass(frozen=True, init=True, unsafe_hash=True, slots=True, eq=True)
-class Coord:
-    """Represents a 2-dimensional point"""
+@dataclass(init=True, unsafe_hash=True, slots=True, eq=True)
+class Vector:
+    """Represents a 2-dimensional vector"""
 
     x: float
     y: float
 
     def __repr__(self):
-        return f"{type(self).__name__}({self.x}, {self.y})"
+        return f"[{self.x}, {self.y}]"
 
     def as_tuple(self) -> tuple[float, float]:
         """Represent the coordinates as a tuple"""
         return self.x, self.y
+
+    def __add__(self, other: float | int | Vector) -> Self:
+        s = copy(self)
+        if isinstance(other, Vector):
+            s.x += other.x
+            s.y += other.y
+        else:
+            s.x += other
+            s.y += other
+        return s
+
+    def __sub__(self, other: float | int | Vector) -> Self:
+        s = copy(self)
+        if isinstance(other, Vector):
+            s.x -= other.x
+            s.y -= other.y
+        else:
+            s.x -= other
+            s.y -= other
+        return s
+
+    def __mul__(self, other: float | int) -> Self:
+        s = copy(self)
+        s.x *= other
+        s.y *= other
+        return s
+
+    def __truediv__(self, other: float | int) -> Self:
+        s = copy(self)
+        s.x /= other
+        s.y /= other
+        return s
+
+    def __abs__(self) -> float:
+        return (self.x**2 + self.y**2) ** 0.5
+
+    def unit(self) -> Self:
+        return self / abs(self)
+
+    def dot(self, other: Vector) -> float:
+        return self.x * other.x + self.y * other.y
+
+
+class Coord(Vector):
+    """Represents a 2-dimensional point"""
+
+    def __repr__(self):
+        return f"{type(self).__name__}({self.x}, {self.y})"
 
     @property
     def point(self) -> Point:
@@ -71,7 +121,7 @@ class ImageCoord(Coord):
         return WorldCoord(xs, ys)
 
 
-@functools.lru_cache()
+@functools.cache
 def _to_image_coord(wc: WorldCoord, tc: TileCoord, tile_size: int, zoom: ZoomParams):
     size = zoom.range * 2 ** (zoom.max - tc.z)
     xc = wc.x - tc.x * size
@@ -113,6 +163,10 @@ class WorldCoord(Coord):
             range_ *= 2
 
         return tiles
+
+
+def _centroid(coords: list[Coord]) -> Point:
+    return LineString(set(a.as_tuple() for a in coords)).centroid
 
 
 @dataclass
@@ -183,9 +237,11 @@ class Line:
         )
 
     @property
-    def centroid(self) -> Point:
+    def centroid(self) -> Coord:
         """Calls shapely.LineString.centroid()"""
-        return LineString(a.as_tuple() for a in self.coords).centroid
+        coords = [c - self.coords[0] for c in self.coords]
+        centroid = _centroid(coords)
+        return Coord(centroid.x + self.coords[0].x, centroid.y + self.coords[0].y)
 
     def to_tiles(self, z: ZoomParams) -> list[TileCoord]:
         """

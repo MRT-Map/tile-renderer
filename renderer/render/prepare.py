@@ -3,14 +3,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import dill
-import vector
 from rich.progress import track
-from vector import Vector2D
 
 if TYPE_CHECKING:
     from .. import Config
+
 from .._internal.logger import log
-from ..misc_types.coord import TileCoord, WorldCoord, WorldLine
+from ..misc_types.coord import TileCoord, Vector, WorldCoord, WorldLine
 from ..misc_types.pla2 import Component, Pla2File
 from ..misc_types.skin import Skin
 from ..misc_types.zoom_params import ZoomParams
@@ -90,17 +89,12 @@ def prepare_render(
     config: Config,
     tiles: list[TileCoord] | None = None,
     zooms: list[int] | None = None,
-    offset: Vector2D = vector.obj(x=0, y=0),
+    offset: Vector = Vector(0, 0),
 ) -> dict[TileCoord, list[list[Component]]]:
     """The data-preparing step of the rendering job. Check render() for the full list of parameters"""
     log.info("Offsetting coordinates...")
     for component in components:
-        component.nodes = WorldLine(
-            [
-                WorldCoord(coord.x + offset.x, coord.y + offset.y)
-                for coord in component.nodes
-            ]
-        )
+        component.nodes = WorldLine([coord + offset for coord in component.nodes])
 
     if tiles is None or len(tiles) == 0:
         log.info("Finding tiles...")
