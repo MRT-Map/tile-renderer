@@ -414,13 +414,12 @@ class PointText(ComponentStyle):
             stroke_fill="#dddddd",
             spacing=-self.size / 2,
         )
-        tw, th = pt_i.size
         pt_i = pt_i.crop((0, 0, pt_i.width, pt_i.height))
         return [
             TextObject(
                 pt_i,
                 ImageCoord(coord.x + self.offset.x, coord.y + self.offset.y),
-                (tw / 2, th / 2),
+                (text_length, self.size),
                 0,
                 zoom,
                 config,
@@ -558,7 +557,6 @@ class LineText(ComponentStyle):
                     stroke_fill=stroke or "#dddddd",
                     spacing=1,
                 )
-                tw, th = lt_i.size[:]
                 trot = math.atan2(-c2.y + c1.y, c2.x - c1.x)
                 lt_i = lt_i.rotate(trot * 180 / math.pi, expand=True)
                 lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
@@ -569,7 +567,7 @@ class LineText(ComponentStyle):
                     TextObject(
                         lt_i,
                         ImageCoord(tx, ty),
-                        (tw / 2, th / 2),
+                        (text_length, self.size),
                         trot,
                         zoom,
                         config,
@@ -926,9 +924,8 @@ class AreaCenterText(ComponentStyle):
             align="center",
             spacing=-self.size / 2,
         )
-        cw, ch = act_i.size[:]
         act_i = act_i.crop((0, 0, act_i.width, act_i.height))
-        return [TextObject(act_i, c, (cw / 2, ch / 2), 0, zoom, config)]
+        return [TextObject(act_i, c, (text_length, text_size), 0, zoom, config)]
 
 
 class AreaFill(ComponentStyle):

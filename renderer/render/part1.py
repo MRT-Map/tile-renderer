@@ -50,7 +50,7 @@ def render_part1(
     batch_size: int = 8,
     chunk_size: int = 8,
     serial: bool = False,
-) -> dict[TileCoord, list[TextObject]]:
+):
     """Part 1 of the rendering job. Check render() for the full list of parameters"""
     tile_coords = []
     with open(part_dir(config, 0) / f"processed.dill", "rb") as f:
@@ -104,22 +104,21 @@ def _pre_draw_components(
     ph: ObjectRef[ProgressHandler[TileCoord]] | None,  # type: ignore
     tile_coord: TileCoord,
     consts: Part1Consts,
-) -> tuple[TileCoord, list[TextObject]]:
+):
     logging.getLogger("fontTools").setLevel(logging.CRITICAL)
     logging.getLogger("PIL").setLevel(logging.CRITICAL)
     path = part_dir(consts, 0) / f"tile_{tile_coord}.dill"
     with open(path, "rb") as f:
         tile_components = dill.load(f)
 
-    out = _draw_components(ph, tile_coord, tile_components, consts)
+    _draw_components(ph, tile_coord, tile_components, consts)
 
     os.remove(path)
     with open(
         part_dir(consts, 1) / f"tile_{tile_coord}.dill",
         "wb",
     ) as f:
-        dill.dump((tile_coord, out), f)
-    return tile_coord, out
+        dill.dump(tile_coord, f)
 
 
 def _count_num_rendering_ops(config: Config) -> dict[TileCoord, int]:
@@ -173,13 +172,11 @@ def _draw_components(
     tile_coord: TileCoord,
     tile_components: list[list[Component]],
     consts: Part1Consts,
-) -> list[TextObject]:
+):
     img = Image.new(
         mode="RGBA", size=(consts.skin.tile_size,) * 2, color=consts.skin.background
     )
     imd = ImageDraw.Draw(img)
-    text_list: list[TextObject] = []
-    points_text_list: list[TextObject] = []
 
     for group in tile_components:
         type_info = consts.skin[group[0].type]
@@ -256,14 +253,9 @@ def _draw_components(
                 if ph:
                     ph.add.remote(tile_coord)  # type: ignore
 
-    text_list += points_text_list
-    text_list.reverse()
-
     img.save(
         wip_tiles_dir(consts) / f"{tile_coord}.png",
         "png",
     )
     if ph:
         ph.complete.remote(tile_coord)  # type: ignore
-
-    return text_list

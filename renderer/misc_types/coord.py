@@ -241,13 +241,15 @@ class Line:
             y_min=min(c.y for c in self.coords),
         )
 
-    def parallel_offset(self, *args, **kwargs) -> Line:
+    def parallel_offset(self, distance: float) -> Line:
+        if distance == 0:
+            return self
         """Calls shapely.LineString.parallel_offset()"""
         return Line(
             [
                 Coord(*a)
                 for a in LineString(a.as_tuple() for a in self.coords)
-                .parallel_offset(*args, **kwargs)
+                .offset_curve(distance)
                 .coords
             ]
         )
@@ -332,12 +334,14 @@ class WorldLine(Line):
         for c in self.coords:
             yield c
 
-    def parallel_offset(self, *args, **kwargs) -> WorldLine:
+    def parallel_offset(self, distance: float) -> WorldLine:
+        if distance == 0:
+            return self
         return WorldLine(
             [
                 WorldCoord(*a)
                 for a in LineString(a.as_tuple() for a in self.coords)
-                .parallel_offset(*args, **kwargs)
+                .offset_curve(distance)
                 .coords
             ]
         )
@@ -365,12 +369,14 @@ class ImageLine(Line):
         for c in self.coords:
             yield c
 
-    def parallel_offset(self, *args, **kwargs) -> ImageLine:
+    def parallel_offset(self, distance: float) -> ImageLine:
+        if distance == 0:
+            return self
         return ImageLine(
             [
                 ImageCoord(*a)
                 for a in LineString(a.as_tuple() for a in self.coords)
-                .parallel_offset(*args, **kwargs)
+                .offset_curve(distance)
                 .coords
             ]
         )

@@ -35,8 +35,13 @@ def render_part2(config: Config) -> dict[TileCoord, list[TextObject]]:
     with open(part_dir(config, 0) / f"processed.dill", "rb") as f:
         components: Pla2File = dill.load(f)
 
+    def key(comp: Component) -> int:
+        return config.skin.order.index(comp.type)
+
+    sorted_ = sorted(components.components, key=key, reverse=True)
+
     pre_text_objects = multiprocess(
-        components.components,
+        sorted_,
         (config, zooms),
         _find_text_objects,
         "[green]Finding text",
