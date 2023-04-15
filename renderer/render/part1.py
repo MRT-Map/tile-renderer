@@ -20,7 +20,7 @@ from .._internal.logger import log
 from ..misc_types.config import Config
 from ..misc_types.coord import TileCoord, WorldCoord
 from ..misc_types.pla2 import Component, Pla2File
-from ..misc_types.skin import Skin
+from ..misc_types.skin import LineBack, LineFore
 from .utils import ProgressHandler, TextObject, part_dir, wip_tiles_dir
 
 
@@ -273,7 +273,7 @@ def _draw_components(
             if (
                 type_info.shape == "line"
                 and "road" in type_info.tags
-                and isinstance(step, Skin.ComponentTypeInfo.LineBack)
+                and isinstance(step, LineBack)
             ):
                 coord: WorldCoord
                 for coord in chain(*(c.nodes.coords for c in group)):
@@ -292,9 +292,9 @@ def _draw_components(
                         )
                         con_info = consts.skin[con_component.type]
                         for con_step in con_info[consts.zoom.max - tile_coord.z]:
-                            if not isinstance(
-                                con_step, Skin.ComponentTypeInfo.LineFore
-                            ) or isinstance(con_step, Skin.ComponentTypeInfo.LineBack):
+                            if not isinstance(con_step, LineFore) or isinstance(
+                                con_step, LineBack
+                            ):
                                 continue
 
                             con_img = Image.new(

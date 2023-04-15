@@ -142,7 +142,7 @@ class SkinBuilder:
     tile_size: int
     fonts: dict[str, list[Path]]
     background: str
-    types: dict[str, ComponentTypeInfo]
+    types: dict[str, CTI]
 
     def __init__(self, tile_size: int, fonts: dict[str, list[Path]], background: int):
         self.tile_size = tile_size
@@ -150,7 +150,7 @@ class SkinBuilder:
         self.background = hex_to_colour(background) or "#000000"
         self.types = {}
 
-    def __setitem__(self, key: str, value: ComponentTypeInfo):
+    def __setitem__(self, key: str, value: CTI):
         print("Setting", key)
         self.types[key] = value
 
@@ -176,7 +176,7 @@ class SkinBuilder:
 
         shape: Literal["point", "line", "area"]
         tags: list[str]
-        style: dict[str, list[ComponentStyle]]
+        style: dict[str, list[CS]]
 
         def __init__(
             self, shape: Literal["point", "line", "area"], tags: list[str] | None = None
@@ -185,7 +185,7 @@ class SkinBuilder:
             self.tags = tags or []
             self.style = {}
 
-        def __setitem__(self, key: int | slice, value: list[ComponentStyle]):
+        def __setitem__(self, key: int | slice, value: list[CS]):
             if isinstance(key, int):
                 self.style[f"{key}, {key}"] = value
             else:
@@ -375,4 +375,4 @@ class SkinBuilder:
 
 
 CTI = SkinBuilder.ComponentTypeInfo
-CS = SkinBuilder.ComponentTypeInfo.ComponentStyle
+CS = CTI.ComponentStyle
