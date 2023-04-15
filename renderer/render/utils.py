@@ -7,11 +7,9 @@ import uuid
 from copy import copy
 from dataclasses import dataclass
 from pathlib import Path
-from queue import Empty, Queue
 from typing import TYPE_CHECKING
 from uuid import UUID
 
-import ray
 from PIL import Image, ImageDraw
 from shapely import LineString, Polygon
 
@@ -21,53 +19,6 @@ if TYPE_CHECKING:
     from ..misc_types.config import Config
 
 from ..misc_types.coord import Coord, ImageCoord, TileCoord, WorldCoord
-
-
-@ray.remote
-class ProgressHandler:
-    """The handler for progress bars"""
-
-    def __init__(self):
-        self.queue = Queue()
-        """The queue of TileCoords to be processed"""
-        self.completed = Queue()
-        """The list of completed TileCoords"""
-        self.new_tasks_needed = Queue()
-        """If this queue has something, a new task is needed"""
-
-    def add(self, id_: TileCoord):
-        """Add a TileCoord to the queue"""
-        self.queue.put_nowait(id_)
-
-    def get(self) -> TileCoord | None:
-        """Get the first TileCoord in the queue"""
-        try:
-            return self.queue.get_nowait()
-        except Empty:
-            return None
-
-    def complete(self, id_: TileCoord):
-        """Complete a TileCoord"""
-        self.completed.put_nowait(id_)
-
-    def get_complete(self) -> TileCoord | None:
-        """Get the first completed TileCoord in the queue"""
-        try:
-            return self.completed.get_nowait()
-        except Empty:
-            return None
-
-    def request_new_task(self):
-        """Request a new task to be processed"""
-        self.new_tasks_needed.put_nowait(None)
-
-    def needs_new_task(self) -> bool:
-        """Returns True if a new task is needed, and resets the value to False"""
-        try:
-            self.queue.get_nowait()
-            return True
-        except Empty:
-            return False
 
 
 @dataclass(eq=True, unsafe_hash=True)

@@ -29,8 +29,7 @@ def file_loader(
     """
     for file in glob.glob(str(part_dir(config, 1) / f"tile_{zoom},*.dill")):
         with open(file, "rb") as f:
-            data = dill.load(f)
-        for tile_coord, text_objects in data.items():
+            tile_coord, text_objects = dill.load(f)
             yield tile_coord, text_objects
 
 

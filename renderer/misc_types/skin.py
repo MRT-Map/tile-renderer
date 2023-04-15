@@ -51,7 +51,7 @@ class Skin:
     def __getitem__(self, type_name: str) -> ComponentTypeInfo:
         return self.misc_types[type_name]
 
-    @methodtools.lru_cache()
+    # @methodtools.lru_cache()
     def get_font(
         self, style: str, size: int, assets_dir: Path, rendered_text: str = ""
     ) -> ImageFont.FreeTypeFont:

@@ -19,32 +19,11 @@ from rich.progress import Progress, track
 
 if TYPE_CHECKING:
     from .. import Config
+
 from .._internal.logger import log
 from ..misc_types.coord import TileCoord
-from .utils import ProgressHandler, TextObject, part_dir, wip_tiles_dir
-
-
-@ray.remote
-def task_spawner(
-    ph: ObjectRef[ProgressHandler],  # type: ignore
-    config: Config,
-    chunks: list[list[TileCoord]],
-    save_dir: Path | None,
-    cursor: int,
-    futures: list[ObjectRef[dict[TileCoord, Image.Image] | None]],  # type: ignore
-) -> list[ObjectRef[dict[TileCoord, Image.Image] | None]]:  # type: ignore
-    """The task spawner used for part 3"""
-    while cursor < len(chunks):
-        if ray.get(ph.needs_new_task.remote()):  # type: ignore
-            output = ray.remote(_draw_text).remote(  # type: ignore
-                ph,
-                config,
-                chunks[cursor],
-                save_dir,
-            )
-            futures.append(output)
-            cursor += 1
-    return futures
+from .multiprocess import ProgressHandler, multiprocess
+from .utils import TextObject, part_dir, wip_tiles_dir
 
 
 def render_part3(
@@ -68,57 +47,18 @@ def render_part3(
         )
 
     log.info(f"Rendering texts in {len(tile_coords)} tiles...")
-    if serial:
-        pre_result: list[dict[TileCoord, Image.Image] | None] = [
-            _draw_text(
-                None,
-                config,
-                [tile_coord],
-                save_dir,
-            )
-            for tile_coord in track(tile_coords, description="[green]Rendering texts")
-        ]
-    else:
-        chunks = [tile_coords[i : i + 10] for i in range(0, len(tile_coords), 10)]
-        gc.collect()
 
-        ph = ProgressHandler.remote()  # type: ignore
-        futures = [
-            ray.remote(_draw_text).remote(  # type: ignore
-                ph,
-                config,
-                text_lists,
-                save_dir,
-            )
-            for text_lists in track(chunks[:batch_size], "Spawning initial tasks")
-        ]
-        future_refs: ObjectRef[list[ObjectRef[dict[TileCoord, Image.Image] | None]]]  # type: ignore
-        future_refs = task_spawner.remote(
-            ph,
-            config,
-            chunks,
-            save_dir,
-            batch_size,
-            futures,
-        )
-        with Progress() as progress:
-            main_id = progress.add_task("[green]Rendering texts", total=len(chunks))
-            num_complete = 0
-            while num_complete < len(chunks):
-                id_: TileCoord | None = ray.get(ph.get.remote())
-                if id_ is None:
-                    continue
-                progress.advance(main_id, 1)
-                num_complete += 1
-            progress.update(main_id, completed=len(tile_coords))
-
-        pre_pre_result: list[ObjectRef[dict[TileCoord, Image.Image] | None]]  # type: ignore
-        pre_pre_result = ray.get(future_refs)
-        pre_result = ray.get(pre_pre_result)
-    result: dict[TileCoord, Image.Image] = {}
-    for i in pre_result:
-        if i is not None:
-            result.update(i)
+    pre_result = multiprocess(
+        tile_coords,
+        (config, save_dir),
+        _draw_text,
+        "[green]Rendering texts",
+        len(tile_coords),
+        batch_size,
+        8,
+        serial,
+    )
+    result = {a: b for a, b in pre_result}
 
     shutil.rmtree(config.temp_dir / config.export_id)
     log.info("Render complete")
@@ -128,55 +68,45 @@ def render_part3(
 
 def _draw_text(
     ph: ObjectRef[ProgressHandler] | None,  # type: ignore
-    config: Config,
-    tile_coords: list[TileCoord],
-    save_dir: Path | None = None,
-) -> dict[TileCoord, Image.Image] | None:
+    tile_coord: TileCoord,
+    const_data: tuple[Config, Path],
+) -> tuple[TileCoord, Image.Image] | None:
+    config, save_dir = const_data
     logging.getLogger("PIL").setLevel(logging.CRITICAL)
-    # noinspection PyBroadException
+
+    with open(part_dir(config, 2) / f"tile_{tile_coord}.dill", "rb") as f:
+        text_list: list[TextObject] = dill.load(f)
     try:
-        out = {}
-        for tile_coord in tile_coords:
-            with open(part_dir(config, 2) / f"tile_{tile_coord}.dill", "rb") as f:
-                text_list: list[TextObject] = dill.load(f)
-            try:
-                image = Image.open(wip_tiles_dir(config) / f"{tile_coord}.png").convert(
-                    "RGBA"
-                )
-            except FileNotFoundError:
-                if ph:
-                    ph.add.remote(tile_coord)  # type: ignore
-                continue
-
-            # antialiasing
-            image = image.resize(
-                (image.width * 16, image.height * 16), resample=Image.BOX
-            ).resize(image.size, resample=Image.ANTIALIAS)
-
-            for text in text_list:
-                for img_uuid, center in zip(text.image, text.center):
-                    img = TextObject.uuid_to_img(img_uuid, config).convert("RGBA")
-                    new_center = center.to_image_coord(tile_coord, config)
-                    image.alpha_composite(
-                        img,
-                        (
-                            int(new_center.x - img.width / 2),
-                            int(new_center.y - img.height / 2),
-                        ),
-                    )
-
-            if save_dir is not None:
-                image.save(save_dir / f"{tile_coord}.webp", "webp", quality=95)
-            os.remove(wip_tiles_dir(config) / f"{tile_coord}.png")
-            out[tile_coord] = image
-
-            if ph:
-                ph.add.remote(tile_coord)  # type: ignore
+        image = Image.open(wip_tiles_dir(config) / f"{tile_coord}.png").convert("RGBA")
+    except FileNotFoundError:
         if ph:
-            ph.request_new_task.remote()  # type: ignore
-
-        return out
-    except Exception as e:
-        log.error(f"Error in ray task: {e!r}")
-        log.error(traceback.format_exc())
+            ph.add.remote(tile_coord)
+            ph.complete.remote(tile_coord)  # type: ignore
         return None
+
+    # antialiasing
+    image = image.resize(
+        (image.width * 16, image.height * 16), resample=Image.BOX
+    ).resize(image.size, resample=Image.ANTIALIAS)
+
+    for text in text_list:
+        for img_uuid, center in zip(text.image, text.center):
+            img = TextObject.uuid_to_img(img_uuid, config).convert("RGBA")
+            new_center = center.to_image_coord(tile_coord, config)
+            image.alpha_composite(
+                img,
+                (
+                    int(new_center.x - img.width / 2),
+                    int(new_center.y - img.height / 2),
+                ),
+            )
+
+    if save_dir is not None:
+        image.save(save_dir / f"{tile_coord}.webp", "webp", quality=95)
+    os.remove(wip_tiles_dir(config) / f"{tile_coord}.png")
+
+    if ph:
+        ph.add.remote(tile_coord)
+        ph.complete.remote(tile_coord)  # type: ignore
+
+    return tile_coord, image
