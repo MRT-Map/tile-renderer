@@ -68,6 +68,8 @@ def _dash(
     is_dash = True
     next_len = dash_length
     for c1, c2 in with_next(coords):
+        if c1 == c2:
+            continue
         cursor = c1
         while True:
             if is_dash:

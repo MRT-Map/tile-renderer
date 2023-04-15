@@ -26,8 +26,16 @@ _T = TypeVar("_T")
 class Vector:
     """Represents a 2-dimensional vector"""
 
-    x: float
-    y: float
+    _x: float
+    _y: float
+
+    @property
+    def x(self) -> float:
+        return self._x
+
+    @property
+    def y(self) -> float:
+        return self._y
 
     def __repr__(self):
         return f"[{self.x}, {self.y}]"
@@ -39,43 +47,43 @@ class Vector:
     def __add__(self, other: float | int | Vector) -> Self:
         s = copy(self)
         if isinstance(other, Vector):
-            s.x += other.x
-            s.y += other.y
+            s._x += other._x
+            s._y += other._y
         else:
-            s.x += other
-            s.y += other
+            s._x += other
+            s._y += other
         return s
 
     def __sub__(self, other: float | int | Vector) -> Self:
         s = copy(self)
         if isinstance(other, Vector):
-            s.x -= other.x
-            s.y -= other.y
+            s._x -= other._x
+            s._y -= other._y
         else:
-            s.x -= other
-            s.y -= other
+            s._x -= other
+            s._y -= other
         return s
 
     def __mul__(self, other: float | int) -> Self:
         s = copy(self)
-        s.x *= other
-        s.y *= other
+        s._x *= other
+        s._y *= other
         return s
 
     def __truediv__(self, other: float | int) -> Self:
         s = copy(self)
-        s.x /= other
-        s.y /= other
+        s._x /= other
+        s._y /= other
         return s
 
     def __abs__(self) -> float:
-        return (self.x**2 + self.y**2) ** 0.5
+        return (self._x**2 + self._y**2) ** 0.5
 
     def unit(self) -> Self:
         return self / abs(self)
 
     def dot(self, other: Vector) -> float:
-        return self.x * other.x + self.y * other.y
+        return self._x * other._x + self._y * other._y
 
 
 class Coord(Vector):
@@ -100,6 +108,14 @@ class Coord(Vector):
 class ImageCoord(Coord):
     """Represents a 2-dimensional coordinate on an image"""
 
+    @property
+    def x(self) -> int:
+        return int(self._x)
+
+    @property
+    def y(self) -> int:
+        return int(self._y)
+
     def to_world_coord(
         self,
         tile_coord: TileCoord,
@@ -113,9 +129,9 @@ class ImageCoord(Coord):
 
         :return: The world coordinate
         """
-        size = config.zoom.range * 2 ** (config.zoom.max - tile_coord[0])
-        xc = size / config.skin.tile_size * self.x
-        yc = size / config.skin.tile_size * self.y
+        size = config.zoom.range * 2 ** (config.zoom.max - tile_coord.z)
+        xc = size / config.skin.tile_size * self._x
+        yc = size / config.skin.tile_size * self._y
         xs = xc + tile_coord.x * size
         ys = yc + tile_coord.y * size
         return WorldCoord(xs, ys)
@@ -126,8 +142,8 @@ def _to_image_coord(wc: WorldCoord, tc: TileCoord, tile_size: int, zoom: ZoomPar
     size = zoom.range * 2 ** (zoom.max - tc.z)
     xc = wc.x - tc.x * size
     yc = wc.y - tc.y * size
-    xs = int(tile_size / size * xc)
-    ys = int(tile_size / size * yc)
+    xs = tile_size / size * xc
+    ys = tile_size / size * yc
     return ImageCoord(xs, ys)
 
 
