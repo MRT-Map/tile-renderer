@@ -22,6 +22,7 @@ from .coord import ImageCoord, ImageLine, TileCoord
 from .pla2 import Component
 
 if TYPE_CHECKING:
+    from ..misc_types.config import Config
     from ..render.part1 import Part1Consts
 
 Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=16)  # type: ignore
@@ -327,11 +328,8 @@ class ComponentStyle:
         component: Component,
         imd: ImageDraw.ImageDraw,
         img: Image.Image,
-        coords: ImageLine,
         consts: Part1Consts,
         tile_coord: TileCoord,
-        text_list: list[TextObject],
-        points_text_list: list[TextObject],
     ):
         """Renders the component into an ImageDraw instance."""
 
@@ -353,12 +351,10 @@ class PointCircle(ComponentStyle):
         component: Component,
         imd: ImageDraw.ImageDraw,
         img: Image.Image,
-        coords: ImageLine,
         consts: Part1Consts,
         tile_coord: TileCoord,
-        text_list: list[TextObject],
-        points_text_list: list[TextObject],
     ):
+        coords = component.nodes.to_image_line(tile_coord, consts)
         coord = coords.first_coord
         imd.ellipse(
             (
@@ -390,17 +386,20 @@ class PointText(ComponentStyle):
         component: Component,
         imd: ImageDraw.ImageDraw,
         img: Image.Image,
-        coords: ImageLine,
         consts: Part1Consts,
         tile_coord: TileCoord,
-        text_list: list[TextObject],
-        points_text_list: list[TextObject],
     ):
+        pass
+
+    def text(
+        self, component: Component, imd: ImageDraw.ImageDraw, config: Config, zoom: int
+    ) -> list[TextObject]:
+        coords = component.nodes.to_image_line(TileCoord(zoom, 0, 0), config)
         coord = coords.first_coord
         if len(component.display_name.strip()) == 0:
-            return
-        font = consts.skin.get_font(
-            "", self.size + 2, consts.assets_dir, component.display_name
+            return []
+        font = config.skin.get_font(
+            "", self.size + 2, config.assets_dir, component.display_name
         )
         text_length = int(imd.textlength(component.display_name, font))
         pt_i = Image.new("RGBA", (2 * text_length, 2 * (self.size + 4)), (0, 0, 0, 0))
@@ -417,17 +416,16 @@ class PointText(ComponentStyle):
         )
         tw, th = pt_i.size
         pt_i = pt_i.crop((0, 0, pt_i.width, pt_i.height))
-        points_text_list.append(
+        return [
             TextObject(
                 pt_i,
-                imd,
                 ImageCoord(coord.x + self.offset.x, coord.y + self.offset.y),
                 (tw / 2, th / 2),
                 0,
-                tile_coord,
-                consts,
+                zoom,
+                config,
             )
-        )
+        ]
 
 
 class PointSquare(ComponentStyle):
@@ -447,12 +445,10 @@ class PointSquare(ComponentStyle):
         component: Component,
         imd: ImageDraw.ImageDraw,
         img: Image.Image,
-        coords: ImageLine,
         consts: Part1Consts,
         tile_coord: TileCoord,
-        text_list: list[TextObject],
-        points_text_list: list[TextObject],
     ):
+        coords = component.nodes.to_image_line(tile_coord, consts)
         coord = coords.first_coord
         imd.rectangle(
             (
@@ -482,12 +478,10 @@ class PointImage(ComponentStyle):
         component: Component,
         imd: ImageDraw.ImageDraw,
         img: Image.Image,
-        coords: ImageLine,
         consts: Part1Consts,
         tile_coord: TileCoord,
-        text_list: list[TextObject],
-        points_text_list: list[TextObject],
     ):
+        coords = component.nodes.to_image_line(tile_coord, consts)
         coord = coords.first_coord
         icon = Image.open(consts.assets_dir / self.file)
         img.paste(
@@ -515,15 +509,13 @@ class LineText(ComponentStyle):
     def _text_on_line(
         self,
         imd: ImageDraw.ImageDraw,
-        img: Image.Image,
         font: ImageFont.FreeTypeFont,
         text: str,
-        tile_coord: TileCoord,
+        zoom: int,
         coords: ImageLine,
-        consts: Part1Consts,
+        config: Config,
         fill: str | None = None,
         stroke: str | None = None,
-        paste_direct: bool = False,
         upright: bool = True,
     ) -> TextObject | None:
         char_cursor = 0
@@ -572,40 +564,17 @@ class LineText(ComponentStyle):
                 lt_i = lt_i.crop((0, 0, lt_i.width, lt_i.height))
                 tx = c1.x - (-overflow / 2 - text_length / 2) * math.cos(trot)
                 ty = c1.y + (-overflow / 2 - text_length / 2) * math.sin(trot)
-                if paste_direct:
-                    img.paste(
+
+                text_objects.append(
+                    TextObject(
                         lt_i,
-                        (int(tx - lt_i.width / 2), int(ty - lt_i.height / 2)),
-                        lt_i,
+                        ImageCoord(tx, ty),
+                        (tw / 2, th / 2),
+                        trot,
+                        zoom,
+                        config,
                     )
-                    if os.environ.get("DEBUG"):
-                        nr = functools.partial(
-                            math_utils.rotate_around_pivot,
-                            pivot=ImageCoord(tx, ty),
-                            theta=-trot,
-                        )
-                        imd.line(
-                            [
-                                nr(ImageCoord(tx - tw / 4, ty - th / 4)).as_tuple(),
-                                nr(ImageCoord(tx - tw / 4, ty + th / 4)).as_tuple(),
-                                nr(ImageCoord(tx + tw / 4, ty + th / 4)).as_tuple(),
-                                nr(ImageCoord(tx + tw / 4, ty - th / 4)).as_tuple(),
-                                nr(ImageCoord(tx - tw / 4, ty - th / 4)).as_tuple(),
-                            ],
-                            fill="#ff0000",
-                        )
-                else:
-                    text_objects.append(
-                        TextObject(
-                            lt_i,
-                            imd,
-                            ImageCoord(tx, ty),
-                            (tw / 2, th / 2),
-                            trot,
-                            tile_coord,
-                            consts,
-                        )
-                    )
+                )
 
             text_to_print = ""
             overflow = (text_length - (c1.point.distance(c2.point) - overflow)) * 2
@@ -622,17 +591,25 @@ class LineText(ComponentStyle):
         component: Component,
         imd: ImageDraw.ImageDraw,
         img: Image.Image,
-        coords: ImageLine,
         consts: Part1Consts,
         tile_coord: TileCoord,
-        text_list: list[TextObject],
-        points_text_list: list[TextObject],
     ):
+        pass
+
+    def text(
+        self,
+        component: Component,
+        imd: ImageDraw.ImageDraw,
+        config: Config,
+        zoom: int,
+    ) -> list[TextObject]:
+        coords = component.nodes.to_image_line(TileCoord(zoom, 0, 0), config)
+        text_list = []
         if len(component.display_name) == 0:
-            return
+            return []
         # logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating text length")
-        font = consts.skin.get_font(
-            "", self.size + 2, consts.assets_dir, component.display_name
+        font = config.skin.get_font(
+            "", self.size + 2, config.assets_dir, component.display_name
         )
         text_length = int(imd.textlength(component.display_name, font))
         if text_length == 0:
@@ -662,12 +639,11 @@ class LineText(ComponentStyle):
             for e in (
                 self._text_on_line(
                     imd,
-                    img,
                     font,
                     component.display_name,
-                    tile_coord,
+                    zoom,
                     cs,
-                    consts,
+                    config,
                 )
                 for cs in coord_lines
             )
@@ -675,7 +651,7 @@ class LineText(ComponentStyle):
         )
 
         if "oneWay" in component.tags:
-            font = consts.skin.get_font("", self.size + 2, consts.assets_dir, "→")
+            font = config.skin.get_font("", self.size + 2, config.assets_dir, "→")
             arrow_coord_lines = math_utils.dash(
                 coords.parallel_offset(self.offset + self.size * 3 / 16),
                 text_length / 2,
@@ -691,15 +667,13 @@ class LineText(ComponentStyle):
                 for e in (
                     self._text_on_line(
                         imd,
-                        img,
                         font,
                         "→",
-                        tile_coord,
+                        zoom,
                         cs,
-                        consts,
+                        config,
                         fill=self.arrow_colour,
                         stroke="#00000000",
-                        paste_direct=True,
                         upright=False,
                     )
                     for i, cs in enumerate(arrow_coord_lines)
@@ -707,6 +681,7 @@ class LineText(ComponentStyle):
                 )
                 if e is not None
             )
+        return text_list
 
 
 class LineFore(ComponentStyle):
@@ -725,12 +700,10 @@ class LineFore(ComponentStyle):
         component: Component,
         imd: ImageDraw.ImageDraw,
         img: Image.Image,
-        coords: ImageLine,
         consts: Part1Consts,
         tile_coord: TileCoord,
-        text_list: list[TextObject],
-        points_text_list: list[TextObject],
     ):
+        coords = component.nodes.to_image_line(tile_coord, consts)
         if self.dash is None:
             imd.line(
                 [c.as_tuple() for c in coords],
@@ -791,17 +764,21 @@ class AreaBorderText(ComponentStyle):
         component: Component,
         imd: ImageDraw.ImageDraw,
         img: Image.Image,
-        coords: ImageLine,
         consts: Part1Consts,
         tile_coord: TileCoord,
-        text_list: list[TextObject],
-        points_text_list: list[TextObject],
     ):
-        """TODO fix"""
+        pass
+
+    def text(
+        self, component: Component, imd: ImageDraw.ImageDraw, config: Config, zoom: int
+    ) -> list[TextObject]:
+        return []
+
+        # TODO fix
         """
         if len(component.display_name.strip()) == 0:
             return
-        font = consts.skin.get_font(
+        font = config.skin.get_font(
             "", self.size + 2, assets_dir, component.display_name
         )
         text_length = int(
@@ -811,8 +788,8 @@ class AreaBorderText(ComponentStyle):
             if coords.in_bounds(
                 Bounds(
                     x_min=0,
-                    x_max=consts.skin.tile_size,
-                    y_max=consts.skin.tile_size,
+                    x_max=config.skin.tile_size,
+                    y_max=config.skin.tile_size,
                     y_min=0,
                 )
             ) and 2 * text_length <= c1.point.distance(c2.point):
@@ -894,19 +871,22 @@ class AreaCenterText(ComponentStyle):
         component: Component,
         imd: ImageDraw.ImageDraw,
         img: Image.Image,
-        coords: ImageLine,
         consts: Part1Consts,
         tile_coord: TileCoord,
-        text_list: list[TextObject],
-        points_text_list: list[TextObject],
     ):
+        pass
+
+    def text(
+        self, component: Component, imd: ImageDraw.ImageDraw, config: Config, zoom: int
+    ) -> list[TextObject]:
+        coords = component.nodes.to_image_line(TileCoord(zoom, 0, 0), config)
         if len(component.display_name.strip()) == 0:
-            return
+            return []
         c = ImageCoord(
             coords.centroid.x + self.offset.x, coords.centroid.y + self.offset.y
         )
-        font = consts.skin.get_font(
-            "", self.size + 2, consts.assets_dir, component.display_name
+        font = config.skin.get_font(
+            "", self.size + 2, config.assets_dir, component.display_name
         )
         text_length = int(
             min(imd.textlength(x, font) for x in component.display_name.split("\n"))
@@ -948,9 +928,7 @@ class AreaCenterText(ComponentStyle):
         )
         cw, ch = act_i.size[:]
         act_i = act_i.crop((0, 0, act_i.width, act_i.height))
-        text_list.append(
-            TextObject(act_i, imd, c, (cw / 2, ch / 2), 0, tile_coord, consts)
-        )
+        return [TextObject(act_i, c, (cw / 2, ch / 2), 0, zoom, config)]
 
 
 class AreaFill(ComponentStyle):
@@ -971,12 +949,10 @@ class AreaFill(ComponentStyle):
         component: Component,
         imd: ImageDraw.ImageDraw,
         img: Image.Image,
-        coords: ImageLine,
         consts: Part1Consts,
         tile_coord: TileCoord,
-        text_list: list[TextObject],
-        points_text_list: list[TextObject],
     ):
+        coords = component.nodes.to_image_line(tile_coord, consts)
         ai = Image.new(
             "RGBA",
             (consts.skin.tile_size, consts.skin.tile_size),
@@ -1046,7 +1022,7 @@ class AreaFill(ComponentStyle):
         """if component.hollows is not None:
             for n in component.hollows:
                 n_coords = _node_list_to_image_coords(
-                    n, nodes, consts.skin, tile_coord, size
+                    n, nodes, config.skin, tile_coord, size
                 )
                 ad.polygon(n_coords, fill=(0, 0, 0, 0))       """
         img.paste(ai, (0, 0), ai)
@@ -1059,7 +1035,7 @@ class AreaFill(ComponentStyle):
             """if component.hollows is not None:
                 for n in component.hollows:
                     n_coords = _node_list_to_image_coords(
-                        n, nodes, consts.skin, tile_coord, size
+                        n, nodes, config.skin, tile_coord, size
                     )
                     n_coords.append(n_coords[0])
                     outlines.append(n_coords)  """
@@ -1087,12 +1063,10 @@ class AreaCenterImage(ComponentStyle):
         component: Component,
         imd: ImageDraw.ImageDraw,
         img: Image.Image,
-        coords: ImageLine,
         consts: Part1Consts,
         tile_coord: TileCoord,
-        text_list: list[TextObject],
-        points_text_list: list[TextObject],
     ):
+        coords = component.nodes.to_image_line(tile_coord, consts)
         cx, cy = (coords.centroid.x, coords.centroid.y)
         icon = Image.open(consts.assets_dir / self.file)
         img.paste(icon, (int(cx + self.offset.x), int(cy + self.offset.y)), icon)

@@ -25,27 +25,6 @@ from .multiprocess import ProgressHandler, multiprocess
 from .utils import TextObject, part_dir, wip_tiles_dir
 
 
-@ray.remote
-def task_spawner(
-    ph: ObjectRef[ProgressHandler],  # type: ignore
-    tile_chunks: list[list[TileCoord]],
-    futures: list[ObjectRef[dict[TileCoord, list[TextObject]] | None]],  # type: ignore
-    cursor: int,
-    consts: Part1Consts,
-) -> list[ObjectRef[dict[TileCoord, list[TextObject]] | None]]:  # type: ignore
-    """The task spawner used for part 1"""
-    while cursor < len(tile_chunks):
-        if ray.get(ph.needs_new_task.remote()):  # type: ignore
-            output: ObjectRef[dict[TileCoord, list[TextObject]] | None]  # type: ignore
-            output = ray.remote(_pre_draw_components).remote(
-                ph, tile_chunks[cursor], consts
-            )
-            if output is not None:
-                futures.append(output)
-            cursor += 1
-    return futures
-
-
 @dataclass(frozen=True, init=True)
 class Part1Consts(Config):
     """The constants used for part 1"""
@@ -118,7 +97,6 @@ def render_part1(
     )
     result = {a: b for a, b in pre_result}
 
-    os.remove(part_dir(config, 0) / f"processed.dill")
     return result
 
 
@@ -208,17 +186,12 @@ def _draw_components(
         style = type_info[consts.zoom.max - tile_coord[0]]
         for step in style:
             for component in group:
-                coords = component.nodes.to_image_line(tile_coord, consts)
-
                 step.render(
                     component,
                     imd,
                     img,
-                    coords,
                     consts,
                     tile_coord,
-                    text_list,
-                    points_text_list,
                 )
 
                 if ph:
@@ -236,10 +209,6 @@ def _draw_components(
                     for con_component in consts.coord_to_comp[coord]:
                         if "road" not in consts.skin[con_component.type].tags:
                             continue
-
-                        con_coords = con_component.nodes.to_image_line(
-                            tile_coord, consts
-                        )
 
                         inter = Image.new(
                             "RGBA", (consts.skin.tile_size,) * 2, (0,) * 4
@@ -259,11 +228,8 @@ def _draw_components(
                                 con_component,
                                 con_imd,
                                 con_img,
-                                con_coords,
                                 consts,
                                 tile_coord,
-                                text_list,
-                                points_text_list,
                             )
 
                             con_mask_img = Image.new(

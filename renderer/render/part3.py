@@ -34,8 +34,8 @@ def render_part3(
 ) -> dict[TileCoord, Image.Image]:
     """Part 3 of the rendering job. Check render() for the full list of parameters"""
     tile_coords = []
-    for file in glob.glob(str(part_dir(config, 2) / f"tile_*.dill")):
-        re_result = re.search(rf"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)
+    for file in glob.glob(str(wip_tiles_dir(config) / f"*.png")):
+        re_result = re.search(rf"(-?\d+), (-?\d+), (-?\d+)\.png$", file)
         if re_result is None:
             raise ValueError("Dill object was not saved properly")
         tile_coords.append(
@@ -74,15 +74,12 @@ def _draw_text(
     config, save_dir = const_data
     logging.getLogger("PIL").setLevel(logging.CRITICAL)
 
-    with open(part_dir(config, 2) / f"tile_{tile_coord}.dill", "rb") as f:
-        text_list: list[TextObject] = dill.load(f)
+    image = Image.open(wip_tiles_dir(config) / f"{tile_coord}.png").convert("RGBA")
     try:
-        image = Image.open(wip_tiles_dir(config) / f"{tile_coord}.png").convert("RGBA")
+        with open(part_dir(config, 2) / f"tile_{tile_coord}.dill", "rb") as f:
+            text_list: list[TextObject] = dill.load(f)
     except FileNotFoundError:
-        if ph:
-            ph.add.remote(tile_coord)
-            ph.complete.remote(tile_coord)  # type: ignore
-        return None
+        text_list = []
 
     # antialiasing
     image = image.resize(

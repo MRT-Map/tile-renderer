@@ -7,106 +7,128 @@ from itertools import product
 from typing import Any, Generator
 
 import dill
-from rich.progress import Progress
+from PIL import Image, ImageDraw
+from ray import ObjectRef
+from rich.progress import Progress, track
 from shapely import prepare
 from shapely.geometry import Polygon
 
 from .._internal.logger import log
 from ..misc_types.config import Config
 from ..misc_types.coord import TileCoord
+from ..misc_types.pla2 import Component, Pla2File
+from ..misc_types.skin import AreaBorderText, AreaCenterText, LineText, PointText
+from .multiprocess import ProgressHandler, multiprocess
 from .utils import TextObject, part_dir
-
-
-def file_loader(
-    config: Config, zoom: int
-) -> Generator[tuple[TileCoord, list[TextObject]], Any, None]:
-    """
-    Loads the intermediate files for a certain zoom level
-
-    :param config: The configuration
-    :param zoom: The zoom to look for
-    :return: The files
-    """
-    for file in glob.glob(str(part_dir(config, 1) / f"tile_{zoom},*.dill")):
-        with open(file, "rb") as f:
-            tile_coord, text_objects = dill.load(f)
-            yield tile_coord, text_objects
 
 
 def render_part2(config: Config) -> dict[TileCoord, list[TextObject]]:
     """Part 2 of the rendering job. Check render() for the full list of parameters"""
-    zooms = {}
+    zooms = set()
     log.info("Determining zoom levels...")
     for file in glob.glob(str(part_dir(config, 1) / f"tile_*.dill")):
         regex = re.search(r"_(\d+),", file)
         if regex is None:
             raise ValueError("Dill object is not saved properly")
         zoom = regex.group(1)
-        if zoom not in zooms:
-            zooms[zoom] = 0
-        zooms[zoom] += 1
+        zooms.add(int(zoom))
+    with open(part_dir(config, 0) / f"processed.dill", "rb") as f:
+        components: Pla2File = dill.load(f)
 
-    all_new_texts = {}
-    with Progress() as progress:
-        for zoom, length in progress.track(
-            zooms.items(), description="[green]Eliminating overlapping text"
-        ):
-            new_texts = _prevent_text_overlap(
-                config,
-                int(zoom),
-                file_loader(config, int(zoom)),
-                length,
-                progress,
-            )
-            for file in progress.track(
-                glob.glob(str(part_dir(config, 1) / f"tile_{zoom},*.dill")),
-                description=f"Zoom {zoom}: [dim white]Cleaning up",
-            ):
-                os.remove(file)
-            all_new_texts.update(new_texts)
-    return all_new_texts
+    pre_text_objects = multiprocess(
+        components.components,
+        (config, zooms),
+        _find_text_objects,
+        "[green]Finding text",
+        len(components.components),
+    )
+    text_objects: dict[int, list[TextObject]] = {}
+    for li in pre_text_objects:
+        for z, to in li.items():
+            text_objects.setdefault(z, []).extend(to)
+
+    pre_result = multiprocess(
+        list((a, b) for a, b in text_objects.items()),
+        config,
+        _prevent_text_overlap,
+        "[green]Eliminating overlapping text",
+        sum(len(to) for to in text_objects.values()),
+    )
+    result = {}
+    for a in pre_result:
+        result.update(a)
+
+    for file in track(
+        glob.glob(str(part_dir(config, 1) / f"tile_*.dill")),
+        description="Cleaning up",
+    ):
+        os.remove(file)
+    os.remove(part_dir(config, 0) / f"processed.dill")
+
+    return result
+
+
+def _find_text_objects(
+    ph: ObjectRef[ProgressHandler] | None,  # type: ignore
+    component: Component,
+    const_data: tuple[Config, set[int]],
+) -> dict[int, list[TextObject]]:
+    config, zooms = const_data
+    type_info = config.skin[component.type]
+    out = {}
+
+    img = Image.new(
+        mode="RGBA", size=(config.skin.tile_size,) * 2, color=config.skin.background
+    )
+    imd = ImageDraw.Draw(img)
+
+    for zoom in zooms:
+        styles = type_info[config.zoom.max - zoom]
+        for style in styles:
+            if isinstance(style, (PointText, LineText, AreaCenterText, AreaBorderText)):
+                out.setdefault(zoom, []).extend(
+                    style.text(component, imd, config, zoom)
+                )
+
+    if ph:
+        ph.add.remote(component.fid)
+        ph.complete.remote(component.fid)
+
+    return out
 
 
 def _prevent_text_overlap(
+    ph: ObjectRef[ProgressHandler] | None,  # type: ignore
+    i: tuple[int, list[TextObject]],
     config: Config,
-    zoom: int,
-    texts: Generator[tuple[TileCoord, list[TextObject]], Any, None],
-    length: int,
-    progress: Progress,
 ) -> dict[TileCoord, list[TextObject]]:
-    out: dict[TileCoord, list[TextObject]] = {}
-    tile_coords = set()
+    zoom, texts = i
 
-    no_intersect: dict[TileCoord, set[Polygon]] = {}
-    for tile_coord, text_objects in progress.track(
-        texts, description=f"Zoom {zoom}: [dim white]Filtering text", total=length
-    ):
-        tile_coords.add(tile_coord)
-        for text in text_objects:
-            if not any(
-                poly.intersects(ni)
-                for ni in no_intersect.get(tile_coord, set())
-                for poly in text.bounds
-            ):
-                for dx, dy in product((-1, 0, 1), (-1, 0, 1)):
-                    tc = TileCoord(tile_coord.z, tile_coord.x + dx, tile_coord.y + dy)
-                    out.setdefault(tc, []).append(text)
-                    for poly in text.bounds:
-                        prepare(poly)
-                    no_intersect.setdefault(
-                        tc,
-                        set(),
-                    ).update(text.bounds)
-            else:
-                for id_ in text.image:
-                    TextObject.remove_img(id_, config)
+    out: list[TextObject] = []
 
-    default: dict[TileCoord, list[TextObject]] = {tc: [] for tc in tile_coords}
-    out = {**default, **out}
-    for tile_coord, text_objects in progress.track(
-        out.items(),
-        description=f"Zoom {zoom}: [dim white]Saving remaining text objects",
-    ):
+    no_intersect: set[Polygon] = set()
+    for text in texts:
+        if not any(poly.intersects(ni) for ni in no_intersect for poly in text.bounds):
+            out.append(text)
+            for poly in text.bounds:
+                prepare(poly)
+            no_intersect.update(text.bounds)
+        else:
+            for id_ in text.image:
+                TextObject.remove_img(id_, config)
+        if ph:
+            ph.add.remote(zoom)  # type: ignore
+
+    new_out = {}
+    for text in out:
+        for tile in text.to_tiles(config.zoom):
+            new_out.setdefault(tile, []).append(text)
+
+    for tile_coord, text_objects in new_out.items():
         with open(part_dir(config, 2) / f"tile_{tile_coord}.dill", "wb") as f:
             dill.dump(text_objects, f)
-    return out
+
+    if ph:
+        ph.complete.remote(zoom)
+
+    return new_out

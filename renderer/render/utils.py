@@ -14,11 +14,12 @@ from PIL import Image, ImageDraw
 from shapely import LineString, Polygon
 
 from .. import math_utils
+from ..misc_types.zoom_params import ZoomParams
 
 if TYPE_CHECKING:
     from ..misc_types.config import Config
 
-from ..misc_types.coord import Coord, ImageCoord, TileCoord, WorldCoord
+from ..misc_types.coord import Coord, ImageCoord, Line, TileCoord, WorldCoord, WorldLine
 
 
 @dataclass(eq=True, unsafe_hash=True)
@@ -82,11 +83,10 @@ class TextObject:
     def __init__(
         self,
         img: Image.Image,
-        imd: ImageDraw.ImageDraw,
         center: ImageCoord,
         width_height: tuple[float, float],
         rot: float,
-        tile_coord: TileCoord,
+        zoom: int,
         config: Config,
     ):
         """
@@ -99,68 +99,30 @@ class TextObject:
         :param config: The constants of part 1
         """
         w, h = width_height
-        if os.environ.get("DEBUG"):
-            nr = functools.partial(
-                math_utils.rotate_around_pivot, pivot=center, theta=-rot
-            )
-            imd.line(
-                [
-                    nr(Coord(center.x - w / 2, center.y - h / 2)).as_tuple(),
-                    nr(Coord(center.x - w / 2, center.y + h / 2)).as_tuple(),
-                    nr(Coord(center.x + w / 2, center.y + h / 2)).as_tuple(),
-                    nr(Coord(center.x + w / 2, center.y - h / 2)).as_tuple(),
-                    nr(Coord(center.x - w / 2, center.y - h / 2)).as_tuple(),
-                ],
-                fill="#ff0000",
-            )
         self.temp_dir = config.temp_dir
         self.export_id = config.export_id
 
         self.image = [TextObject.img_to_uuid(img, config)]
-        new_center = center.to_world_coord(tile_coord, config)
-        self.center = [new_center]
+        self.center = [center.to_world_coord(TileCoord(zoom, 0, 0), config)]
         r = functools.partial(
             math_utils.rotate_around_pivot,
-            pivot=new_center,
+            pivot=center,
             theta=-rot,
         )
-        new_width_height = ImageCoord(w, h).to_world_coord(tile_coord, config)
-        w, h = new_width_height.x, new_width_height.y
+        bounds = [
+            r(ImageCoord(center.x - w / 2, center.y - h / 2)),
+            r(ImageCoord(center.x - w / 2, center.y + h / 2)),
+            r(ImageCoord(center.x + w / 2, center.y + h / 2)),
+            r(ImageCoord(center.x + w / 2, center.y - h / 2)),
+            r(ImageCoord(center.x - w / 2, center.y - h / 2)),
+        ]
         self.bounds = [
             Polygon(
                 LineString(
-                    [
-                        r(
-                            Coord(
-                                new_center.x - w / 2,
-                                new_center.y - h / 2,
-                            )
-                        ).point,
-                        r(
-                            Coord(
-                                new_center.x - w / 2,
-                                new_center.y + h / 2,
-                            )
-                        ).point,
-                        r(
-                            Coord(
-                                new_center.x + w / 2,
-                                new_center.y + h / 2,
-                            )
-                        ).point,
-                        r(
-                            Coord(
-                                new_center.x + w / 2,
-                                new_center.y - h / 2,
-                            )
-                        ).point,
-                        r(
-                            Coord(
-                                new_center.x - w / 2,
-                                new_center.y - h / 2,
-                            )
-                        ).point,
-                    ]
+                    ImageCoord(a.x, a.y)
+                    .to_world_coord(TileCoord(zoom, 0, 0), config)
+                    .as_tuple()
+                    for a in bounds
                 )
             )
         ]
@@ -175,6 +137,16 @@ class TextObject:
         to.center = list(itertools.chain(*[sto.center for sto in text_object]))
 
         return to
+
+    def to_tiles(self, zoom: ZoomParams) -> list[TileCoord]:
+        tiles = []
+        for bound in self.bounds:
+            tiles.extend(
+                WorldLine(
+                    [WorldCoord(x, y) for x, y in bound.exterior.coords]
+                ).to_tiles(zoom)
+            )
+        return list(set(tiles))
 
 
 def wip_tiles_dir(config: Config) -> Path:

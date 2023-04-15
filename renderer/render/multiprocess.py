@@ -90,7 +90,7 @@ def multiprocess(
     msg: str,
     num_operations: int | None = None,
     batch_size: int = 8,
-    chunk_size: int = 1,
+    chunk_size: int = 8,
     serial: bool = False,
 ) -> list[_R]:
     if serial:
