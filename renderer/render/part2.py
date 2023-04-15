@@ -3,13 +3,11 @@ from __future__ import annotations
 import glob
 import os
 import re
-from itertools import product
-from typing import Any, Generator
 
 import dill
 from PIL import Image, ImageDraw
 from ray import ObjectRef
-from rich.progress import Progress, track
+from rich.progress import track
 from shapely import prepare
 from shapely.geometry import Polygon
 
@@ -80,13 +78,13 @@ def render_part2(
 
 
 def _find_text_objects(
-    ph: ObjectRef[ProgressHandler] | None,  # type: ignore
+    ph: ObjectRef[ProgressHandler[Component]] | None,  # type: ignore
     component: Component,
     const_data: tuple[Config, set[int]],
 ) -> dict[int, list[TextObject]]:
     config, zooms = const_data
     type_info = config.skin[component.type]
-    out = {}
+    out: dict[int, list[TextObject]] = {}
 
     img = Image.new(
         mode="RGBA", size=(config.skin.tile_size,) * 2, color=config.skin.background
@@ -102,14 +100,14 @@ def _find_text_objects(
                 )
 
     if ph:
-        ph.add.remote(component.fid)
-        ph.complete.remote(component.fid)
+        ph.add.remote(component.fid)  # type: ignore
+        ph.complete.remote(component.fid)  # type: ignore
 
     return out
 
 
 def _prevent_text_overlap(
-    ph: ObjectRef[ProgressHandler] | None,  # type: ignore
+    ph: ObjectRef[ProgressHandler[int]] | None,  # type: ignore
     i: tuple[int, list[TextObject]],
     config: Config,
 ) -> dict[TileCoord, list[TextObject]]:
@@ -130,7 +128,7 @@ def _prevent_text_overlap(
         if ph:
             ph.add.remote(zoom)  # type: ignore
 
-    new_out = {}
+    new_out: dict[TileCoord, list[TextObject]] = {}
     for text in out:
         for tile in text.to_tiles(config.zoom):
             new_out.setdefault(tile, []).append(text)
@@ -140,6 +138,6 @@ def _prevent_text_overlap(
             dill.dump(text_objects, f)
 
     if ph:
-        ph.complete.remote(zoom)
+        ph.complete.remote(zoom)  # type: ignore
 
     return new_out

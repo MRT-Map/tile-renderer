@@ -5,16 +5,13 @@ import glob
 import logging
 import os
 import re
-import traceback
 from dataclasses import dataclass, field
 from itertools import chain
 
 import dill
-import ray
 from PIL import Image, ImageDraw
 from ray import ObjectRef
-from rich.progress import Progress, track
-from rich.traceback import install
+from rich.progress import track
 
 from .._internal.logger import log
 from ..misc_types.config import Config
@@ -22,7 +19,7 @@ from ..misc_types.coord import TileCoord, WorldCoord
 from ..misc_types.pla2 import Component, Pla2File
 from ..misc_types.skin import LineBack, LineFore
 from .multiprocess import MultiprocessConfig, ProgressHandler, multiprocess
-from .utils import TextObject, part_dir, wip_tiles_dir
+from .utils import part_dir, wip_tiles_dir
 
 
 @dataclass(frozen=True, init=True)
@@ -80,7 +77,7 @@ def render_part1(config: Config, mp_config: MultiprocessConfig = MultiprocessCon
         f"Rendering components in {len(tile_coords)} tiles ({sum(operations.values())} operations)..."
     )
 
-    pre_result = multiprocess(
+    multiprocess(
         tile_coords,
         consts,
         _pre_draw_components,
@@ -88,16 +85,13 @@ def render_part1(config: Config, mp_config: MultiprocessConfig = MultiprocessCon
         sum(operations.values()),
         mp_config,
     )
-    result = {a: b for a, b in pre_result}
-
-    return result
 
 
 def _pre_draw_components(
     ph: ObjectRef[ProgressHandler[TileCoord]] | None,  # type: ignore
     tile_coord: TileCoord,
     consts: Part1Consts,
-):
+) -> None:
     logging.getLogger("fontTools").setLevel(logging.CRITICAL)
     logging.getLogger("PIL").setLevel(logging.CRITICAL)
     path = part_dir(consts, 0) / f"tile_{tile_coord}.dill"
@@ -161,7 +155,7 @@ def _count_num_rendering_ops(config: Config) -> dict[TileCoord, int]:
 
 
 def _draw_components(
-    ph: ObjectRef[ProgressHandler] | None,  # type: ignore
+    ph: ObjectRef[ProgressHandler[TileCoord]] | None,  # type: ignore
     tile_coord: TileCoord,
     tile_components: list[list[Component]],
     consts: Part1Consts,

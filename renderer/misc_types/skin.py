@@ -602,7 +602,7 @@ class LineText(ComponentStyle):
         zoom: int,
     ) -> list[TextObject]:
         coords = component.nodes.to_image_line(TileCoord(zoom, 0, 0), config)
-        text_list = []
+        text_list: list[TextObject] = []
         if len(component.display_name) == 0:
             return []
         # logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating text length")

@@ -44,11 +44,10 @@ def render(
     :param tiles: a list of tiles to render
     :param zooms: a list of zooms to render
     :param offset: the offset to shift all node coordinates by, given as ``(x,y)``
-    :param int part1_batch_size: The batch size for part 1
-    :param int part1_chunk_size: The chunk size for part 1
-    :param int part1_serial: Whether part 1 will be run serially
-    :param int part3_batch_size: The batch size for part 3
-    :param int part3_serial: Whether part 3 will be run serially
+    :param part1_mp_config: The configuration for the processing of part 1
+    :param part2_mp_config1: The configuration for the 1st processing of part 2
+    :param part2_mp_config2: The configuration for the 2nd processing of part 2
+    :param part3_mp_config: The configuration for the processing of part 3
 
     :returns: Given in the form of ``{tile_coord: image}``
     :rtype: dict[TileCoord, Image.Image]

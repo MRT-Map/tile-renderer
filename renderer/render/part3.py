@@ -1,21 +1,16 @@
 from __future__ import annotations
 
-import gc
 import glob
 import logging
 import os
 import re
 import shutil
-import traceback
 from pathlib import Path
 from typing import TYPE_CHECKING
 
 import dill
-import psutil
-import ray
 from PIL import Image
 from ray import ObjectRef
-from rich.progress import Progress, track
 
 if TYPE_CHECKING:
     from .. import Config
@@ -64,9 +59,9 @@ def render_part3(
 
 
 def _draw_text(
-    ph: ObjectRef[ProgressHandler] | None,  # type: ignore
+    ph: ObjectRef[ProgressHandler[TileCoord]] | None,  # type: ignore
     tile_coord: TileCoord,
-    const_data: tuple[Config, Path],
+    const_data: tuple[Config, Path | None],
 ) -> tuple[TileCoord, Image.Image] | None:
     config, save_dir = const_data
     logging.getLogger("PIL").setLevel(logging.CRITICAL)
@@ -100,7 +95,7 @@ def _draw_text(
     os.remove(wip_tiles_dir(config) / f"{tile_coord}.png")
 
     if ph:
-        ph.add.remote(tile_coord)
+        ph.add.remote(tile_coord)  # type: ignore
         ph.complete.remote(tile_coord)  # type: ignore
 
     return tile_coord, image

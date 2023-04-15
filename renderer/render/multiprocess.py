@@ -7,7 +7,7 @@ from typing import Callable, Generic, TypeVar
 
 import psutil
 import ray
-import rich
+from ray import ObjectRef
 from rich.progress import Progress, track
 from rich.traceback import install
 
@@ -70,8 +70,8 @@ def task_spawner(
     ph: ObjectRef[ProgressHandler[_I]],  # type: ignore
     chunks: list[list[_I]],
     const_data: _D,
-    f: Callable[[ProgressHandler[_I] | None, list[_I], _D], list[_R] | None],
-    futures: list[ObjectRef[_R]],  # type: ignore
+    f: Callable[[ObjectRef[ProgressHandler[_I]] | None, list[_I], _D], list[_R] | None],  # type: ignore
+    futures: list[ObjectRef[list[_R] | None]],  # type: ignore
     cursor: int,
 ) -> list[ObjectRef[list[_R] | None]]:  # type: ignore
     """The task spawner used for part 1"""
@@ -79,8 +79,7 @@ def task_spawner(
         if ray.get(ph.needs_new_task.remote()):  # type: ignore
             output: ObjectRef[list[_R] | None]  # type: ignore
             output = ray.remote(f).remote(ph, chunks[cursor], const_data)
-            if output is not None:
-                futures.append(output)
+            futures.append(output)
             cursor += 1
     return futures
 
@@ -88,17 +87,17 @@ def task_spawner(
 @dataclass(frozen=True, init=True, unsafe_hash=True)
 class MultiprocessConfig:
     batch_size: int = psutil.cpu_count()
-    chunk_size: int = (8,)
+    chunk_size: int = 8
     serial: bool = False
 
 
 def multiprocess(
     iterated: list[_I],
     const_data: _D,
-    f: Callable[[ProgressHandler[_I] | None, _I, _D], _R | None],
+    f: Callable[[ObjectRef[ProgressHandler[_I]] | None, _I, _D], _R | None],  # type: ignore
     msg: str,
     num_operations: int | None = None,
-    mp_config: MultiprocessConfig = MultiprocessConfig,
+    mp_config: MultiprocessConfig = MultiprocessConfig(),
 ) -> list[_R]:
     if mp_config.serial:
         out_ = []

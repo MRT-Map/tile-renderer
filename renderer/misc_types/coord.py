@@ -313,10 +313,10 @@ class Line:
 class WorldLine(Line):
     """Represents a line in the world"""
 
-    coords: list[WorldCoord]
+    coords: list[WorldCoord]  # type: ignore
 
-    def __init__(self, line: list[WorldCoord] | LineString):
-        super().__init__(line)
+    def __init__(self, line: list[WorldCoord] | LineString):  # type: ignore
+        super().__init__(line)  # type: ignore
 
     def to_image_line(self, tile_coord: TileCoord, config: Config) -> ImageLine:
         """
@@ -348,10 +348,10 @@ class WorldLine(Line):
 
 
 class ImageLine(Line):
-    coords: list[ImageCoord]
+    coords: list[ImageCoord]  # type: ignore
 
-    def __init__(self, line: list[ImageCoord] | LineString):
-        super().__init__(line)
+    def __init__(self, line: list[ImageCoord] | LineString):  # type: ignore
+        super().__init__(line)  # type: ignore
 
     def to_world_line(self, tile_coord: TileCoord, config: Config) -> WorldLine:
         """
