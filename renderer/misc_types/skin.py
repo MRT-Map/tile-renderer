@@ -710,24 +710,27 @@ class LineFore(ComponentStyle):
                 joint="curve",
             )
             if "unroundedEnds" not in self.tags:
-                imd.ellipse(
-                    [
-                        coords.first_coord.x - self.width / 2 + 1,
-                        coords.first_coord.y - self.width / 2 + 1,
-                        coords.first_coord.x + self.width / 2 - 1,
-                        coords.first_coord.y + self.width / 2 - 1,
-                    ],
-                    fill=self.colour,
-                )
-                imd.ellipse(
-                    [
-                        coords.last_coord.x - self.width / 2 + 1,
-                        coords.last_coord.y - self.width / 2 + 1,
-                        coords.last_coord.x + self.width / 2 - 1,
-                        coords.last_coord.y + self.width / 2 - 1,
-                    ],
-                    fill=self.colour,
-                )
+                try:
+                    imd.ellipse(
+                        [
+                            coords.first_coord.x - self.width / 2 + 1,
+                            coords.first_coord.y - self.width / 2 + 1,
+                            coords.first_coord.x + self.width / 2 - 1,
+                            coords.first_coord.y + self.width / 2 - 1,
+                        ],
+                        fill=self.colour,
+                    )
+                    imd.ellipse(
+                        [
+                            coords.last_coord.x - self.width / 2 + 1,
+                            coords.last_coord.y - self.width / 2 + 1,
+                            coords.last_coord.x + self.width / 2 - 1,
+                            coords.last_coord.y + self.width / 2 - 1,
+                        ],
+                        fill=self.colour,
+                    )
+                except ValueError:
+                    pass
         else:
             for dash_coords in math_utils.dash(coords, self.dash[0], self.dash[1]):
                 imd.line(
