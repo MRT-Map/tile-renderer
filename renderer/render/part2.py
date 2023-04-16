@@ -131,7 +131,8 @@ def _prevent_text_overlap(
     new_out: dict[TileCoord, list[TextObject]] = {}
     for text in out:
         for tile in text.to_tiles(config.zoom):
-            new_out.setdefault(tile, []).append(text)
+            if tile.z == zoom:
+                new_out.setdefault(tile, []).append(text)
 
     for tile_coord, text_objects in new_out.items():
         with open(part_dir(config, 2) / f"tile_{tile_coord}.dill", "wb") as f:
