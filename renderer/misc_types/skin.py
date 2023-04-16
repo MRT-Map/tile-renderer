@@ -44,13 +44,13 @@ class Skin:
         self.background: str = json["info"]["background"]
 
         self.order: list[str] = json["order"]
-        self.misc_types: dict[str, ComponentTypeInfo] = {
+        self.types: dict[str, ComponentTypeInfo] = {
             name: ComponentTypeInfo(name, value, self.order)
             for name, value in json["types"].items()
         }
 
     def __getitem__(self, type_name: str) -> ComponentTypeInfo:
-        return self.misc_types[type_name]
+        return self.types[type_name]
 
     # @methodtools.lru_cache()
     def get_font(
