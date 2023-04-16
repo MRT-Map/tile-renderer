@@ -1,6 +1,5 @@
 from __future__ import annotations
 
-import functools
 import itertools
 import math
 import os
@@ -9,7 +8,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Literal
 
 import imagehash
-import methodtools
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont
 from schema import And, Optional, Or, Regex, Schema
@@ -651,7 +649,7 @@ class LineText(ComponentStyle):
         if "oneWay" in component.tags:
             font = config.skin.get_font("", self.size + 2, config.assets_dir, "→")
             arrow_coord_lines = math_utils.dash(
-                coords.parallel_offset(self.offset + self.size * 3 / 16),
+                coords.parallel_offset(self.offset),
                 text_length / 2,
                 text_length * 0.75,
             )
