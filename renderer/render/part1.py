@@ -111,8 +111,8 @@ def _count_num_rendering_ops(config: Config) -> dict[TileCoord, int]:
     for tile_coord, tile_components in track(
         grouped_tile_list.items(), description="Counting operations"
     ):
+        operations[tile_coord] = 0
         if not tile_components:
-            operations[tile_coord] = 0
             continue
 
         for group in tile_components:
