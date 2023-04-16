@@ -74,7 +74,7 @@ def render_part1(config: Config, mp_config: MultiprocessConfig = MultiprocessCon
     )
 
     log.info(
-        f"Rendering components in {len(tile_coords)} tiles ({sum(operations.values())} operations)..."
+        f"Rendering components in {len(tile_coords)} tiles ({operations} operations)..."
     )
 
     multiprocess(
@@ -82,12 +82,12 @@ def render_part1(config: Config, mp_config: MultiprocessConfig = MultiprocessCon
         consts,
         _pre_draw_components,
         "[green]Rendering components",
-        sum(operations.values()),
+        operations,
         mp_config,
     )
 
 
-def _count_num_rendering_ops(config: Config) -> dict[TileCoord, int]:
+def _count_num_rendering_ops(config: Config) -> int:
     grouped_tile_list: dict[TileCoord, list[list[Component]]] = {}
     for file in track(
         glob.glob(str(part_dir(config, 0) / f"tile_*.dill")),
@@ -103,15 +103,13 @@ def _count_num_rendering_ops(config: Config) -> dict[TileCoord, int]:
                 )
             ] = dill.load(f)
 
-    tile_operations = 0
-    operations = {}
+    operations = 0
 
     tile_coord: TileCoord
     tile_components: list[list[Component]]
     for tile_coord, tile_components in track(
         grouped_tile_list.items(), description="Counting operations"
     ):
-        operations[tile_coord] = 0
         if not tile_components:
             continue
 
@@ -119,13 +117,11 @@ def _count_num_rendering_ops(config: Config) -> dict[TileCoord, int]:
             type_info = config.skin[group[0].type]
             style = type_info[config.zoom.max - tile_coord[0]]
             for step in style:
-                operations[tile_coord] += len(group)
+                operations += len(group)
 
                 if _needs_con_rendering(type_info, step):
-                    operations[tile_coord] += 1
+                    operations += 1
 
-        operations[tile_coord] = tile_operations
-        tile_operations = 0
     return operations
 
 
