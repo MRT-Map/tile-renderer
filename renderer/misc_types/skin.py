@@ -590,7 +590,27 @@ class LineText(ComponentStyle):
         consts: Part1Consts,
         tile_coord: TileCoord,
     ):
-        pass
+        if "oneWay" not in component.tags:
+            return
+        coords = component.nodes.to_image_line(tile_coord, consts)
+        arrow_coord_lines = math_utils.dash(
+            coords.parallel_offset(self.offset),
+            self.size,
+            self.size * 5,
+        )
+        for arrow_coord_line in arrow_coord_lines:
+            if len(arrow_coord_line.coords) >= 2:
+                c1 = arrow_coord_line.coords[0]
+                c2 = arrow_coord_line.coords[1]
+                rot = math.atan2(-c2.y + c1.y, c2.x - c1.x)
+                ai = Image.new("RGBA", (self.size // 2,) * 2, (0,) * 4)
+                ad = ImageDraw.Draw(ai)
+                ad.polygon(
+                    [(0, 0), (0, self.size // 2), (self.size // 2, self.size // 2 / 2)],
+                    fill=self.arrow_colour,
+                )
+                ai = ai.rotate(rot * 180 / math.pi, expand=True)
+                img.paste(ai, (int(c1.x - ai.width / 2), int(c1.y - ai.height / 2)), ai)
 
     def text(
         self,
@@ -646,37 +666,6 @@ class LineText(ComponentStyle):
             if e is not None
         )
 
-        if "oneWay" in component.tags:
-            font = config.skin.get_font("", self.size + 2, config.assets_dir, "→")
-            arrow_coord_lines = math_utils.dash(
-                coords.parallel_offset(self.offset),
-                text_length / 2,
-                text_length * 0.75,
-            )
-            if arrow_coord_lines and sum(
-                c1.point.distance(c2.point)
-                for c1, c2 in with_next([a for a in arrow_coord_lines[-1]])
-            ) < int(imd.textlength("→", font)):
-                arrow_coord_lines = arrow_coord_lines[:-1]
-            text_list.extend(
-                e
-                for e in (
-                    self._text_on_line(
-                        imd,
-                        font,
-                        "→",
-                        zoom,
-                        cs,
-                        config,
-                        fill=self.arrow_colour,
-                        stroke="#00000000",
-                        upright=False,
-                    )
-                    for i, cs in enumerate(arrow_coord_lines)
-                    if i % 2 != 0
-                )
-                if e is not None
-            )
         return text_list
 
 
