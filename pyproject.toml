@@ -38,6 +38,7 @@ msgspec = "^0.14.1"
 dill = "^0.3.5.1"
 six = "^1.16.0"
 methodtools = "^0.4.7"
+typing_extensions = "^4.5.0"
 
 [tool.poetry.group.dev.dependencies]
 wheel = "^0.37.1"
