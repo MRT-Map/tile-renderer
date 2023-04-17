@@ -598,19 +598,21 @@ class LineText(ComponentStyle):
             self.size,
             self.size * 5,
         )
+        ai = Image.new("RGBA", (self.size // 2,) * 2, (0,) * 4)
+        ad = ImageDraw.Draw(ai)
+        ad.polygon(
+            [(0, 0), (0, self.size // 2), (self.size // 2, self.size // 2 / 2)],
+            fill=self.arrow_colour,
+        )
         for arrow_coord_line in arrow_coord_lines:
             if len(arrow_coord_line.coords) >= 2:
                 c1 = arrow_coord_line.coords[0]
                 c2 = arrow_coord_line.coords[1]
                 rot = math.atan2(-c2.y + c1.y, c2.x - c1.x)
-                ai = Image.new("RGBA", (self.size // 2,) * 2, (0,) * 4)
-                ad = ImageDraw.Draw(ai)
-                ad.polygon(
-                    [(0, 0), (0, self.size // 2), (self.size // 2, self.size // 2 / 2)],
-                    fill=self.arrow_colour,
+                nai = ai.rotate(rot * 180 / math.pi, expand=True)
+                img.paste(
+                    nai, (int(c1.x - ai.width / 2), int(c1.y - ai.height / 2)), nai
                 )
-                ai = ai.rotate(rot * 180 / math.pi, expand=True)
-                img.paste(ai, (int(c1.x - ai.width / 2), int(c1.y - ai.height / 2)), ai)
 
     def text(
         self,
