@@ -6,13 +6,13 @@ import dill
 from rich.progress import track
 
 if TYPE_CHECKING:
-    from .. import Config
+    from ..misc_types.config import Config
 
 from .._internal.logger import log
-from ..misc_types.coord import TileCoord, Vector, WorldCoord, WorldLine
+from ..misc_types.coord import TileCoord, Vector, WorldLine
 from ..misc_types.pla2 import Component, Pla2File
-from ..misc_types.skin import Skin
 from ..misc_types.zoom_params import ZoomParams
+from ..skin_type import Skin
 from .utils import part_dir
 
 

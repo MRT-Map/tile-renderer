@@ -7,16 +7,18 @@ import psutil
 from rich.progress import track
 from rich.traceback import install
 
-from renderer import MultiprocessConfig, TileCoord, __version__, merge_tiles, render
+from renderer import __version__
 
 # noinspection PyProtectedMember
 from renderer._internal.logger import log
+from renderer.merge_tiles import merge_tiles
 from renderer.misc_types.config import Config
-from renderer.misc_types.coord import Vector
+from renderer.misc_types.coord import TileCoord, Vector
 from renderer.misc_types.pla2 import Pla2File
-from renderer.misc_types.skin import Skin
 from renderer.misc_types.zoom_params import ZoomParams
 from renderer.pla1to2 import pla1to2
+from renderer.render import MultiprocessConfig, render
+from renderer.skin_type import Skin
 
 install(show_locals=True)
 

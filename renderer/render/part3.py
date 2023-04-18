@@ -13,12 +13,13 @@ from PIL import Image
 from ray import ObjectRef
 
 if TYPE_CHECKING:
-    from .. import Config
+    from ..misc_types.config import Config
 
 from .._internal.logger import log
 from ..misc_types.coord import TileCoord
 from .multiprocess import MultiprocessConfig, ProgressHandler, multiprocess
-from .utils import TextObject, part_dir, wip_tiles_dir
+from .text_object import TextObject
+from .utils import part_dir, wip_tiles_dir
 
 
 def render_part3(

@@ -1,7 +1,7 @@
 from dataclasses import dataclass
 from pathlib import Path
 
-from .skin import Skin
+from ..skin_type import Skin
 from .zoom_params import ZoomParams
 
 

@@ -15,9 +15,12 @@ from .._internal.logger import log
 from ..misc_types.config import Config
 from ..misc_types.coord import TileCoord
 from ..misc_types.pla2 import Component, Pla2File
-from ..misc_types.skin import AreaBorderText, AreaCenterText, LineText, PointText
+from ..skin_type.area import AreaBorderText, AreaCenterText
+from ..skin_type.line import LineText
+from ..skin_type.point import PointText
 from .multiprocess import MultiprocessConfig, ProgressHandler, multiprocess
-from .utils import TextObject, part_dir
+from .text_object import TextObject
+from .utils import part_dir
 
 
 def render_part2(

@@ -17,7 +17,8 @@ from .._internal.logger import log
 from ..misc_types.config import Config
 from ..misc_types.coord import TileCoord, WorldCoord
 from ..misc_types.pla2 import Component, Pla2File
-from ..misc_types.skin import ComponentStyle, ComponentTypeInfo, LineBack, LineFore
+from ..skin_type import ComponentStyle, ComponentTypeInfo
+from ..skin_type.line import LineBack, LineFore
 from .multiprocess import MultiprocessConfig, ProgressHandler, multiprocess
 from .utils import part_dir, wip_tiles_dir
 

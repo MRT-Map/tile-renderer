@@ -11,7 +11,7 @@ from ray import ObjectRef
 from rich.progress import Progress, track
 from rich.traceback import install
 
-from renderer import log
+from .._internal.logger import log
 
 _I = TypeVar("_I")
 _D = TypeVar("_D")

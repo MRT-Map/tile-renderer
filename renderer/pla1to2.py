@@ -1,7 +1,7 @@
 from rich.progress import track
 
-from . import Pla1ComponentListJson, Pla1NodeListJson
 from ._internal.logger import log
+from .misc_types import Pla1ComponentListJson, Pla1NodeListJson
 from .misc_types.coord import WorldCoord, WorldLine
 from .misc_types.pla2 import Component, Pla2File
 

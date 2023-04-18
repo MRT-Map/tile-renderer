@@ -15,10 +15,6 @@ if TYPE_CHECKING:
     from ..misc_types.pla2 import Pla2File
 
 from ..misc_types.coord import TileCoord, Vector
-from .part1 import render_part1
-from .part2 import render_part2
-from .part3 import render_part3
-from .prepare import prepare_render
 
 
 def render(
@@ -57,6 +53,10 @@ def render(
     if save_dir is not None:
         save_dir.mkdir(exist_ok=True)
     config.temp_dir.mkdir(exist_ok=True)
+    from .part1 import render_part1
+    from .part2 import render_part2
+    from .part3 import render_part3
+    from .prepare import prepare_render
 
     prepare_render(components, config, tiles, zooms, offset)
 
