@@ -115,7 +115,7 @@ def prepare_render(
     ):
         with open(part_dir(config, 0) / f"tile_{coord}.dill", "wb") as f:
             dill.dump(grouped_components, f)
-    with open(part_dir(config, 0) / f"processed.dill", "wb") as f:
+    with open(part_dir(config, 0) / "processed.dill", "wb") as f:
         dill.dump(components, f)
 
     return grouped_tile_list

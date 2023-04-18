@@ -46,11 +46,11 @@ class Part1Consts(Config):
 def render_part1(config: Config, mp_config: MultiprocessConfig = MultiprocessConfig()):
     """Part 1 of the rendering job. Check render() for the full list of parameters"""
     tile_coords = []
-    with open(part_dir(config, 0) / f"processed.dill", "rb") as f:
+    with open(part_dir(config, 0) / "processed.dill", "rb") as f:
         components: Pla2File = dill.load(f)
 
-    for file in glob.glob(str(part_dir(config, 0) / f"tile_*.dill")):
-        re_result = re.search(rf"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)
+    for file in glob.glob(str(part_dir(config, 0) / "tile_*.dill")):
+        re_result = re.search(r"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)
         if re_result is None:
             raise ValueError("Dill object not saved properly")
         tile_coords.append(
@@ -91,11 +91,11 @@ def render_part1(config: Config, mp_config: MultiprocessConfig = MultiprocessCon
 def _count_num_rendering_ops(config: Config) -> int:
     grouped_tile_list: dict[TileCoord, list[list[Component]]] = {}
     for file in track(
-        glob.glob(str(part_dir(config, 0) / f"tile_*.dill")),
+        glob.glob(str(part_dir(config, 0) / "tile_*.dill")),
         description="Loading data",
     ):
         with open(file, "rb") as f:
-            result = re.search(rf"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)
+            result = re.search(r"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)
             if result is None:
                 raise ValueError("Dill object is not saved properly")
             grouped_tile_list[

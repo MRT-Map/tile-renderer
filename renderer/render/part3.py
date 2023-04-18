@@ -29,8 +29,8 @@ def render_part3(
 ) -> dict[TileCoord, Image.Image]:
     """Part 3 of the rendering job. Check render() for the full list of parameters"""
     tile_coords = []
-    for file in glob.glob(str(wip_tiles_dir(config) / f"*.png")):
-        re_result = re.search(rf"(-?\d+), (-?\d+), (-?\d+)\.png$", file)
+    for file in glob.glob(str(wip_tiles_dir(config) / "*.png")):
+        re_result = re.search(r"(-?\d+), (-?\d+), (-?\d+)\.png$", file)
         if re_result is None:
             raise ValueError("Dill object was not saved properly")
         tile_coords.append(

@@ -31,13 +31,13 @@ def render_part2(
     """Part 2 of the rendering job. Check render() for the full list of parameters"""
     zooms = set()
     log.info("Determining zoom levels...")
-    for file in glob.glob(str(part_dir(config, 1) / f"tile_*.dill")):
+    for file in glob.glob(str(part_dir(config, 1) / "tile_*.dill")):
         regex = re.search(r"_(\d+),", file)
         if regex is None:
             raise ValueError("Dill object is not saved properly")
         zoom = regex.group(1)
         zooms.add(int(zoom))
-    with open(part_dir(config, 0) / f"processed.dill", "rb") as f:
+    with open(part_dir(config, 0) / "processed.dill", "rb") as f:
         components: Pla2File = dill.load(f)
 
     def key(comp: Component) -> int:
@@ -71,11 +71,11 @@ def render_part2(
         result.update(a)
 
     for file in track(
-        glob.glob(str(part_dir(config, 1) / f"tile_*.dill")),
+        glob.glob(str(part_dir(config, 1) / "tile_*.dill")),
         description="Cleaning up",
     ):
         os.remove(file)
-    os.remove(part_dir(config, 0) / f"processed.dill")
+    os.remove(part_dir(config, 0) / "processed.dill")
 
     return result
 

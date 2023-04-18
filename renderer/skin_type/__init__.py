@@ -3,6 +3,7 @@ from __future__ import annotations
 from pathlib import Path
 from typing import TYPE_CHECKING, Literal
 
+import imagehash
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont
 from schema import And, Optional, Or, Regex, Schema
@@ -155,7 +156,7 @@ class Skin:
                 "layer": Or("back", "fore"),
                 "colour": Or(None, And(str, Regex(r"^#[a-f,0-9]{3,6}$"))),
                 "width": int,
-                Optional("dash"): Or(None, And([int], lambda l: len(l) == 2)),
+                Optional("dash"): Or(None, And([int], lambda list_: len(list_) == 2)),
             }
         )
         line_text = Schema(
@@ -172,7 +173,7 @@ class Skin:
                 "layer": "fill",
                 "colour": Or(None, And(str, Regex(r"^#[a-f,0-9]{3,6}$"))),
                 "outline": Or(None, And(str, Regex(r"^#[a-f,0-9]{3,6}$"))),
-                Optional("stripe"): Or(None, And([int], lambda l: len(l) == 3)),
+                Optional("stripe"): Or(None, And([int], lambda list_: len(list_) == 3)),
             }
         )
         area_bordertext = Schema(
@@ -224,7 +225,7 @@ class Skin:
                 if str_to_tuple(z)[0] > str_to_tuple(z)[1]:
                     raise ValueError(f"Invalid range '{z}'")
                 for step in steps:
-                    if not step["layer"] in schemas[t["type"]]:
+                    if step["layer"] not in schemas[t["type"]]:
                         raise ValueError(f"Invalid layer '{step}'")
                     else:
                         try:
