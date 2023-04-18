@@ -83,7 +83,6 @@ def merge_tiles(
                 py += tile_size
             px += tile_size
             py = 0
-        # tile_return[tile_components] = im
         if save_dir is not None:
             log.info(f"Zoom {z}: [dim white]Saving image")
             i.save(save_dir / f"merge_{z}.webp", "WEBP")

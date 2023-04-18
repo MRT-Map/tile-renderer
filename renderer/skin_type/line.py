@@ -60,9 +60,6 @@ class LineText(ComponentStyle):
                 ) < c1.point.distance(c2.point) and char_cursor < len(text):
                     text_to_print += text[char_cursor]
                     char_cursor += 1
-            # if char_cursor != len(text):
-            #    text_to_print = text_to_print[:-1]
-            #    char_cursor -= 1
             text_length = imd.textlength(text_to_print, font)
 
             if text_length != 0:
@@ -152,7 +149,6 @@ class LineText(ComponentStyle):
         text_list: list[TextObject] = []
         if len(component.display_name) == 0:
             return []
-        # logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Calculating text length")
         font = config.skin.get_font(
             "", self.size + 2, config.assets_dir, component.display_name
         )

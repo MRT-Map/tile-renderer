@@ -69,8 +69,6 @@ def _process_tiles(
 
         # groups components of the same type if "road" tag present
         newer_tile_components: list[list[Component]] = [[]]
-        # keys = list(tile_list[tile_components].keys())
-        # for i in range(len(tile_list[tile_components])):
         for i, component in enumerate(tile_components):
             newer_tile_components[-1].append(component)
             if i != len(tile_components) - 1 and (

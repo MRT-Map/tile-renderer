@@ -12,10 +12,10 @@ def segments_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
     """
     Finds if two segments intersect.
 
-    :param Coord c1: the 1st point of the 1st segment.
-    :param Coord c2: the 2nd point of the 1st segment.
-    :param Coord c3: the 1st point of the 2nd segment.
-    :param Coord c4: the 2nd point of the 2nd segment.
+    :param Coord c1: The 1st point of the 1st segment.
+    :param Coord c2: The 2nd point of the 1st segment.
+    :param Coord c3: The 1st point of the 2nd segment.
+    :param Coord c4: The 2nd point of the 2nd segment.
 
     :returns: Whether the two segments intersect.
     :rtype: bool

@@ -74,11 +74,6 @@ def _draw_text(
     except FileNotFoundError:
         text_list = []
 
-    # antialiasing
-    # image = image.resize(
-    #    (image.width * 16, image.height * 16), resample=Image.BOX
-    # ).resize(image.size, resample=Image.ANTIALIAS)
-
     for text in text_list:
         for img_uuid, center in zip(text.image, text.center):
             img = TextObject.uuid_to_img(img_uuid, config).convert("RGBA")

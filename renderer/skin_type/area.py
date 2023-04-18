@@ -168,7 +168,6 @@ class AreaCenterText(ComponentStyle):
         right = max(cr.x for cr in coords)
         delta = right - left
         if text_length > delta:
-            # logger.log(f"{style.index(self) + 1}/{len(style)} {component.name}: Breaking up string")
             tokens = component.display_name.split()
             wss = re.findall(r"\s+", component.display_name)
             text = ""
@@ -234,7 +233,6 @@ class AreaFill(ComponentStyle):
         ad = ImageDraw.Draw(ai)
 
         if self.stripe is not None:
-            # logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Generating stripes")
             bounds = coords.bounds
             bounds.x_max += bounds.x_max - bounds.x_min
             bounds.x_min -= bounds.y_max - bounds.y_min
@@ -285,7 +283,6 @@ class AreaFill(ComponentStyle):
             pi.paste(af_i, (0, 0), mi)
             ai.paste(pi, (0, 0), pi)
         else:
-            # logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Filling area")
             ad.polygon(
                 [c.as_tuple() for c in coords.coords],
                 fill=self.colour,
@@ -301,7 +298,6 @@ class AreaFill(ComponentStyle):
         img.paste(ai, (0, 0), ai)
 
         if self.outline is not None:
-            # logger.log(f"{style.index(step) + 1}/{len(style)} {component.name}: Drawing outline")
             exterior_outline = coords.coords[:]
             exterior_outline.append(exterior_outline[0])
             outlines = [exterior_outline]
