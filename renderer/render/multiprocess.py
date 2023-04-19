@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import functools
 import logging
 import traceback
 from dataclasses import dataclass
@@ -119,6 +120,7 @@ def multiprocess(
         for i in range(0, len(iterated), mp_config.chunk_size)
     ]
 
+    @functools.wraps(f)
     def new_f(
         p: ObjectRef[ProgressHandler[_I]] | None,
         i: list[_I],
