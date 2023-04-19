@@ -5,7 +5,6 @@ import glob
 import re
 from dataclasses import dataclass, field
 from itertools import chain
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 import dill
@@ -55,7 +54,8 @@ def render_part1(
     """Part 1 of the rendering job. Check render() for the full list of parameters"""
     tile_coords = []
     with (part_dir(config, 0) / "processed.dill").open("rb") as f:
-        components: Pla2File = dill.load(f)  # noqa: S301
+        data: tuple[Pla2File, int] = dill.load(f)  # noqa: S301
+        components, operations = data
 
     for file in glob.glob(str(part_dir(config, 0) / "tile_*.dill")):
         re_result = re.search(r"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)
@@ -69,7 +69,6 @@ def render_part1(
             ),
         )
 
-    operations = _count_num_rendering_ops(config)
     gc.collect()
 
     coord_to_comp: dict[WorldCoord, list[Component]] = {}
@@ -94,49 +93,6 @@ def render_part1(
         operations,
         mp_config,
     )
-
-
-def _count_num_rendering_ops(config: Config) -> int:
-    grouped_tile_list: dict[TileCoord, list[list[Component]]] = {}
-    for file in track(
-        glob.glob(str(part_dir(config, 0) / "tile_*.dill")),
-        description="Loading data",
-    ):
-        with Path(file).open("rb") as f:
-            result = re.search(r"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)
-            if result is None:
-                raise ValueError("Dill object is not saved properly")
-            grouped_tile_list[
-                TileCoord(
-                    int(result.group(1)),
-                    int(result.group(2)),
-                    int(result.group(3)),
-                )
-            ] = dill.load(  # noqa: S301
-                f,
-            )
-
-    operations = 0
-
-    tile_coord: TileCoord
-    tile_components: list[list[Component]]
-    for tile_coord, tile_components in track(
-        grouped_tile_list.items(),
-        description="Counting operations",
-    ):
-        if not tile_components:
-            continue
-
-        for group in tile_components:
-            type_info = config.skin[group[0].type]
-            style = type_info[config.zoom.max - tile_coord[0]]
-            for step in style:
-                operations += len(group)
-
-                if _needs_con_rendering(type_info, step):
-                    operations += 1
-
-    return operations
 
 
 def _pre_draw_components(

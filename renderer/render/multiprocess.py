@@ -139,7 +139,7 @@ def multiprocess(
                 log.error(f"Error in ray task: {e!r}")
                 log.error(traceback.format_exc())
             if p:
-                p.complete.remote(j)
+                p._complete.remote(j)
         if p:
             p.request_new_task.remote()
 

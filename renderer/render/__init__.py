@@ -26,6 +26,7 @@ def render(
     tiles: list[TileCoord] | None = None,
     zooms: list[int] | None = None,
     offset: Vector = Vector(0, 0),  # noqa: B008
+    prepare_mp_config: MultiprocessConfig = MultiprocessConfig(),  # noqa: B008
     part1_mp_config: MultiprocessConfig = MultiprocessConfig(),  # noqa: B008
     part2_mp_config1: MultiprocessConfig = MultiprocessConfig(),  # noqa: B008
     part2_mp_config2: MultiprocessConfig = MultiprocessConfig(),  # noqa: B008
@@ -41,6 +42,7 @@ def render(
     :param tiles: a list of tiles to render
     :param zooms: a list of zooms to render
     :param offset: the offset to shift all node coordinates by, given as ``(x,y)``
+    :param prepare_mp_config: The configuration for the data-dumping of the preparation stage
     :param part1_mp_config: The configuration for the processing of part 1
     :param part2_mp_config1: The configuration for the 1st processing of part 2
     :param part2_mp_config2: The configuration for the 2nd processing of part 2
@@ -59,16 +61,17 @@ def render(
     from .part3 import render_part3
     from .prepare import prepare_render
 
-    prepare_render(components, config, tiles, zooms, offset)
-
     if (
-        not part1_mp_config.serial
+        prepare_mp_config
+        and not part1_mp_config.serial
         and not part2_mp_config1.serial
         and not part2_mp_config2.serial
         and not part3_mp_config.serial
     ):
         log.info(f"Initialising Ray with {processes=}...")
         ray.init(num_cpus=processes)
+
+    prepare_render(components, config, tiles, zooms, offset, prepare_mp_config)
 
     render_part1(config, part1_mp_config)
     render_part2(config, part2_mp_config1, part2_mp_config2)

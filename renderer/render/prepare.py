@@ -3,7 +3,11 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import dill
+from ray.types import ObjectRef
 from rich.progress import track
+
+from .multiprocess import MultiprocessConfig, ProgressHandler, multiprocess
+from .part1 import _needs_con_rendering
 
 if TYPE_CHECKING:
     from ..misc_types.zoom_params import ZoomParams
@@ -92,6 +96,7 @@ def prepare_render(
     tiles: list[TileCoord] | None = None,
     zooms: list[int] | None = None,
     offset: Vector = Vector(0, 0),  # noqa: B008
+    prepare_mp_config: MultiprocessConfig = MultiprocessConfig(),  # noqa: B008
 ) -> dict[TileCoord, list[list[Component]]]:
     """The data-preparing step of the rendering job. Check render() for the full list of parameters"""
     log.info("Offsetting coordinates...")
@@ -114,13 +119,55 @@ def prepare_render(
 
     grouped_tile_list = _process_tiles(tile_list, config.skin)
 
-    for coord, grouped_components in track(
-        grouped_tile_list.items(),
-        description="Dumping data",
-    ):
-        with (part_dir(config, 0) / f"tile_{coord}.dill").open("wb") as f:
+    def dump_data(
+        ph: ObjectRef[ProgressHandler[TileCoord]] | None,
+        cgc: tuple[TileCoord, list[list[Component]]],
+        config_: Config,
+    ) -> None:
+        coord, grouped_components = cgc
+        with (part_dir(config_, 0) / f"tile_{coord}.dill").open("wb") as f:
             dill.dump(grouped_components, f)
-    with (part_dir(config, 0) / "processed.dill").open("wb") as f:
-        dill.dump(components, f)
+        if ph:
+            ph.add.remote(coord)
+
+    multiprocess(
+        list(grouped_tile_list.items()),
+        config,
+        dump_data,
+        "Dumping data",
+        len(grouped_tile_list),
+        prepare_mp_config,
+    )
+
+    num_rendering_ops = _count_num_rendering_ops(grouped_tile_list, config)
+
+    with (part_dir(config, 0) / "processed.dill").open("wb") as f2:
+        dill.dump((components, num_rendering_ops), f2)
 
     return grouped_tile_list
+
+
+def _count_num_rendering_ops(
+    grouped_tile_list: dict[TileCoord, list[list[Component]]], config: Config
+) -> int:
+    operations = 0
+
+    tile_coord: TileCoord
+    tile_components: list[list[Component]]
+    for tile_coord, tile_components in track(
+        grouped_tile_list.items(),
+        description="Counting operations",
+    ):
+        if not tile_components:
+            continue
+
+        for group in tile_components:
+            type_info = config.skin[group[0].type]
+            style = type_info[config.zoom.max - tile_coord[0]]
+            for step in style:
+                operations += len(group)
+
+                if _needs_con_rendering(type_info, step):
+                    operations += 1
+
+    return operations
