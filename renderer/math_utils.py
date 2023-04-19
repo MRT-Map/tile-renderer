@@ -24,7 +24,7 @@ def segments_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
     xdiff = Coord(c1.x - c2.x, c3.x - c4.x)
     ydiff = Coord(c1.y - c2.y, c3.y - c4.y)
 
-    def det(a, b):
+    def det(a: Coord, b: Coord) -> float:
         return a.x * b.y - a.y * b.x
 
     div = det(xdiff, ydiff)
@@ -61,7 +61,9 @@ def dash(coords: ImageLine, dash_length: float, gap_length: float) -> list[Image
 
 @functools.cache
 def _dash(
-    coords: tuple[ImageCoord, ...], dash_length: float, gap_length: float
+    coords: tuple[ImageCoord, ...],
+    dash_length: float,
+    gap_length: float,
 ) -> list[list[ImageCoord]]:
     dashes = []
     next_dash = []
@@ -78,14 +80,14 @@ def _dash(
             if (new_cursor - c2).dot(c2 - c1) >= 0:
                 next_len -= abs(c2 - cursor)
                 break
-            else:
-                cursor = new_cursor
-                if is_dash:
-                    next_dash.append(cursor)
-                    dashes.append(next_dash.copy())
-                    next_dash.clear()
-                is_dash = not is_dash
-                next_len = dash_length if is_dash else gap_length
+
+            cursor = new_cursor
+            if is_dash:
+                next_dash.append(cursor)
+                dashes.append(next_dash.copy())
+                next_dash.clear()
+            is_dash = not is_dash
+            next_len = dash_length if is_dash else gap_length
     if is_dash and len(coords) >= 1:
         next_dash.append(coords[-1])
         dashes.append(next_dash.copy())

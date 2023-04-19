@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import functools
 import itertools
-import os
 import uuid
 from copy import copy
 from dataclasses import dataclass
@@ -15,11 +14,11 @@ from shapely import LineString, Polygon
 
 from .. import math_utils
 from ..misc_types.coord import ImageCoord, TileCoord, WorldCoord, WorldLine
-from ..misc_types.zoom_params import ZoomParams
 from .utils import text_object_path
 
 if TYPE_CHECKING:
     from ..misc_types.config import Config
+    from ..misc_types.zoom_params import ZoomParams
 
 
 @dataclass(eq=True, unsafe_hash=True)
@@ -64,11 +63,10 @@ class TextObject:
         :raises FileNotFoundError: if the UUID is invalid
         """
         path = text_object_path(config, u)
-        img = Image.open(path)
-        return img
+        return Image.open(path)
 
     @staticmethod
-    def remove_img(u: UUID, config: Config):
+    def remove_img(u: UUID, config: Config) -> None:
         """
         Remove the image from the temporary directory
 
@@ -78,7 +76,7 @@ class TextObject:
         :raises FileNotFoundError: If the UUID is invalid
         """
         path = text_object_path(config, u)
-        os.remove(path)
+        path.unlink(missing_ok=True)
 
     def __init__(
         self,
@@ -88,7 +86,7 @@ class TextObject:
         rot: float,
         zoom: int,
         config: Config,
-    ):
+    ) -> None:
         """
         :param img: The Image object of the current tile
         :param center: The centre of the text
@@ -122,8 +120,8 @@ class TextObject:
                     .to_world_coord(TileCoord(zoom, 0, 0), config)
                     .as_tuple()
                     for a in bounds
-                )
-            )
+                ),
+            ),
         ]
 
     @classmethod
@@ -142,7 +140,7 @@ class TextObject:
         for bound in self.bounds:
             tiles.extend(
                 WorldLine(
-                    [WorldCoord(x, y) for x, y in bound.exterior.coords]
-                ).to_tiles(zoom)
+                    [WorldCoord(x, y) for x, y in bound.exterior.coords],
+                ).to_tiles(zoom),
             )
         return list(set(tiles))

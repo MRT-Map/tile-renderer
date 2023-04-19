@@ -1,10 +1,11 @@
 from __future__ import annotations
 
-from pathlib import Path
 from typing import TYPE_CHECKING
-from uuid import UUID
 
 if TYPE_CHECKING:
+    from pathlib import Path
+    from uuid import UUID
+
     from ..misc_types.config import Config
 
 

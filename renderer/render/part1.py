@@ -3,24 +3,28 @@ from __future__ import annotations
 import gc
 import glob
 import logging
-import os
 import re
 from dataclasses import dataclass, field
 from itertools import chain
+from pathlib import Path
+from typing import TYPE_CHECKING
 
 import dill
 from PIL import Image, ImageDraw
-from ray import ObjectRef
 from rich.progress import track
 
 from .._internal.logger import log
 from ..misc_types.config import Config
 from ..misc_types.coord import TileCoord, WorldCoord
-from ..misc_types.pla2 import Component, Pla2File
-from ..skin_type import ComponentStyle, ComponentTypeInfo
 from ..skin_type.line import LineBack, LineFore
 from .multiprocess import MultiprocessConfig, ProgressHandler, multiprocess
 from .utils import part_dir, wip_tiles_dir
+
+if TYPE_CHECKING:
+    from ray import ObjectRef
+
+    from ..misc_types.pla2 import Component, Pla2File
+    from ..skin_type import ComponentStyle, ComponentTypeInfo
 
 
 @dataclass(frozen=True, init=True)
@@ -31,7 +35,9 @@ class Part1Consts(Config):
 
     @classmethod
     def from_config(
-        cls, config: Config, coord_to_comp: dict[WorldCoord, list[Component]]
+        cls,
+        config: Config,
+        coord_to_comp: dict[WorldCoord, list[Component]],
     ) -> Part1Consts:
         return cls(
             zoom=config.zoom,
@@ -43,11 +49,13 @@ class Part1Consts(Config):
         )
 
 
-def render_part1(config: Config, mp_config: MultiprocessConfig = MultiprocessConfig()):
+def render_part1(
+    config: Config, mp_config: MultiprocessConfig = MultiprocessConfig()
+) -> None:  # noqa: B008
     """Part 1 of the rendering job. Check render() for the full list of parameters"""
     tile_coords = []
-    with open(part_dir(config, 0) / "processed.dill", "rb") as f:
-        components: Pla2File = dill.load(f)
+    with (part_dir(config, 0) / "processed.dill").open("rb") as f:
+        components: Pla2File = dill.load(f)  # noqa: S301
 
     for file in glob.glob(str(part_dir(config, 0) / "tile_*.dill")):
         re_result = re.search(r"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)
@@ -58,7 +66,7 @@ def render_part1(config: Config, mp_config: MultiprocessConfig = MultiprocessCon
                 int(re_result.group(1)),
                 int(re_result.group(2)),
                 int(re_result.group(3)),
-            )
+            ),
         )
 
     operations = _count_num_rendering_ops(config)
@@ -75,7 +83,7 @@ def render_part1(config: Config, mp_config: MultiprocessConfig = MultiprocessCon
     )
 
     log.info(
-        f"Rendering components in {len(tile_coords)} tiles ({operations} operations)..."
+        f"Rendering components in {len(tile_coords)} tiles ({operations} operations)...",
     )
 
     multiprocess(
@@ -94,22 +102,27 @@ def _count_num_rendering_ops(config: Config) -> int:
         glob.glob(str(part_dir(config, 0) / "tile_*.dill")),
         description="Loading data",
     ):
-        with open(file, "rb") as f:
+        with Path(file).open("rb") as f:
             result = re.search(r"tile_(-?\d+), (-?\d+), (-?\d+)\.dill$", file)
             if result is None:
                 raise ValueError("Dill object is not saved properly")
             grouped_tile_list[
                 TileCoord(
-                    int(result.group(1)), int(result.group(2)), int(result.group(3))
+                    int(result.group(1)),
+                    int(result.group(2)),
+                    int(result.group(3)),
                 )
-            ] = dill.load(f)
+            ] = dill.load(
+                f
+            )  # noqa: S301
 
     operations = 0
 
     tile_coord: TileCoord
     tile_components: list[list[Component]]
     for tile_coord, tile_components in track(
-        grouped_tile_list.items(), description="Counting operations"
+        grouped_tile_list.items(),
+        description="Counting operations",
     ):
         if not tile_components:
             continue
@@ -127,34 +140,35 @@ def _count_num_rendering_ops(config: Config) -> int:
 
 
 def _pre_draw_components(
-    ph: ObjectRef[ProgressHandler[TileCoord]] | None,  # type: ignore
+    ph: ObjectRef[ProgressHandler[TileCoord]] | None,
     tile_coord: TileCoord,
     consts: Part1Consts,
 ) -> None:
     logging.getLogger("fontTools").setLevel(logging.CRITICAL)
     logging.getLogger("PIL").setLevel(logging.CRITICAL)
     path = part_dir(consts, 0) / f"tile_{tile_coord}.dill"
-    with open(path, "rb") as f:
-        tile_components = dill.load(f)
+    with path.open("rb") as f:
+        tile_components = dill.load(f)  # noqa: S301
 
     _draw_components(ph, tile_coord, tile_components, consts)
 
-    os.remove(path)
-    with open(
-        part_dir(consts, 1) / f"tile_{tile_coord}.dill",
+    path.unlink(missing_ok=True)
+    with (part_dir(consts, 1) / f"tile_{tile_coord}.dill").open(
         "wb",
     ) as f:
         dill.dump(tile_coord, f)
 
 
 def _draw_components(
-    ph: ObjectRef[ProgressHandler[TileCoord]] | None,  # type: ignore
+    ph: ObjectRef[ProgressHandler[TileCoord]] | None,
     tile_coord: TileCoord,
     tile_components: list[list[Component]],
     consts: Part1Consts,
-):
+) -> None:
     img = Image.new(
-        mode="RGBA", size=(consts.skin.tile_size,) * 2, color=consts.skin.background
+        mode="RGBA",
+        size=(consts.skin.tile_size,) * 2,
+        color=consts.skin.background,
     )
     imd = ImageDraw.Draw(img)
 
@@ -172,21 +186,21 @@ def _draw_components(
                 )
 
                 if ph:
-                    ph.add.remote(tile_coord)  # type: ignore
+                    ph.add.remote(tile_coord)
 
             if _needs_con_rendering(type_info, step):
-                step: LineBack
+                step: LineBack  # noqa: PLW2901
                 _render_con(tile_coord, consts, group, step, img)
 
                 if ph:
-                    ph.add.remote(tile_coord)  # type: ignore
+                    ph.add.remote(tile_coord)
 
     img.save(
         wip_tiles_dir(consts) / f"{tile_coord}.png",
         "png",
     )
     if ph:
-        ph.complete.remote(tile_coord)  # type: ignore
+        ph.complete.remote(tile_coord)
 
 
 def _needs_con_rendering(type_info: ComponentTypeInfo, step: ComponentStyle) -> bool:
@@ -203,7 +217,7 @@ def _render_con(
     group: list[Component],
     step: LineBack,
     img: Image.Image,
-):
+) -> None:
     coord: WorldCoord
     for coord in chain(*(c.nodes.coords for c in group)):
         con_img_coord = coord.to_image_coord(tile_coord, consts)

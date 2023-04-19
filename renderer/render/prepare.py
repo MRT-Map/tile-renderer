@@ -6,13 +6,13 @@ import dill
 from rich.progress import track
 
 if TYPE_CHECKING:
+    from ..misc_types.zoom_params import ZoomParams
+    from ..skin_type import Skin
     from ..misc_types.config import Config
 
 from .._internal.logger import log
 from ..misc_types.coord import TileCoord, Vector, WorldLine
 from ..misc_types.pla2 import Component, Pla2File
-from ..misc_types.zoom_params import ZoomParams
-from ..skin_type import Skin
 from .utils import part_dir
 
 
@@ -27,7 +27,9 @@ def _remove_unknown_component_types(components: Pla2File, skin: Skin) -> list[st
 
 
 def _sort_by_tiles(
-    tiles: list[TileCoord], components: Pla2File, zoom: ZoomParams
+    tiles: list[TileCoord],
+    components: Pla2File,
+    zoom: ZoomParams,
 ) -> dict[TileCoord, list[Component]]:
     tile_list: dict[TileCoord, list[Component]] = {}
     for tile in tiles:
@@ -35,49 +37,51 @@ def _sort_by_tiles(
     for component in components:
         rendered_in = component.nodes.to_tiles(zoom)
         for tile in rendered_in:
-            if tile in tile_list.keys():
+            if tile in tile_list:
                 tile_list[tile].append(component)
     return tile_list
 
 
 def _process_tiles(
-    tile_list: dict[TileCoord, list[Component]], skin: Skin
+    tile_list: dict[TileCoord, list[Component]],
+    skin: Skin,
 ) -> dict[TileCoord, list[list[Component]]]:
     grouped_tile_list: dict[TileCoord, list[list[Component]]] = {}
     for tile_coord, tile_components in track(
-        tile_list.items(), description="Processing tiles"
+        tile_list.items(),
+        description="Processing tiles",
     ):
         # sort components in tiles by layer
-        new_tile_components: dict[float, list[Component]] = {}
+        sorted_tile_components: dict[float, list[Component]] = {}
         for component in tile_components:
-            if component.layer not in new_tile_components.keys():
-                new_tile_components[component.layer] = []
-            new_tile_components[component.layer].append(component)
+            if component.layer not in sorted_tile_components.keys():
+                sorted_tile_components[component.layer] = []
+            sorted_tile_components[component.layer].append(component)
 
         # sort components in layers in files by type
-        new_tile_components = {
+        sorted_tile_components = {
             layer: sorted(component_list, key=lambda x: skin.order.index(x.type))
-            for layer, component_list in new_tile_components.items()
+            for layer, component_list in sorted_tile_components.items()
         }
 
         # merge layers
-        tile_components = []
-        layers = sorted(new_tile_components.keys())
+        merged_tile_components = []
+        layers = sorted(sorted_tile_components.keys())
         for layer in layers:
-            for component in new_tile_components[layer]:
-                tile_components.append(component)
+            for component in sorted_tile_components[layer]:
+                merged_tile_components.append(component)
 
         # groups components of the same type if "road" tag present
-        newer_tile_components: list[list[Component]] = [[]]
-        for i, component in enumerate(tile_components):
-            newer_tile_components[-1].append(component)
-            if i != len(tile_components) - 1 and (
-                tile_components[i + 1].type != component.type
+        grouped_tile_components: list[list[Component]] = [[]]
+        for i, component in enumerate(merged_tile_components):
+            grouped_tile_components[-1].append(component)
+            if i != len(merged_tile_components) - 1 and (
+                merged_tile_components[i + 1].type != component.type
                 or "road" not in skin[component.type].tags
             ):
-                newer_tile_components.append([])
-        if newer_tile_components != [[]]:
-            grouped_tile_list[tile_coord] = newer_tile_components
+                grouped_tile_components.append([])
+        if grouped_tile_components != [[]]:
+            grouped_tile_list[tile_coord] = grouped_tile_components
 
     return grouped_tile_list
 
@@ -87,7 +91,7 @@ def prepare_render(
     config: Config,
     tiles: list[TileCoord] | None = None,
     zooms: list[int] | None = None,
-    offset: Vector = Vector(0, 0),
+    offset: Vector = Vector(0, 0),  # noqa: B008
 ) -> dict[TileCoord, list[list[Component]]]:
     """The data-preparing step of the rendering job. Check render() for the full list of parameters"""
     log.info("Offsetting coordinates...")
@@ -111,11 +115,12 @@ def prepare_render(
     grouped_tile_list = _process_tiles(tile_list, config.skin)
 
     for coord, grouped_components in track(
-        grouped_tile_list.items(), description="Dumping data"
+        grouped_tile_list.items(),
+        description="Dumping data",
     ):
-        with open(part_dir(config, 0) / f"tile_{coord}.dill", "wb") as f:
+        with (part_dir(config, 0) / f"tile_{coord}.dill").open("wb") as f:
             dill.dump(grouped_components, f)
-    with open(part_dir(config, 0) / "processed.dill", "wb") as f:
+    with (part_dir(config, 0) / "processed.dill").open("wb") as f:
         dill.dump(components, f)
 
     return grouped_tile_list

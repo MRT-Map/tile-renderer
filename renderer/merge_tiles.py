@@ -38,7 +38,8 @@ def merge_tiles(
     tile_return = {}
     if isinstance(images, Path):
         for d in track(
-            glob.glob(str(images / "*.webp")), description="[green]Retrieving images..."
+            glob.glob(str(images / "*.webp")),
+            description="[green]Retrieving images...",
         ):
             regex = re.search(r"(-?\d+, -?\d+, -?\d+)\.webp$", d)
             if regex is None:
@@ -49,7 +50,7 @@ def merge_tiles(
         image_dict = images
     log.info("[green]Determining zoom levels...")
     if not zoom:
-        zoom = list({c.z for c in image_dict.keys()})
+        zoom = list({c.z for c in image_dict})
     for z in zoom:
         log.info(f"Zoom {z}: [dim white]Determining tiles to be merged")
         to_merge = {k: v for k, v in image_dict.items() if k.z == z}
@@ -77,7 +78,7 @@ def merge_tiles(
             description=f"Zoom {z}: [dim white]Pasting tiles",
         ):
             for y in range(bounds.y_min, bounds.y_max + 1):
-                if TileCoord(z, x, y) in to_merge.keys():
+                if TileCoord(z, x, y) in to_merge:
                     i.paste(to_merge[TileCoord(z, x, y)], (px, py))
                     merged += 1
                 py += tile_size

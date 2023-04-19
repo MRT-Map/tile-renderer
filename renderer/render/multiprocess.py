@@ -3,13 +3,16 @@ from __future__ import annotations
 import traceback
 from dataclasses import dataclass
 from queue import Empty, Queue
-from typing import Callable, Generic, TypeVar
+from typing import TYPE_CHECKING, Generic, TypeVar
 
 import psutil
 import ray
 from ray import ObjectRef
 from rich.progress import Progress, track
 from rich.traceback import install
+
+if TYPE_CHECKING:
+    from collections.abc import Callable
 
 from .._internal.logger import log
 
@@ -22,7 +25,7 @@ _R = TypeVar("_R")
 class ProgressHandler(Generic[_I]):
     """The handler for progress bars"""
 
-    def __init__(self):
+    def __init__(self) -> None:
         self.queue = Queue()
         """The queue of TileCoords to be processed"""
         self.completed = Queue()
@@ -30,7 +33,7 @@ class ProgressHandler(Generic[_I]):
         self.new_tasks_needed = Queue()
         """If this queue has something, a new task is needed"""
 
-    def add(self, id_: _I):
+    def add(self, id_: _I) -> None:
         """Add a TileCoord to the queue"""
         self.queue.put_nowait(id_)
 
@@ -41,7 +44,7 @@ class ProgressHandler(Generic[_I]):
         except Empty:
             return None
 
-    def complete(self, id_: _I):
+    def complete(self, id_: _I) -> None:
         """Complete a TileCoord"""
         self.completed.put_nowait(id_)
 
@@ -52,7 +55,7 @@ class ProgressHandler(Generic[_I]):
         except Empty:
             return None
 
-    def request_new_task(self):
+    def request_new_task(self) -> None:
         """Request a new task to be processed"""
         self.new_tasks_needed.put_nowait(None)
 
@@ -60,24 +63,25 @@ class ProgressHandler(Generic[_I]):
         """Returns True if a new task is needed, and resets the value to False"""
         try:
             self.queue.get_nowait()
-            return True
         except Empty:
             return False
+        else:
+            return True
 
 
 @ray.remote
 def task_spawner(
-    ph: ObjectRef[ProgressHandler[_I]],  # type: ignore
+    ph: ObjectRef[ProgressHandler[_I]],
     chunks: list[list[_I]],
     const_data: _D,
-    f: Callable[[ObjectRef[ProgressHandler[_I]] | None, list[_I], _D], list[_R] | None],  # type: ignore
-    futures: list[ObjectRef[list[_R] | None]],  # type: ignore
+    f: Callable[[ObjectRef[ProgressHandler[_I]] | None, list[_I], _D], list[_R] | None],
+    futures: list[ObjectRef[list[_R] | None]],
     cursor: int,
-) -> list[ObjectRef[list[_R] | None]]:  # type: ignore
+) -> list[ObjectRef[list[_R] | None]]:
     """The task spawner used for part 1"""
     while cursor < len(chunks):
-        if ray.get(ph.needs_new_task.remote()):  # type: ignore
-            output: ObjectRef[list[_R] | None]  # type: ignore
+        if ray.get(ph.needs_new_task.remote()):
+            output: ObjectRef[list[_R] | None]
             output = ray.remote(f).remote(ph, chunks[cursor], const_data)
             futures.append(output)
             cursor += 1
@@ -94,10 +98,10 @@ class MultiprocessConfig:
 def multiprocess(
     iterated: list[_I],
     const_data: _D,
-    f: Callable[[ObjectRef[ProgressHandler[_I]] | None, _I, _D], _R | None],  # type: ignore
+    f: Callable[[ObjectRef[ProgressHandler[_I]] | None, _I, _D], _R | None],
     msg: str,
     num_operations: int | None = None,
-    mp_config: MultiprocessConfig = MultiprocessConfig(),
+    mp_config: MultiprocessConfig = MultiprocessConfig(),  # noqa: B008
 ) -> list[_R]:
     if mp_config.serial:
         out_ = []
@@ -123,24 +127,25 @@ def multiprocess(
                 if o is not None:
                     out.append(o)
             if p:
-                p.request_new_task.remote()  # type: ignore
-            return out
-        except Exception as e:
+                p.request_new_task.remote()
+        except Exception as e:  # noqa: BLE001
             log.error(f"Error in ray task: {e!r}")
             log.error(traceback.format_exc())
             if p:
-                p.request_new_task.remote()  # type: ignore
+                p.request_new_task.remote()
             return None
+        else:
+            return out
 
-    ph = ProgressHandler.remote()  # type: ignore
+    ph = ProgressHandler.remote()
 
-    futures: list[ObjectRef[_R]]  # type: ignore
+    futures: list[ObjectRef[_R]]
     futures = [
         ray.remote(new_f).remote(ph, chunk, const_data)
         for chunk in track(chunks[: mp_config.batch_size], "Spawning initial tasks")
     ]
     cursor = mp_config.batch_size
-    future_refs: ObjectRef[list[ObjectRef[list[_R] | None]]]  # type: ignore
+    future_refs: ObjectRef[list[ObjectRef[list[_R] | None]]]
     future_refs = task_spawner.remote(ph, chunks, const_data, new_f, futures, cursor)
     with Progress() as progress:
         main_id = progress.add_task(msg, total=num_operations)
@@ -154,7 +159,7 @@ def multiprocess(
                 progress.advance(main_id, 1)
         progress.update(main_id, completed=num_operations)
 
-    pre_result: list[ObjectRef[list[_R] | None]]  # type: ignore
+    pre_result: list[ObjectRef[list[_R] | None]]
     pre_result = ray.get(future_refs)
     result: list[_R] = [b for a in ray.get(pre_result) if a is not None for b in a]
     return result

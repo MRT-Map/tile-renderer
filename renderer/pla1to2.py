@@ -7,7 +7,8 @@ from .misc_types.pla2 import Component, Pla2File
 
 
 def pla1to2(
-    old_comps: Pla1ComponentListJson, old_nodes: Pla1NodeListJson
+    old_comps: Pla1ComponentListJson,
+    old_nodes: Pla1NodeListJson,
 ) -> list[Pla2File]:
     """
     Converts PLA1 to PLA2
@@ -29,7 +30,7 @@ def pla1to2(
         id_ = comp_name.removeprefix(ns + "-")
         if "hollows" in comp:
             log.warn(
-                f"Hollow data found in `{comp_name}`, PLA 2 doesn't support hollows"
+                f"Hollow data found in `{comp_name}`, PLA 2 doesn't support hollows",
             )
         nodes = WorldLine([get_coord(n) for n in comp["nodes"]])
         comps.setdefault(ns, []).append(
@@ -43,6 +44,6 @@ def pla1to2(
                 attrs=comp["attrs"],
                 tags=comp["type"].split(" ")[1:],
                 nodes=nodes,
-            )
+            ),
         )
     return [Pla2File(namespace=ns, components=comps) for ns, comps in comps.items()]

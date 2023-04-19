@@ -2,18 +2,17 @@ from __future__ import annotations
 
 import glob
 import logging
-import os
 import re
 import shutil
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 import dill
 from PIL import Image
-from ray import ObjectRef
 
 if TYPE_CHECKING:
+    from ray import ObjectRef
     from ..misc_types.config import Config
+    from pathlib import Path
 
 from .._internal.logger import log
 from ..misc_types.coord import TileCoord
@@ -25,7 +24,7 @@ from .utils import part_dir, wip_tiles_dir
 def render_part3(
     config: Config,
     save_dir: Path | None = None,
-    mp_config: MultiprocessConfig = MultiprocessConfig(),
+    mp_config: MultiprocessConfig = MultiprocessConfig(),  # noqa: B008
 ) -> dict[TileCoord, Image.Image]:
     """Part 3 of the rendering job. Check render() for the full list of parameters"""
     tile_coords = []
@@ -38,7 +37,7 @@ def render_part3(
                 int(re_result.group(1)),
                 int(re_result.group(2)),
                 int(re_result.group(3)),
-            )
+            ),
         )
 
     log.info(f"Rendering texts in {len(tile_coords)} tiles...")
@@ -51,7 +50,7 @@ def render_part3(
         len(tile_coords),
         mp_config,
     )
-    result = {a: b for a, b in pre_result}
+    result = dict(pre_result)
 
     shutil.rmtree(config.temp_dir / config.export_id)
     log.info("Render complete")
@@ -60,7 +59,7 @@ def render_part3(
 
 
 def _draw_text(
-    ph: ObjectRef[ProgressHandler[TileCoord]] | None,  # type: ignore
+    ph: ObjectRef[ProgressHandler[TileCoord]] | None,
     tile_coord: TileCoord,
     const_data: tuple[Config, Path | None],
 ) -> tuple[TileCoord, Image.Image] | None:
@@ -69,13 +68,13 @@ def _draw_text(
 
     image = Image.open(wip_tiles_dir(config) / f"{tile_coord}.png").convert("RGBA")
     try:
-        with open(part_dir(config, 2) / f"tile_{tile_coord}.dill", "rb") as f:
-            text_list: list[TextObject] = dill.load(f)
+        with (part_dir(config, 2) / f"tile_{tile_coord}.dill").open("rb") as f:
+            text_list: list[TextObject] = dill.load(f)  # noqa: S301
     except FileNotFoundError:
         text_list = []
 
     for text in text_list:
-        for img_uuid, center in zip(text.image, text.center):
+        for img_uuid, center in zip(text.image, text.center, strict=True):
             img = TextObject.uuid_to_img(img_uuid, config).convert("RGBA")
             new_center = center.to_image_coord(tile_coord, config)
             image.alpha_composite(
@@ -88,10 +87,10 @@ def _draw_text(
 
     if save_dir is not None:
         image.save(save_dir / f"{tile_coord}.webp", "webp", quality=75)
-    os.remove(wip_tiles_dir(config) / f"{tile_coord}.png")
+    (wip_tiles_dir(config) / f"{tile_coord}.png").unlink(missing_ok=True)
 
     if ph:
-        ph.add.remote(tile_coord)  # type: ignore
-        ph.complete.remote(tile_coord)  # type: ignore
+        ph.add.remote(tile_coord)
+        ph.complete.remote(tile_coord)
 
     return tile_coord, image

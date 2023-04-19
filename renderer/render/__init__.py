@@ -1,16 +1,17 @@
 from __future__ import annotations
 
-from pathlib import Path
 from typing import TYPE_CHECKING
 
 import psutil
 import ray
-from PIL import Image
 
 from .._internal.logger import log
 from .multiprocess import MultiprocessConfig
 
 if TYPE_CHECKING:
+    from pathlib import Path
+    from PIL import Image
+
     from ..misc_types.config import Config
     from ..misc_types.pla2 import Pla2File
 
@@ -21,14 +22,14 @@ def render(
     components: Pla2File,
     config: Config,
     save_dir: Path | None = None,
-    processes: int = psutil.cpu_count(),
+    processes: int = psutil.cpu_count(),  # noqa: B008
     tiles: list[TileCoord] | None = None,
     zooms: list[int] | None = None,
-    offset: Vector = Vector(0, 0),
-    part1_mp_config: MultiprocessConfig = MultiprocessConfig(),
-    part2_mp_config1: MultiprocessConfig = MultiprocessConfig(),
-    part2_mp_config2: MultiprocessConfig = MultiprocessConfig(),
-    part3_mp_config: MultiprocessConfig = MultiprocessConfig(),
+    offset: Vector = Vector(0, 0),  # noqa: B008
+    part1_mp_config: MultiprocessConfig = MultiprocessConfig(),  # noqa: B008
+    part2_mp_config1: MultiprocessConfig = MultiprocessConfig(),  # noqa: B008
+    part2_mp_config2: MultiprocessConfig = MultiprocessConfig(),  # noqa: B008
+    part3_mp_config: MultiprocessConfig = MultiprocessConfig(),  # noqa: B008
 ) -> dict[TileCoord, Image.Image]:
     """
     Renders tiles from given coordinates and zoom values.

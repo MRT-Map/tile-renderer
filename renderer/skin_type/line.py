@@ -2,19 +2,19 @@ from __future__ import annotations
 
 import math
 import os
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from PIL import Image, ImageDraw, ImageFont
 
 from .. import math_utils
 from .._internal import with_next
 from ..misc_types.coord import ImageCoord, ImageLine, TileCoord
-from ..misc_types.pla2 import Component
 from ..render.text_object import TextObject
 from . import ComponentStyle
 
 if TYPE_CHECKING:
     from ..misc_types.config import Config
+    from ..misc_types.pla2 import Component
     from ..render.part1 import Part1Consts
 
 
@@ -22,7 +22,7 @@ class LineText(ComponentStyle):
     """Represents text of a point"""
 
     # noinspection PyInitNewSignature
-    def __init__(self, json: dict, tags: list[str], *_, **__):
+    def __init__(self, json: dict, tags: list[str], *_: Any, **__: Any) -> None:
         self.tags = tags
         self.layer = "text"
         self.arrow_colour: str | None = json["arrow_colour"]
@@ -49,14 +49,15 @@ class LineText(ComponentStyle):
         swap = coords.last_coord.x < coords.first_coord.x
         if swap and upright:
             coords = ImageLine(coords.coords[::-1])
-        for c1, c2 in with_next([a for a in coords]):
+        for c1, c2 in with_next(list(coords)):
             if c2 == coords.last_coord:
                 while char_cursor < len(text):
                     text_to_print += text[char_cursor]
                     char_cursor += 1
             else:
                 while overflow + imd.textlength(
-                    text_to_print, font
+                    text_to_print,
+                    font,
                 ) < c1.point.distance(c2.point) and char_cursor < len(text):
                     text_to_print += text[char_cursor]
                     char_cursor += 1
@@ -93,7 +94,7 @@ class LineText(ComponentStyle):
                         trot,
                         zoom,
                         config,
-                    )
+                    ),
                 )
 
             text_to_print = " "
@@ -103,17 +104,16 @@ class LineText(ComponentStyle):
                 break
         if text_objects:
             return TextObject.from_multiple(*text_objects)
-        else:
-            return None
+        return None
 
     def render(
         self,
         component: Component,
-        imd: ImageDraw.ImageDraw,
+        _: ImageDraw.ImageDraw,
         img: Image.Image,
         consts: Part1Consts,
         tile_coord: TileCoord,
-    ):
+    ) -> None:
         if "oneWay" not in component.tags:
             return
         coords = component.nodes.to_image_line(tile_coord, consts)
@@ -135,7 +135,9 @@ class LineText(ComponentStyle):
                 rot = math.atan2(-c2.y + c1.y, c2.x - c1.x)
                 nai = ai.rotate(rot * 180 / math.pi, expand=True)
                 img.paste(
-                    nai, (int(c1.x - ai.width / 2), int(c1.y - ai.height / 2)), nai
+                    nai,
+                    (int(c1.x - ai.width / 2), int(c1.y - ai.height / 2)),
+                    nai,
                 )
 
     def text(
@@ -150,7 +152,10 @@ class LineText(ComponentStyle):
         if len(component.display_name) == 0:
             return []
         font = config.skin.get_font(
-            "", self.size + 2, config.assets_dir, component.display_name
+            "",
+            self.size + 2,
+            config.assets_dir,
+            component.display_name,
         )
         text_length = int(imd.textlength(component.display_name, font))
         if text_length == 0:
@@ -165,7 +170,7 @@ class LineText(ComponentStyle):
             coord_lines
             and sum(
                 c1.point.distance(c2.point)
-                for c1, c2 in with_next([a for a in coord_lines[-1]])
+                for c1, c2 in with_next(list(coord_lines[-1]))
             )
             < text_length
         ):
@@ -198,7 +203,7 @@ class LineFore(ComponentStyle):
     """Represents the front layer of a line"""
 
     # noinspection PyInitNewSignature
-    def __init__(self, json: dict, tags: list[str], *_, **__):
+    def __init__(self, json: dict, tags: list[str], *_: Any, **__: Any) -> None:
         self.tags = tags
         self.layer = "fore"
         self.colour: str | None = json["colour"]
@@ -209,10 +214,10 @@ class LineFore(ComponentStyle):
         self,
         component: Component,
         imd: ImageDraw.ImageDraw,
-        img: Image.Image,
+        _: Image.Image,
         consts: Part1Consts,
         tile_coord: TileCoord,
-    ):
+    ) -> None:
         coords = component.nodes.to_image_line(tile_coord, consts)
         if self.dash is None:
             imd.line(
@@ -256,6 +261,6 @@ class LineBack(LineFore):
     """Represent the back layer of a line"""
 
     # noinspection PyInitNewSignature
-    def __init__(self, json: dict, tags: list[str], *_, **__):
+    def __init__(self, json: dict, tags: list[str], *_: Any, **__: Any) -> None:
         super().__init__(json, tags)
         self.layer = "back"

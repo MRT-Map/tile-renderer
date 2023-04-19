@@ -23,7 +23,7 @@ from renderer.skin_type import Skin
 install(show_locals=True)
 
 
-def p_render(p: argparse.ArgumentParser):
+def p_render(p: argparse.ArgumentParser) -> None:
     p.add_argument(
         "-f",
         "--file",
@@ -32,10 +32,18 @@ def p_render(p: argparse.ArgumentParser):
         help="the PLA 2 file to render from",
     )
     p.add_argument(
-        "-m", "--min_zoom", type=int, required=True, help="Minimum zoom value"
+        "-m",
+        "--min_zoom",
+        type=int,
+        required=True,
+        help="Minimum zoom value",
     )
     p.add_argument(
-        "-M", "--max_zoom", type=int, required=True, help="Maximum zoom value"
+        "-M",
+        "--max_zoom",
+        type=int,
+        required=True,
+        help="Maximum zoom value",
     )
     p.add_argument(
         "-r",
@@ -87,9 +95,11 @@ def p_render(p: argparse.ArgumentParser):
         default=psutil.cpu_count(),
     )
 
-    def tile_coord(x: str):
+    def tile_coord(x: str) -> TileCoord:
         return TileCoord(
-            int(x.split(",")[0]), int(x.split(",")[1]), int(x.split(",")[2])
+            int(x.split(",")[0]),
+            int(x.split(",")[1]),
+            int(x.split(",")[2]),
         )
 
     p.add_argument(
@@ -140,7 +150,7 @@ def p_render(p: argparse.ArgumentParser):
         )
 
 
-def p_merge(p: argparse.ArgumentParser):
+def p_merge(p: argparse.ArgumentParser) -> None:
     p.add_argument(
         "-i",
         "--image_dir",
@@ -156,11 +166,16 @@ def p_merge(p: argparse.ArgumentParser):
         default=Path.cwd(),
     )
     p.add_argument(
-        "-z", "--zoom", type=int, nargs="*", help="the zoom levels to merge", default=[]
+        "-z",
+        "--zoom",
+        type=int,
+        nargs="*",
+        help="the zoom levels to merge",
+        default=[],
     )
 
 
-def p_1to2(p: argparse.ArgumentParser):
+def p_1to2(p: argparse.ArgumentParser) -> None:
     p.add_argument(
         "-c",
         "--comps",
@@ -188,7 +203,7 @@ def p_1to2(p: argparse.ArgumentParser):
     )
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
 
     subparsers = parser.add_subparsers(help="task to run", dest="task")
@@ -204,7 +219,7 @@ def main():
             "render",
             help="render tiles",
             formatter_class=argparse.MetavarTypeHelpFormatter,
-        )
+        ),
     )
 
     p_merge(
@@ -212,7 +227,7 @@ def main():
             "merge",
             help="merge tiles",
             formatter_class=argparse.MetavarTypeHelpFormatter,
-        )
+        ),
     )
 
     p_1to2(
@@ -220,7 +235,7 @@ def main():
             "1to2",
             help="convert PLA 1 to PLA 2",
             formatter_class=argparse.MetavarTypeHelpFormatter,
-        )
+        ),
     )
 
     args = parser.parse_args()
@@ -228,7 +243,7 @@ def main():
     if args.task == "info":
         log.info(f"[yellow]tile-renderer [cyan]v{__version__}")
         log.info(
-            "[yellow]Made by 7d for the OpenMRTMap project of the Minecart Rapid Transit Mapping Services"
+            "[yellow]Made by 7d for the OpenMRTMap project of the Minecart Rapid Transit Mapping Services",
         )
         log.info("GitHub: https://github.com/MRT-Map/tile-renderer")
         log.info("PyPI: https://pypi.org/project/tile-renderer/")
@@ -280,13 +295,14 @@ def main():
     elif args.task == "1to2":
         comps = {}
         for file in track(
-            glob.glob(str(args.comps / "*.comps.pla")), "Loading components"
+            glob.glob(str(args.comps / "*.comps.pla")),
+            "Loading components",
         ):
-            with open(file, "r") as f:
+            with Path(file).open() as f:
                 comps.update(json.load(f))
         nodes = {}
         for file in track(glob.glob(str(args.nodes / "*.nodes.pla")), "Loading nodes"):
-            with open(file, "r") as f:
+            with Path(file).open() as f:
                 nodes.update(json.load(f))
         result = pla1to2(comps, nodes)
         args.out.mkdir(exist_ok=True)

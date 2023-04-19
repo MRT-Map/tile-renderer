@@ -6,18 +6,18 @@ from typing import TYPE_CHECKING, Literal
 import imagehash
 from fontTools.ttLib import TTFont
 from PIL import Image, ImageDraw, ImageFont
-from schema import And, Optional, Or, Regex, Schema
+from schema import And, Optional, Or, Regex, Schema, SchemaError
 
 from .._internal import read_json, str_to_tuple
-from ..misc_types import SkinJson, SkinType
 
 if TYPE_CHECKING:
-    from ..render.part1 import Part1Consts
+    from ..misc_types import SkinJson, SkinType
+    from ..misc_types.coord import TileCoord
     from ..misc_types.pla2 import Component
+    from ..render.part1 import Part1Consts
 
-from ..misc_types.coord import TileCoord
 
-Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=16)  # type: ignore
+Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=16)
 
 
 class Skin:
@@ -26,7 +26,7 @@ class Skin:
     :param SkinJson json: The JSON of the skin.
     """
 
-    def __init__(self, json: SkinJson):
+    def __init__(self, json: SkinJson) -> None:
         self.validate_json(json)
         self.tile_size: int = json["info"]["size"]
         self.fonts: dict[str, list[Path]] = {
@@ -45,7 +45,11 @@ class Skin:
         return self.types[type_name]
 
     def get_font(
-        self, style: str, size: int, assets_dir: Path, rendered_text: str = ""
+        self,
+        style: str,
+        size: int,
+        assets_dir: Path,
+        rendered_text: str = "",
     ) -> ImageFont.FreeTypeFont:
         """Gets a font, given the style and size.
 
@@ -56,23 +60,22 @@ class Skin:
         :param str rendered_text: The text that is rendered with the font, to allow for fallbacks
         :return: The font
         :raises FileNotFoundError: if font is not found"""
-        if style in self.fonts.keys():
+        if style in self.fonts:
             pil_font = None
             for font in self.fonts[style]:
                 try:
                     pil_font = ImageFont.truetype(str(assets_dir / font), size)
                 except OSError as e:
                     raise FileNotFoundError(
-                        f"Could not find font {font} in {assets_dir}"
+                        f"Could not find font {font} in {assets_dir}",
                     ) from e
                 ft_font = TTFont(str(assets_dir / font))
                 for table in ft_font["cmap"].tables:
-                    if all((ord(char) in table.cmap.keys()) for char in rendered_text):
+                    if all((ord(char) in table.cmap) for char in rendered_text):
                         return pil_font
-            else:
-                if pil_font is None:
-                    raise FileNotFoundError(f"Font for {style} not found")
-                return pil_font
+            if pil_font is None:
+                raise FileNotFoundError(f"Font for {style} not found")
+            return pil_font
         raise FileNotFoundError(f"Font for {style} not found")
 
     @classmethod
@@ -89,10 +92,10 @@ class Skin:
 
         try:
             return cls(
-                read_json(Path(__file__).parent.parent / "skins" / (name + ".json"))
+                read_json(Path(__file__).parent.parent / "skins" / (name + ".json")),
             )
-        except FileNotFoundError:
-            raise FileNotFoundError(f"Skin '{name}' not found")
+        except FileNotFoundError as e:
+            raise FileNotFoundError(f"Skin '{name}' not found") from e
 
     @staticmethod
     def validate_json(json: SkinJson) -> Literal[True]:
@@ -117,9 +120,9 @@ class Skin:
                         "tags": list,
                         "type": lambda t_: t_ in ("point", "line", "area"),
                         "style": {Optional(str): list},
-                    }
+                    },
                 },
-            }
+            },
         )
         point_circle = Schema(
             {
@@ -128,7 +131,7 @@ class Skin:
                 "outline": Or(None, And(str, Regex(r"^#[a-f,0-9]{3,6}$"))),
                 "size": int,
                 "width": int,
-            }
+            },
         )
         point_text = Schema(
             {
@@ -137,7 +140,7 @@ class Skin:
                 "offset": And([int], lambda o: len(o) == 2),
                 "size": int,
                 "anchor": Or(None, str),
-            }
+            },
         )
         point_square = Schema(
             {
@@ -146,10 +149,14 @@ class Skin:
                 "outline": Or(None, And(str, Regex(r"^#[a-f,0-9]{3,6}$"))),
                 "size": int,
                 "width": int,
-            }
+            },
         )
         point_image = Schema(
-            {"layer": "image", "file": str, "offset": And([int], lambda o: len(o) == 2)}
+            {
+                "layer": "image",
+                "file": str,
+                "offset": And([int], lambda o: len(o) == 2),
+            },
         )
         line_back_fore = Schema(
             {
@@ -157,7 +164,7 @@ class Skin:
                 "colour": Or(None, And(str, Regex(r"^#[a-f,0-9]{3,6}$"))),
                 "width": int,
                 Optional("dash"): Or(None, And([int], lambda list_: len(list_) == 2)),
-            }
+            },
         )
         line_text = Schema(
             {
@@ -166,7 +173,7 @@ class Skin:
                 "arrow_colour": Or(None, And(str, Regex(r"^#[a-f,0-9]{3,6}$"))),
                 "size": int,
                 "offset": int,
-            }
+            },
         )
         area_fill = Schema(
             {
@@ -174,7 +181,7 @@ class Skin:
                 "colour": Or(None, And(str, Regex(r"^#[a-f,0-9]{3,6}$"))),
                 "outline": Or(None, And(str, Regex(r"^#[a-f,0-9]{3,6}$"))),
                 Optional("stripe"): Or(None, And([int], lambda list_: len(list_) == 3)),
-            }
+            },
         )
         area_bordertext = Schema(
             {
@@ -182,7 +189,7 @@ class Skin:
                 "colour": Or(None, And(str, Regex(r"^#[a-f,0-9]{3,6}$"))),
                 "offset": int,
                 "size": int,
-            }
+            },
         )
         area_centertext = Schema(
             {
@@ -190,14 +197,14 @@ class Skin:
                 "colour": Or(None, And(str, Regex(r"^#[a-f,0-9]{3,6}$"))),
                 "size": int,
                 "offset": And(And(list, [int]), lambda o: len(o) == 2),
-            }
+            },
         )
         area_centerimage = Schema(
             {
                 "layer": "image",
                 "file": str,
                 "offset": And(And(list, [int]), lambda o: len(o) == 2),
-            }
+            },
         )
 
         schemas = {
@@ -227,13 +234,12 @@ class Skin:
                 for step in steps:
                     if step["layer"] not in schemas[t["type"]]:
                         raise ValueError(f"Invalid layer '{step}'")
-                    else:
-                        try:
-                            schemas[t["type"]][step["layer"]].validate(step)
-                        except Exception as e:
-                            raise type(e)(
-                                "Error at type {n}, range {z}, step {step['layer']}"
-                            ) from e
+                    try:
+                        schemas[t["type"]][step["layer"]].validate(step)
+                    except SchemaError as e:
+                        raise type(e)(
+                            f"Error at type {n}, range {z}, step {step['layer']}",
+                        ) from e
         return True
 
 
@@ -245,7 +251,7 @@ class ComponentTypeInfo:
     :param list[str] order: Will set ``_order``
     """
 
-    def __init__(self, name: str, json: SkinType, order: list[str]):
+    def __init__(self, name: str, json: SkinType, order: list[str]) -> None:
         self.name: str = name
         """The name of the component."""
         self.tags: list[str] = json["tags"]
@@ -254,7 +260,7 @@ class ComponentTypeInfo:
         """The shape of the component, must be one of ``point``, ``line``, ``area``"""
         self._order = order
         self.styles: dict[tuple[int, int], list[ComponentStyle]] = {
-            str_to_tuple(range_): [  # type: ignore
+            str_to_tuple(range_): [
                 ComponentStyle(v, self.tags, self.shape) for v in value
             ]
             for range_, value in json["style"].items()
@@ -265,8 +271,7 @@ class ComponentTypeInfo:
         for (max_level, min_level), styles in self.styles.items():
             if max_level <= zoom_level <= min_level:
                 return styles
-        else:
-            return []
+        return []
 
 
 class ComponentStyle:
@@ -278,12 +283,12 @@ class ComponentStyle:
     """
     layer: str
 
-    def __new__(
+    def __new__(  # noqa: PLR0911, PLR0912
         cls,
         json: dict | None = None,
         tags: list[str] | None = None,
         shape: Literal["point", "line", "area"] | None = None,
-    ):
+    ) -> ComponentStyle:
         from .area import AreaBorderText, AreaCenterImage, AreaCenterText, AreaFill
         from .line import LineBack, LineFore, LineText
         from .point import PointCircle, PointImage, PointSquare, PointText
@@ -325,5 +330,5 @@ class ComponentStyle:
         img: Image.Image,
         consts: Part1Consts,
         tile_coord: TileCoord,
-    ):
+    ) -> None:
         """Renders the component into an ImageDraw instance."""

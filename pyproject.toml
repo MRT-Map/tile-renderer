@@ -68,5 +68,7 @@ build-backend = "poetry.core.masonry.api"
 mypy_path = "$MYPY_CONFIG_FILE_DIR/stubs"
 
 [tool.ruff]
-select = ["E", "F"]
-ignore = ["E501"]
+select = ["E", "F", "W", "N", "U", "YTT", "ANN", "S", "BLE", "B", "A", "COM", "C4", "DTZ", "EM", "EXE",
+    "ISC", "ICN", "G", "INP", "PIE", "PYI", "PT", "Q", "RSE", "RET", "SLF", "SIM", "TCH", "INT", "ARG", "PTH", "ERA",
+    "PGH", "PL", "TRY", "RUF"]
+ignore = ["E501", "ANN401", "A003", "ANN101", "ANN102", "SLF001", "PLR2004", "PLR0913", "TRY003", "EM101", "EM102"]

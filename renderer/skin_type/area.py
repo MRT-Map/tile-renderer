@@ -3,17 +3,17 @@ from __future__ import annotations
 import itertools
 import re
 from pathlib import Path
-from typing import TYPE_CHECKING
+from typing import TYPE_CHECKING, Any
 
 from PIL import Image, ImageDraw
 
 from ..misc_types.coord import ImageCoord, TileCoord
-from ..misc_types.pla2 import Component
 from ..render.text_object import TextObject
 from . import ComponentStyle
 
 if TYPE_CHECKING:
     from ..misc_types.config import Config
+    from ..misc_types.pla2 import Component
     from ..render.part1 import Part1Consts
 
 
@@ -21,7 +21,7 @@ class AreaBorderText(ComponentStyle):
     """Represent the border text of an area. Will be rendered in the future"""
 
     # noinspection PyInitNewSignature
-    def __init__(self, json: dict, tags: list[str], *_, **__):
+    def __init__(self, json: dict, tags: list[str], *_: Any, **__: Any) -> None:
         self.tags = tags
         self.layer = "bordertext"
         self.colour: str | None = json["colour"]
@@ -35,11 +35,15 @@ class AreaBorderText(ComponentStyle):
         img: Image.Image,
         consts: Part1Consts,
         tile_coord: TileCoord,
-    ):
+    ) -> None:
         pass
 
     def text(
-        self, component: Component, imd: ImageDraw.ImageDraw, config: Config, zoom: int
+        self,
+        component: Component,
+        imd: ImageDraw.ImageDraw,
+        config: Config,
+        zoom: int,
     ) -> list[TextObject]:
         return []
 
@@ -122,13 +126,14 @@ class AreaBorderText(ComponentStyle):
                 export_id=export_id
                         )
                     )"""
+        return None
 
 
 class AreaCenterText(ComponentStyle):
     """Represents the text at the centre of an area"""
 
     # noinspection PyInitNewSignature
-    def __init__(self, json: dict, tags: list[str], *_, **__):
+    def __init__(self, json: dict, tags: list[str], *_: Any, **__: Any) -> None:
         self.tags = tags
         self.layer = "centertext"
         self.colour: str | None = json["colour"]
@@ -142,26 +147,34 @@ class AreaCenterText(ComponentStyle):
         img: Image.Image,
         consts: Part1Consts,
         tile_coord: TileCoord,
-    ):
+    ) -> None:
         pass
 
     def text(
-        self, component: Component, imd: ImageDraw.ImageDraw, config: Config, zoom: int
+        self,
+        component: Component,
+        imd: ImageDraw.ImageDraw,
+        config: Config,
+        zoom: int,
     ) -> list[TextObject]:
         coords = component.nodes.to_image_line(TileCoord(zoom, 0, 0), config)
         if len(component.display_name.strip()) == 0:
             return []
         c = ImageCoord(
-            coords.centroid.x + self.offset.x, coords.centroid.y + self.offset.y
+            coords.centroid.x + self.offset.x,
+            coords.centroid.y + self.offset.y,
         )
         font = config.skin.get_font(
-            "", self.size + 2, config.assets_dir, component.display_name
+            "",
+            self.size + 2,
+            config.assets_dir,
+            component.display_name,
         )
         text_length = int(
             min(
                 imd.textlength(x.strip(), font)
                 for x in component.display_name.split("\n")
-            )
+            ),
         )
 
         left = min(cl.x for cl in coords)
@@ -179,7 +192,7 @@ class AreaCenterText(ComponentStyle):
                 else:
                     text += token + ws
             text_length = int(
-                max(imd.textlength(x.strip(), font) for x in text.split("\n"))
+                max(imd.textlength(x.strip(), font) for x in text.split("\n")),
             )
             text_size = int(imd.textsize(text, font)[1] * 2)
         else:
@@ -207,13 +220,13 @@ class AreaFill(ComponentStyle):
     """Represents the fill and outline of an area"""
 
     # noinspection PyInitNewSignature
-    def __init__(self, json: dict, tags: list[str], *_, **__):
+    def __init__(self, json: dict, tags: list[str], *_: Any, **__: Any) -> None:
         self.tags = tags
         self.layer = "fill"
         self.colour: str | None = json["colour"]
         self.outline: str | None = json["outline"]
-        self.stripe: tuple[int, int, int] | None = (  # type: ignore
-            None if json["stripe"] is None else tuple(json["stripe"])  # type: ignore
+        self.stripe: tuple[int, int, int] | None = (
+            None if json["stripe"] is None else tuple(json["stripe"])
         )  # TODO find way to typecheck this
 
     def render(
@@ -223,7 +236,7 @@ class AreaFill(ComponentStyle):
         img: Image.Image,
         consts: Part1Consts,
         tile_coord: TileCoord,
-    ):
+    ) -> None:
         coords = component.nodes.to_image_line(tile_coord, consts)
         ai = Image.new(
             "RGBA",
@@ -260,7 +273,8 @@ class AreaFill(ComponentStyle):
                 )
                 tlx += self.stripe[0] + self.stripe[1]
             af_i = af_i.rotate(
-                self.stripe[2], center=(coords.centroid.x, coords.centroid.y)
+                self.stripe[2],
+                center=(coords.centroid.x, coords.centroid.y),
             )
             mi = Image.new(
                 "RGBA",
@@ -321,7 +335,7 @@ class AreaCenterImage(ComponentStyle):
     """Represents the image at the centre of an area"""
 
     # noinspection PyInitNewSignature
-    def __init__(self, json: dict, tags: list[str], *_, **__):
+    def __init__(self, json: dict, tags: list[str], *_: Any, **__: Any) -> None:
         self.tags = tags
         self.layer = "centerimage"
         self.file: Path = Path(json["file"])
@@ -330,11 +344,11 @@ class AreaCenterImage(ComponentStyle):
     def render(
         self,
         component: Component,
-        imd: ImageDraw.ImageDraw,
+        _: ImageDraw.ImageDraw,
         img: Image.Image,
         consts: Part1Consts,
         tile_coord: TileCoord,
-    ):
+    ) -> None:
         coords = component.nodes.to_image_line(tile_coord, consts)
         cx, cy = (coords.centroid.x, coords.centroid.y)
         icon = Image.open(consts.assets_dir / self.file)

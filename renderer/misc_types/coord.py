@@ -5,19 +5,20 @@ import math
 from copy import copy
 from dataclasses import dataclass
 from itertools import chain
-from typing import TYPE_CHECKING, Any, Generator, Generic, NamedTuple, TypeVar
+from typing import TYPE_CHECKING, Any, Generic, NamedTuple, TypeVar
 
 import methodtools
 from shapely.geometry import LineString, Point
-from typing_extensions import Self
 
-from .. import math_utils
 from .._internal import with_next
 
 if TYPE_CHECKING:
-    from .config import Config
+    from collections.abc import Generator
 
-from .zoom_params import ZoomParams
+    from typing_extensions import Self
+
+    from .config import Config
+    from .zoom_params import ZoomParams
 
 _T = TypeVar("_T")
 
@@ -37,7 +38,7 @@ class Vector:
     def y(self) -> float:
         return self._y
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"[{self.x}, {self.y}]"
 
     def as_tuple(self) -> tuple[float, float]:
@@ -89,7 +90,7 @@ class Vector:
 class Coord(Vector):
     """Represents a 2-dimensional point"""
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{type(self).__name__}({self.x}, {self.y})"
 
     @property
@@ -138,7 +139,9 @@ class ImageCoord(Coord):
 
 
 @functools.cache
-def _to_image_coord(wc: WorldCoord, tc: TileCoord, tile_size: int, zoom: ZoomParams):
+def _to_image_coord(
+    wc: WorldCoord, tc: TileCoord, tile_size: int, zoom: ZoomParams
+) -> ImageCoord:
     size = zoom.range * 2 ** (zoom.max - tc.z)
     xc = wc.x - tc.x * size
     yc = wc.y - tc.y * size
@@ -182,7 +185,7 @@ class WorldCoord(Coord):
 
 
 def _centroid(coords: list[Coord]) -> Point:
-    return LineString(set(a.as_tuple() for a in coords)).centroid
+    return LineString({a.as_tuple() for a in coords}).centroid
 
 
 @dataclass
@@ -203,10 +206,10 @@ class Line:
 
     __slots__ = ("coords",)
 
-    def __init__(self, coords: list[Coord]):
+    def __init__(self, coords: list[Coord]) -> None:
         self.coords = coords
 
-    def __repr__(self):
+    def __repr__(self) -> str:
         return f"{type(self).__name__} <{';'.join(str(a) for a in self.coords)}>"
 
     @property
@@ -221,10 +224,9 @@ class Line:
 
     @methodtools.lru_cache
     def __iter__(self) -> Generator[Coord, Any, None]:
-        for c in self.coords:
-            yield c
+        yield from self.coords
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.coords)
 
     @functools.cached_property
@@ -251,7 +253,7 @@ class Line:
                 for a in LineString(a.as_tuple() for a in self.coords)
                 .offset_curve(distance)
                 .coords
-            ]
+            ],
         )
 
     @property
@@ -292,7 +294,9 @@ class Line:
 
         :return: If the above is true
         """
-        for c1, c2 in with_next([a for a in self]):
+        from .. import math_utils
+
+        for c1, c2 in with_next(list(self)):
             for c3, c4 in (
                 (Coord(bounds.y_max, bounds.x_min), Coord(bounds.y_min, bounds.x_min)),
                 (Coord(bounds.y_min, bounds.x_min), Coord(bounds.y_min, bounds.x_max)),
@@ -306,17 +310,17 @@ class Line:
                 return True
         return False
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash(self.coords)
 
 
 class WorldLine(Line):
     """Represents a line in the world"""
 
-    coords: list[WorldCoord]  # type: ignore
+    coords: list[WorldCoord]
 
-    def __init__(self, line: list[WorldCoord] | LineString):  # type: ignore
-        super().__init__(line)  # type: ignore
+    def __init__(self, line: list[WorldCoord] | LineString) -> None:
+        super().__init__(line)
 
     def to_image_line(self, tile_coord: TileCoord, config: Config) -> ImageLine:
         """
@@ -331,8 +335,7 @@ class WorldLine(Line):
         return ImageLine(image_coords)
 
     def __iter__(self) -> Generator[WorldCoord, Any, None]:
-        for c in self.coords:
-            yield c
+        yield from self.coords
 
     def parallel_offset(self, distance: float) -> WorldLine:
         if distance == 0:
@@ -343,15 +346,15 @@ class WorldLine(Line):
                 for a in LineString(a.as_tuple() for a in self.coords)
                 .offset_curve(distance)
                 .coords
-            ]
+            ],
         )
 
 
 class ImageLine(Line):
-    coords: list[ImageCoord]  # type: ignore
+    coords: list[ImageCoord]
 
-    def __init__(self, line: list[ImageCoord] | LineString):  # type: ignore
-        super().__init__(line)  # type: ignore
+    def __init__(self, line: list[ImageCoord] | LineString) -> None:
+        super().__init__(line)
 
     def to_world_line(self, tile_coord: TileCoord, config: Config) -> WorldLine:
         """
@@ -366,8 +369,7 @@ class ImageLine(Line):
         return WorldLine(image_coords)
 
     def __iter__(self) -> Generator[ImageCoord, Any, None]:
-        for c in self.coords:
-            yield c
+        yield from self.coords
 
     def parallel_offset(self, distance: float) -> ImageLine:
         if distance == 0:
@@ -378,7 +380,7 @@ class ImageLine(Line):
                 for a in LineString(a.as_tuple() for a in self.coords)
                 .offset_curve(distance)
                 .coords
-            ]
+            ],
         )
 
 
@@ -410,5 +412,5 @@ class TileCoord(NamedTuple):
             y_min=min(c.y for c in tile_coords),
         )
 
-    def __hash__(self):
+    def __hash__(self) -> int:
         return hash((self.z, self.x, self.y))

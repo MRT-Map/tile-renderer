@@ -2,15 +2,19 @@ from __future__ import annotations
 
 import itertools
 from collections import Counter
-from pathlib import Path
-from typing import Any, Generator, Type
+from typing import TYPE_CHECKING, Any
 
 import msgspec.json
 from msgspec import Struct
 from shapely import LineString
 
 from .coord import Bounds, Coord, TileCoord, WorldCoord, WorldLine
-from .zoom_params import ZoomParams
+
+if TYPE_CHECKING:
+    from collections.abc import Generator
+    from pathlib import Path
+
+    from .zoom_params import ZoomParams
 
 
 class Component(Struct):
@@ -59,7 +63,8 @@ class Component(Struct):
 
     @staticmethod
     def rendered_in(
-        components: list[Component], zoom_params: ZoomParams
+        components: list[Component],
+        zoom_params: ZoomParams,
     ) -> list[TileCoord]:
         """
         Like :py:func:`tools.line.to_tiles`, but for a JSON of components.
@@ -76,16 +81,16 @@ class Component(Struct):
 def _enc_hook(obj: Any) -> Any:
     if isinstance(obj, WorldLine):
         return [_enc_hook(c) for c in obj.coords]
-    elif isinstance(obj, Coord):
+    if isinstance(obj, Coord):
         return Coord.enc_hook(obj)
     raise TypeError(type(obj))
 
 
-def _dec_hook(type_: Type, obj: Any) -> Any:
+def _dec_hook(type_: type, obj: Any) -> Any:
     if type_ == WorldCoord:
         c = Coord.dec_hook(obj)
         return WorldCoord(c.x, c.y)
-    elif type_ == WorldLine or type_ == LineString:
+    if type_ in (WorldLine, LineString):
         if len(obj) == 1:
             obj.append(obj[0])
         return WorldLine([_dec_hook(WorldCoord, o) for o in obj])
@@ -117,8 +122,7 @@ class Pla2File(Struct):
         """
         if file.suffix == ".msgpack":
             return Pla2File.from_msgpack(file)
-        else:
-            return Pla2File.from_json(file)
+        return Pla2File.from_json(file)
 
     @staticmethod
     def from_json(file: Path) -> Pla2File:
@@ -129,11 +133,11 @@ class Pla2File(Struct):
 
         :return: The PLA2 file
         """
-        with open(file, "rb") as f:
+        with file.open("rb") as f:
             b = f.read()
         return Pla2File(
             namespace=file.stem.split(".")[0],
-            components=[c for c in Pla2File.validate(_json_decoder.decode(b))],
+            components=list(Pla2File.validate(_json_decoder.decode(b))),
         )
 
     @staticmethod
@@ -145,29 +149,29 @@ class Pla2File(Struct):
 
         :return: The PLA2 file
         """
-        with open(file, "rb") as f:
+        with file.open("rb") as f:
             b = f.read()
         return Pla2File(
             namespace=file.stem.split(".")[0],
-            components=[c for c in Pla2File.validate(_msgpack_decoder.decode(b))],
+            components=list(Pla2File.validate(_msgpack_decoder.decode(b))),
         )
 
-    def save_json(self, directory: Path):
+    def save_json(self, directory: Path) -> None:
         """
         Save the PLA2 file in JSON format
 
         :param directory: The directory to save the file in
         """
-        with open(directory / f"{self.namespace}.pla2.json", "wb+") as f:
+        with (directory / f"{self.namespace}.pla2.json").open("wb+") as f:
             f.write(_json_encoder.encode(self.components))
 
-    def save_msgpack(self, directory: Path):
+    def save_msgpack(self, directory: Path) -> None:
         """
         Save the PLA2 file in MessagePack format
 
         :param directory: The directory to save the file in
         """
-        with open(directory / f"{self.namespace}.pla2.msgpack", "wb+") as f:
+        with (directory / f"{self.namespace}.pla2.msgpack").open("wb+") as f:
             f.write(_msgpack_encoder.encode(self.components))
 
     @staticmethod
@@ -186,21 +190,20 @@ class Pla2File(Struct):
         }
         if count:
             raise ValueError(
-                f"IDs {', '.join(f'`{id_}`' for id_ in count)} are duplicated"
+                f"IDs {', '.join(f'`{id_}`' for id_ in count)} are duplicated",
             )
         return comps
 
     def __getitem__(self, id_: str) -> Component:
         return [comp for comp in self.components if comp.fid == id_][0]
 
-    def __delitem__(self, id_: str):
+    def __delitem__(self, id_: str) -> None:
         self.components.remove(self[id_])
 
     def __iter__(self) -> Generator[Component, Any, None]:
-        for component in self.components:
-            yield component
+        yield from self.components
 
-    def __len__(self):
+    def __len__(self) -> int:
         return len(self.components)
 
     @property

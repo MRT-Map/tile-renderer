@@ -1,7 +1,9 @@
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Literal, overload
+from typing import TYPE_CHECKING, Literal, overload
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 @overload
@@ -144,13 +146,15 @@ class SkinBuilder:
     background: str
     types: dict[str, CTI]
 
-    def __init__(self, tile_size: int, fonts: dict[str, list[Path]], background: int):
+    def __init__(
+        self, tile_size: int, fonts: dict[str, list[Path]], background: int
+    ) -> None:
         self.tile_size = tile_size
         self.fonts = fonts
         self.background = hex_to_colour(background) or "#000000"
         self.types = {}
 
-    def __setitem__(self, key: str, value: CTI):
+    def __setitem__(self, key: str, value: CTI) -> None:
         print("Setting", key)
         self.types[key] = value
 
@@ -179,13 +183,15 @@ class SkinBuilder:
         style: dict[str, list[CS]]
 
         def __init__(
-            self, shape: Literal["point", "line", "area"], tags: list[str] | None = None
-        ):
+            self,
+            shape: Literal["point", "line", "area"],
+            tags: list[str] | None = None,
+        ) -> None:
             self.shape = shape
             self.tags = tags or []
             self.style = {}
 
-        def __setitem__(self, key: int | slice, value: list[CS]):
+        def __setitem__(self, key: int | slice, value: list[CS]) -> None:
             if isinstance(key, int):
                 self.style[f"{key}, {key}"] = value
             else:
@@ -212,7 +218,7 @@ class SkinBuilder:
                 outline: int | None = None,
                 size: int = 1,
                 width: int = 1,
-            ):
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "circle",
@@ -231,7 +237,7 @@ class SkinBuilder:
                 offset: tuple[int, int] = (0, 0),
                 size: int = 10,
                 anchor: str | None = None,
-            ):
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "text",
@@ -250,7 +256,7 @@ class SkinBuilder:
                 outline: int | None = None,
                 size: int = 1,
                 width: int = 1,
-            ):
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "square",
@@ -262,7 +268,7 @@ class SkinBuilder:
                 return cs
 
             @classmethod
-            def point_image(cls, *, file: Path, offset: tuple[int, int] = (0, 0)):
+            def point_image(cls, *, file: Path, offset: tuple[int, int] = (0, 0)) -> CS:
                 cs = cls()
                 cs.json = {"layer": "image", "file": str(file), "offset": offset}
                 return cs
@@ -275,7 +281,7 @@ class SkinBuilder:
                 arrow_colour: int | None = None,
                 size: int = 1,
                 offset: int = 0,
-            ):
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "text",
@@ -293,7 +299,7 @@ class SkinBuilder:
                 colour: int | None = None,
                 width: int = 1,
                 dash: tuple[int, int] | None = None,
-            ):
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "back",
@@ -310,7 +316,7 @@ class SkinBuilder:
                 colour: int | None = None,
                 width: int = 1,
                 dash: tuple[int, int] | None = None,
-            ):
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "fore",
@@ -322,8 +328,12 @@ class SkinBuilder:
 
             @classmethod
             def area_bordertext(
-                cls, *, colour: int | None = None, offset: int = 0, size: int = 1
-            ):
+                cls,
+                *,
+                colour: int | None = None,
+                offset: int = 0,
+                size: int = 1,
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "bordertext",
@@ -340,7 +350,7 @@ class SkinBuilder:
                 colour: int | None = None,
                 size: int = 1,
                 offset: tuple[int, int] = (0, 0),
-            ):
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "centertext",
@@ -357,7 +367,7 @@ class SkinBuilder:
                 colour: int | None = None,
                 outline: int | None = None,
                 stripe: tuple[int, int, int] | None = None,
-            ):
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "fill",
@@ -368,7 +378,9 @@ class SkinBuilder:
                 return cs
 
             @classmethod
-            def area_centerimage(cls, *, file: Path, offset: tuple[int, int] = (0, 0)):
+            def area_centerimage(
+                cls, *, file: Path, offset: tuple[int, int] = (0, 0)
+            ) -> CS:
                 cs = cls()
                 cs.json = {"layer": "centerimage", "file": str(file), "offset": offset}
                 return cs

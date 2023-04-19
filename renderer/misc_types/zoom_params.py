@@ -17,6 +17,6 @@ class ZoomParams:
     max: int
     range: float
 
-    def __post_init__(self):
+    def __post_init__(self) -> None:
         if self.min > self.max:
             raise ValueError("Max zoom value is greater than min zoom value")
