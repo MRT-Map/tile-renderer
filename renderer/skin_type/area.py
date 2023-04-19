@@ -51,16 +51,17 @@ class AreaBorderText(ComponentStyle):
         zoom: int,
     ) -> list[TextObject]:
         coords = component.nodes.to_image_line(TileCoord(zoom, 0, 0), config)
+        display_name = component.display_name.replace("\n", " ")
         text_list: list[TextObject] = []
-        if len(component.display_name) == 0:
+        if len(display_name) == 0:
             return []
         font = config.skin.get_font(
             "",
             self.size + 2,
             config.assets_dir,
-            component.display_name,
+            display_name,
         )
-        text_length = int(imd.textlength(component.display_name, font))
+        text_length = int(imd.textlength(display_name, font))
         if text_length == 0:
             text_length = int(imd.textlength("----------", font))
 
@@ -99,7 +100,7 @@ class AreaBorderText(ComponentStyle):
                     self.colour,
                     imd,
                     font,
-                    component.display_name,
+                    display_name,
                     zoom,
                     cs,
                     config,
