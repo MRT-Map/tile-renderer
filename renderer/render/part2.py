@@ -104,7 +104,8 @@ def _find_text_objects(
         styles = type_info[config.zoom.max - zoom]
         for style in styles:
             if isinstance(
-                style, PointText | LineText | AreaCenterText | AreaBorderText
+                style,
+                PointText | LineText | AreaCenterText | AreaBorderText,
             ):
                 out.setdefault(zoom, []).extend(
                     style.text(component, imd, config, zoom),

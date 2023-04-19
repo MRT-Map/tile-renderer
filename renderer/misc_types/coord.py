@@ -140,7 +140,10 @@ class ImageCoord(Coord):
 
 @functools.cache
 def _to_image_coord(
-    wc: WorldCoord, tc: TileCoord, tile_size: int, zoom: ZoomParams
+    wc: WorldCoord,
+    tc: TileCoord,
+    tile_size: int,
+    zoom: ZoomParams,
 ) -> ImageCoord:
     size = zoom.range * 2 ** (zoom.max - tc.z)
     xc = wc.x - tc.x * size

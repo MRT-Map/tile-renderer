@@ -147,7 +147,10 @@ class SkinBuilder:
     types: dict[str, CTI]
 
     def __init__(
-        self, tile_size: int, fonts: dict[str, list[Path]], background: int
+        self,
+        tile_size: int,
+        fonts: dict[str, list[Path]],
+        background: int,
     ) -> None:
         self.tile_size = tile_size
         self.fonts = fonts
@@ -379,7 +382,10 @@ class SkinBuilder:
 
             @classmethod
             def area_centerimage(
-                cls, *, file: Path, offset: tuple[int, int] = (0, 0)
+                cls,
+                *,
+                file: Path,
+                offset: tuple[int, int] = (0, 0),
             ) -> CS:
                 cs = cls()
                 cs.json = {"layer": "centerimage", "file": str(file), "offset": offset}

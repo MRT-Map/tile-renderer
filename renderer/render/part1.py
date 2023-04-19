@@ -114,7 +114,7 @@ def _count_num_rendering_ops(config: Config) -> int:
                     int(result.group(3)),
                 )
             ] = dill.load(
-                f,
+                f,  # noqa: S301
             )
 
     operations = 0
