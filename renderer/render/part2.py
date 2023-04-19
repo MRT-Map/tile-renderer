@@ -19,7 +19,7 @@ from .text_object import TextObject
 from .utils import part_dir
 
 if TYPE_CHECKING:
-    from ray import ObjectRef
+    from ray.types import ObjectRef
     from shapely.geometry import Polygon
 
     from ..misc_types.config import Config

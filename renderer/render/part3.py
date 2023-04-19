@@ -10,7 +10,7 @@ import dill
 from PIL import Image
 
 if TYPE_CHECKING:
-    from ray import ObjectRef
+    from ray.types import ObjectRef
     from ..misc_types.config import Config
     from pathlib import Path
 

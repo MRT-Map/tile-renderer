@@ -21,7 +21,7 @@ from .multiprocess import MultiprocessConfig, ProgressHandler, multiprocess
 from .utils import part_dir, wip_tiles_dir
 
 if TYPE_CHECKING:
-    from ray import ObjectRef
+    from ray.types import ObjectRef
 
     from ..misc_types.pla2 import Component, Pla2File
     from ..skin_type import ComponentStyle, ComponentTypeInfo
@@ -113,8 +113,8 @@ def _count_num_rendering_ops(config: Config) -> int:
                     int(result.group(2)),
                     int(result.group(3)),
                 )
-            ] = dill.load(
-                f,  # noqa: S301
+            ] = dill.load(  # noqa: S301
+                f,
             )
 
     operations = 0

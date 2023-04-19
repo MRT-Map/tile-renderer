@@ -7,12 +7,12 @@ from typing import TYPE_CHECKING, Generic, TypeVar
 
 import psutil
 import ray
-from ray import ObjectRef
 from rich.progress import Progress, track
 from rich.traceback import install
 
 if TYPE_CHECKING:
     from collections.abc import Callable
+    from ray.types import ObjectRef
 
 from .._internal.logger import log
 
@@ -118,7 +118,11 @@ def multiprocess(
         for i in range(0, len(iterated), mp_config.chunk_size)
     ]
 
-    def new_f(p: ProgressHandler[_I] | None, i: list[_I], d: _D) -> list[_R] | None:
+    def new_f(
+        p: ObjectRef[ProgressHandler[_I]] | None,
+        i: list[_I],
+        d: _D,
+    ) -> list[_R] | None:
         try:
             install(show_locals=True)
             out = []
