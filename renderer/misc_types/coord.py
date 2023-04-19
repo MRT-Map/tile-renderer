@@ -8,6 +8,7 @@ from itertools import chain
 from typing import TYPE_CHECKING, Any, Generic, NamedTuple, TypeVar
 
 import methodtools
+from shapely import LinearRing
 from shapely.geometry import LineString, Point
 
 from .._internal import with_next
@@ -188,7 +189,7 @@ class WorldCoord(Coord):
 
 
 def _centroid(coords: list[Coord]) -> Point:
-    return LineString({a.as_tuple() for a in coords}).centroid
+    return LinearRing({a.as_tuple() for a in coords}).centroid
 
 
 @dataclass

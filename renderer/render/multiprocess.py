@@ -150,7 +150,9 @@ def multiprocess(
     futures: list[ObjectRef[_R]]
     futures = [
         ray.remote(new_f).remote(ph, chunk, const_data)
-        for chunk in track(chunks[: mp_config.batch_size], "Spawning initial tasks")
+        for chunk in track(
+            chunks[: mp_config.batch_size], "Spawning initial tasks", transient=True
+        )
     ]
     cursor = mp_config.batch_size
     future_refs: ObjectRef[list[ObjectRef[list[_R] | None]]]
