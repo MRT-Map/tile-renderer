@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import gc
 import glob
-import logging
 import re
 from dataclasses import dataclass, field
 from itertools import chain
@@ -145,8 +144,6 @@ def _pre_draw_components(
     tile_coord: TileCoord,
     consts: Part1Consts,
 ) -> None:
-    logging.getLogger("fontTools").setLevel(logging.CRITICAL)
-    logging.getLogger("PIL").setLevel(logging.CRITICAL)
     path = part_dir(consts, 0) / f"tile_{tile_coord}.dill"
     with path.open("rb") as f:
         tile_components = dill.load(f)  # noqa: S301

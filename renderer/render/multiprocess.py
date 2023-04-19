@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import logging
 import traceback
 from dataclasses import dataclass
 from queue import Empty, Queue
@@ -125,6 +126,8 @@ def multiprocess(
     ) -> list[_R] | None:
         try:
             install(show_locals=True)
+            logging.getLogger("fontTools").setLevel(logging.CRITICAL)
+            logging.getLogger("PIL").setLevel(logging.CRITICAL)
             out = []
             for j in i:
                 o = f(p, j, d)
