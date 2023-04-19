@@ -28,11 +28,11 @@ class ProgressHandler(Generic[_I]):
     """The handler for progress bars"""
 
     def __init__(self) -> None:
-        self.queue = Queue()
+        self.queue: Queue[_I] = Queue()
         """The queue of TileCoords to be processed"""
-        self.completed = Queue()
+        self.completed: Queue[_I] = Queue()
         """The list of completed TileCoords"""
-        self.new_tasks_needed = Queue()
+        self.new_tasks_needed: Queue[None] = Queue()
         """If this queue has something, a new task is needed"""
 
     def add(self, id_: _I) -> None:

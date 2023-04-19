@@ -306,11 +306,11 @@ def main() -> None:
                 nodes.update(json.load(f))
         result = pla1to2(comps, nodes)
         args.out.mkdir(exist_ok=True)
-        for file in result:
+        for pla2_file in result:
             if args.json:
-                file.save_json(args.out)
+                pla2_file.save_json(args.out)
             else:
-                file.save_msgpack(args.out)
+                pla2_file.save_msgpack(args.out)
     else:
         parser.print_help()
 
