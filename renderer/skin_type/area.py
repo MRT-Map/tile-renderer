@@ -1,15 +1,20 @@
 from __future__ import annotations
 
 import itertools
+import os
 import re
 from pathlib import Path
 from typing import TYPE_CHECKING, Any
 
 from PIL import Image, ImageDraw
+from shapely import Polygon
 
+from .. import math_utils
+from .._internal import with_next
 from ..misc_types.coord import ImageCoord, TileCoord
 from ..render.text_object import TextObject
 from . import ComponentStyle
+from .line import LineText
 
 if TYPE_CHECKING:
     from ..misc_types.config import Config
@@ -45,88 +50,66 @@ class AreaBorderText(ComponentStyle):
         config: Config,
         zoom: int,
     ) -> list[TextObject]:
-        return []
-
-        # TODO fix
-        """
-        if len(component.display_name.strip()) == 0:
-            return
+        coords = component.nodes.to_image_line(TileCoord(zoom, 0, 0), config)
+        text_list: list[TextObject] = []
+        if len(component.display_name) == 0:
+            return []
         font = config.skin.get_font(
-            "", self.size + 2, assets_dir, component.display_name
+            "",
+            self.size + 2,
+            config.assets_dir,
+            component.display_name,
         )
-        text_length = int(
-            imd.textlength(component.display_name.replace("\n", ""), font)
+        text_length = int(imd.textlength(component.display_name, font))
+        if text_length == 0:
+            text_length = int(imd.textlength("----------", font))
+
+        offset = coords.parallel_offset(self.offset)
+        if (
+            self.offset < 0
+            and len(offset) > 1
+            and offset.coords[0].point.within(Polygon(component.nodes.coords))
+        ):
+            offset = coords.parallel_offset(-self.offset)
+
+        coord_lines = math_utils.dash(
+            offset,
+            text_length,
+            text_length * 1.5,
         )
-        for c1, c2 in internal._with_next(coords.coords):
-            if coords.in_bounds(
-                Bounds(
-                    x_min=0,
-                    x_max=config.skin.tile_size,
-                    y_max=config.skin.tile_size,
-                    y_min=0,
+        if (
+            coord_lines
+            and sum(
+                c1.point.distance(c2.point)
+                for c1, c2 in with_next(list(coord_lines[-1]))
+            )
+            < text_length
+        ):
+            coord_lines = coord_lines[:-1]
+        if os.environ.get("DEBUG"):
+            imd.line(
+                [c.as_tuple() for c in coords.parallel_offset(self.offset)],
+                fill="#ff0000",
+            )
+        text_list.extend(
+            e
+            for e in (
+                LineText._text_on_line(
+                    self.size,
+                    self.colour,
+                    imd,
+                    font,
+                    component.display_name,
+                    zoom,
+                    cs,
+                    config,
                 )
-            ) and 2 * text_length <= c1.point.distance(c2.point):
-                t = math.floor(c1.point.distance(c2.point) / (4 * text_length))
-                t = 1 if t == 0 else t
-                all_points: list[
-                    list[tuple[ImageCoord, float]]
-                ] = math_utils.midpoint(
-                    c1, c2, self.offset, n=t, return_both=True
-                )
-                for n in range(0, len(all_points), 2):
-                    p1, p2 = all_points[n][0], all_points[n][1]
-                    if self.offset < 0:
-                        (tx, ty), trot = (
-                            p1
-                            if not math_utils.point_in_poly(
-                                p1[0].x, p1[0].y, coords
-                            )
-                            else p2
-                        )
-                    else:
-                        (tx, ty), trot = (
-                            p1
-                            if math_utils.point_in_poly(
-                                p1[0].x, p1[0].y, coords
-                            )
-                            else p2
-                        )
-                    abt_i = Image.new(
-                        "RGBA",
-                        (2 * text_length, 2 * (self.size + 4)),
-                        (0, 0, 0, 0),
-                    )
-                    abt_d = ImageDraw.Draw(abt_i)
-                    abt_d.text(
-                        (text_length, self.size + 4),
-                        component.display_name.replace("\n", ""),
-                        fill=self.colour,
-                        font=font,
-                        anchor="mm",
-                        stroke_width=1,
-                        stroke_fill="#dddddd",
-                        spacing=1,
-                    )
-                    tw, th = abt_i.size[:]
-                    abt_ir = abt_i.rotate(trot, expand=True)
-                    abt_ir = abt_ir.crop((0, 0, abt_ir.width, abt_ir.height))
-                    text_list.append(
-                        TextObject(
-                            abt_ir,
-                            tx,
-                            ty,
-                            tw / 2,
-                            th / 2,
-                            trot,
-                            tile_coord,
-                            tile_size,
-                            imd,
-                            ,
-                temp_dir=temp_dir,
-                export_id=export_id
-                        )
-                    )"""
-        return None
+                for cs in coord_lines
+            )
+            if e is not None
+        )
+
+        return text_list
 
 
 class AreaCenterText(ComponentStyle):

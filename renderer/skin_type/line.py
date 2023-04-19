@@ -30,8 +30,10 @@ class LineText(ComponentStyle):
         self.size: int = json["size"]
         self.offset: int = json["offset"]
 
+    @staticmethod
     def _text_on_line(
-        self,
+        size: int,
+        colour: str | None,
         imd: ImageDraw.ImageDraw,
         font: ImageFont.FreeTypeFont,
         text: str,
@@ -66,14 +68,14 @@ class LineText(ComponentStyle):
             if text_length != 0:
                 lt_i = Image.new(
                     "RGBA",
-                    (2 * int(text_length), 2 * (self.size + 4)),
+                    (2 * int(text_length), 2 * (size + 4)),
                     (0, 0, 0, 0),
                 )
                 lt_d = ImageDraw.Draw(lt_i)
                 lt_d.text(
-                    (int(text_length), self.size + 4),
+                    (int(text_length), size + 4),
                     text_to_print,
-                    fill=fill or self.colour,
+                    fill=fill or colour,
                     font=font,
                     anchor="mm",
                     stroke_width=1,
@@ -90,7 +92,7 @@ class LineText(ComponentStyle):
                     TextObject(
                         lt_i,
                         ImageCoord(tx, ty),
-                        (text_length, self.size),
+                        (text_length, size),
                         trot,
                         zoom,
                         config,
@@ -183,7 +185,9 @@ class LineText(ComponentStyle):
         text_list.extend(
             e
             for e in (
-                self._text_on_line(
+                LineText._text_on_line(
+                    self.size,
+                    self.colour,
                     imd,
                     font,
                     component.display_name,

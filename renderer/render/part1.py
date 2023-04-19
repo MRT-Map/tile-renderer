@@ -50,8 +50,9 @@ class Part1Consts(Config):
 
 
 def render_part1(
-    config: Config, mp_config: MultiprocessConfig = MultiprocessConfig()
-) -> None:  # noqa: B008
+    config: Config,
+    mp_config: MultiprocessConfig = MultiprocessConfig(),  # noqa: B008
+) -> None:
     """Part 1 of the rendering job. Check render() for the full list of parameters"""
     tile_coords = []
     with (part_dir(config, 0) / "processed.dill").open("rb") as f:
@@ -113,8 +114,8 @@ def _count_num_rendering_ops(config: Config) -> int:
                     int(result.group(3)),
                 )
             ] = dill.load(
-                f
-            )  # noqa: S301
+                f,
+            )
 
     operations = 0
 
