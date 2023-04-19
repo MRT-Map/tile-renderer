@@ -113,7 +113,6 @@ def _find_text_objects(
 
     if ph:
         ph.add.remote(component.fid)
-        ph.complete.remote(component.fid)
 
     return out
 
@@ -149,8 +148,5 @@ def _prevent_text_overlap(
     for tile_coord, text_objects in new_out.items():
         with (part_dir(config, 2) / f"tile_{tile_coord}.dill").open("wb") as f:
             dill.dump(text_objects, f)
-
-    if ph:
-        ph.complete.remote(zoom)
 
     return new_out

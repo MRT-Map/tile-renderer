@@ -197,8 +197,6 @@ def _draw_components(
         wip_tiles_dir(consts) / f"{tile_coord}.png",
         "png",
     )
-    if ph:
-        ph.complete.remote(tile_coord)
 
 
 def _needs_con_rendering(type_info: ComponentTypeInfo, step: ComponentStyle) -> bool:

@@ -91,6 +91,5 @@ def _draw_text(
 
     if ph:
         ph.add.remote(tile_coord)
-        ph.complete.remote(tile_coord)
 
     return tile_coord, image

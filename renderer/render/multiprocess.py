@@ -45,7 +45,7 @@ class ProgressHandler(Generic[_I]):
         except Empty:
             return None
 
-    def complete(self, id_: _I) -> None:
+    def _complete(self, id_: _I) -> None:
         """Complete a TileCoord"""
         self.completed.put_nowait(id_)
 
@@ -124,25 +124,24 @@ def multiprocess(
         i: list[_I],
         d: _D,
     ) -> list[_R] | None:
-        try:
-            install(show_locals=True)
-            logging.getLogger("fontTools").setLevel(logging.CRITICAL)
-            logging.getLogger("PIL").setLevel(logging.CRITICAL)
-            out = []
-            for j in i:
+        install(show_locals=True)
+        logging.getLogger("fontTools").setLevel(logging.CRITICAL)
+        logging.getLogger("PIL").setLevel(logging.CRITICAL)
+        out = []
+        for j in i:
+            try:
                 o = f(p, j, d)
                 if o is not None:
                     out.append(o)
+            except Exception as e:  # noqa: BLE001
+                log.error(f"Error in ray task: {e!r}")
+                log.error(traceback.format_exc())
             if p:
-                p.request_new_task.remote()
-        except Exception as e:  # noqa: BLE001
-            log.error(f"Error in ray task: {e!r}")
-            log.error(traceback.format_exc())
-            if p:
-                p.request_new_task.remote()
-            return None
-        else:
-            return out
+                p.complete.remote(j)
+        if p:
+            p.request_new_task.remote()
+
+        return out
 
     ph = ProgressHandler.remote()
 
