@@ -42,7 +42,7 @@ def render_part2(
         zoom = regex.group(1)
         zooms.add(int(zoom))
     with (part_dir(config, 0) / "processed.dill").open("rb") as f:
-        components: Pla2File = dill.load(f)  # noqa: S301
+        components: Pla2File = dill.load(f)[0]  # noqa: S301
 
     def key(comp: Component) -> int:
         return config.skin.order.index(comp.type)
