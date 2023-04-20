@@ -1,5 +1,21 @@
 Changelog
 =========
+* **v4.0.0 (20/4/23)**
+
+  * chang antialias method
+  * replace most function parameters with a single ``Config`` class
+  * new ``Vector`` class
+  * ``ImageCoord`` now saves coordinates as floats instead of integer, to reduce rounding errors
+  * multiprocess file-dumping of preparation, and part 2
+  * rewrite ``math_tools.dash()``
+  * fix texts overlapping and texts around corners... maybe
+  * move rendering operations counting from part 1 to preparation stage
+  * new arrows on one-way lines
+  * now uses Ruff, a linter in addition to mypy
+  * reimplement AreaBorderTexts
+  * fix off-centered text on areas
+  * optimisations here and there
+
 * **v3.0.0 (10/2/23)**
 
   * Add NotoSans and NotoSans-SC to rendering typefaces

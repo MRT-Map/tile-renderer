@@ -1,8 +1,7 @@
-import sys
 from random import randint
 
 from renderer.misc_types.config import Config
-from renderer.misc_types.coord import ImageCoord, TileCoord, WorldCoord
+from renderer.misc_types.coord import TileCoord, WorldCoord
 from renderer.misc_types.zoom_params import ZoomParams
 
 
