@@ -213,15 +213,8 @@ class Line:
     def __repr__(self) -> str:
         return f"{type(self).__name__} <{';'.join(str(a) for a in self.coords)}>"
 
-    @property
-    def first_coord(self) -> Coord:
-        """The first coordinate in the line"""
-        return self.coords[0]
-
-    @property
-    def last_coord(self) -> Coord:
-        """The last coordinate in the line"""
-        return self.coords[-1]
+    def __getitem__(self, item: int) -> Coord:
+        return self.coords[item]
 
     @methodtools.lru_cache
     def __iter__(self) -> Generator[Coord, Any, None]:
@@ -313,6 +306,9 @@ class WorldLine(Line):
     def __init__(self, line: list[WorldCoord] | LineString) -> None:
         super().__init__(line)
 
+    def __getitem__(self, item: int) -> WorldCoord:
+        return self.coords[item]
+
     def to_image_line(self, tile_coord: TileCoord, config: Config) -> ImageLine:
         """
         Converts the line into an ImageLine
@@ -344,6 +340,9 @@ class ImageLine(Line):
 
     def __init__(self, line: list[ImageCoord] | LineString) -> None:
         super().__init__(line)
+
+    def __getitem__(self, item: int) -> ImageCoord:
+        return self.coords[item]
 
     def to_world_line(self, tile_coord: TileCoord, config: Config) -> WorldLine:
         """

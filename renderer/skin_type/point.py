@@ -36,7 +36,7 @@ class PointCircle(ComponentStyle):
         tile_coord: TileCoord,
     ) -> None:
         coords = component.nodes.to_image_line(tile_coord, consts)
-        coord = coords.first_coord
+        coord = coords[0]
         imd.ellipse(
             (
                 coord.x - self.size / 2 + 1,
@@ -80,7 +80,7 @@ class PointText(ComponentStyle):
         zoom: int,
     ) -> list[TextObject]:
         coords = component.nodes.to_image_line(TileCoord(zoom, 0, 0), config)
-        coord = coords.first_coord
+        coord = coords[0]
         if len(component.display_name.strip()) == 0:
             return []
         font = config.skin.get_font(
@@ -136,7 +136,7 @@ class PointSquare(ComponentStyle):
         tile_coord: TileCoord,
     ) -> None:
         coords = component.nodes.to_image_line(tile_coord, consts)
-        coord = coords.first_coord
+        coord = coords[0]
         imd.rectangle(
             (
                 coord.x - self.size / 2 + 1,
@@ -169,7 +169,7 @@ class PointImage(ComponentStyle):
         tile_coord: TileCoord,
     ) -> None:
         coords = component.nodes.to_image_line(tile_coord, consts)
-        coord = coords.first_coord
+        coord = coords[0]
         icon = Image.open(consts.assets_dir / self.file)
         img.paste(
             icon,

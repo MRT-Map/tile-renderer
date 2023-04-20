@@ -48,11 +48,11 @@ class LineText(ComponentStyle):
         text_to_print = ""
         overflow = 0
         text_objects = []
-        swap = coords.last_coord.x < coords.first_coord.x
+        swap = coords[-1].x < coords[0].x
         if swap and upright:
             coords = ImageLine(coords.coords[::-1])
         for c1, c2 in with_next(list(coords)):
-            if c2 == coords.last_coord:
+            if c2 == coords[-1]:
                 while char_cursor < len(text):
                     text_to_print += text[char_cursor]
                     char_cursor += 1
@@ -234,19 +234,19 @@ class LineFore(ComponentStyle):
                 try:
                     imd.ellipse(
                         [
-                            coords.first_coord.x - self.width / 2 + 1,
-                            coords.first_coord.y - self.width / 2 + 1,
-                            coords.first_coord.x + self.width / 2 - 1,
-                            coords.first_coord.y + self.width / 2 - 1,
+                            coords[0].x - self.width / 2 + 1,
+                            coords[0].y - self.width / 2 + 1,
+                            coords[0].x + self.width / 2 - 1,
+                            coords[0].y + self.width / 2 - 1,
                         ],
                         fill=self.colour,
                     )
                     imd.ellipse(
                         [
-                            coords.last_coord.x - self.width / 2 + 1,
-                            coords.last_coord.y - self.width / 2 + 1,
-                            coords.last_coord.x + self.width / 2 - 1,
-                            coords.last_coord.y + self.width / 2 - 1,
+                            coords[-1].x - self.width / 2 + 1,
+                            coords[-1].y - self.width / 2 + 1,
+                            coords[-1].x + self.width / 2 - 1,
+                            coords[-1].y + self.width / 2 - 1,
                         ],
                         fill=self.colour,
                     )
