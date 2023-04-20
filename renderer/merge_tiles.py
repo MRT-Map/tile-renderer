@@ -15,8 +15,7 @@ from .misc_types.coord import TileCoord
 
 def merge_tiles(
     images: Path | dict[TileCoord, Image.Image],
-    save_images: bool = True,
-    save_dir: Path = Path.cwd(),
+    save_dir: Path | None = None,
     zoom: list[int] | None = None,
 ) -> dict[int, Image.Image]:
     """
@@ -24,14 +23,9 @@ def merge_tiles(
 
     :param images: Give in the form of ``(tile coord): (PIL Image)``, like the return value of :py:func:`render`,
         or as a path to a directory.
-    :type images: Path | dict[TileCoord, Image]
-    :param bool save_images: whether to save the tile images in a folder or not
-    :param Path save_dir: the directory to save tiles in
-    :param zoom: if left empty, automatically calculates all zoom values based on tiles;
+    :param save_dir: The directory to save the merged images in
+    :param zoom: If left empty, automatically calculates all zoom values based on tiles;
         otherwise, the layers of zoom to merge.
-    :type zoom: list[int] | None
-
-    :returns: Given in the form of ``(Zoom): (PIL Image)``
     """
     if zoom is None:
         zoom = []
@@ -40,9 +34,10 @@ def merge_tiles(
     tile_return = {}
     if isinstance(images, Path):
         for d in track(
-            glob.glob(str(images / "*.png")), description="[green]Retrieving images..."
+            glob.glob(str(images / "*.webp")),
+            description="[green]Retrieving images...",
         ):
-            regex = re.search(r"(-?\d+, -?\d+, -?\d+)\.png$", d)
+            regex = re.search(r"(-?\d+, -?\d+, -?\d+)\.webp$", d)
             if regex is None:
                 continue
             coord = TileCoord(*str_to_tuple(regex.group(1)))
@@ -51,7 +46,7 @@ def merge_tiles(
         image_dict = images
     log.info("[green]Determining zoom levels...")
     if not zoom:
-        zoom = list({c.z for c in image_dict.keys()})
+        zoom = list({c.z for c in image_dict})
     for z in zoom:
         log.info(f"Zoom {z}: [dim white]Determining tiles to be merged")
         to_merge = {k: v for k, v in image_dict.items() if k.z == z}
@@ -79,16 +74,15 @@ def merge_tiles(
             description=f"Zoom {z}: [dim white]Pasting tiles",
         ):
             for y in range(bounds.y_min, bounds.y_max + 1):
-                if TileCoord(z, x, y) in to_merge.keys():
+                if TileCoord(z, x, y) in to_merge:
                     i.paste(to_merge[TileCoord(z, x, y)], (px, py))
                     merged += 1
                 py += tile_size
             px += tile_size
             py = 0
-        # tile_return[tile_components] = im
-        if save_images:
+        if save_dir is not None:
             log.info(f"Zoom {z}: [dim white]Saving image")
-            i.save(save_dir / f"merge_{z}.png", "PNG")
+            i.save(save_dir / f"merge_{z}.webp", "WEBP")
         tile_return[z] = i
 
     log.info("[green]All merges complete")

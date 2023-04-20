@@ -4,23 +4,26 @@ import json
 from pathlib import Path
 
 import psutil
-import vector
 from rich.progress import track
 from rich.traceback import install
 
-from renderer import __version__, merge_tiles, render
+from renderer import __version__
 
 # noinspection PyProtectedMember
 from renderer._internal.logger import log
+from renderer.merge_tiles import merge_tiles
+from renderer.misc_types.config import Config
+from renderer.misc_types.coord import TileCoord, Vector
 from renderer.misc_types.pla2 import Pla2File
-from renderer.misc_types.skin import Skin
 from renderer.misc_types.zoom_params import ZoomParams
 from renderer.pla1to2 import pla1to2
+from renderer.render import MultiprocessConfig, render
+from renderer.skin_type import Skin
 
 install(show_locals=True)
 
 
-def p_render(p: argparse.ArgumentParser):
+def p_render(p: argparse.ArgumentParser) -> None:
     p.add_argument(
         "-f",
         "--file",
@@ -29,51 +32,125 @@ def p_render(p: argparse.ArgumentParser):
         help="the PLA 2 file to render from",
     )
     p.add_argument(
-        "-min", "--min_zoom", type=int, required=True, help="minimum zoom value"
+        "-m",
+        "--min_zoom",
+        type=int,
+        required=True,
+        help="Minimum zoom value",
     )
     p.add_argument(
-        "-max", "--max_zoom", type=int, required=True, help="maximum zoom value"
+        "-M",
+        "--max_zoom",
+        type=int,
+        required=True,
+        help="Maximum zoom value",
     )
     p.add_argument(
         "-r",
         "--max_zoom_range",
         type=float,
         required=True,
-        help="range of coordinates covered by a tile in the maximum zoom",
+        help="Actual distance covered by a tile in the maximum zoom",
     )
     p.add_argument(
-        "-s", "--skin", type=str, help="the name of the skin to use", default="default"
+        "-e",
+        "--export_id",
+        type=str,
+        help="The name of the rendering task",
+        default="unnamed",
     )
     p.add_argument(
-        "-d",
+        "-td",
+        "--temp_dir",
+        type=Path,
+        help="the temporary data folder that will be used to save data",
+        default=Path.cwd() / "temp",
+    )
+    p.add_argument(
+        "-s",
+        "--skin",
+        type=str,
+        help="The skin to use for rendering the tiles",
+        default="default",
+    )
+    p.add_argument(
+        "-ad",
+        "--assets_dir",
+        type=Path,
+        help="The asset directory for the skin",
+        default=Path(__file__).parent / "skins" / "assets",
+    )
+    p.add_argument(
+        "-sd",
         "--save_dir",
         type=Path,
-        help="the directory to save tiles in",
-        default=Path.cwd(),
+        help="The directory to save tiles to",
+        default=Path.cwd() / "tiles",
     )
     p.add_argument(
-        "-m",
+        "-p",
         "--processes",
         type=int,
-        help="the amount of processes to run for rendering",
+        help="The number of processes to run for rendering",
         default=psutil.cpu_count(),
     )
+
+    def tile_coord(x: str) -> TileCoord:
+        return TileCoord(
+            int(x.split(",")[0]),
+            int(x.split(",")[1]),
+            int(x.split(",")[2]),
+        )
+
     p.add_argument(
         "-t",
         "--tiles",
-        type=list[str],
-        help="a list of tiles to render, given in tuples of (z,x,y)",
+        nargs="+",
+        type=tile_coord,
+        help="a list of tiles to render, given as `z,x,y [z,x,y...]`",
+        default=[],
+    )
+    p.add_argument(
+        "-z",
+        "--zooms",
+        nargs="+",
+        type=int,
+        help="a list of zooms to render, given as `z [z...]`",
+        default=[],
     )
     p.add_argument(
         "-o",
         "--offset",
-        type=tuple[int, int],  # type: ignore
-        help="the offset of node coordinates, given as (x,y)",
+        nargs=2,
+        type=int,
+        help="the offset of node coordinates, given as `x y`",
         default=[0, 0],
     )
 
+    for part in ("1", "2a", "2b", "3"):
+        p.add_argument(
+            f"-p{part}b",
+            f"--part{part}_batch_size",
+            type=int,
+            help=f"The batch size for part {part}",
+            default=psutil.cpu_count(),
+        )
+        p.add_argument(
+            f"-p{part}c",
+            f"--part{part}_chunk_size",
+            type=int,
+            help=f"The chunk size for part {part}",
+            default=8,
+        )
+        p.add_argument(
+            f"-p{part}s",
+            f"--part{part}_serial",
+            help=f"Whether part {part} will be run serially",
+            action="store_true",
+        )
 
-def p_merge(p: argparse.ArgumentParser):
+
+def p_merge(p: argparse.ArgumentParser) -> None:
     p.add_argument(
         "-i",
         "--image_dir",
@@ -89,11 +166,16 @@ def p_merge(p: argparse.ArgumentParser):
         default=Path.cwd(),
     )
     p.add_argument(
-        "-z", "--zoom", type=int, nargs="*", help="the zoom levels to merge", default=[]
+        "-z",
+        "--zoom",
+        type=int,
+        nargs="*",
+        help="the zoom levels to merge",
+        default=[],
     )
 
 
-def p_1to2(p: argparse.ArgumentParser):
+def p_1to2(p: argparse.ArgumentParser) -> None:
     p.add_argument(
         "-c",
         "--comps",
@@ -121,7 +203,7 @@ def p_1to2(p: argparse.ArgumentParser):
     )
 
 
-def main():
+def main() -> None:
     parser = argparse.ArgumentParser()
 
     subparsers = parser.add_subparsers(help="task to run", dest="task")
@@ -137,7 +219,7 @@ def main():
             "render",
             help="render tiles",
             formatter_class=argparse.MetavarTypeHelpFormatter,
-        )
+        ),
     )
 
     p_merge(
@@ -145,7 +227,7 @@ def main():
             "merge",
             help="merge tiles",
             formatter_class=argparse.MetavarTypeHelpFormatter,
-        )
+        ),
     )
 
     p_1to2(
@@ -153,7 +235,7 @@ def main():
             "1to2",
             help="convert PLA 1 to PLA 2",
             formatter_class=argparse.MetavarTypeHelpFormatter,
-        )
+        ),
     )
 
     args = parser.parse_args()
@@ -161,7 +243,7 @@ def main():
     if args.task == "info":
         log.info(f"[yellow]tile-renderer [cyan]v{__version__}")
         log.info(
-            "[yellow]Made by 7d for the OpenMRTMap project of the Minecart Rapid Transit Mapping Services"
+            "[yellow]Made by 7d for the OpenMRTMap project of the Minecart Rapid Transit Mapping Services",
         )
         log.info("GitHub: https://github.com/MRT-Map/tile-renderer")
         log.info("PyPI: https://pypi.org/project/tile-renderer/")
@@ -175,33 +257,60 @@ def main():
         log.info("Starting rendering...")
         render(
             file,
-            ZoomParams(args.min_zoom, args.max_zoom, args.max_zoom_range),
-            skin=skin,
+            Config(
+                ZoomParams(args.min_zoom, args.max_zoom, args.max_zoom_range),
+                args.export_id,
+                args.temp_dir,
+                skin,
+                args.assets_dir,
+            ),
             save_dir=args.save_dir,
             processes=args.processes,
             tiles=args.tiles,
-            offset=vector.obj(x=args.offset[0], y=args.offset[1]),
+            zooms=args.zooms,
+            offset=Vector(args.offset[0], args.offset[1]),
+            part1_mp_config=MultiprocessConfig(
+                batch_size=args.part1_batch_size,
+                chunk_size=args.part1_chunk_size,
+                serial=args.part1_serial,
+            ),
+            part2_mp_config1=MultiprocessConfig(
+                batch_size=args.part2a_batch_size,
+                chunk_size=args.part2a_chunk_size,
+                serial=args.part2a_serial,
+            ),
+            part2_mp_config2=MultiprocessConfig(
+                batch_size=args.part2b_batch_size,
+                chunk_size=args.part2b_chunk_size,
+                serial=args.part2b_serial,
+            ),
+            part3_mp_config=MultiprocessConfig(
+                batch_size=args.part3_batch_size,
+                chunk_size=args.part3_chunk_size,
+                serial=args.part3_serial,
+            ),
         )
     elif args.task == "merge":
-        merge_tiles(args.image_dir, True, args.save_dir, args.zoom)
+        merge_tiles(args.image_dir, args.save_dir, args.zoom)
     elif args.task == "1to2":
         comps = {}
         for file in track(
-            glob.glob(str(args.comps / "*.comps.pla")), "Loading components"
+            glob.glob(str(args.comps / "*.comps.pla")),
+            "Loading components",
         ):
-            with open(file, "r") as f:
+            with Path(file).open() as f:
                 comps.update(json.load(f))
         nodes = {}
         for file in track(glob.glob(str(args.nodes / "*.nodes.pla")), "Loading nodes"):
-            with open(file, "r") as f:
+            with Path(file).open() as f:
                 nodes.update(json.load(f))
         result = pla1to2(comps, nodes)
         args.out.mkdir(exist_ok=True)
-        for file in result:
+        for pla2_file in result:
             if args.json:
-                file.save_json(args.out)
+                pla2_file.save_json(args.out)
             else:
-                file.save_msgpack(args.out)
+                pla2_file.save_msgpack(args.out)
     else:
         parser.print_help()
 

@@ -1,20 +1,20 @@
 from rich.progress import track
 
-from . import Pla1ComponentListJson, Pla1NodeListJson
 from ._internal.logger import log
-from .misc_types.coord import WorldCoord
+from .misc_types import Pla1ComponentListJson, Pla1NodeListJson
+from .misc_types.coord import WorldCoord, WorldLine
 from .misc_types.pla2 import Component, Pla2File
 
 
 def pla1to2(
-    old_comps: Pla1ComponentListJson, old_nodes: Pla1NodeListJson
+    old_comps: Pla1ComponentListJson,
+    old_nodes: Pla1NodeListJson,
 ) -> list[Pla2File]:
     """
     Converts PLA1 to PLA2
 
     :param old_comps: The components JSON of PLA1
     :param old_nodes: The nodes JSON of PLA1
-    :return: The same components and nodes in PLA2
     """
 
     def get_coord(node: str) -> WorldCoord:
@@ -29,9 +29,9 @@ def pla1to2(
         id_ = comp_name.removeprefix(ns + "-")
         if "hollows" in comp:
             log.warn(
-                f"Hollow data found in `{comp_name}`, PLA 2 doesn't support hollows"
+                f"Hollow data found in `{comp_name}`, PLA 2 doesn't support hollows",
             )
-        nodes = [get_coord(n) for n in comp["nodes"]]
+        nodes = WorldLine([get_coord(n) for n in comp["nodes"]])
         comps.setdefault(ns, []).append(
             Component(
                 namespace=ns,
@@ -43,6 +43,6 @@ def pla1to2(
                 attrs=comp["attrs"],
                 tags=comp["type"].split(" ")[1:],
                 nodes=nodes,
-            )
+            ),
         )
     return [Pla2File(namespace=ns, components=comps) for ns, comps in comps.items()]

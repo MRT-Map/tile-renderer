@@ -1,7 +1,9 @@
 from __future__ import annotations
 
-from pathlib import Path
-from typing import Literal, overload
+from typing import TYPE_CHECKING, Literal, overload
+
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 @overload
@@ -18,7 +20,6 @@ def hex_to_colour(h: int | None) -> str | None:
     """
     Converts a hex colour, represented as an integer, into a string of format ``#XXXXXX``
     :param h: The hex code (``0xXXXXXX``)
-    :return: The string
     """
     if h is None:
         return None
@@ -35,8 +36,6 @@ def blend(h1: int, h2: int, prop: float = 0.5) -> int:
     :param h1: The first colour
     :param h2: The second colour
     :param prop: The proportion of the second colour, between 0.0 and 1.0
-
-    :return: The final colour
     """
     nh1 = hex(h1)[2:].zfill(6)
     nh2 = hex(h2)[2:].zfill(6)
@@ -58,8 +57,6 @@ def darken(h1: int, strength: float = 0.5) -> int:
 
     :param h1: The colour
     :param strength: The strength of the darkening, between 0.0 and 1.0
-
-    :return: The final colour
     """
     nh1 = hex(h1)[2:].zfill(6)
     r = int(nh1[0:2], base=16) / 255
@@ -78,14 +75,12 @@ def darken(h1: int, strength: float = 0.5) -> int:
     return int(nr + ng + nb, base=16)
 
 
-def lighten(h1: int, strength: float = 0.5) -> int:
+def brighten(h1: int, strength: float = 0.5) -> int:
     """
     Lighten a colour
 
     :param h1: The colour
-    :param strength: The strength of the lightening, between 0.0 and 1.0
-
-    :return: The final colour
+    :param strength: The strength of the brightening, between 0.0 and 1.0
     """
     nh1 = hex(h1)[2:].zfill(6)
     r = int(nh1[0:2], base=16) / 255
@@ -132,31 +127,36 @@ def lighten(h1: int, strength: float = 0.5) -> int:
 
 
 class SkinBuilder:
-    """Utility class for building skins.
-
-    :param int tile_size: Size of the tiles that the skin produces.
-    :param fonts: Keys are the formatting, eg "", "b", "i", "bi", values are the relative paths to the fonts.
-    :type fonts: dict[str, list[Path]]
-    :param int background: The colour of the background in hexadecimal."""
+    """Utility class for building skins."""
 
     tile_size: int
+    """Size of the tiles that the skin produces."""
     fonts: dict[str, list[Path]]
+    """Keys are the formatting, eg "", "b", "i", "bi", values are the relative paths to the fonts."""
     background: str
-    types: dict[str, ComponentTypeInfo]
+    """The colour of the background in hexadecimal."""
+    types: dict[str, CTI]
+    """The component types that have been registered."""
 
-    def __init__(self, tile_size: int, fonts: dict[str, list[Path]], background: int):
+    def __init__(
+        self,
+        tile_size: int,
+        fonts: dict[str, list[Path]],
+        background: int,
+    ) -> None:
         self.tile_size = tile_size
         self.fonts = fonts
         self.background = hex_to_colour(background) or "#000000"
         self.types = {}
 
-    def __setitem__(self, key: str, value: ComponentTypeInfo):
+    def __setitem__(self, key: str, value: CTI) -> None:
         print("Setting", key)
         self.types[key] = value
 
     def json(self) -> dict:
-        """Returns a JSON representation of the skin.
-        :rtype: dict"""
+        """
+        Returns a JSON representation of the skin.
+        """
         return {
             "info": {
                 "size": self.tile_size,
@@ -168,32 +168,32 @@ class SkinBuilder:
         }
 
     class ComponentTypeInfo:
-        """Utility class for building the component type info for the skin.
-
-        :param shape: The shape of the component. Must be either `point`, `line` or `area`.
-        :type shape: str
-        :param list[str] tags: A list of tags for the component"""
+        """Utility class for building the component type info for the skin."""
 
         shape: Literal["point", "line", "area"]
+        """The shape of the component. Must be either `point`, `line` or `area`."""
         tags: list[str]
-        style: dict[str, list[ComponentStyle]]
+        """A list of tags for the component"""
+        style: dict[str, list[CS]]
+        """The registered styles for the component type information"""
 
         def __init__(
-            self, shape: Literal["point", "line", "area"], tags: list[str] | None = None
-        ):
+            self,
+            shape: Literal["point", "line", "area"],
+            tags: list[str] | None = None,
+        ) -> None:
             self.shape = shape
             self.tags = tags or []
             self.style = {}
 
-        def __setitem__(self, key: int | slice, value: list[ComponentStyle]):
+        def __setitem__(self, key: int | slice, value: list[CS]) -> None:
             if isinstance(key, int):
                 self.style[f"{key}, {key}"] = value
             else:
                 self.style[f"{key.start}, {key.stop or 1000}"] = value
 
         def json(self) -> dict:
-            """Returns a JSON representation of the skin.
-            :rtype: dict"""
+            """Returns a JSON representation of the skin."""
             return {
                 "tags": self.tags,
                 "type": self.shape,
@@ -213,7 +213,7 @@ class SkinBuilder:
                 outline: int | None = None,
                 size: int = 1,
                 width: int = 1,
-            ):
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "circle",
@@ -232,7 +232,7 @@ class SkinBuilder:
                 offset: tuple[int, int] = (0, 0),
                 size: int = 10,
                 anchor: str | None = None,
-            ):
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "text",
@@ -251,7 +251,7 @@ class SkinBuilder:
                 outline: int | None = None,
                 size: int = 1,
                 width: int = 1,
-            ):
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "square",
@@ -263,7 +263,7 @@ class SkinBuilder:
                 return cs
 
             @classmethod
-            def point_image(cls, *, file: Path, offset: tuple[int, int] = (0, 0)):
+            def point_image(cls, *, file: Path, offset: tuple[int, int] = (0, 0)) -> CS:
                 cs = cls()
                 cs.json = {"layer": "image", "file": str(file), "offset": offset}
                 return cs
@@ -276,7 +276,7 @@ class SkinBuilder:
                 arrow_colour: int | None = None,
                 size: int = 1,
                 offset: int = 0,
-            ):
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "text",
@@ -294,7 +294,7 @@ class SkinBuilder:
                 colour: int | None = None,
                 width: int = 1,
                 dash: tuple[int, int] | None = None,
-            ):
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "back",
@@ -311,7 +311,7 @@ class SkinBuilder:
                 colour: int | None = None,
                 width: int = 1,
                 dash: tuple[int, int] | None = None,
-            ):
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "fore",
@@ -323,8 +323,12 @@ class SkinBuilder:
 
             @classmethod
             def area_bordertext(
-                cls, *, colour: int | None = None, offset: int = 0, size: int = 1
-            ):
+                cls,
+                *,
+                colour: int | None = None,
+                offset: int = 0,
+                size: int = 1,
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "bordertext",
@@ -341,7 +345,7 @@ class SkinBuilder:
                 colour: int | None = None,
                 size: int = 1,
                 offset: tuple[int, int] = (0, 0),
-            ):
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "centertext",
@@ -358,7 +362,7 @@ class SkinBuilder:
                 colour: int | None = None,
                 outline: int | None = None,
                 stripe: tuple[int, int, int] | None = None,
-            ):
+            ) -> CS:
                 cs = cls()
                 cs.json = {
                     "layer": "fill",
@@ -369,11 +373,16 @@ class SkinBuilder:
                 return cs
 
             @classmethod
-            def area_centerimage(cls, *, file: Path, offset: tuple[int, int] = (0, 0)):
+            def area_centerimage(
+                cls,
+                *,
+                file: Path,
+                offset: tuple[int, int] = (0, 0),
+            ) -> CS:
                 cs = cls()
                 cs.json = {"layer": "centerimage", "file": str(file), "offset": offset}
                 return cs
 
 
 CTI = SkinBuilder.ComponentTypeInfo
-CS = SkinBuilder.ComponentTypeInfo.ComponentStyle
+CS = CTI.ComponentStyle

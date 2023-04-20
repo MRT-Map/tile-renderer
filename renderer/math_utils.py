@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-import math
+import functools
 
 import vector
 
@@ -12,19 +12,16 @@ def segments_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
     """
     Finds if two segments intersect.
 
-    :param Coord c1: the 1st point of the 1st segment.
-    :param Coord c2: the 2nd point of the 1st segment.
-    :param Coord c3: the 1st point of the 2nd segment.
-    :param Coord c4: the 2nd point of the 2nd segment.
-
-    :returns: Whether the two segments intersect.
-    :rtype: bool
+    :param c1: The 1st point of the 1st segment.
+    :param c2: The 2nd point of the 1st segment.
+    :param c3: The 1st point of the 2nd segment.
+    :param c4: The 2nd point of the 2nd segment.
     """
     # https://stackoverflow.com/questions/20677795/how-do-i-compute-the-intersection-point-of-two-lines lol
     xdiff = Coord(c1.x - c2.x, c3.x - c4.x)
     ydiff = Coord(c1.y - c2.y, c3.y - c4.y)
 
-    def det(a, b):
+    def det(a: Coord, b: Coord) -> float:
         return a.x * b.y - a.y * b.x
 
     div = det(xdiff, ydiff)
@@ -45,86 +42,61 @@ def dash(coords: ImageLine, dash_length: float, gap_length: float) -> list[Image
     """
     Takes a list of coordinates and returns a list of lines that make up a dashed line.
 
-    :param list[renderer.misc_types.Vector2D.Vector2D] coords: the coordinates
+    :param coords: The list of coordinates
     :param float dash_length: the length of each dash
     :param float gap_length: the length of the gap between dashes
-    :return: a list of pairs of Vector2Ds.
     """
     if dash_length <= 0.0 or gap_length <= 0.0:
         raise ValueError("dash or gap length cannot be <= 0")
-    dashes = []
-    is_gap = False
-    overflow = 0.0
-    for c1, c2 in with_next([a for a in coords]):
-        pre_dashes = [c1]
-        plotted_length = 0.0
-        start_as_gap = is_gap
-        theta = math.atan2(c2.y - c1.y, c2.x - c1.x)
-        dash_dx = dash_length * math.cos(theta)
-        dash_dy = dash_length * math.sin(theta)
-        gap_dx = gap_length * math.cos(theta)
-        gap_dy = gap_length * math.sin(theta)
-        if overflow != 0.0:
-            if overflow > c1.point.distance(c2.point):
-                pre_dashes.append(c2)
-                overflow -= c1.point.distance(c2.point)
-                plotted_length += c1.point.distance(c2.point)
-            else:
-                overflow_x = overflow * math.cos(theta)
-                overflow_y = overflow * math.sin(theta)
-                pre_dashes.append(
-                    ImageCoord(
-                        pre_dashes[-1].x + overflow_x, pre_dashes[-1].y + overflow_y
-                    )
-                )
-                plotted_length += overflow
-                is_gap = False if is_gap else True
-                overflow = 0.0
-        while overflow == 0.0:
-            if is_gap:
-                dx = gap_dx
-                dy = gap_dy
-            else:
-                dx = dash_dx
-                dy = dash_dy
-            if math.hypot(dx, dy) > c1.point.distance(c2.point) - plotted_length:
-                overflow = math.hypot(dx, dy) - (
-                    c1.point.distance(c2.point) - plotted_length
-                )
-                pre_dashes.append(c2)
-            else:
-                pre_dashes.append(
-                    ImageCoord(pre_dashes[-1].x + dx, pre_dashes[-1].y + dy)
-                )
-                plotted_length += gap_length if is_gap else dash_length
-                is_gap = False if is_gap else True
-        for i, (c3, c4) in enumerate(
-            with_next(pre_dashes[(1 if start_as_gap else 0) :])
-        ):
-            if i % 2 == 0 and c3 != c4:
-                dashes.append((c3, c4))
+    o_coords = tuple([c - coords.coords[0] for c in coords])
+    return [
+        ImageLine([a + coords.coords[0] for a in d])
+        for d in _dash(o_coords, dash_length, gap_length)
+    ]
 
-    new_dashes = []
-    prev_coord: ImageCoord | None = None
-    for c1, c2 in dashes:
-        if prev_coord != c1:
-            new_dashes.append(ImageLine([c1, c2]))
-        else:
-            new_dashes[-1] = ImageLine([*new_dashes[-1], c2])
-        prev_coord = c2
-    return new_dashes
+
+@functools.cache
+def _dash(
+    coords: tuple[ImageCoord, ...],
+    dash_length: float,
+    gap_length: float,
+) -> list[list[ImageCoord]]:
+    dashes = []
+    next_dash = []
+    is_dash = True
+    next_len = dash_length
+    for c1, c2 in with_next(coords):
+        if c1 == c2:
+            continue
+        cursor = c1
+        while True:
+            if is_dash:
+                next_dash.append(cursor)
+            new_cursor = cursor + (c2 - c1).unit() * next_len
+            if (new_cursor - c2).dot(c2 - c1) >= 0:
+                next_len -= abs(c2 - cursor)
+                break
+
+            cursor = new_cursor
+            if is_dash:
+                next_dash.append(cursor)
+                dashes.append(next_dash.copy())
+                next_dash.clear()
+            is_dash = not is_dash
+            next_len = dash_length if is_dash else gap_length
+    if is_dash and len(coords) >= 1:
+        next_dash.append(coords[-1])
+        dashes.append(next_dash.copy())
+    return dashes
 
 
 def rotate_around_pivot(coord: Coord, pivot: Coord, theta: float) -> Coord:
     """
     Rotates a set of coordinates about a pivot point.
 
-    :param float coord: the coordinate to be rotated
-    :param float pivot: the pivot to be rotated about
-    :param float theta: angle to rotate in radians
-
-    :returns: The rotated coordinates, given in ``(x,y)``
-    :rtype: renderer.misc_types.coord.Coord
+    :param float coord: The coordinate to be rotated
+    :param float pivot: The pivot to be rotated about
+    :param float theta: The angle to rotate in radians
     """
     coord_vec = vector.obj(x=coord.x, y=coord.y)
     pivot_vec = vector.obj(x=pivot.x, y=pivot.y)

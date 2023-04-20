@@ -1,8 +1,10 @@
+# noqa: INP001
+
 import json
 from math import ceil
 from pathlib import Path
 
-from renderer.misc_types.skin_builder import CS, CTI, SkinBuilder, darken, lighten
+from renderer.misc_types.skin_builder import CS, CTI, SkinBuilder, brighten, darken
 
 A_ROAD = 0xFFAAAA
 B_ROAD = 0xFF8000
@@ -15,7 +17,7 @@ BUILDING = 0xA2A288
 TRANSPORT_BUILDING = 0x999966
 
 
-def main():
+def main() -> None:  # noqa: PLR0912, PLR0915
     s = SkinBuilder(
         256,
         {
@@ -201,31 +203,31 @@ def main():
 
     building_underground = CTI("area")
     building_underground[0:1] = [
-        CS.area_fill(colour=lighten(BUILDING), outline=BUILDING),
+        CS.area_fill(colour=brighten(BUILDING), outline=BUILDING),
         CS.area_centertext(colour=darken(BUILDING), size=15),
     ]
     building_underground[2:3] = [
-        CS.area_fill(colour=lighten(BUILDING), outline=BUILDING)
+        CS.area_fill(colour=brighten(BUILDING), outline=BUILDING),
     ]
     s["building_underground"] = building_underground
 
     city_hall = CTI("area")
     city_hall[0:1] = [
-        CS.area_fill(colour=lighten(0xFFAAAA), outline=0xFFAAAA),
+        CS.area_fill(colour=brighten(0xFFAAAA), outline=0xFFAAAA),
         CS.area_centertext(colour=darken(0xFFAAAA), size=15),
     ]
     city_hall[2:3] = [
-        CS.area_fill(colour=lighten(0xFFAAAA), outline=0xFFAAAA),
+        CS.area_fill(colour=brighten(0xFFAAAA), outline=0xFFAAAA),
     ]
     s["cityHall"] = city_hall
 
     transport_building_underground = CTI("area")
     transport_building_underground[0:1] = [
-        CS.area_fill(colour=lighten(TRANSPORT_BUILDING), outline=TRANSPORT_BUILDING),
+        CS.area_fill(colour=brighten(TRANSPORT_BUILDING), outline=TRANSPORT_BUILDING),
         CS.area_centertext(colour=darken(TRANSPORT_BUILDING), size=15),
     ]
     transport_building_underground[2:3] = [
-        CS.area_fill(colour=lighten(TRANSPORT_BUILDING), outline=TRANSPORT_BUILDING)
+        CS.area_fill(colour=brighten(TRANSPORT_BUILDING), outline=TRANSPORT_BUILDING),
     ]
     s["transportBuilding_underground"] = transport_building_underground
 
@@ -253,8 +255,11 @@ def main():
             *(
                 [
                     CS.line_text(
-                        colour=0xAAAAAA, arrow_colour=0xEEEEEE, size=size, offset=offset
-                    )
+                        colour=0xAAAAAA,
+                        arrow_colour=0xEEEEEE,
+                        size=size,
+                        offset=offset,
+                    ),
                 ]
                 if offset != 0
                 else []
@@ -280,14 +285,14 @@ def main():
         for i in (0, 1, 2, 3, 4):
             area[i] = [
                 CS.line_back(colour=col, width=int((width + 8) * (2 / 3) ** i)),
-                CS.line_fore(colour=lighten(col), width=int(width * (2 / 3) ** i)),
+                CS.line_fore(colour=brighten(col), width=int(width * (2 / 3) ** i)),
                 *(
                     [
                         CS.line_text(
                             colour=0x000000,
                             arrow_colour=col,
                             size=int(width * (2 / 3) ** i),
-                        )
+                        ),
                     ]
                     if width * (2 / 3) ** i > 12
                     else []
@@ -297,7 +302,7 @@ def main():
             area[i] = (
                 [
                     CS.line_back(colour=col, width=(small_width - i + 5) * 2),
-                    CS.line_fore(colour=lighten(col), width=small_width - i + 5),
+                    CS.line_fore(colour=brighten(col), width=small_width - i + 5),
                 ]
                 if small_width - i + 5 >= 1
                 else []
@@ -309,7 +314,10 @@ def main():
         rail_underground[i] = [
             CS.line_fore(colour=0x808080, width=width, dash=(dash, dash // 2)),
             CS.line_text(
-                colour=0x808080, arrow_colour=0x808080, offset=size, size=size
+                colour=0x808080,
+                arrow_colour=0x808080,
+                offset=size,
+                size=size,
             ),
         ]
     rail_underground[3:4] = [CS.line_fore(colour=0x808080, width=2, dash=(20, 10))]
@@ -320,11 +328,14 @@ def main():
         intercity_rail_underground[i] = [
             CS.line_fore(colour=0x808080, width=width * 2, dash=(dash, dash)),
             CS.line_text(
-                colour=0x808080, arrow_colour=0x808080, offset=size, size=size
+                colour=0x808080,
+                arrow_colour=0x808080,
+                offset=size,
+                size=size,
             ),
         ]
     intercity_rail_underground[3:6] = [
-        CS.line_fore(colour=0x808080, width=4, dash=(20, 20))
+        CS.line_fore(colour=0x808080, width=4, dash=(20, 20)),
     ]
     s["intercityRail_underground"] = intercity_rail_underground
 
@@ -334,7 +345,7 @@ def main():
         CS.area_centertext(colour=darken(0xAAAAAA), size=10),
     ]
     platform_underground[2:3] = [
-        CS.area_fill(colour=0xAAAAAA, outline=darken(0xAAAAAA))
+        CS.area_fill(colour=0xAAAAAA, outline=darken(0xAAAAAA)),
     ]
     s["platform_underground"] = platform_underground
 
@@ -380,8 +391,11 @@ def main():
             *(
                 [
                     CS.line_text(
-                        colour=0xAAAAAA, arrow_colour=0x008000, size=size, offset=offset
-                    )
+                        colour=0xAAAAAA,
+                        arrow_colour=0x008000,
+                        size=size,
+                        offset=offset,
+                    ),
                 ]
                 if offset != 0
                 else []
@@ -407,7 +421,8 @@ def main():
         for i in (0, 1, 2, 3, 4):
             area[i] = [
                 CS.line_back(
-                    colour=darken(col, 0.25), width=int((width + 8) * (2 / 3) ** i)
+                    colour=darken(col, 0.25),
+                    width=int((width + 8) * (2 / 3) ** i),
                 ),
                 CS.line_fore(colour=col, width=int(width * (2 / 3) ** i)),
                 *(
@@ -416,7 +431,7 @@ def main():
                             colour=0x000000,
                             arrow_colour=darken(col, 0.25),
                             size=int(width * (2 / 3) ** i),
-                        )
+                        ),
                     ]
                     if width * (2 / 3) ** i > 12
                     else []
@@ -426,7 +441,8 @@ def main():
             area[i] = (
                 [
                     CS.line_back(
-                        colour=darken(col, 0.25), width=(small_width - i + 5) * 2
+                        colour=darken(col, 0.25),
+                        width=(small_width - i + 5) * 2,
                     ),
                     CS.line_fore(colour=col, width=small_width - i + 5),
                 ]
@@ -440,7 +456,10 @@ def main():
         rail[i] = [
             CS.line_fore(colour=0x808080, width=width),
             CS.line_text(
-                colour=0x808080, arrow_colour=0x808080, offset=size, size=size
+                colour=0x808080,
+                arrow_colour=0x808080,
+                offset=size,
+                size=size,
             ),
         ]
     rail[3:4] = [CS.line_fore(colour=0x808080, width=2)]
@@ -452,7 +471,10 @@ def main():
             CS.line_back(colour=0x808080, width=width * 2),
             CS.line_fore(colour=0xFFFFFF, width=width, dash=(dash, dash)),
             CS.line_text(
-                colour=0x808080, arrow_colour=0x808080, offset=size, size=size
+                colour=0x808080,
+                arrow_colour=0x808080,
+                offset=size,
+                size=size,
             ),
         ]
     intercity_rail[3:6] = [
@@ -476,8 +498,11 @@ def main():
             *(
                 [
                     CS.line_text(
-                        colour=0xAAAAAA, arrow_colour=0x008000, size=size, offset=offset
-                    )
+                        colour=0xAAAAAA,
+                        arrow_colour=0x008000,
+                        size=size,
+                        offset=offset,
+                    ),
                 ]
                 if offset != 0
                 else []
@@ -510,7 +535,7 @@ def main():
                             colour=0x000000,
                             arrow_colour=darken(col, 0.25),
                             size=int(width * (2 / 3) ** i),
-                        )
+                        ),
                     ]
                     if width * (2 / 3) ** i > 12
                     else []
@@ -533,7 +558,10 @@ def main():
             CS.line_back(colour=0x000000, width=ceil(1.5 * width)),
             CS.line_fore(colour=0x808080, width=width),
             CS.line_text(
-                colour=0x808080, arrow_colour=0x808080, offset=size, size=size
+                colour=0x808080,
+                arrow_colour=0x808080,
+                offset=size,
+                size=size,
             ),
         ]
     rail_elevated[3:4] = rail_elevated[i] = [
@@ -548,7 +576,10 @@ def main():
             CS.line_back(colour=0x000000, width=width * 2),
             CS.line_fore(colour=0xFFFFFF, width=width, dash=(dash, dash)),
             CS.line_text(
-                colour=0x808080, arrow_colour=0x808080, offset=size, size=size
+                colour=0x808080,
+                arrow_colour=0x808080,
+                offset=size,
+                size=size,
             ),
         ]
     intercity_rail_elevated[3:6] = [
@@ -946,7 +977,7 @@ def main():
     ]
     s["simplePoint"] = simple_point
 
-    with open("default.json", "w") as f:
+    with Path("default.json").open("w") as f:
         json.dump(s.json(), f, indent=2)
 
 
