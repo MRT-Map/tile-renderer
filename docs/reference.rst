@@ -12,25 +12,25 @@ Rendering
 .. automodule:: renderer.render
    :members:
 
-.. automodule:: renderer.prepare
+.. automodule:: renderer.render.prepare
    :members:
 
-.. automodule:: renderer.part1
+.. automodule:: renderer.render.part1
    :members:
 
-.. automodule:: renderer.part2
+.. automodule:: renderer.render.part2
    :members:
 
-.. automodule:: renderer.part3
+.. automodule:: renderer.render.part3
    :members:
 
-.. automodule:: renderer.text_object
+.. automodule:: renderer.render.text_object
    :members:
 
-.. automodule:: renderer.multiprocess
+.. automodule:: renderer.render.multiprocess
    :members:
 
-.. automodule:: renderer.utils
+.. automodule:: renderer.render.utils
    :members:
 
 Types
