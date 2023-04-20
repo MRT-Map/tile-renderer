@@ -1,6 +1,6 @@
 [tool.poetry]
 name = "tile-renderer"
-version = "3.0"
+version = "4.0.0"
 description = "Leaflet.js streetmap tile renderer"
 authors = ["7d <i.third.7d@protonmail.com>"]
 license = "gpl-3.0"
