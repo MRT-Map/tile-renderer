@@ -15,7 +15,6 @@ def pla1to2(
 
     :param old_comps: The components JSON of PLA1
     :param old_nodes: The nodes JSON of PLA1
-    :return: The same components and nodes in PLA2
     """
 
     def get_coord(node: str) -> WorldCoord:

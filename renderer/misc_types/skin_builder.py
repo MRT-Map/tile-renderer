@@ -20,7 +20,6 @@ def hex_to_colour(h: int | None) -> str | None:
     """
     Converts a hex colour, represented as an integer, into a string of format ``#XXXXXX``
     :param h: The hex code (``0xXXXXXX``)
-    :return: The string
     """
     if h is None:
         return None
@@ -37,8 +36,6 @@ def blend(h1: int, h2: int, prop: float = 0.5) -> int:
     :param h1: The first colour
     :param h2: The second colour
     :param prop: The proportion of the second colour, between 0.0 and 1.0
-
-    :return: The final colour
     """
     nh1 = hex(h1)[2:].zfill(6)
     nh2 = hex(h2)[2:].zfill(6)
@@ -60,8 +57,6 @@ def darken(h1: int, strength: float = 0.5) -> int:
 
     :param h1: The colour
     :param strength: The strength of the darkening, between 0.0 and 1.0
-
-    :return: The final colour
     """
     nh1 = hex(h1)[2:].zfill(6)
     r = int(nh1[0:2], base=16) / 255
@@ -86,8 +81,6 @@ def brighten(h1: int, strength: float = 0.5) -> int:
 
     :param h1: The colour
     :param strength: The strength of the brightening, between 0.0 and 1.0
-
-    :return: The final colour
     """
     nh1 = hex(h1)[2:].zfill(6)
     r = int(nh1[0:2], base=16) / 255
@@ -134,17 +127,16 @@ def brighten(h1: int, strength: float = 0.5) -> int:
 
 
 class SkinBuilder:
-    """Utility class for building skins.
-
-    :param int tile_size: Size of the tiles that the skin produces.
-    :param fonts: Keys are the formatting, eg "", "b", "i", "bi", values are the relative paths to the fonts.
-    :type fonts: dict[str, list[Path]]
-    :param int background: The colour of the background in hexadecimal."""
+    """Utility class for building skins."""
 
     tile_size: int
+    """Size of the tiles that the skin produces."""
     fonts: dict[str, list[Path]]
+    """Keys are the formatting, eg "", "b", "i", "bi", values are the relative paths to the fonts."""
     background: str
+    """The colour of the background in hexadecimal."""
     types: dict[str, CTI]
+    """The component types that have been registered."""
 
     def __init__(
         self,
@@ -176,14 +168,14 @@ class SkinBuilder:
         }
 
     class ComponentTypeInfo:
-        """Utility class for building the component type info for the skin.
-
-        :param shape: The shape of the component. Must be either `point`, `line` or `area`.
-        :param list[str] tags: A list of tags for the component"""
+        """Utility class for building the component type info for the skin."""
 
         shape: Literal["point", "line", "area"]
+        """The shape of the component. Must be either `point`, `line` or `area`."""
         tags: list[str]
+        """A list of tags for the component"""
         style: dict[str, list[CS]]
+        """The registered styles for the component type information"""
 
         def __init__(
             self,

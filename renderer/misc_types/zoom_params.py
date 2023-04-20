@@ -3,19 +3,18 @@ from dataclasses import dataclass
 
 @dataclass(frozen=True)
 class ZoomParams:
-    # noinspection PyUnresolvedReferences
     """
     Utility object for storing zoom parameters.
 
-    :param int min: Minimum zoom value
-    :param int max: Maximum zoom value
-    :param float range: Actual distance covered by a tile in the maximum zoom
-
     :raises ValueError: If min > max
     """
+
     min: int
+    """Minimum zoom value"""
     max: int
+    """Maximum zoom value"""
     range: float
+    """Actual distance covered by a tile in the maximum zoom"""
 
     def __post_init__(self) -> None:
         if self.min > self.max:

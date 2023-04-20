@@ -82,9 +82,11 @@ class Vector:
         return (self._x**2 + self._y**2) ** 0.5
 
     def unit(self) -> Self:
+        """Normalises the vector"""
         return self / abs(self)
 
     def dot(self, other: Vector) -> float:
+        """Dot product"""
         return self._x * other._x + self._y * other._y
 
 
@@ -96,14 +98,17 @@ class Coord(Vector):
 
     @property
     def point(self) -> Point:
+        """Returns a Shapely point"""
         return Point(self.x, self.y)
 
     @staticmethod
     def enc_hook(obj: Coord) -> tuple[int, int]:
+        """Encoding hook for msgspec"""
         return int(obj.x), int(obj.y)
 
     @staticmethod
     def dec_hook(obj: tuple[float, float]) -> Coord:
+        """Decoding hook for msgspec"""
         return Coord(*obj)
 
 
@@ -128,8 +133,6 @@ class ImageCoord(Coord):
 
         :param tile_coord: The tile coordinate that the coordinate is part of
         :param config: The configuration
-
-        :return: The world coordinate
         """
         size = config.zoom.range * 2 ** (config.zoom.max - tile_coord.z)
         xc = size / config.skin.tile_size * self._x
@@ -163,8 +166,6 @@ class WorldCoord(Coord):
 
         :param tile_coord: The tile coordinate that the coordinate is part of
         :param config: The configuration
-
-        :return: The image coordinate
         """
 
         return _to_image_coord(self, tile_coord, config.skin.tile_size, config.zoom)
@@ -172,10 +173,6 @@ class WorldCoord(Coord):
     def tiles(self, zoom_params: ZoomParams) -> list[TileCoord]:
         """
         Returns all tiles in the form of tile coordinates that contain the provided regular coordinate.
-
-        :param ZoomParams zoom_params: The zoom parameters
-
-        :returns: A list of tile coordinates
         """
         tiles = []
         range_ = zoom_params.range
@@ -237,8 +234,6 @@ class Line:
     def bounds(self) -> Bounds[float]:
         """
         Find the minimum and maximum x/y values in a list of coords.
-
-        :returns: Returns in the form ``(x_max, x_min, y_max, y_min)``
         """
         return Bounds(
             x_max=max(c.x for c in self.coords),
@@ -248,6 +243,7 @@ class Line:
         )
 
     def parallel_offset(self, distance: float) -> Line:
+        """Calculates a line that is the parallel offset of this line"""
         if distance == 0:
             return self
         """Calls shapely.LineString.parallel_offset()"""
@@ -262,7 +258,7 @@ class Line:
 
     @property
     def centroid(self) -> Coord:
-        """Calls shapely.LineString.centroid()"""
+        """Finds the visual center"""
         coords = [c - self.coords[0] for c in self.coords]
         centroid = _centroid(coords)
         return Coord(centroid.x + self.coords[0].x, centroid.y + self.coords[0].y)
@@ -270,11 +266,6 @@ class Line:
     def to_tiles(self, z: ZoomParams) -> list[TileCoord]:
         """
         Generates tile coordinates from a list of regular coordinates.
-            Mainly for rendering whole components.
-
-        :param ZoomParams z: The zoom params
-
-        :returns: A list of tile coordinates
         """
 
         bounds = Bounds(
@@ -293,10 +284,6 @@ class Line:
     def in_bounds(self, bounds: Bounds[int]) -> bool:
         """
         Finds whether any part of the LineString is entirely within a bound
-
-        :param bounds: The bounds to check for
-
-        :return: If the above is true
         """
         from .. import math_utils
 
@@ -332,8 +319,6 @@ class WorldLine(Line):
 
         :param tile_coord: The tile coordinate that the coordinate is part of
         :param config: The configuration
-
-        :return: The image line
         """
         image_coords = [a.to_image_coord(tile_coord, config) for a in self]
         return ImageLine(image_coords)
@@ -366,8 +351,6 @@ class ImageLine(Line):
 
         :param tile_coord: The tile coordinate that the coordinate is part of
         :param config: The configuration
-
-        :return: The world coordinate
         """
         image_coords = [a.to_world_coord(tile_coord, config) for a in self]
         return WorldLine(image_coords)
@@ -405,8 +388,6 @@ class TileCoord(NamedTuple):
     def bounds(tile_coords: list[TileCoord]) -> Bounds[int]:
         """
         Find the minimum and maximum x/y values in a set of TileCoords.
-
-        :param List[TileCoord] tile_coords: A list of tile coordinates
         """
 
         return Bounds(

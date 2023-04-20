@@ -23,13 +23,9 @@ def merge_tiles(
 
     :param images: Give in the form of ``(tile coord): (PIL Image)``, like the return value of :py:func:`render`,
         or as a path to a directory.
-    :type images: Path | dict[TileCoord, Image]
-    :param save_dir: the directory to save the merged images in
-    :param zoom: if left empty, automatically calculates all zoom values based on tiles;
+    :param save_dir: The directory to save the merged images in
+    :param zoom: If left empty, automatically calculates all zoom values based on tiles;
         otherwise, the layers of zoom to merge.
-    :type zoom: list[int] | None
-
-    :returns: Given in the form of ``(Zoom): (PIL Image)``
     """
     if zoom is None:
         zoom = []

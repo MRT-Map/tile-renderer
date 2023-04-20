@@ -23,7 +23,7 @@ if TYPE_CHECKING:
 
 
 class AreaBorderText(ComponentStyle):
-    """Represent the border text of an area. Will be rendered in the future"""
+    """Represent the border text of an area"""
 
     # noinspection PyInitNewSignature
     def __init__(self, json: dict, tags: list[str], *_: Any, **__: Any) -> None:
@@ -92,6 +92,7 @@ class AreaBorderText(ComponentStyle):
                 [c.as_tuple() for c in coords.parallel_offset(self.offset)],
                 fill="#ff0000",
             )
+        # noinspection PyProtectedMember
         text_list.extend(
             e
             for e in (

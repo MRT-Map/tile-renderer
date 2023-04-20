@@ -3,13 +3,13 @@ from __future__ import annotations
 from typing import TYPE_CHECKING
 
 import dill
-from ray.types import ObjectRef
 from rich.progress import track
 
 from .multiprocess import MultiprocessConfig, ProgressHandler, multiprocess
 from .part1 import _needs_con_rendering
 
 if TYPE_CHECKING:
+    from ray.types import ObjectRef
     from ..misc_types.zoom_params import ZoomParams
     from ..skin_type import Skin
     from ..misc_types.config import Config
@@ -148,7 +148,8 @@ def prepare_render(
 
 
 def _count_num_rendering_ops(
-    grouped_tile_list: dict[TileCoord, list[list[Component]]], config: Config
+    grouped_tile_list: dict[TileCoord, list[list[Component]]],
+    config: Config,
 ) -> int:
     operations = 0
 

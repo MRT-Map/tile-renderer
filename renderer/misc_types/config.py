@@ -9,15 +9,15 @@ from .zoom_params import ZoomParams
 class Config:
     """
     The configuration for the render job.
-    :param ZoomParams zoom: A ZoomParams object
-    :param Skin skin: The skin to use for rendering the tiles
-    :param str export_id: The name of the rendering task
-    :param Path assets_dir: The asset directory for the skin
-    :param Path temp_dir: the temporary data folder that will be used to save data
     """
 
     zoom: ZoomParams
+    """A ZoomParams object"""
     export_id: str = "unnamed"
+    """The skin to use for rendering the tiles"""
     temp_dir: Path = Path.cwd() / "temp"
+    """The temporary data folder that will be used to save data"""
     skin: Skin = Skin.from_name("default")
+    """The skin to use for rendering the tiles"""
     assets_dir: Path = Path(__file__).parent.parent / "skins" / "assets"
+    """The asset directory for the skin"""

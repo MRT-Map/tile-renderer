@@ -37,8 +37,8 @@ def render(
 
     :param Pla2File components: a JSON of components
     :param config: The configuration of the renderer
-    :param int save_dir: The directory to save tiles to, ``None`` to make it not save
-    :param int processes: The number of processes to run for rendering
+    :param save_dir: The directory to save tiles to, ``None`` to make it not save
+    :param processes: The number of processes to run for rendering
     :param tiles: a list of tiles to render
     :param zooms: a list of zooms to render
     :param offset: the offset to shift all node coordinates by, given as ``(x,y)``
@@ -47,9 +47,6 @@ def render(
     :param part2_mp_config1: The configuration for the 1st processing of part 2
     :param part2_mp_config2: The configuration for the 2nd processing of part 2
     :param part3_mp_config: The configuration for the processing of part 3
-
-    :returns: Given in the form of ``{tile_coord: image}``
-    :rtype: dict[TileCoord, Image.Image]
     """
 
     log.debug("Creating save & temp directories")

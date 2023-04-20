@@ -47,11 +47,7 @@ class Component(Struct):
     @staticmethod
     def find_ends(components: list[Component]) -> Bounds[float]:
         """
-        Finds the minimum and maximum X and Y values in a JSON of components
-
-        :param ComponentList components: A JSON of components
-
-        :returns: The minimum and maximum X and Y values
+        Finds the minimum and maximum X and Y values from a set of components
         """
         bounds = [component.nodes.bounds for component in components]
         return Bounds(
@@ -67,12 +63,7 @@ class Component(Struct):
         zoom_params: ZoomParams,
     ) -> list[TileCoord]:
         """
-        Like :py:func:`tools.line.to_tiles`, but for a JSON of components.
-
-        :param ComponentList components: A JSON of components
-        :param zoom_params: The zoom parameters
-
-        :returns: A list of tile coordinates
+        Finds the tile coordinates that the list of components will be rendered in.
         """
         tiles = [component.nodes.to_tiles(zoom_params) for component in components]
         return list(set(itertools.chain(*tiles)))
@@ -114,11 +105,7 @@ class Pla2File(Struct):
     @staticmethod
     def from_file(file: Path) -> Pla2File:
         """
-        Load a PLA2 file, can be either in JSON or MessagePack format
-
-        :param file: The file to load from
-
-        :return: The PLA2 file
+        Load a PLA2 file from a path, can be either in JSON or MessagePack format
         """
         if file.suffix == ".msgpack":
             return Pla2File.from_msgpack(file)
@@ -128,10 +115,6 @@ class Pla2File(Struct):
     def from_json(file: Path) -> Pla2File:
         """
         Load a PLA2 file, must be in JSON
-
-        :param file: The file to load from
-
-        :return: The PLA2 file
         """
         with file.open("rb") as f:
             b = f.read()
@@ -144,10 +127,6 @@ class Pla2File(Struct):
     def from_msgpack(file: Path) -> Pla2File:
         """
         Load a PLA2 file, must be in MessagePack
-
-        :param file: The file to load from
-
-        :return: The PLA2 file
         """
         with file.open("rb") as f:
             b = f.read()
@@ -158,18 +137,14 @@ class Pla2File(Struct):
 
     def save_json(self, directory: Path) -> None:
         """
-        Save the PLA2 file in JSON format
-
-        :param directory: The directory to save the file in
+        Save the PLA2 file in JSON format to a directory
         """
         with (directory / f"{self.namespace}.pla2.json").open("wb+") as f:
             f.write(_json_encoder.encode(self.components))
 
     def save_msgpack(self, directory: Path) -> None:
         """
-        Save the PLA2 file in MessagePack format
-
-        :param directory: The directory to save the file in
+        Save the PLA2 file in MessagePack format to a directory
         """
         with (directory / f"{self.namespace}.pla2.msgpack").open("wb+") as f:
             f.write(_msgpack_encoder.encode(self.components))
@@ -177,11 +152,9 @@ class Pla2File(Struct):
     @staticmethod
     def validate(comps: list[Component]) -> list[Component]:
         """
-        Check for duplicate IDs
+        Check for duplicate IDs in a list of components and returns the same list of components if all is well
 
-        :param comps: The list of components to look for
-        :return: The same list of components
-        :raises ValueError: if a duplicated ID is found
+        :raises ValueError: If a duplicated ID is found
         """
         count = {
             k: v

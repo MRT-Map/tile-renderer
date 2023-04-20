@@ -23,7 +23,7 @@ Image.Image.__hash__ = lambda self: int(str(imagehash.average_hash(self)), base=
 class Skin:
     """Represents a skin.
 
-    :param SkinJson json: The JSON of the skin.
+    :param json: The JSON of the skin.
     """
 
     def __init__(self, json: SkinJson) -> None:
@@ -53,13 +53,13 @@ class Skin:
     ) -> ImageFont.FreeTypeFont:
         """Gets a font, given the style and size.
 
-        :param str style: The style of the font needed, eg.
-            bold, italic etc.
-        :param int size: The size of the font
-        :param Path assets_dir: Where the font is stored
-        :param str rendered_text: The text that is rendered with the font, to allow for fallbacks
-        :return: The font
-        :raises FileNotFoundError: if font is not found"""
+        :param style: The style of the font needed, eg.
+            Bold, italic etc.
+        :param size: The size of the font
+        :param assets_dir: Where the font is stored
+        :param rendered_text: The text that is rendered with the font, to allow for fallbacks
+
+        :raises FileNotFoundError: If font is not found"""
         if style in self.fonts:
             pil_font = None
             for font in self.fonts[style]:
@@ -83,11 +83,7 @@ class Skin:
         """
         Gets a skin from inside the package.
 
-        :param str name: the name of the skin
-
-        :returns: The skin
-
-        :raises FileNotFoundError: if skin does not exist
+        :raises FileNotFoundError: If skin does not exist
         """
 
         try:
@@ -101,10 +97,6 @@ class Skin:
     def validate_json(json: SkinJson) -> Literal[True]:
         """
         Validates a skin JSON file.
-
-        :param SkinJson json: the skin JSON file
-
-        :returns: Returns True if no errors
         """
 
         main_schema = Schema(
@@ -246,9 +238,9 @@ class Skin:
 class ComponentTypeInfo:
     """An object representing a component type in the ``types`` portion of a skin.
 
-    :param str name: Will set ``name``
-    :param SkinType json: The JSON of the component type
-    :param list[str] order: Will set ``_order``
+    :param name: Will set ``name``
+    :param json: The JSON of the component type
+    :param order: Will set ``_order``
     """
 
     def __init__(self, name: str, json: SkinType, order: list[str]) -> None:
@@ -278,8 +270,8 @@ class ComponentStyle:
     # noinspection PyUnresolvedReferences
     """Represents the ``styles`` portion of a ComponentTypeInfo. Base class for all types of ComponentStyle.
 
-    :param dict json: JSON dictionary as input
-    :param ComponentTypeInfo type_info: The type_info that the ComponentStyle is under
+    :param json: JSON dictionary as input
+    :param type_info: The type_info that the ComponentStyle is under
     """
     layer: str
 

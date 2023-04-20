@@ -30,6 +30,7 @@ class Part1Consts(Config):
     """The constants used for part 1"""
 
     coord_to_comp: dict[WorldCoord, list[Component]] = field(default_factory=dict)
+    """A dictionary of world coordinates to the components that have nodes at said coordinate"""
 
     @classmethod
     def from_config(

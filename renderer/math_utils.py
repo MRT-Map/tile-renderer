@@ -12,13 +12,10 @@ def segments_intersect(c1: Coord, c2: Coord, c3: Coord, c4: Coord) -> bool:
     """
     Finds if two segments intersect.
 
-    :param Coord c1: The 1st point of the 1st segment.
-    :param Coord c2: The 2nd point of the 1st segment.
-    :param Coord c3: The 1st point of the 2nd segment.
-    :param Coord c4: The 2nd point of the 2nd segment.
-
-    :returns: Whether the two segments intersect.
-    :rtype: bool
+    :param c1: The 1st point of the 1st segment.
+    :param c2: The 2nd point of the 1st segment.
+    :param c3: The 1st point of the 2nd segment.
+    :param c4: The 2nd point of the 2nd segment.
     """
     # https://stackoverflow.com/questions/20677795/how-do-i-compute-the-intersection-point-of-two-lines lol
     xdiff = Coord(c1.x - c2.x, c3.x - c4.x)
@@ -45,10 +42,9 @@ def dash(coords: ImageLine, dash_length: float, gap_length: float) -> list[Image
     """
     Takes a list of coordinates and returns a list of lines that make up a dashed line.
 
-    :param list[renderer.misc_types.Vector2D.Vector2D] coords: the coordinates
+    :param coords: The list of coordinates
     :param float dash_length: the length of each dash
     :param float gap_length: the length of the gap between dashes
-    :return: a list of pairs of Vector2Ds.
     """
     if dash_length <= 0.0 or gap_length <= 0.0:
         raise ValueError("dash or gap length cannot be <= 0")
@@ -98,12 +94,9 @@ def rotate_around_pivot(coord: Coord, pivot: Coord, theta: float) -> Coord:
     """
     Rotates a set of coordinates about a pivot point.
 
-    :param float coord: the coordinate to be rotated
-    :param float pivot: the pivot to be rotated about
-    :param float theta: angle to rotate in radians
-
-    :returns: The rotated coordinates, given in ``(x,y)``
-    :rtype: renderer.misc_types.coord.Coord
+    :param float coord: The coordinate to be rotated
+    :param float pivot: The pivot to be rotated about
+    :param float theta: The angle to rotate in radians
     """
     coord_vec = vector.obj(x=coord.x, y=coord.y)
     pivot_vec = vector.obj(x=pivot.x, y=pivot.y)

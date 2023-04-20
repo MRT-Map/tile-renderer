@@ -40,11 +40,6 @@ class TextObject:
     def img_to_uuid(img: Image.Image, config: Config) -> UUID:
         """
         Puts the image into the temporary directory and returns the UUID corresponding to the image
-
-        :param img: The image to save
-        :param config: The configuration
-
-        :return: The UUID
         """
         u = uuid.uuid4()
         path = text_object_path(config, u)
@@ -56,10 +51,6 @@ class TextObject:
         """
         Retrieves an image object, given its corresponding UUID
 
-        :param u: The UUID.
-        :param config: The configuration
-
-        :return: The image object
         :raises FileNotFoundError: if the UUID is invalid
         """
         path = text_object_path(config, u)
@@ -69,9 +60,6 @@ class TextObject:
     def remove_img(u: UUID, config: Config) -> None:
         """
         Remove the image from the temporary directory
-
-        :param u: The UUID.
-        :param config: The configuration
 
         :raises FileNotFoundError: If the UUID is invalid
         """
@@ -136,6 +124,7 @@ class TextObject:
         return to
 
     def to_tiles(self, zoom: ZoomParams) -> list[TileCoord]:
+        """Find the tiles that the text will be rendered in"""
         tiles = []
         for bound in self.bounds:
             tiles.extend(

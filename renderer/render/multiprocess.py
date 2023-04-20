@@ -36,29 +36,29 @@ class ProgressHandler(Generic[_I]):
         """If this queue has something, a new task is needed"""
 
     def add(self, id_: _I) -> None:
-        """Add a TileCoord to the queue"""
+        """Bump the progress bar up by 1"""
         self.queue.put_nowait(id_)
 
     def get(self) -> _I | None:
-        """Get the first TileCoord in the queue"""
+        """Returns an ``_I`` if the progress bar has yet to be bumped"""
         try:
             return self.queue.get_nowait()
         except Empty:
             return None
 
     def _complete(self, id_: _I) -> None:
-        """Complete a TileCoord"""
+        """Complete one task"""
         self.completed.put_nowait(id_)
 
     def get_complete(self) -> _I | None:
-        """Get the first completed TileCoord in the queue"""
+        """Returns an ``_I`` if there is a completed task in the queue"""
         try:
             return self.completed.get_nowait()
         except Empty:
             return None
 
     def request_new_task(self) -> None:
-        """Request a new task to be processed"""
+        """Request a new task"""
         self.new_tasks_needed.put_nowait(None)
 
     def needs_new_task(self) -> bool:
@@ -80,7 +80,7 @@ def task_spawner(
     futures: list[ObjectRef[list[_R] | None]],
     cursor: int,
 ) -> list[ObjectRef[list[_R] | None]]:
-    """The task spawner used for part 1"""
+    """The task spawner used for multiprocessing"""
     while cursor < len(chunks):
         if ray.get(ph.needs_new_task.remote()):
             output: ObjectRef[list[_R] | None]
@@ -92,9 +92,14 @@ def task_spawner(
 
 @dataclass(frozen=True, init=True, unsafe_hash=True)
 class MultiprocessConfig:
+    """The configuration for each multiprocessing job"""
+
     batch_size: int = psutil.cpu_count()
+    """How many processes to run at once running the task"""
     chunk_size: int = 8
+    """The number of tasks to do at one spawn"""
     serial: bool = False
+    """Whether to run the tasks serially instead"""
 
 
 def multiprocess(
@@ -105,6 +110,17 @@ def multiprocess(
     num_operations: int | None = None,
     mp_config: MultiprocessConfig = MultiprocessConfig(),  # noqa: B008
 ) -> list[_R]:
+    """Multiprocess a task
+
+    :param iterated: The objects to iter over for each task
+    :param const_data: The object that will be the same on all tasks
+    :param f: The function to be run with the multiprocessor, that takes in an (optional) ProgressHandler,
+        an item of ``iterated`` and ``const_data`` and returns a result
+    :param msg: The message to show for the progress bar
+    :param num_operations: The number of operations
+        (or the total number of ProgressHandler.add() calls during the multiprocess job)
+    :param mp_config: The configuration for the multiprocess job
+    """
     if mp_config.serial:
         out_ = []
         for i_ in track(iterated, msg):
@@ -139,6 +155,7 @@ def multiprocess(
                 log.error(f"Error in ray task: {e!r}")
                 log.error(traceback.format_exc())
             if p:
+                # noinspection PyProtectedMember
                 p._complete.remote(j)
         if p:
             p.request_new_task.remote()
@@ -151,7 +168,9 @@ def multiprocess(
     futures = [
         ray.remote(new_f).remote(ph, chunk, const_data)
         for chunk in track(
-            chunks[: mp_config.batch_size], "Spawning initial tasks", transient=True
+            chunks[: mp_config.batch_size],
+            "Spawning initial tasks",
+            transient=True,
         )
     ]
     cursor = mp_config.batch_size

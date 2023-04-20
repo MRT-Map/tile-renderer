@@ -12,9 +12,6 @@ if TYPE_CHECKING:
 def wip_tiles_dir(config: Config) -> Path:
     """
     Retrieve the directory for half-complete tiles
-
-    :param config: The configuration
-    :return: The path of the directory
     """
     p = config.temp_dir / config.export_id / "wip_tiles"
     p.mkdir(parents=True, exist_ok=True)
@@ -24,10 +21,6 @@ def wip_tiles_dir(config: Config) -> Path:
 def part_dir(config: Config, part: int) -> Path:
     """
     Retrieve the directory for data from each of the parts
-
-    :param config: The configuration
-    :param part: The part number (0, 1, 2)
-    :return: The path of the directory
     """
     p = config.temp_dir / config.export_id / str(part)
     p.mkdir(parents=True, exist_ok=True)
@@ -37,11 +30,6 @@ def part_dir(config: Config, part: int) -> Path:
 def text_object_path(config: Config, id_: UUID) -> Path:
     """
     Retrieve the directory for a text object
-
-    :param config: The configuration.
-    :param id_: The UUID of the text object
-
-    :return: The path of the directory
     """
     dir1 = id_.hex[0:2]
     dir2 = id_.hex[2:4]
