@@ -21,6 +21,6 @@ Leaflet.js streetmap tile renderer, made by 7d
 
 **Documentation: https://tile-renderer.readthedocs.io/en/latest/**
 
-## Current version: v4.0.0
+## Current version: v4.0.1
 
 * **Past changelogs can be found in https://tile-renderer.readthedocs.io/en/latest/changelog.html**

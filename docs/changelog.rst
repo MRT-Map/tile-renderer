@@ -1,5 +1,9 @@
 Changelog
 =========
+* **v4.0.1 (5/10/23)**
+
+  * upgrade dependencies
+
 * **v4.0.0 (20/4/23)**
 
   * chang antialias method
