@@ -22,6 +22,8 @@ classifiers = [
 ]
 dependencies = [
   "click",
+  "msgspec",
+  "shapely",
 ]
 
 [project.urls]

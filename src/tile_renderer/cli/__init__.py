@@ -1,4 +1,3 @@
-
 import click
 
 from tile_renderer.__about__ import __version__
