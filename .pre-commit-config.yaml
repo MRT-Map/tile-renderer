@@ -1,0 +1,9 @@
+repos:
+  - repo: local
+    hooks:
+      - id: hatch-ruff
+        name: hatch-ruff
+        language: system
+        entry: hatch fmt -f
+        pass_filenames: false
+        verbose: true
