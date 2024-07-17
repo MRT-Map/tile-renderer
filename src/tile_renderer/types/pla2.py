@@ -77,6 +77,7 @@ _json_encoder = msgspec.json.Encoder()
 _msgpack_encoder = msgspec.msgpack.Encoder()
 
 
+@dataclass_transform()
 class Pla2File(Struct):
     """Represents a PLA2 file"""
 
