@@ -24,6 +24,7 @@ dependencies = [
   "click",
   "msgspec",
   "shapely",
+  "requests",
 ]
 
 [project.urls]

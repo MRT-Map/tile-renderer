@@ -15,7 +15,6 @@ if TYPE_CHECKING:
 @dataclass_transform()
 class Skin(Struct):
     name: str
-    tile_size: int
     fonts: dict[Literal["", "i", "b", "bi"], list[bytes]]
     background: Colour
     types: list[ComponentType]
@@ -24,7 +23,6 @@ class Skin(Struct):
     def encode(self) -> _SerSkin:
         return _SerSkin(
             name=self.name,
-            tile_size=self.tile_size,
             fonts=self.fonts,
             background=str(self.background),
             types=[t.encode() for t in self.types],
@@ -81,7 +79,6 @@ class _SerSkin(Skin):
     def decode(self) -> Skin:
         return Skin(
             name=self.name,
-            tile_size=self.tile_size,
             fonts=self.fonts,
             background=Colour.from_hex(self.background),
             types=[t.decode() for t in self.types],
@@ -89,38 +86,32 @@ class _SerSkin(Skin):
         )
 
 
-_json_decoder = msgspec.json.Decoder(_SerSkin)
-_msgpack_decoder = msgspec.msgpack.Decoder(_SerSkin)
-_json_encoder = msgspec.json.Encoder()
-_msgpack_encoder = msgspec.msgpack.Encoder()
-
-
 @dataclass_transform()
 class ComponentType(Struct):
     name: str
-    tags: list[str] = field(default_factory=list)
     shape: Literal["point", "line", "area"]
-    styles: list[list[ComponentStyle]]
+    styles: dict[str, list[ComponentStyle]]
+    tags: list[str] = field(default_factory=list)
 
     def encode(self) -> _SerComponentType:
         return _SerComponentType(
             name=self.name,
             tags=self.tags,
             shape=self.shape,
-            styles=[[s.encode() for s in ss] for ss in self.styles],
+            styles={k: [s.encode() for s in v] for k, v in self.styles.items()},
         )
 
 
 @dataclass_transform()
 class _SerComponentType(ComponentType):
-    styles: list[list[_SerComponentStyle]]
+    styles: dict[str, list[_SerComponentStyle]]
 
     def decode(self) -> ComponentType:
         return ComponentType(
             name=self.name,
             tags=self.tags,
             shape=self.shape,
-            styles=[[s.decode() for s in ss] for ss in self.styles],
+            styles={k: [s.decode() for s in v] for k, v in self.styles.items()},
         )
 
 
@@ -152,9 +143,9 @@ type _SerComponentStyle = (
 
 @dataclass_transform()
 class AreaBorderText(Struct):
+    size: int
     colour: Colour | None = None
     offset: int = 0
-    size: int
 
     def encode(self) -> _SerAreaBorderText:
         return _SerAreaBorderText(
@@ -163,7 +154,7 @@ class AreaBorderText(Struct):
 
 
 @dataclass_transform()
-class _SerAreaBorderText(AreaBorderText, tag_field="ty", tag=True):
+class _SerAreaBorderText(AreaBorderText, tag_field="ty", tag="areaBorderText"):
     colour: str | None = None
 
     def decode(self) -> AreaBorderText:
@@ -174,9 +165,9 @@ class _SerAreaBorderText(AreaBorderText, tag_field="ty", tag=True):
 
 @dataclass_transform()
 class AreaCentreText(Struct):
+    size: int
     colour: Colour | None = None
     offset: Vector[float] = Vector(0.0, 0.0)
-    size: int
 
     def encode(self) -> _SerAreaCentreText:
         return _SerAreaCentreText(
@@ -185,7 +176,7 @@ class AreaCentreText(Struct):
 
 
 @dataclass_transform()
-class _SerAreaCentreText(AreaCentreText, tag_field="ty", tag=True):
+class _SerAreaCentreText(AreaCentreText, tag_field="ty", tag="areaCentreText"):
     colour: str | None = None
     offset: tuple[float, float] = (0.0, 0.0)
 
@@ -212,7 +203,7 @@ class AreaFill(Struct):
 
 
 @dataclass_transform()
-class _SerAreaFill(AreaFill, tag_field="ty", tag=True):
+class _SerAreaFill(AreaFill, tag_field="ty", tag="areaFill"):
     colour: str | None = None
     outline: str | None = None
 
@@ -233,7 +224,7 @@ class AreaCentreImage(Struct):
 
 
 @dataclass_transform()
-class _SerAreaCentreImage(AreaCentreImage, tag_field="ty", tag=True):
+class _SerAreaCentreImage(AreaCentreImage, tag_field="ty", tag="areaCentreImage"):
     offset: tuple[float, float] = (0.0, 0.0)
 
     def decode(self) -> AreaCentreImage:
@@ -242,9 +233,9 @@ class _SerAreaCentreImage(AreaCentreImage, tag_field="ty", tag=True):
 
 @dataclass_transform()
 class LineText(Struct):
+    size: int
     arrow_colour: Colour | None = None
     colour: Colour | None = None
-    size: int
     offset: int = 0
 
     def encode(self) -> _SerLineText:
@@ -257,7 +248,7 @@ class LineText(Struct):
 
 
 @dataclass_transform()
-class _SerLineText(LineText, tag_field="ty", tag=True):
+class _SerLineText(LineText, tag_field="ty", tag="lineText"):
     arrow_colour: str | None = None
     colour: str | None = None
 
@@ -272,9 +263,9 @@ class _SerLineText(LineText, tag_field="ty", tag=True):
 
 @dataclass_transform()
 class LineFore(Struct):
-    colour: Colour | None = None
     width: int
-    dash: list[int]
+    dash: list[int] | None = None
+    colour: Colour | None = None
 
     def encode(self) -> _SerLineFore:
         return _SerLineFore(
@@ -285,7 +276,7 @@ class LineFore(Struct):
 
 
 @dataclass_transform()
-class _SerLineFore(LineFore, tag_field="ty", tag=True):
+class _SerLineFore(LineFore, tag_field="ty", tag="lineFore"):
     colour: str | None = None
 
     def decode(self) -> LineFore:
@@ -302,16 +293,16 @@ class LineBack(LineFore):
 
 
 @dataclass_transform()
-class _SerLineBack(_SerLineFore, tag_field="ty", tag=True):
+class _SerLineBack(_SerLineFore, tag_field="ty", tag="lineBack"):
     pass
 
 
 @dataclass_transform()
 class PointText(Struct):
-    colour: Colour | None = None
-    offset: Vector[float] = Vector(0.0, 0.0)
     anchor: str
     size: int
+    colour: Colour | None = None
+    offset: Vector[float] = Vector(0.0, 0.0)
 
     def encode(self) -> _SerPointText:
         return _SerPointText(
@@ -323,7 +314,7 @@ class PointText(Struct):
 
 
 @dataclass_transform()
-class _SerPointText(PointText, tag_field="ty", tag=True):
+class _SerPointText(PointText, tag_field="ty", tag="pointText"):
     colour: str | None = None
     offset: tuple[float, float] = (0.0, 0.0)
 
@@ -338,11 +329,11 @@ class _SerPointText(PointText, tag_field="ty", tag=True):
 
 @dataclass_transform()
 class PointSquare(Struct):
+    size: int
+    width: int
     colour: Colour | None = None
     outline: Colour | None = None
     border_radius: int = 0
-    size: int
-    width: int
 
     def encode(self) -> _SerPointSquare:
         return _SerPointSquare(
@@ -352,7 +343,7 @@ class PointSquare(Struct):
 
 
 @dataclass_transform()
-class _SerPointSquare(PointSquare, tag_field="ty", tag=True):
+class _SerPointSquare(PointSquare, tag_field="ty", tag="pointSquare"):
     colour: str | None = None
     outline: str | None = None
 
@@ -369,5 +360,11 @@ class PointImage(AreaCentreImage):
 
 
 @dataclass_transform()
-class _SerPointImage(_SerAreaCentreImage, tag_field="ty", tag=True):
+class _SerPointImage(_SerAreaCentreImage, tag_field="ty", tag="pointImage"):
     pass
+
+
+_json_decoder = msgspec.json.Decoder(_SerSkin)
+_msgpack_decoder = msgspec.msgpack.Decoder(_SerSkin)
+_json_encoder = msgspec.json.Encoder()
+_msgpack_encoder = msgspec.msgpack.Encoder()

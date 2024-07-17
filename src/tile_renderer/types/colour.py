@@ -1,5 +1,7 @@
 import colorsys
 import dataclasses
+from copy import copy
+from typing import Self
 
 
 @dataclasses.dataclass
@@ -75,3 +77,13 @@ class Colour:
         self.h = h * 360
         self.l = l * 100
         self.s = s * 100
+
+    def darkened(self, by: float = 10.0) -> Self:
+        s = copy(self)
+        s.l -= by
+        return s
+
+    def brightened(self, by: float = 10.0) -> Self:
+        s = copy(self)
+        s.l += by
+        return s
