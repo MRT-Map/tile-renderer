@@ -20,11 +20,11 @@ class Colour:
             g = (h >> 8) & 0xFF
             b = h & 0xFF
         elif h.startswith("#"):
-            if len(h) == 4:
+            if len(h) == 4:  # noqa: PLR2004
                 r = int(h[1] * 2, 16)
                 g = int(h[2] * 2, 16)
                 b = int(h[3] * 2, 16)
-            elif len(h) == 7:
+            elif len(h) == 7:  # noqa: PLR2004
                 r = int(h[1:3], 16)
                 g = int(h[3:5], 16)
                 b = int(h[5:7], 16)

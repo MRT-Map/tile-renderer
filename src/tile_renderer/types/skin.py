@@ -1,17 +1,15 @@
 from __future__ import annotations
 
-from typing import Literal, dataclass_transform
+from typing import TYPE_CHECKING, Literal, Self, dataclass_transform
 
+import msgspec
 from msgspec import Struct, field
 
 from tile_renderer.types.colour import Colour
 from tile_renderer.types.coord import Vector
 
-
-_json_decoder = msgspec.json.Decoder(_SerSkin)
-_msgpack_decoder = msgspec.msgpack.Decoder(_SerSkin)
-_json_encoder = msgspec.json.Encoder()
-_msgpack_encoder = msgspec.msgpack.Encoder()
+if TYPE_CHECKING:
+    from pathlib import Path
 
 
 @dataclass_transform()
@@ -91,6 +89,12 @@ class _SerSkin(Skin):
         )
 
 
+_json_decoder = msgspec.json.Decoder(_SerSkin)
+_msgpack_decoder = msgspec.msgpack.Decoder(_SerSkin)
+_json_encoder = msgspec.json.Encoder()
+_msgpack_encoder = msgspec.msgpack.Encoder()
+
+
 @dataclass_transform()
 class ComponentType(Struct):
     name: str
@@ -106,6 +110,7 @@ class ComponentType(Struct):
             styles=[[s.encode() for s in ss] for ss in self.styles],
         )
 
+
 @dataclass_transform()
 class _SerComponentType(ComponentType):
     styles: list[list[_SerComponentStyle]]
@@ -118,8 +123,32 @@ class _SerComponentType(ComponentType):
             styles=[[s.decode() for s in ss] for ss in self.styles],
         )
 
-type ComponentStyle = AreaBorderText | AreaCentreText | AreaFill | AreaCentreImage | LineText | LineFore | LineBack | PointText | PointSqurare | PointImage
-type _SerComponentStyle = _SerAreaBorderText | _SerAreaCentreText | _SerAreaFill | _SerAreaCentreImage | _SerLineText | _SerLineFore | _SerLineBack | _SerPointText | _SerPointSqurare | _SerPointImage
+
+type ComponentStyle = (
+    AreaBorderText
+    | AreaCentreText
+    | AreaFill
+    | AreaCentreImage
+    | LineText
+    | LineFore
+    | LineBack
+    | PointText
+    | PointSquare
+    | PointImage
+)
+type _SerComponentStyle = (
+    _SerAreaBorderText
+    | _SerAreaCentreText
+    | _SerAreaFill
+    | _SerAreaCentreImage
+    | _SerLineText
+    | _SerLineFore
+    | _SerLineBack
+    | _SerPointText
+    | _SerPointSquare
+    | _SerPointImage
+)
+
 
 @dataclass_transform()
 class AreaBorderText(Struct):
@@ -172,8 +201,8 @@ class _SerAreaCentreText(AreaCentreText, tag_field="ty", tag=True):
 class AreaFill(Struct):
     colour: Colour | None = None
     outline: Colour | None = None
-    # stripe: tuple[int, int, int] | None = None
 
+    # stripe: tuple[int, int, int] | None = None
 
     def encode(self) -> _SerAreaFill:
         return _SerAreaFill(
@@ -210,6 +239,7 @@ class _SerAreaCentreImage(AreaCentreImage, tag_field="ty", tag=True):
     def decode(self) -> AreaCentreImage:
         return AreaCentreImage(image=self.image, offset=Vector.decode(self.offset))
 
+
 @dataclass_transform()
 class LineText(Struct):
     arrow_colour: Colour | None = None
@@ -222,8 +252,9 @@ class LineText(Struct):
             arrow_colour=None if self.arrow_colour is None else str(self.arrow_colour),
             colour=None if self.colour is None else str(self.colour),
             size=self.size,
-            offset=self.offset
+            offset=self.offset,
         )
+
 
 @dataclass_transform()
 class _SerLineText(LineText, tag_field="ty", tag=True):
@@ -235,8 +266,9 @@ class _SerLineText(LineText, tag_field="ty", tag=True):
             arrow_colour=None if self.arrow_colour is None else Colour.from_hex(self.arrow_colour),
             colour=None if self.colour is None else Colour.from_hex(self.colour),
             size=self.size,
-            offset=self.offset
+            offset=self.offset,
         )
+
 
 @dataclass_transform()
 class LineFore(Struct):
@@ -251,6 +283,7 @@ class LineFore(Struct):
             dash=self.dash,
         )
 
+
 @dataclass_transform()
 class _SerLineFore(LineFore, tag_field="ty", tag=True):
     colour: str | None = None
@@ -262,13 +295,16 @@ class _SerLineFore(LineFore, tag_field="ty", tag=True):
             dash=self.dash,
         )
 
+
 @dataclass_transform()
 class LineBack(LineFore):
     pass
 
+
 @dataclass_transform()
-class _SerLineBack(_SerLineBack, tag_field="ty", tag=True):
+class _SerLineBack(_SerLineFore, tag_field="ty", tag=True):
     pass
+
 
 @dataclass_transform()
 class PointText(Struct):
@@ -284,6 +320,7 @@ class PointText(Struct):
             anchor=self.anchor,
             size=self.size,
         )
+
 
 @dataclass_transform()
 class _SerPointText(PointText, tag_field="ty", tag=True):
@@ -309,9 +346,10 @@ class PointSquare(Struct):
 
     def encode(self) -> _SerPointSquare:
         return _SerPointSquare(
-             colour=None if self.colour is None else str(self.colour),
-             outline=None if self.outline is None else str(self.outline),
+            colour=None if self.colour is None else str(self.colour),
+            outline=None if self.outline is None else str(self.outline),
         )
+
 
 @dataclass_transform()
 class _SerPointSquare(PointSquare, tag_field="ty", tag=True):
@@ -324,9 +362,11 @@ class _SerPointSquare(PointSquare, tag_field="ty", tag=True):
             outline=None if self.outline is None else Colour.from_hex(self.outline),
         )
 
+
 @dataclass_transform()
 class PointImage(AreaCentreImage):
     pass
+
 
 @dataclass_transform()
 class _SerPointImage(_SerAreaCentreImage, tag_field="ty", tag=True):

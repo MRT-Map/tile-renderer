@@ -1,14 +1,16 @@
 from __future__ import annotations
 
 from collections import Counter
-from collections.abc import Iterator
-from pathlib import Path
-from typing import Self, dataclass_transform
+from typing import TYPE_CHECKING, Self, dataclass_transform
 
 import msgspec
 from msgspec import Struct
 
 from tile_renderer.types.coord import Line
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
+    from pathlib import Path
 
 
 @dataclass_transform()
@@ -140,15 +142,16 @@ class Pla2File(Struct):
 
         :raises ValueError: If a duplicated ID is found
         """
-        count = {k: v for k, v in Counter(component.fid for component in comps).items() if v >= 2}
+        count = {k: v for k, v in Counter(component.fid for component in comps).items() if v >= 2}  # noqa: PLR2004
         if count:
+            msg = f"IDs {', '.join(f'`{id_}`' for id_ in count)} are duplicated"
             raise ValueError(
-                f"IDs {', '.join(f'`{id_}`' for id_ in count)} are duplicated",
+                msg,
             )
         return comps
 
     def __getitem__(self, id_: str) -> Component:
-        return [comp for comp in self.components if comp.fid == id_][0]
+        return next(comp for comp in self.components if comp.fid == id_)
 
     def __delitem__(self, id_: str) -> None:
         self.components.remove(self[id_])

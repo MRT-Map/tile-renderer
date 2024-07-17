@@ -2,12 +2,13 @@ from __future__ import annotations
 
 import dataclasses
 import functools
-from collections.abc import Iterator
 from copy import copy
-from typing import Self, Tuple, Generator
+from typing import TYPE_CHECKING, Self
 
-import methodtools
-from shapely import Point, LineString, LinearRing
+from shapely import LinearRing, LineString, Point
+
+if TYPE_CHECKING:
+    from collections.abc import Iterator
 
 
 @dataclasses.dataclass
