@@ -8,8 +8,8 @@ from tile_renderer.types.colour import Colour
 from tile_renderer.types.coord import Vector
 
 
-_json_decoder = msgspec.json.Decoder(list[_SerSkin])
-_msgpack_decoder = msgspec.msgpack.Decoder(list[_SerSkin])
+_json_decoder = msgspec.json.Decoder(_SerSkin)
+_msgpack_decoder = msgspec.msgpack.Decoder(_SerSkin)
 _json_encoder = msgspec.json.Encoder()
 _msgpack_encoder = msgspec.msgpack.Encoder()
 
@@ -21,13 +21,16 @@ class Skin(Struct):
     fonts: dict[Literal["", "i", "b", "bi"], list[bytes]]
     background: Colour
     types: list[ComponentType]
+    licence: str = ""
 
     def encode(self) -> _SerSkin:
         return _SerSkin(
+            name=self.name,
             tile_size=self.tile_size,
             fonts=self.fonts,
             background=str(self.background),
             types=[t.encode() for t in self.types],
+            licence=self.licence,
         )
 
     @classmethod
@@ -79,10 +82,12 @@ class _SerSkin(Skin):
 
     def decode(self) -> Skin:
         return Skin(
+            name=self.name,
             tile_size=self.tile_size,
             fonts=self.fonts,
             background=Colour.from_hex(self.background),
             types=[t.decode() for t in self.types],
+            licence=self.licence,
         )
 
 
