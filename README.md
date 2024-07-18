@@ -9,7 +9,8 @@
 
 ![GitHub code size](https://img.shields.io/github/languages/code-size/MRT-Map/tile-renderer)
 ![GitHub repo size](https://img.shields.io/github/repo-size/MRT-Map/tile-renderer)
-![GitHub last commit](https://img.shields.io/github/last-commit/MRT-Map/tile-renderer)
+![GitHub last commit (branch)](https://img.shields.io/github/last-commit/mrt-map/tile-renderer/v5)
+![GitHub commits since latest release (branch)](https://img.shields.io/github/commits-since/mrt-map/tile-renderer/latest/dev?include_prereleases)
 ![GitHub Release Date](https://img.shields.io/github/release-date/MRT-Map/tile-renderer)
 ![Libraries.io dependency status for GitHub repo](https://img.shields.io/librariesio/github/MRT-Map/tile-renderer)
 
