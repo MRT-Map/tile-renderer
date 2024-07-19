@@ -106,7 +106,7 @@ class Pla2File(Struct):
             b = f.read()
         return cls(
             namespace=file.stem.split(".")[0],
-            components=cls.validate([c.decode() for c in _json_decoder.decode(b)]),
+            components=[c.decode() for c in _json_decoder.decode(b)],
         )
 
     @classmethod
@@ -118,7 +118,7 @@ class Pla2File(Struct):
             b = f.read()
         return cls(
             namespace=file.stem.split(".")[0],
-            components=cls.validate([c.decode() for c in _msgpack_decoder.decode(b)]),
+            components=[c.decode() for c in _msgpack_decoder.decode(b)],
         )
 
     def save_json(self, directory: Path) -> None:
@@ -135,21 +135,14 @@ class Pla2File(Struct):
         with (directory / f"{self.namespace}.pla2.msgpack").open("wb+") as f:
             f.write(_msgpack_encoder.encode([c.encode() for c in self.components]))
 
-    @staticmethod
-    def validate(comps: list[Component]) -> list[Component]:
-        """
-        Check for duplicate IDs in a list of components and returns the same list of components if all is well
-
-        :raises ValueError: If a duplicated ID is found
-        """
-        count = {k: v for k, v in Counter(component.fid for component in comps).items() if v >= 2}  # noqa: PLR2004
+    def __post_init__(self):
+        count = {k: v for k, v in Counter(component.fid for component in self.components).items() if v >= 2}  # noqa: PLR2004
         if count:
             msg = f"IDs {', '.join(f'`{id_}`' for id_ in count)} are duplicated"
             raise ValueError(
                 msg,
             )
-        return comps
-
+    
     def __getitem__(self, id_: str) -> Component:
         return next(comp for comp in self.components if comp.fid == id_)
 

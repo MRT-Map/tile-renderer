@@ -36,6 +36,17 @@ class Colour:
             raise ValueError
         return cls.from_rgb(r, g, b)
 
+    def __post_init__(self):
+        if self.h < 0 or self.h > 360:
+            msg = f"h must be between 0 and 360, got {self.h}"
+            raise ValueError(msg)
+        if self.s < 0 or self.s > 100:
+            msg = f"s must be between 0 and 100, got {self.s}"
+            raise ValueError(msg)
+        if self.l < 0 or self.l > 100:
+            msg = f"l must be between 0 and 100, got {self.l}"
+            raise ValueError(msg)
+
     def __str__(self) -> str:
         r, g, b = self.rgb
         return "#" + hex(round(r))[2:].zfill(2) + hex(round(r))[2:].zfill(2) + hex(round(r))[2:].zfill(2)
@@ -51,6 +62,9 @@ class Colour:
 
     @r.setter
     def r(self, val: float):
+        if val < 0 or val > 255:
+            msg = f"r must be between 0 and 255, got {val}"
+            raise ValueError(msg)
         h, l, s = colorsys.rgb_to_hls(val / 256, self.g / 256, self.b / 256)
         self.h = h * 360
         self.l = l * 100
@@ -62,6 +76,9 @@ class Colour:
 
     @g.setter
     def g(self, val: float):
+        if val < 0 or val > 255:
+            msg = f"g must be between 0 and 255, got {val}"
+            raise ValueError(msg)
         h, l, s = colorsys.rgb_to_hls(self.r / 256, val / 256, self.b / 256)
         self.h = h * 360
         self.l = l * 100
@@ -73,6 +90,9 @@ class Colour:
 
     @b.setter
     def b(self, val: float):
+        if val < 0 or val > 255:
+            msg = f"b must be between 0 and 255, got {val}"
+            raise ValueError(msg)
         h, l, s = colorsys.rgb_to_hls(self.r / 256, self.g / 256, val / 256)
         self.h = h * 360
         self.l = l * 100
@@ -81,9 +101,13 @@ class Colour:
     def darkened(self, by: float = 10.0) -> Self:
         s = copy(self)
         s.l -= by
+        if s.l < 0:
+            s.l = 0
         return s
 
     def brightened(self, by: float = 10.0) -> Self:
         s = copy(self)
         s.l += by
+        if s.l > 100:
+            s.l = 100
         return s
