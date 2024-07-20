@@ -228,7 +228,7 @@ def main():
             },
         )
     )
-
+    
     types.append(
         ComponentType(
             name="plaza",
@@ -237,12 +237,65 @@ def main():
                 "0-4": [
                     AreaFill(colour=Colour.from_hex(0xCCCCFF), outline=Colour.from_hex(0xCCCCFF).darkened()),
                     AreaCentreText(colour=Colour.from_hex(0xCCCCFF).darkened(), size=15),
+                ],
+                "5-6": [
+                    AreaFill(colour=Colour.from_hex(0xCCCCFF), outline=Colour.from_hex(0xCCCCFF).darkened()),
                 ]
             },
         )
     )
 
-    # TODO more
+    for name, col in (
+        ("building_underground", BUILDING),
+        ("cityHall_underground", Colour.from_hex(0xffaaaa)),
+        ("transportBuilding_underground", TRANSPORT_BUILDING),
+    ):
+        types.append(
+            ComponentType(
+                name="building_underground",
+                shape="area",
+                styles={
+                    "0-1": [
+                        AreaFill(colour=col.brightened(), outline=col),
+                        AreaCentreText(colour=col.darkened(), size=15),
+                    ],
+                    "2-3": [
+                        AreaFill(colour=col.brightened(), outline=col),
+                    ]
+                },
+            )
+        )
+
+    types.append(
+        ComponentType(
+            name="park",
+            shape="area",
+            styles={
+                "0-2": [
+                    AreaFill(colour=Colour.from_hex(0x669900), outline=Colour.from_hex(0x669900).darkened()),
+                    AreaCentreText(colour=Colour.from_hex(0x669900).darkened(), size=20),
+                ],
+                "3-6": [
+                    AreaFill(colour=Colour.from_hex(0x669900), outline=Colour.from_hex(0x669900).darkened()),
+                ]
+            },
+        )
+    )
+
+    types.append(
+        ComponentType(
+            name="pathwayUnderground",
+            shape="line",
+            tags=["road"],
+            styles={
+                "0-4": [
+                    LineBack(colour=Colour.from_hex(0xeeeeee), width=8),
+                    LineFore(colour=Colour.from_hex(0x66ff66), width=4, dash=[16, 16]),
+                    LineText(colour=Colour.from_hex(0xaaaaaa), arrow_colour=Colour.from_hex(0xeeeeee), size=16, offset=10)
+                ]
+            },
+        )
+    )
 
     for name, col, width, small_width in (
         ("localHighwaySlip_underground", LOCAL_HIGHWAY, 20, 1),
