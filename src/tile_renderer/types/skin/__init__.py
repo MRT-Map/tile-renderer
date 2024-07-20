@@ -1,5 +1,6 @@
 from __future__ import annotations
 
+import base64
 from typing import TYPE_CHECKING, Literal, Self, dataclass_transform
 
 import msgspec
@@ -8,8 +9,7 @@ from msgspec import Struct, field
 from tile_renderer.types.colour import Colour
 from tile_renderer.types.coord import Vector
 
-if TYPE_CHECKING:
-    from pathlib import Path
+from pathlib import Path
 
 
 @dataclass_transform()
@@ -28,6 +28,10 @@ class Skin(Struct):
             types=[t.encode() for t in self.types],
             licence=self.licence,
         )
+
+    @classmethod
+    def default(cls) -> Self:
+        return cls.from_json(Path(__file__).parent / "default.skin.json")
 
     @classmethod
     def from_file(cls, file: Path) -> Self:
@@ -70,6 +74,12 @@ class Skin(Struct):
         with (directory / f"{self.name}.skin.msgpack").open("wb+") as f:
             f.write(_msgpack_encoder.encode(self.encode()))
 
+    def get_type_by_name(self, name: str) -> ComponentType | None:
+        return next((t for t in self.types if t.name == name), None)
+
+    def get_order(self, name: str) -> int | None:
+        return next((i for i, t in enumerate(self.types) if t.name == name), None)
+
 
 @dataclass_transform()
 class _SerSkin(Skin):
@@ -100,6 +110,15 @@ class ComponentType(Struct):
             shape=self.shape,
             styles={k: [s.encode() for s in v] for k, v in self.styles.items()},
         )
+
+    def get_styling_by_zoom(self, zoom: int) -> list[ComponentStyle] | None:
+        for z, styling in self.styles.items():
+            min_z = z.split("-")[0]
+            min_z = 0 if min_z == "" else int(min_z)
+            max_z = z.split("-")[-1]
+            max_z = float("inf") if max_z == "" else int(max_z)
+            if min_z <= zoom <= max_z:
+                return styling
 
 
 @dataclass_transform()

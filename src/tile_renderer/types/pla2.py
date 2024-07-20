@@ -142,7 +142,7 @@ class Pla2File(Struct):
             raise ValueError(
                 msg,
             )
-    
+
     def __getitem__(self, id_: str) -> Component:
         return next(comp for comp in self.components if comp.fid == id_)
 
