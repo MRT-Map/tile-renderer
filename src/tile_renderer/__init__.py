@@ -1,29 +1,26 @@
 import functools
+import subprocess
 from copy import copy
 from pathlib import Path
 
 import svg
 
+from tile_renderer.types.coord import TileCoord, Coord
 from tile_renderer.types.pla2 import Component
 from tile_renderer.types.skin import ComponentStyle, ComponentType, LineBack, LineFore, Skin
 
 
-def render(components: list[Component], skin: Skin, zoom_levels: set[int], max_zoom_range: int):
+def render(
+    components: list[Component], skin: Skin, zoom_levels: set[int], max_zoom_range: int, offset: Coord = Coord(0, 0)
+) -> dict[TileCoord, bytes]:
+    images = {}
     for zoom in zoom_levels:
         styling = _get_styling(components, skin, zoom)
         styling = _sort_styling(styling, skin)
-        doc = svg.SVG(elements=[s.render(skin, c, zoom) for c, ct, s, i in styling])
-        tiles = Component.tiles(components, zoom, max_zoom_range)
-        for tile in tiles:
-            doc2 = copy(doc)
-            bounds = tile.bounds(max_zoom_range)
-            doc2.viewBox = svg.ViewBoxSpec(
-                min_x=bounds.x_min,
-                min_y=bounds.y_min,
-                width=bounds.x_max - bounds.x_min,
-                height=bounds.y_max - bounds.y_min,
-            )
-            Path("./out.svg").write_text(str(doc2))
+        doc = svg.SVG(elements=[s.render(c, zoom, offset) for c, ct, s, i in styling])
+        for tile in Component.tiles(components, zoom, max_zoom_range):
+            images[tile] = _export_tile(doc, tile, max_zoom_range, skin)
+    return images
 
 
 def _get_styling(
@@ -68,3 +65,32 @@ def _sort_styling(
         return i1 - i2
 
     return sorted(styling, key=functools.cmp_to_key(sort_fn))
+
+
+def _export_tile(doc: svg.SVG, tile: TileCoord, max_zoom_range: int, skin: Skin) -> bytes:
+    doc2 = copy(doc)
+    bounds = tile.bounds(max_zoom_range)
+    doc2.viewBox = svg.ViewBoxSpec(
+        min_x=bounds.x_min,
+        min_y=bounds.y_min,
+        width=bounds.x_max - bounds.x_min,
+        height=bounds.y_max - bounds.y_min,
+    )
+    Path("./out.svg").write_text(str(doc2))
+    p = subprocess.Popen(
+        [
+            "resvg",
+            "-",
+            "/dev/stdout",
+            "--resources-dir",
+            Path(__file__).parent,
+            "--background",
+            str(skin.background),
+            "--font-family",
+            "Noto Sans",
+        ],
+        stdout=subprocess.PIPE,
+        stdin=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    return p.communicate(input=str(doc2).encode("utf-8"))[0]

@@ -98,14 +98,14 @@ class Colour:
         self.l = l * 100
         self.s = s * 100
 
-    def darkened(self, by: float = 10.0) -> Self:
+    def darkened(self, by: float = 30.0) -> Self:
         s = copy(self)
         s.l -= by
         if s.l < 0:
             s.l = 0
         return s
 
-    def brightened(self, by: float = 10.0) -> Self:
+    def brightened(self, by: float = 30.0) -> Self:
         s = copy(self)
         s.l += by
         if s.l > 100:  # noqa: PLR2004

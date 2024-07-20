@@ -7,7 +7,7 @@ import msgspec
 from msgspec import Struct, field
 
 from tile_renderer.types.colour import Colour
-from tile_renderer.types.coord import Vector
+from tile_renderer.types.coord import Vector, Coord
 
 if TYPE_CHECKING:
     import svg
@@ -175,10 +175,10 @@ class AreaBorderText(Struct):
             colour=None if self.colour is None else str(self.colour), offset=self.offset, size=self.size
         )
 
-    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+    def render(self, component: Component, zoom: int, offset: Coord = Coord(0, 0)) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.area_border_text_svg(self, skin, component, zoom)
+        return component_to_svg.area_border_text_svg(self, component, zoom, offset)
 
 
 @dataclass_transform()
@@ -202,10 +202,10 @@ class AreaCentreText(Struct):
             colour=None if self.colour is None else str(self.colour), offset=self.offset.encode(), size=self.size
         )
 
-    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+    def render(self, component: Component, zoom: int, offset: Coord = Coord(0, 0)) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.area_centre_text_svg(self, skin, component, zoom)
+        return component_to_svg.area_centre_text_svg(self, component, zoom, offset)
 
 
 @dataclass_transform()
@@ -234,10 +234,10 @@ class AreaFill(Struct):
             outline=None if self.outline is None else str(self.outline),
         )
 
-    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+    def render(self, component: Component, zoom: int, offset: Coord = Coord(0, 0)) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.area_fill_svg(self, skin, component, zoom)
+        return component_to_svg.area_fill_svg(self, component, zoom, offset)
 
 
 @dataclass_transform()
@@ -260,10 +260,10 @@ class AreaCentreImage(Struct):
     def encode(self) -> _SerAreaCentreImage:
         return _SerAreaCentreImage(image=self.image, offset=self.offset.encode())
 
-    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+    def render(self, component: Component, zoom: int, offset: Coord = Coord(0, 0)) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.area_centre_image_svg(self, skin, component, zoom)
+        return component_to_svg.area_centre_image_svg(self, component, zoom, offset)
 
 
 @dataclass_transform()
@@ -289,10 +289,10 @@ class LineText(Struct):
             offset=self.offset,
         )
 
-    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+    def render(self, component: Component, zoom: int, offset: Coord = Coord(0, 0)) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.line_text_svg(self, skin, component, zoom)
+        return component_to_svg.line_text_svg(self, component, zoom, offset)
 
 
 @dataclass_transform()
@@ -314,18 +314,20 @@ class LineFore(Struct):
     width: int
     dash: list[int] | None = None
     colour: Colour | None = None
+    unrounded: bool = False
 
     def encode(self) -> _SerLineFore:
         return _SerLineFore(
             colour=None if self.colour is None else str(self.colour),
             width=self.width,
             dash=self.dash,
+            unrounded=self.unrounded,
         )
 
-    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+    def render(self, component: Component, zoom: int, offset: Coord = Coord(0, 0)) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.line_back_fore_svg(self, skin, component, zoom)
+        return component_to_svg.line_back_fore_svg(self, component, zoom, offset)
 
 
 @dataclass_transform()
@@ -337,6 +339,7 @@ class _SerLineFore(LineFore, tag_field="ty", tag="lineFore"):
             colour=None if self.colour is None else Colour.from_hex(self.colour),
             width=self.width,
             dash=self.dash,
+            unrounded=self.unrounded,
         )
 
 
@@ -365,10 +368,10 @@ class PointText(Struct):
             size=self.size,
         )
 
-    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+    def render(self, component: Component, zoom: int, offset: Coord = Coord(0, 0)) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.point_text_svg(self, skin, component, zoom)
+        return component_to_svg.point_text_svg(self, component, zoom, offset)
 
 
 @dataclass_transform()
@@ -399,10 +402,10 @@ class PointSquare(Struct):
             outline=None if self.outline is None else str(self.outline),
         )
 
-    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+    def render(self, component: Component, zoom: int, offset: Coord = Coord(0, 0)) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.point_square_svg(self, skin, component, zoom)
+        return component_to_svg.point_square_svg(self, component, zoom, offset)
 
 
 @dataclass_transform()
@@ -419,10 +422,10 @@ class _SerPointSquare(PointSquare, tag_field="ty", tag="pointSquare"):
 
 @dataclass_transform()
 class PointImage(AreaCentreImage):
-    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+    def render(self, component: Component, zoom: int, offset: Coord = Coord(0, 0)) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.point_image_svg(self, skin, component, zoom)
+        return component_to_svg.point_image_svg(self, component, zoom, offset)
 
 
 @dataclass_transform()
