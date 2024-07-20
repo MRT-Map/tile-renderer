@@ -252,7 +252,7 @@ def main():
     ):
         types.append(
             ComponentType(
-                name="building_underground",
+                name=name,
                 shape="area",
                 styles={
                     "0-1": [
@@ -284,7 +284,7 @@ def main():
 
     types.append(
         ComponentType(
-            name="pathwayUnderground",
+            name="pathway_underground",
             shape="line",
             tags=["road"],
             styles={
@@ -315,6 +315,7 @@ def main():
             ComponentType(
                 name=name,
                 shape="line",
+                tags=["road"],
                 styles={
                     "0-4": [
                         LineBack(colour=col, width=width + 8),
@@ -328,6 +329,269 @@ def main():
                 },
             )
         )
+
+    types.append(
+        ComponentType(
+            name="rail_underground",
+            shape="line",
+            tags=["road"],
+            styles={
+                "0-2": [
+                    LineFore(colour=Colour.from_hex(0x808080), width=8, dash=[50, 25]),
+                    LineText(colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=16, size=16),
+                ],
+                "3-4": [
+                    LineFore(colour=Colour.from_hex(0x808080), width=2, dash=(20, 10))
+                ]
+            },
+        )
+    )
+
+    types.append(
+        ComponentType(
+            name="intercityRail_underground",
+            shape="line",
+            tags=["road"],
+            styles={
+                "0-2": [
+                    LineFore(colour=Colour.from_hex(0x808080), width=16, dash=[50, 25]),
+                    LineText(colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=16, size=16),
+                ],
+                "3-6": [
+                    LineFore(colour=Colour.from_hex(0x808080), width=2, dash=(20, 10))
+                ]
+            },
+        )
+    )
+
+    types.append(
+        ComponentType(
+            name="platform_underground",
+            shape="area",
+            styles={
+                "0-1": [
+                    AreaFill(colour=Colour.from_hex(0xaaaaaa), outline=Colour.from_hex(0xaaaaaa).darkened()),
+                    AreaCentreText(Colour.from_hex(0xaaaaaa).darkened(), size=10)
+                ],
+                "2-3": [
+                    AreaFill(colour=Colour.from_hex(0xaaaaaa), outline=Colour.from_hex(0xaaaaaa).darkened()),
+                ]
+            },
+        )
+    )
+
+    
+    for name, col in (
+        ("building", BUILDING),
+        ("cityHall", Colour.from_hex(0xffaaaa)),
+        ("transportBuilding", TRANSPORT_BUILDING),
+    ):
+        types.append(
+            ComponentType(
+                name="building_underground",
+                shape="area",
+                styles={
+                    "0-1": [
+                        AreaFill(colour=col, outline=col),
+                        AreaCentreText(colour=col.darkened(), size=15),
+                    ],
+                    "2-3": [
+                        AreaFill(colour=col, outline=col),
+                    ]
+                },
+            )
+        )
+
+    types.append(
+        ComponentType(
+            name="pathway",
+            shape="line",
+            tags=["road"],
+            styles={
+                "0-4": [
+                    LineBack(colour=Colour.from_hex(0xeeeeee), width=8),
+                    LineFore(colour=Colour.from_hex(0x008000), width=4, dash=[16, 16]),
+                    LineText(colour=Colour.from_hex(0xaaaaaa), arrow_colour=Colour.from_hex(0xeeeeee), size=16, offset=10)
+                ]
+            },
+        )
+    )
+
+    for name, col, width, small_width in (
+        ("localHighwaySlip", LOCAL_HIGHWAY, 20, 1),
+        ("bRoadSlip", B_ROAD, 24, 2),
+        ("aRoadSlip", A_ROAD, 32, 3),
+        ("localPedestrianQuaternaryRoad", LOCAL_PEDESTRIAN, 16, 1),
+        ("localQuaternaryRoad", LOCAL_TERTIARY_QUATERNARY, 16, 1),
+        ("localPedestrianTertiaryRoad", LOCAL_PEDESTRIAN, 24, 2),
+        ("localTertiaryRoad", LOCAL_TERTIARY_QUATERNARY, 24, 2),
+        ("localSecondaryRoad", LOCAL_SECONDARY, 28, 2),
+        ("localMainRoad", LOCAL_MAIN, 32, 3),
+        ("localHighway", LOCAL_HIGHWAY, 36, 3),
+        ("bRoad", B_ROAD, 40, 4),
+        ("aRoad", A_ROAD, 48, 4),
+    ):
+        types.append(
+            ComponentType(
+                name=name,
+                shape="line",
+                tags=["road"],
+                styles={
+                    "0-4": [
+                        LineBack(colour=col.darkened(), width=width + 8),
+                        LineFore(colour=col, width=width),
+                        LineText(colour=Colour.from_hex(0x000000), arrow_colour=col, size=width),
+                    ],
+                    "5-8": [
+                        LineBack(colour=col.darkened(), width=small_width * 2),
+                        LineFore(colour=col, width=small_width),
+                    ],
+                },
+            )
+        )
+
+    types.append(
+        ComponentType(
+            name="rail",
+            shape="line",
+            tags=["road"],
+            styles={
+                "0-2": [
+                    LineFore(colour=Colour.from_hex(0x808080), width=8),
+                    LineText(colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=16, size=16),
+                ],
+                "3-4": [
+                    LineFore(colour=Colour.from_hex(0x808080), width=2)
+                ]
+            },
+        )
+    )
+
+    types.append(
+        ComponentType(
+            name="intercityRail",
+            shape="line",
+            tags=["road"],
+            styles={
+                "0-2": [
+                    LineBack(colour=Colour.from_hex(0x808080), width=16),
+                    LineFore(colour=Colour.from_hex(0xffffff), width=8, dash=[50, 50]),
+                    LineText(colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=16, size=16),
+                ],
+                "3-6": [
+                    LineBack(colour=Codour.from_hex(0x808080), width=4)
+                    LineFore(colour=Colour.from_hex(0xffffff), width=2, dash=(20, 20))
+                ]
+            },
+        )
+    )
+
+    types.append(
+        ComponentType(
+            name="pathway_elevated",
+            shape="line",
+            tags=["road"],
+            styles={
+                "0-4": [
+                    LineBack(colour=Colour.from_hex(0x555555), width=12),
+                    LineBack(colour=Colour.from_hex(0xeeeeee), width=8),
+                    LineFore(colour=Colour.from_hex(0x008000), width=4, dash=[16, 16]),
+                    LineText(colour=Colour.from_hex(0xaaaaaa), arrow_colour=Colour.from_hex(0xeeeeee), size=16, offset=10)
+                ]
+            },
+        )
+    )
+
+    for name, col, width, small_width in (
+        ("localHighwaySlip_elevated", LOCAL_HIGHWAY, 20, 1),
+        ("bRoadSlip_elevated", B_ROAD, 24, 2),
+        ("aRoadSlip_elevated", A_ROAD, 32, 3),
+        ("localPedestrianQuaternaryRoad_elevated", LOCAL_PEDESTRIAN, 16, 1),
+        ("localQuaternaryRoad_elevated", LOCAL_TERTIARY_QUATERNARY, 16, 1),
+        ("localPedestrianTertiaryRoad_elevated", LOCAL_PEDESTRIAN, 24, 2),
+        ("localTertiaryRoad_elevated", LOCAL_TERTIARY_QUATERNARY, 24, 2),
+        ("localSecondaryRoad_elevated", LOCAL_SECONDARY, 28, 2),
+        ("localMainRoad_elevated", LOCAL_MAIN, 32, 3),
+        ("localHighway_elevated", LOCAL_HIGHWAY, 36, 3),
+        ("bRoad_elevated", B_ROAD, 40, 4),
+        ("aRoad_elevated", A_ROAD, 48, 4),
+    ):
+        types.append(
+            ComponentType(
+                name=name,
+                shape="line",
+                tags=["road"],
+                styles={
+                    "0-4": [
+                        LineBack(colour=Colour.from_hex(0x555555), width=width + 8),
+                        LineFore(colour=col, width=width),
+                        LineText(colour=Colour.from_hex(0x000000), arrow_colour=col, size=width),
+                    ],
+                    "5-8": [
+                        LineBack(colour=Colour.from_hex(0x555555), width=small_width * 2),
+                        LineFore(colour=col, width=small_width),
+                    ],
+                },
+            )
+        )
+
+    types.append(
+        ComponentType(
+            name="rail_elevated",
+            shape="line",
+            tags=["road"],
+            styles={
+                "0-2": [
+                    LineBack(colour=Colour.from_hex(0x555555), width=12),
+                    LineFore(colour=Colour.from_hex(0x808080), width=8),
+                    LineText(colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=16, size=16),
+                ],
+                "3-4": [
+                    LineBack(colour=Colour.from_hex(0x555555), width=4),
+                    LineFore(colour=Colour.from_hex(0x808080), width=2)
+                ]
+            },
+        )
+    )
+
+    types.append(
+        ComponentType(
+            name="intercityRail_elevated",
+            shape="line",
+            tags=["road"],
+            styles={
+                "0-2": [
+                    LineBack(colour=Colour.from_hex(0x555555), width=20),
+                    LineBack(colour=Colour.from_hex(0x808080), width=16),
+                    LineFore(colour=Colour.from_hex(0xffffff), width=8, dash=[50, 50]),
+                    LineText(colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=16, size=16),
+                ],
+                "3-6": [
+                    LineBack(colour=Colour.from_hex(0x555555), width=6),
+                    LineBack(colour=Codour.from_hex(0x808080), width=4),
+                    LineFore(colour=Colour.from_hex(0xffffff), width=2, dash=(20, 20))
+                ]
+            },
+        )
+    )
+
+    types.append(
+        ComponentType(
+            name="platform",
+            shape="area",
+            styles={
+                "0-1": [
+                    AreaFill(colour=Colour.from_hex(0xcccccc), outline=Colour.from_hex(0x808080)),
+                    AreaCentreText(Colour.from_hex(0x808080), size=10)
+                ],
+                "2-3": [
+                    AreaFill(colour=Colour.from_hex(0xcccccc), outline=Colour.from_hex(0x808080)),
+                ]
+            },
+        )
+    )
+
+    
 
     skin = Skin(
         name="default",
