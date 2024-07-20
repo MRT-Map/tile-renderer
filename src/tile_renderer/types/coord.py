@@ -2,10 +2,12 @@ from __future__ import annotations
 
 import dataclasses
 import functools
+import math
 from copy import copy
 from typing import TYPE_CHECKING, Self
 
 from shapely import LinearRing, LineString, Point
+from shapely.ops import substring
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -166,11 +168,18 @@ class Line[T: float | int]:
         )
 
     @property
-    def centroid(self) -> Coord[float]:
+    def point_on_surface(self) -> Coord[float]:
         """Finds the visual center"""
         coords = [c - self.coords[0] for c in self.coords]
-        centroid = LinearRing({a.as_tuple() for a in coords}).centroid
-        return Coord(centroid.x + self.coords[0].x, centroid.y + self.coords[0].y)
+        point = LinearRing({a.as_tuple() for a in coords}).point_on_surface()
+        return Coord(point.x + self.coords[0].x, point.y + self.coords[0].y)
+
+    def dash(self, dash_length: int | float) -> list[Self]:
+        coords = LineString(a.as_tuple() for a in self.coords)
+        return [
+            Line([Coord(*c) for c in substring(coords, start_dist=dist, end_dist=dist + dash_length).coords])
+            for dist in range(0, math.ceil(coords.length), dash_length * 2)
+        ]
 
     def encode(self) -> list[tuple[T, T]]:
         """Encoding hook for msgspec"""

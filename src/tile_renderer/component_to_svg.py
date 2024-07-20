@@ -1,3 +1,5 @@
+import uuid
+
 import svg
 
 from tile_renderer import Component
@@ -24,15 +26,36 @@ def _shift_coordinates(line: Line[int], zoom: int, offset: Coord) -> list[Coord[
 def area_border_text_svg(
     s: AreaBorderText, component: Component, zoom: int, offset: Coord = Coord(0, 0)
 ) -> svg.Element:
+    if not component.display_name:
+        return svg.G()
     coordinates = _shift_coordinates(component.nodes, zoom, offset)
-    return svg.G()
+    elements = []
+    for dash in Line(coordinates).dash(s.size * len(component.display_name)):
+        if dash[0].x > dash[-1].x:
+            dash.coords.reverse()
+        id_ = str(uuid.uuid4())
+        elements.append(
+            svg.Polyline(points=[f"{c.x},{c.y}" for c in dash], fill=None, fill_opacity=0, stroke=None, id=id_)
+        )
+        elements.append(
+            svg.Text(
+                fill=s.colour,
+                font_size=s.size,
+                stroke="#dddddd",
+                stroke_width=0.025 * s.size,
+                font_weight="bold",
+                dy=0.9 * s.size // 2 + s.offset,
+                elements=[svg.TextPath(href="#" + id_, text=component.display_name)],
+            )
+        )
+    return svg.G(elements=elements)
 
 
 def area_centre_text_svg(
     s: AreaCentreText, component: Component, zoom: int, offset: Coord = Coord(0, 0)
 ) -> svg.Element:
     coordinates = _shift_coordinates(component.nodes, zoom, offset)
-    centroid = Line(coordinates).centroid
+    centroid = Line(coordinates).point_on_surface
     return svg.Text(
         x=centroid.x + s.offset.x,
         y=centroid.y + s.offset.y,
@@ -63,8 +86,29 @@ def area_centre_image_svg(
 
 
 def line_text_svg(s: LineText, component: Component, zoom: int, offset: Coord = Coord(0, 0)) -> svg.Element:
+    if not component.display_name:
+        return svg.G()
     coordinates = _shift_coordinates(component.nodes, zoom, offset)
-    return svg.G()
+    elements = []
+    for dash in Line(coordinates).dash(s.size * len(component.display_name)):
+        if dash[0].x > dash[-1].x:
+            dash.coords.reverse()
+        id_ = str(uuid.uuid4())
+        elements.append(
+            svg.Polyline(points=[f"{c.x},{c.y}" for c in dash], fill=None, fill_opacity=0, stroke=None, id=id_)
+        )
+        elements.append(
+            svg.Text(
+                fill=s.colour,
+                font_size=s.size,
+                stroke="#dddddd",
+                stroke_width=0.025 * s.size,
+                font_weight="bold",
+                dy=0.9 * s.size // 2 + s.offset,
+                elements=[svg.TextPath(href="#" + id_, text=component.display_name)],
+            )
+        )
+    return svg.G(elements=elements)
 
 
 def line_back_fore_svg(
