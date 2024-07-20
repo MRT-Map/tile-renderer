@@ -3,7 +3,9 @@ import subprocess
 from copy import copy
 from pathlib import Path
 
+import rich
 import svg
+from rich.progress import track
 
 from tile_renderer.types.coord import TileCoord, Coord
 from tile_renderer.types.pla2 import Component
@@ -13,7 +15,7 @@ from tile_renderer.types.skin import ComponentStyle, ComponentType, LineBack, Li
 def render_svg(components: list[Component], skin: Skin, zoom: int, offset: Coord = Coord(0, 0)) -> svg.SVG:
     styling = _get_styling(components, skin, zoom)
     styling = _sort_styling(styling, skin)
-    return svg.SVG(elements=[s.render(c, zoom, offset) for c, ct, s, i in styling])
+    return svg.SVG(elements=[s.render(c, zoom, offset) for c, ct, s, i in track(styling, "[green] Rendering SVG")])
 
 
 def render_tiles(
@@ -22,7 +24,7 @@ def render_tiles(
     images = {}
     for zoom in zoom_levels:
         doc = render_svg(components, skin, zoom, offset)
-        for tile in Component.tiles(components, zoom, max_zoom_range):
+        for tile in track(Component.tiles(components, zoom, max_zoom_range), "[green] Exporting to PNG"):
             images[tile] = _export_tile(doc, tile, max_zoom_range, skin)
     return images
 
@@ -31,7 +33,7 @@ def _get_styling(
     components: list[Component], skin: Skin, zoom: int
 ) -> list[tuple[Component, ComponentType, ComponentStyle, int]]:
     out = []
-    for component in components:
+    for component in track(components, "[green] Getting styling"):
         component_type = skin.get_type_by_name(component.type)
         if component_type is None:
             # TODO log
@@ -47,6 +49,8 @@ def _get_styling(
 def _sort_styling(
     styling: list[tuple[Component, ComponentType, ComponentStyle, int]], skin: Skin
 ) -> list[tuple[Component, ComponentType, ComponentStyle, int]]:
+    rich.print("[green] Sorting styling")
+
     def sort_fn(
         s1: tuple[Component, ComponentType, ComponentStyle, int],
         s2: tuple[Component, ComponentType, ComponentStyle, int],
