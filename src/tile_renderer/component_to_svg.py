@@ -41,7 +41,7 @@ def area_centre_text_svg(
         text=component.display_name,
         text_anchor="middle",
         stroke="#dddddd",
-        stroke_width=0.05 * s.size,
+        stroke_width=0.025 * s.size,
         font_weight="bold",
     )
 
@@ -75,9 +75,11 @@ def line_back_fore_svg(
         points=[f"{c.x},{c.y}" for c in coordinates],
         stroke=None if s.colour is None else str(s.colour),
         fill=None,
+        fill_opacity=0,
         stroke_width=s.width,
         stroke_dasharray=s.dash,
         stroke_linecap=None if s.unrounded else "round",
+        stroke_linejoin="round",
     )
 
 
@@ -91,7 +93,7 @@ def point_text_svg(s: PointText, component: Component, zoom: int, offset: Coord 
         text=component.display_name,
         text_anchor="middle",
         stroke="#dddddd",
-        stroke_width=0.05 * s.size,
+        stroke_width=0.025 * s.size,
         font_weight="bold",
     )
 

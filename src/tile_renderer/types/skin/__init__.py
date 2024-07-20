@@ -345,12 +345,24 @@ class _SerLineFore(LineFore, tag_field="ty", tag="lineFore"):
 
 @dataclass_transform()
 class LineBack(LineFore):
-    pass
+    def encode(self) -> _SerLineBack:
+        return _SerLineBack(
+            colour=None if self.colour is None else str(self.colour),
+            width=self.width,
+            dash=self.dash,
+            unrounded=self.unrounded,
+        )
 
 
 @dataclass_transform()
 class _SerLineBack(_SerLineFore, tag_field="ty", tag="lineBack"):
-    pass
+    def decode(self) -> LineBack:
+        return LineBack(
+            colour=None if self.colour is None else Colour.from_hex(self.colour),
+            width=self.width,
+            dash=self.dash,
+            unrounded=self.unrounded,
+        )
 
 
 @dataclass_transform()
@@ -427,10 +439,14 @@ class PointImage(AreaCentreImage):
 
         return component_to_svg.point_image_svg(self, component, zoom, offset)
 
+    def encode(self) -> _SerPointImage:
+        return _SerPointImage(image=self.image, offset=self.offset.encode())
+
 
 @dataclass_transform()
 class _SerPointImage(_SerAreaCentreImage, tag_field="ty", tag="pointImage"):
-    pass
+    def decode(self) -> PointImage:
+        return PointImage(image=self.image, offset=Vector.decode(self.offset))
 
 
 _json_decoder = msgspec.json.Decoder(_SerSkin)

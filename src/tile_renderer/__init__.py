@@ -10,14 +10,18 @@ from tile_renderer.types.pla2 import Component
 from tile_renderer.types.skin import ComponentStyle, ComponentType, LineBack, LineFore, Skin
 
 
-def render(
+def render_svg(components: list[Component], skin: Skin, zoom: int, offset: Coord = Coord(0, 0)) -> svg.SVG:
+    styling = _get_styling(components, skin, zoom)
+    styling = _sort_styling(styling, skin)
+    return svg.SVG(elements=[s.render(c, zoom, offset) for c, ct, s, i in styling])
+
+
+def render_tiles(
     components: list[Component], skin: Skin, zoom_levels: set[int], max_zoom_range: int, offset: Coord = Coord(0, 0)
 ) -> dict[TileCoord, bytes]:
     images = {}
     for zoom in zoom_levels:
-        styling = _get_styling(components, skin, zoom)
-        styling = _sort_styling(styling, skin)
-        doc = svg.SVG(elements=[s.render(c, zoom, offset) for c, ct, s, i in styling])
+        doc = render_svg(components, skin, zoom, offset)
         for tile in Component.tiles(components, zoom, max_zoom_range):
             images[tile] = _export_tile(doc, tile, max_zoom_range, skin)
     return images
@@ -54,9 +58,9 @@ def _sort_styling(
             return delta
 
         if "road" in component_type1.tags and "road" in component_type2.tags:
-            if isinstance(style1, LineBack) and isinstance(style2, LineFore):
+            if style1.__class__ is LineBack and style2.__class__ is LineFore:
                 return -1
-            if isinstance(style1, LineFore) and isinstance(style2, LineBack):
+            if style1.__class__ is LineFore and style2.__class__ is LineBack:
                 return 1
 
         if (delta := skin.get_order(component_type1.name) - skin.get_order(component_type2.name)) != 0:
