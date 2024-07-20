@@ -103,7 +103,7 @@ class Coord[T: float | int](Vector[T]):
         return Point(self.x, self.y)
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class Bounds[T: float | int]:
     """Represents a bounding box, like a rectangle"""
 
@@ -112,8 +112,16 @@ class Bounds[T: float | int]:
     y_max: T
     y_min: T
 
+    def __add__(self, other: Self) -> Self:
+        return Bounds(
+            x_max=max(self.x_max, other.x_max),
+            x_min=min(self.x_min, other.x_min),
+            y_max=max(self.y_max, other.y_max),
+            y_min=min(self.y_min, other.y_min),
+        )
 
-@dataclasses.dataclass
+
+@dataclasses.dataclass(frozen=True)
 class Line[T: float | int]:
     """Represents a 2-dimensional line"""
 
@@ -174,7 +182,7 @@ class Line[T: float | int]:
         return cls([Coord.decode(c) for c in obj])
 
 
-@dataclasses.dataclass
+@dataclasses.dataclass(frozen=True)
 class TileCoord:
     """Represents a tile coordinate in the form ``(z, x, y)``."""
 
@@ -188,15 +196,11 @@ class TileCoord:
     def __str__(self) -> str:
         return f"{self.z}, {self.x}, {self.y}"
 
-    @staticmethod
-    def bounds(tile_coords: list[TileCoord]) -> Bounds[int]:
-        """
-        Find the minimum and maximum x/y values in a set of TileCoords.
-        """
-
+    def bounds(self, max_zoom_range: int) -> Bounds[int]:
+        zoom_range = max_zoom_range * 2**self.z
         return Bounds(
-            x_max=max(c.x for c in tile_coords),
-            x_min=min(c.x for c in tile_coords),
-            y_max=max(c.y for c in tile_coords),
-            y_min=min(c.y for c in tile_coords),
+            x_max=(self.x + 1) * zoom_range,
+            x_min=self.x * zoom_range,
+            y_max=(self.y + 1) * zoom_range,
+            y_min=self.y * zoom_range,
         )

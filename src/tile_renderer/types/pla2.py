@@ -1,12 +1,13 @@
 from __future__ import annotations
 
+import math
 from collections import Counter
 from typing import TYPE_CHECKING, Self, dataclass_transform
 
 import msgspec
 from msgspec import Struct
 
-from tile_renderer.types.coord import Line
+from tile_renderer.types.coord import Line, TileCoord, Bounds
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -53,6 +54,14 @@ class Component(Struct):
             tags=self.tags,
             attrs=self.attrs,
         )
+
+    @staticmethod
+    def tiles(components: list[Component], zoom: int, max_zoom_range: int) -> set[TileCoord]:
+        bounds = sum((c.nodes.bounds for c in components), components[0].nodes.bounds)
+        zoom_range = max_zoom_range * 2**zoom
+        xr = range(math.floor(bounds.x_min), math.ceil(bounds.x_max + 1), zoom_range // 2)
+        yr = range(math.floor(bounds.y_min), math.ceil(bounds.y_max + 1), zoom_range // 2)
+        return set(TileCoord(zoom, math.floor(x / zoom_range), math.floor(y / zoom_range)) for x in xr for y in yr)
 
 
 @dataclass_transform()

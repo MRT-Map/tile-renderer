@@ -12,7 +12,7 @@ class Colour:
 
     @classmethod
     def from_rgb(cls, r: float, g: float, b: float):
-        h, l, s = colorsys.rgb_to_hls(r / 256, g / 256, b / 256)
+        h, l, s = colorsys.rgb_to_hls(r / 255, g / 255, b / 255)
         return cls(h * 360, s * 100, l * 100)
 
     @classmethod
@@ -49,12 +49,12 @@ class Colour:
 
     def __str__(self) -> str:
         r, g, b = self.rgb
-        return "#" + hex(round(r))[2:].zfill(2) + hex(round(r))[2:].zfill(2) + hex(round(r))[2:].zfill(2)
+        return "#" + hex(round(r))[2:].zfill(2) + hex(round(g))[2:].zfill(2) + hex(round(b))[2:].zfill(2)
 
     @property
     def rgb(self) -> tuple[float, float, float]:
         r, g, b = colorsys.hls_to_rgb(self.h / 360, self.l / 100, self.s / 100)
-        return 256 * r, 256 * g, 256 * b
+        return 255 * r, 255 * g, 255 * b
 
     @property
     def r(self):
@@ -65,7 +65,7 @@ class Colour:
         if val < 0 or val > 255:
             msg = f"r must be between 0 and 255, got {val}"
             raise ValueError(msg)
-        h, l, s = colorsys.rgb_to_hls(val / 256, self.g / 256, self.b / 256)
+        h, l, s = colorsys.rgb_to_hls(val / 255, self.g / 255, self.b / 255)
         self.h = h * 360
         self.l = l * 100
         self.s = s * 100
@@ -79,7 +79,7 @@ class Colour:
         if val < 0 or val > 255:
             msg = f"g must be between 0 and 255, got {val}"
             raise ValueError(msg)
-        h, l, s = colorsys.rgb_to_hls(self.r / 256, val / 256, self.b / 256)
+        h, l, s = colorsys.rgb_to_hls(self.r / 255, val / 255, self.b / 255)
         self.h = h * 360
         self.l = l * 100
         self.s = s * 100
@@ -93,7 +93,7 @@ class Colour:
         if val < 0 or val > 255:
             msg = f"b must be between 0 and 255, got {val}"
             raise ValueError(msg)
-        h, l, s = colorsys.rgb_to_hls(self.r / 256, self.g / 256, val / 256)
+        h, l, s = colorsys.rgb_to_hls(self.r / 255, self.g / 255, val / 255)
         self.h = h * 360
         self.l = l * 100
         self.s = s * 100

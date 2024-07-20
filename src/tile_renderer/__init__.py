@@ -1,13 +1,29 @@
 import functools
+from copy import copy
+from pathlib import Path
+
+import svg
 
 from tile_renderer.types.pla2 import Component
-from tile_renderer.types.skin import Skin, ComponentStyle, ComponentType, LineBack, LineFore
+from tile_renderer.types.skin import ComponentStyle, ComponentType, LineBack, LineFore, Skin
 
 
-def render(components: list[Component], skin: Skin, zoom_levels: set[int]):
+def render(components: list[Component], skin: Skin, zoom_levels: set[int], max_zoom_range: int):
     for zoom in zoom_levels:
         styling = _get_styling(components, skin, zoom)
         styling = _sort_styling(styling, skin)
+        doc = svg.SVG(elements=[s.render(skin, c, zoom) for c, ct, s, i in styling])
+        tiles = Component.tiles(components, zoom, max_zoom_range)
+        for tile in tiles:
+            doc2 = copy(doc)
+            bounds = tile.bounds(max_zoom_range)
+            doc2.viewBox = svg.ViewBoxSpec(
+                min_x=bounds.x_min,
+                min_y=bounds.y_min,
+                width=bounds.x_max - bounds.x_min,
+                height=bounds.y_max - bounds.y_min,
+            )
+            Path("./out.svg").write_text(str(doc2))
 
 
 def _get_styling(

@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import base64
+from pathlib import Path
 from typing import TYPE_CHECKING, Literal, Self, dataclass_transform
 
 import msgspec
@@ -9,7 +10,10 @@ from msgspec import Struct, field
 from tile_renderer.types.colour import Colour
 from tile_renderer.types.coord import Vector
 
-from pathlib import Path
+if TYPE_CHECKING:
+    import svg
+
+    from tile_renderer import Component
 
 
 @dataclass_transform()
@@ -119,6 +123,7 @@ class ComponentType(Struct):
             max_z = float("inf") if max_z == "" else int(max_z)
             if min_z <= zoom <= max_z:
                 return styling
+        return None
 
 
 @dataclass_transform()
@@ -171,6 +176,11 @@ class AreaBorderText(Struct):
             colour=None if self.colour is None else str(self.colour), offset=self.offset, size=self.size
         )
 
+    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+        from tile_renderer import component_to_svg
+
+        return component_to_svg.area_border_text_svg(self, skin, component, zoom)
+
 
 @dataclass_transform()
 class _SerAreaBorderText(AreaBorderText, tag_field="ty", tag="areaBorderText"):
@@ -192,6 +202,11 @@ class AreaCentreText(Struct):
         return _SerAreaCentreText(
             colour=None if self.colour is None else str(self.colour), offset=self.offset.encode(), size=self.size
         )
+
+    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+        from tile_renderer import component_to_svg
+
+        return component_to_svg.area_centre_text_svg(self, skin, component, zoom)
 
 
 @dataclass_transform()
@@ -220,6 +235,11 @@ class AreaFill(Struct):
             outline=None if self.outline is None else str(self.outline),
         )
 
+    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+        from tile_renderer import component_to_svg
+
+        return component_to_svg.area_fill_svg(self, skin, component, zoom)
+
 
 @dataclass_transform()
 class _SerAreaFill(AreaFill, tag_field="ty", tag="areaFill"):
@@ -240,6 +260,11 @@ class AreaCentreImage(Struct):
 
     def encode(self) -> _SerAreaCentreImage:
         return _SerAreaCentreImage(image=self.image, offset=self.offset.encode())
+
+    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+        from tile_renderer import component_to_svg
+
+        return component_to_svg.area_centre_image_svg(self, skin, component, zoom)
 
 
 @dataclass_transform()
@@ -264,6 +289,11 @@ class LineText(Struct):
             size=self.size,
             offset=self.offset,
         )
+
+    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+        from tile_renderer import component_to_svg
+
+        return component_to_svg.line_text_svg(self, skin, component, zoom)
 
 
 @dataclass_transform()
@@ -292,6 +322,11 @@ class LineFore(Struct):
             width=self.width,
             dash=self.dash,
         )
+
+    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+        from tile_renderer import component_to_svg
+
+        return component_to_svg.line_back_fore_svg(self, skin, component, zoom)
 
 
 @dataclass_transform()
@@ -331,6 +366,11 @@ class PointText(Struct):
             size=self.size,
         )
 
+    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+        from tile_renderer import component_to_svg
+
+        return component_to_svg.point_text_svg(self, skin, component, zoom)
+
 
 @dataclass_transform()
 class _SerPointText(PointText, tag_field="ty", tag="pointText"):
@@ -360,6 +400,11 @@ class PointSquare(Struct):
             outline=None if self.outline is None else str(self.outline),
         )
 
+    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+        from tile_renderer import component_to_svg
+
+        return component_to_svg.point_square_svg(self, skin, component, zoom)
+
 
 @dataclass_transform()
 class _SerPointSquare(PointSquare, tag_field="ty", tag="pointSquare"):
@@ -375,7 +420,10 @@ class _SerPointSquare(PointSquare, tag_field="ty", tag="pointSquare"):
 
 @dataclass_transform()
 class PointImage(AreaCentreImage):
-    pass
+    def render(self, skin: Skin, component: Component, zoom: int) -> svg.Element:
+        from tile_renderer import component_to_svg
+
+        return component_to_svg.point_image_svg(self, skin, component, zoom)
 
 
 @dataclass_transform()
