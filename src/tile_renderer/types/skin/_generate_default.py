@@ -11,17 +11,19 @@ def get_url(url: str) -> bytes:
     path = Path(tempfile.gettempdir()) / "renderer" / "url" / url
     if path.exists():
         return path.read_bytes()
-    response = requests.get(url).content
+    response = requests.get(url).content  # noqa: S113
     path.parent.mkdir(parents=True, exist_ok=True)
     path.touch()
     path.write_bytes(response)
     return response
 
 
+WATER_COL = Colour.from_hex(0x87CEEB)
+LAND_COL = Colour.from_hex(0xDDDDDD)
+
+
 # noinspection PyListCreation
 def main():
-    WATER_COL = Colour.from_hex(0x87CEEB)
-    LAND_COL = Colour.from_hex(0xDDDDDD)
     types: list[ComponentType] = []
 
     types.append(

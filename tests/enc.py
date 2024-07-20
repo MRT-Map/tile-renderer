@@ -1,7 +1,7 @@
 from pathlib import Path
 
 from tile_renderer import Skin, render
-from tile_renderer.types.pla2 import Pla2File, Component
+from tile_renderer.types.pla2 import Pla2File
 
 
 def main():

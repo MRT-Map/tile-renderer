@@ -1,7 +1,7 @@
 import svg
 
 from tile_renderer import Component
-from tile_renderer.types.coord import Vector, Coord
+from tile_renderer.types.coord import Coord
 from tile_renderer.types.skin import (
     AreaBorderText,
     AreaCentreImage,

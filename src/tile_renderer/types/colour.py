@@ -37,13 +37,13 @@ class Colour:
         return cls.from_rgb(r, g, b)
 
     def __post_init__(self):
-        if self.h < 0 or self.h > 360:
+        if self.h < 0 or self.h > 360:  # noqa: PLR2004
             msg = f"h must be between 0 and 360, got {self.h}"
             raise ValueError(msg)
-        if self.s < 0 or self.s > 100:
+        if self.s < 0 or self.s > 100:  # noqa: PLR2004
             msg = f"s must be between 0 and 100, got {self.s}"
             raise ValueError(msg)
-        if self.l < 0 or self.l > 100:
+        if self.l < 0 or self.l > 100:  # noqa: PLR2004
             msg = f"l must be between 0 and 100, got {self.l}"
             raise ValueError(msg)
 
@@ -62,7 +62,7 @@ class Colour:
 
     @r.setter
     def r(self, val: float):
-        if val < 0 or val > 255:
+        if val < 0 or val > 255:  # noqa: PLR2004
             msg = f"r must be between 0 and 255, got {val}"
             raise ValueError(msg)
         h, l, s = colorsys.rgb_to_hls(val / 255, self.g / 255, self.b / 255)
@@ -76,7 +76,7 @@ class Colour:
 
     @g.setter
     def g(self, val: float):
-        if val < 0 or val > 255:
+        if val < 0 or val > 255:  # noqa: PLR2004
             msg = f"g must be between 0 and 255, got {val}"
             raise ValueError(msg)
         h, l, s = colorsys.rgb_to_hls(self.r / 255, val / 255, self.b / 255)
@@ -90,7 +90,7 @@ class Colour:
 
     @b.setter
     def b(self, val: float):
-        if val < 0 or val > 255:
+        if val < 0 or val > 255:  # noqa: PLR2004
             msg = f"b must be between 0 and 255, got {val}"
             raise ValueError(msg)
         h, l, s = colorsys.rgb_to_hls(self.r / 255, self.g / 255, val / 255)
@@ -108,6 +108,6 @@ class Colour:
     def brightened(self, by: float = 10.0) -> Self:
         s = copy(self)
         s.l += by
-        if s.l > 100:
+        if s.l > 100:  # noqa: PLR2004
             s.l = 100
         return s
