@@ -42,7 +42,7 @@ def render_tiles(
 ) -> dict[TileCoord, bytes]:
     images = {}
     doc = render_svg(components, skin, zoom, offset)
-    tiles = Component.tiles(components, zoom, max_zoom_range)
+    tiles = {t for c in components for t in c.tiles(zoom, max_zoom_range)}
     with (
         multiprocessing.Pool(processes=processes) as pool,
         Progress() as progress,
