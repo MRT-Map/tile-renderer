@@ -1,19 +1,16 @@
 import functools
-import io
 import multiprocessing
 import os
 import subprocess
 from copy import copy
-from multiprocessing.managers import BaseManager
 from pathlib import Path
 from typing import cast
 
-import PIL.Image
 import rich
 import svg
-from rich.progress import Progress, track
+from rich.progress import track, Progress
 
-from tile_renderer.types.coord import Coord, Line, TileCoord
+from tile_renderer.types.coord import TileCoord, Coord, Line
 from tile_renderer.types.pla2 import Component
 from tile_renderer.types.skin import ComponentStyle, ComponentType, LineBack, LineFore, Skin
 
@@ -30,8 +27,7 @@ def render_svg(components: list[Component], skin: Skin, zoom: int, offset: Coord
 
 
 def _f(args):
-    print("a")
-    return _cut_tile(*args)
+    return _export_tile(*args)
 
 
 def render_tiles(
@@ -41,18 +37,15 @@ def render_tiles(
     max_zoom_range: int,
     tile_size: int,
     offset: Coord = Coord(0, 0),
-) -> dict[TileCoord, PIL.Image.Image]:
+    processes: int = os.cpu_count(),
+) -> dict[TileCoord, bytes]:
     images = {}
     doc = render_svg(components, skin, zoom, offset)
     tiles = Component.tiles(components, zoom, max_zoom_range)
-    img = _export_png(doc, tiles, max_zoom_range * 2**zoom, skin, tile_size)
-    with Progress() as progress:
+    with multiprocessing.Pool(processes=processes) as pool, Progress() as progress:
         task_id = progress.add_task("[green] Exporting to PNG", total=len(tiles))
-        tile_min_x = min(tiles, key=lambda a: a.x).x
-        tile_min_y = min(tiles, key=lambda a: a.y).y
 
-        # for tile, b in pool.imap(_f, ((img, tile, tile_size, tile_min_x, tile_min_y) for tile in tiles)):
-        for tile, b in (_cut_tile(img, tile, tile_size, tile_min_x, tile_min_y) for tile in tiles):
+        for tile, b in pool.imap(_f, ((doc, tile, max_zoom_range, skin, tile_size) for tile in tiles)):
             images[tile] = b
             progress.advance(task_id)
     return images
@@ -106,52 +99,6 @@ def _sort_styling(
         return i1 - i2
 
     return sorted(styling, key=functools.cmp_to_key(cast(any, sort_fn)))
-
-
-def _export_png(doc: svg.SVG, tiles: set[TileCoord], zoom_range: int, skin: Skin, tile_size: int) -> PIL.Image.Image:
-    x_min = min(tiles, key=lambda a: a.x).bounds(zoom_range).x_min
-    y_min = min(tiles, key=lambda a: a.y).bounds(zoom_range).y_min
-    x_max = max(tiles, key=lambda a: a.x).bounds(zoom_range).x_max
-    y_max = max(tiles, key=lambda a: a.y).bounds(zoom_range).y_max
-    doc.viewBox = svg.ViewBoxSpec(
-        min_x=x_min,
-        min_y=y_min,
-        width=x_max - x_min,
-        height=y_max - y_min,
-    )
-    p = subprocess.Popen(
-        [
-            "resvg",
-            "-",
-            "-c",
-            "--resources-dir",
-            Path(__file__).parent,
-            "--background",
-            str(skin.background),
-            "--font-family",
-            "Noto Sans",
-            "--width",
-            str(tile_size * (max(tiles, key=lambda a: a.x).x - min(tiles, key=lambda a: a.x).x + 1)),
-            "--height",
-            str(tile_size * (max(tiles, key=lambda a: a.y).y - min(tiles, key=lambda a: a.y).y + 1)),
-        ],
-        stdout=subprocess.PIPE,
-        stdin=subprocess.PIPE,
-        stderr=subprocess.PIPE,
-    )
-    return PIL.Image.open(io.BytesIO(p.communicate(input=str(doc).encode("utf-8"))[0]))
-
-
-def _cut_tile(
-    img: PIL.Image.Image,
-    tile: TileCoord,
-    tile_size: int,
-    tile_min_x: int,
-    tile_min_y: int,
-) -> tuple[TileCoord, PIL.Image.Image]:
-    x = (tile.x - tile_min_x) * tile_size
-    y = (tile.y - tile_min_y) * tile_size
-    return tile, img.crop((x, y, x + tile_size, y + tile_size))
 
 
 def _export_tile(
