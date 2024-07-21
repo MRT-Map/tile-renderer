@@ -14,5 +14,4 @@ jobs:
     - uses: actions/checkout@v4
     - uses: pypa/hatch@install
     - run: cargo install resvg
-    - run: resvg
     - run: hatch run python tests/enc.py
