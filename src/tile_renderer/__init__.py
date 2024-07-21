@@ -115,7 +115,7 @@ def _export_tile(
     bounds = tile.bounds(max_zoom_range)
     doc = doc.value.replace("<|min_x|>", str(bounds.x_min)).replace("<|min_y|>", str(bounds.y_min)).replace("<|width|>", str(bounds.x_max - bounds.x_min)).replace("<|height|>", str(bounds.y_max - bounds.y_min))
 
-    resvg_path = subprocess.check_output(["where" if platform.system() == "Windows" else "which", "resvg"])
+    resvg_path = subprocess.check_output(["where" if platform.system() == "Windows" else "which", "resvg"]).strip()
     p = subprocess.Popen(
         [
             resvg_path,
