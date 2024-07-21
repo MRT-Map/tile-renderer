@@ -6,7 +6,7 @@ import math
 from copy import copy
 from typing import TYPE_CHECKING, Self
 
-from shapely import LinearRing, LineString, Point
+from shapely import LinearRing, LineString, Point, Polygon
 from shapely.ops import substring
 
 if TYPE_CHECKING:
@@ -175,9 +175,10 @@ class Line[T: float | int]:
     @property
     def point_on_surface(self) -> Coord[float]:
         """Finds the visual center"""
-        coords = [c - self.coords[0] for c in self.coords]
-        point = LinearRing({a.as_tuple() for a in coords}).point_on_surface()
-        return Coord(point.x + self.coords[0].x, point.y + self.coords[0].y)
+        point = self.shapely.centroid
+        if not Polygon(self.shapely).contains(point):
+            point = self.shapely.point_on_surface()
+        return Coord(point.x, point.y)
 
     def dash(self, dash_length: int | float) -> list[Self]:
         coords = self.shapely

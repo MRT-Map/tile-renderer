@@ -73,7 +73,11 @@ def _sort_styling(
             if style1.__class__ is LineFore and style2.__class__ is LineBack:
                 return 1
 
-        if (delta := skin.get_order(component_type1.name) - skin.get_order(component_type2.name)) != 0:
+        first_road = next(a.name for a in skin.types if "road" in a.tags)
+        type_name1 = first_road if "road" in component_type1.tags else component_type1.name
+        type_name2 = first_road if "road" in component_type2.tags else component_type2.name
+
+        if (delta := skin.get_order(type_name1) - skin.get_order(type_name2)) != 0:
             return delta
 
         return i1 - i2

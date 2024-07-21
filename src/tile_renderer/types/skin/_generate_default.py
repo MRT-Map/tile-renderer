@@ -417,15 +417,15 @@ def main():
     ):
         types.append(
             ComponentType(
-                name="building_underground",
+                name=name,
                 shape="area",
                 styles={
                     "0-1": [
-                        AreaFill(colour=col.brightened(), outline=col, outline_width=0.5),
+                        AreaFill(colour=col, outline=col.darkened(), outline_width=0.5),
                         AreaCentreText(colour=col.darkened(), size=1.5),
                     ],
                     "2-3": [
-                        AreaFill(colour=col.brightened(), outline=col, outline_width=0.5),
+                        AreaFill(colour=col, outline=col.darkened(), outline_width=0.5),
                     ],
                 },
             )
@@ -526,7 +526,7 @@ def main():
             tags=["road"],
             styles={
                 "0-4": [
-                    LineBack(colour=Colour.from_hex(0x555555), width=1.2),
+                    LineBack(colour=Colour.from_hex(0x333333), width=1.2),
                     LineBack(colour=Colour.from_hex(0xEEEEEE), width=0.8),
                     LineFore(colour=Colour.from_hex(0x008000), width=0.4, dash=[1.6, 1.6]),
                     LineText(
@@ -558,12 +558,12 @@ def main():
                 tags=["road"],
                 styles={
                     "0-4": [
-                        LineBack(colour=Colour.from_hex(0x555555), width=width + 0.8),
+                        LineBack(colour=Colour.from_hex(0x333333), width=width + 0.8),
                         LineFore(colour=col, width=width),
                         LineText(colour=Colour.from_hex(0x000000), arrow_colour=col, size=width),
                     ],
                     "5-8": [
-                        LineBack(colour=Colour.from_hex(0x555555), width=small_width * 2),
+                        LineBack(colour=Colour.from_hex(0x333333), width=small_width * 2),
                         LineFore(colour=col, width=small_width),
                     ],
                 },
@@ -577,14 +577,14 @@ def main():
             tags=["road"],
             styles={
                 "0-2": [
-                    LineBack(colour=Colour.from_hex(0x555555), width=1.2),
+                    LineBack(colour=Colour.from_hex(0x333333), width=1.2),
                     LineFore(colour=Colour.from_hex(0x808080), width=0.8),
                     LineText(
                         colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=1.6, size=1.6
                     ),
                 ],
                 "3-4": [
-                    LineBack(colour=Colour.from_hex(0x555555), width=0.4),
+                    LineBack(colour=Colour.from_hex(0x333333), width=0.4),
                     LineFore(colour=Colour.from_hex(0x808080), width=0.2),
                 ],
             },
@@ -598,7 +598,7 @@ def main():
             tags=["road"],
             styles={
                 "0-2": [
-                    LineBack(colour=Colour.from_hex(0x555555), width=2.0),
+                    LineBack(colour=Colour.from_hex(0x333333), width=2.0),
                     LineBack(colour=Colour.from_hex(0x808080), width=1.6),
                     LineFore(colour=Colour.from_hex(0xFFFFFF), width=0.8, dash=[5.0, 5.0]),
                     LineText(
@@ -606,7 +606,7 @@ def main():
                     ),
                 ],
                 "3-6": [
-                    LineBack(colour=Colour.from_hex(0x555555), width=0.6),
+                    LineBack(colour=Colour.from_hex(0x333333), width=0.6),
                     LineBack(colour=Colour.from_hex(0x808080), width=0.4),
                     LineFore(colour=Colour.from_hex(0xFFFFFF), width=0.2, dash=(2.0, 2.0)),
                 ],
