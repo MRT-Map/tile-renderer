@@ -10,8 +10,8 @@ def main():
     skin = Skin.default()
     # (Path(__file__).parent / "out.svg").write_text(str(render_svg(a.components, skin, 0)))
     Path(f"/tmp/tile-renderer").mkdir(exist_ok=True)
-    for tile, b in render_tiles(a.components, skin, 0, 32, 256, processes=os.cpu_count() * 2).items():
-        Path(f"/tmp/tile-renderer/{tile}.png").write_bytes(b)
+    for tile, b in render_tiles(a.components, skin, 0, 32, 256).items():
+        b.save(Path(f"/tmp/tile-renderer/{tile}.webp"))
 
 
 if __name__ == "__main__":
