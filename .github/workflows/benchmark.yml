@@ -13,6 +13,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: pypa/hatch@install
-    - run: sudo apt-get update; sudo apt-get install --no-install-recommends resvg
+    - run: cargo install resvg
     - run: resvg
     - run: hatch run python tests/enc.py
