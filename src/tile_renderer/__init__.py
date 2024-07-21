@@ -112,7 +112,7 @@ def _export_tile(
     doc: str, tile: TileCoord, max_zoom_range: int, skin: Skin, tile_size: int
 ) -> tuple[TileCoord, bytes]:
     bounds = tile.bounds(max_zoom_range)
-    doc = doc.value.replace("<|min_x|>", bounds.x_min).replace("<|min_y|>", bounds.y_min).replace("<|width|>", bounds.x_max - bounds.x_min).replace("<|height|>", bounds.y_max - bounds.y_min)
+    doc = doc.value.replace("<|min_x|>", str(bounds.x_min)).replace("<|min_y|>", str(bounds.y_min)).replace("<|width|>", str(bounds.x_max - bounds.x_min)).replace("<|height|>", str(bounds.y_max - bounds.y_min))
     
     p = subprocess.Popen(
         [
