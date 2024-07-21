@@ -20,7 +20,7 @@ from tile_renderer.types.skin import (
 
 
 def _shift_coordinates(line: Line[int], zoom: int, offset: Coord) -> list[Coord[int]]:
-    return [(c + offset) / (zoom + 1) for c in line]
+    return [(c + offset) / 2**zoom for c in line]
 
 
 def area_border_text_svg(

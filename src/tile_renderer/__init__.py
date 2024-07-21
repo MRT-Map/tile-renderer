@@ -38,7 +38,7 @@ def render_tiles(
     max_zoom_range: int,
     tile_size: int,
     offset: Coord = Coord(0, 0),
-    processes: int = os.cpu_count(),
+    processes: int = os.cpu_count() * 2,
 ) -> dict[TileCoord, bytes]:
     images = {}
     doc = render_svg(components, skin, zoom, offset)
@@ -60,7 +60,8 @@ def render_tiles(
         resvg_path = subprocess.check_output(["where" if platform.system() == "Windows" else "which", "resvg"]).strip()
         n = 0
         for tile, b in pool.imap(
-            _f, ((doc, tile, zoom_range, str(skin.background), tile_size, resvg_path) for tile in tiles)
+            _f,
+            ((doc, tile, max_zoom_range, zoom, offset, str(skin.background), tile_size, resvg_path) for tile in tiles),
         ):
             images[tile] = b
             progress.advance(task_id)
@@ -123,14 +124,17 @@ def _sort_styling(
 def _export_tile(
     doc: str,
     tile: TileCoord,
-    zoom_range: int,
+    max_zoom_range: int,
+    zoom: int,
+    offset: Coord,
     background: str,
     tile_size: int,
     resvg_path: str,
 ) -> tuple[TileCoord, bytes]:
-    bounds = tile.bounds(zoom_range)
-    doc = doc.value.replace("<|min_x|>", str(bounds.x_min)).replace("<|min_y|>", str(bounds.y_min))
-
+    bounds = tile.bounds(max_zoom_range)
+    doc = doc.value.replace("<|min_x|>", str((bounds.x_min + offset.x) / 2**zoom), 1).replace(
+        "<|min_y|>", str((bounds.y_min + offset.y) / 2**zoom), 1
+    )
     p = subprocess.Popen(
         [
             resvg_path,
