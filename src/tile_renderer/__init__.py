@@ -2,6 +2,7 @@ import ctypes
 import functools
 import multiprocessing
 import os
+import platform
 import subprocess
 from copy import copy
 from pathlib import Path
@@ -113,10 +114,11 @@ def _export_tile(
 ) -> tuple[TileCoord, bytes]:
     bounds = tile.bounds(max_zoom_range)
     doc = doc.value.replace("<|min_x|>", str(bounds.x_min)).replace("<|min_y|>", str(bounds.y_min)).replace("<|width|>", str(bounds.x_max - bounds.x_min)).replace("<|height|>", str(bounds.y_max - bounds.y_min))
-    
+
+    resvg_path = subprocess.check_output(["where" if platform.system() == "Windows" else "which", "resvg"])
     p = subprocess.Popen(
         [
-            "resvg",
+            resvg_path,
             "-",
             "-c",
             "--resources-dir",
