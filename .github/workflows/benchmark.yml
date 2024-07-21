@@ -3,9 +3,6 @@ on:
     branches: [ "v5" ]
   workflow_dispatch:
   
-permissions:
-  contents: write
-  
 jobs:
   benchmark:
     runs-on: ubuntu-latest
