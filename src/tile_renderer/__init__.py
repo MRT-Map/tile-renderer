@@ -4,15 +4,14 @@ import multiprocessing
 import os
 import platform
 import subprocess
-from copy import copy
 from pathlib import Path
 from typing import cast
 
 import rich
 import svg
-from rich.progress import track, Progress
+from rich.progress import Progress, track
 
-from tile_renderer.types.coord import TileCoord, Coord, Line
+from tile_renderer.types.coord import Coord, Line, TileCoord
 from tile_renderer.types.pla2 import Component
 from tile_renderer.types.skin import ComponentStyle, ComponentType, LineBack, LineFore, Skin
 
@@ -44,18 +43,29 @@ def render_tiles(
     images = {}
     doc = render_svg(components, skin, zoom, offset)
     tiles = Component.tiles(components, zoom, max_zoom_range)
-    with multiprocessing.Pool(processes=processes) as pool, Progress() as progress, multiprocessing.Manager() as manager:
-        task_id = progress.add_task("[green] Exporting to PNG", total=len(tiles))
+    with (
+        multiprocessing.Pool(processes=processes) as pool,
+        Progress() as progress,
+        multiprocessing.Manager() as manager,
+    ):
+        task_id = progress.add_task(f"[green] Exporting to PNG", total=len(tiles))
         doc.viewBox = svg.ViewBoxSpec(
-            min_x="<|min_x|>",
-            min_y="<|min_y|>",
-            width="<|width|>",
-            height="<|height|>",
+            min_x=cast(int, "<|min_x|>"),
+            min_y=cast(int, "<|min_y|>"),
+            width=tile_size,
+            height=tile_size,
         )
         doc = manager.Value(ctypes.c_wchar_p, str(doc))
-        for tile, b in pool.imap(_f, ((doc, tile, max_zoom_range, skin, tile_size) for tile in tiles)):
+        resvg_path = subprocess.check_output(["where" if platform.system() == "Windows" else "which", "resvg"]).strip()
+        n = 0
+        for tile, b in pool.imap(
+            _f, ((doc, tile, max_zoom_range, str(skin.background), tile_size, resvg_path) for tile in tiles)
+        ):
             images[tile] = b
             progress.advance(task_id)
+            n += 1
+            if n % 10 == 0:
+                progress.console.print(f"{n}/{len(tiles)}")
     return images
 
 
@@ -110,12 +120,16 @@ def _sort_styling(
 
 
 def _export_tile(
-    doc: str, tile: TileCoord, max_zoom_range: int, skin: Skin, tile_size: int
+    doc: str,
+    tile: TileCoord,
+    max_zoom_range: int,
+    background: str,
+    tile_size: int,
+    resvg_path: str,
 ) -> tuple[TileCoord, bytes]:
     bounds = tile.bounds(max_zoom_range)
-    doc = doc.value.replace("<|min_x|>", str(bounds.x_min)).replace("<|min_y|>", str(bounds.y_min)).replace("<|width|>", str(bounds.x_max - bounds.x_min)).replace("<|height|>", str(bounds.y_max - bounds.y_min))
+    doc = doc.value.replace("<|min_x|>", str(bounds.x_min)).replace("<|min_y|>", str(bounds.y_min))
 
-    resvg_path = subprocess.check_output(["where" if platform.system() == "Windows" else "which", "resvg"]).strip()
     p = subprocess.Popen(
         [
             resvg_path,
@@ -124,7 +138,7 @@ def _export_tile(
             "--resources-dir",
             Path(__file__).parent,
             "--background",
-            str(skin.background),
+            background,
             "--font-family",
             "Noto Sans",
             "--width",
