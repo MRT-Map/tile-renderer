@@ -7,12 +7,12 @@ permissions:
   contents: write
   
 jobs:
-  pages:
+  benchmark:
     runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v4
     - uses: pypa/hatch@install
     - run: sudo apt-get update; sudo apt-get install --no-install-recommends resvg
-    - run: which resvg
+    - run: resvg
     - run: hatch run python tests/enc.py
