@@ -7,7 +7,7 @@ import rich
 import svg
 from rich.progress import track
 
-from tile_renderer.types.coord import TileCoord, Coord
+from tile_renderer.types.coord import TileCoord, Coord, Line
 from tile_renderer.types.pla2 import Component
 from tile_renderer.types.skin import ComponentStyle, ComponentType, LineBack, LineFore, Skin
 
@@ -15,7 +15,12 @@ from tile_renderer.types.skin import ComponentStyle, ComponentType, LineBack, Li
 def render_svg(components: list[Component], skin: Skin, zoom: int, offset: Coord = Coord(0, 0)) -> svg.SVG:
     styling = _get_styling(components, skin, zoom)
     styling = _sort_styling(styling, skin)
-    return svg.SVG(elements=[s.render(c, zoom, offset) for c, ct, s, i in track(styling, "[green] Rendering SVG")])
+    text_list = []
+    out = svg.SVG(
+        elements=[s.render(c, zoom, text_list, offset) for c, ct, s, i in track(styling, "[green] Rendering SVG")]
+    )
+    out.elements.extend(_filter_text_list(text_list))
+    return out
 
 
 def render_tiles(
@@ -102,3 +107,11 @@ def _export_tile(doc: svg.SVG, tile: TileCoord, max_zoom_range: int, skin: Skin)
         stderr=subprocess.PIPE,
     )
     return p.communicate(input=str(doc2).encode("utf-8"))[0]
+
+
+def _filter_text_list(text_list: list[tuple[Line, svg.Element]]) -> list[svg.Element]:
+    out = []
+    for line, text in text_list:
+        if not any(line.shapely.intersects(other.shapely) for other, _ in out):
+            out.append((line, text))
+    return [text for _, text in out]

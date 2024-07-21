@@ -100,7 +100,7 @@ class Coord[T: float | int](Vector[T]):
         return Coord(round(self.x), round(self.y))
 
     @property
-    def point(self) -> Point:
+    def shapely(self) -> Point:
         """Returns a Shapely point"""
         return Point(self.x, self.y)
 
@@ -147,6 +147,11 @@ class Line[T: float | int]:
     def to_int(self) -> Line[int]:
         return Line([c.to_int() for c in self.coords])
 
+    @property
+    def shapely(self) -> LineString:
+        """Returns a Shapely line string"""
+        return LineString(a.as_tuple() for a in self.coords)
+
     @functools.cached_property
     def bounds(self) -> Bounds[float]:
         """
@@ -164,7 +169,7 @@ class Line[T: float | int]:
         if distance == 0:
             return self
         return Line(
-            [Coord(*a) for a in LineString(a.as_tuple() for a in self.coords).offset_curve(distance).coords],
+            [Coord(*a) for a in self.shapely.offset_curve(distance).coords],
         )
 
     @property
@@ -175,10 +180,10 @@ class Line[T: float | int]:
         return Coord(point.x + self.coords[0].x, point.y + self.coords[0].y)
 
     def dash(self, dash_length: int | float) -> list[Self]:
-        coords = LineString(a.as_tuple() for a in self.coords)
+        coords = self.shapely
         return [
             Line([Coord(*c) for c in substring(coords, start_dist=dist, end_dist=dist + dash_length).coords])
-            for dist in range(0, math.ceil(coords.length), dash_length * 2)
+            for dist in range(math.ceil((coords.length % dash_length) / 2), math.ceil(coords.length), dash_length * 2)
         ]
 
     def encode(self) -> list[tuple[T, T]]:
