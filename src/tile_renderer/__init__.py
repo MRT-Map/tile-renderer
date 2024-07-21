@@ -49,17 +49,18 @@ def render_tiles(
         multiprocessing.Manager() as manager,
     ):
         task_id = progress.add_task(f"[green] Exporting to PNG", total=len(tiles))
+        zoom_range = max_zoom_range * 2**zoom
         doc.viewBox = svg.ViewBoxSpec(
             min_x=cast(int, "<|min_x|>"),
             min_y=cast(int, "<|min_y|>"),
-            width=tile_size,
-            height=tile_size,
+            width=zoom_range,
+            height=zoom_range,
         )
         doc = manager.Value(ctypes.c_wchar_p, str(doc))
         resvg_path = subprocess.check_output(["where" if platform.system() == "Windows" else "which", "resvg"]).strip()
         n = 0
         for tile, b in pool.imap(
-            _f, ((doc, tile, max_zoom_range, str(skin.background), tile_size, resvg_path) for tile in tiles)
+            _f, ((doc, tile, zoom_range, str(skin.background), tile_size, resvg_path) for tile in tiles)
         ):
             images[tile] = b
             progress.advance(task_id)
@@ -122,12 +123,12 @@ def _sort_styling(
 def _export_tile(
     doc: str,
     tile: TileCoord,
-    max_zoom_range: int,
+    zoom_range: int,
     background: str,
     tile_size: int,
     resvg_path: str,
 ) -> tuple[TileCoord, bytes]:
-    bounds = tile.bounds(max_zoom_range)
+    bounds = tile.bounds(zoom_range)
     doc = doc.value.replace("<|min_x|>", str(bounds.x_min)).replace("<|min_y|>", str(bounds.y_min))
 
     p = subprocess.Popen(
