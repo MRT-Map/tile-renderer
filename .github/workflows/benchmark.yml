@@ -1,0 +1,15 @@
+on:
+  workflow_dispatch:
+  
+permissions:
+  contents: write
+  
+jobs:
+  pages:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: pypa/hatch@install
+    - run: sudo apt-get update; sudo apt-get install --no-install-recommends resvg
+    - run: hatch run tests/enc.py
