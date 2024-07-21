@@ -1,6 +1,7 @@
 from __future__ import annotations
 
 import math
+import warnings
 from collections import Counter
 from typing import TYPE_CHECKING, Self, dataclass_transform
 
@@ -148,7 +149,7 @@ class Pla2File(Struct):
         count = {k: v for k, v in Counter(component.fid for component in self.components).items() if v >= 2}  # noqa: PLR2004
         if count:
             msg = f"IDs {', '.join(f'`{id_}`' for id_ in count)} are duplicated"
-            raise ValueError(
+            warnings.warn(
                 msg,
             )
 
