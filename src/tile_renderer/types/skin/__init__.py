@@ -166,9 +166,9 @@ type _SerComponentStyle = (
 
 @dataclass_transform()
 class AreaBorderText(Struct):
-    size: int
+    size: int | float
     colour: Colour | None = None
-    offset: int = 0
+    offset: int | float = 0
 
     def encode(self) -> _SerAreaBorderText:
         return _SerAreaBorderText(
@@ -195,7 +195,7 @@ class _SerAreaBorderText(AreaBorderText, tag_field="ty", tag="areaBorderText"):
 
 @dataclass_transform()
 class AreaCentreText(Struct):
-    size: int
+    size: int | float
     colour: Colour | None = None
     offset: Vector[float] = Vector(0.0, 0.0)
 
@@ -229,6 +229,7 @@ class _SerAreaCentreText(AreaCentreText, tag_field="ty", tag="areaCentreText"):
 class AreaFill(Struct):
     colour: Colour | None = None
     outline: Colour | None = None
+    outline_width: int | float = 0
 
     # stripe: tuple[int, int, int] | None = None
 
@@ -236,6 +237,7 @@ class AreaFill(Struct):
         return _SerAreaFill(
             colour=None if self.colour is None else str(self.colour),
             outline=None if self.outline is None else str(self.outline),
+            outline_width=self.outline_width,
         )
 
     def render(
@@ -255,6 +257,7 @@ class _SerAreaFill(AreaFill, tag_field="ty", tag="areaFill"):
         return AreaFill(
             colour=None if self.colour is None else Colour.from_hex(self.colour),
             outline=None if self.outline is None else Colour.from_hex(self.outline),
+            outline_width=self.outline_width,
         )
 
 
@@ -284,10 +287,10 @@ class _SerAreaCentreImage(AreaCentreImage, tag_field="ty", tag="areaCentreImage"
 
 @dataclass_transform()
 class LineText(Struct):
-    size: int
+    size: int | float
     arrow_colour: Colour | None = None
     colour: Colour | None = None
-    offset: int = 0
+    offset: int | float = 0
 
     def encode(self) -> _SerLineText:
         return _SerLineText(
@@ -321,8 +324,8 @@ class _SerLineText(LineText, tag_field="ty", tag="lineText"):
 
 @dataclass_transform()
 class LineFore(Struct):
-    width: int
-    dash: list[int] | None = None
+    width: int | float
+    dash: list[int | float] | None = None
     colour: Colour | None = None
     unrounded: bool = False
 
@@ -380,7 +383,7 @@ class _SerLineBack(_SerLineFore, tag_field="ty", tag="lineBack"):
 @dataclass_transform()
 class PointText(Struct):
     anchor: str
-    size: int
+    size: int | float
     colour: Colour | None = None
     offset: Vector[float] = Vector(0.0, 0.0)
 
@@ -416,11 +419,11 @@ class _SerPointText(PointText, tag_field="ty", tag="pointText"):
 
 @dataclass_transform()
 class PointSquare(Struct):
-    size: int
-    width: int
+    size: int | float
+    width: int | float
     colour: Colour | None = None
     outline: Colour | None = None
-    border_radius: int = 0
+    border_radius: int | float = 0
 
     def encode(self) -> _SerPointSquare:
         return _SerPointSquare(

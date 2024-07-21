@@ -2,6 +2,7 @@ import functools
 import subprocess
 from copy import copy
 from pathlib import Path
+from typing import cast
 
 import rich
 import svg
@@ -77,7 +78,7 @@ def _sort_styling(
 
         return i1 - i2
 
-    return sorted(styling, key=functools.cmp_to_key(sort_fn))
+    return sorted(styling, key=functools.cmp_to_key(cast(any, sort_fn)))
 
 
 def _export_tile(doc: svg.SVG, tile: TileCoord, max_zoom_range: int, skin: Skin) -> bytes:
@@ -111,7 +112,7 @@ def _export_tile(doc: svg.SVG, tile: TileCoord, max_zoom_range: int, skin: Skin)
 
 def _filter_text_list(text_list: list[tuple[Line, svg.Element]]) -> list[svg.Element]:
     out = []
-    for line, text in text_list:
+    for line, text in track(text_list, "[green] Filtering text"):
         if not any(line.shapely.intersects(other.shapely) for other, _ in out):
             out.append((line, text))
     return [text for _, text in out]

@@ -39,7 +39,7 @@ def main():
         ComponentType(
             name="waterLarge",
             shape="area",
-            styles={"0-": [AreaFill(colour=WATER), AreaCentreText(colour=WATER.darkened(), size=10)]},
+            styles={"0-": [AreaFill(colour=WATER), AreaCentreText(colour=WATER.darkened(), size=5.0)]},
         )
     )
     types.append(
@@ -47,7 +47,7 @@ def main():
             name="waterSmall",
             shape="area",
             styles={
-                "0-2": [AreaFill(colour=WATER), AreaCentreText(colour=WATER.darkened(), size=5)],
+                "0-2": [AreaFill(colour=WATER), AreaCentreText(colour=WATER.darkened(), size=2.5)],
                 "3-": [
                     AreaFill(colour=WATER),
                 ],
@@ -60,7 +60,7 @@ def main():
             name="landLarge",
             shape="area",
             styles={
-                "0-5": [AreaFill(colour=LAND), AreaCentreText(colour=LAND.darkened(), size=10)],
+                "0-5": [AreaFill(colour=LAND), AreaCentreText(colour=LAND.darkened(), size=5.0)],
                 "6-": [
                     AreaFill(colour=LAND),
                 ],
@@ -72,7 +72,7 @@ def main():
             name="landSmall",
             shape="area",
             styles={
-                "0-2": [AreaFill(colour=LAND), AreaCentreText(colour=LAND.darkened(), size=5)],
+                "0-2": [AreaFill(colour=LAND), AreaCentreText(colour=LAND.darkened(), size=2.5)],
                 "3-": [
                     AreaFill(colour=LAND),
                 ],
@@ -86,11 +86,11 @@ def main():
             shape="line",
             styles={
                 "0-2": [
-                    LineFore(colour=WATER, width=2),
-                    LineText(colour=WATER.darkened(), arrow_colour=WATER.darkened(), size=4),
+                    LineFore(colour=WATER, width=1.0),
+                    LineText(colour=WATER.darkened(), arrow_colour=WATER.darkened(), size=2.0),
                 ],
                 "3-4": [
-                    LineFore(colour=WATER, width=1),
+                    LineFore(colour=WATER, width=0.3),
                 ],
             },
         )
@@ -119,10 +119,10 @@ def main():
                 shape="area",
                 styles={
                     "0-3": [
-                        AreaFill(colour=colour, outline=colour.darkened()),
-                        AreaCentreText(colour=colour.darkened(), size=5),
+                        AreaFill(colour=colour, outline=colour.darkened(), outline_width=0.5),
+                        AreaCentreText(colour=colour.darkened(), size=2.5),
                     ],
-                    "4-6": [AreaFill(colour=colour, outline=colour.darkened())],
+                    "4-6": [AreaFill(colour=colour, outline=colour.darkened(), outline_width=0.5)],
                 },
             )
         )
@@ -134,7 +134,7 @@ def main():
             styles={
                 "0-2": [
                     AreaFill(colour=Colour.from_hex(0x33334D)),
-                    AreaCentreText(colour=Colour.from_hex(0x33334D).darkened(), size=2),
+                    AreaCentreText(colour=Colour.from_hex(0x33334D).darkened(), size=1.0),
                 ],
                 "3-5": [
                     AreaFill(colour=Colour.from_hex(0x33334D)),
@@ -150,7 +150,7 @@ def main():
             styles={
                 "0-5": [
                     AreaFill(colour=Colour.from_hex(0xC2C2D6)),
-                    AreaCentreText(colour=Colour.from_hex(0xC2C2D6).darkened(), size=3),
+                    AreaCentreText(colour=Colour.from_hex(0xC2C2D6).darkened(), size=1.5),
                 ]
             },
         )
@@ -162,15 +162,15 @@ def main():
             shape="line",
             styles={
                 "0-2": [
-                    LineFore(colour=Colour.from_hex(0x8F8FA3), width=10),
+                    LineFore(colour=Colour.from_hex(0x8F8FA3), width=5.0),
                     LineText(
                         colour=Colour.from_hex(0x8F8FA3).darkened(),
                         arrow_colour=Colour.from_hex(0x8F8FA3).darkened(),
-                        size=4,
+                        size=2.0,
                     ),
                 ],
                 "3-5": [
-                    LineFore(colour=Colour.from_hex(0x8F8FA3), width=10),
+                    LineFore(colour=Colour.from_hex(0x8F8FA3), width=5.0),
                 ],
             },
         )
@@ -182,15 +182,15 @@ def main():
             shape="line",
             styles={
                 "0-1": [
-                    LineFore(colour=Colour.from_hex(0x73738C), width=20, unrounded=True),
+                    LineFore(colour=Colour.from_hex(0x73738C), width=10.0, unrounded=True),
                     LineText(
                         colour=Colour.from_hex(0x73738C).darkened(),
                         arrow_colour=Colour.from_hex(0x73738C).darkened(),
-                        size=4,
+                        size=2.0,
                     ),
                 ],
                 "2-5": [
-                    LineFore(colour=Colour.from_hex(0x73738C), width=10, unrounded=True),
+                    LineFore(colour=Colour.from_hex(0x73738C), width=5.0, unrounded=True),
                 ],
             },
         )
@@ -202,15 +202,15 @@ def main():
             shape="line",
             styles={
                 "0-1": [
-                    LineFore(colour=Colour.from_hex(0x73738C), width=40, unrounded=True),
+                    LineFore(colour=Colour.from_hex(0x73738C), width=20.0, unrounded=True),
                     LineText(
                         colour=Colour.from_hex(0x73738C).darkened(),
                         arrow_colour=Colour.from_hex(0x73738C).darkened(),
-                        size=8,
+                        size=4.0,
                     ),
                 ],
                 "2-5": [
-                    LineFore(colour=Colour.from_hex(0x73738C), width=20, unrounded=True),
+                    LineFore(colour=Colour.from_hex(0x73738C), width=10.0, unrounded=True),
                 ],
             },
         )
@@ -222,8 +222,12 @@ def main():
             shape="area",
             styles={
                 "0-1": [
-                    AreaFill(colour=Colour.from_hex(0xFF99FF), outline=Colour.from_hex(0xFF99FF).darkened()),
-                    AreaCentreText(colour=Colour.from_hex(0xFF99FF).darkened(), size=2),
+                    AreaFill(
+                        colour=Colour.from_hex(0xFF99FF),
+                        outline=Colour.from_hex(0xFF99FF).darkened(),
+                        outline_width=0.5,
+                    ),
+                    AreaCentreText(colour=Colour.from_hex(0xFF99FF).darkened(), size=1.0),
                 ]
             },
         )
@@ -235,11 +239,19 @@ def main():
             shape="area",
             styles={
                 "0-4": [
-                    AreaFill(colour=Colour.from_hex(0xCCCCFF), outline=Colour.from_hex(0xCCCCFF).darkened()),
-                    AreaCentreText(colour=Colour.from_hex(0xCCCCFF).darkened(), size=3),
+                    AreaFill(
+                        colour=Colour.from_hex(0xCCCCFF),
+                        outline=Colour.from_hex(0xCCCCFF).darkened(),
+                        outline_width=0.5,
+                    ),
+                    AreaCentreText(colour=Colour.from_hex(0xCCCCFF).darkened(), size=1.5),
                 ],
                 "5-6": [
-                    AreaFill(colour=Colour.from_hex(0xCCCCFF), outline=Colour.from_hex(0xCCCCFF).darkened()),
+                    AreaFill(
+                        colour=Colour.from_hex(0xCCCCFF),
+                        outline=Colour.from_hex(0xCCCCFF).darkened(),
+                        outline_width=0.5,
+                    ),
                 ],
             },
         )
@@ -256,11 +268,11 @@ def main():
                 shape="area",
                 styles={
                     "0-1": [
-                        AreaFill(colour=col.brightened(), outline=col),
-                        AreaCentreText(colour=col.darkened(), size=3),
+                        AreaFill(colour=col.brightened(), outline=col, outline_width=0.5),
+                        AreaCentreText(colour=col.darkened(), size=1.5),
                     ],
                     "2-3": [
-                        AreaFill(colour=col.brightened(), outline=col),
+                        AreaFill(colour=col.brightened(), outline=col, outline_width=0.5),
                     ],
                 },
             )
@@ -272,11 +284,19 @@ def main():
             shape="area",
             styles={
                 "0-2": [
-                    AreaFill(colour=Colour.from_hex(0x669900), outline=Colour.from_hex(0x669900).darkened()),
-                    AreaCentreText(colour=Colour.from_hex(0x669900).darkened(), size=4),
+                    AreaFill(
+                        colour=Colour.from_hex(0x669900),
+                        outline=Colour.from_hex(0x669900).darkened(),
+                        outline_width=0.5,
+                    ),
+                    AreaCentreText(colour=Colour.from_hex(0x669900).darkened(), size=2.0),
                 ],
                 "3-6": [
-                    AreaFill(colour=Colour.from_hex(0x669900), outline=Colour.from_hex(0x669900).darkened()),
+                    AreaFill(
+                        colour=Colour.from_hex(0x669900),
+                        outline=Colour.from_hex(0x669900).darkened(),
+                        outline_width=0.5,
+                    ),
                 ],
             },
         )
@@ -289,10 +309,10 @@ def main():
             tags=["road"],
             styles={
                 "0-4": [
-                    LineBack(colour=Colour.from_hex(0xEEEEEE), width=2),
-                    LineFore(colour=Colour.from_hex(0x66FF66), width=1, dash=[3, 3]),
+                    LineBack(colour=Colour.from_hex(0xEEEEEE), width=0.8),
+                    LineFore(colour=Colour.from_hex(0x66FF66), width=0.4, dash=[1.6, 1.6]),
                     LineText(
-                        colour=Colour.from_hex(0xAAAAAA), arrow_colour=Colour.from_hex(0xEEEEEE), size=3, offset=2
+                        colour=Colour.from_hex(0xAAAAAA), arrow_colour=Colour.from_hex(0xEEEEEE), size=1.6, offset=1.0
                     ),
                 ]
             },
@@ -300,18 +320,18 @@ def main():
     )
 
     for name, col, width, small_width in (
-        ("localHighwaySlip_underground", LOCAL_HIGHWAY, 4, 1),
-        ("bRoadSlip_underground", B_ROAD, 5, 2),
-        ("aRoadSlip_underground", A_ROAD, 6, 3),
-        ("localPedestrianQuaternaryRoad_underground", LOCAL_PEDESTRIAN, 3, 1),
-        ("localQuaternaryRoad_underground", LOCAL_TERTIARY_QUATERNARY, 3, 1),
-        ("localPedestrianTertiaryRoad_underground", LOCAL_PEDESTRIAN, 5, 2),
-        ("localTertiaryRoad_underground", LOCAL_TERTIARY_QUATERNARY, 5, 2),
-        ("localSecondaryRoad_underground", LOCAL_SECONDARY, 6, 2),
-        ("localMainRoad_underground", LOCAL_MAIN, 6, 3),
-        ("localHighway_underground", LOCAL_HIGHWAY, 7, 3),
-        ("bRoad_underground", B_ROAD, 8, 4),
-        ("aRoad_underground", A_ROAD, 10, 4),
+        ("localHighwaySlip_underground", LOCAL_HIGHWAY, 2.0, 0.1),
+        ("bRoadSlip_underground", B_ROAD, 2.4, 0.2),
+        ("aRoadSlip_underground", A_ROAD, 3.2, 0.3),
+        ("localPedestrianQuaternaryRoad_underground", LOCAL_PEDESTRIAN, 1.6, 0.1),
+        ("localQuaternaryRoad_underground", LOCAL_TERTIARY_QUATERNARY, 1.6, 0.1),
+        ("localPedestrianTertiaryRoad_underground", LOCAL_PEDESTRIAN, 2.4, 0.2),
+        ("localTertiaryRoad_underground", LOCAL_TERTIARY_QUATERNARY, 2.4, 0.2),
+        ("localSecondaryRoad_underground", LOCAL_SECONDARY, 2.8, 0.2),
+        ("localMainRoad_underground", LOCAL_MAIN, 3.2, 0.3),
+        ("localHighway_underground", LOCAL_HIGHWAY, 3.6, 0.3),
+        ("bRoad_underground", B_ROAD, 4.0, 0.4),
+        ("aRoad_underground", A_ROAD, 4.8, 0.4),
     ):
         types.append(
             ComponentType(
@@ -320,7 +340,7 @@ def main():
                 tags=["road"],
                 styles={
                     "0-4": [
-                        LineBack(colour=col, width=width + 2),
+                        LineBack(colour=col, width=width + 0.8),
                         LineFore(colour=col.brightened(), width=width),
                         LineText(colour=Colour.from_hex(0x000000), arrow_colour=col, size=width),
                     ],
@@ -339,12 +359,12 @@ def main():
             tags=["road"],
             styles={
                 "0-2": [
-                    LineFore(colour=Colour.from_hex(0x808080), width=2, dash=[10, 5]),
+                    LineFore(colour=Colour.from_hex(0x808080), width=0.8, dash=[5.0, 2.5]),
                     LineText(
-                        colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=3, size=3
+                        colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=1.6, size=1.6
                     ),
                 ],
-                "3-4": [LineFore(colour=Colour.from_hex(0x808080), width=1, dash=(4, 2))],
+                "3-4": [LineFore(colour=Colour.from_hex(0x808080), width=0.2, dash=(2.0, 1.0))],
             },
         )
     )
@@ -356,12 +376,12 @@ def main():
             tags=["road"],
             styles={
                 "0-2": [
-                    LineFore(colour=Colour.from_hex(0x808080), width=3, dash=[10, 5]),
+                    LineFore(colour=Colour.from_hex(0x808080), width=1.6, dash=[5.0, 2.5]),
                     LineText(
-                        colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=3, size=3
+                        colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=1.6, size=1.6
                     ),
                 ],
-                "3-6": [LineFore(colour=Colour.from_hex(0x808080), width=1, dash=(4, 2))],
+                "3-6": [LineFore(colour=Colour.from_hex(0x808080), width=0.2, dash=(2.0, 1.0))],
             },
         )
     )
@@ -372,11 +392,19 @@ def main():
             shape="area",
             styles={
                 "0-1": [
-                    AreaFill(colour=Colour.from_hex(0xAAAAAA), outline=Colour.from_hex(0xAAAAAA).darkened()),
-                    AreaCentreText(colour=Colour.from_hex(0xAAAAAA).darkened(), size=2),
+                    AreaFill(
+                        colour=Colour.from_hex(0xAAAAAA),
+                        outline=Colour.from_hex(0xAAAAAA).darkened(),
+                        outline_width=0.5,
+                    ),
+                    AreaCentreText(colour=Colour.from_hex(0xAAAAAA).darkened(), size=1.0),
                 ],
                 "2-3": [
-                    AreaFill(colour=Colour.from_hex(0xAAAAAA), outline=Colour.from_hex(0xAAAAAA).darkened()),
+                    AreaFill(
+                        colour=Colour.from_hex(0xAAAAAA),
+                        outline=Colour.from_hex(0xAAAAAA).darkened(),
+                        outline_width=0.5,
+                    ),
                 ],
             },
         )
@@ -393,11 +421,11 @@ def main():
                 shape="area",
                 styles={
                     "0-1": [
-                        AreaFill(colour=col, outline=col),
-                        AreaCentreText(colour=col.darkened(), size=3),
+                        AreaFill(colour=col.brightened(), outline=col, outline_width=0.5),
+                        AreaCentreText(colour=col.darkened(), size=1.5),
                     ],
                     "2-3": [
-                        AreaFill(colour=col, outline=col),
+                        AreaFill(colour=col.brightened(), outline=col, outline_width=0.5),
                     ],
                 },
             )
@@ -410,10 +438,10 @@ def main():
             tags=["road"],
             styles={
                 "0-4": [
-                    LineBack(colour=Colour.from_hex(0xEEEEEE), width=2),
-                    LineFore(colour=Colour.from_hex(0x008000), width=1, dash=[3, 3]),
+                    LineBack(colour=Colour.from_hex(0xEEEEEE), width=0.8),
+                    LineFore(colour=Colour.from_hex(0x008000), width=0.4, dash=[1.6, 1.6]),
                     LineText(
-                        colour=Colour.from_hex(0xAAAAAA), arrow_colour=Colour.from_hex(0xEEEEEE), size=3, offset=2
+                        colour=Colour.from_hex(0xAAAAAA), arrow_colour=Colour.from_hex(0xEEEEEE), size=1.6, offset=1.0
                     ),
                 ]
             },
@@ -421,18 +449,18 @@ def main():
     )
 
     for name, col, width, small_width in (
-        ("localHighwaySlip", LOCAL_HIGHWAY, 4, 1),
-        ("bRoadSlip", B_ROAD, 5, 2),
-        ("aRoadSlip", A_ROAD, 6, 3),
-        ("localPedestrianQuaternaryRoad", LOCAL_PEDESTRIAN, 3, 1),
-        ("localQuaternaryRoad", LOCAL_TERTIARY_QUATERNARY, 3, 1),
-        ("localPedestrianTertiaryRoad", LOCAL_PEDESTRIAN, 5, 2),
-        ("localTertiaryRoad", LOCAL_TERTIARY_QUATERNARY, 5, 2),
-        ("localSecondaryRoad", LOCAL_SECONDARY, 6, 2),
-        ("localMainRoad", LOCAL_MAIN, 6, 3),
-        ("localHighway", LOCAL_HIGHWAY, 7, 3),
-        ("bRoad", B_ROAD, 8, 4),
-        ("aRoad", A_ROAD, 10, 4),
+        ("localHighwaySlip", LOCAL_HIGHWAY, 2.0, 0.1),
+        ("bRoadSlip", B_ROAD, 2.4, 0.2),
+        ("aRoadSlip", A_ROAD, 3.2, 0.3),
+        ("localPedestrianQuaternaryRoad", LOCAL_PEDESTRIAN, 1.6, 0.1),
+        ("localQuaternaryRoad", LOCAL_TERTIARY_QUATERNARY, 1.6, 0.1),
+        ("localPedestrianTertiaryRoad", LOCAL_PEDESTRIAN, 2.4, 0.2),
+        ("localTertiaryRoad", LOCAL_TERTIARY_QUATERNARY, 2.4, 0.2),
+        ("localSecondaryRoad", LOCAL_SECONDARY, 2.8, 0.2),
+        ("localMainRoad", LOCAL_MAIN, 3.2, 0.3),
+        ("localHighway", LOCAL_HIGHWAY, 3.6, 0.3),
+        ("bRoad", B_ROAD, 4.0, 0.4),
+        ("aRoad", A_ROAD, 4.8, 0.4),
     ):
         types.append(
             ComponentType(
@@ -441,7 +469,7 @@ def main():
                 tags=["road"],
                 styles={
                     "0-4": [
-                        LineBack(colour=col.darkened(), width=width + 2),
+                        LineBack(colour=col.darkened(), width=width + 0.8),
                         LineFore(colour=col, width=width),
                         LineText(colour=Colour.from_hex(0x000000), arrow_colour=col, size=width),
                     ],
@@ -460,12 +488,12 @@ def main():
             tags=["road"],
             styles={
                 "0-2": [
-                    LineFore(colour=Colour.from_hex(0x808080), width=2),
+                    LineFore(colour=Colour.from_hex(0x808080), width=0.8),
                     LineText(
-                        colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=3, size=3
+                        colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=1.6, size=1.6
                     ),
                 ],
-                "3-4": [LineFore(colour=Colour.from_hex(0x808080), width=1)],
+                "3-4": [LineFore(colour=Colour.from_hex(0x808080), width=0.2)],
             },
         )
     )
@@ -477,15 +505,15 @@ def main():
             tags=["road"],
             styles={
                 "0-2": [
-                    LineBack(colour=Colour.from_hex(0x808080), width=3),
-                    LineFore(colour=Colour.from_hex(0xFFFFFF), width=2, dash=[10, 10]),
+                    LineBack(colour=Colour.from_hex(0x808080), width=1.6),
+                    LineFore(colour=Colour.from_hex(0xFFFFFF), width=0.8, dash=[5.0, 5.0]),
                     LineText(
-                        colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=3, size=3
+                        colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=1.6, size=1.6
                     ),
                 ],
                 "3-6": [
-                    LineBack(colour=Colour.from_hex(0x808080), width=2),
-                    LineFore(colour=Colour.from_hex(0xFFFFFF), width=1, dash=(4, 4)),
+                    LineBack(colour=Colour.from_hex(0x808080), width=0.4),
+                    LineFore(colour=Colour.from_hex(0xFFFFFF), width=0.2, dash=(2.0, 2.0)),
                 ],
             },
         )
@@ -498,11 +526,11 @@ def main():
             tags=["road"],
             styles={
                 "0-4": [
-                    LineBack(colour=Colour.from_hex(0x555555), width=3),
-                    LineBack(colour=Colour.from_hex(0xEEEEEE), width=2),
-                    LineFore(colour=Colour.from_hex(0x008000), width=1, dash=[3, 3]),
+                    LineBack(colour=Colour.from_hex(0x555555), width=1.2),
+                    LineBack(colour=Colour.from_hex(0xEEEEEE), width=0.8),
+                    LineFore(colour=Colour.from_hex(0x008000), width=0.4, dash=[1.6, 1.6]),
                     LineText(
-                        colour=Colour.from_hex(0xAAAAAA), arrow_colour=Colour.from_hex(0xEEEEEE), size=3, offset=2
+                        colour=Colour.from_hex(0xAAAAAA), arrow_colour=Colour.from_hex(0xEEEEEE), size=1.6, offset=1.0
                     ),
                 ]
             },
@@ -510,18 +538,18 @@ def main():
     )
 
     for name, col, width, small_width in (
-        ("localHighwaySlip_elevated", LOCAL_HIGHWAY, 4, 1),
-        ("bRoadSlip_elevated", B_ROAD, 5, 2),
-        ("aRoadSlip_elevated", A_ROAD, 6, 3),
-        ("localPedestrianQuaternaryRoad_elevated", LOCAL_PEDESTRIAN, 3, 1),
-        ("localQuaternaryRoad_elevated", LOCAL_TERTIARY_QUATERNARY, 3, 1),
-        ("localPedestrianTertiaryRoad_elevated", LOCAL_PEDESTRIAN, 5, 2),
-        ("localTertiaryRoad_elevated", LOCAL_TERTIARY_QUATERNARY, 5, 2),
-        ("localSecondaryRoad_elevated", LOCAL_SECONDARY, 6, 2),
-        ("localMainRoad_elevated", LOCAL_MAIN, 6, 3),
-        ("localHighway_elevated", LOCAL_HIGHWAY, 7, 3),
-        ("bRoad_elevated", B_ROAD, 8, 4),
-        ("aRoad_elevated", A_ROAD, 10, 4),
+        ("localHighwaySlip_elevated", LOCAL_HIGHWAY, 2.0, 0.1),
+        ("bRoadSlip_elevated", B_ROAD, 2.4, 0.2),
+        ("aRoadSlip_elevated", A_ROAD, 3.2, 0.3),
+        ("localPedestrianQuaternaryRoad_elevated", LOCAL_PEDESTRIAN, 1.6, 0.1),
+        ("localQuaternaryRoad_elevated", LOCAL_TERTIARY_QUATERNARY, 1.6, 0.1),
+        ("localPedestrianTertiaryRoad_elevated", LOCAL_PEDESTRIAN, 2.4, 0.2),
+        ("localTertiaryRoad_elevated", LOCAL_TERTIARY_QUATERNARY, 2.4, 0.2),
+        ("localSecondaryRoad_elevated", LOCAL_SECONDARY, 2.8, 0.2),
+        ("localMainRoad_elevated", LOCAL_MAIN, 3.2, 0.3),
+        ("localHighway_elevated", LOCAL_HIGHWAY, 3.6, 0.3),
+        ("bRoad_elevated", B_ROAD, 4.0, 0.4),
+        ("aRoad_elevated", A_ROAD, 4.8, 0.4),
     ):
         types.append(
             ComponentType(
@@ -530,7 +558,7 @@ def main():
                 tags=["road"],
                 styles={
                     "0-4": [
-                        LineBack(colour=Colour.from_hex(0x555555), width=width + 2),
+                        LineBack(colour=Colour.from_hex(0x555555), width=width + 0.8),
                         LineFore(colour=col, width=width),
                         LineText(colour=Colour.from_hex(0x000000), arrow_colour=col, size=width),
                     ],
@@ -549,15 +577,15 @@ def main():
             tags=["road"],
             styles={
                 "0-2": [
-                    LineBack(colour=Colour.from_hex(0x555555), width=3),
-                    LineFore(colour=Colour.from_hex(0x808080), width=2),
+                    LineBack(colour=Colour.from_hex(0x555555), width=1.2),
+                    LineFore(colour=Colour.from_hex(0x808080), width=0.8),
                     LineText(
-                        colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=3, size=3
+                        colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=1.6, size=1.6
                     ),
                 ],
                 "3-4": [
-                    LineBack(colour=Colour.from_hex(0x555555), width=2),
-                    LineFore(colour=Colour.from_hex(0x808080), width=1),
+                    LineBack(colour=Colour.from_hex(0x555555), width=0.4),
+                    LineFore(colour=Colour.from_hex(0x808080), width=0.2),
                 ],
             },
         )
@@ -570,17 +598,17 @@ def main():
             tags=["road"],
             styles={
                 "0-2": [
-                    LineBack(colour=Colour.from_hex(0x555555), width=4),
-                    LineBack(colour=Colour.from_hex(0x808080), width=3),
-                    LineFore(colour=Colour.from_hex(0xFFFFFF), width=2, dash=[10, 10]),
+                    LineBack(colour=Colour.from_hex(0x555555), width=2.0),
+                    LineBack(colour=Colour.from_hex(0x808080), width=1.6),
+                    LineFore(colour=Colour.from_hex(0xFFFFFF), width=0.8, dash=[5.0, 5.0]),
                     LineText(
-                        colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=3, size=3
+                        colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=1.6, size=1.6
                     ),
                 ],
                 "3-6": [
-                    LineBack(colour=Colour.from_hex(0x555555), width=3),
-                    LineBack(colour=Colour.from_hex(0x808080), width=2),
-                    LineFore(colour=Colour.from_hex(0xFFFFFF), width=1, dash=(4, 4)),
+                    LineBack(colour=Colour.from_hex(0x555555), width=0.6),
+                    LineBack(colour=Colour.from_hex(0x808080), width=0.4),
+                    LineFore(colour=Colour.from_hex(0xFFFFFF), width=0.2, dash=(2.0, 2.0)),
                 ],
             },
         )
@@ -592,11 +620,11 @@ def main():
             shape="area",
             styles={
                 "0-1": [
-                    AreaFill(colour=Colour.from_hex(0xCCCCCC), outline=Colour.from_hex(0x808080)),
-                    AreaCentreText(colour=Colour.from_hex(0x808080), size=2),
+                    AreaFill(colour=Colour.from_hex(0xCCCCCC), outline=Colour.from_hex(0x808080), outline_width=0.5),
+                    AreaCentreText(colour=Colour.from_hex(0x808080), size=1.0),
                 ],
                 "2-3": [
-                    AreaFill(colour=Colour.from_hex(0xCCCCCC), outline=Colour.from_hex(0x808080)),
+                    AreaFill(colour=Colour.from_hex(0xCCCCCC), outline=Colour.from_hex(0x808080), outline_width=0.5),
                 ],
             },
         )

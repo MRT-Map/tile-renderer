@@ -1,4 +1,5 @@
 import uuid
+from typing import cast
 
 import svg
 
@@ -15,7 +16,6 @@ from tile_renderer.types.skin import (
     PointImage,
     PointSquare,
     PointText,
-    Skin,
 )
 
 
@@ -43,7 +43,9 @@ def area_border_text_svg(
                 svg.G(
                     elements=[
                         svg.Polyline(
-                            points=[f"{c.x},{c.y}" for c in dash.parallel_offset(0.9 * s.size // 2 + s.offset)],
+                            points=[
+                                cast(int, f"{c.x},{c.y}") for c in dash.parallel_offset(0.9 * s.size // 2 + s.offset)
+                            ],
                             fill=None,
                             fill_opacity=0,
                             stroke=None,
@@ -106,9 +108,11 @@ def area_fill_svg(
 ) -> svg.Element:
     coordinates = _shift_coordinates(component.nodes, zoom, offset)
     return svg.Polygon(
-        points=[f"{c.x},{c.y}" for c in coordinates],
+        points=[cast(int, f"{c.x},{c.y}") for c in coordinates],
         fill=None if s.colour is None else str(s.colour),
         stroke=None if s.outline is None else str(s.outline),
+        stroke_width=s.outline_width,
+        stroke_linejoin="round",
     )
 
 
@@ -141,7 +145,9 @@ def line_text_svg(
                 svg.G(
                     elements=[
                         svg.Polyline(
-                            points=[f"{c.x},{c.y}" for c in dash.parallel_offset(0.9 * s.size // 2 + s.offset)],
+                            points=[
+                                cast(int, f"{c.x},{c.y}") for c in dash.parallel_offset(0.9 * s.size // 2 + s.offset)
+                            ],
                             fill=None,
                             fill_opacity=0,
                             stroke=None,
@@ -171,7 +177,7 @@ def line_back_fore_svg(
 ) -> svg.Element:
     coordinates = _shift_coordinates(component.nodes, zoom, offset)
     return svg.Polyline(
-        points=[f"{c.x},{c.y}" for c in coordinates],
+        points=[cast(int, f"{c.x},{c.y}") for c in coordinates],
         stroke=None if s.colour is None else str(s.colour),
         fill=None,
         fill_opacity=0,
@@ -211,6 +217,7 @@ def point_text_svg(
             ),
         )
     )
+    return svg.G()
 
 
 def point_square_svg(
