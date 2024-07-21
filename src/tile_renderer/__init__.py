@@ -25,13 +25,18 @@ def render_svg(components: list[Component], skin: Skin, zoom: int, offset: Coord
 
 
 def render_tiles(
-    components: list[Component], skin: Skin, zoom_levels: set[int], max_zoom_range: int, offset: Coord = Coord(0, 0)
+    components: list[Component],
+    skin: Skin,
+    zoom_levels: set[int],
+    max_zoom_range: int,
+    tile_size: int,
+    offset: Coord = Coord(0, 0),
 ) -> dict[TileCoord, bytes]:
     images = {}
     for zoom in zoom_levels:
         doc = render_svg(components, skin, zoom, offset)
         for tile in track(Component.tiles(components, zoom, max_zoom_range), "[green] Exporting to PNG"):
-            images[tile] = _export_tile(doc, tile, max_zoom_range, skin)
+            images[tile] = _export_tile(doc, tile, max_zoom_range, skin, tile_size)
     return images
 
 
@@ -85,7 +90,7 @@ def _sort_styling(
     return sorted(styling, key=functools.cmp_to_key(cast(any, sort_fn)))
 
 
-def _export_tile(doc: svg.SVG, tile: TileCoord, max_zoom_range: int, skin: Skin) -> bytes:
+def _export_tile(doc: svg.SVG, tile: TileCoord, max_zoom_range: int, skin: Skin, tile_size: int) -> bytes:
     doc2 = copy(doc)
     bounds = tile.bounds(max_zoom_range)
     doc2.viewBox = svg.ViewBoxSpec(
@@ -98,14 +103,17 @@ def _export_tile(doc: svg.SVG, tile: TileCoord, max_zoom_range: int, skin: Skin)
     p = subprocess.Popen(
         [
             "resvg",
-            "-",
-            "/dev/stdout",
+            "-c",
             "--resources-dir",
             Path(__file__).parent,
             "--background",
             str(skin.background),
             "--font-family",
             "Noto Sans",
+            "--width",
+            str(tile_size),
+            "--height",
+            str(tile_size),
         ],
         stdout=subprocess.PIPE,
         stdin=subprocess.PIPE,
