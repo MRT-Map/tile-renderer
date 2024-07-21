@@ -4,7 +4,7 @@ from pathlib import Path
 import requests
 
 from tile_renderer.types.colour import Colour
-from tile_renderer.types.skin import AreaCentreText, AreaFill, ComponentType, LineFore, LineText, Skin, LineBack
+from tile_renderer.types.skin import AreaCentreText, AreaFill, ComponentType, LineBack, LineFore, LineText, Skin
 
 
 def get_url(url: str) -> bytes:

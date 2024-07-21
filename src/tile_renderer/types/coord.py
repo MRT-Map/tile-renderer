@@ -6,7 +6,7 @@ import math
 from copy import copy
 from typing import TYPE_CHECKING, Self
 
-from shapely import LinearRing, LineString, Point, Polygon
+from shapely import LineString, Point, Polygon
 from shapely.ops import substring
 
 if TYPE_CHECKING:

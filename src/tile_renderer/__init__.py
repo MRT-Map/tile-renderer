@@ -11,9 +11,9 @@ from typing import cast
 import PIL.Image
 import rich
 import svg
-from rich.progress import track, Progress
+from rich.progress import Progress, track
 
-from tile_renderer.types.coord import TileCoord, Coord, Line
+from tile_renderer.types.coord import Coord, Line, TileCoord
 from tile_renderer.types.pla2 import Component
 from tile_renderer.types.skin import ComponentStyle, ComponentType, LineBack, LineFore, Skin
 
