@@ -8,7 +8,7 @@ from tile_renderer.types.skin import AreaCentreText, AreaFill, ComponentType, Li
 
 
 def get_url(url: str) -> bytes:
-    path = Path(tempfile.gettempdir()) / "renderer" / "url" / url
+    path = Path(tempfile.gettempdir()) / "tile-renderer" / "url" / url
     if path.exists():
         return path.read_bytes()
     response = requests.get(url).content  # noqa: S113
@@ -632,28 +632,34 @@ def main():
 
     skin = Skin(
         name="default",
-        fonts={
-            "": [
-                get_url(
-                    "https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/hinted/ttf/NotoSans-Regular.ttf"
-                )
-            ],
-            "b": [
-                get_url(
-                    "https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/hinted/ttf/NotoSans-Bold.ttf"
-                )
-            ],
-            "i": [
-                get_url(
-                    "https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/hinted/ttf/NotoSans-Italic.ttf"
-                )
-            ],
-            "bi": [
-                get_url(
-                    "https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/hinted/ttf/NotoSans-BoldItalic.ttf"
-                )
-            ],
-        },
+        font_files=[
+            get_url(
+                "https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/hinted/ttf/NotoSans-Regular.ttf"
+            ),
+            get_url(
+                "https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/hinted/ttf/NotoSans-Bold.ttf"
+            ),
+            get_url(
+                "https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/hinted/ttf/NotoSans-Italic.ttf"
+            ),
+            get_url(
+                "https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/hinted/ttf/NotoSans-BoldItalic.ttf"
+            ),
+            get_url("https://github.com/googlefonts/noto-cjk/raw/main/Sans/Variable/TTF/NotoSansCJKjp-VF.ttf"),
+            # get_url(
+            #     "https://github.com/googlefonts/noto-cjk/raw/main/Sans/Variable/TTF/NotoSansCJKsc-VF.ttf"
+            # ),
+            # get_url(
+            #     "https://github.com/googlefonts/noto-cjk/raw/main/Sans/Variable/TTF/NotoSansCJKtc-VF.ttf"
+            # ),
+            # get_url(
+            #     "https://github.com/googlefonts/noto-cjk/raw/main/Sans/Variable/TTF/NotoSansCJKhk-VF.ttf"
+            # ),
+            # get_url(
+            #     "https://github.com/googlefonts/noto-cjk/raw/main/Sans/Variable/TTF/NotoSansCJKkr-VF.ttf"
+            # )
+        ],
+        font_string="Noto Sans",
         background=LAND,
         types=types,
         licence=(Path(__file__).parent / "default_licences.md").read_text(),

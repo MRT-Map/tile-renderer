@@ -4,6 +4,7 @@ import multiprocessing
 import os
 import platform
 import subprocess
+import tempfile
 from pathlib import Path
 from typing import cast
 
@@ -43,6 +44,12 @@ def render_tiles(
     images = {}
     doc = render_svg(components, skin, zoom, offset)
     tiles = {t for c in components for t in c.tiles(zoom, max_zoom_range)}
+
+    font_dir = Path(tempfile.gettempdir()) / "tile-renderer" / "fonts"
+    font_dir.mkdir(exist_ok=True, parents=True)
+    for i, file in enumerate(skin.font_files):
+        (font_dir / (str(i) + ".ttf")).write_bytes(file)
+
     with (
         multiprocessing.Pool(processes=processes) as pool,
         Progress() as progress,
@@ -60,7 +67,21 @@ def render_tiles(
         n = 0
         for tile, b in pool.imap(
             _f,
-            ((doc, tile, max_zoom_range, zoom, offset, str(skin.background), tile_size, resvg_path) for tile in tiles),
+            (
+                (
+                    doc,
+                    tile,
+                    max_zoom_range,
+                    zoom,
+                    offset,
+                    str(skin.background),
+                    skin.font_string,
+                    font_dir,
+                    tile_size,
+                    resvg_path,
+                )
+                for tile in tiles
+            ),
         ):
             images[tile] = b
             progress.advance(task_id)
@@ -127,6 +148,8 @@ def _export_tile(
     zoom: int,
     offset: Coord,
     background: str,
+    font_string: str,
+    font_dir: Path,
     tile_size: int,
     resvg_path: str,
 ) -> tuple[TileCoord, bytes]:
@@ -144,7 +167,10 @@ def _export_tile(
             "--background",
             background,
             "--font-family",
-            "Noto Sans",
+            font_string,
+            "--skip-system-fonts",
+            "--use-fonts-dir",
+            str(font_dir),
             "--width",
             str(tile_size),
             "--height",
