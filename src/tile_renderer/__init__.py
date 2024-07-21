@@ -43,7 +43,7 @@ def render_tiles(
     images = {}
     doc = render_svg(components, skin, zoom, offset)
     tiles = Component.tiles(components, zoom, max_zoom_range)
-    with multiprocessing.Pool(processes=processes) as pool, Progress() as progress:
+    with multiprocessing.Pool(processes=processes) as pool, Progress() as progress, multiprocessing.Manager() as manager:
         task_id = progress.add_task("[green] Exporting to PNG", total=len(tiles))
         doc.viewBox = svg.ViewBoxSpec(
             min_x="<|min_x|>",
@@ -51,7 +51,7 @@ def render_tiles(
             width="<|width|>",
             height="<|height|>",
         )
-        doc = multiprocessing.Value(ctypes.c_wchar_p, str(doc))
+        doc = manager.Value(ctypes.c_wchar_p, str(doc))
         for tile, b in pool.imap(_f, ((doc, tile, max_zoom_range, skin, tile_size) for tile in tiles)):
             images[tile] = b
             progress.advance(task_id)
