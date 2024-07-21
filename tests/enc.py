@@ -9,7 +9,7 @@ def main():
     skin = Skin.default()
     # (Path(__file__).parent / "out.svg").write_text(str(render_svg(a.components, skin, 0)))
     Path("/tmp/tile-renderer").mkdir(exist_ok=True)
-    for tile, b in render_tiles(a.components, skin, 1, 32, 256).items():
+    for tile, b in render_tiles(a.components, skin, 5, 32, 256).items():
         Path(f"/tmp/tile-renderer/{tile}.png").write_bytes(b)
 
 

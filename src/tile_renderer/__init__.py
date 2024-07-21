@@ -49,12 +49,11 @@ def render_tiles(
         multiprocessing.Manager() as manager,
     ):
         task_id = progress.add_task(f"[green] Exporting to PNG", total=len(tiles))
-        zoom_range = max_zoom_range * 2**zoom
         doc.viewBox = svg.ViewBoxSpec(
             min_x=cast(int, "<|min_x|>"),
             min_y=cast(int, "<|min_y|>"),
-            width=zoom_range,
-            height=zoom_range,
+            width=max_zoom_range,
+            height=max_zoom_range,
         )
         doc = manager.Value(ctypes.c_wchar_p, str(doc))
         resvg_path = subprocess.check_output(["where" if platform.system() == "Windows" else "which", "resvg"]).strip()
