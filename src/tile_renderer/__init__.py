@@ -1,3 +1,4 @@
+import ctypes
 import functools
 import multiprocessing
 import os
@@ -44,7 +45,13 @@ def render_tiles(
     tiles = Component.tiles(components, zoom, max_zoom_range)
     with multiprocessing.Pool(processes=processes) as pool, Progress() as progress:
         task_id = progress.add_task("[green] Exporting to PNG", total=len(tiles))
-
+        doc.viewBox = svg.ViewBoxSpec(
+            min_x="<|min_x|>",
+            min_y="<|min_y|>",
+            width="<|width|>",
+            height="<|height|>",
+        )
+        doc = multiprocessing.Value(ctypes.c_wchar_p, str(doc))
         for tile, b in pool.imap(_f, ((doc, tile, max_zoom_range, skin, tile_size) for tile in tiles)):
             images[tile] = b
             progress.advance(task_id)
@@ -102,16 +109,15 @@ def _sort_styling(
 
 
 def _export_tile(
-    doc: svg.SVG, tile: TileCoord, max_zoom_range: int, skin: Skin, tile_size: int
+    doc: str, tile: TileCoord, max_zoom_range: int, skin: Skin, tile_size: int
 ) -> tuple[TileCoord, bytes]:
-    doc2 = copy(doc)
     bounds = tile.bounds(max_zoom_range)
-    doc2.viewBox = svg.ViewBoxSpec(
-        min_x=bounds.x_min,
-        min_y=bounds.y_min,
-        width=bounds.x_max - bounds.x_min,
-        height=bounds.y_max - bounds.y_min,
-    )
+    doc = doc.value
+        .replace("<|min_x|>", bounds.x_min)
+        .replace("<|min_y|>", bounds.y_min)
+        .replace("<|width|>", bounds.x_max - bounds.x_min)
+        .replace("<|height|>", bounds.y_max - bounds.y_min)
+    
     p = subprocess.Popen(
         [
             "resvg",
@@ -132,7 +138,7 @@ def _export_tile(
         stdin=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
-    return tile, p.communicate(input=str(doc2).encode("utf-8"))[0]
+    return tile, p.communicate(input=doc.encode("utf-8"))[0]
 
 
 def _filter_text_list(text_list: list[tuple[Line, svg.Element]]) -> list[svg.Element]:
