@@ -1,4 +1,6 @@
 on:
+  push:
+    branches: [ "v5" ]
   workflow_dispatch:
   
 permissions:
@@ -12,4 +14,4 @@ jobs:
     - uses: actions/checkout@v4
     - uses: pypa/hatch@install
     - run: sudo apt-get update; sudo apt-get install --no-install-recommends resvg
-    - run: hatch run tests/enc.py
+    - run: hatch run python tests/enc.py
