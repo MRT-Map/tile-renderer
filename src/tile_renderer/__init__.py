@@ -115,6 +115,7 @@ def _export_tile(
     p = subprocess.Popen(
         [
             "resvg",
+            "-",
             "-c",
             "--resources-dir",
             Path(__file__).parent,
