@@ -1,13 +1,13 @@
 import ctypes
 import functools
 import multiprocessing
+import multiprocessing.sharedctypes
 import os
 import platform
 import subprocess
 import tempfile
 from pathlib import Path
 from typing import cast
-import multiprocessing.sharedctypes
 
 import rich
 import svg
@@ -60,7 +60,7 @@ def render_tiles(
         Progress() as progress,
         multiprocessing.Manager() as manager,
     ):
-        task_id = progress.add_task(f"[green] Exporting to PNG", total=len(tiles))
+        task_id = progress.add_task("[green] Exporting to PNG", total=len(tiles))
         doc.viewBox = svg.ViewBoxSpec(
             min_x=cast(int, "<|min_x|>"),
             min_y=cast(int, "<|min_y|>"),

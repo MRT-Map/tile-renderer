@@ -1,7 +1,7 @@
 from __future__ import annotations
 
 from pathlib import Path
-from typing import TYPE_CHECKING, Literal, Self, dataclass_transform, Any
+from typing import TYPE_CHECKING, Any, Literal, Self, dataclass_transform
 
 import msgspec
 from msgspec import Struct, field
