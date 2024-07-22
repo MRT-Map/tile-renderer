@@ -23,7 +23,11 @@ def render_svg(components: list[Component], skin: Skin, zoom: int, offset: Coord
     styling = _sort_styling(styling, skin)
     text_list = []
     out = svg.SVG(
-        elements=[s.render(c, zoom, text_list, offset) for c, ct, s, i in track(styling, "[green] Rendering SVG")]
+        elements=[
+            a
+            for a in (s.render(c, zoom, text_list, offset) for c, ct, s, i in track(styling, "[green] Rendering SVG"))
+            if a != svg.G()
+        ]
     )
     out.elements.extend(_filter_text_list(text_list))
     return out
