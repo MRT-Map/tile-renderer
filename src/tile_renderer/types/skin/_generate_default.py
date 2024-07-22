@@ -694,7 +694,7 @@ def main():
         font_string="Noto Sans, Noto Sans CJK JP",
         background=LAND,
         types=types,
-        prune_small_text=3.0,
+        prune_small_text=0.5,
         licence=(Path(__file__).parent / "default_licences.md").read_text(),
     )
     skin.save_json(Path(__file__).parent)

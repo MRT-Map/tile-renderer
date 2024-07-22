@@ -32,7 +32,7 @@ def area_border_text_svg(
     skin: Skin,
     offset: Coord = Coord(0, 0),
 ) -> svg.Element:
-    if not component.display_name or (skin.prune_small_text is not None and skin.prune_small_text >= s.size):
+    if (not component.display_name) or (skin.prune_small_text is not None and skin.prune_small_text >= s.size):
         return svg.G()
     coordinates = _shift_coordinates(component.nodes, zoom, offset)
     dashes = Line(coordinates).dash(round(0.75 * s.size * len(component.display_name))) or []
@@ -142,7 +142,7 @@ def line_text_svg(
     skin: Skin,
     offset: Coord = Coord(0, 0),
 ) -> svg.Element:
-    if not component.display_name or (skin.prune_small_text is not None and skin.prune_small_text >= s.size):
+    if (not component.display_name) or (skin.prune_small_text is not None and skin.prune_small_text >= s.size):
         return svg.G()
     coordinates = _shift_coordinates(component.nodes, zoom, offset)
     dashes = Line(coordinates).dash(round(0.75 * s.size * len(component.display_name))) or []
