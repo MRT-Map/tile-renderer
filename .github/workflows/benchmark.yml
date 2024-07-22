@@ -15,7 +15,7 @@ jobs:
     - uses: pypa/hatch@install
     - run: cargo install resvg usvg
     - run: hatch run python src/tile_renderer/types/skin/_generate_default.py
-    - run: hatch run python tests/enc.py
+    - run: hatch run python tests/car.py
     - run: |
             git config --global user.name "github actions"
             git config --global user.email "username@users.noreply.github.com"
