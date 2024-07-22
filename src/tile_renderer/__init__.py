@@ -12,6 +12,7 @@ from typing import cast
 import rich
 import svg
 from rich.progress import Progress, track
+from shapely.prepared import prep
 
 from tile_renderer.types.coord import Coord, Line, TileCoord
 from tile_renderer.types.pla2 import Component
@@ -191,6 +192,7 @@ def _export_tile(
 def _filter_text_list(text_list: list[tuple[Line, svg.Element]]) -> list[svg.Element]:
     out = []
     for line, text in track(text_list, "[green] Filtering text"):
-        if not any(line.shapely.intersects(other.shapely) for other, _ in out):
-            out.append((line, text))
+        line_sh = prep(line.shapely)
+        if not any(line_sh.intersects(other) for other, _ in out):
+            out.append((line_sh, text))
     return [text for _, text in out]
