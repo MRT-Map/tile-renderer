@@ -190,7 +190,7 @@ def main():
                     ),
                 ],
                 "2-5": [
-                    LineFore(colour=Colour.from_hex(0x73738C), width=10.0, unrounded=True, zoom_multiplier=2.0),
+                    LineFore(colour=Colour.from_hex(0x73738C), width=20.0 / 2**2, unrounded=True, zoom_multiplier=2.0),
                 ],
             },
         )
@@ -210,7 +210,7 @@ def main():
                     ),
                 ],
                 "2-5": [
-                    LineFore(colour=Colour.from_hex(0x73738C), width=20.0, unrounded=True, zoom_multiplier=2.0),
+                    LineFore(colour=Colour.from_hex(0x73738C), width=40.0 / 2**2, unrounded=True, zoom_multiplier=2.0),
                 ],
             },
         )
@@ -238,7 +238,7 @@ def main():
             name="plaza",
             shape="area",
             styles={
-                "0-4": [
+                "0-2": [
                     AreaFill(
                         colour=Colour.from_hex(0xCCCCFF),
                         outline=Colour.from_hex(0xCCCCFF).darkened(),
@@ -246,11 +246,11 @@ def main():
                     ),
                     AreaCentreText(colour=Colour.from_hex(0xCCCCFF).darkened(), size=3.0),
                 ],
-                "5-6": [
+                "3-6": [
                     AreaFill(
                         colour=Colour.from_hex(0xCCCCFF),
                         outline=Colour.from_hex(0xCCCCFF).darkened(),
-                        outline_width=0.5,
+                        outline_width=0.5 / 1.5**3,
                     ),
                 ],
             },
@@ -272,7 +272,7 @@ def main():
                         AreaCentreText(colour=col.darkened(), size=3.0),
                     ],
                     "3-5": [
-                        AreaFill(colour=col.brightened(), outline=col, outline_width=0.5),
+                        AreaFill(colour=col.brightened(), outline=col, outline_width=0.5 / 1.5**3),
                     ],
                 },
             )
@@ -433,7 +433,7 @@ def main():
                         AreaCentreText(colour=col.darkened(), size=3.0),
                     ],
                     "3-5": [
-                        AreaFill(colour=col, outline=col.darkened(), outline_width=0.5),
+                        AreaFill(colour=col, outline=col.darkened(), outline_width=0.5 / 1.5**3),
                     ],
                 },
             )
