@@ -18,10 +18,11 @@ if TYPE_CHECKING:
 @dataclass_transform()
 class Skin(Struct):
     name: str
-    font_files: list[bytes]
-    font_string: str
-    background: Colour
     types: list[ComponentType]
+    font_files: list[bytes]
+    font_string: str = ""
+    background: Colour = Colour.from_hex(0xFFFFFF)
+    prune_small_text: float | None = None
     licence: str = ""
 
     def encode(self) -> _SerSkin:
@@ -30,6 +31,7 @@ class Skin(Struct):
             font_files=self.font_files,
             font_string=self.font_string,
             background=str(self.background),
+            prune_small_text=self.prune_small_text,
             types=[t.encode() for t in self.types],
             licence=self.licence,
         )
@@ -88,8 +90,8 @@ class Skin(Struct):
 
 @dataclass_transform()
 class _SerSkin(Skin):
-    background: str
     types: list[_SerComponentType]
+    background: str = "#ff0000"
 
     def decode(self) -> Skin:
         return Skin(
@@ -97,6 +99,7 @@ class _SerSkin(Skin):
             font_files=self.font_files,
             font_string=self.font_string,
             background=Colour.from_hex(self.background),
+            prune_small_text=self.prune_small_text,
             types=[t.decode() for t in self.types],
             licence=self.licence,
         )
