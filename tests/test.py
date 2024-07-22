@@ -8,7 +8,7 @@ from tile_renderer.types.pla2 import Pla2File
 
 
 def main():
-    a = Pla2File.from_file(Path(__file__).parent / "enc.pla2.msgpack")
+    a = Pla2File.from_file(Path(__file__).parent / "CAR.pla2.msgpack")
     skin = Skin.default()
     for zoom in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9):
         (Path(__file__).parent / f"out{zoom}.svg").write_text(str(render_svg(a.components, skin, zoom)))
