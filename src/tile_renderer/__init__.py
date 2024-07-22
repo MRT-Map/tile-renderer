@@ -64,13 +64,9 @@ def render_tiles(
         multiprocessing.Manager() as manager,
     ):
         task_id = progress.add_task("[green] Exporting to PNG", total=len(tiles))
-        doc.viewBox = svg.ViewBoxSpec(
-            min_x=cast(int, "<|min_x|>"),
-            min_y=cast(int, "<|min_y|>"),
-            width=max_zoom_range,
-            height=max_zoom_range,
-        )
-        doc = manager.Value(ctypes.c_wchar_p, str(doc), lock=False)
+        doc = f"<svg viewBox=\"<|min_x|> <|min_y|> {max_zoom_range} {max_zoom_range}\"" + _simplify_svg(font_dir, tile_size).removeprefix("<svg ")
+        
+        doc = manager.Value(ctypes.c_wchar_p, doc, lock=False)
         resvg_path = subprocess.check_output(["where" if platform.system() == "Windows" else "which", "resvg"]).strip()
         n = 0
         for tile, b in pool.imap(
@@ -146,6 +142,29 @@ def _sort_styling(
         return i1 - i2
 
     return sorted(styling, key=functools.cmp_to_key(cast(any, sort_fn)))
+
+def _simplify_svg(font_dir: Path, tile_size: int) -> str:
+    usvg_path = subprocess.check_output(["where" if platform.system() == "Windows" else "which", "usvg"]).strip()
+    p = subprocess.Popen(
+        [
+            usvg_path,
+            "-",
+            "-c",
+            "--resources-dir",
+            Path(__file__).parent,
+            "--skip-system-fonts",
+            "--use-fonts-dir",
+            str(font_dir),
+            "--default-width",
+            str(tile_size),
+            "--default-height",
+            str(tile_size),
+        ],
+        stdout=subprocess.PIPE,
+        stdin=subprocess.PIPE,
+        stderr=subprocess.PIPE,
+    )
+    return p.communicate(input=doc.encode("utf-8"))[0]
 
 
 def _export_tile(
