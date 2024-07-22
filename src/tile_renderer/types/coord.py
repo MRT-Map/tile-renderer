@@ -184,7 +184,11 @@ class Line[T: float | int]:
         coords = self.shapely
         return [
             Line([Coord(*c) for c in substring(coords, start_dist=dist, end_dist=dist + dash_length).coords])
-            for dist in range(math.ceil((coords.length % dash_length) / 2), math.ceil(coords.length), dash_length * 2)
+            for dist in range(
+                0 if dash_length == 0 else math.ceil((coords.length % dash_length) / 2),
+                math.ceil(coords.length),
+                dash_length * 2,
+            )
         ]
 
     def encode(self) -> list[tuple[T, T]]:
