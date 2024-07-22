@@ -180,12 +180,14 @@ class Line[T: float | int]:
             point = self.shapely.point_on_surface()
         return Coord(point.x, point.y)
 
-    def dash(self, dash_length: int | float) -> list[Self]:
+    def dash(self, dash_length: int | float) -> list[Self] | None:
+        if dash_length == 0:
+            return None
         coords = self.shapely
         return [
             Line([Coord(*c) for c in substring(coords, start_dist=dist, end_dist=dist + dash_length).coords])
             for dist in range(
-                0 if dash_length == 0 else math.ceil((coords.length % dash_length) / 2),
+                math.ceil((coords.length % dash_length) / 2),
                 math.ceil(coords.length),
                 dash_length * 2,
             )

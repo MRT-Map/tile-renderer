@@ -33,7 +33,8 @@ def area_border_text_svg(
     if not component.display_name:
         return svg.G()
     coordinates = _shift_coordinates(component.nodes, zoom, offset)
-    for dash in Line(coordinates).dash(round(0.75 * s.size * len(component.display_name))):
+    dashes = Line(coordinates).dash(round(0.75 * s.size * len(component.display_name))) or []
+    for dash in dashes:
         if dash[0].x > dash[-1].x:
             dash.coords.reverse()
         id_ = str(uuid.uuid4())
@@ -132,7 +133,8 @@ def line_text_svg(
     if not component.display_name:
         return svg.G()
     coordinates = _shift_coordinates(component.nodes, zoom, offset)
-    for dash in Line(coordinates).dash(round(0.75 * s.size * len(component.display_name))):
+    dashes = Line(coordinates).dash(round(0.75 * s.size * len(component.display_name))) or []
+    for dash in dashes:
         if dash.shapely.length < 0.9 * 0.75 * s.size * len(component.display_name):
             continue
         if dash[0].x > dash[-1].x:
