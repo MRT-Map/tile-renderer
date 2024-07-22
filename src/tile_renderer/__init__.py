@@ -192,7 +192,7 @@ def _export_tile(
 def _filter_text_list(text_list: list[tuple[Line, svg.Element]]) -> list[svg.Element]:
     out = []
     for line, text in track(text_list, "[green] Filtering text"):
-        line_sh = prep(line.shapely)
+        line_sh = line.shapely
         if not any(line_sh.intersects(other) for other, _ in out):
             out.append((line_sh, text))
     return [text for _, text in out]
