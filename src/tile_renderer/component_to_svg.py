@@ -16,6 +16,7 @@ from tile_renderer.types.skin import (
     PointImage,
     PointSquare,
     PointText,
+    Skin,
 )
 
 
@@ -28,6 +29,7 @@ def area_border_text_svg(
     component: Component,
     zoom: int,
     text_list: list[tuple[Line, svg.Element]],
+    skin: Skin,
     offset: Coord = Coord(0, 0),
 ) -> svg.Element:
     if not component.display_name:
@@ -57,6 +59,7 @@ def area_border_text_svg(
                             stroke_width=0.025 * s.size,
                             font_weight="bolder",
                             dominant_baseline="middle",
+                            font_family=skin.font_string,
                             elements=[svg.TextPath(href="#" + id_, text=component.display_name)],
                         ),
                     ]
@@ -71,6 +74,7 @@ def area_centre_text_svg(
     component: Component,
     zoom: int,
     text_list: list[tuple[Line, svg.Element]],
+    skin: Skin,
     offset: Coord = Coord(0, 0),
 ) -> svg.Element:
     coordinates = _shift_coordinates(component.nodes, zoom, offset)
@@ -88,6 +92,7 @@ def area_centre_text_svg(
                 y=centroid.y + s.offset.y,
                 fill=s.colour,
                 font_size=s.size,
+                font_family=skin.font_string,
                 text=component.display_name,
                 text_anchor="middle",
                 stroke="#dddddd",
@@ -104,6 +109,7 @@ def area_fill_svg(
     component: Component,
     zoom: int,
     _text_list: list[tuple[Line, svg.Element]],
+    _skin: Skin,
     offset: Coord = Coord(0, 0),
 ) -> svg.Element:
     coordinates = _shift_coordinates(component.nodes, zoom, offset)
@@ -121,6 +127,7 @@ def area_centre_image_svg(
     component: Component,
     zoom: int,
     _text_list: list[tuple[Line, svg.Element]],
+    _skin: Skin,
     offset: Coord = Coord(0, 0),
 ) -> svg.Element:
     coordinates = _shift_coordinates(component.nodes, zoom, offset)
@@ -128,7 +135,12 @@ def area_centre_image_svg(
 
 
 def line_text_svg(
-    s: LineText, component: Component, zoom: int, text_list: list[tuple[Line, svg.Element]], offset: Coord = Coord(0, 0)
+    s: LineText,
+    component: Component,
+    zoom: int,
+    text_list: list[tuple[Line, svg.Element]],
+    skin: Skin,
+    offset: Coord = Coord(0, 0),
 ) -> svg.Element:
     if not component.display_name:
         return svg.G()
@@ -157,6 +169,7 @@ def line_text_svg(
                             font_size=s.size,
                             stroke="#dddddd",
                             stroke_width=0.025 * s.size,
+                            font_family=skin.font_string,
                             font_weight="bolder",
                             dominant_baseline="middle",
                             elements=[svg.TextPath(href="#" + id_, text=component.display_name)],
@@ -173,6 +186,7 @@ def line_back_fore_svg(
     component: Component,
     zoom: int,
     _text_list: list[tuple[Line, svg.Element]],
+    _skin: Skin,
     offset: Coord = Coord(0, 0),
 ) -> svg.Element:
     coordinates = _shift_coordinates(component.nodes, zoom, offset)
@@ -193,6 +207,7 @@ def point_text_svg(
     component: Component,
     zoom: int,
     text_list: list[tuple[Line, svg.Element]],
+    skin: Skin,
     offset: Coord = Coord(0, 0),
 ) -> svg.Element:
     coordinate = _shift_coordinates(component.nodes, zoom, offset)[0]
@@ -209,6 +224,7 @@ def point_text_svg(
                 y=coordinate.y + s.offset.y,
                 fill=s.colour,
                 font_size=s.size,
+                font_family=skin.font_string,
                 text=component.display_name,
                 text_anchor="middle",
                 stroke="#dddddd",
@@ -225,6 +241,7 @@ def point_square_svg(
     component: Component,
     zoom: int,
     _text_list: list[tuple[Line, svg.Element]],
+    _skin: Skin,
     offset: Coord = Coord(0, 0),
 ) -> svg.Element:
     coordinate = _shift_coordinates(component.nodes, zoom, offset)[0]
@@ -236,6 +253,7 @@ def point_image_svg(
     component: Component,
     zoom: int,
     _text_list: list[tuple[Line, svg.Element]],
+    _skin: Skin,
     offset: Coord = Coord(0, 0),
 ) -> svg.Element:
     coordinate = _shift_coordinates(component.nodes, zoom, offset)[0]

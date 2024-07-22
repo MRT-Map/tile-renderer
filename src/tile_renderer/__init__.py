@@ -25,7 +25,9 @@ def render_svg(components: list[Component], skin: Skin, zoom: int, offset: Coord
     out = svg.SVG(
         elements=[
             a
-            for a in (s.render(c, zoom, text_list, offset) for c, ct, s, i in track(styling, "[green] Rendering SVG"))
+            for a in (
+                s.render(c, zoom, text_list, skin, offset) for c, ct, s, i in track(styling, "[green] Rendering SVG")
+            )
             if a != svg.G()
         ]
     )
@@ -80,7 +82,6 @@ def render_tiles(
                     zoom,
                     offset,
                     str(skin.background),
-                    skin.font_string,
                     font_dir,
                     tile_size,
                     resvg_path,
@@ -153,7 +154,6 @@ def _export_tile(
     zoom: int,
     offset: Coord,
     background: str,
-    font_string: str,
     font_dir: Path,
     tile_size: int,
     resvg_path: str,
@@ -173,8 +173,6 @@ def _export_tile(
             Path(__file__).parent,
             "--background",
             background,
-            "--font-family",
-            font_string,
             "--skip-system-fonts",
             "--use-fonts-dir",
             str(font_dir),
