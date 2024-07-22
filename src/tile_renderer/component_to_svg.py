@@ -20,7 +20,7 @@ from tile_renderer.types.skin import (
 
 
 def _shift_coordinates(line: Line[int], zoom: int, offset: Coord) -> list[Coord[int]]:
-    return [(c + offset) / 2**zoom for c in line]
+    return [(c - offset) / 2**zoom for c in line]
 
 
 def area_border_text_svg(
@@ -43,9 +43,7 @@ def area_border_text_svg(
                 svg.G(
                     elements=[
                         svg.Polyline(
-                            points=[
-                                cast(int, f"{c.x},{c.y}") for c in dash.parallel_offset(0.9 * s.size // 2 + s.offset)
-                            ],
+                            points=[cast(int, f"{c.x},{c.y}") for c in dash.parallel_offset(s.offset)],
                             fill=None,
                             fill_opacity=0,
                             stroke=None,
@@ -56,7 +54,8 @@ def area_border_text_svg(
                             font_size=s.size,
                             stroke="#dddddd",
                             stroke_width=0.025 * s.size,
-                            font_weight="bold",
+                            font_weight="bolder",
+                            dominant_baseline="middle",
                             elements=[svg.TextPath(href="#" + id_, text=component.display_name)],
                         ),
                     ]
@@ -145,9 +144,7 @@ def line_text_svg(
                 svg.G(
                     elements=[
                         svg.Polyline(
-                            points=[
-                                cast(int, f"{c.x},{c.y}") for c in dash.parallel_offset(0.9 * s.size // 2 + s.offset)
-                            ],
+                            points=[cast(int, f"{c.x},{c.y}") for c in dash.parallel_offset(s.offset)],
                             fill=None,
                             fill_opacity=0,
                             stroke=None,
@@ -158,7 +155,8 @@ def line_text_svg(
                             font_size=s.size,
                             stroke="#dddddd",
                             stroke_width=0.025 * s.size,
-                            font_weight="bold",
+                            font_weight="bolder",
+                            dominant_baseline="middle",
                             elements=[svg.TextPath(href="#" + id_, text=component.display_name)],
                         ),
                     ]

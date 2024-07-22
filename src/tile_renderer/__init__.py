@@ -7,6 +7,7 @@ import subprocess
 import tempfile
 from pathlib import Path
 from typing import cast
+import multiprocessing.sharedctypes
 
 import rich
 import svg
@@ -62,7 +63,7 @@ def render_tiles(
             width=max_zoom_range,
             height=max_zoom_range,
         )
-        doc = manager.Value(ctypes.c_wchar_p, str(doc))
+        doc = manager.Value(ctypes.c_wchar_p, str(doc), lock=False)
         resvg_path = subprocess.check_output(["where" if platform.system() == "Windows" else "which", "resvg"]).strip()
         n = 0
         for tile, b in pool.imap(
@@ -142,7 +143,7 @@ def _sort_styling(
 
 
 def _export_tile(
-    doc: str,
+    doc: multiprocessing.sharedctypes.Synchronized,
     tile: TileCoord,
     max_zoom_range: int,
     zoom: int,
@@ -154,8 +155,10 @@ def _export_tile(
     resvg_path: str,
 ) -> tuple[TileCoord, bytes]:
     bounds = tile.bounds(max_zoom_range)
-    doc = doc.value.replace("<|min_x|>", str((bounds.x_min + offset.x) / 2**zoom), 1).replace(
-        "<|min_y|>", str((bounds.y_min + offset.y) / 2**zoom), 1
+    doc = (
+        cast(str, doc.value)
+        .replace("<|min_x|>", str((bounds.x_min - offset.x) / 2**zoom), 1)
+        .replace("<|min_y|>", str((bounds.y_min - offset.y) / 2**zoom), 1)
     )
     p = subprocess.Popen(
         [
