@@ -678,6 +678,7 @@ def main():
                 "https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/hinted/ttf/NotoSans-BoldItalic.ttf"
             ),
             get_url("https://github.com/googlefonts/noto-cjk/raw/main/Sans/Variable/TTF/NotoSansCJKjp-VF.ttf"),
+            get_url("https://github.com/googlefonts/noto-cjk/raw/main/Sans/Variable/TTF/Subset/NotoSansSC-VF.ttf"),
             # get_url(
             #     "https://github.com/googlefonts/noto-cjk/raw/main/Sans/Variable/TTF/NotoSansCJKsc-VF.ttf"
             # ),
@@ -691,7 +692,7 @@ def main():
             #     "https://github.com/googlefonts/noto-cjk/raw/main/Sans/Variable/TTF/NotoSansCJKkr-VF.ttf"
             # )
         ],
-        font_string="'Noto Sans', 'Noto Sans JP'",
+        font_string="'Noto Sans', 'Noto Sans JP', 'Noto Sans CJK JP'",
         background=LAND,
         types=types,
         prune_small_text=0.5,
