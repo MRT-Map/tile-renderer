@@ -4,8 +4,20 @@ from pathlib import Path
 import requests
 
 from tile_renderer.types.colour import Colour
-from tile_renderer.types.coord import Coord
-from tile_renderer.types.skin import AreaCentreText, AreaBorderText, AreaFill, ComponentType, LineBack, LineFore, LineText, PointText, PointSquare, PointImage, Skin
+from tile_renderer.types.coord import Vector
+from tile_renderer.types.skin import (
+    AreaBorderText,
+    AreaCentreText,
+    AreaFill,
+    ComponentType,
+    LineBack,
+    LineFore,
+    LineText,
+    PointImage,
+    PointSquare,
+    PointText,
+    Skin,
+)
 
 
 def get_url(url: str) -> bytes:
@@ -35,6 +47,32 @@ TRANSPORT_BUILDING = Colour.from_hex(0x999966)
 # noinspection PyListCreation
 def main():
     types: list[ComponentType] = []
+
+    for name, colour_hex in (
+        ("residentialArea", 0xB3CBCB),
+        ("industrialArea", 0xFFCCB3),
+        ("commercialArea", 0xE7B1CA),
+        ("officeArea", 0xFFCC99),
+        ("residentialOfficeArea", 0xD9DBB2),
+        ("schoolArea", 0xECC6C6),
+        ("healthArea", 0xFF9999),
+        ("agricultureArea", 0xCCFF99),
+        ("militaryArea", 0xC2C2A3),
+    ):
+        colour = Colour.from_hex(colour_hex)
+        types.append(
+            ComponentType(
+                name=name,
+                shape="area",
+                styles={
+                    "0-3": [
+                        AreaFill(colour=colour, outline=colour.darkened(20.0), outline_width=0.5),
+                        AreaCentreText(colour=colour.darkened(20.0), size=5.0),
+                    ],
+                    "4-6": [AreaFill(colour=colour, outline=colour.darkened(20.0), outline_width=0.5 / 1.5**4)],
+                },
+            )
+        )
 
     types.append(
         ComponentType(
@@ -97,23 +135,32 @@ def main():
         )
     )
 
-    for name, colour in (
+    types.append(
+        ComponentType(
+            name="ferryLine",
+            shape="line",
+            styles={
+                "0-3": [
+                    LineFore(colour=Colour.from_hex(0x25A7DA), width=1.0),
+                    LineText(
+                        colour=Colour.from_hex(0x25A7DA).darkened(), arrow_colour=Colour.from_hex(0x25A7DA), size=2.4
+                    ),
+                ],
+                "4-6": [
+                    LineFore(colour=Colour.from_hex(0x25A7DA), width=1.0 / 1.5**4),
+                ],
+            },
+        )
+    )
+
+    for name, colour_hex in (
         ("grass", 0xBBFF99),
         ("shrub", 0x99FF99),
         ("forest", 0x5CA904),
         ("stone", 0xAAAAAA),
         ("sand", 0xF7E1A1),
-        ("residentialArea", 0xB3CBCB),
-        ("industrialArea", 0xFFCCB3),
-        ("commercialArea", 0xE7B1CA),
-        ("officeArea", 0xFFCC99),
-        ("residentialOfficeArea", 0xD9DBB2),
-        ("schoolArea", 0xECC6C6),
-        ("healthArea", 0xFF9999),
-        ("agricultureArea", 0xCCFF99),
-        ("militaryArea", 0xC2C2A3),
     ):
-        colour = Colour.from_hex(colour)
+        colour = Colour.from_hex(colour_hex)
         types.append(
             ComponentType(
                 name=name,
@@ -671,17 +718,17 @@ def main():
                 styles={
                     "0-5": [
                         PointImage(image=image_path.read_bytes()),
-                        PointText(colour=Colour.from_hex(0x000000), offset=Coord(0, 2.5), size=2.5, anchor="")
+                        PointText(colour=Colour.from_hex(0x000000), offset=Vector(0.0, 2.5), size=2.5, anchor=""),
                     ]
-                }
+                },
             )
         )
-    # TODO airport marker
+    # TODO: airport marker
 
     for name, colour in (
         ("busStop", Colour.from_hex(0x00AAFF)),
-        ("ferrystop", Colour.from_hex(0x1E85AE)),
-        ("railStation", Colour.from_hex(0x1F3D7A))
+        ("ferryStop", Colour.from_hex(0x1E85AE)),
+        ("railStation", Colour.from_hex(0x1F3D7A)),
     ):
         types.append(
             ComponentType(
@@ -690,49 +737,49 @@ def main():
                 styles={
                     "0-2": [
                         PointSquare(colour=colour, size=2.5, width=0),
-                        PointText(colour=Colour.from_hex(0x000000), offset=Coord(0, 4.0), size=2.5, anchor="")
+                        PointText(colour=Colour.from_hex(0x000000), offset=Vector(0.0, 4.0), size=2.5, anchor=""),
                     ],
                     "3-5": [
-                        PointSquare(colour=colour, size=2.5/1.5**3, width=0),
-                    ]
-                }
+                        PointSquare(colour=colour, size=2.5 / 1.5**3, width=0),
+                    ],
+                },
             )
         )
 
-    for name, zoom, colour in (
+    for name, zoom, colour_hex in (
         ("subdistrict", 2, 0xD9B38C),
         ("district", 3, 0xCC9966),
         ("town", 3, 0xBF8040),
         ("state", 4, 0x996633),
-        ("country", 4, 0x86592D)
+        ("country", 4, 0x86592D),
     ):
-        colour = Colour.from_hex(colour)
+        colour = Colour.from_hex(colour_hex)
         types.append(
             ComponentType(
                 name=name,
                 shape="area",
                 styles={
-                    "0-"+str(zoom): [
+                    "0-" + str(zoom): [
                         AreaFill(outline=colour, outline_width=0.5),
                         AreaBorderText(colour=colour.darkened(), offset=2.0, size=4.0),
                     ],
-                    str(zoom)+"-"+str(zoom+3): [
-                        AreaFill(outline=colour, outline_width=0.5/1.5**zoom),
-                        AreaBorderText(colour=colour.darkened(), offset=2.0/1.5**zoom, size=4.0/1.5**zoom),
-                        AreaCentreText(colour=colour.darkened(), size=5.0)
-                    ]
-                }
+                    str(zoom) + "-" + str(zoom + 3): [
+                        AreaFill(outline=colour, outline_width=0.5 / 1.5**zoom),
+                        AreaCentreText(colour=colour.darkened(), size=5.0),
+                        AreaBorderText(colour=colour.darkened(), offset=2.0 / 1.5**zoom, size=4.0 / 1.5**zoom),
+                    ],
+                },
             )
         )
         types.append(
             ComponentType(
-                name=name+"Marker",
+                name=name + "Marker",
                 shape="point",
                 styles={
-                    str(zoom)+"-"+str(zoom+3): [
-                        PointText(colour=colour.darkened(), size=4.0/1.5**zoom, anchor=""),
+                    str(zoom) + "-" + str(zoom + 3): [
+                        PointText(colour=colour.darkened(), size=4.0 / 1.5**zoom, anchor=""),
                     ]
-                }
+                },
             )
         )
 
@@ -743,22 +790,16 @@ def main():
             styles={
                 "0-5": [
                     AreaFill(colour=Colour.from_hex(0xAAAAAA), outline=Colour.from_hex(0x808080)),
+                    AreaCentreText(colour=Colour.from_hex(0x555555), size=10.0),
                     AreaBorderText(colour=Colour.from_hex(0x555555), offset=2.0, size=4.0),
-                    AreaCentreText(colour=Colour.from_hex(0x555555), size=10.0)
                 ]
-            }
+            },
         )
     )
 
     types.append(
         ComponentType(
-            name="simpleLine",
-            shape="line",
-            styles={
-                "0-5": [
-                    LineFore(colour=Colour.from_hex(0x555555), width=1.5)
-                ]
-            }
+            name="simpleLine", shape="line", styles={"0-5": [LineFore(colour=Colour.from_hex(0x555555), width=1.5)]}
         )
     )
 
@@ -768,10 +809,12 @@ def main():
             shape="point",
             styles={
                 "0-5": [
-                    PointSquare(colour=Colour.from_hex(0xAAAAAA), outline=Colour.from_hex(0x808080), size=5.0, width=1.2),
-                    PointText(colour=Colour.from_hex(0x808080), offset=Coord(0, 5.0), size=5.0, anchor=""),
+                    PointSquare(
+                        colour=Colour.from_hex(0xAAAAAA), outline=Colour.from_hex(0x808080), size=5.0, width=1.2
+                    ),
+                    PointText(colour=Colour.from_hex(0x808080), offset=Vector(0.0, 5.0), size=5.0, anchor=""),
                 ]
-            }
+            },
         )
     )
 

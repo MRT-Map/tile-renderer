@@ -7,10 +7,11 @@ import msgspec
 from msgspec import Struct, field
 
 from tile_renderer.types.colour import Colour
-from tile_renderer.types.coord import Coord, Line, Vector
+from tile_renderer.types.coord import ORIGIN, Coord, Vector
 
 if TYPE_CHECKING:
     import svg
+    from shapely import LineString
 
     from tile_renderer import Component
 
@@ -155,9 +156,9 @@ class ComponentStyle(Struct, kw_only=True):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Line, svg.Element]],
+        text_list: list[tuple[LineString, svg.Element]],
         skin: Skin,
-        offset: Coord = Coord(0, 0),
+        offset: Coord = ORIGIN,
     ) -> svg.Element:
         raise NotImplementedError
 
@@ -197,9 +198,9 @@ class AreaBorderText(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Line, svg.Element]],
+        text_list: list[tuple[LineString, svg.Element]],
         skin: Skin,
-        offset: Coord = Coord(0, 0),
+        offset: Coord = ORIGIN,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 
@@ -245,9 +246,9 @@ class AreaCentreText(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Line, svg.Element]],
+        text_list: list[tuple[LineString, svg.Element]],
         skin: Skin,
-        offset: Coord = Coord(0, 0),
+        offset: Coord = ORIGIN,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 
@@ -296,9 +297,9 @@ class AreaFill(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Line, svg.Element]],
+        text_list: list[tuple[LineString, svg.Element]],
         skin: Skin,
-        offset: Coord = Coord(0, 0),
+        offset: Coord = ORIGIN,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 
@@ -339,9 +340,9 @@ class AreaCentreImage(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Line, svg.Element]],
+        text_list: list[tuple[LineString, svg.Element]],
         skin: Skin,
-        offset: Coord = Coord(0, 0),
+        offset: Coord = ORIGIN,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 
@@ -385,9 +386,9 @@ class LineText(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Line, svg.Element]],
+        text_list: list[tuple[LineString, svg.Element]],
         skin: Skin,
-        offset: Coord = Coord(0, 0),
+        offset: Coord = ORIGIN,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 
@@ -438,9 +439,9 @@ class LineFore(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Line, svg.Element]],
+        text_list: list[tuple[LineString, svg.Element]],
         skin: Skin,
-        offset: Coord = Coord(0, 0),
+        offset: Coord = ORIGIN,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 
@@ -523,9 +524,9 @@ class PointText(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Line, svg.Element]],
+        text_list: list[tuple[LineString, svg.Element]],
         skin: Skin,
-        offset: Coord = Coord(0, 0),
+        offset: Coord = ORIGIN,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 
@@ -578,9 +579,9 @@ class PointSquare(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Line, svg.Element]],
+        text_list: list[tuple[LineString, svg.Element]],
         skin: Skin,
-        offset: Coord = Coord(0, 0),
+        offset: Coord = ORIGIN,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 
@@ -619,9 +620,9 @@ class PointImage(AreaCentreImage):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Line, svg.Element]],
+        text_list: list[tuple[LineString, svg.Element]],
         skin: Skin,
-        offset: Coord = Coord(0, 0),
+        offset: Coord = ORIGIN,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 

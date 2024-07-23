@@ -105,6 +105,9 @@ class Coord[T: float | int](Vector[T]):
         return Point(self.x, self.y)
 
 
+ORIGIN: Coord = Coord(0, 0)
+
+
 @dataclasses.dataclass(frozen=True)
 class Bounds[T: float | int]:
     """Represents a bounding box, like a rectangle"""
@@ -180,7 +183,7 @@ class Line[T: float | int]:
             point = self.shapely.point_on_surface()
         return Coord(point.x, point.y)
 
-    def dash(self, dash_length: int | float) -> list[Self] | None:
+    def dash(self, dash_length: float) -> list[Self] | None:
         if dash_length == 0:
             return None
         coords = self.shapely
