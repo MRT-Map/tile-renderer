@@ -116,6 +116,7 @@ def area_fill_svg(
     return svg.Polygon(
         points=[cast(int, f"{c.x},{c.y}") for c in coordinates],
         fill=None if s.colour is None else str(s.colour),
+        fill_opacity=0 if s.colour is None else None,
         stroke=None if s.outline is None else str(s.outline),
         stroke_width=s.outline_width,
         stroke_linejoin="round",
