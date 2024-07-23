@@ -6,14 +6,14 @@ from typing import TYPE_CHECKING, Any, Literal, Self, dataclass_transform
 import msgspec
 from msgspec import Struct, field
 
-from tile_renderer.types.colour import Colour
-from tile_renderer.types.coord import Vector
+from tile_renderer.colour import Colour
+from tile_renderer.coord import Vector
 
 if TYPE_CHECKING:
     import svg
     from shapely import Polygon
 
-    from tile_renderer import Component
+    from tile_renderer.pla2 import Component
 
 
 @dataclass_transform()

@@ -4,9 +4,9 @@ from typing import cast
 import svg
 from shapely import Polygon
 
-from tile_renderer import Component
-from tile_renderer.types.coord import Coord, Line
-from tile_renderer.types.skin import (
+from tile_renderer.coord import Coord, Line
+from tile_renderer.pla2 import Component
+from tile_renderer.skin import (
     AreaBorderText,
     AreaCentreImage,
     AreaCentreText,

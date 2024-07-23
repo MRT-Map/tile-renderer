@@ -8,7 +8,7 @@ import msgspec
 import rich
 from msgspec import Struct
 
-from tile_renderer.types.coord import Line, TileCoord
+from tile_renderer.coord import Line, TileCoord
 
 if TYPE_CHECKING:
     from collections.abc import Iterator

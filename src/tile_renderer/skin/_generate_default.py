@@ -3,9 +3,9 @@ from pathlib import Path
 
 import requests
 
-from tile_renderer.types.colour import Colour
-from tile_renderer.types.coord import Vector
-from tile_renderer.types.skin import (
+from tile_renderer.colour import Colour
+from tile_renderer.coord import Vector
+from tile_renderer.skin import (
     AreaBorderText,
     AreaCentreText,
     AreaFill,

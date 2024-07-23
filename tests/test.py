@@ -4,8 +4,9 @@ from pathlib import Path
 
 import rich
 
-from tile_renderer import Skin, render_svg, render_tiles
-from tile_renderer.types.pla2 import Pla2File
+from tile_renderer import Skin, render_svg
+from tile_renderer.pla2 import Pla2File
+from tile_renderer.render_tiles import render_tiles
 
 
 def main():
