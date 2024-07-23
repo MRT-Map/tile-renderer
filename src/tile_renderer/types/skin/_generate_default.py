@@ -767,8 +767,10 @@ def main():
             name="simplePoint",
             shape="point",
             styles={
-                PointSquare(colour=Colour.from_hex(0xAAAAAA), outline=Colour.from_hex(0x808080), size=5.0, width=1.2),
-                PointText(colour=Colour.from_hex(0x808080), offset=Coord(0, 5.0), size=5.0, anchor="")
+                "0-5": [
+                    PointSquare(colour=Colour.from_hex(0xAAAAAA), outline=Colour.from_hex(0x808080), size=5.0, width=1.2),
+                    PointText(colour=Colour.from_hex(0x808080), offset=Coord(0, 5.0), size=5.0, anchor=""),
+                ]
             }
         )
     )
