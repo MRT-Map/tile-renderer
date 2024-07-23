@@ -4,6 +4,7 @@ from pathlib import Path
 import requests
 
 from tile_renderer.types.colour import Colour
+from tile_renderer.types.coord import Coord
 from tile_renderer.types.skin import AreaCentreText, AreaBorderText, AreaFill, ComponentType, LineBack, LineFore, LineText, PointText, PointSquare, PointImage, Skin
 
 
@@ -670,7 +671,7 @@ def main():
                 styles={
                     "0-5": [
                         PointImage(image=image_path.read_bytes()),
-                        PointText(colour=Colour.from_hex(0x000000), offset=Vector(0, 2.5), size=2.5, anchor="")
+                        PointText(colour=Colour.from_hex(0x000000), offset=Coord(0, 2.5), size=2.5, anchor="")
                     ]
                 }
             )
@@ -689,7 +690,7 @@ def main():
                 styles={
                     "0-2": [
                         PointSquare(colour=colour, size=2.5, width=0),
-                        PointText(colour=Colour.from_hex(0x000000), offset=Vector(0, 4.0), size=2.5, anchor="")
+                        PointText(colour=Colour.from_hex(0x000000), offset=Coord(0, 4.0), size=2.5, anchor="")
                     ],
                     "3-5": [
                         PointSquare(colour=colour, size=2.5/1.5**3, width=0),
@@ -767,7 +768,7 @@ def main():
             shape="point",
             styles={
                 PointSquare(colour=Colour.from_hex(0xAAAAAA), outline=Colour.from_hex(0x808080), size=5.0, width=1.2),
-                PointText(colour=Colour.from_hex(0x808080), offset=Vector(0, 5.0), size=5.0)
+                PointText(colour=Colour.from_hex(0x808080), offset=Coord(0, 5.0), size=5.0)
             }
         )
     )
