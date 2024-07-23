@@ -566,8 +566,11 @@ class PointSquare(ComponentStyle):
 
     def encode(self) -> _SerPointSquare:
         return _SerPointSquare(
+            size=self.size,
+            width=self.width,
             colour=None if self.colour is None else str(self.colour),
             outline=None if self.outline is None else str(self.outline),
+            border_radius=self.border_radius,
             zoom_multiplier=self.zoom_multiplier,
         )
 
@@ -601,8 +604,11 @@ class _SerPointSquare(PointSquare, tag_field="ty", tag="pointSquare"):
 
     def decode(self) -> PointSquare:
         return PointSquare(
+            size=self.size,
+            width=self.width,
             colour=None if self.colour is None else Colour.from_hex(self.colour),
             outline=None if self.outline is None else Colour.from_hex(self.outline),
+            border_radius=self.border_radius,
             zoom_multiplier=self.zoom_multiplier,
         )
 
