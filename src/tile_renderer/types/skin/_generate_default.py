@@ -20,15 +20,15 @@ from tile_renderer.types.skin import (
 )
 
 
-def get_url(url: str) -> bytes:
+def get_url(url: str) -> tuple[str, bytes]:
     path = Path(tempfile.gettempdir()) / "tile-renderer" / "url" / url
     if path.exists():
-        return path.read_bytes()
+        return url.split(".")[-1], path.read_bytes()
     response = requests.get(url).content  # noqa: S113
     path.parent.mkdir(parents=True, exist_ok=True)
     path.touch()
     path.write_bytes(response)
-    return response
+    return url.split(".")[-1], response
 
 
 WATER = Colour.from_hex(0x87CEEB)
@@ -822,33 +822,13 @@ def main():
         name="default",
         font_files=[
             get_url(
-                "https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/hinted/ttf/NotoSans-Regular.ttf"
+                "https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/full/ttf/NotoSans-Bold.ttf"
             ),
             get_url(
-                "https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/hinted/ttf/NotoSans-Bold.ttf"
+                "https://github.com/googlefonts/noto-cjk/raw/main/Sans/OTF/Japanese/NotoSansCJKjp-Black.otf",
             ),
-            get_url(
-                "https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/hinted/ttf/NotoSans-Italic.ttf"
-            ),
-            get_url(
-                "https://cdn.jsdelivr.net/gh/notofonts/notofonts.github.io/fonts/NotoSans/hinted/ttf/NotoSans-BoldItalic.ttf"
-            ),
-            get_url("https://github.com/googlefonts/noto-cjk/raw/main/Sans/Variable/TTF/NotoSansCJKjp-VF.ttf"),
-            get_url("https://github.com/googlefonts/noto-cjk/raw/main/Sans/Variable/TTF/Subset/NotoSansJP-VF.ttf"),
-            # get_url(
-            #     "https://github.com/googlefonts/noto-cjk/raw/main/Sans/Variable/TTF/NotoSansCJKsc-VF.ttf"
-            # ),
-            # get_url(
-            #     "https://github.com/googlefonts/noto-cjk/raw/main/Sans/Variable/TTF/NotoSansCJKtc-VF.ttf"
-            # ),
-            # get_url(
-            #     "https://github.com/googlefonts/noto-cjk/raw/main/Sans/Variable/TTF/NotoSansCJKhk-VF.ttf"
-            # ),
-            # get_url(
-            #     "https://github.com/googlefonts/noto-cjk/raw/main/Sans/Variable/TTF/NotoSansCJKkr-VF.ttf"
-            # )
         ],
-        font_string="'Noto Sans', 'Noto Sans JP', 'Noto Sans CJK JP'",
+        font_string="'Noto Sans', 'Noto Sans CJK JP'",
         background=LAND,
         types=types,
         prune_small_text=0.5,

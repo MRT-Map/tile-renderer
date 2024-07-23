@@ -56,8 +56,8 @@ def render_tiles(
 
     font_dir = Path(tempfile.gettempdir()) / "tile-renderer" / "fonts"
     font_dir.mkdir(exist_ok=True, parents=True)
-    for i, file in enumerate(skin.font_files):
-        (font_dir / (str(i) + ".ttf")).write_bytes(file)
+    for i, (ext, file) in enumerate(skin.font_files):
+        (font_dir / (str(i) + "." + ext)).write_bytes(file)
 
     with (
         multiprocessing.Pool(processes=processes) as pool,

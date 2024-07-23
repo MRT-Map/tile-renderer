@@ -20,7 +20,7 @@ if TYPE_CHECKING:
 class Skin(Struct):
     name: str
     types: list[ComponentType]
-    font_files: list[bytes]
+    font_files: list[tuple[str, bytes]]
     font_string: str = ""
     background: Colour = Colour.from_hex(0xFFFFFF)
     prune_small_text: float | None = None
