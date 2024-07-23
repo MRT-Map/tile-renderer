@@ -4,7 +4,7 @@ from pathlib import Path
 import requests
 
 from tile_renderer.types.colour import Colour
-from tile_renderer.types.skin import AreaCentreText, AreaFill, ComponentType, LineBack, LineFore, LineText, Skin
+from tile_renderer.types.skin import AreaCentreText, AreaBorderText, AreaFill, ComponentType, LineBack, LineFore, LineText, PointText, PointArea, PointImage, Skin
 
 
 def get_url(url: str) -> bytes:
@@ -659,6 +659,116 @@ def main():
                     AreaFill(colour=Colour.from_hex(0xCCCCCC), outline=Colour.from_hex(0x808080), outline_width=0.5),
                 ],
             },
+        )
+    )
+
+    for name, image_path in []:
+        types.append(
+            ComponentType(
+                name=name,
+                shape="point",
+                styles={
+                    "0-5": [
+                        PointImage(image=image_path.read_bytes()),
+                        PointText(colour=Colour.from_hex(0x000000), offset=Vector(0, 2.5), size=2.5, anchor="")
+                    ]
+                }
+            )
+        )
+    # TODO airport marker
+
+    for name, colour in (
+        ("busStop", Colour.from_hex(0x00AAFF)),
+        ("ferrystop", Colour.from_hex(0x1E85AE)),
+        ("railStation", Colour.from_hex(0x1F3D7A))
+    ):
+        types.append(
+            ComponentType(
+                name=name,
+                shape="point",
+                styles={
+                    "0-2": [
+                        PointSquare(colour=colour, size=2.5, width=0),
+                        PointText(colour=Colour.from_hex(0x000000), offset=Vector(0, 4.0), size=2.5, anchor="")
+                    ],
+                    "3-5": [
+                        PointSquare(colour=colour, size=2.5/1.5**3, width=0),
+                    ]
+                }
+            )
+        )
+
+    for name, zoom, colour in (
+        ("subdistrict", 2, 0xD9B38C),
+        ("district", 3, 0xCC9966),
+        ("town", 3, 0xBF8040),
+        ("state", 4, 0x996633),
+        ("country", 4, 0x86592D)
+    ):
+        colour = Colour.from_hex(colour)
+        types.append(
+            ComponentType(
+                name=name,
+                shape="area",
+                styles={
+                    "0-"+str(zoom): [
+                        AreaFill(outline=colour),
+                        AreaBorderText(colour=colour.darkened(), offset=2.0, size=4.0),
+                    ],
+                    str(zoom)+"-"+str(zoom+3): [
+                        AreaFill(outline=colour),
+                        AreaBorderText(colour=colour.darkened(), offset=2.0/1.5**zoom, size=4.0/1.5**zoom),
+                        AreaCentreText(colour=colour.darkened(), size=5.0)
+                    ]
+                }
+            )
+        )
+        types.append(
+            ComponentType(
+                name=name+"Marker",
+                shape="point",
+                styles={
+                    str(zoom)+"-"+str(zoom+3): [
+                        PointText(colour=colour.darkened(), size=4.0/1.5**zoom),
+                    ]
+                }
+            )
+        )
+
+    types.append(
+        ComponentType(
+            name="simpleArea",
+            shape="area",
+            styles={
+                "0-5": [
+                    AreaFill(colour=Colour.from_hex(0xAAAAAA), outline=Colour.from_hex(0x808080)),
+                    AreaBorderText(colour=Colour.from_hex(0x555555), offset=2.0, size=4.0),
+                    AreaCentreText(colour=Colour.from_hex(0x555555), size=10.0)
+                ]
+            }
+        )
+    )
+
+    types.append(
+        ComponentType(
+            name="simpleLine",
+            shape="line",
+            styles={
+                "0-5": [
+                    LineFore(colour=Colour.from_hex(0x555555), width=1.5)
+                ]
+            }
+        )
+    )
+
+    types.append(
+        ComponentType(
+            name="simplePoint",
+            shape="point",
+            styles={
+                PointSquare(colour=Colour.from_hex(0xAAAAAA), outline=Colour.from_hex(0x808080), size=5.0, width=1.2),
+                PointText(colour=Colour.from_hex(0x808080), offset=Vector(0, 5.0), size=5.0)
+            }
         )
     )
 
