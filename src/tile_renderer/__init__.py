@@ -21,16 +21,14 @@ from tile_renderer.types.pla2 import Component
 from tile_renderer.types.skin import ComponentStyle, ComponentType, LineBack, LineFore, Skin
 
 
-def render_svg(components: list[Component], skin: Skin, zoom: int, offset: Coord = ORIGIN) -> svg.SVG:
+def render_svg(components: list[Component], skin: Skin, zoom: int) -> svg.SVG:
     styling = _get_styling(components, skin, zoom)
     styling = _sort_styling(styling, skin)
     text_list = []
     out = svg.SVG(
         elements=[
             a
-            for a in (
-                s.render(c, zoom, text_list, skin, offset) for c, ct, s, i in track(styling, "[green]Rendering SVG")
-            )
+            for a in (s.render(c, zoom, text_list, skin) for c, ct, s, i in track(styling, "[green]Rendering SVG"))
             if a != svg.G()
         ]
     )
@@ -52,7 +50,7 @@ def render_tiles(
     processes: int = os.cpu_count() * 2,
 ) -> dict[TileCoord, bytes]:
     images = {}
-    doc = render_svg(components, skin, zoom, offset)
+    doc = render_svg(components, skin, zoom)
     tiles = {t for c in components for t in c.tiles(zoom, max_zoom_range)}
 
     font_dir = Path(tempfile.gettempdir()) / "tile-renderer" / "fonts"

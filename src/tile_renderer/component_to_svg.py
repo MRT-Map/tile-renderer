@@ -21,8 +21,8 @@ from tile_renderer.types.skin import (
 )
 
 
-def _shift_coordinates(line: Line[int], zoom: int, offset: Coord) -> list[Coord[int]]:
-    return [(c - offset) / 2**zoom for c in line]
+def _shift_coordinates(line: Line[int], zoom: int) -> list[Coord[int]]:
+    return [c / 2**zoom for c in line]
 
 
 def area_border_text_svg(
@@ -31,11 +31,10 @@ def area_border_text_svg(
     zoom: int,
     text_list: list[tuple[Polygon, svg.Element]],
     skin: Skin,
-    offset: Coord = ORIGIN,
 ) -> svg.Element:
     if (not component.display_name) or (skin.prune_small_text is not None and skin.prune_small_text >= s.size):
         return svg.G()
-    coordinates = _shift_coordinates(component.nodes, zoom, offset)
+    coordinates = _shift_coordinates(component.nodes, zoom)
     dashes = Line(coordinates).dash(round(s.size * len(component.display_name))) or []
     for old_dash in dashes:
         dash = old_dash.parallel_offset(s.offset)
@@ -80,9 +79,8 @@ def area_centre_text_svg(
     zoom: int,
     text_list: list[tuple[Polygon, svg.Element]],
     skin: Skin,
-    offset: Coord = ORIGIN,
 ) -> svg.Element:
-    coordinates = _shift_coordinates(component.nodes, zoom, offset)
+    coordinates = _shift_coordinates(component.nodes, zoom)
     centroid = Line(coordinates).point_on_surface
     text_list.append(
         (
@@ -118,9 +116,8 @@ def area_fill_svg(
     zoom: int,
     _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
-    offset: Coord = ORIGIN,
 ) -> svg.Element:
-    coordinates = _shift_coordinates(component.nodes, zoom, offset)
+    coordinates = _shift_coordinates(component.nodes, zoom)
     return svg.Polygon(
         points=[cast(int, f"{c.x},{c.y}") for c in coordinates],
         fill=None if s.colour is None else str(s.colour),
@@ -137,9 +134,8 @@ def area_centre_image_svg(
     zoom: int,
     _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
-    offset: Coord = ORIGIN,
 ) -> svg.Element:
-    _shift_coordinates(component.nodes, zoom, offset)
+    _shift_coordinates(component.nodes, zoom)
     return svg.G()
 
 
@@ -149,11 +145,10 @@ def line_text_svg(
     zoom: int,
     text_list: list[tuple[Polygon, svg.Element]],
     skin: Skin,
-    offset: Coord = ORIGIN,
 ) -> svg.Element:
     if (not component.display_name) or (skin.prune_small_text is not None and skin.prune_small_text >= s.size):
         return svg.G()
-    coordinates = _shift_coordinates(component.nodes, zoom, offset)
+    coordinates = _shift_coordinates(component.nodes, zoom)
     dashes = Line(coordinates).dash(round(s.size * len(component.display_name))) or []
     for dash in dashes:
         if dash.shapely.length < 0.9 * s.size * len(component.display_name):
@@ -200,9 +195,8 @@ def line_back_fore_svg(
     zoom: int,
     _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
-    offset: Coord = ORIGIN,
 ) -> svg.Element:
-    coordinates = _shift_coordinates(component.nodes, zoom, offset)
+    coordinates = _shift_coordinates(component.nodes, zoom)
     return svg.Polyline(
         points=[cast(int, f"{c.x},{c.y}") for c in coordinates],
         stroke=None if s.colour is None else str(s.colour),
@@ -221,9 +215,8 @@ def point_text_svg(
     zoom: int,
     text_list: list[tuple[Polygon, svg.Element]],
     skin: Skin,
-    offset: Coord = ORIGIN,
 ) -> svg.Element:
-    coordinate = _shift_coordinates(component.nodes, zoom, offset)[0]
+    coordinate = _shift_coordinates(component.nodes, zoom)[0]
     text_list.append(
         (
             Polygon(
@@ -258,9 +251,8 @@ def point_square_svg(
     zoom: int,
     _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
-    offset: Coord = ORIGIN,
 ) -> svg.Element:
-    _shift_coordinates(component.nodes, zoom, offset)[0]
+    _shift_coordinates(component.nodes, zoom)[0]
     return svg.G()
 
 
@@ -270,7 +262,6 @@ def point_image_svg(
     zoom: int,
     _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
-    offset: Coord = ORIGIN,
 ) -> svg.Element:
-    _shift_coordinates(component.nodes, zoom, offset)[0]
+    _shift_coordinates(component.nodes, zoom)[0]
     return svg.G()
