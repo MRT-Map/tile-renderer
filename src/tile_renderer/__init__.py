@@ -64,7 +64,8 @@ def render_tiles(
         multiprocessing.Manager() as manager,
     ):
         task_id = progress.add_task("[green] Exporting to PNG", total=len(tiles))
-        doc = f"<svg viewBox=\"<|min_x|> <|min_y|> {max_zoom_range} {max_zoom_range}\"" + _simplify_svg(str(doc), font_dir, tile_size).removeprefix("<svg ")
+        doc = f"<svg viewBox=\"<|min_x|> <|min_y|> {max_zoom_range} {max_zoom_range}\" " + _simplify_svg(str(doc), font_dir, tile_size).removeprefix("<svg ")
+        print(doc[:200])
         
         doc = manager.Value(ctypes.c_wchar_p, doc, lock=False)
         resvg_path = subprocess.check_output(["where" if platform.system() == "Windows" else "which", "resvg"]).strip()
