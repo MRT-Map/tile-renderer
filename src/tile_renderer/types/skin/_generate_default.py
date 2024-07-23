@@ -691,7 +691,7 @@ def main():
             #     "https://github.com/googlefonts/noto-cjk/raw/main/Sans/Variable/TTF/NotoSansCJKkr-VF.ttf"
             # )
         ],
-        font_string="'Noto Sans', 'Noto Sans CJK JP'",
+        font_string="'Noto Sans', 'Noto Sans JP'",
         background=LAND,
         types=types,
         prune_small_text=0.5,
