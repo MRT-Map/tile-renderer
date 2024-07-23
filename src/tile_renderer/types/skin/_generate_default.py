@@ -713,11 +713,11 @@ def main():
                 shape="area",
                 styles={
                     "0-"+str(zoom): [
-                        AreaFill(outline=colour),
+                        AreaFill(outline=colour, outline_width=0.5),
                         AreaBorderText(colour=colour.darkened(), offset=2.0, size=4.0),
                     ],
                     str(zoom)+"-"+str(zoom+3): [
-                        AreaFill(outline=colour),
+                        AreaFill(outline=colour, outline_width=0.5/1.5**zoom),
                         AreaBorderText(colour=colour.darkened(), offset=2.0/1.5**zoom, size=4.0/1.5**zoom),
                         AreaCentreText(colour=colour.darkened(), size=5.0)
                     ]
