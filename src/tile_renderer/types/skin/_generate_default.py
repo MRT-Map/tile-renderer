@@ -730,7 +730,7 @@ def main():
                 shape="point",
                 styles={
                     str(zoom)+"-"+str(zoom+3): [
-                        PointText(colour=colour.darkened(), size=4.0/1.5**zoom),
+                        PointText(colour=colour.darkened(), size=4.0/1.5**zoom, anchor=""),
                     ]
                 }
             )
@@ -768,7 +768,7 @@ def main():
             shape="point",
             styles={
                 PointSquare(colour=Colour.from_hex(0xAAAAAA), outline=Colour.from_hex(0x808080), size=5.0, width=1.2),
-                PointText(colour=Colour.from_hex(0x808080), offset=Coord(0, 5.0), size=5.0)
+                PointText(colour=Colour.from_hex(0x808080), offset=Coord(0, 5.0), size=5.0, anchor="")
             }
         )
     )
