@@ -2,10 +2,10 @@ import uuid
 from typing import cast
 
 import svg
-from shapely import LineString, Polygon
+from shapely import Polygon
 
 from tile_renderer import Component
-from tile_renderer.types.coord import ORIGIN, Coord, Line
+from tile_renderer.types.coord import Coord, Line
 from tile_renderer.types.skin import (
     AreaBorderText,
     AreaCentreImage,

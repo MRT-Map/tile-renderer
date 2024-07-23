@@ -13,7 +13,7 @@ from typing import cast
 import rich
 import svg
 from rich.progress import Progress, track
-from shapely import LineString, Polygon
+from shapely import Polygon
 from shapely.prepared import prep
 
 from tile_renderer.types.coord import ORIGIN, Coord, TileCoord
