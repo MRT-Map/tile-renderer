@@ -37,7 +37,14 @@ def area_border_text_svg(
     coordinates = _shift_coordinates(component.nodes, zoom)
     dashes = Line(coordinates).dash(round(s.size * len(component.display_name))) or []
     for old_dash in dashes:
-        dash = old_dash.parallel_offset(s.offset)
+        new_dash = old_dash.parallel_offset(s.offset)
+        poly = Polygon(a.as_tuple() for a in component.nodes)
+        if (s.offset > 0 and not poly.intersects(new_dash.shapely)) or (
+            s.offset < 0 and poly.intersects(new_dash.shapely)
+        ):
+            dash = old_dash.parallel_offset(-s.offset)
+        else:
+            dash = new_dash
         if dash[0].x > dash[-1].x:
             dash.coords.reverse()
         id_ = str(uuid.uuid4())
