@@ -165,7 +165,10 @@ def _simplify_svg(doc: str, font_dir: Path, tile_size: int) -> str:
         stdin=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
-    return p.communicate(input=doc.encode("utf-8"))[0].decode("utf-8")
+    out, err = p.communicate(input=doc.encode("utf-8"))
+    if err:
+        print(err)
+    return out.decode("utf-8")
 
 
 def _export_tile(
@@ -206,7 +209,10 @@ def _export_tile(
         stdin=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
-    return tile, p.communicate(input=doc.encode("utf-8"))[0]
+    out, err = p.communicate(input=doc.encode("utf-8"))
+    if err:
+        print(err)
+    return tile, out
 
 
 def _filter_text_list(text_list: list[tuple[Line, svg.Element]]) -> list[svg.Element]:
