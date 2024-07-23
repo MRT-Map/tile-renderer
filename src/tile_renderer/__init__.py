@@ -4,6 +4,7 @@ import multiprocessing
 import multiprocessing.sharedctypes
 import os
 import platform
+import re
 import subprocess
 import tempfile
 from pathlib import Path
@@ -64,7 +65,7 @@ def render_tiles(
         multiprocessing.Manager() as manager,
     ):
         task_id = progress.add_task("[green] Exporting to PNG", total=len(tiles))
-        doc = f"<svg viewBox=\"<|min_x|> <|min_y|> {max_zoom_range} {max_zoom_range}\" " + _simplify_svg(str(doc), font_dir, tile_size).removeprefix("<svg ")
+        doc = re.sub(r'<svg width=".*?" height=".*?"', f"<svg viewBox=\"<|min_x|> <|min_y|> {max_zoom_range} {max_zoom_range}\"", _simplify_svg(str(doc), font_dir, tile_size))
         print(doc[:200])
         
         doc = manager.Value(ctypes.c_wchar_p, doc, lock=False)
