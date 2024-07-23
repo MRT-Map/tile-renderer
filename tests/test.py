@@ -11,7 +11,7 @@ from tile_renderer.types.pla2 import Pla2File
 def main():
     a = Pla2File.from_file(Path(__file__).parent / "kze.pla2.msgpack")
     skin = Skin.default()
-    for zoom in (2, 3, 4, 5, 6, 7, 8, 9):
+    for zoom in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9):
         if len(sys.argv) > 1 and sys.argv[1] == "png":
             Path("/tmp/tile-renderer").mkdir(exist_ok=True)
             for tile, b in render_tiles(a.components, skin, zoom, 32, 256).items():

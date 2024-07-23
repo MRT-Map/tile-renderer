@@ -13,7 +13,8 @@ from typing import cast
 import rich
 import svg
 from rich.progress import Progress, track
-from shapely import LineString
+from shapely import LineString, Polygon
+from shapely.prepared import prep
 
 from tile_renderer.types.coord import ORIGIN, Coord, TileCoord
 from tile_renderer.types.pla2 import Component
@@ -222,12 +223,12 @@ def _export_tile(
     return tile, out
 
 
-def _filter_text_list(text_list: list[tuple[LineString, svg.Element]]) -> list[svg.Element]:
+def _filter_text_list(text_list: list[tuple[Polygon, svg.Element]]) -> list[svg.Element]:
     out = []
     with Progress() as progress:
         task_id = progress.add_task("[green]Filtering text", total=len(text_list) ** 2 / 2)
         for i, (shape, text) in enumerate(text_list):
-            if not any(shape.intersects(other) for other, _ in out):
-                out.append((shape, text))
+            if not any(other.intersects(shape) for other, _ in out):
+                out.append((prep(shape), text))
             progress.advance(task_id, i)
         return [text for _, text in out]

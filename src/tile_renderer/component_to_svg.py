@@ -2,7 +2,7 @@ import uuid
 from typing import cast
 
 import svg
-from shapely import LineString
+from shapely import LineString, Polygon
 
 from tile_renderer import Component
 from tile_renderer.types.coord import ORIGIN, Coord, Line
@@ -29,7 +29,7 @@ def area_border_text_svg(
     s: AreaBorderText,
     component: Component,
     zoom: int,
-    text_list: list[tuple[LineString, svg.Element]],
+    text_list: list[tuple[Polygon, svg.Element]],
     skin: Skin,
     offset: Coord = ORIGIN,
 ) -> svg.Element:
@@ -44,7 +44,10 @@ def area_border_text_svg(
         id_ = str(uuid.uuid4())
         text_list.append(
             (
-                dash.shapely,
+                Polygon(
+                    a.as_tuple()
+                    for a in (dash.parallel_offset(s.size / 2).coords + dash.parallel_offset(-s.size / 2).coords[::-1])
+                ),
                 svg.G(
                     elements=[
                         svg.Polyline(
@@ -75,7 +78,7 @@ def area_centre_text_svg(
     s: AreaCentreText,
     component: Component,
     zoom: int,
-    text_list: list[tuple[LineString, svg.Element]],
+    text_list: list[tuple[Polygon, svg.Element]],
     skin: Skin,
     offset: Coord = ORIGIN,
 ) -> svg.Element:
@@ -83,12 +86,15 @@ def area_centre_text_svg(
     centroid = Line(coordinates).point_on_surface
     text_list.append(
         (
-            Line(
-                [
-                    centroid - Coord(0.5 * s.size * len(component.display_name), 0),
-                    centroid + Coord(0.5 * s.size * len(component.display_name), 0),
-                ]
-            ).shapely,
+            Polygon(
+                a.as_tuple()
+                for a in (
+                    centroid - Coord(0.5 * s.size * len(component.display_name), s.size / 2),
+                    centroid - Coord(0.5 * s.size * len(component.display_name), -s.size / 2),
+                    centroid + Coord(0.5 * s.size * len(component.display_name), -s.size / 2),
+                    centroid + Coord(0.5 * s.size * len(component.display_name), s.size / 2),
+                )
+            ),
             svg.Text(
                 x=centroid.x + s.offset.x,
                 y=centroid.y + s.offset.y,
@@ -110,7 +116,7 @@ def area_fill_svg(
     s: AreaFill,
     component: Component,
     zoom: int,
-    _text_list: list[tuple[LineString, svg.Element]],
+    _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
     offset: Coord = ORIGIN,
 ) -> svg.Element:
@@ -129,7 +135,7 @@ def area_centre_image_svg(
     s: AreaCentreImage,
     component: Component,
     zoom: int,
-    _text_list: list[tuple[LineString, svg.Element]],
+    _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
     offset: Coord = ORIGIN,
 ) -> svg.Element:
@@ -141,7 +147,7 @@ def line_text_svg(
     s: LineText,
     component: Component,
     zoom: int,
-    text_list: list[tuple[LineString, svg.Element]],
+    text_list: list[tuple[Polygon, svg.Element]],
     skin: Skin,
     offset: Coord = ORIGIN,
 ) -> svg.Element:
@@ -158,7 +164,10 @@ def line_text_svg(
         id_ = str(uuid.uuid4())
         text_list.append(
             (
-                dash.shapely,
+                Polygon(
+                    a.as_tuple()
+                    for a in (dash.parallel_offset(s.size / 2).coords + dash.parallel_offset(-s.size / 2).coords[::-1])
+                ),
                 svg.G(
                     elements=[
                         svg.Polyline(
@@ -189,7 +198,7 @@ def line_back_fore_svg(
     s: LineBack | LineFore,
     component: Component,
     zoom: int,
-    _text_list: list[tuple[LineString, svg.Element]],
+    _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
     offset: Coord = ORIGIN,
 ) -> svg.Element:
@@ -210,19 +219,22 @@ def point_text_svg(
     s: PointText,
     component: Component,
     zoom: int,
-    text_list: list[tuple[LineString, svg.Element]],
+    text_list: list[tuple[Polygon, svg.Element]],
     skin: Skin,
     offset: Coord = ORIGIN,
 ) -> svg.Element:
     coordinate = _shift_coordinates(component.nodes, zoom, offset)[0]
     text_list.append(
         (
-            Line(
-                [
-                    coordinate - Coord(0.5 * s.size * len(component.display_name), 0),
-                    coordinate + Coord(0.5 * s.size * len(component.display_name), 0),
-                ]
-            ).shapely,
+            Polygon(
+                a.as_tuple()
+                for a in (
+                    coordinate - Coord(0.5 * s.size * len(component.display_name), s.size / 2),
+                    coordinate - Coord(0.5 * s.size * len(component.display_name), -s.size / 2),
+                    coordinate + Coord(0.5 * s.size * len(component.display_name), -s.size / 2),
+                    coordinate + Coord(0.5 * s.size * len(component.display_name), s.size / 2),
+                )
+            ),
             svg.Text(
                 x=coordinate.x + s.offset.x,
                 y=coordinate.y + s.offset.y,
@@ -244,7 +256,7 @@ def point_square_svg(
     s: PointSquare,
     component: Component,
     zoom: int,
-    _text_list: list[tuple[LineString, svg.Element]],
+    _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
     offset: Coord = ORIGIN,
 ) -> svg.Element:
@@ -256,7 +268,7 @@ def point_image_svg(
     s: PointImage,
     component: Component,
     zoom: int,
-    _text_list: list[tuple[LineString, svg.Element]],
+    _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
     offset: Coord = ORIGIN,
 ) -> svg.Element:

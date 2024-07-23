@@ -156,7 +156,7 @@ class ComponentStyle(Struct, kw_only=True):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[LineString, svg.Element]],
+        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
         offset: Coord = ORIGIN,
     ) -> svg.Element:
@@ -198,7 +198,7 @@ class AreaBorderText(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[LineString, svg.Element]],
+        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
         offset: Coord = ORIGIN,
     ) -> svg.Element:
@@ -246,7 +246,7 @@ class AreaCentreText(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[LineString, svg.Element]],
+        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
         offset: Coord = ORIGIN,
     ) -> svg.Element:
@@ -297,7 +297,7 @@ class AreaFill(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[LineString, svg.Element]],
+        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
         offset: Coord = ORIGIN,
     ) -> svg.Element:
@@ -340,7 +340,7 @@ class AreaCentreImage(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[LineString, svg.Element]],
+        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
         offset: Coord = ORIGIN,
     ) -> svg.Element:
@@ -386,7 +386,7 @@ class LineText(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[LineString, svg.Element]],
+        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
         offset: Coord = ORIGIN,
     ) -> svg.Element:
@@ -439,7 +439,7 @@ class LineFore(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[LineString, svg.Element]],
+        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
         offset: Coord = ORIGIN,
     ) -> svg.Element:
@@ -524,7 +524,7 @@ class PointText(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[LineString, svg.Element]],
+        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
         offset: Coord = ORIGIN,
     ) -> svg.Element:
@@ -579,7 +579,7 @@ class PointSquare(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[LineString, svg.Element]],
+        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
         offset: Coord = ORIGIN,
     ) -> svg.Element:
@@ -620,7 +620,7 @@ class PointImage(AreaCentreImage):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[LineString, svg.Element]],
+        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
         offset: Coord = ORIGIN,
     ) -> svg.Element:
