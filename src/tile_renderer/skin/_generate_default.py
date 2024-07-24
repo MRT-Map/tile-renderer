@@ -129,7 +129,7 @@ def main():
                     LineText(colour=WATER.darkened(), arrow_colour=WATER.darkened(), size=4.0),
                 ],
                 "3-4": [
-                    LineFore(colour=WATER, width=0.6),
+                    LineFore(colour=WATER, width=4.0),
                 ],
             },
         )
@@ -168,7 +168,7 @@ def main():
                 styles={
                     "0-3": [
                         AreaFill(colour=colour, outline=colour.darkened(20.0), outline_width=0.5),
-                        AreaCentreText(colour=colour.darkened(40.0 if name == "beach" else 20.0), size=5.0),
+                        AreaCentreText(colour=colour.darkened(40.0 if name == "sand" else 20.0), size=5.0),
                     ],
                     "4-6": [AreaFill(colour=colour, outline=colour.darkened(20.0), outline_width=0.5 / (1.5 / 2) ** 4)],
                 },
@@ -215,10 +215,11 @@ def main():
                         colour=Colour.from_hex(0x8F8FA3).darkened(),
                         arrow_colour=Colour.from_hex(0x8F8FA3).darkened(),
                         size=4.0,
+                        zoom_multiplier=2.0,
                     ),
                 ],
                 "3-5": [
-                    LineFore(colour=Colour.from_hex(0x8F8FA3), width=10.0, zoom_multiplier=2.0),
+                    LineFore(colour=Colour.from_hex(0x8F8FA3), width=10.0 / (2 / 2) ** 3, zoom_multiplier=2.0),
                 ],
             },
         )
@@ -375,19 +376,19 @@ def main():
         )
     )
 
-    for name, col, width, small_width in (
-        ("localHighwaySlip_underground", LOCAL_HIGHWAY, 4.0, 0.1),
-        ("bRoadSlip_underground", B_ROAD, 4.8, 0.2),
-        ("aRoadSlip_underground", A_ROAD, 6.4, 0.3),
-        ("localPedestrianQuaternaryRoad_underground", LOCAL_PEDESTRIAN, 3.2, 0.1),
-        ("localQuaternaryRoad_underground", LOCAL_TERTIARY_QUATERNARY, 3.2, 0.1),
-        ("localPedestrianTertiaryRoad_underground", LOCAL_PEDESTRIAN, 4.8, 0.2),
-        ("localTertiaryRoad_underground", LOCAL_TERTIARY_QUATERNARY, 4.8, 0.2),
-        ("localSecondaryRoad_underground", LOCAL_SECONDARY, 5.6, 0.2),
-        ("localMainRoad_underground", LOCAL_MAIN, 6.4, 0.3),
-        ("localHighway_underground", LOCAL_HIGHWAY, 7.2, 0.3),
-        ("bRoad_underground", B_ROAD, 8.0, 0.4),
-        ("aRoad_underground", A_ROAD, 9.6, 0.4),
+    for name, col, width in (
+        ("localHighwaySlip_underground", LOCAL_HIGHWAY, 4.0),
+        ("bRoadSlip_underground", B_ROAD, 4.8),
+        ("aRoadSlip_underground", A_ROAD, 6.4),
+        ("localPedestrianQuaternaryRoad_underground", LOCAL_PEDESTRIAN, 3.2),
+        ("localQuaternaryRoad_underground", LOCAL_TERTIARY_QUATERNARY, 3.2),
+        ("localPedestrianTertiaryRoad_underground", LOCAL_PEDESTRIAN, 4.8),
+        ("localTertiaryRoad_underground", LOCAL_TERTIARY_QUATERNARY, 4.8),
+        ("localSecondaryRoad_underground", LOCAL_SECONDARY, 5.6),
+        ("localMainRoad_underground", LOCAL_MAIN, 6.4),
+        ("localHighway_underground", LOCAL_HIGHWAY, 7.2),
+        ("bRoad_underground", B_ROAD, 8.0),
+        ("aRoad_underground", A_ROAD, 9.6),
     ):
         types.append(
             ComponentType(
@@ -401,8 +402,8 @@ def main():
                         LineText(colour=Colour.from_hex(0x000000), arrow_colour=col, size=width, zoom_multiplier=2),
                     ],
                     "5-8": [
-                        LineBack(colour=col, width=small_width * 1.5),
-                        LineFore(colour=col.brightened(), width=small_width),
+                        LineBack(colour=col, width=width * 1.5 * 1.5),
+                        LineFore(colour=col.brightened(), width=width * 1.5),
                     ],
                 },
             )
@@ -420,7 +421,7 @@ def main():
                         colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=3.2, size=3.2
                     ),
                 ],
-                "3-4": [LineFore(colour=Colour.from_hex(0x808080), width=0.5, dash=[4.0, 2.0])],
+                "3-6": [LineFore(colour=Colour.from_hex(0x808080), width=3.0, dash=[20.0, 10.0])],
             },
         )
     )
@@ -441,7 +442,7 @@ def main():
                         zoom_multiplier=2.0,
                     ),
                 ],
-                "3-6": [LineFore(colour=Colour.from_hex(0x808080), width=0.4, dash=[4.0, 2.0], zoom_multiplier=2.0)],
+                "3-6": [LineFore(colour=Colour.from_hex(0x808080), width=6.4, dash=[20.0, 10.0], zoom_multiplier=2.0)],
             },
         )
     )
@@ -512,19 +513,19 @@ def main():
         )
     )
 
-    for name, col, width, small_width in (
-        ("localHighwaySlip", LOCAL_HIGHWAY, 4.0, 0.1),
-        ("bRoadSlip", B_ROAD, 4.8, 0.2),
-        ("aRoadSlip", A_ROAD, 6.4, 0.3),
-        ("localPedestrianQuaternaryRoad", LOCAL_PEDESTRIAN, 3.2, 0.1),
-        ("localQuaternaryRoad", LOCAL_TERTIARY_QUATERNARY, 3.2, 0.1),
-        ("localPedestrianTertiaryRoad", LOCAL_PEDESTRIAN, 4.8, 0.2),
-        ("localTertiaryRoad", LOCAL_TERTIARY_QUATERNARY, 4.8, 0.2),
-        ("localSecondaryRoad", LOCAL_SECONDARY, 5.6, 0.2),
-        ("localMainRoad", LOCAL_MAIN, 6.4, 0.3),
-        ("localHighway", LOCAL_HIGHWAY, 3.6, 0.3),
-        ("bRoad", B_ROAD, 8.0, 0.4),
-        ("aRoad", A_ROAD, 9.6, 0.4),
+    for name, col, width in (
+        ("localHighwaySlip", LOCAL_HIGHWAY, 4.0),
+        ("bRoadSlip", B_ROAD, 4.8),
+        ("aRoadSlip", A_ROAD, 6.4),
+        ("localPedestrianQuaternaryRoad", LOCAL_PEDESTRIAN, 3.2),
+        ("localQuaternaryRoad", LOCAL_TERTIARY_QUATERNARY, 3.2),
+        ("localPedestrianTertiaryRoad", LOCAL_PEDESTRIAN, 4.8),
+        ("localTertiaryRoad", LOCAL_TERTIARY_QUATERNARY, 4.8),
+        ("localSecondaryRoad", LOCAL_SECONDARY, 5.6),
+        ("localMainRoad", LOCAL_MAIN, 6.4),
+        ("localHighway", LOCAL_HIGHWAY, 3.6),
+        ("bRoad", B_ROAD, 8.0),
+        ("aRoad", A_ROAD, 9.6),
     ):
         types.append(
             ComponentType(
@@ -538,8 +539,8 @@ def main():
                         LineText(colour=Colour.from_hex(0x000000), arrow_colour=col, size=width, zoom_multiplier=2),
                     ],
                     "5-8": [
-                        LineBack(colour=col.darkened(), width=small_width * 1.5),
-                        LineFore(colour=col, width=small_width),
+                        LineBack(colour=col.darkened(), width=width * 1.5 * 1.5),
+                        LineFore(colour=col, width=width * 1.5),
                     ],
                 },
             )
@@ -561,7 +562,7 @@ def main():
                         zoom_multiplier=2.0,
                     ),
                 ],
-                "3-4": [LineFore(colour=Colour.from_hex(0x808080), width=0.5, zoom_multiplier=2.0)],
+                "3-6": [LineFore(colour=Colour.from_hex(0x808080), width=3.0, zoom_multiplier=2.0)],
             },
         )
     )
@@ -574,7 +575,7 @@ def main():
             styles={
                 "0-2": [
                     LineBack(colour=Colour.from_hex(0x808080), width=3.2, zoom_multiplier=2.0),
-                    LineFore(colour=Colour.from_hex(0xFFFFFF), width=1.5, dash=[10.0, 10.0], zoom_multiplier=2.0),
+                    LineFore(colour=Colour.from_hex(0xFFFFFF), width=1.6, dash=[10.0, 10.0], zoom_multiplier=2.0),
                     LineText(
                         colour=Colour.from_hex(0x808080),
                         arrow_colour=Colour.from_hex(0x808080),
@@ -584,8 +585,8 @@ def main():
                     ),
                 ],
                 "3-6": [
-                    LineBack(colour=Colour.from_hex(0x808080), width=0.8),
-                    LineFore(colour=Colour.from_hex(0xFFFFFF), width=0.4, dash=[4.0, 4.0]),
+                    LineBack(colour=Colour.from_hex(0x808080), width=6.4),
+                    LineFore(colour=Colour.from_hex(0xFFFFFF), width=3.2, dash=[20.0, 20.0]),
                 ],
             },
         )
@@ -613,19 +614,19 @@ def main():
         )
     )
 
-    for name, col, width, small_width in (
-        ("localHighwaySlip_elevated", LOCAL_HIGHWAY, 4.0, 0.1),
-        ("bRoadSlip_elevated", B_ROAD, 4.8, 0.2),
-        ("aRoadSlip_elevated", A_ROAD, 6.4, 0.3),
-        ("localPedestrianQuaternaryRoad_elevated", LOCAL_PEDESTRIAN, 3.2, 0.1),
-        ("localQuaternaryRoad_elevated", LOCAL_TERTIARY_QUATERNARY, 3.2, 0.1),
-        ("localPedestrianTertiaryRoad_elevated", LOCAL_PEDESTRIAN, 4.8, 0.2),
-        ("localTertiaryRoad_elevated", LOCAL_TERTIARY_QUATERNARY, 4.8, 0.2),
-        ("localSecondaryRoad_elevated", LOCAL_SECONDARY, 5.6, 0.2),
-        ("localMainRoad_elevated", LOCAL_MAIN, 6.4, 0.3),
-        ("localHighway_elevated", LOCAL_HIGHWAY, 7.2, 0.3),
-        ("bRoad_elevated", B_ROAD, 8.0, 0.4),
-        ("aRoad_elevated", A_ROAD, 9.6, 0.4),
+    for name, col, width in (
+        ("localHighwaySlip_elevated", LOCAL_HIGHWAY, 4.0),
+        ("bRoadSlip_elevated", B_ROAD, 4.8),
+        ("aRoadSlip_elevated", A_ROAD, 6.4),
+        ("localPedestrianQuaternaryRoad_elevated", LOCAL_PEDESTRIAN, 3.2),
+        ("localQuaternaryRoad_elevated", LOCAL_TERTIARY_QUATERNARY, 3.2),
+        ("localPedestrianTertiaryRoad_elevated", LOCAL_PEDESTRIAN, 4.8),
+        ("localTertiaryRoad_elevated", LOCAL_TERTIARY_QUATERNARY, 4.8),
+        ("localSecondaryRoad_elevated", LOCAL_SECONDARY, 5.6),
+        ("localMainRoad_elevated", LOCAL_MAIN, 6.4),
+        ("localHighway_elevated", LOCAL_HIGHWAY, 7.2),
+        ("bRoad_elevated", B_ROAD, 8.0),
+        ("aRoad_elevated", A_ROAD, 9.6),
     ):
         types.append(
             ComponentType(
@@ -639,8 +640,8 @@ def main():
                         LineText(colour=Colour.from_hex(0x000000), arrow_colour=col, size=width, zoom_multiplier=2),
                     ],
                     "5-8": [
-                        LineBack(colour=Colour.from_hex(0x333333), width=small_width * 1.5),
-                        LineFore(colour=col, width=small_width),
+                        LineBack(colour=Colour.from_hex(0x333333), width=width * 1.5 * 1.5),
+                        LineFore(colour=col, width=width * 1.5),
                     ],
                 },
             )
@@ -654,7 +655,7 @@ def main():
             styles={
                 "0-2": [
                     LineBack(colour=Colour.from_hex(0x333333), width=2.4, zoom_multiplier=2.0),
-                    LineFore(colour=Colour.from_hex(0x808080), width=1.5, zoom_multiplier=2.0),
+                    LineFore(colour=Colour.from_hex(0x808080), width=1.6, zoom_multiplier=2.0),
                     LineText(
                         colour=Colour.from_hex(0x808080),
                         arrow_colour=Colour.from_hex(0x808080),
@@ -663,9 +664,9 @@ def main():
                         zoom_multiplier=2.0,
                     ),
                 ],
-                "3-4": [
-                    LineBack(colour=Colour.from_hex(0x333333), width=0.8),
-                    LineFore(colour=Colour.from_hex(0x808080), width=0.5),
+                "3-6": [
+                    LineBack(colour=Colour.from_hex(0x333333), width=6.4),
+                    LineFore(colour=Colour.from_hex(0x808080), width=3.2),
                 ],
             },
         )
@@ -678,9 +679,9 @@ def main():
             tags=["road"],
             styles={
                 "0-2": [
-                    LineBack(colour=Colour.from_hex(0x333333), width=4.0, zoom_multiplier=2.0),
+                    LineBack(colour=Colour.from_hex(0x333333), width=4.8, zoom_multiplier=2.0),
                     LineBack(colour=Colour.from_hex(0x808080), width=3.2, zoom_multiplier=2.0),
-                    LineFore(colour=Colour.from_hex(0xFFFFFF), width=1.5, dash=[10.0, 10.0], zoom_multiplier=2.0),
+                    LineFore(colour=Colour.from_hex(0xFFFFFF), width=1.6, dash=[10.0, 10.0], zoom_multiplier=2.0),
                     LineText(
                         colour=Colour.from_hex(0x808080),
                         arrow_colour=Colour.from_hex(0x808080),
@@ -690,9 +691,9 @@ def main():
                     ),
                 ],
                 "3-6": [
-                    LineBack(colour=Colour.from_hex(0x333333), width=1.2),
-                    LineBack(colour=Colour.from_hex(0x808080), width=0.8),
-                    LineFore(colour=Colour.from_hex(0xFFFFFF), width=0.5, dash=[4.0, 4.0]),
+                    LineBack(colour=Colour.from_hex(0x333333), width=9.6),
+                    LineBack(colour=Colour.from_hex(0x808080), width=6.4),
+                    LineFore(colour=Colour.from_hex(0xFFFFFF), width=3.2, dash=[20.0, 20.0]),
                 ],
             },
         )
@@ -773,7 +774,7 @@ def main():
                     ],
                     str(zoom) + "-" + str(zoom + 3): [
                         AreaFill(outline=colour, outline_width=0.5 / (1.5 / 2) ** zoom),
-                        AreaCentreText(colour=colour.darkened(), size=5.0),
+                        AreaCentreText(colour=colour.darkened(), size=7.5),
                         AreaBorderText(
                             colour=colour.darkened(), offset=2.0 / (1.5 / 2) ** zoom, size=4.0 / (1.5 / 2) ** zoom
                         ),
@@ -787,7 +788,7 @@ def main():
                 shape="point",
                 styles={
                     str(zoom) + "-" + str(zoom + 3): [
-                        PointText(colour=colour.darkened(), size=4.0 / (1.5 / 2) ** zoom),
+                        PointText(colour=colour.darkened(), size=7.5),
                     ]
                 },
             )
