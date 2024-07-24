@@ -499,8 +499,8 @@ class _SerLineBack(_SerLineFore, tag_field="ty", tag="lineBack"):
 
 @dataclass_transform()
 class PointText(ComponentStyle):
-    anchor: str
     size: int | float
+    anchor: Literal["start", "middle", "end"] = "middle"
     colour: Colour | None = None
     offset: Vector[float] = Vector(0.0, 0.0)
 
@@ -554,7 +554,6 @@ class PointSquare(ComponentStyle):
     size: int | float
     width: int | float
     colour: Colour | None = None
-    outline: Colour | None = None
     border_radius: int | float = 0
 
     def encode(self) -> _SerPointSquare:
@@ -562,7 +561,6 @@ class PointSquare(ComponentStyle):
             size=self.size,
             width=self.width,
             colour=None if self.colour is None else str(self.colour),
-            outline=None if self.outline is None else str(self.outline),
             border_radius=self.border_radius,
             zoom_multiplier=self.zoom_multiplier,
         )
@@ -583,7 +581,6 @@ class PointSquare(ComponentStyle):
             size=self.size / self.zoom_multiplier**zoom,
             width=self.width / self.zoom_multiplier**zoom,
             colour=self.colour,
-            outline=self.outline,
             border_radius=self.border_radius / self.zoom_multiplier**zoom,
             zoom_multiplier=self.zoom_multiplier,
         )
@@ -599,7 +596,6 @@ class _SerPointSquare(PointSquare, tag_field="ty", tag="pointSquare"):
             size=self.size,
             width=self.width,
             colour=None if self.colour is None else Colour.from_hex(self.colour),
-            outline=None if self.outline is None else Colour.from_hex(self.outline),
             border_radius=self.border_radius,
             zoom_multiplier=self.zoom_multiplier,
         )

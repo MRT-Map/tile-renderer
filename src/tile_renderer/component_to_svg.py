@@ -242,7 +242,7 @@ def point_text_svg(
                 font_size=s.size,
                 font_family=skin.font_string,
                 text=component.display_name,
-                text_anchor="middle",
+                text_anchor=s.anchor,
                 stroke="#dddddd",
                 stroke_width=0.025 * s.size,
                 font_weight="bold",
@@ -259,8 +259,16 @@ def point_square_svg(
     _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
 ) -> svg.Element:
-    _shift_coordinates(component.nodes, zoom)[0]
-    return svg.G()
+    coordinate = _shift_coordinates(component.nodes, zoom)[0]
+    return svg.Rect(
+        x=coordinate.x - s.size / 2,
+        y=coordinate.y - s.size / 2,
+        width=s.size,
+        height=s.size,
+        fill=None if s.colour is None else str(s.colour),
+        rx=s.border_radius,
+        ry=s.border_radius,
+    )
 
 
 def point_image_svg(

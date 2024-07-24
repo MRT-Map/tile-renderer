@@ -718,7 +718,7 @@ def main():
                 styles={
                     "0-5": [
                         PointImage(image=image_path.read_bytes()),
-                        PointText(colour=Colour.from_hex(0x000000), offset=Vector(0.0, 2.5), size=2.5, anchor=""),
+                        PointText(colour=Colour.from_hex(0x000000), offset=Vector(0.0, 2.5), size=2.5),
                     ]
                 },
             )
@@ -737,7 +737,7 @@ def main():
                 styles={
                     "0-2": [
                         PointSquare(colour=colour, size=2.5, width=0),
-                        PointText(colour=Colour.from_hex(0x000000), offset=Vector(0.0, 4.0), size=2.5, anchor=""),
+                        PointText(colour=colour.darkened(), offset=Vector(0.0, 4.0), size=2.5),
                     ],
                     "3-5": [
                         PointSquare(colour=colour, size=2.5 / 1.5**3, width=0),
@@ -777,7 +777,7 @@ def main():
                 shape="point",
                 styles={
                     str(zoom) + "-" + str(zoom + 3): [
-                        PointText(colour=colour.darkened(), size=4.0 / 1.5**zoom, anchor=""),
+                        PointText(colour=colour.darkened(), size=4.0 / 1.5**zoom),
                     ]
                 },
             )
@@ -809,10 +809,8 @@ def main():
             shape="point",
             styles={
                 "0-5": [
-                    PointSquare(
-                        colour=Colour.from_hex(0xAAAAAA), outline=Colour.from_hex(0x808080), size=5.0, width=1.2
-                    ),
-                    PointText(colour=Colour.from_hex(0x808080), offset=Vector(0.0, 5.0), size=5.0, anchor=""),
+                    PointSquare(colour=Colour.from_hex(0xAAAAAA), size=5.0, width=1.2),
+                    PointText(colour=Colour.from_hex(0x808080), offset=Vector(0.0, 5.0), size=5.0),
                 ]
             },
         )

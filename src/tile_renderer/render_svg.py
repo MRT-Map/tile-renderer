@@ -80,7 +80,7 @@ def _filter_text_list(text_list: list[tuple[Polygon, svg.Element]]) -> list[svg.
     out = []
     with Progress() as progress:
         task_id = progress.add_task("[green]Filtering text", total=len(text_list) ** 2 / 2)
-        for i, (shape, text) in enumerate(text_list):
+        for i, (shape, text) in enumerate(text_list[::-1]):
             if not any(other.intersects(shape) for other, _ in out):
                 out.append((prep(shape), text))
             progress.advance(task_id, i)
