@@ -1,4 +1,5 @@
 import base64
+import math
 import uuid
 from typing import cast
 
@@ -165,10 +166,32 @@ def line_text_svg(
     _connection_list: list[tuple[int, Line[int], int, str]],
     _i: int,
 ) -> svg.Element:
+    out = []
+    if "oneWay" in component.tags:
+        for dash in component.nodes.parallel_offset(s.offset).dash(
+            round(s.size * len(component.display_name or "-" * 8)), shift=True
+        ):
+            vector = (dash[-1] - dash[0]).unit()
+            arrow_centre = dash.shapely.interpolate(0.5, normalized=True)
+            arrow_centre = Coord(arrow_centre.x, arrow_centre.y)
+            point1 = arrow_centre + vector * (s.size / 2)
+            point2 = arrow_centre - vector * (s.size / 2) + vector.perp() * (s.size / 2)
+            point3 = arrow_centre - vector * (s.size / 2) - vector.perp() * (s.size / 2)
+            out.append(
+                svg.Polygon(
+                    points=[cast(int, f"{c.x},{c.y}") for c in (point1, point2, point3)],
+                    fill=str(s.arrow_colour)
+                    if s.arrow_colour is not None
+                    else str(s.colour)
+                    if s.colour is not None
+                    else None,
+                    stroke=None,
+                )
+            )
     if (not component.display_name) or (
         skin.prune_small_text is not None and skin.prune_small_text >= s.size / 2**zoom
     ):
-        return svg.G()
+        return svg.G(elements=out)
     dashes = component.nodes.dash(round(s.size * len(component.display_name))) or []
     for dash in dashes:
         if dash.shapely.length < 0.9 * s.size * len(component.display_name):
@@ -206,7 +229,7 @@ def line_text_svg(
                 ),
             )
         )
-    return svg.G()
+    return svg.G(elements=out)
 
 
 def line_back_fore_svg(

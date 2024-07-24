@@ -404,7 +404,9 @@ def main():
                             width=width,
                             zoom_multiplier=2,
                         ),
-                        LineText(colour=Colour.from_hex(0x000000), arrow_colour=col, size=width, zoom_multiplier=2),
+                        LineText(
+                            colour=Colour.from_hex(0x000000), arrow_colour=col.darkened(), size=width, zoom_multiplier=2
+                        ),
                     ],
                     "5-8": [
                         LineBack(colour=col, width=width * 1.5 * 1.5),
@@ -545,7 +547,9 @@ def main():
                             zoom_multiplier=2,
                         ),
                         LineFore(colour=col, width=width, zoom_multiplier=2),
-                        LineText(colour=Colour.from_hex(0x000000), arrow_colour=col, size=width, zoom_multiplier=2),
+                        LineText(
+                            colour=Colour.from_hex(0x000000), arrow_colour=col.darkened(), size=width, zoom_multiplier=2
+                        ),
                     ],
                     "5-8": [
                         LineBack(colour=col.darkened(10.0 if "Pedestrian" in name else 30.0), width=width * 1.5 * 1.5),
@@ -653,7 +657,9 @@ def main():
                             colour=Colour.from_hex(0x333333), width=width + 1.6, zoom_multiplier=2, unrounded=True
                         ),
                         LineFore(colour=col, width=width, zoom_multiplier=2),
-                        LineText(colour=Colour.from_hex(0x000000), arrow_colour=col, size=width, zoom_multiplier=2),
+                        LineText(
+                            colour=Colour.from_hex(0x000000), arrow_colour=col.darkened(), size=width, zoom_multiplier=2
+                        ),
                     ],
                     "5-8": [
                         LineBack(colour=col.darkened(10.0 if "Pedestrian" in name else 30.0), width=width * 1.5 * 1.5),

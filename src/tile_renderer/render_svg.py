@@ -79,7 +79,7 @@ def _get_connections(
     styling: list[_StylingTuple],
 ) -> list[tuple[int, list[svg.Element]]]:
     out: dict[int, list[svg.Element]] = {}
-    for i, line, size, fid in connection_list:
+    for i, line, size, fid in track(connection_list, "[green]Calculating road joint connections"):
         for c, ct, s, _ in styling[:i]:
             if s.__class__ is not LineFore or c.fid == fid:
                 continue
@@ -88,8 +88,8 @@ def _get_connections(
                 for j in (j for j, a in enumerate(c.nodes) if a == coord):
                     vector1 = c.nodes[j - 1] - coord if j != 0 else None
                     vector2 = c.nodes[j + 1] - coord if j != len(c.nodes) - 1 else None
-                    coord1 = (coord + vector1.unit() * min(size / 2, abs(vector1))) if vector1 is not None else None
-                    coord2 = (coord + vector2.unit() * min(size / 2, abs(vector2))) if vector2 is not None else None
+                    coord1 = (coord + vector1.unit() * min(size * 0.75, abs(vector1))) if vector1 is not None else None
+                    coord2 = (coord + vector2.unit() * min(size * 0.75, abs(vector2))) if vector2 is not None else None
                     coords = [a for a in (coord1, coord, coord2) if a is not None]
 
                     out.setdefault(i, []).append(

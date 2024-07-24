@@ -68,6 +68,12 @@ class Vector[T: float | int]:
     def __abs__(self) -> float:
         return (self.x**2 + self.y**2) ** 0.5
 
+    def __neg__(self):
+        s = copy(self)
+        s.x = -self.x
+        s.y = -self.y
+        return s
+
     def unit(self) -> Vector[float]:
         """Normalises the vector"""
         return self / abs(self)
@@ -75,6 +81,12 @@ class Vector[T: float | int]:
     def dot(self, other: Self) -> T:
         """Dot product"""
         return self.x * other.x + self.y * other.y
+
+    def perp(self) -> Self:
+        s = copy(self)
+        s.x = -self.y
+        s.y = self.x
+        return s
 
     def encode(self) -> tuple[T, T]:
         """Encoding hook for msgspec"""
@@ -186,16 +198,18 @@ class Line[T: float | int]:
             point = self.shapely.point_on_surface()
         return Coord(point.x, point.y)
 
-    def dash(self, dash_length: float) -> list[Self] | None:
+    def dash(self, dash_length: float, shift: bool = False) -> list[Self] | None:
         if dash_length == 0:
             return None
         coords = self.shapely
         out = []
-        dist = (coords.length % dash_length) / 2
+        dist = (coords.length % dash_length) / 2 - (dash_length if shift else 0)
         while dist < coords.length - dash_length:
-            out.append(
-                Line([Coord(*c) for c in substring(coords, start_dist=dist, end_dist=dist + dash_length).coords])
+            dash = Line(
+                [Coord(*c) for c in substring(coords, start_dist=max(dist, 0), end_dist=dist + dash_length).coords]
             )
+            if len(dash) != 1:
+                out.append(dash)
             dist += dash_length * 2
         return out
 
