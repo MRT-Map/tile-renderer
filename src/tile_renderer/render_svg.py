@@ -9,7 +9,7 @@ from shapely.prepared import prep
 
 from tile_renderer.coord import Line
 from tile_renderer.pla2 import Component
-from tile_renderer.skin import ComponentStyle, ComponentType, LineBack, LineFore, Skin
+from tile_renderer.skin import ComponentStyle, ComponentType, LineFore, Skin
 
 type _StylingTuple = tuple[Component, ComponentType, ComponentStyle, int]
 
@@ -80,7 +80,7 @@ def _get_connections(
 ) -> list[tuple[int, list[svg.Element]]]:
     out: dict[int, list[svg.Element]] = {}
     for i, line, size, fid in track(connection_list, "[green]Calculating road joint connections"):
-        for c, ct, s, _ in styling[:i]:
+        for c, _, s, _ in styling[:i]:
             if s.__class__ is not LineFore or c.fid == fid:
                 continue
             s: LineFore
@@ -103,7 +103,7 @@ def _get_connections(
                             stroke_linejoin="round",
                         )
                     )
-    return sorted([(k, v) for k, v in out.items()], key=lambda a: -a[0])
+    return sorted(out.items(), key=lambda a: -a[0])
 
 
 def _filter_text_list(text_list: list[tuple[Polygon, svg.Element]]) -> list[svg.Element]:

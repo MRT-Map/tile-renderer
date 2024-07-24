@@ -2,7 +2,6 @@ from __future__ import annotations
 
 import dataclasses
 import functools
-import math
 from copy import copy
 from typing import TYPE_CHECKING, Self
 
@@ -198,7 +197,7 @@ class Line[T: float | int]:
             point = self.shapely.point_on_surface()
         return Coord(point.x, point.y)
 
-    def dash(self, dash_length: float, shift: bool = False) -> list[Self] | None:
+    def dash(self, dash_length: float, shift: bool = False) -> list[Self] | None:  # noqa: FBT001 FBT002
         if dash_length == 0:
             return None
         coords = self.shapely

@@ -121,8 +121,8 @@ def _export_tile(
     bounds = tile.bounds(max_zoom_range)
     doc = (
         cast(str, doc.value)
-        .replace("<|min_x|>", str((bounds.x_min + offset.x)), 1)
-        .replace("<|min_y|>", str((bounds.y_min + offset.y)), 1)
+        .replace("<|min_x|>", str(bounds.x_min + offset.x), 1)
+        .replace("<|min_y|>", str(bounds.y_min + offset.y), 1)
     )
     p = subprocess.Popen(
         [

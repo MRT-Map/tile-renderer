@@ -4,10 +4,10 @@ from pathlib import Path
 
 import rich
 
-from tile_renderer.skin import Skin
 from tile_renderer.pla2 import Pla2File
 from tile_renderer.render_svg import render_svg
 from tile_renderer.render_tiles import render_tiles
+from tile_renderer.skin import Skin
 
 
 def main():

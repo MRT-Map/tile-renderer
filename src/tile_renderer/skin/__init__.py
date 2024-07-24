@@ -7,7 +7,7 @@ import msgspec
 from msgspec import Struct, field
 
 from tile_renderer.colour import Colour
-from tile_renderer.coord import Vector, Coord, Line
+from tile_renderer.coord import Line, Vector
 
 if TYPE_CHECKING:
     import svg
