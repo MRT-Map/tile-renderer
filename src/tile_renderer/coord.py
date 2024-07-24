@@ -187,14 +187,14 @@ class Line[T: float | int]:
         if dash_length == 0:
             return None
         coords = self.shapely
-        return [
-            Line([Coord(*c) for c in substring(coords, start_dist=dist, end_dist=dist + dash_length).coords])
-            for dist in range(
-                math.ceil((coords.length % dash_length) / 2),
-                math.ceil(coords.length),
-                dash_length * 2,
+        out = []
+        dist = (coords.length % dash_length) / 2
+        while dist < coords.length - dash_length:
+            out.append(
+                Line([Coord(*c) for c in substring(coords, start_dist=dist, end_dist=dist + dash_length).coords])
             )
-        ]
+            dist += dash_length * 2
+        return out
 
     def encode(self) -> list[tuple[T, T]]:
         """Encoding hook for msgspec"""

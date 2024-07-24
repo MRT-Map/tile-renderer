@@ -34,17 +34,17 @@ def area_border_text_svg(
 ) -> svg.Element:
     if (not component.display_name) or (skin.prune_small_text is not None and skin.prune_small_text >= s.size):
         return svg.G()
-    coordinates = _shift_coordinates(component.nodes, zoom)
-    dashes = Line(coordinates).dash(round(s.size * len(component.display_name))) or []
-    for old_dash in dashes:
-        new_dash = old_dash.parallel_offset(s.offset)
-        poly = Polygon((a / 2**zoom).as_tuple() for a in component.nodes)
-        if (s.offset > 0 and not poly.intersects(new_dash.shapely)) or (
-            s.offset < 0 and poly.intersects(new_dash.shapely)
-        ):
-            dash = old_dash.parallel_offset(-s.offset)
-        else:
-            dash = new_dash
+    old_coordinates = Line(_shift_coordinates(component.nodes, zoom))
+    new_coordinates = old_coordinates.parallel_offset(s.offset)
+    poly = Polygon(a.as_tuple() for a in old_coordinates)
+    if (s.offset > 0 and not poly.contains(new_coordinates.shapely)) or (
+        s.offset < 0 and poly.contains(new_coordinates.shapely)
+    ):
+        coordinates = old_coordinates.parallel_offset(-s.offset)
+    else:
+        coordinates = new_coordinates
+    dashes = coordinates.dash(round(s.size * len(component.display_name))) or []
+    for dash in dashes:
         if dash[0].x > dash[-1].x:
             dash.coords.reverse()
         id_ = str(uuid.uuid4())

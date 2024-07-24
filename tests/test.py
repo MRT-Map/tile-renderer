@@ -11,7 +11,7 @@ from tile_renderer.render_tiles import render_tiles
 
 
 def main():
-    a = Pla2File.from_file(Path(__file__).parent / "kze.pla2.msgpack")
+    a = Pla2File.from_file(Path(__file__).parent / "CAR.pla2.msgpack")
     skin = Skin.default()
     for zoom in (0, 1, 2, 3, 4, 5, 6, 7, 8, 9):
         if len(sys.argv) > 1 and sys.argv[1] == "png":
