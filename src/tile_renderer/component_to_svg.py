@@ -232,7 +232,7 @@ def point_text_svg(
             svg.Text(
                 x=coordinate.x + s.offset.x,
                 y=coordinate.y + s.offset.y,
-                fill=s.colour,
+                fill=str(s.colour),
                 font_size=s.size,
                 font_family=skin.font_string,
                 text=component.display_name,

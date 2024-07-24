@@ -45,7 +45,7 @@ extra-dependencies = [
   "mypy>=1.0.0",
 ]
 [tool.hatch.envs.types.scripts]
-check = "mypy --install-types --non-interactive {args:src/tile_renderer tests}"
+check = "mypy --install-types --non-interactive {args:src/tile_renderer tests}  --enable-incomplete-feature=NewGenericSyntax"
 
 [tool.coverage.run]
 source_pkgs = ["tile_renderer", "tests"]

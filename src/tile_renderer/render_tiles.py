@@ -30,6 +30,7 @@ def render_tiles(
     tile_size: int,
     offset: Coord = ORIGIN,
     processes: int = os.cpu_count() * 2,
+    chunk_size: int = 8,
 ) -> dict[TileCoord, bytes]:
     images = {}
     doc = render_svg(components, skin, zoom)
@@ -62,7 +63,6 @@ def render_tiles(
                         doc,
                         tile,
                         max_zoom_range,
-                        zoom,
                         offset,
                         str(skin.background),
                         font_dir,
@@ -71,6 +71,7 @@ def render_tiles(
                     )
                     for tile in tiles
                 ),
+                chunk_size,
             )
         ):
             images[tile] = b
@@ -111,7 +112,6 @@ def _export_tile(
     doc: multiprocessing.sharedctypes.Synchronized,
     tile: TileCoord,
     max_zoom_range: int,
-    zoom: int,
     offset: Coord,
     background: str,
     font_dir: Path,
