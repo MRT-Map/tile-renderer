@@ -7,7 +7,7 @@ from rich.progress import Progress, track
 from shapely import Polygon
 from shapely.prepared import prep
 
-from tile_renderer.coord import Line
+from tile_renderer.coord import Line, Coord
 from tile_renderer.pla2 import Component
 from tile_renderer.skin import ComponentStyle, ComponentType, LineFore, Skin
 
@@ -88,8 +88,16 @@ def _get_connections(
                 for j in (j for j, a in enumerate(c.nodes) if a == coord):
                     vector1 = c.nodes[j - 1] - coord if j != 0 else None
                     vector2 = c.nodes[j + 1] - coord if j != len(c.nodes) - 1 else None
-                    coord1 = (coord + vector1.unit() * min(size * 0.75, abs(vector1))) if vector1 is not None else None
-                    coord2 = (coord + vector2.unit() * min(size * 0.75, abs(vector2))) if vector2 is not None else None
+                    coord1 = (
+                        (coord + vector1.unit() * min(size * 0.75, abs(vector1)))
+                        if vector1 is not None and vector1 != Coord(0, 0)
+                        else None
+                    )
+                    coord2 = (
+                        (coord + vector2.unit() * min(size * 0.75, abs(vector2)))
+                        if vector2 is not None and vector2 != Coord(0, 0)
+                        else None
+                    )
                     coords = [a for a in (coord1, coord, coord2) if a is not None]
 
                     out.setdefault(i, []).append(
