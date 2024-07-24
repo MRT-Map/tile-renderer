@@ -48,7 +48,7 @@ def render_tiles(
         task_id = progress.add_task("[green]Exporting to PNG", total=len(tiles))
         doc = re.sub(
             r'<svg width=".*?" height=".*?"',
-            f'<svg viewBox="<|min_x|> <|min_y|> {max_zoom_range} {max_zoom_range}"',
+            f'<svg viewBox="<|min_x|> <|min_y|> {max_zoom_range*2**zoom} {max_zoom_range*2**zoom}"',
             _simplify_svg(str(doc), font_dir, tile_size),
         )
 
@@ -121,8 +121,8 @@ def _export_tile(
     bounds = tile.bounds(max_zoom_range)
     doc = (
         cast(str, doc.value)
-        .replace("<|min_x|>", str((bounds.x_min + offset.x) / 2**zoom), 1)
-        .replace("<|min_y|>", str((bounds.y_min + offset.y) / 2**zoom), 1)
+        .replace("<|min_x|>", str((bounds.x_min + offset.x)), 1)
+        .replace("<|min_y|>", str((bounds.y_min + offset.y)), 1)
     )
     p = subprocess.Popen(
         [

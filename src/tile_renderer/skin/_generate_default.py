@@ -69,7 +69,7 @@ def main():
                         AreaFill(colour=colour, outline=colour.darkened(20.0), outline_width=0.5),
                         AreaCentreText(colour=colour.darkened(20.0), size=5.0),
                     ],
-                    "4-6": [AreaFill(colour=colour, outline=colour.darkened(20.0), outline_width=0.5 / 1.5**4)],
+                    "4-6": [AreaFill(colour=colour, outline=colour.darkened(20.0), outline_width=0.5 / (1.5 / 2) ** 4)],
                 },
             )
         )
@@ -147,7 +147,7 @@ def main():
                     ),
                 ],
                 "4-6": [
-                    LineFore(colour=Colour.from_hex(0x25A7DA), width=1.0 / 1.5**4),
+                    LineFore(colour=Colour.from_hex(0x25A7DA), width=1.0 / (1.5 / 2) ** 4),
                 ],
             },
         )
@@ -168,9 +168,9 @@ def main():
                 styles={
                     "0-3": [
                         AreaFill(colour=colour, outline=colour.darkened(20.0), outline_width=0.5),
-                        AreaCentreText(colour=colour.darkened(20.0), size=5.0),
+                        AreaCentreText(colour=colour.darkened(40.0 if name == "beach" else 20.0), size=5.0),
                     ],
-                    "4-6": [AreaFill(colour=colour, outline=colour.darkened(20.0), outline_width=0.5 / 1.5**4)],
+                    "4-6": [AreaFill(colour=colour, outline=colour.darkened(20.0), outline_width=0.5 / (1.5 / 2) ** 4)],
                 },
             )
         )
@@ -238,7 +238,9 @@ def main():
                     ),
                 ],
                 "2-5": [
-                    LineFore(colour=Colour.from_hex(0x73738C), width=20.0 / 2**2, unrounded=True, zoom_multiplier=2.0),
+                    LineFore(
+                        colour=Colour.from_hex(0x73738C), width=20.0 / (2 / 2) ** 2, unrounded=True, zoom_multiplier=2.0
+                    ),
                 ],
             },
         )
@@ -258,7 +260,9 @@ def main():
                     ),
                 ],
                 "2-5": [
-                    LineFore(colour=Colour.from_hex(0x73738C), width=40.0 / 2**2, unrounded=True, zoom_multiplier=2.0),
+                    LineFore(
+                        colour=Colour.from_hex(0x73738C), width=40.0 / (2 / 2) ** 2, unrounded=True, zoom_multiplier=2.0
+                    ),
                 ],
             },
         )
@@ -289,16 +293,16 @@ def main():
                 "0-2": [
                     AreaFill(
                         colour=Colour.from_hex(0xCCCCFF),
-                        outline=Colour.from_hex(0xCCCCFF).darkened(),
+                        outline=Colour.from_hex(0xCCCCFF).darkened(10.0),
                         outline_width=0.5,
                     ),
-                    AreaCentreText(colour=Colour.from_hex(0xCCCCFF).darkened(), size=3.0),
+                    AreaCentreText(colour=Colour.from_hex(0xCCCCFF).darkened(10.0), size=3.0),
                 ],
                 "3-6": [
                     AreaFill(
                         colour=Colour.from_hex(0xCCCCFF),
-                        outline=Colour.from_hex(0xCCCCFF).darkened(),
-                        outline_width=0.5 / 1.5**3,
+                        outline=Colour.from_hex(0xCCCCFF).darkened(10.0),
+                        outline_width=0.5 / (1.5 / 2) ** 3,
                     ),
                 ],
             },
@@ -320,7 +324,7 @@ def main():
                         AreaCentreText(colour=col.darkened(), size=3.0),
                     ],
                     "3-5": [
-                        AreaFill(colour=col.brightened(), outline=col, outline_width=0.5 / 1.5**3),
+                        AreaFill(colour=col.brightened(), outline=col, outline_width=0.5 / (1.5 / 2) ** 3),
                     ],
                 },
             )
@@ -331,7 +335,7 @@ def main():
             name="park",
             shape="area",
             styles={
-                "0-2": [
+                "0-3": [
                     AreaFill(
                         colour=Colour.from_hex(0x669900),
                         outline=Colour.from_hex(0x669900).darkened(20.0),
@@ -339,11 +343,11 @@ def main():
                     ),
                     AreaCentreText(colour=Colour.from_hex(0x669900).darkened(20.0), size=4.0),
                 ],
-                "3-6": [
+                "4-6": [
                     AreaFill(
                         colour=Colour.from_hex(0x669900),
                         outline=Colour.from_hex(0x669900).darkened(20.0),
-                        outline_width=0.5 / 1.5**3,
+                        outline_width=0.5 / (1.5 / 2) ** 4,
                     ),
                 ],
             },
@@ -459,7 +463,7 @@ def main():
                     AreaFill(
                         colour=Colour.from_hex(0xAAAAAA),
                         outline=Colour.from_hex(0xAAAAAA).darkened(),
-                        outline_width=0.5,
+                        outline_width=0.5 / (1.5 / 2) ** 2,
                     ),
                 ],
             },
@@ -481,7 +485,7 @@ def main():
                         AreaCentreText(colour=col.darkened(), size=3.0),
                     ],
                     "3-5": [
-                        AreaFill(colour=col, outline=col.darkened(), outline_width=0.5 / 1.5**3),
+                        AreaFill(colour=col, outline=col.darkened(), outline_width=0.5 / (1.5 / 2) ** 3),
                     ],
                 },
             )
@@ -704,7 +708,11 @@ def main():
                     AreaCentreText(colour=Colour.from_hex(0x808080), size=2.0),
                 ],
                 "2-3": [
-                    AreaFill(colour=Colour.from_hex(0xCCCCCC), outline=Colour.from_hex(0x808080), outline_width=0.5),
+                    AreaFill(
+                        colour=Colour.from_hex(0xCCCCCC),
+                        outline=Colour.from_hex(0x808080),
+                        outline_width=0.5 / (1.5 / 2) ** 2,
+                    ),
                 ],
             },
         )
@@ -735,12 +743,12 @@ def main():
                 name=name,
                 shape="point",
                 styles={
-                    "0-2": [
+                    "0-3": [
                         PointSquare(colour=colour, size=2.5, width=0),
-                        PointText(colour=colour.darkened(), offset=Vector(0.0, 4.0), size=2.5),
+                        PointText(colour=colour.darkened(10.0), offset=Vector(0.0, 4.0), size=2.5),
                     ],
-                    "3-5": [
-                        PointSquare(colour=colour, size=2.5 / 1.5**3, width=0),
+                    "4-6": [
+                        PointSquare(colour=colour, size=2.5 / (1.5 / 2) ** 4, width=0),
                     ],
                 },
             )
@@ -764,9 +772,11 @@ def main():
                         AreaBorderText(colour=colour.darkened(), offset=2.0, size=4.0),
                     ],
                     str(zoom) + "-" + str(zoom + 3): [
-                        AreaFill(outline=colour, outline_width=0.5 / 1.5**zoom),
+                        AreaFill(outline=colour, outline_width=0.5 / (1.5 / 2) ** zoom),
                         AreaCentreText(colour=colour.darkened(), size=5.0),
-                        AreaBorderText(colour=colour.darkened(), offset=2.0 / 1.5**zoom, size=4.0 / 1.5**zoom),
+                        AreaBorderText(
+                            colour=colour.darkened(), offset=2.0 / (1.5 / 2) ** zoom, size=4.0 / (1.5 / 2) ** zoom
+                        ),
                     ],
                 },
             )
@@ -777,7 +787,7 @@ def main():
                 shape="point",
                 styles={
                     str(zoom) + "-" + str(zoom + 3): [
-                        PointText(colour=colour.darkened(), size=4.0 / 1.5**zoom),
+                        PointText(colour=colour.darkened(), size=4.0 / (1.5 / 2) ** zoom),
                     ]
                 },
             )
@@ -829,7 +839,7 @@ def main():
         font_string="'Noto Sans', 'Noto Sans CJK JP'",
         background=LAND,
         types=types,
-        prune_small_text=1.5,
+        prune_small_text=1.0,
         licence=(Path(__file__).parent / "default_licences.md").read_text(),
     )
     skin.save_json(Path(__file__).parent)

@@ -206,9 +206,9 @@ class AreaBorderText(ComponentStyle):
 
     def scale(self, zoom: int):
         return AreaBorderText(
-            size=self.size / self.zoom_multiplier**zoom,
+            size=self.size / (self.zoom_multiplier / 2) ** zoom,
             colour=self.colour,
-            offset=self.offset / self.zoom_multiplier**zoom,
+            offset=self.offset / (self.zoom_multiplier / 2) ** zoom,
             zoom_multiplier=self.zoom_multiplier,
         )
 
@@ -253,9 +253,9 @@ class AreaCentreText(ComponentStyle):
 
     def scale(self, zoom: int) -> Self:
         return AreaCentreText(
-            size=self.size / self.zoom_multiplier**zoom,
+            size=self.size / (self.zoom_multiplier / 2) ** zoom,
             colour=self.colour,
-            offset=self.offset / self.zoom_multiplier**zoom,
+            offset=self.offset / (self.zoom_multiplier / 2) ** zoom,
             zoom_multiplier=self.zoom_multiplier,
         )
 
@@ -305,7 +305,7 @@ class AreaFill(ComponentStyle):
         return AreaFill(
             colour=self.colour,
             outline=self.outline,
-            outline_width=self.outline_width / self.zoom_multiplier**zoom,
+            outline_width=self.outline_width / (self.zoom_multiplier / 2) ** zoom,
             zoom_multiplier=self.zoom_multiplier,
         )
 
@@ -346,7 +346,7 @@ class AreaCentreImage(ComponentStyle):
     def scale(self, zoom: int) -> Self:
         return AreaCentreImage(
             image=self.image,
-            offset=self.offset / self.zoom_multiplier**zoom,
+            offset=self.offset / (self.zoom_multiplier / 2) ** zoom,
             zoom_multiplier=self.zoom_multiplier,
         )
 
@@ -390,10 +390,10 @@ class LineText(ComponentStyle):
 
     def scale(self, zoom: int) -> Self:
         return LineText(
-            size=self.size / self.zoom_multiplier**zoom,
+            size=self.size / (self.zoom_multiplier / 2) ** zoom,
             arrow_colour=self.arrow_colour,
             colour=self.colour,
-            offset=self.offset / self.zoom_multiplier**zoom,
+            offset=self.offset / (self.zoom_multiplier / 2) ** zoom,
             zoom_multiplier=self.zoom_multiplier,
         )
 
@@ -442,8 +442,8 @@ class LineFore(ComponentStyle):
 
     def scale(self, zoom: int) -> Self:
         return LineFore(
-            width=self.width / self.zoom_multiplier**zoom,
-            dash=[a / self.zoom_multiplier**zoom for a in self.dash] if self.dash is not None else None,
+            width=self.width / (self.zoom_multiplier / 2) ** zoom,
+            dash=[a / (self.zoom_multiplier / 2) ** zoom for a in self.dash] if self.dash is not None else None,
             colour=self.colour,
             unrounded=self.unrounded,
             zoom_multiplier=self.zoom_multiplier,
@@ -477,8 +477,8 @@ class LineBack(LineFore):
 
     def scale(self, zoom: int) -> Self:
         return LineBack(
-            width=self.width / self.zoom_multiplier**zoom,
-            dash=[a / self.zoom_multiplier**zoom for a in self.dash] if self.dash is not None else None,
+            width=self.width / (self.zoom_multiplier / 2) ** zoom,
+            dash=[a / (self.zoom_multiplier / 2) ** zoom for a in self.dash] if self.dash is not None else None,
             colour=self.colour,
             unrounded=self.unrounded,
             zoom_multiplier=self.zoom_multiplier,
@@ -527,9 +527,9 @@ class PointText(ComponentStyle):
     def scale(self, zoom: int) -> Self:
         return PointText(
             anchor=self.anchor,
-            size=self.size / self.zoom_multiplier**zoom,
+            size=self.size / (self.zoom_multiplier / 2) ** zoom,
             colour=self.colour,
-            offset=self.offset / self.zoom_multiplier**zoom,
+            offset=self.offset / (self.zoom_multiplier / 2) ** zoom,
             zoom_multiplier=self.zoom_multiplier,
         )
 
@@ -578,10 +578,10 @@ class PointSquare(ComponentStyle):
 
     def scale(self, zoom: int) -> Self:
         return PointSquare(
-            size=self.size / self.zoom_multiplier**zoom,
-            width=self.width / self.zoom_multiplier**zoom,
+            size=self.size / (self.zoom_multiplier / 2) ** zoom,
+            width=self.width / (self.zoom_multiplier / 2) ** zoom,
             colour=self.colour,
-            border_radius=self.border_radius / self.zoom_multiplier**zoom,
+            border_radius=self.border_radius / (self.zoom_multiplier / 2) ** zoom,
             zoom_multiplier=self.zoom_multiplier,
         )
 
@@ -620,7 +620,7 @@ class PointImage(AreaCentreImage):
     def scale(self, zoom: int) -> Self:
         return PointImage(
             image=self.image,
-            offset=self.offset / self.zoom_multiplier**zoom,
+            offset=self.offset / (self.zoom_multiplier / 2) ** zoom,
             zoom_multiplier=self.zoom_multiplier,
         )
 
