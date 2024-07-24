@@ -7,6 +7,7 @@ from rich.progress import Progress, track
 from shapely import Polygon
 from shapely.prepared import prep
 
+from tile_renderer.coord import Line
 from tile_renderer.pla2 import Component
 from tile_renderer.skin import ComponentStyle, ComponentType, LineBack, LineFore, Skin
 
@@ -17,14 +18,18 @@ def render_svg(components: list[Component], skin: Skin, zoom: int) -> svg.SVG:
     styling = _get_styling(components, skin, zoom)
     styling = _sort_styling(styling, skin)
     text_list = []
+    connection_list = []
     out = svg.SVG(
         elements=[
-            a
-            for a in (s.render(c, zoom, text_list, skin) for c, ct, s, i in track(styling, "[green]Rendering SVG"))
-            if a != svg.G()
+            s.render(c, zoom, skin, text_list, connection_list, i)
+            for i, (c, _, s, _) in track(enumerate(styling), "[green]Rendering SVG", total=len(styling))
         ]
     )
+    for i, elements in _get_connections(connection_list, styling):
+        for element in elements:
+            out.elements.insert(i + 1, element)
     out.elements.extend(_filter_text_list(text_list))
+    out.elements = [a for a in out.elements if a != svg.G()]
     return out
 
 
@@ -58,22 +63,47 @@ def _sort_styling(styling: list[_StylingTuple], skin: Skin) -> list[_StylingTupl
         if (delta := component1.layer - component2.layer) != 0:
             return delta
 
-        if "road" in component_type1.tags and "road" in component_type2.tags:
-            if style1.__class__ is LineBack and style2.__class__ is LineFore:
-                return -1
-            if style1.__class__ is LineFore and style2.__class__ is LineBack:
-                return 1
-
-        first_road = next(a.name for a in skin.types if "road" in a.tags)
-        type_name1 = first_road if "road" in component_type1.tags else component_type1.name
-        type_name2 = first_road if "road" in component_type2.tags else component_type2.name
-
-        if (delta := skin.get_order(type_name1) - skin.get_order(type_name2)) != 0:
+        if (delta := skin.get_order(component_type1.name) - skin.get_order(component_type2.name)) != 0:
             return delta
+
+        if component1.fid != component2.fid:
+            return component1.fid < component2.fid
 
         return i1 - i2
 
     return sorted(styling, key=functools.cmp_to_key(cast(any, sort_fn)))
+
+
+def _get_connections(
+    connection_list: list[tuple[int, Line[int], int, str]],
+    styling: list[_StylingTuple],
+) -> list[tuple[int, list[svg.Element]]]:
+    out: dict[int, list[svg.Element]] = {}
+    for i, line, size, fid in connection_list:
+        for c, ct, s, _ in styling[:i]:
+            if s.__class__ is not LineFore or c.fid == fid:
+                continue
+            s: LineFore
+            for coord in line:
+                for j in (j for j, a in enumerate(c.nodes) if a == coord):
+                    vector1 = c.nodes[j - 1] - coord if j != 0 else None
+                    vector2 = c.nodes[j + 1] - coord if j != len(c.nodes) - 1 else None
+                    coord1 = (coord + vector1.unit() * min(size / 2, abs(vector1))) if vector1 is not None else None
+                    coord2 = (coord + vector2.unit() * min(size / 2, abs(vector2))) if vector2 is not None else None
+                    coords = [a for a in (coord1, coord, coord2) if a is not None]
+
+                    out.setdefault(i, []).append(
+                        svg.Polyline(
+                            points=[cast(int, f"{c.x},{c.y}") for c in coords],
+                            stroke=None if s.colour is None else str(s.colour),
+                            fill=None,
+                            fill_opacity=0,
+                            stroke_width=s.width,
+                            stroke_linecap=None if s.unrounded else "round",
+                            stroke_linejoin="round",
+                        )
+                    )
+    return sorted([(k, v) for k, v in out.items()], key=lambda a: -a[0])
 
 
 def _filter_text_list(text_list: list[tuple[Polygon, svg.Element]]) -> list[svg.Element]:

@@ -26,8 +26,10 @@ def area_border_text_svg(
     s: AreaBorderText,
     component: Component,
     zoom: int,
-    text_list: list[tuple[Polygon, svg.Element]],
     skin: Skin,
+    text_list: list[tuple[Polygon, svg.Element]],
+    _connection_list: list[tuple[int, Line[int], int, str]],
+    _i: int,
 ) -> svg.Element:
     if (not component.display_name) or (
         skin.prune_small_text is not None and skin.prune_small_text >= s.size / 2**zoom
@@ -82,8 +84,10 @@ def area_centre_text_svg(
     s: AreaCentreText,
     component: Component,
     _zoom: int,
-    text_list: list[tuple[Polygon, svg.Element]],
     skin: Skin,
+    text_list: list[tuple[Polygon, svg.Element]],
+    _connection_list: list[tuple[int, Line[int], int, str]],
+    _i: int,
 ) -> svg.Element:
     centroid = component.nodes.point_on_surface
     text_list.append(
@@ -120,6 +124,8 @@ def area_fill_svg(
     _zoom: int,
     _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
+    _connection_list: list[tuple[int, Line[int], int, str]],
+    _i: int,
 ) -> svg.Element:
     return svg.Polygon(
         points=[cast(int, f"{c.x},{c.y}") for c in component.nodes],
@@ -137,6 +143,8 @@ def area_centre_image_svg(
     _zoom: int,
     _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
+    _connection_list: list[tuple[int, Line[int], int, str]],
+    _i: int,
 ) -> svg.Element:
     centroid = component.nodes.point_on_surface
     return svg.Image(
@@ -152,8 +160,10 @@ def line_text_svg(
     s: LineText,
     component: Component,
     zoom: int,
-    text_list: list[tuple[Polygon, svg.Element]],
     skin: Skin,
+    text_list: list[tuple[Polygon, svg.Element]],
+    _connection_list: list[tuple[int, Line[int], int, str]],
+    _i: int,
 ) -> svg.Element:
     if (not component.display_name) or (
         skin.prune_small_text is not None and skin.prune_small_text >= s.size / 2**zoom
@@ -205,7 +215,11 @@ def line_back_fore_svg(
     _zoom: int,
     _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
+    connection_list: list[tuple[int, Line[int], int, str]],
+    i: int,
 ) -> svg.Element:
+    if s.__class__ is LineBack:
+        connection_list.append((i, component.nodes, s.width, component.fid))
     return svg.Polyline(
         points=[cast(int, f"{c.x},{c.y}") for c in component.nodes],
         stroke=None if s.colour is None else str(s.colour),
@@ -222,8 +236,10 @@ def point_text_svg(
     s: PointText,
     component: Component,
     _zoom: int,
-    text_list: list[tuple[Polygon, svg.Element]],
     skin: Skin,
+    text_list: list[tuple[Polygon, svg.Element]],
+    _connection_list: list[tuple[int, Line[int], int, str]],
+    _i: int,
 ) -> svg.Element:
     coordinate = component.nodes[0]
     text_list.append(
@@ -260,6 +276,8 @@ def point_square_svg(
     _zoom: int,
     _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
+    _connection_list: list[tuple[int, Line[int], int, str]],
+    _i: int,
 ) -> svg.Element:
     coordinate = component.nodes[0]
     return svg.Rect(
@@ -279,6 +297,8 @@ def point_image_svg(
     _zoom: int,
     _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
+    _connection_list: list[tuple[int, Line[int], int, str]],
+    _i: int,
 ) -> svg.Element:
     coordinate = component.nodes[0]
     return svg.Image(

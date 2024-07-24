@@ -135,7 +135,7 @@ class Line[T: float | int]:
     def __repr__(self) -> str:
         return f"{type(self).__name__} <{''.join(str(a.as_tuple()) for a in self.coords)}>"
 
-    def __getitem__(self, item: int) -> Coord[T]:
+    def __getitem__(self, item: int | slice) -> Coord[T]:
         return self.coords[item]
 
     def __iter__(self) -> Iterator[Coord[T]]:
@@ -143,6 +143,9 @@ class Line[T: float | int]:
 
     def __len__(self) -> int:
         return len(self.coords)
+
+    def __contains__(self, item: Coord[T]):
+        return item in self.coords
 
     def to_float(self) -> Line[float]:
         return Line([c.to_float() for c in self.coords])

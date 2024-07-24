@@ -7,7 +7,7 @@ import msgspec
 from msgspec import Struct, field
 
 from tile_renderer.colour import Colour
-from tile_renderer.coord import Vector
+from tile_renderer.coord import Vector, Coord, Line
 
 if TYPE_CHECKING:
     import svg
@@ -92,7 +92,7 @@ class Skin(Struct):
 @dataclass_transform()
 class _SerSkin(Skin):
     types: list[_SerComponentType]
-    background: str = "#ff0000"
+    background: str = "#ffffff"
 
     def decode(self) -> Skin:
         return Skin(
@@ -156,8 +156,10 @@ class ComponentStyle(Struct, kw_only=True):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
+        text_list: list[tuple[Polygon, svg.Element]],
+        connection_list: list[tuple[int, Line[int], int, str]],
+        i: int,
     ) -> svg.Element:
         raise NotImplementedError
 
@@ -197,12 +199,14 @@ class AreaBorderText(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
+        text_list: list[tuple[Polygon, svg.Element]],
+        connection_list: list[tuple[int, Line[int], int, str]],
+        i: int,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.area_border_text_svg(self, component, zoom, text_list, skin)
+        return component_to_svg.area_border_text_svg(self, component, zoom, skin, text_list, connection_list, i)
 
     def scale(self, zoom: int):
         return AreaBorderText(
@@ -244,12 +248,14 @@ class AreaCentreText(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
+        text_list: list[tuple[Polygon, svg.Element]],
+        connection_list: list[tuple[int, Line[int], int, str]],
+        i: int,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.area_centre_text_svg(self, component, zoom, text_list, skin)
+        return component_to_svg.area_centre_text_svg(self, component, zoom, skin, text_list, connection_list, i)
 
     def scale(self, zoom: int) -> Self:
         return AreaCentreText(
@@ -294,12 +300,14 @@ class AreaFill(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
+        text_list: list[tuple[Polygon, svg.Element]],
+        connection_list: list[tuple[int, Line[int], int, str]],
+        i: int,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.area_fill_svg(self, component, zoom, text_list, skin)
+        return component_to_svg.area_fill_svg(self, component, zoom, skin, text_list, connection_list, i)
 
     def scale(self, zoom: int) -> Self:
         return AreaFill(
@@ -344,12 +352,14 @@ class AreaCentreImage(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
+        text_list: list[tuple[Polygon, svg.Element]],
+        connection_list: list[tuple[int, Line[int], int, str]],
+        i: int,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.area_centre_image_svg(self, component, zoom, text_list, skin)
+        return component_to_svg.area_centre_image_svg(self, component, zoom, skin, text_list, connection_list, i)
 
     def scale(self, zoom: int) -> Self:
         return AreaCentreImage(
@@ -396,12 +406,14 @@ class LineText(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
+        text_list: list[tuple[Polygon, svg.Element]],
+        connection_list: list[tuple[int, Line[int], int, str]],
+        i: int,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.line_text_svg(self, component, zoom, text_list, skin)
+        return component_to_svg.line_text_svg(self, component, zoom, skin, text_list, connection_list, i)
 
     def scale(self, zoom: int) -> Self:
         return LineText(
@@ -448,12 +460,14 @@ class LineFore(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
+        text_list: list[tuple[Polygon, svg.Element]],
+        connection_list: list[tuple[int, Line[int], int, str]],
+        i: int,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.line_back_fore_svg(self, component, zoom, text_list, skin)
+        return component_to_svg.line_back_fore_svg(self, component, zoom, skin, text_list, connection_list, i)
 
     def scale(self, zoom: int) -> Self:
         return LineFore(
@@ -532,12 +546,14 @@ class PointText(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
+        text_list: list[tuple[Polygon, svg.Element]],
+        connection_list: list[tuple[int, Line[int], int, str]],
+        i: int,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.point_text_svg(self, component, zoom, text_list, skin)
+        return component_to_svg.point_text_svg(self, component, zoom, skin, text_list, connection_list, i)
 
     def scale(self, zoom: int) -> Self:
         return PointText(
@@ -584,12 +600,14 @@ class PointSquare(ComponentStyle):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
+        text_list: list[tuple[Polygon, svg.Element]],
+        connection_list: list[tuple[int, Line[int], int, str]],
+        i: int,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.point_square_svg(self, component, zoom, text_list, skin)
+        return component_to_svg.point_square_svg(self, component, zoom, skin, text_list, connection_list, i)
 
     def scale(self, zoom: int) -> Self:
         return PointSquare(
@@ -622,12 +640,14 @@ class PointImage(AreaCentreImage):
         self,
         component: Component,
         zoom: int,
-        text_list: list[tuple[Polygon, svg.Element]],
         skin: Skin,
+        text_list: list[tuple[Polygon, svg.Element]],
+        connection_list: list[tuple[int, Line[int], int, str]],
+        i: int,
     ) -> svg.Element:
         from tile_renderer import component_to_svg
 
-        return component_to_svg.point_image_svg(self, component, zoom, text_list, skin)
+        return component_to_svg.point_image_svg(self, component, zoom, skin, text_list, connection_list, i)
 
     def encode(self) -> _SerPointImage:
         return _SerPointImage(

@@ -363,7 +363,7 @@ def main():
             tags=["road"],
             styles={
                 "0-4": [
-                    LineBack(colour=Colour.from_hex(0xEEEEEE), width=1.5, zoom_multiplier=2.0),
+                    LineFore(colour=Colour.from_hex(0xEEEEEE), width=1.5, zoom_multiplier=2.0),
                     LineFore(colour=Colour.from_hex(0x66FF66), width=0.8, dash=[3.2, 3.2], zoom_multiplier=2.0),
                     LineText(
                         colour=Colour.from_hex(0xAAAAAA),
@@ -399,12 +399,16 @@ def main():
                 styles={
                     "0-4": [
                         LineBack(colour=col, width=width + 1.6, zoom_multiplier=2),
-                        LineFore(colour=col.brightened(), width=width, zoom_multiplier=2),
+                        LineFore(
+                            colour=col.brightened(10.0 if "Pedestrian" in name else 30.0),
+                            width=width,
+                            zoom_multiplier=2,
+                        ),
                         LineText(colour=Colour.from_hex(0x000000), arrow_colour=col, size=width, zoom_multiplier=2),
                     ],
                     "5-8": [
                         LineBack(colour=col, width=width * 1.5 * 1.5),
-                        LineFore(colour=col.brightened(), width=width * 1.5),
+                        LineFore(colour=col.brightened(10.0 if "Pedestrian" in name else 30.0), width=width * 1.5),
                     ],
                 },
             )
@@ -500,7 +504,7 @@ def main():
             tags=["road"],
             styles={
                 "0-4": [
-                    LineBack(colour=Colour.from_hex(0xEEEEEE), width=1.5, zoom_multiplier=2.0),
+                    LineFore(colour=Colour.from_hex(0xEEEEEE), width=1.5, zoom_multiplier=2.0),
                     LineFore(colour=Colour.from_hex(0x008000), width=0.8, dash=[3.2, 3.2], zoom_multiplier=2.0),
                     LineText(
                         colour=Colour.from_hex(0xAAAAAA),
@@ -535,12 +539,16 @@ def main():
                 tags=["road"],
                 styles={
                     "0-4": [
-                        LineBack(colour=col.darkened(), width=width + 1.6, zoom_multiplier=2),
+                        LineBack(
+                            colour=col.darkened(10.0 if "Pedestrian" in name else 30.0),
+                            width=width + 1.6,
+                            zoom_multiplier=2,
+                        ),
                         LineFore(colour=col, width=width, zoom_multiplier=2),
                         LineText(colour=Colour.from_hex(0x000000), arrow_colour=col, size=width, zoom_multiplier=2),
                     ],
                     "5-8": [
-                        LineBack(colour=col.darkened(), width=width * 1.5 * 1.5),
+                        LineBack(colour=col.darkened(10.0 if "Pedestrian" in name else 30.0), width=width * 1.5 * 1.5),
                         LineFore(colour=col, width=width * 1.5),
                     ],
                 },
@@ -575,7 +583,7 @@ def main():
             tags=["road"],
             styles={
                 "0-2": [
-                    LineBack(colour=Colour.from_hex(0x808080), width=3.2, zoom_multiplier=2.0),
+                    LineFore(colour=Colour.from_hex(0x808080), width=3.2, zoom_multiplier=2.0),
                     LineFore(colour=Colour.from_hex(0xFFFFFF), width=1.6, dash=[10.0, 10.0], zoom_multiplier=2.0),
                     LineText(
                         colour=Colour.from_hex(0x808080),
@@ -586,7 +594,7 @@ def main():
                     ),
                 ],
                 "3-6": [
-                    LineBack(colour=Colour.from_hex(0x808080), width=6.4),
+                    LineFore(colour=Colour.from_hex(0x808080), width=6.4),
                     LineFore(colour=Colour.from_hex(0xFFFFFF), width=3.2, dash=[20.0, 20.0]),
                 ],
             },
@@ -600,8 +608,8 @@ def main():
             tags=["road"],
             styles={
                 "0-4": [
-                    LineBack(colour=Colour.from_hex(0x333333), width=2.4, zoom_multiplier=2.0),
-                    LineBack(colour=Colour.from_hex(0xEEEEEE), width=1.5, zoom_multiplier=2.0),
+                    LineBack(colour=Colour.from_hex(0x333333), width=2.4, zoom_multiplier=2.0, unrounded=True),
+                    LineFore(colour=Colour.from_hex(0xEEEEEE), width=1.5, zoom_multiplier=2.0),
                     LineFore(colour=Colour.from_hex(0x008000), width=0.8, dash=[3.2, 3.2], zoom_multiplier=2.0),
                     LineText(
                         colour=Colour.from_hex(0xAAAAAA),
@@ -636,12 +644,20 @@ def main():
                 tags=["road"],
                 styles={
                     "0-4": [
-                        LineBack(colour=Colour.from_hex(0x333333), width=width + 1.6, zoom_multiplier=2),
+                        LineBack(
+                            colour=col.darkened(10.0 if "Pedestrian" in name else 30.0),
+                            width=width + 1.6,
+                            zoom_multiplier=2,
+                        ),
+                        LineBack(
+                            colour=Colour.from_hex(0x333333), width=width + 1.6, zoom_multiplier=2, unrounded=True
+                        ),
                         LineFore(colour=col, width=width, zoom_multiplier=2),
                         LineText(colour=Colour.from_hex(0x000000), arrow_colour=col, size=width, zoom_multiplier=2),
                     ],
                     "5-8": [
-                        LineBack(colour=Colour.from_hex(0x333333), width=width * 1.5 * 1.5),
+                        LineBack(colour=col.darkened(10.0 if "Pedestrian" in name else 30.0), width=width * 1.5 * 1.5),
+                        LineBack(colour=Colour.from_hex(0x333333), width=width * 1.5 * 1.5, unrounded=True),
                         LineFore(colour=col, width=width * 1.5),
                     ],
                 },
@@ -655,7 +671,7 @@ def main():
             tags=["road"],
             styles={
                 "0-2": [
-                    LineBack(colour=Colour.from_hex(0x333333), width=2.4, zoom_multiplier=2.0),
+                    LineBack(colour=Colour.from_hex(0x333333), width=2.4, zoom_multiplier=2.0, unrounded=True),
                     LineFore(colour=Colour.from_hex(0x808080), width=1.6, zoom_multiplier=2.0),
                     LineText(
                         colour=Colour.from_hex(0x808080),
@@ -666,7 +682,7 @@ def main():
                     ),
                 ],
                 "3-6": [
-                    LineBack(colour=Colour.from_hex(0x333333), width=6.4),
+                    LineBack(colour=Colour.from_hex(0x333333), width=6.4, unrounded=True),
                     LineFore(colour=Colour.from_hex(0x808080), width=3.2),
                 ],
             },
@@ -680,8 +696,8 @@ def main():
             tags=["road"],
             styles={
                 "0-2": [
-                    LineBack(colour=Colour.from_hex(0x333333), width=4.8, zoom_multiplier=2.0),
-                    LineBack(colour=Colour.from_hex(0x808080), width=3.2, zoom_multiplier=2.0),
+                    LineBack(colour=Colour.from_hex(0x333333), width=4.8, zoom_multiplier=2.0, unrounded=True),
+                    LineFore(colour=Colour.from_hex(0x808080), width=3.2, zoom_multiplier=2.0),
                     LineFore(colour=Colour.from_hex(0xFFFFFF), width=1.6, dash=[10.0, 10.0], zoom_multiplier=2.0),
                     LineText(
                         colour=Colour.from_hex(0x808080),
@@ -692,8 +708,8 @@ def main():
                     ),
                 ],
                 "3-6": [
-                    LineBack(colour=Colour.from_hex(0x333333), width=9.6),
-                    LineBack(colour=Colour.from_hex(0x808080), width=6.4),
+                    LineBack(colour=Colour.from_hex(0x333333), width=9.6, unrounded=True),
+                    LineFore(colour=Colour.from_hex(0x808080), width=6.4),
                     LineFore(colour=Colour.from_hex(0xFFFFFF), width=3.2, dash=[20.0, 20.0]),
                 ],
             },
