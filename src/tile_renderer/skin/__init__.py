@@ -327,10 +327,18 @@ class _SerAreaFill(AreaFill, tag_field="ty", tag="areaFill"):
 @dataclass_transform()
 class AreaCentreImage(ComponentStyle):
     image: bytes
+    extension: str
+    size: Vector[float] = Vector(0.0, 0.0)
     offset: Vector[float] = Vector(0.0, 0.0)
 
     def encode(self) -> _SerAreaCentreImage:
-        return _SerAreaCentreImage(image=self.image, offset=self.offset.encode(), zoom_multiplier=self.zoom_multiplier)
+        return _SerAreaCentreImage(
+            image=self.image,
+            extension=self.extension,
+            size=self.size.encode(),
+            offset=self.offset.encode(),
+            zoom_multiplier=self.zoom_multiplier,
+        )
 
     def render(
         self,
@@ -346,6 +354,8 @@ class AreaCentreImage(ComponentStyle):
     def scale(self, zoom: int) -> Self:
         return AreaCentreImage(
             image=self.image,
+            extension=self.extension,
+            size=self.size / (self.zoom_multiplier / 2) ** zoom,
             offset=self.offset / (self.zoom_multiplier / 2) ** zoom,
             zoom_multiplier=self.zoom_multiplier,
         )
@@ -353,11 +363,16 @@ class AreaCentreImage(ComponentStyle):
 
 @dataclass_transform()
 class _SerAreaCentreImage(AreaCentreImage, tag_field="ty", tag="areaCentreImage"):
+    size: tuple[float, float] = (0.0, 0.0)
     offset: tuple[float, float] = (0.0, 0.0)
 
     def decode(self) -> AreaCentreImage:
         return AreaCentreImage(
-            image=self.image, offset=Vector.decode(self.offset), zoom_multiplier=self.zoom_multiplier
+            image=self.image,
+            extension=self.extension,
+            size=Vector.decode(self.size),
+            offset=Vector.decode(self.offset),
+            zoom_multiplier=self.zoom_multiplier,
         )
 
 
@@ -615,11 +630,19 @@ class PointImage(AreaCentreImage):
         return component_to_svg.point_image_svg(self, component, zoom, text_list, skin)
 
     def encode(self) -> _SerPointImage:
-        return _SerPointImage(image=self.image, offset=self.offset.encode(), zoom_multiplier=self.zoom_multiplier)
+        return _SerPointImage(
+            image=self.image,
+            extension=self.extension,
+            size=self.size.encode(),
+            offset=self.offset.encode(),
+            zoom_multiplier=self.zoom_multiplier,
+        )
 
     def scale(self, zoom: int) -> Self:
         return PointImage(
             image=self.image,
+            extension=self.extension,
+            size=self.size / (self.zoom_multiplier / 2) ** zoom,
             offset=self.offset / (self.zoom_multiplier / 2) ** zoom,
             zoom_multiplier=self.zoom_multiplier,
         )
@@ -628,7 +651,13 @@ class PointImage(AreaCentreImage):
 @dataclass_transform()
 class _SerPointImage(_SerAreaCentreImage, tag_field="ty", tag="pointImage"):
     def decode(self) -> PointImage:
-        return PointImage(image=self.image, offset=Vector.decode(self.offset), zoom_multiplier=self.zoom_multiplier)
+        return PointImage(
+            image=self.image,
+            extension=self.extension,
+            size=Vector.decode(self.size),
+            offset=Vector.decode(self.offset),
+            zoom_multiplier=self.zoom_multiplier,
+        )
 
 
 _json_decoder = msgspec.json.Decoder(_SerSkin)

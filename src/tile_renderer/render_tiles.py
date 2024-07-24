@@ -102,10 +102,10 @@ def _simplify_svg(doc: str, font_dir: Path, tile_size: int) -> str:
         stdin=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
-    out, err = p.communicate(input=doc.encode("utf-8"))
+    out, err = p.communicate(input=doc.encode())
     if err:
-        rich.print("[yellow]" + err.decode("utf-8"))
-    return out.decode("utf-8")
+        rich.print("[yellow]" + err.decode())
+    return out.decode()
 
 
 def _export_tile(
@@ -145,7 +145,7 @@ def _export_tile(
         stdin=subprocess.PIPE,
         stderr=subprocess.PIPE,
     )
-    out, err = p.communicate(input=doc.encode("utf-8"))
+    out, err = p.communicate(input=doc.encode())
     if err:
-        rich.print("[yellow]" + err.decode("utf-8"))
+        rich.print("[yellow]" + err.decode())
     return tile, out

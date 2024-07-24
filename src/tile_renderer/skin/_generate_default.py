@@ -1,3 +1,4 @@
+import re
 import tempfile
 from pathlib import Path
 
@@ -719,15 +720,44 @@ def main():
         )
     )
 
-    for name, image_path in []:
+    for name, image_path, extension, colour_hex in (
+        ("pedestrianCrossing", Path(__file__).parent / "default_icons" / "traffic-light.svg", "svg+xml", None),
+        ("railCrossing", Path(__file__).parent / "default_icons" / "train.svg", "svg+xml", None),
+        ("parking", Path(__file__).parent / "default_icons" / "square-parking.svg", "svg+xml", None),
+        ("bikeRack", Path(__file__).parent / "default_icons" / "bicycle.svg", "svg+xml", None),
+        ("shop", Path(__file__).parent / "default_icons" / "store.svg", "svg+xml", None),
+        ("restaurant", Path(__file__).parent / "default_icons" / "utensils.svg", "svg+xml", None),
+        ("hotel", Path(__file__).parent / "default_icons" / "bed.svg", "svg+xml", None),
+        ("arcade", Path(__file__).parent / "default_icons" / "gamepad.svg", "svg+xml", None),
+        ("supermarket", Path(__file__).parent / "default_icons" / "cart-shopping.svg", "svg+xml", None),
+        ("clinic", Path(__file__).parent / "default_icons" / "house-chimney-medical.svg", "svg+xml", None),
+        ("library", Path(__file__).parent / "default_icons" / "book.svg", "svg+xml", None),
+        ("placeOfWorship", Path(__file__).parent / "default_icons" / "place-of-worship.svg", "svg+xml", None),
+        ("petrol", Path(__file__).parent / "default_icons" / "gas-pump.svg", "svg+xml", None),
+        ("cinema", Path(__file__).parent / "default_icons" / "film.svg", "svg+xml", None),
+        ("bank", Path(__file__).parent / "default_icons" / "building-columns.svg", "svg+xml", None),
+        ("gym", Path(__file__).parent / "default_icons" / "dumbbell.svg", "svg+xml", None),
+        ("shelter", Path(__file__).parent / "default_icons" / "people-roof.svg", "svg+xml", None),
+        ("playground", Path(__file__).parent / "default_icons" / "baseball-bat-ball.svg", "svg+xml", None),
+        ("waterFeature", Path(__file__).parent / "default_icons" / "droplet.svg", "svg+xml", None),
+        ("transportExit", Path(__file__).parent / "default_icons" / "right-from-bracket.svg", "svg+xml", None),
+        ("attraction", Path(__file__).parent / "default_icons" / "camera.svg", "svg+xml", None),
+        ("airport", Path(__file__).parent / "default_icons" / "plane.svg", "svg+xml", 0x1F3D7A),
+    ):
+        result = re.search(r'viewBox="0 0 ([^ ]*) ([^ ]*?)"', image_path.read_text())
+        width = int(result.group(1))
+        height = int(result.group(2))
+        colour = Colour.from_hex(colour_hex or 0x000000)
         types.append(
             ComponentType(
                 name=name,
                 shape="point",
                 styles={
                     "0-5": [
-                        PointImage(image=image_path.read_bytes()),
-                        PointText(colour=Colour.from_hex(0x000000), offset=Vector(0.0, 2.5), size=2.5),
+                        PointImage(
+                            image=image_path.read_bytes(), extension=extension, size=Vector(5.0, height / width * 5.0)
+                        ),
+                        PointText(colour=colour, offset=Vector(0.0, 4.0), size=2.5),
                     ]
                 },
             )

@@ -1,3 +1,4 @@
+import base64
 import uuid
 from typing import cast
 
@@ -137,7 +138,14 @@ def area_centre_image_svg(
     _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
 ) -> svg.Element:
-    return svg.G()
+    centroid = component.nodes.point_on_surface
+    return svg.Image(
+        x=centroid.x - s.size.x / 2,
+        y=centroid.y - s.size.y / 2,
+        width=s.size.x,
+        height=s.size.y,
+        href=f"data:image/{s.extension};base64,{base64.b64encode(s.image).decode()}",
+    )
 
 
 def line_text_svg(
@@ -272,4 +280,11 @@ def point_image_svg(
     _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
 ) -> svg.Element:
-    return svg.G()
+    coordinate = component.nodes[0]
+    return svg.Image(
+        x=coordinate.x - s.size.x / 2,
+        y=coordinate.y - s.size.y / 2,
+        width=s.size.x,
+        height=s.size.y,
+        href=f"data:image/{s.extension};base64,{base64.b64encode(s.image).decode()}",
+    )
