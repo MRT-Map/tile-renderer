@@ -779,7 +779,7 @@ def main():
                         PointImage(
                             image=image_path.read_bytes(), extension=extension, size=Vector(5.0, height / width * 5.0)
                         ),
-                        PointText(colour=colour, offset=Vector(0.0, 4.0), size=2.5),
+                        PointText(colour=colour, offset=Vector(0.0, 5.0), size=2.5),
                     ]
                 },
             )
