@@ -1,0 +1,211 @@
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="./">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Command Line &mdash; gatelogue-aggregator 5.0.0 documentation</title>
+      <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=80d5e7a1" />
+      <link rel="stylesheet" type="text/css" href="_static/css/theme.css?v=19f00094" />
+      <link rel="stylesheet" type="text/css" href="_static/sphinx-codeautolink.css?v=125d5c1c" />
+
+  
+    <link rel="canonical" href="https://mrt-map.github.io/tile-renderer/cli.html" />
+  <!--[if lt IE 9]>
+    <script src="_static/js/html5shiv.min.js"></script>
+  <![endif]-->
+  
+        <script src="_static/jquery.js?v=5d32c60e"></script>
+        <script src="_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+        <script src="_static/documentation_options.js?v=ce74c6a2"></script>
+        <script src="_static/doctools.js?v=9a2dae69"></script>
+        <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Reference" href="reference.html" />
+    <link rel="prev" title="Data Format" href="data_format.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="index.html" class="icon icon-home">
+            gatelogue-aggregator
+          </a>
+              <div class="version">
+                5.0.0
+              </div>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="data_format.html">Data Format</a></li>
+<li class="toctree-l1 current"><a class="current reference internal" href="#">Command Line</a><ul>
+<li class="toctree-l2"><a class="reference internal" href="#render-svg">Render SVG</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#render-png-tiles">Render PNG tiles</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#generate-default-skin">Generate default skin</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#pla1-to-2-translator">PLA1 to 2 translator</a></li>
+<li class="toctree-l2"><a class="reference internal" href="#print-json-schemas">Print JSON schemas</a></li>
+</ul>
+</li>
+<li class="toctree-l1"><a class="reference internal" href="reference.html">Reference</a></li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="index.html">gatelogue-aggregator</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="index.html" class="icon icon-home" aria-label="Home"></a></li>
+      <li class="breadcrumb-item active">Command Line</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="_sources/cli.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="command-line">
+<h1>Command Line<a class="headerlink" href="#command-line" title="Link to this heading"></a></h1>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Usage: python -m tile_renderer [OPTIONS] COMMAND [ARGS]...
+
+Options:
+  --version   Show the version and exit.
+  -h, --help  Show this message and exit.
+
+Commands:
+  generate-default-skin  generate the default skin
+  pla1to2                convert pla1-formatted COMPS and NODES file to...
+  schema                 print JSON schemas for a skin or PLA2 file
+  svg                    renders an SVG map from PLA2_FILES
+  tiles                  renders PNG tiles from PLA2_FILES
+</pre></div>
+</div>
+<section id="render-svg">
+<h2>Render SVG<a class="headerlink" href="#render-svg" title="Link to this heading"></a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Usage: python -m tile_renderer svg [OPTIONS] [PLA2_FILES]...
+
+  renders an SVG map from PLA2_FILES
+
+Options:
+  -s, --skin PATH
+  -z, --zoom INTEGER   [default: 0]
+  -o, --out-file PATH
+  -h, --help           Show this message and exit.
+</pre></div>
+</div>
+</section>
+<section id="render-png-tiles">
+<h2>Render PNG tiles<a class="headerlink" href="#render-png-tiles" title="Link to this heading"></a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Usage: python -m tile_renderer tiles [OPTIONS] [PLA2_FILES]...
+
+  renders PNG tiles from PLA2_FILES
+
+Options:
+  -s, --skin PATH
+  -z, --zoom INTEGER            [default: 0]
+  -r, --max-zoom-range INTEGER  [required]
+  -t, --tile-size INTEGER       [required]
+  -f, --offset FLOAT...         [default: 0, 0]
+  -p, --processes INTEGER       [default: 8]
+  -c, --chunk-size INTEGER      [default: 8]
+  -o, --out-dir PATH            [default: /home/runner/work/tile-
+                                renderer/tile-renderer/docs]
+  -h, --help                    Show this message and exit.
+</pre></div>
+</div>
+</section>
+<section id="generate-default-skin">
+<h2>Generate default skin<a class="headerlink" href="#generate-default-skin" title="Link to this heading"></a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Usage: python -m tile_renderer generate-default-skin [OPTIONS]
+
+  generate the default skin
+
+Options:
+  -h, --help  Show this message and exit.
+</pre></div>
+</div>
+</section>
+<section id="pla1-to-2-translator">
+<h2>PLA1 to 2 translator<a class="headerlink" href="#pla1-to-2-translator" title="Link to this heading"></a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Usage: python -m tile_renderer pla1to2 [OPTIONS] COMPS NODES
+
+  convert pla1-formatted COMPS and NODES file to pla2 format
+
+Options:
+  -o, --out-dir PATH  [default: /home/runner/work/tile-renderer/tile-
+                      renderer/docs]
+  -j, --json
+  -h, --help          Show this message and exit.
+</pre></div>
+</div>
+</section>
+<section id="print-json-schemas">
+<h2>Print JSON schemas<a class="headerlink" href="#print-json-schemas" title="Link to this heading"></a></h2>
+<div class="highlight-text notranslate"><div class="highlight"><pre><span></span>Usage: python -m tile_renderer schema [OPTIONS] {skin|pla2}
+
+  print JSON schemas for a skin or PLA2 file
+
+Options:
+  -o, --out-file PATH
+  -h, --help           Show this message and exit.
+</pre></div>
+</div>
+</section>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="data_format.html" class="btn btn-neutral float-left" title="Data Format" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="reference.html" class="btn btn-neutral float-right" title="Reference" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MRT Mapping Services.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>
