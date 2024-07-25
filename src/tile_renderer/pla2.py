@@ -18,21 +18,13 @@ if TYPE_CHECKING:
 @dataclass_transform()
 class Component(Struct):
     namespace: str
-
     id: str
-
     display_name: str
-
     description: str
-
     type: str
-
     layer: float
-
     nodes: Line[int]
-
     tags: list[str]
-
     attrs: dict | None = None
 
     @property
@@ -87,7 +79,6 @@ _msgpack_encoder = msgspec.msgpack.Encoder()
 @dataclass_transform()
 class Pla2File(Struct):
     namespace: str
-
     components: list[Component]
 
     @classmethod
