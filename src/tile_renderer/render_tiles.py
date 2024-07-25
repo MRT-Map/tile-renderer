@@ -44,7 +44,6 @@ def render_tiles(
     with (
         multiprocessing.Pool(processes=processes) as pool,
         Progress() as progress,
-        multiprocessing.Manager() as manager,
     ):
         task_id = progress.add_task("[green]Exporting to PNG", total=len(tiles))
         doc = re.sub(
@@ -53,7 +52,6 @@ def render_tiles(
             _simplify_svg(str(doc), font_dir, tile_size),
         )
 
-        doc = manager.Value(ctypes.c_wchar_p, doc, lock=False)
         resvg_path = subprocess.check_output(["where" if platform.system() == "Windows" else "which", "resvg"]).strip()
         for i, (tile, b) in enumerate(
             pool.imap(
@@ -109,7 +107,7 @@ def _simplify_svg(doc: str, font_dir: Path, tile_size: int) -> str:
 
 
 def _export_tile(
-    doc: multiprocessing.sharedctypes.Synchronized,
+    doc: str,
     tile: TileCoord,
     max_zoom_range: int,
     offset: Coord,
@@ -119,10 +117,8 @@ def _export_tile(
     resvg_path: str,
 ) -> tuple[TileCoord, bytes]:
     bounds = tile.bounds(max_zoom_range)
-    doc = (
-        cast(str, doc.value)
-        .replace("<|min_x|>", str(bounds.x_min + offset.x), 1)
-        .replace("<|min_y|>", str(bounds.y_min + offset.y), 1)
+    doc = doc.replace("<|min_x|>", str(bounds.x_min + offset.x), 1).replace(
+        "<|min_y|>", str(bounds.y_min + offset.y), 1
     )
     p = subprocess.Popen(
         [
