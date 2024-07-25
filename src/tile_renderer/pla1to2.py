@@ -2,7 +2,7 @@ import rich
 from rich.progress import track
 
 from tile_renderer.coord import Coord, Line
-from tile_renderer.pla2 import Pla2File, Component
+from tile_renderer.pla2 import Component, Pla2File
 
 
 def pla1to2(
@@ -20,7 +20,8 @@ def pla1to2(
         for node_name, node_obj in old_nodes.items():
             if node == node_name:
                 return Coord(node_obj["x"], node_obj["y"])
-        raise ValueError(f"`{node}` is not found in node lists")
+        msg = f"`{node}` is not found in node lists"
+        raise ValueError(msg)
 
     comps: dict[str, list[Component]] = {}
     for comp_name, comp in track(old_comps.items(), "Processing PLA 1 components"):

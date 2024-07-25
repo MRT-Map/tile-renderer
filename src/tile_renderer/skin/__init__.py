@@ -7,11 +7,10 @@ import msgspec
 from msgspec import Struct, field
 
 from tile_renderer.colour import Colour
-from tile_renderer.coord import Line, Vector
+from tile_renderer.coord import Vector
 
 if TYPE_CHECKING:
     import svg
-    from shapely import Polygon
 
     from tile_renderer.component_to_svg import _Lists
     from tile_renderer.pla2 import Component

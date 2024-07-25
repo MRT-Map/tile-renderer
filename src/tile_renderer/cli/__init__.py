@@ -4,19 +4,19 @@ from pathlib import Path
 
 import click
 
+import tile_renderer.pla1to2
+import tile_renderer.render_svg
+import tile_renderer.render_tiles
 from tile_renderer.__about__ import __version__
 from tile_renderer.coord import Coord
 from tile_renderer.pla2 import Pla2File
-import tile_renderer.render_svg
-import tile_renderer.render_tiles
-import tile_renderer.pla1to2
 from tile_renderer.skin import Skin
 
 
 @click.group(context_settings={"help_option_names": ["-h", "--help"]}, invoke_without_command=True)
 @click.version_option(version=__version__, prog_name="tile-renderer")
 def tile_renderer():
-    print(click.get_current_context().get_help())
+    click.echo(click.get_current_context().get_help())
 
 
 @tile_renderer.command(help="renders an SVG map from PLA2_FILES")
@@ -36,7 +36,7 @@ def svg(*, pla2_files: tuple[Path, ...], skin: Path | None, zoom: int, out_file:
         components=components, skin=Skin.default() if skin is None else Skin.from_file(skin), zoom=zoom
     )
     if out_file is None:
-        print(str(out))
+        click.echo(str(out))
     else:
         out_file.write_text(str(out))
 

@@ -1,4 +1,3 @@
-import ctypes
 import multiprocessing
 import multiprocessing.sharedctypes
 import os
@@ -7,7 +6,6 @@ import re
 import subprocess
 import tempfile
 from pathlib import Path
-from typing import cast
 
 import rich
 from rich.progress import Progress
