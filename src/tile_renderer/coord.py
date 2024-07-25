@@ -3,7 +3,7 @@ from __future__ import annotations
 import dataclasses
 import functools
 from copy import copy
-from typing import TYPE_CHECKING, Self
+from typing import TYPE_CHECKING, Self, no_type_check, cast, overload
 
 from shapely import LineString, Point, Polygon
 from shapely.ops import substring
@@ -29,58 +29,88 @@ class Vector[T: float | int]:
     def to_int(self) -> Vector[int]:
         return Vector(round(self.x), round(self.y))
 
-    def __add__(self, other: Vector | T) -> Self:
-        s = copy(self)
+    @overload
+    def __add__(self: Vector[int], other: Vector[int]) -> Vector[int]:
+        pass
+
+    @overload
+    def __add__(self: Vector[float], other: Vector[int] | Vector[float]) -> Vector[float]:
+        pass
+
+    @overload
+    def __add__(self: Vector[int], other: int) -> Vector[int]:
+        pass
+
+    @overload
+    def __add__(self: Vector[float], other: int | float) -> Vector[float]:
+        pass
+
+    def __add__(self, other):
         if isinstance(other, Vector):
-            s.x += other.x
-            s.y += other.y
-        else:
-            s.x += other
-            s.y += other
-        return s
+            return cast(type, type(self))(self.x + other.x, self.y + other.y)
+        return Vector(self.x + other, self.y + other)
 
-    def __sub__(self, other: Vector | Coord | Self) -> Self:
-        s = copy(self)
+    @overload
+    def __sub__(self: Vector[int], other: Vector[int]) -> Vector[int]:
+        pass
+
+    @overload
+    def __sub__(self: Vector[float], other: Vector[int] | Vector[float]) -> Vector[float]:
+        pass
+
+    @overload
+    def __sub__(self: Vector[int], other: int) -> Vector[int]:
+        pass
+
+    @overload
+    def __sub__(self: Vector[float], other: int | float) -> Vector[float]:
+        pass
+
+    def __sub__(self, other):
         if isinstance(other, Vector):
-            s.x -= other.x
-            s.y -= other.y
-        else:
-            s.x -= other
-            s.y -= other
-        return s
+            return cast(type, type(self))(self.x - other.x, self.y - other.y)
+        return Vector(self.x - other, self.y - other)
 
-    def __mul__(self, other: T) -> Self:
-        s = copy(self)
-        s.x *= other
-        s.y *= other
-        return s
+    @overload
+    def __mul__(self: Vector[int], other: int) -> Vector[int]:
+        pass
 
-    def __truediv__(self, other: T) -> Vector[float]:
-        s = copy(self)
-        s.x /= other
-        s.y /= other
-        return s
+    @overload
+    def __mul__(self: Vector[float], other: int | float) -> Vector[float]:
+        pass
+
+    def __mul__(self, other):
+        return cast(type, type(self))(self.x * other, self.y * other)
+
+    def __truediv__(self, other: int | float) -> Vector[float]:
+        return cast(type, type(self))(self.x / other, self.y / other)
 
     def __abs__(self) -> float:
         return (self.x**2 + self.y**2) ** 0.5
 
-    def __neg__(self):
-        s = copy(self)
-        s.x = -self.x
-        s.y = -self.y
-        return s
+    def __neg__(self) -> Self:
+        return cast(type, type(self))(-self.x, -self.y)
 
     def unit(self) -> Vector[float]:
         return self / abs(self)
 
-    def dot(self, other: Self) -> T:
+    @overload
+    def dot(self: Vector[int], other: Vector[int]) -> int:
+        pass
+
+    @overload
+    def dot(self: Vector[float], other: Vector[int] | Vector[float]) -> float:
+        pass
+
+    @overload
+    def dot(self: Vector[int], other: Vector[float]) -> float:
+        pass
+
+    def dot(self, other):
         return self.x * other.x + self.y * other.y
 
     def perp(self) -> Self:
-        s = copy(self)
-        s.x = -self.y
-        s.y = self.x
-        return s
+        return cast(type, type(self))(-self.y, self.x)
 
     def encode(self) -> tuple[T, T]:
         return self.x, self.y
@@ -116,7 +146,19 @@ class Bounds[T: float | int]:
     y_max: T
     y_min: T
 
-    def __add__(self, other: Self) -> Self:
+    @overload
+    def __add__(self: Bounds[int], other: Bounds[int]) -> Bounds[int]:
+        pass
+
+    @overload
+    def __add__(self: Bounds[float], other: Bounds[int] | Bounds[float]) -> Bounds[float]:
+        pass
+
+    @overload
+    def __add__(self: Bounds[int], other: Bounds[float]) -> Bounds[float]:
+        pass
+
+    def __add__(self, other):
         return Bounds(
             x_max=max(self.x_max, other.x_max),
             x_min=min(self.x_min, other.x_min),
@@ -132,7 +174,15 @@ class Line[T: float | int]:
     def __repr__(self) -> str:
         return f"{type(self).__name__} <{''.join(str(a.as_tuple()) for a in self.coords)}>"
 
-    def __getitem__(self, item: int | slice) -> Coord[T]:
+    @overload
+    def __getitem__(self, item: int) -> Coord[T]:
+        pass
+
+    @overload
+    def __getitem__(self, item: slice) -> list[Coord[T]]:
+        pass
+
+    def __getitem__(self, item):
         return self.coords[item]
 
     def __iter__(self) -> Iterator[Coord[T]]:
@@ -177,7 +227,7 @@ class Line[T: float | int]:
             point = self.shapely.point_on_surface()
         return Coord(point.x, point.y)
 
-    def dash(self, dash_length: float, shift: bool = False) -> list[Line[T]] | None:  # noqa: FBT001 FBT002
+    def dash(self, dash_length: float, shift: bool = False) -> list[Line[float]] | None:  # noqa: FBT001 FBT002
         if dash_length == 0:
             return None
         coords = self.shapely

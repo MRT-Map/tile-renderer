@@ -47,7 +47,7 @@ class Component(Struct):
             description=self.description,
             type=self.type,
             layer=self.layer,
-            nodes=self.nodes.encode(),
+            nodes=self.nodes.encode(),  # type: ignore
             tags=self.tags,
             attrs=self.attrs,
         )
@@ -62,7 +62,7 @@ class Component(Struct):
 
 @dataclass_transform()
 class _SerComponent(Component):
-    nodes: list[tuple[int | float, int | float]]
+    nodes: list[tuple[int, int] | tuple[float, float]]  # type: ignore[assignment]
 
     def decode(self) -> Component:
         return Component(
@@ -72,7 +72,7 @@ class _SerComponent(Component):
             description=self.description,
             type=self.type,
             layer=self.layer,
-            nodes=Line.decode(self.nodes),
+            nodes=Line.decode(self.nodes),  # type: ignore[arg-type]
             tags=self.tags,
             attrs=self.attrs,
         )

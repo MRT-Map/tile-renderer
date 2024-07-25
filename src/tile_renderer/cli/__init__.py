@@ -53,7 +53,7 @@ def svg(*, pla2_files: tuple[Path, ...], skin: Path | None, zoom: int, out_file:
 @click.option("-r", "--max-zoom-range", type=int, required=True, help="")
 @click.option("-t", "--tile-size", type=int, required=True, help="")
 @click.option("-f", "--offset", type=float, nargs=2, default=(0, 0), show_default=True, help="")
-@click.option("-p", "--processes", type=int, default=os.cpu_count() * 2, show_default=True, help="")
+@click.option("-p", "--processes", type=int, default=(os.cpu_count() or 8) * 2, show_default=True, help="")
 @click.option("-c", "--chunk-size", type=int, default=8, show_default=True, help="")
 @click.option("-o", "--out-dir", type=Path, default=Path.cwd(), show_default=True, help="")
 def tiles(
@@ -66,7 +66,7 @@ def tiles(
     offset: tuple[float, float],
     processes: int,
     chunk_size: int,
-    out_dir: Path | None,
+    out_dir: Path,
 ):
     components = []
     for path in pla2_files:
@@ -96,9 +96,9 @@ def tiles(
 @click.option("-o", "--out-dir", type=Path, default=Path.cwd(), show_default=True, help="")
 @click.option("-j", "--json", "json_format", is_flag=True, default=False, show_default=True, help="")
 def pla1to2(*, comps: Path, nodes: Path, out_dir: Path, json_format: bool):
-    comps = json.loads(comps.read_bytes())
-    nodes = json.loads(nodes.read_bytes())
-    for result in tile_renderer.pla1to2.pla1to2(comps, nodes):
+    comps_dict = json.loads(comps.read_bytes())
+    nodes_dict = json.loads(nodes.read_bytes())
+    for result in tile_renderer.pla1to2.pla1to2(comps_dict, nodes_dict):
         if json_format:
             result.save_json(out_dir)
         else:

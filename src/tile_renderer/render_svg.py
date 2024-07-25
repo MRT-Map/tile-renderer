@@ -7,7 +7,8 @@ from typing import Any, cast
 import svg
 from rich.console import Console
 from rich.progress import Progress, track
-from shapely.prepared import prep
+from shapely import Polygon
+from shapely.prepared import prep, PreparedGeometry
 
 from tile_renderer._logger import log
 from tile_renderer.component_to_svg import _Lists
@@ -28,21 +29,16 @@ def render_svg(components: list[Component], skin: Skin, zoom: int) -> svg.SVG:
     styling = _get_styling(components, skin, zoom)
     styling = _sort_styling(styling, skin)
     lists = _Lists()
-    out = svg.SVG(
-        elements=[
-            st.s.render(st.c, zoom, skin, lists, i)
-            for i, st in track(
-                enumerate(styling), "Rendering SVG", total=len(styling), console=Console(file=sys.stderr)
-            )
-        ]
-    )
-    for i, elements in _get_junctions(lists.junction, styling):
-        for element in elements:
-            out.elements.insert(i + 1, element)
-    out.elements.extend(lists.arrow)
-    out.elements.extend(_filter_text_list(lists.text))
-    out.elements = [a for a in out.elements if a != svg.G()]
-    return out
+    elements = [
+        st.s.render(st.c, zoom, skin, lists, i)
+        for i, st in track(enumerate(styling), "Rendering SVG", total=len(styling), console=Console(file=sys.stderr))
+    ]
+    for i, jts in _get_junctions(lists.junction, styling):
+        for jt in jts:
+            elements.insert(i + 1, jt)
+    elements.extend(lists.arrow)
+    elements.extend(_filter_text_list(lists.text))
+    return svg.SVG(elements=[a for a in elements if a != svg.G()])
 
 
 def _get_styling(components: list[Component], skin: Skin, zoom: int) -> list[_Styling]:
@@ -73,7 +69,7 @@ def _sort_styling(styling: list[_Styling], skin: Skin) -> list[_Styling]:
         if (delta := s1.c.layer - s2.c.layer) != 0:
             return delta
 
-        if (delta := skin.get_order(s1.ct.name) - skin.get_order(s2.ct.name)) != 0:
+        if (delta := (skin.get_order(s1.ct.name) or 0) - (skin.get_order(s2.ct.name) or 0)) != 0:
             return delta
 
         if s1.c.fid != s2.c.fid:
@@ -91,12 +87,12 @@ def _get_junctions(
     out: dict[int, list[svg.Element]] = {}
     for jt in track(junction_list, "Calculating road joint junctions", console=Console(file=sys.stderr)):
         for st in styling[: jt.i]:
-            if st.s.__class__ is not LineFore or st.c.fid == jt.fid:
+            if type(st.s) is not LineFore or st.c.fid == jt.fid:
                 continue
             s = cast(LineFore, st.s)
             for coord in jt.line:
                 id_ = uuid.uuid4()
-                mask = svg.Mask(
+                mask: svg.Mask | None = svg.Mask(
                     id=str(id_),
                     elements=[
                         svg.Circle(
@@ -111,12 +107,12 @@ def _get_junctions(
                     vector1 = st.c.nodes[j - 1] - coord if j != 0 else None
                     vector2 = st.c.nodes[j + 1] - coord if j != len(st.c.nodes) - 1 else None
                     coord1 = (
-                        (coord + vector1.unit() * min(jt.size, abs(vector1)))
+                        (coord + vector1.unit() * min(jt.size, abs(vector1)))  # type: ignore[operator]
                         if vector1 is not None and vector1 != Coord(0, 0)
                         else None
                     )
                     coord2 = (
-                        (coord + vector2.unit() * min(jt.size, abs(vector2)))
+                        (coord + vector2.unit() * min(jt.size, abs(vector2)))  # type: ignore[operator]
                         if vector2 is not None and vector2 != Coord(0, 0)
                         else None
                     )
@@ -141,7 +137,7 @@ def _get_junctions(
 
 
 def _filter_text_list(text_list: list[_Lists.Text]) -> list[svg.Element]:
-    out = []
+    out: list[tuple[PreparedGeometry, svg.Element]] = []
     with Progress() as progress:
         task_id = progress.add_task("Filtering text", total=len(text_list) ** 2 / 2, console=Console(file=sys.stderr))
         for i, t in enumerate(text_list[::-1]):

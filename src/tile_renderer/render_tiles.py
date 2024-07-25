@@ -29,7 +29,7 @@ def render_tiles(
     max_zoom_range: int,
     tile_size: int,
     offset: Coord = ORIGIN,
-    processes: int = os.cpu_count() * 2,
+    processes: int = (os.cpu_count() or 8) * 2,
     chunk_size: int = 8,
 ) -> dict[TileCoord, bytes]:
     images = {}
@@ -46,7 +46,7 @@ def render_tiles(
         Progress() as progress,
     ):
         task_id = progress.add_task("Exporting to PNG", total=len(tiles), console=Console(file=sys.stderr))
-        doc = re.sub(
+        doc_str = re.sub(
             r'<svg width=".*?" height=".*?"',
             f'<svg viewBox="<|min_x|> <|min_y|> {max_zoom_range*2**zoom} {max_zoom_range*2**zoom}"',
             _simplify_svg(str(doc), font_dir, tile_size),
@@ -58,7 +58,7 @@ def render_tiles(
                 _f,
                 (
                     (
-                        doc,
+                        doc_str,
                         tile,
                         max_zoom_range,
                         offset,

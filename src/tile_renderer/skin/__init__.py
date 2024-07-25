@@ -38,7 +38,7 @@ class Skin(Struct):
         )
 
     @classmethod
-    def default(cls) -> Self:
+    def default(cls) -> Skin:
         path = Path(__file__).parent / "default.skin.json"
         if not path.exists():
             from tile_renderer.skin import generate_default
@@ -47,19 +47,19 @@ class Skin(Struct):
         return cls.from_json(path)
 
     @classmethod
-    def from_file(cls, file: Path) -> Self:
+    def from_file(cls, file: Path) -> Skin:
         if file.suffix == ".msgpack":
             return cls.from_msgpack(file)
         return cls.from_json(file)
 
     @classmethod
-    def from_json(cls, file: Path) -> Self:
+    def from_json(cls, file: Path) -> Skin:
         with file.open("rb") as f:
             b = f.read()
         return _json_decoder.decode(b).decode()
 
     @classmethod
-    def from_msgpack(cls, file: Path) -> Self:
+    def from_msgpack(cls, file: Path) -> Skin:
         with file.open("rb") as f:
             b = f.read()
         return _msgpack_decoder.decode(b).decode()
@@ -81,8 +81,8 @@ class Skin(Struct):
 
 @dataclass_transform()
 class _SerSkin(Skin):
-    types: list[_SerComponentType]
-    background: str = "#ffffff"
+    types: list[_SerComponentType]  # type: ignore[assignment]
+    background: str = "#ffffff"  # type: ignore[assignment]
 
     def decode(self) -> Skin:
         return Skin(
@@ -113,10 +113,10 @@ class ComponentType(Struct):
 
     def get_styling_by_zoom(self, zoom: int) -> list[ComponentStyle] | None:
         for z, styling in self.styles.items():
-            min_z = z.split("-")[0]
-            min_z = 0 if min_z == "" else int(min_z)
-            max_z = z.split("-")[-1]
-            max_z = float("inf") if max_z == "" else int(max_z)
+            min_z_str = z.split("-")[0]
+            min_z = 0 if min_z_str == "" else int(min_z_str)
+            max_z_str = z.split("-")[-1]
+            max_z = float("inf") if max_z_str == "" else int(max_z_str)
             if min_z <= zoom <= max_z:
                 return [s.scale(zoom - min_z) for s in styling]
         return None
@@ -124,7 +124,7 @@ class ComponentType(Struct):
 
 @dataclass_transform()
 class _SerComponentType(ComponentType):
-    styles: dict[str, list[_SerComponentStyle]]
+    styles: dict[str, list[_SerComponentStyle]]  # type: ignore[assignment]
 
     def decode(self) -> ComponentType:
         return ComponentType(
@@ -207,7 +207,7 @@ class AreaBorderText(ComponentStyle):
 
 @dataclass_transform()
 class _SerAreaBorderText(AreaBorderText, tag_field="ty", tag="areaBorderText"):
-    colour: str | None = None
+    colour: str | None = None  # type: ignore[assignment]
 
     def decode(self) -> AreaBorderText:
         return AreaBorderText(
@@ -245,7 +245,7 @@ class AreaCentreText(ComponentStyle):
         return component_to_svg.area_centre_text_svg(self, component, zoom, skin, lists, i)
 
     def scale(self, zoom: int) -> Self:
-        return AreaCentreText(
+        return type(self)(
             size=self.size / (self.zoom_multiplier / 2) ** zoom,
             colour=self.colour,
             offset=self.offset / (self.zoom_multiplier / 2) ** zoom,
@@ -255,8 +255,8 @@ class AreaCentreText(ComponentStyle):
 
 @dataclass_transform()
 class _SerAreaCentreText(AreaCentreText, tag_field="ty", tag="areaCentreText"):
-    colour: str | None = None
-    offset: tuple[float, float] = (0.0, 0.0)
+    colour: str | None = None  # type: ignore[assignment]
+    offset: tuple[float, float] = (0.0, 0.0)  # type: ignore[assignment]
 
     def decode(self) -> AreaCentreText:
         return AreaCentreText(
@@ -296,7 +296,7 @@ class AreaFill(ComponentStyle):
         return component_to_svg.area_fill_svg(self, component, zoom, skin, lists, i)
 
     def scale(self, zoom: int) -> Self:
-        return AreaFill(
+        return type(self)(
             colour=self.colour,
             outline=self.outline,
             outline_width=self.outline_width / (self.zoom_multiplier / 2) ** zoom,
@@ -306,8 +306,8 @@ class AreaFill(ComponentStyle):
 
 @dataclass_transform()
 class _SerAreaFill(AreaFill, tag_field="ty", tag="areaFill"):
-    colour: str | None = None
-    outline: str | None = None
+    colour: str | None = None  # type: ignore[assignment]
+    outline: str | None = None  # type: ignore[assignment]
 
     def decode(self) -> AreaFill:
         return AreaFill(
@@ -347,7 +347,7 @@ class AreaCentreImage(ComponentStyle):
         return component_to_svg.area_centre_image_svg(self, component, zoom, skin, lists, i)
 
     def scale(self, zoom: int) -> Self:
-        return AreaCentreImage(
+        return type(self)(
             image=self.image,
             extension=self.extension,
             size=self.size / (self.zoom_multiplier / 2) ** zoom,
@@ -358,8 +358,8 @@ class AreaCentreImage(ComponentStyle):
 
 @dataclass_transform()
 class _SerAreaCentreImage(AreaCentreImage, tag_field="ty", tag="areaCentreImage"):
-    size: tuple[float, float] = (0.0, 0.0)
-    offset: tuple[float, float] = (0.0, 0.0)
+    size: tuple[float, float] = (0.0, 0.0)  # type: ignore[assignment]
+    offset: tuple[float, float] = (0.0, 0.0)  # type: ignore[assignment]
 
     def decode(self) -> AreaCentreImage:
         return AreaCentreImage(
@@ -400,7 +400,7 @@ class LineText(ComponentStyle):
         return component_to_svg.line_text_svg(self, component, zoom, skin, lists, i)
 
     def scale(self, zoom: int) -> Self:
-        return LineText(
+        return type(self)(
             size=self.size / (self.zoom_multiplier / 2) ** zoom,
             arrow_colour=self.arrow_colour,
             colour=self.colour,
@@ -411,8 +411,8 @@ class LineText(ComponentStyle):
 
 @dataclass_transform()
 class _SerLineText(LineText, tag_field="ty", tag="lineText"):
-    arrow_colour: str | None = None
-    colour: str | None = None
+    arrow_colour: str | None = None  # type: ignore[assignment]
+    colour: str | None = None  # type: ignore[assignment]
 
     def decode(self) -> LineText:
         return LineText(
@@ -453,7 +453,7 @@ class LineFore(ComponentStyle):
         return component_to_svg.line_back_fore_svg(self, component, zoom, skin, lists, i)
 
     def scale(self, zoom: int) -> Self:
-        return LineFore(
+        return type(self)(
             width=self.width / (self.zoom_multiplier / 2) ** zoom,
             dash=[a / (self.zoom_multiplier / 2) ** zoom for a in self.dash] if self.dash is not None else None,
             colour=self.colour,
@@ -464,7 +464,7 @@ class LineFore(ComponentStyle):
 
 @dataclass_transform()
 class _SerLineFore(LineFore, tag_field="ty", tag="lineFore"):
-    colour: str | None = None
+    colour: str | None = None  # type: ignore[assignment]
 
     def decode(self) -> LineFore:
         return LineFore(
@@ -483,15 +483,6 @@ class LineBack(LineFore):
             colour=None if self.colour is None else str(self.colour),
             width=self.width,
             dash=self.dash,
-            unrounded=self.unrounded,
-            zoom_multiplier=self.zoom_multiplier,
-        )
-
-    def scale(self, zoom: int) -> Self:
-        return LineBack(
-            width=self.width / (self.zoom_multiplier / 2) ** zoom,
-            dash=[a / (self.zoom_multiplier / 2) ** zoom for a in self.dash] if self.dash is not None else None,
-            colour=self.colour,
             unrounded=self.unrounded,
             zoom_multiplier=self.zoom_multiplier,
         )
@@ -538,7 +529,7 @@ class PointText(ComponentStyle):
         return component_to_svg.point_text_svg(self, component, zoom, skin, lists, i)
 
     def scale(self, zoom: int) -> Self:
-        return PointText(
+        return type(self)(
             anchor=self.anchor,
             size=self.size / (self.zoom_multiplier / 2) ** zoom,
             colour=self.colour,
@@ -549,8 +540,8 @@ class PointText(ComponentStyle):
 
 @dataclass_transform()
 class _SerPointText(PointText, tag_field="ty", tag="pointText"):
-    colour: str | None = None
-    offset: tuple[float, float] = (0.0, 0.0)
+    colour: str | None = None  # type: ignore[assignment]
+    offset: tuple[float, float] = (0.0, 0.0)  # type: ignore[assignment]
 
     def decode(self) -> PointText:
         return PointText(
@@ -591,7 +582,7 @@ class PointSquare(ComponentStyle):
         return component_to_svg.point_square_svg(self, component, zoom, skin, lists, i)
 
     def scale(self, zoom: int) -> Self:
-        return PointSquare(
+        return type(self)(
             size=self.size / (self.zoom_multiplier / 2) ** zoom,
             width=self.width / (self.zoom_multiplier / 2) ** zoom,
             colour=self.colour,
@@ -602,8 +593,8 @@ class PointSquare(ComponentStyle):
 
 @dataclass_transform()
 class _SerPointSquare(PointSquare, tag_field="ty", tag="pointSquare"):
-    colour: str | None = None
-    outline: str | None = None
+    colour: str | None = None  # type: ignore[assignment]
+    outline: str | None = None  # type: ignore[assignment]
 
     def decode(self) -> PointSquare:
         return PointSquare(
@@ -635,15 +626,6 @@ class PointImage(AreaCentreImage):
             extension=self.extension,
             size=self.size.encode(),
             offset=self.offset.encode(),
-            zoom_multiplier=self.zoom_multiplier,
-        )
-
-    def scale(self, zoom: int) -> Self:
-        return PointImage(
-            image=self.image,
-            extension=self.extension,
-            size=self.size / (self.zoom_multiplier / 2) ** zoom,
-            offset=self.offset / (self.zoom_multiplier / 2) ** zoom,
             zoom_multiplier=self.zoom_multiplier,
         )
 

@@ -38,7 +38,7 @@ class _Lists:
     class Junction:
         i: int
         line: Line[int]
-        size: int
+        size: int | float
         fid: str
 
     text: list[_Lists.Text] = dataclasses.field(default_factory=list)
@@ -87,7 +87,7 @@ def area_border_text_svg(
                             id=id_,
                         ),
                         svg.Text(
-                            fill=s.colour,
+                            fill=None if s.colour is None else str(s.colour),
                             font_size=s.size,
                             stroke="#dddddd",
                             stroke_width=0.025 * s.size,
@@ -126,7 +126,7 @@ def area_centre_text_svg(
             svg.Text(
                 x=centroid.x + s.offset.x,
                 y=centroid.y + s.offset.y,
-                fill=s.colour,
+                fill=None if s.colour is None else str(s.colour),
                 font_size=s.size,
                 font_family=skin.font_string,
                 text=component.display_name,
@@ -185,12 +185,15 @@ def line_text_svg(
     _i: int,
 ) -> svg.Element:
     if "oneWay" in component.tags:
-        for dash in component.nodes.parallel_offset(s.offset).dash(
-            round(s.size * len(component.display_name or "-" * 8)), shift=True
+        for dash in (
+            component.nodes.parallel_offset(s.offset).dash(
+                round(s.size * len(component.display_name or "-" * 8)), shift=True
+            )
+            or []
         ):
             vector = (dash[-1] - dash[0]).unit()
-            arrow_centre = dash.shapely.interpolate(0.5, normalized=True)
-            arrow_centre = Coord(arrow_centre.x, arrow_centre.y)
+            pre_arrow_centre = dash.shapely.interpolate(0.5, normalized=True)
+            arrow_centre = Coord(pre_arrow_centre.x, pre_arrow_centre.y)
             point1 = arrow_centre + vector * (s.size / 2)
             point2 = arrow_centre - vector * (s.size / 2) + vector.perp() * (s.size / 3)
             point3 = arrow_centre - vector * (s.size / 2) - vector.perp() * (s.size / 3)
@@ -256,7 +259,7 @@ def line_back_fore_svg(
     lists: _Lists,
     i: int,
 ) -> svg.Element:
-    if s.__class__ is LineBack:
+    if type(s) is LineBack:
         lists.junction.append(_Lists.Junction(i, component.nodes, s.width, component.fid))
     return svg.Polyline(
         points=[cast(int, f"{c.x},{c.y}") for c in component.nodes],
@@ -264,7 +267,7 @@ def line_back_fore_svg(
         fill=None,
         fill_opacity=0,
         stroke_width=s.width,
-        stroke_dasharray=s.dash,
+        stroke_dasharray=s.dash,  # type: ignore[arg-type]
         stroke_linecap=None if s.unrounded else "round",
         stroke_linejoin="round",
     )
@@ -278,7 +281,7 @@ def point_text_svg(
     lists: _Lists,
     _i: int,
 ) -> svg.Element:
-    coordinate = component.nodes[0]
+    coordinate = component.nodes[0].to_float()
     lists.text.append(
         _Lists.Text(
             Polygon(

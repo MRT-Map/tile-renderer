@@ -46,7 +46,6 @@ BUILDING = Colour.from_hex(0xA2A288)
 TRANSPORT_BUILDING = Colour.from_hex(0x999966)
 
 
-# noinspection PyListCreation
 def main():
     log.info("Generating skin")
     types: list[ComponentType] = []
@@ -738,33 +737,35 @@ def main():
     )
 
     for name, image_path, extension, colour_hex in (
-        ("pedestrianCrossing", Path(__file__).parent / "default_icons" / "traffic-light.svg", "svg+xml", None),
-        ("railCrossing", Path(__file__).parent / "default_icons" / "train.svg", "svg+xml", None),
-        ("parking", Path(__file__).parent / "default_icons" / "square-parking.svg", "svg+xml", None),
-        ("bikeRack", Path(__file__).parent / "default_icons" / "bicycle.svg", "svg+xml", None),
-        ("shop", Path(__file__).parent / "default_icons" / "store.svg", "svg+xml", None),
-        ("restaurant", Path(__file__).parent / "default_icons" / "utensils.svg", "svg+xml", None),
-        ("hotel", Path(__file__).parent / "default_icons" / "bed.svg", "svg+xml", None),
-        ("arcade", Path(__file__).parent / "default_icons" / "gamepad.svg", "svg+xml", None),
-        ("supermarket", Path(__file__).parent / "default_icons" / "cart-shopping.svg", "svg+xml", None),
-        ("clinic", Path(__file__).parent / "default_icons" / "house-chimney-medical.svg", "svg+xml", None),
-        ("library", Path(__file__).parent / "default_icons" / "book.svg", "svg+xml", None),
-        ("placeOfWorship", Path(__file__).parent / "default_icons" / "place-of-worship.svg", "svg+xml", None),
-        ("petrol", Path(__file__).parent / "default_icons" / "gas-pump.svg", "svg+xml", None),
-        ("cinema", Path(__file__).parent / "default_icons" / "film.svg", "svg+xml", None),
-        ("bank", Path(__file__).parent / "default_icons" / "building-columns.svg", "svg+xml", None),
-        ("gym", Path(__file__).parent / "default_icons" / "dumbbell.svg", "svg+xml", None),
-        ("shelter", Path(__file__).parent / "default_icons" / "people-roof.svg", "svg+xml", None),
-        ("playground", Path(__file__).parent / "default_icons" / "baseball-bat-ball.svg", "svg+xml", None),
-        ("waterFeature", Path(__file__).parent / "default_icons" / "droplet.svg", "svg+xml", None),
-        ("transportExit", Path(__file__).parent / "default_icons" / "right-from-bracket.svg", "svg+xml", None),
-        ("attraction", Path(__file__).parent / "default_icons" / "camera.svg", "svg+xml", None),
+        ("pedestrianCrossing", Path(__file__).parent / "default_icons" / "traffic-light.svg", "svg+xml", 0x000000),
+        ("railCrossing", Path(__file__).parent / "default_icons" / "train.svg", "svg+xml", 0x000000),
+        ("parking", Path(__file__).parent / "default_icons" / "square-parking.svg", "svg+xml", 0x000000),
+        ("bikeRack", Path(__file__).parent / "default_icons" / "bicycle.svg", "svg+xml", 0x000000),
+        ("shop", Path(__file__).parent / "default_icons" / "store.svg", "svg+xml", 0x000000),
+        ("restaurant", Path(__file__).parent / "default_icons" / "utensils.svg", "svg+xml", 0x000000),
+        ("hotel", Path(__file__).parent / "default_icons" / "bed.svg", "svg+xml", 0x000000),
+        ("arcade", Path(__file__).parent / "default_icons" / "gamepad.svg", "svg+xml", 0x000000),
+        ("supermarket", Path(__file__).parent / "default_icons" / "cart-shopping.svg", "svg+xml", 0x000000),
+        ("clinic", Path(__file__).parent / "default_icons" / "house-chimney-medical.svg", "svg+xml", 0x000000),
+        ("library", Path(__file__).parent / "default_icons" / "book.svg", "svg+xml", 0x000000),
+        ("placeOfWorship", Path(__file__).parent / "default_icons" / "place-of-worship.svg", "svg+xml", 0x000000),
+        ("petrol", Path(__file__).parent / "default_icons" / "gas-pump.svg", "svg+xml", 0x000000),
+        ("cinema", Path(__file__).parent / "default_icons" / "film.svg", "svg+xml", 0x000000),
+        ("bank", Path(__file__).parent / "default_icons" / "building-columns.svg", "svg+xml", 0x000000),
+        ("gym", Path(__file__).parent / "default_icons" / "dumbbell.svg", "svg+xml", 0x000000),
+        ("shelter", Path(__file__).parent / "default_icons" / "people-roof.svg", "svg+xml", 0x000000),
+        ("playground", Path(__file__).parent / "default_icons" / "baseball-bat-ball.svg", "svg+xml", 0x000000),
+        ("waterFeature", Path(__file__).parent / "default_icons" / "droplet.svg", "svg+xml", 0x000000),
+        ("transportExit", Path(__file__).parent / "default_icons" / "right-from-bracket.svg", "svg+xml", 0x000000),
+        ("attraction", Path(__file__).parent / "default_icons" / "camera.svg", "svg+xml", 0x000000),
         ("airport", Path(__file__).parent / "default_icons" / "plane.svg", "svg+xml", 0x1F3D7A),
     ):
         result = re.search(r'viewBox="0 0 ([^ ]*) ([^ ]*?)"', image_path.read_text())
+        if result is None:
+            raise ValueError(image_path)
         width = int(result.group(1))
         height = int(result.group(2))
-        colour = Colour.from_hex(colour_hex or 0x000000)
+        colour = Colour.from_hex(colour_hex)
         types.append(
             ComponentType(
                 name=name,

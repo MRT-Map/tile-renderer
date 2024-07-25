@@ -43,9 +43,10 @@ path = "src/tile_renderer/__about__.py"
 [tool.hatch.envs.types]
 extra-dependencies = [
   "mypy>=1.0.0",
+  "types-shapely"
 ]
 [tool.hatch.envs.types.scripts]
-check = "mypy --install-types --non-interactive {args:src/tile_renderer tests}  --enable-incomplete-feature=NewGenericSyntax"
+check = "mypy --install-types --non-interactive {args:src/tile_renderer tests}  --enable-incomplete-feature=NewGenericSyntax --check-untyped-defs"
 
 [tool.coverage.run]
 source_pkgs = ["tile_renderer", "tests"]
