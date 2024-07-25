@@ -1,4 +1,5 @@
 import functools
+import uuid
 from typing import Any, cast
 
 import rich
@@ -86,21 +87,36 @@ def _get_connections(
                 continue
             s: LineFore
             for coord in line:
+                id_ = uuid.uuid4()
+                mask = svg.Mask(
+                    id=str(id_),
+                    elements=[
+                        svg.Circle(
+                            cx=coord.x,
+                            cy=coord.y,
+                            r=size*0.75,
+                            fill="white",
+                        )
+                    ]
+                )
                 for j in (j for j, a in enumerate(c.nodes) if a == coord):
                     vector1 = c.nodes[j - 1] - coord if j != 0 else None
                     vector2 = c.nodes[j + 1] - coord if j != len(c.nodes) - 1 else None
                     coord1 = (
-                        (coord + vector1.unit() * min(size * 0.75, abs(vector1)))
+                        (coord + vector1.unit() * min(size, abs(vector1)))
                         if vector1 is not None and vector1 != Coord(0, 0)
                         else None
                     )
                     coord2 = (
-                        (coord + vector2.unit() * min(size * 0.75, abs(vector2)))
+                        (coord + vector2.unit() * min(size, abs(vector2)))
                         if vector2 is not None and vector2 != Coord(0, 0)
                         else None
                     )
                     coords = [a for a in (coord1, coord, coord2) if a is not None]
 
+                    if mask is not None:
+                        out.setdefault(i, []).append(mask)
+                        mask = None
                     out.setdefault(i, []).append(
                         svg.Polyline(
                             points=[cast(int, f"{c.x},{c.y}") for c in coords],
@@ -110,6 +126,7 @@ def _get_connections(
                             stroke_width=s.width,
                             stroke_linecap=None if s.unrounded else "round",
                             stroke_linejoin="round",
+                            mask=f"url(#{id_})"
                         )
                     )
     return sorted(out.items(), key=lambda a: -a[0])
