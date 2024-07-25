@@ -14,8 +14,6 @@ if TYPE_CHECKING:
 
 @dataclasses.dataclass
 class Vector[T: float | int]:
-    """Represents a 2-dimensional vector"""
-
     x: T
     y: T
 
@@ -23,7 +21,6 @@ class Vector[T: float | int]:
         return f"[{self.x}, {self.y}]"
 
     def as_tuple(self) -> tuple[T, T]:
-        """Represent the coordinates as a tuple"""
         return self.x, self.y
 
     def to_float(self) -> Vector[float]:
@@ -74,11 +71,9 @@ class Vector[T: float | int]:
         return s
 
     def unit(self) -> Vector[float]:
-        """Normalises the vector"""
         return self / abs(self)
 
     def dot(self, other: Self) -> T:
-        """Dot product"""
         return self.x * other.x + self.y * other.y
 
     def perp(self) -> Self:
@@ -88,19 +83,15 @@ class Vector[T: float | int]:
         return s
 
     def encode(self) -> tuple[T, T]:
-        """Encoding hook for msgspec"""
         return self.x, self.y
 
     @classmethod
     def decode(cls, obj: tuple[T, T]) -> Self:
-        """Decoding hook for msgspec"""
         return cls(*obj)
 
 
 @dataclasses.dataclass
 class Coord[T: float | int](Vector[T]):
-    """Represents a 2-dimensional point"""
-
     def __repr__(self) -> str:
         return f"{type(self).__name__}({self.x}, {self.y})"
 
@@ -112,7 +103,6 @@ class Coord[T: float | int](Vector[T]):
 
     @property
     def shapely(self) -> Point:
-        """Returns a Shapely point"""
         return Point(self.x, self.y)
 
 
@@ -121,8 +111,6 @@ ORIGIN: Coord = Coord(0, 0)
 
 @dataclasses.dataclass(frozen=True)
 class Bounds[T: float | int]:
-    """Represents a bounding box, like a rectangle"""
-
     x_max: T
     x_min: T
     y_max: T
@@ -139,8 +127,6 @@ class Bounds[T: float | int]:
 
 @dataclasses.dataclass(frozen=True)
 class Line[T: float | int]:
-    """Represents a 2-dimensional line"""
-
     coords: list[Coord[T]]
 
     def __repr__(self) -> str:
@@ -166,14 +152,10 @@ class Line[T: float | int]:
 
     @property
     def shapely(self) -> LineString:
-        """Returns a Shapely line string"""
         return LineString(a.as_tuple() for a in self.coords)
 
     @functools.cached_property
     def bounds(self) -> Bounds[float]:
-        """
-        Find the minimum and maximum x/y values in a list of coords.
-        """
         return Bounds(
             x_max=max(c.x for c in self.coords),
             x_min=min(c.x for c in self.coords),
@@ -182,7 +164,6 @@ class Line[T: float | int]:
         )
 
     def parallel_offset(self, distance: float) -> Self | Line[float]:
-        """Calculates a line that is the parallel offset of this line"""
         if distance == 0:
             return self
         return Line(
@@ -191,7 +172,6 @@ class Line[T: float | int]:
 
     @property
     def point_on_surface(self) -> Coord[float]:
-        """Finds the visual center"""
         point = self.shapely.centroid
         if not Polygon(self.shapely).contains(point):
             point = self.shapely.point_on_surface()
@@ -213,25 +193,20 @@ class Line[T: float | int]:
         return out
 
     def encode(self) -> list[tuple[T, T]]:
-        """Encoding hook for msgspec"""
         return [c.encode() for c in self.coords]
 
     @classmethod
     def decode(cls, obj: list[tuple[T, T]]) -> Self:
-        """Decoding hook for msgspec"""
         return cls([Coord.decode(c) for c in obj])
 
 
 @dataclasses.dataclass(frozen=True)
 class TileCoord:
-    """Represents a tile coordinate in the form ``(z, x, y)``."""
-
     z: int
-    """Represents zoom"""
+
     x: int
-    """Represents x-coordinate"""
+
     y: int
-    """Represents y-coordinate"""
 
     def __str__(self) -> str:
         return f"{self.z}, {self.x}, {self.y}"

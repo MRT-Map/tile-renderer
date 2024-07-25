@@ -9,13 +9,6 @@ def pla1to2(
     old_comps: dict,
     old_nodes: dict,
 ) -> list[Pla2File]:
-    """
-    Converts PLA1 to PLA2
-
-    :param old_comps: The components JSON of PLA1
-    :param old_nodes: The nodes JSON of PLA1
-    """
-
     def get_coord(node: str) -> Coord:
         for node_name, node_obj in old_nodes.items():
             if node == node_name:

@@ -17,30 +17,26 @@ if TYPE_CHECKING:
 
 @dataclass_transform()
 class Component(Struct):
-    """A component to be rendered"""
-
     namespace: str
-    """The namespace that the coordinate belongs to"""
+
     id: str
-    """The ID of the component"""
+
     display_name: str
-    """This will appear on the map itself, if the component type's style has a Text layer"""
+
     description: str
-    """The description of the component"""
+
     type: str
-    """The component type of the map"""
+
     layer: float
-    """The layer of the component. Higher numbers mean further in front"""
+
     nodes: Line[int]
-    """The nodes of the component"""
+
     tags: list[str]
-    """The tags of the component"""
+
     attrs: dict | None = None
-    """Additional attributes of the component, will probably be used in newer versions"""
 
     @property
     def fid(self) -> str:
-        """The full ID of the component (<namespace>-<id>)"""
         return f"{self.namespace}-{self.id}"
 
     def encode(self) -> _SerComponent:
@@ -90,27 +86,18 @@ _msgpack_encoder = msgspec.msgpack.Encoder()
 
 @dataclass_transform()
 class Pla2File(Struct):
-    """Represents a PLA2 file"""
-
     namespace: str
-    """The namespace of the file, all components included belong to this namespace"""
+
     components: list[Component]
-    """The components in the file"""
 
     @classmethod
     def from_file(cls, file: Path) -> Self:
-        """
-        Load a PLA2 file from a path, can be either in JSON or MessagePack format
-        """
         if file.suffix == ".msgpack":
             return cls.from_msgpack(file)
         return cls.from_json(file)
 
     @classmethod
     def from_json(cls, file: Path) -> Self:
-        """
-        Load a PLA2 file, must be in JSON
-        """
         with file.open("rb") as f:
             b = f.read()
         return cls(
@@ -120,9 +107,6 @@ class Pla2File(Struct):
 
     @classmethod
     def from_msgpack(cls, file: Path) -> Self:
-        """
-        Load a PLA2 file, must be in MessagePack
-        """
         with file.open("rb") as f:
             b = f.read()
         return cls(
@@ -131,16 +115,10 @@ class Pla2File(Struct):
         )
 
     def save_json(self, directory: Path) -> None:
-        """
-        Save the PLA2 file in JSON format to a directory
-        """
         with (directory / f"{self.namespace}.pla2.json").open("wb+") as f:
             f.write(_json_encoder.encode([c.encode() for c in self.components]))
 
     def save_msgpack(self, directory: Path) -> None:
-        """
-        Save the PLA2 file in MessagePack format to a directory
-        """
         with (directory / f"{self.namespace}.pla2.msgpack").open("wb+") as f:
             f.write(_msgpack_encoder.encode([c.encode() for c in self.components]))
 
@@ -163,5 +141,4 @@ class Pla2File(Struct):
 
     @property
     def ids(self) -> list[str]:
-        """A list of IDs that all the components have"""
         return [comp.fid for comp in self.components]

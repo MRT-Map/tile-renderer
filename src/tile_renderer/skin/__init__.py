@@ -43,42 +43,27 @@ class Skin(Struct):
 
     @classmethod
     def from_file(cls, file: Path) -> Self:
-        """
-        Load a skin file from a path, can be either in JSON or MessagePack format
-        """
         if file.suffix == ".msgpack":
             return cls.from_msgpack(file)
         return cls.from_json(file)
 
     @classmethod
     def from_json(cls, file: Path) -> Self:
-        """
-        Load a skin file, must be in JSON
-        """
         with file.open("rb") as f:
             b = f.read()
         return _json_decoder.decode(b).decode()
 
     @classmethod
     def from_msgpack(cls, file: Path) -> Self:
-        """
-        Load a skin file, must be in MessagePack
-        """
         with file.open("rb") as f:
             b = f.read()
         return _msgpack_decoder.decode(b).decode()
 
     def save_json(self, directory: Path) -> None:
-        """
-        Save the skin file in JSON format to a directory
-        """
         with (directory / f"{self.name}.skin.json").open("wb+") as f:
             f.write(_json_encoder.encode(self.encode()))
 
     def save_msgpack(self, directory: Path) -> None:
-        """
-        Save the skin file in MessagePack format to a directory
-        """
         with (directory / f"{self.name}.skin.msgpack").open("wb+") as f:
             f.write(_msgpack_encoder.encode(self.encode()))
 
