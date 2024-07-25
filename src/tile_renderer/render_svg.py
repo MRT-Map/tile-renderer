@@ -19,14 +19,14 @@ def render_svg(components: list[Component], skin: Skin, zoom: int) -> svg.SVG:
     styling = _get_styling(components, skin, zoom)
     styling = _sort_styling(styling, skin)
     text_list = []
-    connection_list = []
+    junction_list = []
     out = svg.SVG(
         elements=[
-            s.render(c, zoom, skin, text_list, connection_list, i)
+            s.render(c, zoom, skin, text_list, junction_list, i)
             for i, (c, _, s, _) in track(enumerate(styling), "[green]Rendering SVG", total=len(styling))
         ]
     )
-    for i, elements in _get_connections(connection_list, styling):
+    for i, elements in _get_junctions(junction_list, styling):
         for element in elements:
             out.elements.insert(i + 1, element)
     out.elements.extend(_filter_text_list(text_list))
@@ -76,12 +76,12 @@ def _sort_styling(styling: list[_StylingTuple], skin: Skin) -> list[_StylingTupl
     return sorted(styling, key=functools.cmp_to_key(cast(Any, sort_fn)))
 
 
-def _get_connections(
-    connection_list: list[tuple[int, Line[int], int, str]],
+def _get_junctions(
+    junction_list: list[tuple[int, Line[int], int, str]],
     styling: list[_StylingTuple],
 ) -> list[tuple[int, list[svg.Element]]]:
     out: dict[int, list[svg.Element]] = {}
-    for i, line, size, fid in track(connection_list, "[green]Calculating road joint connections"):
+    for i, line, size, fid in track(junction_list, "[green]Calculating road joint junctions"):
         for c, _, s, _ in styling[:i]:
             if s.__class__ is not LineFore or c.fid == fid:
                 continue
