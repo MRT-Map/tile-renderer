@@ -3,7 +3,6 @@ import tempfile
 from pathlib import Path
 
 import requests
-import rich
 
 from tile_renderer._logger import log
 from tile_renderer.colour import Colour

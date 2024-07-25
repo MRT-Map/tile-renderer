@@ -1,6 +1,5 @@
 import sys
 
-import rich
 from rich.console import Console
 from rich.progress import track
 

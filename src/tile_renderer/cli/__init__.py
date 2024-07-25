@@ -7,11 +7,11 @@ import click
 import tile_renderer.pla1to2
 import tile_renderer.render_svg
 import tile_renderer.render_tiles
+import tile_renderer.skin.generate_default
 from tile_renderer.__about__ import __version__
 from tile_renderer.coord import Coord
 from tile_renderer.pla2 import Pla2File
 from tile_renderer.skin import Skin
-import tile_renderer.skin.generate_default
 
 
 @click.group(context_settings={"help_option_names": ["-h", "--help"]})

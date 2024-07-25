@@ -4,7 +4,6 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, Self, dataclass_transform
 
 import msgspec
-import rich
 from msgspec import Struct, field
 
 from tile_renderer.colour import Colour

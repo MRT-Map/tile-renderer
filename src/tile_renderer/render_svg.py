@@ -4,7 +4,6 @@ import sys
 import uuid
 from typing import Any, cast
 
-import rich
 import svg
 from rich.console import Console
 from rich.progress import Progress, track

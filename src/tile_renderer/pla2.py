@@ -5,9 +5,9 @@ from collections import Counter
 from typing import TYPE_CHECKING, Self, dataclass_transform
 
 import msgspec
-import rich
 from msgspec import Struct
 
+from tile_renderer._logger import log
 from tile_renderer.coord import Line, TileCoord
 
 if TYPE_CHECKING:
@@ -125,7 +125,7 @@ class Pla2File(Struct):
     def __post_init__(self):
         count = {k: v for k, v in Counter(component.fid for component in self.components).items() if v >= 2}  # noqa: PLR2004
         if count:
-            log.warn(f"IDs {', '.join(f'`{id_}`' for id_ in count)} are duplicated")
+            log.warning(f"IDs {', '.join(f'`{id_}`' for id_ in count)} are duplicated")
 
     def __getitem__(self, id_: str) -> Component:
         return next(comp for comp in self.components if comp.fid == id_)

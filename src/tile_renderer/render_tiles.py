@@ -8,7 +8,6 @@ import sys
 import tempfile
 from pathlib import Path
 
-import rich
 from rich.console import Console
 from rich.progress import Progress
 
