@@ -1,5 +1,5 @@
 import functools
-from typing import cast
+from typing import Any, cast
 
 import rich
 import svg
@@ -7,7 +7,7 @@ from rich.progress import Progress, track
 from shapely import Polygon
 from shapely.prepared import prep
 
-from tile_renderer.coord import Line, Coord
+from tile_renderer.coord import Coord, Line
 from tile_renderer.pla2 import Component
 from tile_renderer.skin import ComponentStyle, ComponentType, LineFore, Skin
 
@@ -39,7 +39,8 @@ def _get_styling(components: list[Component], skin: Skin, zoom: int) -> list[_St
         component_type = skin.get_type_by_name(component.type)
         if component_type is None:
             rich.print(
-                f"[yellow]Skipping render of {component.type} {component.fid} {f'({component.display_name})' if component.display_name else ''}"
+                f"[yellow]Skipping render of {component.type} {component.fid} "
+                f"{f'({component.display_name})' if component.display_name else ''}"
             )
             continue
         styling = component_type.get_styling_by_zoom(zoom)
@@ -71,7 +72,7 @@ def _sort_styling(styling: list[_StylingTuple], skin: Skin) -> list[_StylingTupl
 
         return i1 - i2
 
-    return sorted(styling, key=functools.cmp_to_key(cast(any, sort_fn)))
+    return sorted(styling, key=functools.cmp_to_key(cast(Any, sort_fn)))
 
 
 def _get_connections(

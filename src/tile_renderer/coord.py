@@ -32,7 +32,7 @@ class Vector[T: float | int]:
     def to_int(self) -> Vector[int]:
         return Vector(round(self.x), round(self.y))
 
-    def __add__(self, other: T | Self) -> Self:
+    def __add__(self, other: Vector | T) -> Self:
         s = copy(self)
         if isinstance(other, Vector):
             s.x += other.x
@@ -42,7 +42,7 @@ class Vector[T: float | int]:
             s.y += other
         return s
 
-    def __sub__(self, other: T | Self) -> Self:
+    def __sub__(self, other: Vector | Coord | Self) -> Self:
         s = copy(self)
         if isinstance(other, Vector):
             s.x -= other.x
@@ -58,7 +58,7 @@ class Vector[T: float | int]:
         s.y *= other
         return s
 
-    def __truediv__(self, other: T) -> Self:
+    def __truediv__(self, other: T) -> Vector[float]:
         s = copy(self)
         s.x /= other
         s.y /= other
@@ -181,7 +181,7 @@ class Line[T: float | int]:
             y_min=min(c.y for c in self.coords),
         )
 
-    def parallel_offset(self, distance: float) -> Line[float]:
+    def parallel_offset(self, distance: float) -> Self | Line[float]:
         """Calculates a line that is the parallel offset of this line"""
         if distance == 0:
             return self
@@ -197,7 +197,7 @@ class Line[T: float | int]:
             point = self.shapely.point_on_surface()
         return Coord(point.x, point.y)
 
-    def dash(self, dash_length: float, shift: bool = False) -> list[Self] | None:  # noqa: FBT001 FBT002
+    def dash(self, dash_length: float, shift: bool = False) -> list[Line[T]] | None:  # noqa: FBT001 FBT002
         if dash_length == 0:
             return None
         coords = self.shapely

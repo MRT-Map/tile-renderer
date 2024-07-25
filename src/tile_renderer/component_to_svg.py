@@ -122,8 +122,8 @@ def area_fill_svg(
     s: AreaFill,
     component: Component,
     _zoom: int,
-    _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
+    _text_list: list[tuple[Polygon, svg.Element]],
     _connection_list: list[tuple[int, Line[int], int, str]],
     _i: int,
 ) -> svg.Element:
@@ -141,8 +141,8 @@ def area_centre_image_svg(
     s: AreaCentreImage,
     component: Component,
     _zoom: int,
-    _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
+    _text_list: list[tuple[Polygon, svg.Element]],
     _connection_list: list[tuple[int, Line[int], int, str]],
     _i: int,
 ) -> svg.Element:
@@ -215,7 +215,7 @@ def line_text_svg(
                             id=id_,
                         ),
                         svg.Text(
-                            fill=s.colour,
+                            fill=str(s.colour),
                             font_size=s.size,
                             stroke="#dddddd",
                             stroke_width=0.025 * s.size,
@@ -235,8 +235,8 @@ def line_back_fore_svg(
     s: LineBack | LineFore,
     component: Component,
     _zoom: int,
-    _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
+    _text_list: list[tuple[Polygon, svg.Element]],
     connection_list: list[tuple[int, Line[int], int, str]],
     i: int,
 ) -> svg.Element:
@@ -296,8 +296,8 @@ def point_square_svg(
     s: PointSquare,
     component: Component,
     _zoom: int,
-    _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
+    _text_list: list[tuple[Polygon, svg.Element]],
     _connection_list: list[tuple[int, Line[int], int, str]],
     _i: int,
 ) -> svg.Element:
@@ -317,8 +317,8 @@ def point_image_svg(
     s: PointImage,
     component: Component,
     _zoom: int,
-    _text_list: list[tuple[Polygon, svg.Element]],
     _skin: Skin,
+    _text_list: list[tuple[Polygon, svg.Element]],
     _connection_list: list[tuple[int, Line[int], int, str]],
     _i: int,
 ) -> svg.Element:
