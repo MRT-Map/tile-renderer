@@ -1,12 +1,14 @@
+from __future__ import annotations
+
 import base64
+import dataclasses
 import uuid
-from typing import cast
+from typing import TYPE_CHECKING, cast
 
 import svg
 from shapely import Polygon
 
 from tile_renderer.coord import Coord, Line
-from tile_renderer.pla2 import Component
 from tile_renderer.skin import (
     AreaBorderText,
     AreaCentreImage,
@@ -21,14 +23,35 @@ from tile_renderer.skin import (
     Skin,
 )
 
+if TYPE_CHECKING:
+    from tile_renderer.pla2 import Component
+
+
+@dataclasses.dataclass
+class _Lists:
+    @dataclasses.dataclass
+    class Text:
+        shape: Polygon
+        text: svg.Element
+
+    @dataclasses.dataclass
+    class Junction:
+        i: int
+        line: Line[int]
+        size: int
+        fid: str
+
+    text: list[_Lists.Text] = dataclasses.field(default_factory=list)
+    junction: list[_Lists.Junction] = dataclasses.field(default_factory=list)
+    arrow: list[svg.Polygon] = dataclasses.field(default_factory=list)
+
 
 def area_border_text_svg(
     s: AreaBorderText,
     component: Component,
     zoom: int,
     skin: Skin,
-    text_list: list[tuple[Polygon, svg.Element]],
-    _junction_list: list[tuple[int, Line[int], int, str]],
+    lists: _Lists,
     _i: int,
 ) -> svg.Element:
     if (not component.display_name) or (
@@ -48,8 +71,8 @@ def area_border_text_svg(
         if dash[0].x > dash[-1].x:
             dash.coords.reverse()
         id_ = str(uuid.uuid4())
-        text_list.append(
-            (
+        lists.text.append(
+            _Lists.Text(
                 Polygon(
                     a.as_tuple()
                     for a in (dash.parallel_offset(s.size / 2).coords + dash.parallel_offset(-s.size / 2).coords[::-1])
@@ -85,13 +108,12 @@ def area_centre_text_svg(
     component: Component,
     _zoom: int,
     skin: Skin,
-    text_list: list[tuple[Polygon, svg.Element]],
-    _junction_list: list[tuple[int, Line[int], int, str]],
+    lists: _Lists,
     _i: int,
 ) -> svg.Element:
     centroid = component.nodes.point_on_surface
-    text_list.append(
-        (
+    lists.text.append(
+        _Lists.Text(
             Polygon(
                 a.as_tuple()
                 for a in (
@@ -123,8 +145,7 @@ def area_fill_svg(
     component: Component,
     _zoom: int,
     _skin: Skin,
-    _text_list: list[tuple[Polygon, svg.Element]],
-    _junction_list: list[tuple[int, Line[int], int, str]],
+    _lists: _Lists,
     _i: int,
 ) -> svg.Element:
     return svg.Polygon(
@@ -142,8 +163,7 @@ def area_centre_image_svg(
     component: Component,
     _zoom: int,
     _skin: Skin,
-    _text_list: list[tuple[Polygon, svg.Element]],
-    _junction_list: list[tuple[int, Line[int], int, str]],
+    _lists: _Lists,
     _i: int,
 ) -> svg.Element:
     centroid = component.nodes.point_on_surface
@@ -161,11 +181,9 @@ def line_text_svg(
     component: Component,
     zoom: int,
     skin: Skin,
-    text_list: list[tuple[Polygon, svg.Element]],
-    _junction_list: list[tuple[int, Line[int], int, str]],
+    lists: _Lists,
     _i: int,
 ) -> svg.Element:
-    out = []
     if "oneWay" in component.tags:
         for dash in component.nodes.parallel_offset(s.offset).dash(
             round(s.size * len(component.display_name or "-" * 8)), shift=True
@@ -174,9 +192,9 @@ def line_text_svg(
             arrow_centre = dash.shapely.interpolate(0.5, normalized=True)
             arrow_centre = Coord(arrow_centre.x, arrow_centre.y)
             point1 = arrow_centre + vector * (s.size / 2)
-            point2 = arrow_centre - vector * (s.size / 2) + vector.perp() * (s.size / 2)
-            point3 = arrow_centre - vector * (s.size / 2) - vector.perp() * (s.size / 2)
-            out.append(
+            point2 = arrow_centre - vector * (s.size / 2) + vector.perp() * (s.size / 3)
+            point3 = arrow_centre - vector * (s.size / 2) - vector.perp() * (s.size / 3)
+            lists.arrow.append(
                 svg.Polygon(
                     points=[cast(int, f"{c.x},{c.y}") for c in (point1, point2, point3)],
                     fill=str(s.arrow_colour)
@@ -190,7 +208,7 @@ def line_text_svg(
     if (not component.display_name) or (
         skin.prune_small_text is not None and skin.prune_small_text >= s.size / 2**zoom
     ):
-        return svg.G(elements=out)
+        return svg.G()
     dashes = component.nodes.dash(round(s.size * len(component.display_name))) or []
     for dash in dashes:
         if dash.shapely.length < 0.9 * s.size * len(component.display_name):
@@ -199,8 +217,8 @@ def line_text_svg(
         if dash[0].x > dash[-1].x:
             dash.coords.reverse()
         id_ = str(uuid.uuid4())
-        text_list.append(
-            (
+        lists.text.append(
+            _Lists.Text(
                 Polygon(
                     a.as_tuple()
                     for a in (dash.parallel_offset(s.size / 2).coords + dash.parallel_offset(-s.size / 2).coords[::-1])
@@ -228,7 +246,7 @@ def line_text_svg(
                 ),
             )
         )
-    return svg.G(elements=out)
+    return svg.G()
 
 
 def line_back_fore_svg(
@@ -236,12 +254,11 @@ def line_back_fore_svg(
     component: Component,
     _zoom: int,
     _skin: Skin,
-    _text_list: list[tuple[Polygon, svg.Element]],
-    junction_list: list[tuple[int, Line[int], int, str]],
+    lists: _Lists,
     i: int,
 ) -> svg.Element:
     if s.__class__ is LineBack:
-        junction_list.append((i, component.nodes, s.width, component.fid))
+        lists.junction.append(_Lists.Junction(i, component.nodes, s.width, component.fid))
     return svg.Polyline(
         points=[cast(int, f"{c.x},{c.y}") for c in component.nodes],
         stroke=None if s.colour is None else str(s.colour),
@@ -259,13 +276,12 @@ def point_text_svg(
     component: Component,
     _zoom: int,
     skin: Skin,
-    text_list: list[tuple[Polygon, svg.Element]],
-    _junction_list: list[tuple[int, Line[int], int, str]],
+    lists: _Lists,
     _i: int,
 ) -> svg.Element:
     coordinate = component.nodes[0]
-    text_list.append(
-        (
+    lists.text.append(
+        _Lists.Text(
             Polygon(
                 a.as_tuple()
                 for a in (
@@ -297,8 +313,7 @@ def point_square_svg(
     component: Component,
     _zoom: int,
     _skin: Skin,
-    _text_list: list[tuple[Polygon, svg.Element]],
-    _junction_list: list[tuple[int, Line[int], int, str]],
+    _lists: _Lists,
     _i: int,
 ) -> svg.Element:
     coordinate = component.nodes[0]
@@ -318,8 +333,7 @@ def point_image_svg(
     component: Component,
     _zoom: int,
     _skin: Skin,
-    _text_list: list[tuple[Polygon, svg.Element]],
-    _junction_list: list[tuple[int, Line[int], int, str]],
+    _lists: _Lists,
     _i: int,
 ) -> svg.Element:
     coordinate = component.nodes[0]
