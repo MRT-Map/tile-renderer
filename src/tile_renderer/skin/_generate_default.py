@@ -784,7 +784,6 @@ def main():
                 },
             )
         )
-    # TODO: airport marker
 
     for name, colour in (
         ("busStop", Colour.from_hex(0x00AAFF)),
@@ -826,7 +825,7 @@ def main():
                     ],
                     str(zoom) + "-" + str(zoom + 3): [
                         AreaFill(outline=colour, outline_width=0.5 / (1.5 / 2) ** zoom),
-                        AreaCentreText(colour=colour.darkened(), size=7.5),
+                        AreaCentreText(colour=colour.darkened(), size=12.5, zoom_multiplier=1.0),
                         AreaBorderText(
                             colour=colour.darkened(), offset=2.0 / (1.5 / 2) ** zoom, size=4.0 / (1.5 / 2) ** zoom
                         ),
