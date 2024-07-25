@@ -62,7 +62,7 @@ class Component(Struct):
 
 @dataclass_transform()
 class _SerComponent(Component):
-    nodes: list[tuple[int, int] | tuple[float, float]]  # type: ignore[assignment]
+    nodes: list[tuple[int | float, int | float]]  # type: ignore[assignment]
 
     def decode(self) -> Component:
         return Component(

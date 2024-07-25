@@ -1,0 +1,18 @@
+on:
+  push:
+    branches: [ "v5" ]
+  workflow_dispatch:
+
+jobs:
+  pages:
+    runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: pypa/hatch@install
+    - run: hatch run docs:build
+    - name: Deploy
+      uses: peaceiris/actions-gh-pages@v4
+      with:
+        github_token: ${{ secrets.GITHUB_TOKEN }}
+        publish_dir: ./docs/_build/html/

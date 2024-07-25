@@ -2,8 +2,7 @@ from __future__ import annotations
 
 import dataclasses
 import functools
-from copy import copy
-from typing import TYPE_CHECKING, Self, no_type_check, cast, overload
+from typing import TYPE_CHECKING, Self, cast, overload
 
 from shapely import LineString, Point, Polygon
 from shapely.ops import substring
@@ -42,7 +41,7 @@ class Vector[T: float | int]:
         pass
 
     @overload
-    def __add__(self: Vector[float], other: int | float) -> Vector[float]:
+    def __add__(self: Vector[float], other: float) -> Vector[float]:
         pass
 
     def __add__(self, other):
@@ -63,7 +62,7 @@ class Vector[T: float | int]:
         pass
 
     @overload
-    def __sub__(self: Vector[float], other: int | float) -> Vector[float]:
+    def __sub__(self: Vector[float], other: float) -> Vector[float]:
         pass
 
     def __sub__(self, other):
@@ -76,13 +75,13 @@ class Vector[T: float | int]:
         pass
 
     @overload
-    def __mul__(self: Vector[float], other: int | float) -> Vector[float]:
+    def __mul__(self: Vector[float], other: float) -> Vector[float]:
         pass
 
     def __mul__(self, other):
         return cast(type, type(self))(self.x * other, self.y * other)
 
-    def __truediv__(self, other: int | float) -> Vector[float]:
+    def __truediv__(self, other: float) -> Vector[float]:
         return cast(type, type(self))(self.x / other, self.y / other)
 
     def __abs__(self) -> float:

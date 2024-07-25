@@ -40,6 +40,24 @@ tile-renderer = "tile_renderer.cli:cli"
 [tool.hatch.version]
 path = "src/tile_renderer/__about__.py"
 
+[tool.hatch.envs.docs]
+extra-dependencies = [
+  "sphinx",
+  "sphinxcontrib-programoutput",
+  "sphinx-codeautolink",
+  "sphinx_rtd_theme",
+  "sphinx-jsonschema"
+]
+[tool.hatch.envs.docs.scripts]
+build = """
+  cd docs &&
+  (mkdir _build || true) &&
+  tile-renderer schema pla2 > _build/pla2.json &&
+  tile-renderer schema skin > _build/skin.json &&
+  make html &&
+  cd ..
+"""
+
 [tool.hatch.envs.types]
 extra-dependencies = [
   "mypy>=1.0.0",
@@ -58,7 +76,7 @@ omit = [
 
 [tool.coverage.paths]
 tile_renderer = ["src/tile_renderer", "*/tile-renderer/src/tile_renderer"]
-tests = ["tests", "*/tile-renderer/tests"]
+tests = ["tests", "*/tile_renderer/tests"]
 
 [tool.coverage.report]
 exclude_lines = [

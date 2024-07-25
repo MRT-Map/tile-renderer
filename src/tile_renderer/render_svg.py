@@ -7,8 +7,7 @@ from typing import Any, cast
 import svg
 from rich.console import Console
 from rich.progress import Progress, track
-from shapely import Polygon
-from shapely.prepared import prep, PreparedGeometry
+from shapely.prepared import PreparedGeometry, prep
 
 from tile_renderer._logger import log
 from tile_renderer.component_to_svg import _Lists

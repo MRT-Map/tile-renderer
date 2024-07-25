@@ -1,8 +1,10 @@
 import json
 import os
 from pathlib import Path
+from typing import Literal
 
 import click
+import msgspec.json
 
 import tile_renderer.pla1to2
 import tile_renderer.render_svg
@@ -10,8 +12,8 @@ import tile_renderer.render_tiles
 import tile_renderer.skin.generate_default
 from tile_renderer.__about__ import __version__
 from tile_renderer.coord import Coord
-from tile_renderer.pla2 import Pla2File
-from tile_renderer.skin import Skin
+from tile_renderer.pla2 import Pla2File, _SerComponent
+from tile_renderer.skin import Skin, _SerSkin
 
 
 @click.group(context_settings={"help_option_names": ["-h", "--help"]})
@@ -108,3 +110,25 @@ def pla1to2(*, comps: Path, nodes: Path, out_dir: Path, json_format: bool):
 @cli.command(help="generate the default skin")
 def generate_default_skin():
     tile_renderer.skin.generate_default.main()
+
+
+@cli.command(help="print JSON schemas for a skin or PLA2 file")
+@click.argument("what", type=click.Choice(["skin", "pla2"], case_sensitive=False))
+@click.option("-o", "--out-file", type=Path, default=None, show_default=True, help="")
+def schema(*, what: Literal["skin", "pla2"], out_file: Path | None):
+    s = msgspec.json.schema(list[_SerComponent] if what == "pla2" else _SerSkin)
+
+    def remove_ser(o):
+        if isinstance(o, dict):
+            return {remove_ser(k): remove_ser(v) for k, v in o.items()}
+        if isinstance(o, list):
+            return [remove_ser(i) for i in o]
+        if isinstance(o, str):
+            return o.replace("_Ser", "")
+        return o
+
+    s = remove_ser(s)
+    if out_file is None:
+        click.echo(msgspec.json.encode(s).decode())
+    else:
+        out_file.write_bytes(msgspec.json.encode(s))
