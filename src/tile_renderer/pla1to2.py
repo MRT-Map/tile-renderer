@@ -1,6 +1,10 @@
+import sys
+
 import rich
+from rich.console import Console
 from rich.progress import track
 
+from tile_renderer._logger import log
 from tile_renderer.coord import Coord, Line
 from tile_renderer.pla2 import Component, Pla2File
 
@@ -9,22 +13,22 @@ def pla1to2(
     old_comps: dict,
     old_nodes: dict,
 ) -> list[Pla2File]:
-    def get_coord(node: str) -> Coord:
+    def get_coord(node: str) -> Coord | None:
         for node_name, node_obj in old_nodes.items():
             if node == node_name:
                 return Coord(node_obj["x"], node_obj["y"])
-        msg = f"`{node}` is not found in node lists"
-        raise ValueError(msg)
+        log.error(f"`{node}` is not found in node lists")
+        return None
 
     comps: dict[str, list[Component]] = {}
-    for comp_name, comp in track(old_comps.items(), "Processing PLA 1 components"):
+    for comp_name, comp in track(old_comps.items(), "Processing PLA 1 components", console=Console(file=sys.stderr)):
         ns = comp_name.split("-")[0]
         id_ = comp_name.removeprefix(ns + "-")
         if "hollows" in comp:
-            rich.print(
-                f"[yellow]Hollow data found in `{comp_name}`, PLA 2 doesn't support hollows",
+            log.warn(
+                f"Hollow data found in `{comp_name}`, PLA 2 doesn't support hollows",
             )
-        nodes = Line([get_coord(n) for n in comp["nodes"]])
+        nodes = Line([a for a in (get_coord(n) for n in comp["nodes"]) if a is not None])
         comps.setdefault(ns, []).append(
             Component(
                 namespace=ns,

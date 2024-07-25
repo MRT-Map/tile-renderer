@@ -5,6 +5,7 @@ from pathlib import Path
 import requests
 import rich
 
+from tile_renderer._logger import log
 from tile_renderer.colour import Colour
 from tile_renderer.coord import Vector
 from tile_renderer.skin import (
@@ -48,7 +49,7 @@ TRANSPORT_BUILDING = Colour.from_hex(0x999966)
 
 # noinspection PyListCreation
 def main():
-    rich.print("[green]Generating skin")
+    log.info("Generating skin")
     types: list[ComponentType] = []
 
     for name, colour_hex in (

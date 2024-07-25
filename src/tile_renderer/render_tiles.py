@@ -4,12 +4,15 @@ import os
 import platform
 import re
 import subprocess
+import sys
 import tempfile
 from pathlib import Path
 
 import rich
+from rich.console import Console
 from rich.progress import Progress
 
+from tile_renderer._logger import log
 from tile_renderer.coord import ORIGIN, Coord, TileCoord
 from tile_renderer.pla2 import Component
 from tile_renderer.render_svg import render_svg
@@ -43,7 +46,7 @@ def render_tiles(
         multiprocessing.Pool(processes=processes) as pool,
         Progress() as progress,
     ):
-        task_id = progress.add_task("[green]Exporting to PNG", total=len(tiles))
+        task_id = progress.add_task("Exporting to PNG", total=len(tiles), console=Console(file=sys.stderr))
         doc = re.sub(
             r'<svg width=".*?" height=".*?"',
             f'<svg viewBox="<|min_x|> <|min_y|> {max_zoom_range*2**zoom} {max_zoom_range*2**zoom}"',
@@ -73,7 +76,7 @@ def render_tiles(
             images[tile] = b
             progress.advance(task_id)
             if i % 10 == 0:
-                progress.console.print(f"{i}/{len(tiles)}")
+                log.debug(f"{i}/{len(tiles)}")
     return images
 
 
@@ -100,7 +103,7 @@ def _simplify_svg(doc: str, font_dir: Path, tile_size: int) -> str:
     )
     out, err = p.communicate(input=doc.encode())
     if err:
-        rich.print("[yellow]" + err.decode())
+        log.warn("" + err.decode())
     return out.decode()
 
 
@@ -141,5 +144,5 @@ def _export_tile(
     )
     out, err = p.communicate(input=doc.encode())
     if err:
-        rich.print("[yellow]" + err.decode())
+        log.warn("" + err.decode())
     return tile, out

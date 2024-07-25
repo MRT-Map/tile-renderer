@@ -1,13 +1,16 @@
 import dataclasses
 import functools
+import sys
 import uuid
 from typing import Any, cast
 
 import rich
 import svg
+from rich.console import Console
 from rich.progress import Progress, track
 from shapely.prepared import prep
 
+from tile_renderer._logger import log
 from tile_renderer.component_to_svg import _Lists
 from tile_renderer.coord import Coord
 from tile_renderer.pla2 import Component
@@ -29,7 +32,9 @@ def render_svg(components: list[Component], skin: Skin, zoom: int) -> svg.SVG:
     out = svg.SVG(
         elements=[
             st.s.render(st.c, zoom, skin, lists, i)
-            for i, st in track(enumerate(styling), "[green]Rendering SVG", total=len(styling))
+            for i, st in track(
+                enumerate(styling), "Rendering SVG", total=len(styling), console=Console(file=sys.stderr)
+            )
         ]
     )
     for i, elements in _get_junctions(lists.junction, styling):
@@ -43,11 +48,11 @@ def render_svg(components: list[Component], skin: Skin, zoom: int) -> svg.SVG:
 
 def _get_styling(components: list[Component], skin: Skin, zoom: int) -> list[_Styling]:
     out = []
-    for component in track(components, "[green]Getting styling"):
+    for component in track(components, "Getting styling", console=Console(file=sys.stderr)):
         component_type = skin.get_type_by_name(component.type)
         if component_type is None:
-            rich.print(
-                f"[yellow]Skipping render of {component.type} {component.fid} "
+            log.warn(
+                f"Skipping render of {component.type} {component.fid} "
                 f"{f'({component.display_name})' if component.display_name else ''}"
             )
             continue
@@ -60,7 +65,7 @@ def _get_styling(components: list[Component], skin: Skin, zoom: int) -> list[_St
 
 
 def _sort_styling(styling: list[_Styling], skin: Skin) -> list[_Styling]:
-    rich.print("[green]Sorting styling")
+    log.info("Sorting styling")
 
     def sort_fn(
         s1: _Styling,
@@ -85,7 +90,7 @@ def _get_junctions(
     styling: list[_Styling],
 ) -> list[tuple[int, list[svg.Element]]]:
     out: dict[int, list[svg.Element]] = {}
-    for jt in track(junction_list, "[green]Calculating road joint junctions"):
+    for jt in track(junction_list, "Calculating road joint junctions", console=Console(file=sys.stderr)):
         for st in styling[: jt.i]:
             if st.s.__class__ is not LineFore or st.c.fid == jt.fid:
                 continue
@@ -139,7 +144,7 @@ def _get_junctions(
 def _filter_text_list(text_list: list[_Lists.Text]) -> list[svg.Element]:
     out = []
     with Progress() as progress:
-        task_id = progress.add_task("[green]Filtering text", total=len(text_list) ** 2 / 2)
+        task_id = progress.add_task("Filtering text", total=len(text_list) ** 2 / 2, console=Console(file=sys.stderr))
         for i, t in enumerate(text_list[::-1]):
             if not any(other.intersects(t.shape) for other, _ in out):
                 out.append((prep(t.shape), t.text))
