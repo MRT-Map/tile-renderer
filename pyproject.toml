@@ -35,7 +35,7 @@ Issues = "https://github.com/MRT-Map/tile-renderer/issues"
 Source = "https://github.com/MRT-Map/tile-renderer"
 
 [project.scripts]
-tile-renderer = "tile_renderer.cli:tile_renderer"
+tile-renderer = "tile_renderer.cli:cli"
 
 [tool.hatch.version]
 path = "src/tile_renderer/__about__.py"

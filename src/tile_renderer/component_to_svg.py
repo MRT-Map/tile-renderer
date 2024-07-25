@@ -209,11 +209,10 @@ def line_text_svg(
         skin.prune_small_text is not None and skin.prune_small_text >= s.size / 2**zoom
     ):
         return svg.G()
-    dashes = component.nodes.dash(round(s.size * len(component.display_name))) or []
+    dashes = component.nodes.parallel_offset(s.offset).dash(round(s.size * len(component.display_name))) or []
     for dash in dashes:
         if dash.shapely.length < 0.9 * s.size * len(component.display_name):
             continue
-        dash.parallel_offset(s.offset)
         if dash[0].x > dash[-1].x:
             dash.coords.reverse()
         id_ = str(uuid.uuid4())

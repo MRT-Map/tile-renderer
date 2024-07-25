@@ -35,8 +35,8 @@ def render_svg(components: list[Component], skin: Skin, zoom: int) -> svg.SVG:
     for i, elements in _get_junctions(lists.junction, styling):
         for element in elements:
             out.elements.insert(i + 1, element)
-    out.elements.extend(_filter_text_list(lists.text))
     out.elements.extend(lists.arrow)
+    out.elements.extend(_filter_text_list(lists.text))
     out.elements = [a for a in out.elements if a != svg.G()]
     return out
 
@@ -98,7 +98,7 @@ def _get_junctions(
                         svg.Circle(
                             cx=coord.x,
                             cy=coord.y,
-                            r=jt.size * 0.75,
+                            r=jt.size,
                             fill="white",
                         )
                     ],

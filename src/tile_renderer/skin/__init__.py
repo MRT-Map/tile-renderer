@@ -4,6 +4,7 @@ from pathlib import Path
 from typing import TYPE_CHECKING, Any, Literal, Self, dataclass_transform
 
 import msgspec
+import rich
 from msgspec import Struct, field
 
 from tile_renderer.colour import Colour
@@ -39,7 +40,12 @@ class Skin(Struct):
 
     @classmethod
     def default(cls) -> Self:
-        return cls.from_json(Path(__file__).parent / "default.skin.json")
+        path = Path(__file__).parent / "default.skin.json"
+        if not path.exists():
+            from tile_renderer.skin import generate_default
+
+            generate_default.main()
+        return cls.from_json(path)
 
     @classmethod
     def from_file(cls, file: Path) -> Self:

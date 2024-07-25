@@ -11,15 +11,16 @@ from tile_renderer.__about__ import __version__
 from tile_renderer.coord import Coord
 from tile_renderer.pla2 import Pla2File
 from tile_renderer.skin import Skin
+import tile_renderer.skin.generate_default
 
 
-@click.group(context_settings={"help_option_names": ["-h", "--help"]}, invoke_without_command=True)
+@click.group(context_settings={"help_option_names": ["-h", "--help"]})
 @click.version_option(version=__version__, prog_name="tile-renderer")
-def tile_renderer():
-    click.echo(click.get_current_context().get_help())
+def cli():
+    pass
 
 
-@tile_renderer.command(help="renders an SVG map from PLA2_FILES")
+@cli.command(help="renders an SVG map from PLA2_FILES")
 @click.argument(
     "pla2-files",
     nargs=-1,
@@ -41,7 +42,7 @@ def svg(*, pla2_files: tuple[Path, ...], skin: Path | None, zoom: int, out_file:
         out_file.write_text(str(out))
 
 
-@tile_renderer.command(help="renders PNG tiles from PLA2_FILES")
+@cli.command(help="renders PNG tiles from PLA2_FILES")
 @click.argument(
     "pla2-files",
     nargs=-1,
@@ -83,7 +84,7 @@ def tiles(
         (out_dir / f"{tile}.png").write_bytes(b)
 
 
-@tile_renderer.command(help="convert pla1-formatted COMPS and NODES file to pla2 format")
+@cli.command(help="convert pla1-formatted COMPS and NODES file to pla2 format")
 @click.argument(
     "comps",
     type=Path,
@@ -102,3 +103,8 @@ def pla1to2(*, comps: Path, nodes: Path, out_dir: Path, json_format: bool):
             result.save_json(out_dir)
         else:
             result.save_json(out_dir)
+
+
+@cli.command(help="generate the default skin")
+def generate_default_skin():
+    tile_renderer.skin.generate_default.main()

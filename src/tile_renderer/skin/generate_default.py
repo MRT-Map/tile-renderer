@@ -3,6 +3,7 @@ import tempfile
 from pathlib import Path
 
 import requests
+import rich
 
 from tile_renderer.colour import Colour
 from tile_renderer.coord import Vector
@@ -47,6 +48,7 @@ TRANSPORT_BUILDING = Colour.from_hex(0x999966)
 
 # noinspection PyListCreation
 def main():
+    rich.print("[green]Generating skin")
     types: list[ComponentType] = []
 
     for name, colour_hex in (
@@ -424,9 +426,7 @@ def main():
             styles={
                 "0-2": [
                     LineFore(colour=Colour.from_hex(0x808080), width=1.5, dash=[10.0, 5.0]),
-                    LineText(
-                        colour=Colour.from_hex(0x808080), arrow_colour=Colour.from_hex(0x808080), offset=3.2, size=3.2
-                    ),
+                    LineText(colour=Colour.from_hex(0x111111), arrow_colour=Colour.from_hex(0x111111), size=3.2),
                 ],
                 "3-6": [LineFore(colour=Colour.from_hex(0x808080), width=3.0, dash=[20.0, 10.0])],
             },
@@ -442,9 +442,8 @@ def main():
                 "0-2": [
                     LineFore(colour=Colour.from_hex(0x808080), width=3.2, dash=[10.0, 5.0], zoom_multiplier=2.0),
                     LineText(
-                        colour=Colour.from_hex(0x808080),
-                        arrow_colour=Colour.from_hex(0x808080),
-                        offset=3.2,
+                        colour=Colour.from_hex(0x111111),
+                        arrow_colour=Colour.from_hex(0x111111),
                         size=3.2,
                         zoom_multiplier=2.0,
                     ),
@@ -568,9 +567,8 @@ def main():
                 "0-2": [
                     LineFore(colour=Colour.from_hex(0x808080), width=1.5, zoom_multiplier=2.0),
                     LineText(
-                        colour=Colour.from_hex(0x808080),
-                        arrow_colour=Colour.from_hex(0x808080),
-                        offset=3.2,
+                        colour=Colour.from_hex(0x111111),
+                        arrow_colour=Colour.from_hex(0x111111),
                         size=3.2,
                         zoom_multiplier=2.0,
                     ),
@@ -590,9 +588,8 @@ def main():
                     LineFore(colour=Colour.from_hex(0x808080), width=3.2, zoom_multiplier=2.0),
                     LineFore(colour=Colour.from_hex(0xFFFFFF), width=1.6, dash=[10.0, 10.0], zoom_multiplier=2.0),
                     LineText(
-                        colour=Colour.from_hex(0x808080),
-                        arrow_colour=Colour.from_hex(0x808080),
-                        offset=3.2,
+                        colour=Colour.from_hex(0x111111),
+                        arrow_colour=Colour.from_hex(0x111111),
                         size=3.2,
                         zoom_multiplier=2.0,
                     ),
@@ -680,9 +677,8 @@ def main():
                     LineBack(colour=Colour.from_hex(0x333333), width=2.4, zoom_multiplier=2.0, unrounded=True),
                     LineFore(colour=Colour.from_hex(0x808080), width=1.6, zoom_multiplier=2.0),
                     LineText(
-                        colour=Colour.from_hex(0x808080),
-                        arrow_colour=Colour.from_hex(0x808080),
-                        offset=3.2,
+                        colour=Colour.from_hex(0x111111),
+                        arrow_colour=Colour.from_hex(0x111111),
                         size=3.2,
                         zoom_multiplier=2.0,
                     ),
@@ -706,9 +702,8 @@ def main():
                     LineFore(colour=Colour.from_hex(0x808080), width=3.2, zoom_multiplier=2.0),
                     LineFore(colour=Colour.from_hex(0xFFFFFF), width=1.6, dash=[10.0, 10.0], zoom_multiplier=2.0),
                     LineText(
-                        colour=Colour.from_hex(0x808080),
-                        arrow_colour=Colour.from_hex(0x808080),
-                        offset=3.2,
+                        colour=Colour.from_hex(0x111111),
+                        arrow_colour=Colour.from_hex(0x111111),
                         size=3.2,
                         zoom_multiplier=2.0,
                     ),
