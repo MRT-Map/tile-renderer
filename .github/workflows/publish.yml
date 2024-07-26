@@ -1,0 +1,36 @@
+on:
+  workflow_dispatch:
+
+permissions:
+  contents: write
+
+jobs:
+  pages:
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/tile-renderer
+    permissions:
+      id-token: write
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: pypa/hatch@install
+    - run: hatch run python tests/test.py 9
+    - run: hatch build
+    - run: hatch run python -c "from tile_renderer.skin import Skin; from pathlib import Path; Skin.default().save_json(Path.cwd() / 'dist')"
+    - run: hatch run python -c "import json; from pathlib import Path; j = json.loads((Path.cwd() / 'dist' / 'default.skin.json').read_text()); j['font_files'] = []; (Path.cwd() / 'dist' / 'default.nofontfiles.skin.json').write_text(json.dumps(j))"
+    - run: |
+        {
+          echo 'CHANGELOG<<__EOF__'
+          python -c "print(open('CHANGELOG.md').read().split('## v5.0.0')[1].split('\n')[1].split('\n##')[0])"
+          echo __EOF__
+        } >> "$GITHUB_ENV"
+    - run: hatch run python -c "from tile_renderer.__about__ import __version__; print("VERSION="+__version__)" >> "$GITHUB_ENV"
+    - uses: softprops/action-gh-release@v2
+      with:
+        tag_name: ${{ env.VERSION }}
+        body: ${{ env.CHANGELOG }}
+        files: dist/*
+    - run: rm dist/default.nofontfiles.skin.json dist/default.skin.json
+    - uses: pypa/gh-action-pypi-publish@release/v1

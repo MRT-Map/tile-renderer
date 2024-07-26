@@ -17,6 +17,7 @@
 ![PyPI - Downloads](https://img.shields.io/pypi/dm/tile-renderer)
 ![Pepy Total Downlods](https://img.shields.io/pepy/dt/tile-renderer)
 
-Leaflet.js streetmap tile renderer, made by 7d
+Street map renderer built for the [MRT City Map](https://mrt-map.github.io/map)
 
 ## Current version: v5.0.0
+Documentation: https://mrt-map.github.io/tile-renderer

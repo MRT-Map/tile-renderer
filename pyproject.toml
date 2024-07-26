@@ -5,34 +5,37 @@ build-backend = "hatchling.build"
 [project]
 name = "tile-renderer"
 dynamic = ["version"]
-description = 'Leaflet.js streetmap tile renderer'
+description = "Street map renderer built for the Minecart Rapid Transit City Map (https://mrt-map.github.io/map)"
 readme = "README.md"
 requires-python = ">=3.12"
-license = "MIT"
+license = { file = "LICENSE" }
 keywords = ['leaflet', 'leaflet.js', 'leafletjs', 'map', 'tiles', 'renderer', 'tile-renderer', 'mapping']
 authors = [
   { name = "7d", email = "61975820+iiiii7d@users.noreply.github.com" },
+  { name = "Minecart Rapid Transit Mapping Services", email = "mappingmrt@gmail.com" }
 ]
 classifiers = [
-  "Development Status :: 4 - Beta",
-  "Programming Language :: Python",
+  'Development Status :: 5 - Production/Stable',
+  'Intended Audience :: Developers',
+  'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
+  'Natural Language :: English',
   "Programming Language :: Python :: 3.12",
   "Programming Language :: Python :: Implementation :: CPython",
-  "Programming Language :: Python :: Implementation :: PyPy",
 ]
 dependencies = [
-  "click",
-  "msgspec",
-  "shapely",
-  "requests",
-  "svg.py",
-  "rich",
+  "click==8.1.7",
+  "msgspec==0.18.6",
+  "shapely==2.0.5",
+  "requests==2.32.3",
+  "svg.py==1.4.3",
+  "rich==13.7.1",
 ]
 
 [project.urls]
-Documentation = "https://github.com/MRT-Map/tile-renderer#readme"
+Documentation = "https://mrt-map.github.io/tile-renderer"
 Issues = "https://github.com/MRT-Map/tile-renderer/issues"
 Source = "https://github.com/MRT-Map/tile-renderer"
+Changelog = "https://github.com/MRT-Map/tile-renderer/blob/main/CHANGELOG.md"
 
 [project.scripts]
 tile-renderer = "tile_renderer.cli:cli"
@@ -60,7 +63,7 @@ build = """
 
 [tool.hatch.envs.types]
 extra-dependencies = [
-  "mypy>=1.0.0",
+  "mypy",
   "types-shapely"
 ]
 [tool.hatch.envs.types.scripts]
@@ -87,3 +90,6 @@ exclude_lines = [
 
 [tool.ruff.lint]
 ignore = ["E741"]
+
+[tool.hatch.build]
+packages = ["src/tile_renderer"]
