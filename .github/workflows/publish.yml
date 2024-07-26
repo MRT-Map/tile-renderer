@@ -71,6 +71,7 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: dist-github
+          path: dist
       - uses: softprops/action-gh-release@v2
         with:
           tag_name: ${{ needs.build.outputs.version }}
@@ -90,4 +91,5 @@ jobs:
       - uses: actions/download-artifact@v4
         with:
           name: dist-pypi
+          path: dist
       - uses: pypa/gh-action-pypi-publish@release/v1
