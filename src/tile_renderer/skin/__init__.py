@@ -17,7 +17,8 @@ if TYPE_CHECKING:
 
 
 @dataclass_transform()
-class Skin(Struct):
+class Skin(Struct, kw_only=True):
+    version: int = 2
     name: str
     types: list[ComponentType]
     font_files: list[tuple[str, bytes]]
@@ -28,6 +29,7 @@ class Skin(Struct):
 
     def encode(self) -> _SerSkin:
         return _SerSkin(
+            version=self.version,
             name=self.name,
             font_files=self.font_files,
             font_string=self.font_string,
@@ -86,6 +88,7 @@ class _SerSkin(Skin):
 
     def decode(self) -> Skin:
         return Skin(
+            version=self.version,
             name=self.name,
             font_files=self.font_files,
             font_string=self.font_string,
@@ -97,7 +100,7 @@ class _SerSkin(Skin):
 
 
 @dataclass_transform()
-class ComponentType(Struct):
+class ComponentType(Struct, kw_only=True):
     name: str
     shape: Literal["point", "line", "area"]
     styles: dict[str, list[ComponentStyle]]
