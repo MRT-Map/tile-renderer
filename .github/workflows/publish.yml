@@ -38,7 +38,7 @@ jobs:
         from tile_renderer.__about__ import __version__
         print('version='+__version__)
         " >> "$GITHUB_OUTPUT"
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: dist-pypi
         path: dist
@@ -56,7 +56,7 @@ jobs:
         j['font_files'] = []
         (Path.cwd() / 'dist' / 'default.nofontfiles.skin.json').write_text(json.dumps(j))
         "
-    - uses: actions/upload-artifact@v3
+    - uses: actions/upload-artifact@v4
       with:
         name: dist-github
         path: dist
