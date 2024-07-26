@@ -75,7 +75,7 @@ def render_tiles(
             images[tile] = b
             progress.advance(task_id)
             if i % 10 == 0:
-                log.debug(f"{i}/{len(tiles)}")
+                log.info(f"{i}/{len(tiles)}")
     return images
 
 
