@@ -8,7 +8,12 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: pypa/hatch@install
-    - run: cargo install resvg usvg
+    - uses: baptiste0928/cargo-install@v3
+      with:
+        crate: resvg
+    - uses: baptiste0928/cargo-install@v3
+      with:
+        crate: usvg
     - run: hatch run python tests/test.py 9
 
   build:
