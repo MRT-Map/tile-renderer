@@ -1,6 +1,6 @@
 on:
   push:
-    branches: [ "v5" ]
+    branches: [ "dev" ]
   workflow_dispatch:
   
 jobs:

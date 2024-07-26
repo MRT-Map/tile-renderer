@@ -2,8 +2,18 @@ on:
   workflow_dispatch:
 
 jobs:
-  test-build:
+  test:
     runs-on: ubuntu-latest
+
+    steps:
+    - uses: actions/checkout@v4
+    - uses: pypa/hatch@install
+    - run: cargo install resvg usvg
+    - run: hatch run python tests/test.py 9
+
+  build:
+    runs-on: ubuntu-latest
+    needs: test
     outputs:
       changelog: ${{ steps.release-info.outputs.changelog }}
       version: ${{ steps.release-info.outputs.version }}
@@ -11,7 +21,6 @@ jobs:
     steps:
     - uses: actions/checkout@v4
     - uses: pypa/hatch@install
-    - run: hatch run python tests/test.py 9
     - run: hatch build
 
     - id: release-info
