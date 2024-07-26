@@ -92,4 +92,5 @@ exclude_lines = [
 ignore = ["E741"]
 
 [tool.hatch.build]
-packages = ["src/tile_renderer"]
+include = [".github/tre-light.png", "src/tile_renderer"]
+sources = ["src"]
