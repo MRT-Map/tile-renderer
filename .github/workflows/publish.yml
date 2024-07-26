@@ -27,7 +27,7 @@ jobs:
       run: |
         {
         echo 'changelog<<__EOF__'
-        python -c "
+        hatch run python -c "
         from tile_renderer.__about__ import __version__
         print(open('CHANGELOG.md').read().split('## 0'+__version__)[1].split('\n')[1].split('\n##')[0])
         "
@@ -60,6 +60,7 @@ jobs:
       with:
         name: dist-github
         path: dist
+
   github-release:
     runs-on: ubuntu-latest
     needs: build
@@ -75,6 +76,7 @@ jobs:
           tag_name: ${{ needs.build.outputs.version }}
           body: ${{ needs.build.outputs.changelog }}
           files: dist/*
+
   pypi:
     runs-on: ubuntu-latest
     needs: build
