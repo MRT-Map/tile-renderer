@@ -1,7 +1,6 @@
 import dataclasses
 import functools
 import sys
-import uuid
 from typing import Any, cast
 
 import svg
@@ -90,18 +89,6 @@ def _get_junctions(
                 continue
             s = cast(LineFore, st.s)
             for coord in jt.line:
-                id_ = uuid.uuid4()
-                mask: svg.Mask | None = svg.Mask(
-                    id=str(id_),
-                    elements=[
-                        svg.Circle(
-                            cx=coord.x,
-                            cy=coord.y,
-                            r=jt.size,
-                            fill="white",
-                        )
-                    ],
-                )
                 for j in (j for j, a in enumerate(st.c.nodes) if a == coord):
                     vector1 = st.c.nodes[j - 1] - coord if j != 0 else None
                     vector2 = st.c.nodes[j + 1] - coord if j != len(st.c.nodes) - 1 else None
@@ -117,9 +104,6 @@ def _get_junctions(
                     )
                     coords = [a for a in (coord1, coord, coord2) if a is not None]
 
-                    if mask is not None:
-                        out.setdefault(jt.i, []).append(mask)
-                        mask = None
                     out.setdefault(jt.i, []).append(
                         svg.Polyline(
                             points=[cast(int, f"{c.x},{c.y}") for c in coords],
@@ -129,7 +113,6 @@ def _get_junctions(
                             stroke_width=s.width,
                             stroke_linecap=None if s.unrounded else "round",
                             stroke_linejoin="round",
-                            mask=f"url(#{id_})",
                         )
                     )
     return sorted(out.items(), key=lambda a: -a[0])
