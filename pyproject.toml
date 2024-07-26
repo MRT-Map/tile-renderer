@@ -9,7 +9,7 @@ description = "Street map renderer built for the Minecart Rapid Transit City Map
 readme = "README.md"
 requires-python = ">=3.12"
 license = { file = "LICENSE" }
-keywords = ['leaflet', 'leaflet.js', 'leafletjs', 'map', 'tiles', 'renderer', 'tile-renderer', 'mapping']
+keywords = ['map', 'tiles', 'renderer', 'tile-renderer', 'mapping', 'mrt mapping services', 'minecart rapid transit']
 authors = [
   { name = "7d", email = "61975820+iiiii7d@users.noreply.github.com" },
   { name = "Minecart Rapid Transit Mapping Services", email = "mappingmrt@gmail.com" }
