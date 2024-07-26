@@ -29,14 +29,14 @@ jobs:
         echo 'changelog<<__EOF__'
         hatch run python -c "
         from tile_renderer.__about__ import __version__
-        print(open('CHANGELOG.md').read().split('## 0'+__version__)[1].split('\n')[1].split('\n##')[0])
+        print(open('CHANGELOG.md').read().split('## v'+__version__)[1].split('\n')[1].split('\n##')[0])
         "
         echo __EOF__
         } >> "$GITHUB_OUTPUT"
         
         hatch run python -c "
         from tile_renderer.__about__ import __version__
-        print('version='+__version__)
+        print('version=v'+__version__)
         " >> "$GITHUB_OUTPUT"
     - uses: actions/upload-artifact@v4
       with:
