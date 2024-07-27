@@ -802,12 +802,12 @@ def main():
             )
         )
 
-    for name, zoom, colour_hex in (
-        ("subdistrict", 2, 0xD9B38C),
-        ("district", 3, 0xCC9966),
-        ("town", 3, 0xBF8040),
-        ("state", 4, 0x996633),
-        ("country", 4, 0x86592D),
+    for name, zoom, colour_hex, size in (
+        ("subdistrict", 2, 0xD9B38C, 1.0),
+        ("district", 3, 0xCC9966, 2.0),
+        ("town", 3, 0xBF8040, 3.0),
+        ("state", 4, 0x996633, 4.0),
+        ("country", 4, 0x86592D, 5.0),
     ):
         colour = Colour.from_hex(colour_hex)
         types.append(
@@ -821,7 +821,7 @@ def main():
                     ],
                     str(zoom) + "-" + str(zoom + 3): [
                         AreaFill(outline=colour, outline_width=0.5 / (1.5 / 2) ** zoom),
-                        AreaCentreText(colour=colour.darkened(), size=12.5, zoom_multiplier=1.0),
+                        AreaCentreText(colour=colour.darkened(), size=size / (1.0 / 2) ** zoom, zoom_multiplier=1.0),
                         AreaBorderText(
                             colour=colour.darkened(), offset=2.0 / (1.5 / 2) ** zoom, size=4.0 / (1.5 / 2) ** zoom
                         ),
@@ -835,7 +835,7 @@ def main():
                 shape="point",
                 styles={
                     str(zoom) + "-" + str(zoom + 3): [
-                        PointText(colour=colour.darkened(), size=7.5),
+                        PointText(colour=colour.darkened(), size=size / (1.0 / 2) ** zoom, zoom_multiplier=1.0),
                     ]
                 },
             )
