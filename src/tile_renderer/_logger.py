@@ -1,5 +1,6 @@
 import logging
 import os
+import sys
 
 from rich.logging import RichHandler
 
@@ -8,6 +9,7 @@ logging.basicConfig(
     format="%(message)s",
     # datefmt=" ",
     handlers=[RichHandler(markup=True, show_path=False)],
+    stream=sys.stdout,
 )
 
 log = logging.getLogger("rich")

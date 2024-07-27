@@ -120,8 +120,8 @@ def _get_junctions(
 
 def _filter_text_list(text_list: list[_Lists.Text]) -> list[svg.Element]:
     out: list[tuple[PreparedGeometry, svg.Element]] = []
-    with Progress() as progress:
-        task_id = progress.add_task("Filtering text", total=len(text_list) ** 2 / 2, console=Console(file=sys.stderr))
+    with Progress(console=Console(file=sys.stderr)) as progress:
+        task_id = progress.add_task("Filtering text", total=len(text_list) ** 2 / 2)
         for i, t in enumerate(text_list[::-1]):
             if not any(other.intersects(t.shape) for other, _ in out):
                 out.append((prep(t.shape), t.text))
