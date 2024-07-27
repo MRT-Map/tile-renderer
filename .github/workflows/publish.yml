@@ -61,6 +61,9 @@ jobs:
         j['font_files'] = []
         (Path.cwd() / 'dist' / 'default.nofontfiles.skin.json').write_text(json.dumps(j))
         "
+    - run: |
+        hatch run tile-renderer schema pla2 > dist/pla2.schema.json
+        hatch run tile-renedrer schema skin > dist/skin.schema.json
     - uses: actions/upload-artifact@v4
       with:
         name: dist-github
