@@ -203,6 +203,16 @@ class Line[T: float | int]:
     def shapely(self) -> LineString:
         return LineString(a.as_tuple() for a in self.coords)
 
+    @property
+    def shapely_poly(self) -> Polygon | None:
+        coords = self.coords if self.coords[0] == self.coords[-1] else [*self.coords, self.coords[0]]
+        try:
+            return Polygon(a.as_tuple() for a in coords)
+        except ValueError as e:
+            if "A linearring requires at least 4 coordinates." in str(e):
+                return None
+            raise
+
     @functools.cached_property
     def bounds(self) -> Bounds[float]:
         return Bounds(
@@ -222,7 +232,7 @@ class Line[T: float | int]:
     @property
     def point_on_surface(self) -> Coord[float]:
         point = self.shapely.centroid
-        if not Polygon(self.shapely).contains(point):
+        if (poly := self.shapely_poly) is not None and not poly.contains(point):
             point = self.shapely.point_on_surface()
         return Coord(point.x, point.y)
 

@@ -59,7 +59,9 @@ def area_border_text_svg(
     ):
         return svg.G()
     new_coordinates = component.nodes.parallel_offset(s.offset)
-    poly = Polygon(a.as_tuple() for a in component.nodes)
+    poly = component.nodes.shapely_poly
+    if poly is None:
+        return svg.G()
     if (s.offset > 0 and not poly.contains(new_coordinates.shapely)) or (
         s.offset < 0 and poly.contains(new_coordinates.shapely)
     ):
