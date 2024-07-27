@@ -803,11 +803,11 @@ def main():
         )
 
     for name, zoom, colour_hex, size in (
-        ("subdistrict", 2, 0xD9B38C, 1.0),
-        ("district", 3, 0xCC9966, 2.0),
+        ("subdistrict", 2, 0xD9B38C, 2.0),
+        ("district", 3, 0xCC9966, 2.5),
         ("town", 3, 0xBF8040, 3.0),
-        ("state", 4, 0x996633, 4.0),
-        ("country", 4, 0x86592D, 5.0),
+        ("state", 4, 0x996633, 3.5),
+        ("country", 4, 0x86592D, 4.0),
     ):
         colour = Colour.from_hex(colour_hex)
         types.append(
