@@ -2,6 +2,11 @@
 
 ## Planned
 
+## v5.0.3 (20240727)
+* Redirect all logging to stderr
+* Increase size of text for `subdistrict`, `district`, `town`, `state`, `country`
+* everything can now be accessible from `import tile_renderer` instead of having to import individual submodules
+
 ## v5.0.2 (20240727)
 * fix `ValueError: A linearring requires at least 4 coordinates.` error
 
