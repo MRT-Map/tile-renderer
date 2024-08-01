@@ -19,4 +19,6 @@
 
 Street map renderer built for the [MRT City Map](https://mrt-map.github.io/map)
 
+Installation & Usage: https://mrt-map.github.io/tile-renderer/usage
+
 Documentation: https://mrt-map.github.io/tile-renderer
