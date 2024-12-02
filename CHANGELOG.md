@@ -2,6 +2,9 @@
 
 ## Planned
 
+## v5.0.6 (20241203)
+* HTML escape component display names in svg element generation
+
 ## v5.0.5 (20241203)
 * Component.tiles now returns empty set if no nodes in component
 
