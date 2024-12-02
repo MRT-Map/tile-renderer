@@ -2,6 +2,9 @@
 
 ## Planned
 
+## v5.0.5 (20241203)
+* Component.tiles now returns empty set if no nodes in component
+
 ## v5.0.4 (20241202)
 * Don't process component if it has no nodes
 
