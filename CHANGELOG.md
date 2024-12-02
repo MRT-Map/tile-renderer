@@ -2,6 +2,9 @@
 
 ## Planned
 
+## v5.0.4 (20241202)
+* Don't process component if it has no nodes
+
 ## v5.0.3 (20240727)
 * Redirect all logging to stderr
 * Increase size of text for `subdistrict`, `district`, `town`, `state`, `country`
