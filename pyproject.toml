@@ -28,7 +28,7 @@ dependencies = [
   "shapely~=2.0",
   "requests~=2.32",
   "svg.py~=1.4",
-  "rich~=13.7",
+  "rich>=13.7,<15.0",
 ]
 
 [project.urls]
