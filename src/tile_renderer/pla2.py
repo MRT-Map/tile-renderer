@@ -45,6 +45,8 @@ class Component(Struct):
         )
 
     def tiles(self, zoom: int, max_zoom_range: int) -> set[TileCoord]:
+        if len(self.nodes) == 0:
+            return set()
         bounds = self.nodes.bounds
         zoom_range = max_zoom_range * 2**zoom
         xr = range(math.floor(bounds.x_min), math.ceil(bounds.x_max + 1), zoom_range // 2)

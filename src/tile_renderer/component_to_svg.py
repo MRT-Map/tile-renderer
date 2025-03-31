@@ -2,6 +2,7 @@ from __future__ import annotations
 
 import base64
 import dataclasses
+import html
 import uuid
 from typing import TYPE_CHECKING, cast
 
@@ -96,7 +97,7 @@ def area_border_text_svg(
                             font_weight="bolder",
                             dominant_baseline="middle",
                             font_family=skin.font_string,
-                            elements=[svg.TextPath(href="#" + id_, text=component.display_name)],
+                            elements=[svg.TextPath(href="#" + id_, text=html.escape(component.display_name))],
                         ),
                     ]
                 ),
@@ -131,7 +132,7 @@ def area_centre_text_svg(
                 fill=None if s.colour is None else str(s.colour),
                 font_size=s.size,
                 font_family=skin.font_string,
-                text=component.display_name,
+                text=html.escape(component.display_name),
                 text_anchor="middle",
                 stroke="#dddddd",
                 stroke_width=0.025 * s.size,
@@ -244,7 +245,7 @@ def line_text_svg(
                             font_family=skin.font_string,
                             font_weight="bolder",
                             dominant_baseline="middle",
-                            elements=[svg.TextPath(href="#" + id_, text=component.display_name)],
+                            elements=[svg.TextPath(href="#" + id_, text=html.escape(component.display_name))],
                         ),
                     ]
                 ),
@@ -301,7 +302,7 @@ def point_text_svg(
                 fill=str(s.colour),
                 font_size=s.size,
                 font_family=skin.font_string,
-                text=component.display_name,
+                text=html.escape(component.display_name),
                 text_anchor=s.anchor,
                 stroke="#dddddd",
                 stroke_width=0.025 * s.size,

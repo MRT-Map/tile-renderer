@@ -42,6 +42,8 @@ def render_svg(components: list[Component], skin: Skin, zoom: int) -> svg.SVG:
 def _get_styling(components: list[Component], skin: Skin, zoom: int) -> list[_Styling]:
     out = []
     for component in track(components, "Getting styling", console=Console(file=sys.stderr)):
+        if len(component.nodes) == 0:
+            continue
         component_type = skin.get_type_by_name(component.type)
         if component_type is None:
             log.warn(
