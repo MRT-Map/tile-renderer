@@ -24,11 +24,11 @@ classifiers = [
 ]
 dependencies = [
   "click~=8.1",
-  "msgspec~=0.18",
+  "msgspec~=0.19",
   "shapely~=2.0",
-  "requests~=2.32",
-  "svg.py~=1.4",
-  "rich~=13.7",
+  "niquests~=3.14",
+  "svg.py~=1.6",
+  "rich~=14.0",
 ]
 
 [project.urls]

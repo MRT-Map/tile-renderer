@@ -2,7 +2,7 @@ import re
 import tempfile
 from pathlib import Path
 
-import requests
+import niquests
 
 from tile_renderer._logger import log
 from tile_renderer.colour import Colour
@@ -26,7 +26,7 @@ def get_url(url: str) -> tuple[str, bytes]:
     path = Path(tempfile.gettempdir()) / "tile-renderer" / "url" / url
     if path.exists():
         return url.split(".")[-1], path.read_bytes()
-    response = requests.get(url).content  # noqa: S113
+    response = niquests.get(url).content  # noqa: S113
     path.parent.mkdir(parents=True, exist_ok=True)
     path.touch()
     path.write_bytes(response)
