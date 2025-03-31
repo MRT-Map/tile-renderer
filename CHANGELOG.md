@@ -2,6 +2,10 @@
 
 ## Planned
 
+## v5.0.7 (20250331)
+* upgrade dependencies for Python 3.13
+* change `requests` to `niquests`
+
 ## v5.0.6 (20241203)
 * HTML escape component display names in svg element generation
 
