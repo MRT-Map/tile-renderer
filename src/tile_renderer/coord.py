@@ -150,11 +150,11 @@ class Bounds[T: float | int]:
         pass
 
     @overload
-    def __add__(self: Bounds[float], other: Bounds[int] | Bounds[float]) -> Bounds[float]:
+    def __add__(self: Bounds[int], other: Bounds[float]) -> Bounds[float]:
         pass
 
     @overload
-    def __add__(self: Bounds[int], other: Bounds[float]) -> Bounds[float]:
+    def __add__(self: Bounds[float], other: Bounds[int] | Bounds[float]) -> Bounds[float]:
         pass
 
     def __add__(self, other):

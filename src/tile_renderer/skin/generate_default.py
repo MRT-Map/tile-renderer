@@ -26,7 +26,7 @@ def get_url(url: str) -> tuple[str, bytes]:
     path = Path(tempfile.gettempdir()) / "tile-renderer" / "url" / url
     if path.exists():
         return url.split(".")[-1], path.read_bytes()
-    response = niquests.get(url).content  # noqa: S113
+    response = niquests.get(url).content or b""
     path.parent.mkdir(parents=True, exist_ok=True)
     path.touch()
     path.write_bytes(response)
