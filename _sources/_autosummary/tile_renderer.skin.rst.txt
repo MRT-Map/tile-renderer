@@ -1,0 +1,52 @@
+tile\_renderer.skin
+===================
+
+.. automodule:: tile_renderer.skin
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      AreaBorderText
+      AreaCentreImage
+      AreaCentreText
+      AreaFill
+      ComponentStyle
+      ComponentType
+      LineBack
+      LineFore
+      LineText
+      PointImage
+      PointSquare
+      PointText
+      Skin
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst                 
+   :recursive:
+
+   generate_default
+

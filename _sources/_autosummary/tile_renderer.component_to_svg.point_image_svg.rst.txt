@@ -1,0 +1,6 @@
+tile\_renderer.component\_to\_svg.point\_image\_svg
+===================================================
+
+.. currentmodule:: tile_renderer.component_to_svg
+
+.. autofunction:: point_image_svg

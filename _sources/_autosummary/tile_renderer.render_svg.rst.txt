@@ -1,0 +1,30 @@
+tile\_renderer.render\_svg
+==========================
+
+.. automodule:: tile_renderer.render_svg
+  
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:                                          
+   
+      render_svg
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

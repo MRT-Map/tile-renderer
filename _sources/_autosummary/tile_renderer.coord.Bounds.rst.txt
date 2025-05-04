@@ -1,0 +1,35 @@
+tile\_renderer.coord.Bounds
+===========================
+
+.. currentmodule:: tile_renderer.coord
+
+.. autoclass:: Bounds
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Bounds.__init__
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Bounds.x_max
+      ~Bounds.x_min
+      ~Bounds.y_max
+      ~Bounds.y_min
+   
+   

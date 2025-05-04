@@ -1,0 +1,39 @@
+tile\_renderer.skin.LineBack
+============================
+
+.. currentmodule:: tile_renderer.skin
+
+.. autoclass:: LineBack
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LineBack.__init__
+      ~LineBack.encode
+      ~LineBack.render
+      ~LineBack.scale
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LineBack.colour
+      ~LineBack.dash
+      ~LineBack.unrounded
+      ~LineBack.width
+      ~LineBack.zoom_multiplier
+   
+   

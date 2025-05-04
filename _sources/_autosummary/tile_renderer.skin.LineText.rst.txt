@@ -1,0 +1,39 @@
+tile\_renderer.skin.LineText
+============================
+
+.. currentmodule:: tile_renderer.skin
+
+.. autoclass:: LineText
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LineText.__init__
+      ~LineText.encode
+      ~LineText.render
+      ~LineText.scale
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LineText.arrow_colour
+      ~LineText.colour
+      ~LineText.offset
+      ~LineText.size
+      ~LineText.zoom_multiplier
+   
+   

@@ -1,0 +1,6 @@
+tile\_renderer.component\_to\_svg.area\_fill\_svg
+=================================================
+
+.. currentmodule:: tile_renderer.component_to_svg
+
+.. autofunction:: area_fill_svg

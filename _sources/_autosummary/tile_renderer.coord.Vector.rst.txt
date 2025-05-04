@@ -1,0 +1,41 @@
+tile\_renderer.coord.Vector
+===========================
+
+.. currentmodule:: tile_renderer.coord
+
+.. autoclass:: Vector
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Vector.__init__
+      ~Vector.as_tuple
+      ~Vector.decode
+      ~Vector.dot
+      ~Vector.encode
+      ~Vector.perp
+      ~Vector.to_float
+      ~Vector.to_int
+      ~Vector.unit
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Vector.x
+      ~Vector.y
+   
+   

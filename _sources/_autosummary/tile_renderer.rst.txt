@@ -1,0 +1,40 @@
+﻿tile\_renderer
+==============
+
+.. automodule:: tile_renderer
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+
+.. rubric:: Modules
+
+.. autosummary::
+   :toctree:
+   :template: custom-module-template.rst                 
+   :recursive:
+
+   cli
+   colour
+   component_to_svg
+   coord
+   pla1to2
+   pla2
+   render_svg
+   render_tiles
+   skin
+

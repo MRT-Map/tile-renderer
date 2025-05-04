@@ -1,0 +1,39 @@
+tile\_renderer.pla2.Pla2File
+============================
+
+.. currentmodule:: tile_renderer.pla2
+
+.. autoclass:: Pla2File
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Pla2File.__init__
+      ~Pla2File.from_file
+      ~Pla2File.from_json
+      ~Pla2File.from_msgpack
+      ~Pla2File.save_json
+      ~Pla2File.save_msgpack
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Pla2File.components
+      ~Pla2File.namespace
+      ~Pla2File.ids
+   
+   

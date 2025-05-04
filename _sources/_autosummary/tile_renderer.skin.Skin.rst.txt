@@ -1,0 +1,48 @@
+tile\_renderer.skin.Skin
+========================
+
+.. currentmodule:: tile_renderer.skin
+
+.. autoclass:: Skin
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Skin.__init__
+      ~Skin.default
+      ~Skin.encode
+      ~Skin.from_file
+      ~Skin.from_json
+      ~Skin.from_msgpack
+      ~Skin.get_order
+      ~Skin.get_type_by_name
+      ~Skin.save_json
+      ~Skin.save_msgpack
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Skin.background
+      ~Skin.font_files
+      ~Skin.font_string
+      ~Skin.licence
+      ~Skin.name
+      ~Skin.prune_small_text
+      ~Skin.types
+      ~Skin.version
+   
+   

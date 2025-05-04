@@ -1,0 +1,42 @@
+tile\_renderer.coord.Line
+=========================
+
+.. currentmodule:: tile_renderer.coord
+
+.. autoclass:: Line
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Line.__init__
+      ~Line.dash
+      ~Line.decode
+      ~Line.encode
+      ~Line.parallel_offset
+      ~Line.to_float
+      ~Line.to_int
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Line.bounds
+      ~Line.point_on_surface
+      ~Line.shapely
+      ~Line.shapely_poly
+      ~Line.coords
+   
+   

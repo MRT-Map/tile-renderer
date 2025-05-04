@@ -1,0 +1,6 @@
+tile\_renderer.component\_to\_svg.area\_centre\_image\_svg
+==========================================================
+
+.. currentmodule:: tile_renderer.component_to_svg
+
+.. autofunction:: area_centre_image_svg

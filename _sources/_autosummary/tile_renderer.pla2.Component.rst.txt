@@ -1,0 +1,43 @@
+tile\_renderer.pla2.Component
+=============================
+
+.. currentmodule:: tile_renderer.pla2
+
+.. autoclass:: Component
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Component.__init__
+      ~Component.encode
+      ~Component.tiles
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Component.attrs
+      ~Component.description
+      ~Component.display_name
+      ~Component.id
+      ~Component.layer
+      ~Component.namespace
+      ~Component.nodes
+      ~Component.tags
+      ~Component.type
+      ~Component.fid
+   
+   

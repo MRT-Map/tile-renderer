@@ -1,0 +1,42 @@
+tile\_renderer.colour.Colour
+============================
+
+.. currentmodule:: tile_renderer.colour
+
+.. autoclass:: Colour
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Colour.__init__
+      ~Colour.brightened
+      ~Colour.darkened
+      ~Colour.from_hex
+      ~Colour.from_rgb
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Colour.b
+      ~Colour.g
+      ~Colour.r
+      ~Colour.rgb
+      ~Colour.h
+      ~Colour.s
+      ~Colour.l
+   
+   

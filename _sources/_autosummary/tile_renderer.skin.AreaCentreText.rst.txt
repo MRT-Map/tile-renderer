@@ -1,0 +1,38 @@
+tile\_renderer.skin.AreaCentreText
+==================================
+
+.. currentmodule:: tile_renderer.skin
+
+.. autoclass:: AreaCentreText
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AreaCentreText.__init__
+      ~AreaCentreText.encode
+      ~AreaCentreText.render
+      ~AreaCentreText.scale
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AreaCentreText.colour
+      ~AreaCentreText.offset
+      ~AreaCentreText.size
+      ~AreaCentreText.zoom_multiplier
+   
+   

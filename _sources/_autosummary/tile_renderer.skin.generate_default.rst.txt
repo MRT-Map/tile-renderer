@@ -1,0 +1,31 @@
+tile\_renderer.skin.generate\_default
+=====================================
+
+.. automodule:: tile_renderer.skin.generate_default
+  
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:                                          
+   
+      get_url
+      main
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

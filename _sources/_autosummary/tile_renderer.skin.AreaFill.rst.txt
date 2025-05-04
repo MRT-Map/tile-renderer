@@ -1,0 +1,38 @@
+tile\_renderer.skin.AreaFill
+============================
+
+.. currentmodule:: tile_renderer.skin
+
+.. autoclass:: AreaFill
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AreaFill.__init__
+      ~AreaFill.encode
+      ~AreaFill.render
+      ~AreaFill.scale
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AreaFill.colour
+      ~AreaFill.outline
+      ~AreaFill.outline_width
+      ~AreaFill.zoom_multiplier
+   
+   

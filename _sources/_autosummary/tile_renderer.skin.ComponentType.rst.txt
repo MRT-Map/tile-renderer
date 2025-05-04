@@ -1,0 +1,37 @@
+tile\_renderer.skin.ComponentType
+=================================
+
+.. currentmodule:: tile_renderer.skin
+
+.. autoclass:: ComponentType
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~ComponentType.__init__
+      ~ComponentType.encode
+      ~ComponentType.get_styling_by_zoom
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~ComponentType.name
+      ~ComponentType.shape
+      ~ComponentType.styles
+      ~ComponentType.tags
+   
+   

@@ -1,0 +1,6 @@
+tile\_renderer.component\_to\_svg.line\_back\_fore\_svg
+=======================================================
+
+.. currentmodule:: tile_renderer.component_to_svg
+
+.. autofunction:: line_back_fore_svg

@@ -1,0 +1,198 @@
+
+
+<!DOCTYPE html>
+<html class="writer-html5" lang="en" data-content_root="../">
+<head>
+  <meta charset="utf-8" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>tile_renderer.skin &mdash; tile-renderer 5.0.7 documentation</title>
+      <link rel="stylesheet" type="text/css" href="../_static/pygments.css?v=b86133f3" />
+      <link rel="stylesheet" type="text/css" href="../_static/css/theme.css?v=e59714d7" />
+      <link rel="stylesheet" type="text/css" href="../_static/sphinx-codeautolink.css?v=b2176991" />
+
+  
+    <link rel="canonical" href="https://mrt-map.github.io/tile-renderer/_autosummary/tile_renderer.skin.html" />
+      <script src="../_static/jquery.js?v=5d32c60e"></script>
+      <script src="../_static/_sphinx_javascript_frameworks_compat.js?v=2cd50e6c"></script>
+      <script src="../_static/documentation_options.js?v=05fd566f"></script>
+      <script src="../_static/doctools.js?v=9bcbadda"></script>
+      <script src="../_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="../_static/js/theme.js"></script>
+    <link rel="index" title="Index" href="../genindex.html" />
+    <link rel="search" title="Search" href="../search.html" />
+    <link rel="next" title="tile_renderer.skin.AreaBorderText" href="tile_renderer.skin.AreaBorderText.html" />
+    <link rel="prev" title="tile_renderer.render_tiles.render_tiles" href="tile_renderer.render_tiles.render_tiles.html" /> 
+</head>
+
+<body class="wy-body-for-nav"> 
+  <div class="wy-grid-for-nav">
+    <nav data-toggle="wy-nav-shift" class="wy-nav-side">
+      <div class="wy-side-scroll">
+        <div class="wy-side-nav-search" >
+
+          
+          
+          <a href="../index.html" class="icon icon-home">
+            tile-renderer
+          </a>
+<div role="search">
+  <form id="rtd-search-form" class="wy-form" action="../search.html" method="get">
+    <input type="text" name="q" placeholder="Search docs" aria-label="Search docs" />
+    <input type="hidden" name="check_keywords" value="yes" />
+    <input type="hidden" name="area" value="default" />
+  </form>
+</div>
+        </div><div class="wy-menu wy-menu-vertical" data-spy="affix" role="navigation" aria-label="Navigation menu">
+              <p class="caption" role="heading"><span class="caption-text">Contents:</span></p>
+<ul class="current">
+<li class="toctree-l1"><a class="reference internal" href="../usage.html">Usage</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../data_format.html">Data Format</a></li>
+<li class="toctree-l1"><a class="reference internal" href="../cli.html">Command Line</a></li>
+<li class="toctree-l1 current"><a class="reference internal" href="../reference.html">Reference</a><ul class="current">
+<li class="toctree-l2 current"><a class="reference internal" href="tile_renderer.html">tile_renderer</a><ul class="current">
+<li class="toctree-l3"><a class="reference internal" href="tile_renderer.cli.html">tile_renderer.cli</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tile_renderer.colour.html">tile_renderer.colour</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tile_renderer.component_to_svg.html">tile_renderer.component_to_svg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tile_renderer.coord.html">tile_renderer.coord</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tile_renderer.pla1to2.html">tile_renderer.pla1to2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tile_renderer.pla2.html">tile_renderer.pla2</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tile_renderer.render_svg.html">tile_renderer.render_svg</a></li>
+<li class="toctree-l3"><a class="reference internal" href="tile_renderer.render_tiles.html">tile_renderer.render_tiles</a></li>
+<li class="toctree-l3 current"><a class="current reference internal" href="#">tile_renderer.skin</a><ul>
+<li class="toctree-l4"><a class="reference internal" href="tile_renderer.skin.AreaBorderText.html">tile_renderer.skin.AreaBorderText</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tile_renderer.skin.AreaCentreImage.html">tile_renderer.skin.AreaCentreImage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tile_renderer.skin.AreaCentreText.html">tile_renderer.skin.AreaCentreText</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tile_renderer.skin.AreaFill.html">tile_renderer.skin.AreaFill</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tile_renderer.skin.ComponentStyle.html">tile_renderer.skin.ComponentStyle</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tile_renderer.skin.ComponentType.html">tile_renderer.skin.ComponentType</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tile_renderer.skin.LineBack.html">tile_renderer.skin.LineBack</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tile_renderer.skin.LineFore.html">tile_renderer.skin.LineFore</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tile_renderer.skin.LineText.html">tile_renderer.skin.LineText</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tile_renderer.skin.PointImage.html">tile_renderer.skin.PointImage</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tile_renderer.skin.PointSquare.html">tile_renderer.skin.PointSquare</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tile_renderer.skin.PointText.html">tile_renderer.skin.PointText</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tile_renderer.skin.Skin.html">tile_renderer.skin.Skin</a></li>
+<li class="toctree-l4"><a class="reference internal" href="tile_renderer.skin.generate_default.html">tile_renderer.skin.generate_default</a></li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+
+        </div>
+      </div>
+    </nav>
+
+    <section data-toggle="wy-nav-shift" class="wy-nav-content-wrap"><nav class="wy-nav-top" aria-label="Mobile navigation menu" >
+          <i data-toggle="wy-nav-top" class="fa fa-bars"></i>
+          <a href="../index.html">tile-renderer</a>
+      </nav>
+
+      <div class="wy-nav-content">
+        <div class="rst-content">
+          <div role="navigation" aria-label="Page navigation">
+  <ul class="wy-breadcrumbs">
+      <li><a href="../index.html" class="icon icon-home" aria-label="Home"></a></li>
+          <li class="breadcrumb-item"><a href="../reference.html">Reference</a></li>
+          <li class="breadcrumb-item"><a href="tile_renderer.html">tile_renderer</a></li>
+      <li class="breadcrumb-item active">tile_renderer.skin</li>
+      <li class="wy-breadcrumbs-aside">
+            <a href="../_sources/_autosummary/tile_renderer.skin.rst.txt" rel="nofollow"> View page source</a>
+      </li>
+  </ul>
+  <hr/>
+</div>
+          <div role="main" class="document" itemscope="itemscope" itemtype="http://schema.org/Article">
+           <div itemprop="articleBody">
+             
+  <section id="module-tile_renderer.skin">
+<span id="tile-renderer-skin"></span><h1>tile_renderer.skin<a class="headerlink" href="#module-tile_renderer.skin" title="Link to this heading"></a></h1>
+<p class="rubric">Classes</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="tile_renderer.skin.AreaBorderText.html#tile_renderer.skin.AreaBorderText" title="tile_renderer.skin.AreaBorderText"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AreaBorderText</span></code></a>(size[, colour, offset, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="tile_renderer.skin.AreaCentreImage.html#tile_renderer.skin.AreaCentreImage" title="tile_renderer.skin.AreaCentreImage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AreaCentreImage</span></code></a>(image, extension[, size, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="tile_renderer.skin.AreaCentreText.html#tile_renderer.skin.AreaCentreText" title="tile_renderer.skin.AreaCentreText"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AreaCentreText</span></code></a>(size[, colour, offset, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="tile_renderer.skin.AreaFill.html#tile_renderer.skin.AreaFill" title="tile_renderer.skin.AreaFill"><code class="xref py py-obj docutils literal notranslate"><span class="pre">AreaFill</span></code></a>([colour, outline, outline_width, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="tile_renderer.skin.ComponentStyle.html#tile_renderer.skin.ComponentStyle" title="tile_renderer.skin.ComponentStyle"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ComponentStyle</span></code></a>(*[, zoom_multiplier])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="tile_renderer.skin.ComponentType.html#tile_renderer.skin.ComponentType" title="tile_renderer.skin.ComponentType"><code class="xref py py-obj docutils literal notranslate"><span class="pre">ComponentType</span></code></a>(*, name, shape, , ], styles, ...)</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="tile_renderer.skin.LineBack.html#tile_renderer.skin.LineBack" title="tile_renderer.skin.LineBack"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LineBack</span></code></a>(width[, dash, colour, unrounded, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="tile_renderer.skin.LineFore.html#tile_renderer.skin.LineFore" title="tile_renderer.skin.LineFore"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LineFore</span></code></a>(width[, dash, colour, unrounded, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="tile_renderer.skin.LineText.html#tile_renderer.skin.LineText" title="tile_renderer.skin.LineText"><code class="xref py py-obj docutils literal notranslate"><span class="pre">LineText</span></code></a>(size[, arrow_colour, colour, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="tile_renderer.skin.PointImage.html#tile_renderer.skin.PointImage" title="tile_renderer.skin.PointImage"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointImage</span></code></a>(image, extension[, size, offset, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="tile_renderer.skin.PointSquare.html#tile_renderer.skin.PointSquare" title="tile_renderer.skin.PointSquare"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointSquare</span></code></a>(size, width[, colour, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-even"><td><p><a class="reference internal" href="tile_renderer.skin.PointText.html#tile_renderer.skin.PointText" title="tile_renderer.skin.PointText"><code class="xref py py-obj docutils literal notranslate"><span class="pre">PointText</span></code></a>(size[, anchor, colour, offset, ...])</p></td>
+<td><p></p></td>
+</tr>
+<tr class="row-odd"><td><p><a class="reference internal" href="tile_renderer.skin.Skin.html#tile_renderer.skin.Skin" title="tile_renderer.skin.Skin"><code class="xref py py-obj docutils literal notranslate"><span class="pre">Skin</span></code></a>(*[, version, font_string, background, ...])</p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+<p class="rubric">Modules</p>
+<table class="autosummary longtable docutils align-default">
+<tbody>
+<tr class="row-odd"><td><p><a class="reference internal" href="tile_renderer.skin.generate_default.html#module-tile_renderer.skin.generate_default" title="tile_renderer.skin.generate_default"><code class="xref py py-obj docutils literal notranslate"><span class="pre">generate_default</span></code></a></p></td>
+<td><p></p></td>
+</tr>
+</tbody>
+</table>
+</section>
+
+
+           </div>
+          </div>
+          <footer><div class="rst-footer-buttons" role="navigation" aria-label="Footer">
+        <a href="tile_renderer.render_tiles.render_tiles.html" class="btn btn-neutral float-left" title="tile_renderer.render_tiles.render_tiles" accesskey="p" rel="prev"><span class="fa fa-arrow-circle-left" aria-hidden="true"></span> Previous</a>
+        <a href="tile_renderer.skin.AreaBorderText.html" class="btn btn-neutral float-right" title="tile_renderer.skin.AreaBorderText" accesskey="n" rel="next">Next <span class="fa fa-arrow-circle-right" aria-hidden="true"></span></a>
+    </div>
+
+  <hr/>
+
+  <div role="contentinfo">
+    <p>&#169; Copyright 2024, MRT Mapping Services.</p>
+  </div>
+
+  Built with <a href="https://www.sphinx-doc.org/">Sphinx</a> using a
+    <a href="https://github.com/readthedocs/sphinx_rtd_theme">theme</a>
+    provided by <a href="https://readthedocs.org">Read the Docs</a>.
+   
+
+</footer>
+        </div>
+      </div>
+    </section>
+  </div>
+  <script>
+      jQuery(function () {
+          SphinxRtdTheme.Navigation.enable(true);
+      });
+  </script> 
+
+</body>
+</html>

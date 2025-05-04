@@ -1,0 +1,42 @@
+tile\_renderer.coord.Coord
+==========================
+
+.. currentmodule:: tile_renderer.coord
+
+.. autoclass:: Coord
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~Coord.__init__
+      ~Coord.as_tuple
+      ~Coord.decode
+      ~Coord.dot
+      ~Coord.encode
+      ~Coord.perp
+      ~Coord.to_float
+      ~Coord.to_int
+      ~Coord.unit
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~Coord.shapely
+      ~Coord.x
+      ~Coord.y
+   
+   

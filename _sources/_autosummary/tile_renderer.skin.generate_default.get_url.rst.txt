@@ -1,0 +1,6 @@
+tile\_renderer.skin.generate\_default.get\_url
+==============================================
+
+.. currentmodule:: tile_renderer.skin.generate_default
+
+.. autofunction:: get_url

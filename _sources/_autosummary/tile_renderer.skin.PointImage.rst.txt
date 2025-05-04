@@ -1,0 +1,39 @@
+tile\_renderer.skin.PointImage
+==============================
+
+.. currentmodule:: tile_renderer.skin
+
+.. autoclass:: PointImage
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~PointImage.__init__
+      ~PointImage.encode
+      ~PointImage.render
+      ~PointImage.scale
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~PointImage.extension
+      ~PointImage.image
+      ~PointImage.offset
+      ~PointImage.size
+      ~PointImage.zoom_multiplier
+   
+   

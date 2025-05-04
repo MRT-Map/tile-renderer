@@ -1,0 +1,39 @@
+tile\_renderer.skin.PointSquare
+===============================
+
+.. currentmodule:: tile_renderer.skin
+
+.. autoclass:: PointSquare
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~PointSquare.__init__
+      ~PointSquare.encode
+      ~PointSquare.render
+      ~PointSquare.scale
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~PointSquare.border_radius
+      ~PointSquare.colour
+      ~PointSquare.size
+      ~PointSquare.width
+      ~PointSquare.zoom_multiplier
+   
+   

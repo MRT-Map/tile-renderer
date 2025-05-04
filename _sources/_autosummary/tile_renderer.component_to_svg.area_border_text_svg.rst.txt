@@ -1,0 +1,6 @@
+tile\_renderer.component\_to\_svg.area\_border\_text\_svg
+=========================================================
+
+.. currentmodule:: tile_renderer.component_to_svg
+
+.. autofunction:: area_border_text_svg

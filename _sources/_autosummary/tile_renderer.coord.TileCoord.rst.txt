@@ -1,0 +1,35 @@
+tile\_renderer.coord.TileCoord
+==============================
+
+.. currentmodule:: tile_renderer.coord
+
+.. autoclass:: TileCoord
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~TileCoord.__init__
+      ~TileCoord.bounds
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~TileCoord.z
+      ~TileCoord.x
+      ~TileCoord.y
+   
+   

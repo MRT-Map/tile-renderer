@@ -1,0 +1,32 @@
+tile\_renderer.pla2
+===================
+
+.. automodule:: tile_renderer.pla2
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      Component
+      Pla2File
+   
+   
+
+   
+   
+   
+
+
+

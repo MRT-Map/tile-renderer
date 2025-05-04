@@ -1,0 +1,38 @@
+tile\_renderer.component\_to\_svg
+=================================
+
+.. automodule:: tile_renderer.component_to_svg
+  
+   
+   
+   
+
+   
+   
+   .. rubric:: Functions
+
+   .. autosummary::
+      :toctree:                                          
+   
+      area_border_text_svg
+      area_centre_image_svg
+      area_centre_text_svg
+      area_fill_svg
+      line_back_fore_svg
+      line_text_svg
+      point_image_svg
+      point_square_svg
+      point_text_svg
+   
+   
+
+   
+   
+   
+
+   
+   
+   
+
+
+

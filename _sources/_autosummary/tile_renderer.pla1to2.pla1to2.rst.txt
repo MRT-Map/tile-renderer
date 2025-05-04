@@ -1,0 +1,6 @@
+tile\_renderer.pla1to2.pla1to2
+==============================
+
+.. currentmodule:: tile_renderer.pla1to2
+
+.. autofunction:: pla1to2

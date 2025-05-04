@@ -1,0 +1,39 @@
+tile\_renderer.skin.LineFore
+============================
+
+.. currentmodule:: tile_renderer.skin
+
+.. autoclass:: LineFore
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~LineFore.__init__
+      ~LineFore.encode
+      ~LineFore.render
+      ~LineFore.scale
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~LineFore.colour
+      ~LineFore.dash
+      ~LineFore.unrounded
+      ~LineFore.width
+      ~LineFore.zoom_multiplier
+   
+   

@@ -1,0 +1,35 @@
+tile\_renderer.coord
+====================
+
+.. automodule:: tile_renderer.coord
+  
+   
+   
+   
+
+   
+   
+   
+
+   
+   
+   .. rubric:: Classes
+
+   .. autosummary::
+      :toctree:                                          
+      :template: custom-class-template.rst               
+   
+      Bounds
+      Coord
+      Line
+      TileCoord
+      Vector
+   
+   
+
+   
+   
+   
+
+
+

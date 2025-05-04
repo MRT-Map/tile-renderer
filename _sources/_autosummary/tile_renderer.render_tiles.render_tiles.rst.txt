@@ -1,0 +1,6 @@
+tile\_renderer.render\_tiles.render\_tiles
+==========================================
+
+.. currentmodule:: tile_renderer.render_tiles
+
+.. autofunction:: render_tiles

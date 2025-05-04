@@ -1,0 +1,6 @@
+tile\_renderer.component\_to\_svg.line\_text\_svg
+=================================================
+
+.. currentmodule:: tile_renderer.component_to_svg
+
+.. autofunction:: line_text_svg

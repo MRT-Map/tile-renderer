@@ -1,0 +1,39 @@
+tile\_renderer.skin.AreaCentreImage
+===================================
+
+.. currentmodule:: tile_renderer.skin
+
+.. autoclass:: AreaCentreImage
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AreaCentreImage.__init__
+      ~AreaCentreImage.encode
+      ~AreaCentreImage.render
+      ~AreaCentreImage.scale
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AreaCentreImage.extension
+      ~AreaCentreImage.image
+      ~AreaCentreImage.offset
+      ~AreaCentreImage.size
+      ~AreaCentreImage.zoom_multiplier
+   
+   

@@ -1,0 +1,38 @@
+tile\_renderer.skin.AreaBorderText
+==================================
+
+.. currentmodule:: tile_renderer.skin
+
+.. autoclass:: AreaBorderText
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~AreaBorderText.__init__
+      ~AreaBorderText.encode
+      ~AreaBorderText.render
+      ~AreaBorderText.scale
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~AreaBorderText.colour
+      ~AreaBorderText.offset
+      ~AreaBorderText.size
+      ~AreaBorderText.zoom_multiplier
+   
+   

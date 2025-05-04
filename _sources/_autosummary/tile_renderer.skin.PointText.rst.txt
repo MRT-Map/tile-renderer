@@ -1,0 +1,39 @@
+tile\_renderer.skin.PointText
+=============================
+
+.. currentmodule:: tile_renderer.skin
+
+.. autoclass:: PointText
+   :members:
+   :show-inheritance:
+   :inherited-members:
+   :undoc-members:
+
+   
+   .. automethod:: __init__
+
+   
+   .. rubric:: Methods
+
+   .. autosummary::
+   
+      ~PointText.__init__
+      ~PointText.encode
+      ~PointText.render
+      ~PointText.scale
+   
+   
+
+   
+   
+   .. rubric:: Attributes
+
+   .. autosummary::
+   
+      ~PointText.anchor
+      ~PointText.colour
+      ~PointText.offset
+      ~PointText.size
+      ~PointText.zoom_multiplier
+   
+   
