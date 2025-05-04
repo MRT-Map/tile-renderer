@@ -23,10 +23,12 @@ extensions = [
     "sphinxcontrib.programoutput",
     "sphinx_codeautolink",
     "sphinx.ext.autodoc",
+    "sphinx.ext.autosummary",
     "sphinx.ext.intersphinx",
     "sphinx.ext.githubpages",
     "sphinx-jsonschema",
 ]
+autosummary_generate = True
 
 templates_path = ["_templates"]
 exclude_patterns = ["_build", "Thumbs.db", ".DS_Store"]

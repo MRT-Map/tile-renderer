@@ -1,8 +1,6 @@
 Data Format
 ===========
 
-WILL BE REWRWITTEN
-
 PLA2 component file
 -------------------
 .. jsonschema:: _build/pla2.json
