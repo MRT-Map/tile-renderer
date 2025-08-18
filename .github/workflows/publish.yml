@@ -6,7 +6,7 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: pypa/hatch@install
     - uses: baptiste0928/cargo-install@v3
       with:
@@ -24,7 +24,7 @@ jobs:
       version: ${{ steps.release-info.outputs.version }}
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@v5
     - uses: pypa/hatch@install
     - run: hatch build
 
