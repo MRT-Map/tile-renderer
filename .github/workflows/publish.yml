@@ -6,12 +6,12 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
     - uses: pypa/hatch@install
-    - uses: baptiste0928/cargo-install@v3
+    - uses: baptiste0928/cargo-install@b687c656bda5733207e629b50a22bf68974a0305 # v3
       with:
         crate: resvg
-    - uses: baptiste0928/cargo-install@v3
+    - uses: baptiste0928/cargo-install@b687c656bda5733207e629b50a22bf68974a0305 # v3
       with:
         crate: usvg
     - run: hatch run python tests/test.py 9
@@ -24,7 +24,7 @@ jobs:
       version: ${{ steps.release-info.outputs.version }}
 
     steps:
-    - uses: actions/checkout@v4
+    - uses: actions/checkout@08eba0b27e820071cde6df949e0beb9ba4906955 # v4
     - uses: pypa/hatch@install
     - run: hatch build
 
@@ -43,7 +43,7 @@ jobs:
         from tile_renderer.__about__ import __version__
         print('version=v'+__version__)
         " >> "$GITHUB_OUTPUT"
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
       with:
         name: dist-pypi
         path: dist
@@ -64,7 +64,7 @@ jobs:
     - run: |
         hatch run tile-renderer schema pla2 > dist/pla2.schema.json
         hatch run tile-renderer schema skin > dist/skin.schema.json
-    - uses: actions/upload-artifact@v4
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
       with:
         name: dist-github
         path: dist
@@ -76,11 +76,11 @@ jobs:
       contents: write
 
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: dist-github
           path: dist
-      - uses: softprops/action-gh-release@v2
+      - uses: softprops/action-gh-release@5be0e66d93ac7ed76da52eca8bb058f665c3a5fe # v2
         with:
           tag_name: ${{ needs.build.outputs.version }}
           body: ${{ needs.build.outputs.changelog }}
@@ -96,7 +96,7 @@ jobs:
       id-token: write
 
     steps:
-      - uses: actions/download-artifact@v4
+      - uses: actions/download-artifact@d3f86a106a0bac45b974a628896c90dbdf5c8093 # v4
         with:
           name: dist-pypi
           path: dist
