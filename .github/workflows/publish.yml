@@ -43,7 +43,7 @@ jobs:
         from tile_renderer.__about__ import __version__
         print('version=v'+__version__)
         " >> "$GITHUB_OUTPUT"
-    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: dist-pypi
         path: dist
@@ -64,7 +64,7 @@ jobs:
     - run: |
         hatch run tile-renderer schema pla2 > dist/pla2.schema.json
         hatch run tile-renderer schema skin > dist/skin.schema.json
-    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+    - uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4.6.2
       with:
         name: dist-github
         path: dist
