@@ -2,6 +2,9 @@
 
 ## Planned
 
+## v5.0.8 (20250611)
+* handle `LineString.offset_curve()` sometimes returning `MultiLineString`
+
 ## v5.0.7 (20250331)
 * upgrade dependencies for Python 3.13
 * change `requests` to `niquests`

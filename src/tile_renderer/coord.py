@@ -4,7 +4,8 @@ import dataclasses
 import functools
 from typing import TYPE_CHECKING, Self, cast, overload
 
-from shapely import LineString, Point, Polygon
+from shapely import LineString, MultiLineString, Point, Polygon
+from shapely import ops
 from shapely.ops import substring
 
 if TYPE_CHECKING:
@@ -150,11 +151,11 @@ class Bounds[T: float | int]:
         pass
 
     @overload
-    def __add__(self: Bounds[float], other: Bounds[int] | Bounds[float]) -> Bounds[float]:
+    def __add__(self: Bounds[int], other: Bounds[float]) -> Bounds[float]:
         pass
 
     @overload
-    def __add__(self: Bounds[int], other: Bounds[float]) -> Bounds[float]:
+    def __add__(self: Bounds[float], other: Bounds[int] | Bounds[float]) -> Bounds[float]:
         pass
 
     def __add__(self, other):
@@ -225,8 +226,11 @@ class Line[T: float | int]:
     def parallel_offset(self, distance: float) -> Self | Line[float]:
         if distance == 0:
             return self
+        line = self.shapely.offset_curve(distance)
+        if isinstance(line, MultiLineString):
+            line = ops.linemerge(line)
         return Line(
-            [Coord(*a) for a in self.shapely.offset_curve(distance).coords],
+            [Coord(*a) for a in line.coords],
         )
 
     @property

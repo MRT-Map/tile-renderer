@@ -45,11 +45,11 @@ path = "src/tile_renderer/__about__.py"
 
 [tool.hatch.envs.docs]
 extra-dependencies = [
-  "sphinx",
-  "sphinxcontrib-programoutput",
-  "sphinx-codeautolink",
-  "sphinx_rtd_theme",
-  "sphinx-jsonschema"
+  "sphinx==8.2.3", # renovate
+  "sphinxcontrib-programoutput==0.18", # renovate
+  "sphinx-codeautolink==0.17.5", # renovate
+  "sphinx_rtd_theme==3.0.2", # renovate
+  "sphinx-jsonschema==1.19.1", # renovate
 ]
 [tool.hatch.envs.docs.scripts]
 build = """
@@ -63,11 +63,10 @@ build = """
 
 [tool.hatch.envs.types]
 extra-dependencies = [
-  "mypy",
-  "types-shapely"
+  "mypy>=1.0.0",
 ]
 [tool.hatch.envs.types.scripts]
-check = "mypy --install-types --non-interactive {args:src/tile_renderer tests}  --enable-incomplete-feature=NewGenericSyntax --check-untyped-defs"
+check = "mypy --install-types --non-interactive {args:src/tile_renderer tests} --check-untyped-defs"
 
 [tool.coverage.run]
 source_pkgs = ["tile_renderer", "tests"]

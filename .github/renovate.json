@@ -1,0 +1,17 @@
+{
+  "$schema": "https://docs.renovatebot.com/renovate-schema.json",
+  "extends": [
+    "github>mrt-map/renovate-config",
+    ":pinOnlyDevDependencies"
+  ],
+  "customManagers": [
+    {
+      "customType": "regex",
+      "managerFilePatterns": ["/pyproject.toml/"],
+      "matchStrings": [
+        "\"(?<packageName>[A-Z0-9a-z_-]*)(?<currentValue>.*)\", # renovate"
+      ],
+      "datasourceTemplate": "pypi"
+    }
+  ]
+}
