@@ -38,7 +38,7 @@ intersphinx_mapping = {
     "shapely": ("https://shapely.readthedocs.io/en/stable", None),
     "msgspec": ("https://jcristharif.com/msgspec/", None),
     "niquests": ("https://niquests.readthedocs.io/en/latest/", None),
-    "rich": ("https://rich.readthedocs.io/en/stable/", None)
+    "rich": ("https://rich.readthedocs.io/en/stable/", None),
 }
 html_baseurl = "https://mrt-map.github.io/tile-renderer"
 

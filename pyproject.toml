@@ -45,11 +45,11 @@ path = "src/tile_renderer/__about__.py"
 
 [tool.hatch.envs.docs]
 extra-dependencies = [
-  "sphinx==8.2.3", # renovate
-  "sphinxcontrib-programoutput==0.18", # renovate
-  "sphinx-codeautolink==0.17.5", # renovate
-  "sphinx_rtd_theme==3.0.2", # renovate
-  "sphinx-jsonschema==1.19.1", # renovate
+  "sphinx==8.2.3", 
+  "sphinxcontrib-programoutput==0.18", 
+  "sphinx-codeautolink==0.17.5", 
+  "sphinx_rtd_theme==3.0.2", 
+  "sphinx-jsonschema==1.19.1", 
 ]
 [tool.hatch.envs.docs.scripts]
 build = """
