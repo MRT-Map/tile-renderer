@@ -4,8 +4,7 @@ import dataclasses
 import functools
 from typing import TYPE_CHECKING, Self, cast, overload
 
-from shapely import LineString, MultiLineString, Point, Polygon
-from shapely import ops
+from shapely import LineString, MultiLineString, Point, Polygon, ops
 from shapely.ops import substring
 
 if TYPE_CHECKING:
