@@ -66,7 +66,7 @@ extra-dependencies = [
   "pyrefly==0.41.0",
 ]
 [tool.hatch.envs.types.scripts]
-check = "pyrefly check"
+check = "pyrefly check {args}"
 
 [tool.coverage.run]
 source_pkgs = ["tile_renderer", "tests"]
