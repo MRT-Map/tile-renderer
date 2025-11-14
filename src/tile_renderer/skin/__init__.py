@@ -83,8 +83,8 @@ class Skin(Struct, kw_only=True):
 
 @dataclass_transform()
 class _SerSkin(Skin):
-    types: list[_SerComponentType]  # type: ignore[assignment]
-    background: str = "#ffffff"  # type: ignore[assignment]
+    types: list[_SerComponentType]  # pyrefly: ignore[bad-override]
+    background: str = "#ffffff"  # pyrefly: ignore[bad-override]
 
     def decode(self) -> Skin:
         return Skin(
@@ -127,7 +127,7 @@ class ComponentType(Struct, kw_only=True):
 
 @dataclass_transform()
 class _SerComponentType(ComponentType):
-    styles: dict[str, list[_SerComponentStyle]]  # type: ignore[assignment]
+    styles: dict[str, list[_SerComponentStyle]]  # pyrefly: ignore[bad-override]
 
     def decode(self) -> ComponentType:
         return ComponentType(
@@ -210,7 +210,7 @@ class AreaBorderText(ComponentStyle):
 
 @dataclass_transform()
 class _SerAreaBorderText(AreaBorderText, tag_field="ty", tag="areaBorderText"):
-    colour: str | None = None  # type: ignore[assignment]
+    colour: str | None = None  # pyrefly: ignore[bad-override]
 
     def decode(self) -> AreaBorderText:
         return AreaBorderText(
@@ -258,8 +258,8 @@ class AreaCentreText(ComponentStyle):
 
 @dataclass_transform()
 class _SerAreaCentreText(AreaCentreText, tag_field="ty", tag="areaCentreText"):
-    colour: str | None = None  # type: ignore[assignment]
-    offset: tuple[float, float] = (0.0, 0.0)  # type: ignore[assignment]
+    colour: str | None = None  # pyrefly: ignore[bad-override]
+    offset: tuple[float, float] = (0.0, 0.0)  # pyrefly: ignore[bad-override]
 
     def decode(self) -> AreaCentreText:
         return AreaCentreText(
@@ -309,8 +309,8 @@ class AreaFill(ComponentStyle):
 
 @dataclass_transform()
 class _SerAreaFill(AreaFill, tag_field="ty", tag="areaFill"):
-    colour: str | None = None  # type: ignore[assignment]
-    outline: str | None = None  # type: ignore[assignment]
+    colour: str | None = None  # pyrefly: ignore[bad-override]
+    outline: str | None = None  # pyrefly: ignore[bad-override]
 
     def decode(self) -> AreaFill:
         return AreaFill(
@@ -361,8 +361,8 @@ class AreaCentreImage(ComponentStyle):
 
 @dataclass_transform()
 class _SerAreaCentreImage(AreaCentreImage, tag_field="ty", tag="areaCentreImage"):
-    size: tuple[float, float] = (0.0, 0.0)  # type: ignore[assignment]
-    offset: tuple[float, float] = (0.0, 0.0)  # type: ignore[assignment]
+    size: tuple[float, float] = (0.0, 0.0)  # pyrefly: ignore[bad-override]
+    offset: tuple[float, float] = (0.0, 0.0)  # pyrefly: ignore[bad-override]
 
     def decode(self) -> AreaCentreImage:
         return AreaCentreImage(
@@ -414,8 +414,8 @@ class LineText(ComponentStyle):
 
 @dataclass_transform()
 class _SerLineText(LineText, tag_field="ty", tag="lineText"):
-    arrow_colour: str | None = None  # type: ignore[assignment]
-    colour: str | None = None  # type: ignore[assignment]
+    arrow_colour: str | None = None  # pyrefly: ignore[bad-override]
+    colour: str | None = None  # pyrefly: ignore[bad-override]
 
     def decode(self) -> LineText:
         return LineText(
@@ -467,7 +467,7 @@ class LineFore(ComponentStyle):
 
 @dataclass_transform()
 class _SerLineFore(LineFore, tag_field="ty", tag="lineFore"):
-    colour: str | None = None  # type: ignore[assignment]
+    colour: str | None = None  # pyrefly: ignore[bad-override]
 
     def decode(self) -> LineFore:
         return LineFore(
@@ -543,8 +543,8 @@ class PointText(ComponentStyle):
 
 @dataclass_transform()
 class _SerPointText(PointText, tag_field="ty", tag="pointText"):
-    colour: str | None = None  # type: ignore[assignment]
-    offset: tuple[float, float] = (0.0, 0.0)  # type: ignore[assignment]
+    colour: str | None = None  # pyrefly: ignore[bad-override]
+    offset: tuple[float, float] = (0.0, 0.0)  # pyrefly: ignore[bad-override]
 
     def decode(self) -> PointText:
         return PointText(
@@ -596,8 +596,8 @@ class PointSquare(ComponentStyle):
 
 @dataclass_transform()
 class _SerPointSquare(PointSquare, tag_field="ty", tag="pointSquare"):
-    colour: str | None = None  # type: ignore[assignment]
-    outline: str | None = None  # type: ignore[assignment]
+    colour: str | None = None  # pyrefly: ignore[bad-override]
+    outline: str | None = None  # pyrefly: ignore[bad-override]
 
     def decode(self) -> PointSquare:
         return PointSquare(

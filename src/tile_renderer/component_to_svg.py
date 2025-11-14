@@ -270,7 +270,7 @@ def line_back_fore_svg(
         fill=None,
         fill_opacity=0,
         stroke_width=s.width,
-        stroke_dasharray=s.dash,  # type: ignore[arg-type]
+        stroke_dasharray=s.dash,  # pyrefly: ignore[bad-argument-type]
         stroke_linecap=None if s.unrounded else "round",
         stroke_linejoin="round",
     )

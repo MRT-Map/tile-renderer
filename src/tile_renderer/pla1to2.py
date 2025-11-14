@@ -24,7 +24,7 @@ def pla1to2(
         ns = comp_name.split("-")[0]
         id_ = comp_name.removeprefix(ns + "-")
         if "hollows" in comp:
-            log.warn(
+            log.warning(
                 f"Hollow data found in `{comp_name}`, PLA 2 doesn't support hollows",
             )
         nodes = Line([a for a in (get_coord(n) for n in comp["nodes"]) if a is not None])

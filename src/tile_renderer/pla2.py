@@ -39,7 +39,7 @@ class Component(Struct):
             description=self.description,
             type=self.type,
             layer=self.layer,
-            nodes=self.nodes.encode(),  # type: ignore
+            nodes=self.nodes.encode(),  # pyrefly: ignore[bad-argument-type]
             tags=self.tags,
             attrs=self.attrs,
         )
@@ -56,7 +56,7 @@ class Component(Struct):
 
 @dataclass_transform()
 class _SerComponent(Component):
-    nodes: list[tuple[int | float, int | float]]  # type: ignore[assignment]
+    nodes: list[tuple[int | float, int | float]]  # pyrefly: ignore[bad-override]
 
     def decode(self) -> Component:
         return Component(
@@ -66,7 +66,7 @@ class _SerComponent(Component):
             description=self.description,
             type=self.type,
             layer=self.layer,
-            nodes=Line.decode(self.nodes),  # type: ignore[arg-type]
+            nodes=Line.decode(self.nodes),  # pyrefly: ignore[bad-argument-type]
             tags=self.tags,
             attrs=self.attrs,
         )

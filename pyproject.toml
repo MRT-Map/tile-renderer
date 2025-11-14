@@ -63,10 +63,10 @@ build = """
 
 [tool.hatch.envs.types]
 extra-dependencies = [
-  "mypy>=1.0.0",
+  "pyrefly==0.41.0",
 ]
 [tool.hatch.envs.types.scripts]
-check = "mypy --install-types --non-interactive {args:src/tile_renderer tests} --check-untyped-defs"
+check = "pyrefly check"
 
 [tool.coverage.run]
 source_pkgs = ["tile_renderer", "tests"]

@@ -102,7 +102,7 @@ def _simplify_svg(doc: str, font_dir: Path, tile_size: int) -> str:
     )
     out, err = p.communicate(input=doc.encode())
     if err:
-        log.warn("" + err.decode())
+        log.warning("" + err.decode())
     return out.decode()
 
 
@@ -143,5 +143,5 @@ def _export_tile(
     )
     out, err = p.communicate(input=doc.encode())
     if err:
-        log.warn("" + err.decode())
+        log.warning("" + err.decode())
     return tile, out

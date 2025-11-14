@@ -46,7 +46,7 @@ def _get_styling(components: list[Component], skin: Skin, zoom: int) -> list[_St
             continue
         component_type = skin.get_type_by_name(component.type)
         if component_type is None:
-            log.warn(
+            log.warning(
                 f"Skipping render of {component.type} {component.fid} "
                 f"{f'({component.display_name})' if component.display_name else ''}"
             )
@@ -89,18 +89,17 @@ def _get_junctions(
         for st in styling[: jt.i]:
             if type(st.s) is not LineFore or st.c.fid == jt.fid:
                 continue
-            s = cast(LineFore, st.s)
             for coord in jt.line:
                 for j in (j for j, a in enumerate(st.c.nodes) if a == coord):
                     vector1 = st.c.nodes[j - 1] - coord if j != 0 else None
                     vector2 = st.c.nodes[j + 1] - coord if j != len(st.c.nodes) - 1 else None
                     coord1 = (
-                        (coord + vector1.unit() * min(jt.size, abs(vector1)))  # type: ignore[operator]
+                        (coord + vector1.unit() * min(jt.size, abs(vector1)))
                         if vector1 is not None and vector1 != Coord(0, 0)
                         else None
                     )
                     coord2 = (
-                        (coord + vector2.unit() * min(jt.size, abs(vector2)))  # type: ignore[operator]
+                        (coord + vector2.unit() * min(jt.size, abs(vector2)))
                         if vector2 is not None and vector2 != Coord(0, 0)
                         else None
                     )
@@ -109,11 +108,11 @@ def _get_junctions(
                     out.setdefault(jt.i, []).append(
                         svg.Polyline(
                             points=[cast(int, f"{c.x},{c.y}") for c in coords],
-                            stroke=None if s.colour is None else str(s.colour),
+                            stroke=None if st.s.colour is None else str(st.s.colour),
                             fill=None,
                             fill_opacity=0,
-                            stroke_width=s.width,
-                            stroke_linecap=None if s.unrounded else "round",
+                            stroke_width=st.s.width,
+                            stroke_linecap=None if st.s.unrounded else "round",
                             stroke_linejoin="round",
                         )
                     )

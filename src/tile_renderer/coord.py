@@ -29,20 +29,16 @@ class Vector[T: float | int]:
         return Vector(round(self.x), round(self.y))
 
     @overload
-    def __add__(self: Vector[int], other: Vector[int]) -> Vector[int]:
-        pass
+    def __add__(self: Vector[int], other: Vector[int]) -> Vector[int]: ...
 
     @overload
-    def __add__(self: Vector[float], other: Vector[int] | Vector[float]) -> Vector[float]:
-        pass
+    def __add__(self: Vector[float], other: Vector[int] | Vector[float]) -> Vector[float]: ...
 
     @overload
-    def __add__(self: Vector[int], other: int) -> Vector[int]:
-        pass
+    def __add__(self: Vector[int], other: int) -> Vector[int]: ...
 
     @overload
-    def __add__(self: Vector[float], other: float) -> Vector[float]:
-        pass
+    def __add__(self: Vector[float], other: float) -> Vector[float]: ...
 
     def __add__(self, other):
         if isinstance(other, Vector):
@@ -50,20 +46,16 @@ class Vector[T: float | int]:
         return Vector(self.x + other, self.y + other)
 
     @overload
-    def __sub__(self: Vector[int], other: Vector[int]) -> Vector[int]:
-        pass
+    def __sub__(self: Vector[int], other: Vector[int]) -> Vector[int]: ...
 
     @overload
-    def __sub__(self: Vector[float], other: Vector[int] | Vector[float]) -> Vector[float]:
-        pass
+    def __sub__(self: Vector[float], other: Vector[int] | Vector[float]) -> Vector[float]: ...
 
     @overload
-    def __sub__(self: Vector[int], other: int) -> Vector[int]:
-        pass
+    def __sub__(self: Vector[int], other: int) -> Vector[int]: ...
 
     @overload
-    def __sub__(self: Vector[float], other: float) -> Vector[float]:
-        pass
+    def __sub__(self: Vector[float], other: float) -> Vector[float]: ...
 
     def __sub__(self, other):
         if isinstance(other, Vector):
@@ -71,12 +63,10 @@ class Vector[T: float | int]:
         return Vector(self.x - other, self.y - other)
 
     @overload
-    def __mul__(self: Vector[int], other: int) -> Vector[int]:
-        pass
+    def __mul__(self: Vector[int], other: int) -> Vector[int]: ...
 
     @overload
-    def __mul__(self: Vector[float], other: float) -> Vector[float]:
-        pass
+    def __mul__(self: Vector[float], other: float) -> Vector[float]: ...
 
     def __mul__(self, other):
         return cast(type, type(self))(self.x * other, self.y * other)
@@ -88,28 +78,25 @@ class Vector[T: float | int]:
         return (self.x**2 + self.y**2) ** 0.5
 
     def __neg__(self) -> Self:
-        return cast(type, type(self))(-self.x, -self.y)
+        return cast(type, type(self))(-self.x, -self.y)  # pyrefly: ignore[unsupported-operation]
 
     def unit(self) -> Vector[float]:
         return self / abs(self)
 
     @overload
-    def dot(self: Vector[int], other: Vector[int]) -> int:
-        pass
+    def dot(self: Vector[int], other: Vector[int]) -> int: ...
 
     @overload
-    def dot(self: Vector[float], other: Vector[int] | Vector[float]) -> float:
-        pass
+    def dot(self: Vector[float], other: Vector[int] | Vector[float]) -> float: ...
 
     @overload
-    def dot(self: Vector[int], other: Vector[float]) -> float:
-        pass
+    def dot(self: Vector[int], other: Vector[float]) -> float: ...
 
     def dot(self, other):
         return self.x * other.x + self.y * other.y
 
     def perp(self) -> Self:
-        return cast(type, type(self))(-self.y, self.x)
+        return cast(type, type(self))(-self.y, self.x)  # pyrefly: ignore[unsupported-operation]
 
     def encode(self) -> tuple[T, T]:
         return self.x, self.y
@@ -146,16 +133,13 @@ class Bounds[T: float | int]:
     y_min: T
 
     @overload
-    def __add__(self: Bounds[int], other: Bounds[int]) -> Bounds[int]:
-        pass
+    def __add__(self: Bounds[int], other: Bounds[int]) -> Bounds[int]: ...
 
     @overload
-    def __add__(self: Bounds[int], other: Bounds[float]) -> Bounds[float]:
-        pass
+    def __add__(self: Bounds[int], other: Bounds[float]) -> Bounds[float]: ...
 
     @overload
-    def __add__(self: Bounds[float], other: Bounds[int] | Bounds[float]) -> Bounds[float]:
-        pass
+    def __add__(self: Bounds[float], other: Bounds[int] | Bounds[float]) -> Bounds[float]: ...
 
     def __add__(self, other):
         return Bounds(
@@ -174,12 +158,10 @@ class Line[T: float | int]:
         return f"{type(self).__name__} <{''.join(str(a.as_tuple()) for a in self.coords)}>"
 
     @overload
-    def __getitem__(self, item: int) -> Coord[T]:
-        pass
+    def __getitem__(self, item: int) -> Coord[T]: ...
 
     @overload
-    def __getitem__(self, item: slice) -> list[Coord[T]]:
-        pass
+    def __getitem__(self, item: slice) -> list[Coord[T]]: ...
 
     def __getitem__(self, item):
         return self.coords[item]
