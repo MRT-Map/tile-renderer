@@ -48,7 +48,7 @@ def render_tiles(
         task_id = progress.add_task("Exporting to PNG", total=len(tiles), console=Console(file=sys.stderr))
         doc_str = re.sub(
             r'<svg width=".*?" height=".*?"',
-            f'<svg viewBox="<|min_x|> <|min_y|> {max_zoom_range*2**zoom} {max_zoom_range*2**zoom}"',
+            f'<svg viewBox="<|min_x|> <|min_y|> {max_zoom_range * 2**zoom} {max_zoom_range * 2**zoom}"',
             _simplify_svg(str(doc), font_dir, tile_size),
         )
 
