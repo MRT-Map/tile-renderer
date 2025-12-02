@@ -49,7 +49,7 @@ extra-dependencies = [
   "sphinxcontrib-programoutput==0.18", 
   "sphinx-codeautolink==0.17.5", 
   "sphinx_rtd_theme==3.0.2", 
-  "sphinx-jsonschema==1.19.1", 
+  "sphinx-jsonschema==1.19.2", 
 ]
 [tool.hatch.envs.docs.scripts]
 build = """
