@@ -63,7 +63,7 @@ build = """
 
 [tool.hatch.envs.types]
 extra-dependencies = [
-  "pyrefly==0.51.2",
+  "pyrefly==0.52.0",
 ]
 [tool.hatch.envs.types.scripts]
 check = "pyrefly check {args}"
