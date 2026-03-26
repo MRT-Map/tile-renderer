@@ -9,7 +9,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-    - uses: pypa/hatch@install
+    - uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install
     - uses: baptiste0928/cargo-install@f204293d9709061b7bc1756fec3ec4e2cd57dec0 # v3.4.0
       with:
         crate: resvg
@@ -29,7 +29,7 @@ jobs:
 
     steps:
     - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-    - uses: pypa/hatch@install
+    - uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install
     - run: hatch build
 
     - id: release-info
@@ -104,4 +104,4 @@ jobs:
         with:
           name: dist-pypi
           path: dist
-      - uses: pypa/gh-action-pypi-publish@release/v1
+      - uses: pypa/gh-action-pypi-publish@ed0c53931b1dc9bd32cbe73a98c7f6766f8a527e # release/v1
