@@ -2,6 +2,11 @@
 
 ## Planned
 
+## v5.0.10-rc.0 (20260604)
+
+- move to mise and hk
+- revamp gh actions
+
 ## v5.0.9 (20260604)
 
 - handle `LineString.offset_curve()` still sometimes returning `MultiLineString`

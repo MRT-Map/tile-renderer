@@ -1,6 +1,4 @@
-
-name: "Update Python Lockfiles"
-
+name: Update Python Lockfiles
 on:
   schedule:
     - cron: 0 0 * * 1
