@@ -1,0 +1,23 @@
+name: Test
+on:
+  push:
+    branches: ["dev"]
+  workflow_dispatch:
+  workflow_call:
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    strategy:
+      matrix:
+        zoom: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: ./.github/actions/mise
+        with:
+          envs: ""
+
+      - run: hatch run python tests/test_render.py png ${{ matrix.zoom }}

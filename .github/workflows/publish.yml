@@ -3,20 +3,9 @@ on:
 
 jobs:
   test:
-    runs-on: ubuntu-latest
+    uses: ./.github/workflows/test.yml
     permissions:
       contents: read
-
-    steps:
-      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install
-      - uses: baptiste0928/cargo-install@f204293d9709061b7bc1756fec3ec4e2cd57dec0 # v3.4.0
-        with:
-          crate: resvg
-      - uses: baptiste0928/cargo-install@f204293d9709061b7bc1756fec3ec4e2cd57dec0 # v3.4.0
-        with:
-          crate: usvg
-      - run: hatch run python tests/test.py 9
 
   build:
     runs-on: ubuntu-latest
@@ -29,7 +18,12 @@ jobs:
 
     steps:
       - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-      - uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/mise
+        with:
+          cache: false
+          envs: ""
       - run: hatch build
 
       - id: release-info
@@ -84,11 +78,28 @@ jobs:
         with:
           name: dist-github
           path: dist
-      - uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0
+      - uses: softprops/action-gh-release@b4309332981a82ec1c5618f44dd2e27cc8bfbfda # v3.0.0 # zizmor: ignore[superfluous-actions]
         with:
           tag_name: ${{ needs.build.outputs.version }}
           body: ${{ needs.build.outputs.changelog }}
           files: dist/*
+
+  delete-github-release:
+    runs-on: ubuntu-latest
+    needs: [ test, build, github-release ]
+    if: ${{ always() && contains(needs.*.result, 'failure') }}
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - run: gh release delete "$TAG" --cleanup-tag -y
+        env:
+          TAG: ${{ needs.build.outputs.version }}
+          GH_TOKEN: ${{ github.token }}
+        continue-on-error: true
 
   pypi:
     runs-on: ubuntu-latest

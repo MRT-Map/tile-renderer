@@ -1,0 +1,30 @@
+name: Mise
+description: Mise
+
+inputs:
+  envs:
+    description: envs
+    default: "lint"
+  cache:
+    description: cache
+    default: "true"
+
+outputs:
+  mise-action:
+    description: mise-action output
+    value: ${{ toJSON(steps.mise-action.outputs) }}
+
+runs:
+  using: composite
+  steps:
+    - id: mise-env
+      shell: bash
+      run: echo "MISE_ENV=$ENVS" > "$GITHUB_ENV"  # zizmor: ignore[github-env]
+      env:
+        ENVS: ${{ inputs.envs }}
+
+    - id: mise-action
+      uses: jdx/mise-action@1648a7812b9aeae629881980618f079932869151 # v4.0.1
+      with:
+        version: 2026.5.7
+        cache: ${{ inputs.cache }}

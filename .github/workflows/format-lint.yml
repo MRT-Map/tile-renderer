@@ -1,0 +1,88 @@
+name: Format, Lint
+on:
+  push:
+    branches: ["**"]
+  pull_request:
+  workflow_dispatch:
+
+jobs:
+  format:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: true
+      - uses: ./.github/actions/mise
+
+      - run: hk run format --all
+
+      - uses: EndBug/add-and-commit@290ea2c423ad77ca9c62ae0f5b224379612c0321 # v10.0.0
+        if: github.event_name != 'pull_request'
+        with:
+          default_author: github_actions
+          message: Formatting
+      - run: git status
+        if: github.event_name == 'pull_request'
+
+  lint:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      pull-requests: write
+      actions: write
+    outputs:
+      matrix: ${{ steps.matrix.outputs.value }}
+    needs: format
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: ./.github/actions/mise
+
+      - run: hk run sarif --all --no-fail-fast
+      - id: matrix
+        if: '!cancelled()'
+        run: |
+          # shellcheck disable=SC2012
+          echo "value=[$(ls .sarif -Qm | sed s/\.sarif//g | tr '\n' ' ')]" >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        if: '!cancelled()'
+        with:
+          name: sarif
+          path: .sarif/*
+          include-hidden-files: true
+
+      - uses: peter-evans/create-pull-request@5f6978faf089d4d20b00c7766989d076bb2fc7f1 # v8.1.1
+        if: github.ref_name == 'main' && !cancelled()
+        with:
+          branch: lint
+          title: Linting
+      - run: git status
+        if: github.ref_name != 'main' && !cancelled()
+        
+  upload-sarif:
+    needs: lint
+    runs-on: ubuntu-slim
+    if: '!cancelled()'
+    strategy:
+      matrix:
+        value: ${{ fromJSON(needs.lint.outputs.matrix) }}
+    permissions:
+      security-events: write
+
+    steps:
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+        with:
+          persist-credentials: false
+      - uses: actions/download-artifact@3e5f45b2cfb9172054b4087a40e8e0b5a5461e7c # v8.0.1
+        with:
+          name: sarif
+          path: .sarif
+      - uses: github/codeql-action/upload-sarif@7211b7c8077ea37d8641b6271f6a365a22a5fbfa # v4.36.0
+        with:
+          sarif_file: .sarif/${{ matrix.value }}.sarif
+          category: ${{ matrix.value }}

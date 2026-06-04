@@ -346,3 +346,4 @@ cython_debug/
 ### Other
 out*.svg
 default.skin.json
+.sarif

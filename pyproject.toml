@@ -1,5 +1,5 @@
 [build-system]
-requires = ["hatchling"]
+requires = ["hatchling==1.29.0"]
 build-backend = "hatchling.build"
 
 [project]
@@ -44,6 +44,20 @@ tile-renderer = "tile_renderer.cli:cli"
 
 [tool.hatch.version]
 path = "src/tile_renderer/__about__.py"
+
+[tool.hatch.env]
+requires = [
+  "hatch-pip-compile==1.11.6"
+]
+
+[tool.hatch.envs.default]
+type = "pip-compile"
+pip-compile-hashes = true
+pip-compile-constraint = "default"
+pip-compile-resolver = "uv"
+pip-compile-installer = "uv"
+pip-compile-args = ["--exclude-newer", "3 days"]
+lock-filename = "requirements/{env_name}.txt"
 
 [tool.hatch.envs.docs]
 extra-dependencies = [
