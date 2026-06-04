@@ -28,7 +28,6 @@
    :template: custom-module-template.rst                 
    :recursive:
 
-   cli
    colour
    component_to_svg
    coord
