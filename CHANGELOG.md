@@ -6,6 +6,7 @@
 
 - move to mise and hk
 - revamp gh actions
+- change licence to AGPLv3
 
 ## v5.0.9 (20260604)
 
