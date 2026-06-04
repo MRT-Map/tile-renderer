@@ -5,7 +5,6 @@ import functools
 from typing import TYPE_CHECKING, Self, cast, overload
 
 from shapely import LineString, MultiLineString, Point, Polygon, ops
-from shapely.ops import substring
 
 if TYPE_CHECKING:
     from collections.abc import Iterator
@@ -209,7 +208,7 @@ class Line[T: float | int]:
             return self
         line = self.shapely.offset_curve(distance)
         if isinstance(line, MultiLineString):
-            line = ops.linemerge(line)
+            line = LineString([c for line2 in line.geoms for c in line2.coords])
         return Line(
             [Coord(*a) for a in line.coords],
         )
@@ -229,7 +228,7 @@ class Line[T: float | int]:
         dist = (coords.length % dash_length) / 2 - (dash_length if shift else 0)
         while dist < coords.length - dash_length:
             dash = Line(
-                [Coord(*c) for c in substring(coords, start_dist=max(dist, 0), end_dist=dist + dash_length).coords]
+                [Coord(*c) for c in ops.substring(coords, start_dist=max(dist, 0), end_dist=dist + dash_length).coords]
             )
             if len(dash) != 1:
                 out.append(dash)
