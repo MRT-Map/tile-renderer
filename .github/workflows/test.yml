@@ -1,7 +1,7 @@
 name: Test
 on:
   push:
-    branches: ["dev"]
+    branches: ["**"]
   workflow_dispatch:
   workflow_call:
 

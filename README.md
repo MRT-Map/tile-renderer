@@ -1,5 +1,5 @@
-![](./.github/tre-light.png)
-![](./.github/sample-map.png)
+![](https://raw.githubusercontent.com/MRT-Map/tile-renderer/refs/heads/main/.github/tre-light.png)
+![](https://raw.githubusercontent.com/MRT-Map/tile-renderer/refs/heads/main/.github/sample-map.png)
 
 ![PyPI - Version](https://img.shields.io/pypi/v/tile-renderer)
 ![Github Version](https://img.shields.io/github/v/release/MRT-Map/tile-renderer)

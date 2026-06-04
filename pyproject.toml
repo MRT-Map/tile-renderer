@@ -40,7 +40,7 @@ Source = "https://github.com/MRT-Map/tile-renderer"
 Changelog = "https://github.com/MRT-Map/tile-renderer/blob/main/CHANGELOG.md"
 
 [project.scripts]
-tile-renderer = "tile_renderer.cli:cli"
+tile-renderer = "tile_renderer.__main__:cli"
 
 [tool.hatch.version]
 path = "src/tile_renderer/__about__.py"
