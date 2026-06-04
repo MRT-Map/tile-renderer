@@ -2,6 +2,9 @@
 
 ## Planned
 
+## v5.0.9 (20260604)
+* handle `LineString.offset_curve()` still sometimes returning `MultiLineString`
+
 ## v5.0.8 (20250611)
 * handle `LineString.offset_curve()` sometimes returning `MultiLineString`
 

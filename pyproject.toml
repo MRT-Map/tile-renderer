@@ -12,7 +12,7 @@ license = { file = "LICENSE" }
 keywords = ['map', 'tiles', 'renderer', 'tile-renderer', 'mapping', 'mrt mapping services', 'minecart rapid transit']
 authors = [
   { name = "7d", email = "61975820+iiiii7d@users.noreply.github.com" },
-  { name = "Minecart Rapid Transit Mapping Services", email = "mappingmrt@gmail.com" }
+  { name = "Minecart Rapid Transit Mapping Services" }
 ]
 classifiers = [
   'Development Status :: 5 - Production/Stable',
@@ -20,6 +20,8 @@ classifiers = [
   'License :: OSI Approved :: GNU General Public License v3 (GPLv3)',
   'Natural Language :: English',
   "Programming Language :: Python :: 3.12",
+  "Programming Language :: Python :: 3.13",
+  "Programming Language :: Python :: 3.14",
   "Programming Language :: Python :: Implementation :: CPython",
 ]
 dependencies = [
