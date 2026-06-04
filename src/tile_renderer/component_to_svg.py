@@ -83,7 +83,7 @@ def area_border_text_svg(
                 svg.G(
                     elements=[
                         svg.Polyline(
-                            points=[cast(int, f"{c.x},{c.y}") for c in dash],
+                            points=[cast("int", f"{c.x},{c.y}") for c in dash],
                             fill=None,
                             fill_opacity=0,
                             stroke=None,
@@ -152,7 +152,7 @@ def area_fill_svg(
     _i: int,
 ) -> svg.Element:
     return svg.Polygon(
-        points=[cast(int, f"{c.x},{c.y}") for c in component.nodes],
+        points=[cast("int", f"{c.x},{c.y}") for c in component.nodes],
         fill=None if s.colour is None else str(s.colour),
         fill_opacity=0 if s.colour is None else None,
         stroke=None if s.outline is None else str(s.outline),
@@ -202,7 +202,7 @@ def line_text_svg(
             point3 = arrow_centre - vector * (s.size / 2) - vector.perp() * (s.size / 3)
             lists.arrow.append(
                 svg.Polygon(
-                    points=[cast(int, f"{c.x},{c.y}") for c in (point1, point2, point3)],
+                    points=[cast("int", f"{c.x},{c.y}") for c in (point1, point2, point3)],
                     fill=str(s.arrow_colour)
                     if s.arrow_colour is not None
                     else str(s.colour)
@@ -231,7 +231,7 @@ def line_text_svg(
                 svg.G(
                     elements=[
                         svg.Polyline(
-                            points=[cast(int, f"{c.x},{c.y}") for c in dash],
+                            points=[cast("int", f"{c.x},{c.y}") for c in dash],
                             fill=None,
                             fill_opacity=0,
                             stroke=None,
@@ -265,7 +265,7 @@ def line_back_fore_svg(
     if type(s) is LineBack:
         lists.junction.append(_Lists.Junction(i, component.nodes, s.width, component.fid))
     return svg.Polyline(
-        points=[cast(int, f"{c.x},{c.y}") for c in component.nodes],
+        points=[cast("int", f"{c.x},{c.y}") for c in component.nodes],
         stroke=None if s.colour is None else str(s.colour),
         fill=None,
         fill_opacity=0,

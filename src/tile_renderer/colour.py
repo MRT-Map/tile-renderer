@@ -49,7 +49,7 @@ class Colour:
 
     def __str__(self) -> str:
         r, g, b = self.rgb
-        return "#" + hex(round(r))[2:].zfill(2) + hex(round(g))[2:].zfill(2) + hex(round(b))[2:].zfill(2)
+        return f"#{round(r):02x}{round(g):02x}{round(b):02x}"
 
     @property
     def rgb(self) -> tuple[float, float, float]:
@@ -101,13 +101,11 @@ class Colour:
     def darkened(self, by: float = 30.0) -> Self:
         s = copy(self)
         s.l -= by
-        if s.l < 0:
-            s.l = 0
+        s.l = max(s.l, 0)
         return s
 
     def brightened(self, by: float = 30.0) -> Self:
         s = copy(self)
         s.l += by
-        if s.l > 100:  # noqa: PLR2004
-            s.l = 100
+        s.l = min(s.l, 100)
         return s

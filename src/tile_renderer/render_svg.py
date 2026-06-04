@@ -77,7 +77,7 @@ def _sort_styling(styling: list[_Styling], skin: Skin) -> list[_Styling]:
 
         return s1.i - s2.i
 
-    return sorted(styling, key=functools.cmp_to_key(cast(Any, sort_fn)))
+    return sorted(styling, key=functools.cmp_to_key(cast("Any", sort_fn)))
 
 
 def _get_junctions(
@@ -107,7 +107,7 @@ def _get_junctions(
 
                     out.setdefault(jt.i, []).append(
                         svg.Polyline(
-                            points=[cast(int, f"{c.x},{c.y}") for c in coords],
+                            points=[cast("int", f"{c.x},{c.y}") for c in coords],
                             stroke=None if st.s.colour is None else str(st.s.colour),
                             fill=None,
                             fill_opacity=0,

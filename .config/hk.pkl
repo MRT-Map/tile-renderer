@@ -32,7 +32,7 @@ local sarif = new Mapping<String, Step> {
         exclusive = true
     }
     ["hatch"] {
-        fix = linters["hatch"].fix.replaceAll("{{ workspace_files }}", "") + " --output-format=sarif > .sarif/hatch.sarif"
+        fix = linters["hatch"].fix.replaceAll("{{ files }}", "") + " --output-format=sarif > .sarif/hatch.sarif"
     }
     ["zizmor"] {
         fix = linters["zizmor"].fix.replaceAll("{{ files }}", ".") + " --format=sarif > .sarif/zizmor.sarif"

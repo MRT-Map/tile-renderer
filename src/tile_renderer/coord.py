@@ -41,7 +41,7 @@ class Vector[T: float | int]:
 
     def __add__(self, other):
         if isinstance(other, Vector):
-            return cast(type, type(self))(self.x + other.x, self.y + other.y)
+            return cast("type", type(self))(self.x + other.x, self.y + other.y)
         return Vector(self.x + other, self.y + other)
 
     @overload
@@ -58,7 +58,7 @@ class Vector[T: float | int]:
 
     def __sub__(self, other):
         if isinstance(other, Vector):
-            return cast(type, type(self))(self.x - other.x, self.y - other.y)
+            return cast("type", type(self))(self.x - other.x, self.y - other.y)
         return Vector(self.x - other, self.y - other)
 
     @overload
@@ -68,16 +68,16 @@ class Vector[T: float | int]:
     def __mul__(self: Vector[float], other: float) -> Vector[float]: ...
 
     def __mul__(self, other):
-        return cast(type, type(self))(self.x * other, self.y * other)
+        return cast("type", type(self))(self.x * other, self.y * other)
 
     def __truediv__(self, other: float) -> Vector[float]:
-        return cast(type, type(self))(self.x / other, self.y / other)
+        return cast("type", type(self))(self.x / other, self.y / other)
 
     def __abs__(self) -> float:
         return (self.x**2 + self.y**2) ** 0.5
 
     def __neg__(self) -> Self:
-        return cast(type, type(self))(-self.x, -self.y)  # pyrefly: ignore[unsupported-operation]
+        return cast("type", type(self))(-self.x, -self.y)  # pyrefly: ignore[unsupported-operation]
 
     def unit(self) -> Vector[float]:
         return self / abs(self)
@@ -95,7 +95,7 @@ class Vector[T: float | int]:
         return self.x * other.x + self.y * other.y
 
     def perp(self) -> Self:
-        return cast(type, type(self))(-self.y, self.x)  # pyrefly: ignore[unsupported-operation]
+        return cast("type", type(self))(-self.y, self.x)  # pyrefly: ignore[unsupported-operation]
 
     def encode(self) -> tuple[T, T]:
         return self.x, self.y
