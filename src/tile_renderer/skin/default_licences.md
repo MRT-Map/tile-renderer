@@ -1,4 +1,5 @@
 # Noto Sans fonts
+
 Downloadable at https://notofonts.github.io/.
 
 ```text
@@ -99,6 +100,7 @@ OTHER DEALINGS IN THE FONT SOFTWARE.
 ```
 
 # FontAwesome icons
+
 Downloadable at https://github.com/FortAwesome/Font-Awesome and https://fontawesome.com/.
 
 ```text
@@ -270,4 +272,5 @@ to represent the company, product, or service to which they refer.**
 ```
 
 # Map style was inspired by OpenStreetMap Carto
+
 https://github.com/gravitystorm/openstreetmap-carto

@@ -8,15 +8,15 @@ jobs:
       contents: read
 
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-    - uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install
-    - uses: baptiste0928/cargo-install@f204293d9709061b7bc1756fec3ec4e2cd57dec0 # v3.4.0
-      with:
-        crate: resvg
-    - uses: baptiste0928/cargo-install@f204293d9709061b7bc1756fec3ec4e2cd57dec0 # v3.4.0
-      with:
-        crate: usvg
-    - run: hatch run python tests/test.py 9
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install
+      - uses: baptiste0928/cargo-install@f204293d9709061b7bc1756fec3ec4e2cd57dec0 # v3.4.0
+        with:
+          crate: resvg
+      - uses: baptiste0928/cargo-install@f204293d9709061b7bc1756fec3ec4e2cd57dec0 # v3.4.0
+        with:
+          crate: usvg
+      - run: hatch run python tests/test.py 9
 
   build:
     runs-on: ubuntu-latest
@@ -28,50 +28,50 @@ jobs:
       contents: read
 
     steps:
-    - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
-    - uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install
-    - run: hatch build
+      - uses: actions/checkout@de0fac2e4500dabe0009e67214ff5f5447ce83dd # v6.0.2
+      - uses: pypa/hatch@257e27e51a6a5616ed08a39a408a21c35c9931bc # install
+      - run: hatch build
 
-    - id: release-info
-      run: |
-        {
-        echo 'changelog<<__EOF__'
-        hatch run python -c "
-        from tile_renderer.__about__ import __version__
-        print('\n'.join(open('CHANGELOG.md').read().split('## v'+__version__)[1].split('\n')[1:]).split('\n##')[0])
-        "
-        echo __EOF__
-        } >> "$GITHUB_OUTPUT"
-        
-        hatch run python -c "
-        from tile_renderer.__about__ import __version__
-        print('version=v'+__version__)
-        " >> "$GITHUB_OUTPUT"
-    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-      with:
-        name: dist-pypi
-        path: dist
+      - id: release-info
+        run: |
+          {
+          echo 'changelog<<__EOF__'
+          hatch run python -c "
+          from tile_renderer.__about__ import __version__
+          print('\n'.join(open('CHANGELOG.md').read().split('## v'+__version__)[1].split('\n')[1:]).split('\n##')[0])
+          "
+          echo __EOF__
+          } >> "$GITHUB_OUTPUT"
 
-    - run: |
-        hatch run python -c "
-        from tile_renderer.skin import Skin
-        from pathlib import Path
-        Skin.default().save_json(Path.cwd() / 'dist')
-        "
-        hatch run python -c "
-        import json
-        from pathlib import Path
-        j = json.loads((Path.cwd() / 'dist' / 'default.skin.json').read_text())
-        j['font_files'] = []
-        (Path.cwd() / 'dist' / 'default.nofontfiles.skin.json').write_text(json.dumps(j))
-        "
-    - run: |
-        hatch run tile-renderer schema pla2 > dist/pla2.schema.json
-        hatch run tile-renderer schema skin > dist/skin.schema.json
-    - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
-      with:
-        name: dist-github
-        path: dist
+          hatch run python -c "
+          from tile_renderer.__about__ import __version__
+          print('version=v'+__version__)
+          " >> "$GITHUB_OUTPUT"
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: dist-pypi
+          path: dist
+
+      - run: |
+          hatch run python -c "
+          from tile_renderer.skin import Skin
+          from pathlib import Path
+          Skin.default().save_json(Path.cwd() / 'dist')
+          "
+          hatch run python -c "
+          import json
+          from pathlib import Path
+          j = json.loads((Path.cwd() / 'dist' / 'default.skin.json').read_text())
+          j['font_files'] = []
+          (Path.cwd() / 'dist' / 'default.nofontfiles.skin.json').write_text(json.dumps(j))
+          "
+      - run: |
+          hatch run tile-renderer schema pla2 > dist/pla2.schema.json
+          hatch run tile-renderer schema skin > dist/skin.schema.json
+      - uses: actions/upload-artifact@043fb46d1a93c77aae656e7c1c64a875d1fc6a0a # v7.0.1
+        with:
+          name: dist-github
+          path: dist
 
   github-release:
     runs-on: ubuntu-latest
