@@ -94,12 +94,12 @@ def _get_junctions(
                     vector1 = st.c.nodes[j - 1] - coord if j != 0 else None
                     vector2 = st.c.nodes[j + 1] - coord if j != len(st.c.nodes) - 1 else None
                     coord1 = (
-                        (coord + vector1.unit() * min(jt.size, abs(vector1)))
+                        (coord.to_float() + vector1.unit() * min(jt.size, abs(vector1)))
                         if vector1 is not None and vector1 != Coord(0, 0)
                         else None
                     )
                     coord2 = (
-                        (coord + vector2.unit() * min(jt.size, abs(vector2)))
+                        (coord.to_float() + vector2.unit() * min(jt.size, abs(vector2)))
                         if vector2 is not None and vector2 != Coord(0, 0)
                         else None
                     )
@@ -107,7 +107,7 @@ def _get_junctions(
 
                     out.setdefault(jt.i, []).append(
                         svg.Polyline(
-                            points=[cast("int", f"{c.x},{c.y}") for c in coords],
+                            points=[svg.Point(c.x, c.y) for c in coords],
                             stroke=None if st.s.colour is None else str(st.s.colour),
                             fill=None,
                             fill_opacity=0,

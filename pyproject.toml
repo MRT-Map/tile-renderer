@@ -104,8 +104,10 @@ exclude_lines = [
 ]
 
 [tool.ruff.lint]
-ignore = ["E741"]
+ignore = ["E741"]  # ambiguous variable names
 
-[tool.hatch.build]
-include = [".github/tre-light.png", "src/tile_renderer"]
-sources = ["src"]
+[tool.pyrefly]
+project-includes = [
+  "**/*.py*",
+  "**/*.ipynb",
+]

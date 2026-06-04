@@ -43,7 +43,7 @@ class Skin(Struct, kw_only=True):
     def default(cls) -> Skin:
         path = Path(__file__).parent / "default.skin.json"
         if not path.exists():
-            from tile_renderer.skin import generate_default
+            from tile_renderer.skin import generate_default  # noqa: PLC0415
 
             generate_default.main()
         return cls.from_json(path)
@@ -195,7 +195,7 @@ class AreaBorderText(ComponentStyle):
         lists: _Lists,
         i: int,
     ) -> svg.Element:
-        from tile_renderer import component_to_svg
+        from tile_renderer import component_to_svg  # noqa: PLC0415
 
         return component_to_svg.area_border_text_svg(self, component, zoom, skin, lists, i)
 
@@ -243,7 +243,7 @@ class AreaCentreText(ComponentStyle):
         lists: _Lists,
         i: int,
     ) -> svg.Element:
-        from tile_renderer import component_to_svg
+        from tile_renderer import component_to_svg  # noqa: PLC0415
 
         return component_to_svg.area_centre_text_svg(self, component, zoom, skin, lists, i)
 
@@ -294,7 +294,7 @@ class AreaFill(ComponentStyle):
         lists: _Lists,
         i: int,
     ) -> svg.Element:
-        from tile_renderer import component_to_svg
+        from tile_renderer import component_to_svg  # noqa: PLC0415
 
         return component_to_svg.area_fill_svg(self, component, zoom, skin, lists, i)
 
@@ -345,7 +345,7 @@ class AreaCentreImage(ComponentStyle):
         lists: _Lists,
         i: int,
     ) -> svg.Element:
-        from tile_renderer import component_to_svg
+        from tile_renderer import component_to_svg  # noqa: PLC0415
 
         return component_to_svg.area_centre_image_svg(self, component, zoom, skin, lists, i)
 
@@ -398,7 +398,7 @@ class LineText(ComponentStyle):
         lists: _Lists,
         i: int,
     ) -> svg.Element:
-        from tile_renderer import component_to_svg
+        from tile_renderer import component_to_svg  # noqa: PLC0415
 
         return component_to_svg.line_text_svg(self, component, zoom, skin, lists, i)
 
@@ -451,7 +451,7 @@ class LineFore(ComponentStyle):
         lists: _Lists,
         i: int,
     ) -> svg.Element:
-        from tile_renderer import component_to_svg
+        from tile_renderer import component_to_svg  # noqa: PLC0415
 
         return component_to_svg.line_back_fore_svg(self, component, zoom, skin, lists, i)
 
@@ -527,7 +527,7 @@ class PointText(ComponentStyle):
         lists: _Lists,
         i: int,
     ) -> svg.Element:
-        from tile_renderer import component_to_svg
+        from tile_renderer import component_to_svg  # noqa: PLC0415
 
         return component_to_svg.point_text_svg(self, component, zoom, skin, lists, i)
 
@@ -580,7 +580,7 @@ class PointSquare(ComponentStyle):
         lists: _Lists,
         i: int,
     ) -> svg.Element:
-        from tile_renderer import component_to_svg
+        from tile_renderer import component_to_svg  # noqa: PLC0415
 
         return component_to_svg.point_square_svg(self, component, zoom, skin, lists, i)
 
@@ -619,7 +619,7 @@ class PointImage(AreaCentreImage):
         lists: _Lists,
         i: int,
     ) -> svg.Element:
-        from tile_renderer import component_to_svg
+        from tile_renderer import component_to_svg  # noqa: PLC0415
 
         return component_to_svg.point_image_svg(self, component, zoom, skin, lists, i)
 

@@ -27,7 +27,8 @@ def main():
         for zoom in zoom_levels:
             (Path(__file__).parent / f"out{zoom}.svg").write_text(str(render_svg(pla2.components, skin, zoom)))
     else:
-        raise ValueError(f"Invalid suffix {suffix}")
+        msg = f"Invalid suffix {suffix}"
+        raise ValueError(msg)
 
 
 if __name__ == "__main__":
