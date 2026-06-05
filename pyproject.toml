@@ -42,22 +42,11 @@ Changelog = "https://github.com/MRT-Map/tile-renderer/blob/main/CHANGELOG.md"
 [project.scripts]
 tile-renderer = "tile_renderer.__main__:cli"
 
+[tool.hatch]
+lock-envs = true
+
 [tool.hatch.version]
 path = "src/tile_renderer/__about__.py"
-
-[tool.hatch.env]
-requires = [
-  "hatch-pip-compile==1.11.6"
-]
-
-[tool.hatch.envs.default]
-type = "pip-compile"
-pip-compile-hashes = true
-pip-compile-constraint = "default"
-pip-compile-resolver = "uv"
-pip-compile-installer = "uv"
-pip-compile-args = ["--exclude-newer", "3 days"]
-lock-filename = "requirements/{env_name}.txt"
 
 [tool.hatch.envs.docs]
 extra-dependencies = [
@@ -76,13 +65,6 @@ build = """
   make html &&
   cd ..
 """
-
-[tool.hatch.envs.types]
-extra-dependencies = [
-  "pyrefly==1.0.0",
-]
-[tool.hatch.envs.types.scripts]
-check = "pyrefly check {args}"
 
 [tool.coverage.run]
 source_pkgs = ["tile_renderer", "tests"]
@@ -106,8 +88,3 @@ exclude_lines = [
 [tool.ruff.lint]
 ignore = ["E741"]  # ambiguous variable names
 
-[tool.pyrefly]
-project-includes = [
-  "**/*.py*",
-  "**/*.ipynb",
-]
