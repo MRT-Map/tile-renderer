@@ -58,6 +58,7 @@ extra-dependencies = [
 ]
 [tool.hatch.envs.docs.scripts]
 build = """
+  (uv pip install -e . || pip install -e . || true) &&
   cd docs &&
   (mkdir _build || true) &&
   tile-renderer schema pla2 > _build/pla2.json &&
