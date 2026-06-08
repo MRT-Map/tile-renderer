@@ -1,7 +1,7 @@
 [tools]
 python = "3.14.5"
-"pipx:hatch" = { version = "1.16.5", uvx_args = "--with pip" }
-uv = "0.11.17"
+"pipx:hatch" = { version = "1.17.0", uvx_args = "--with pip" }
+uv = "0.11.19"
 
 cargo-binstall = "1.19.1"
 "cargo:resvg" = "0.47.0"
@@ -9,6 +9,9 @@ cargo-binstall = "1.19.1"
 
 [env]
 HATCH_ENV_TYPE_VIRTUAL_UV_PATH = { tools = true, value = "{{ exec(command=mise_bin ~ ' which uv') }}" }
+PIP_UPLOADED_PRIOR_TO = "P3D"
+UV_EXCLUDE_NEWER = "3 days"
+UV_CUSTOM_COMPILE_COMMAND = " "
 
 [settings]
 minimum_release_age = "3d"

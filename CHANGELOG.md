@@ -2,6 +2,10 @@
 
 ## Planned
 
+## v5.0.10-rc.1 (20260608)
+
+- update hatch to 1.17
+
 ## v5.0.10-rc.0 (20260604)
 
 - move to mise and hk

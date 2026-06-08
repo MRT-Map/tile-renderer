@@ -1,17 +1,17 @@
-amends "package://github.com/jdx/hk/releases/download/v1.45.0/hk@1.45.0#/Config.pkl"
-import "package://github.com/jdx/hk/releases/download/v1.45.0/hk@1.45.0#/Builtins.pkl"
+amends "package://github.com/jdx/hk/releases/download/v1.46.0/hk@1.46.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v1.46.0/hk@1.46.0#/Builtins.pkl"
 
 local formatters = new Mapping<String, Step> {
     ["hatch_format"] = (Builtins.ruff_format) {
-        check = "hatch fmt --formatter --check -- --force-exclude {{ files }}"
-        fix = "hatch fmt --formatter -- --force-exclude {{ files }}"
+        check = "hatch check fmt -- --force-exclude {{ files }}"
+        fix = "hatch check fmt --fix -- --force-exclude {{ files }}"
     }
 }
 
 local linters = new Mapping<String, Step> {
     ["hatch"] = (Builtins.ruff) {
-        check = "hatch fmt --linter --check -- --force-exclude {{ files }}"
-        fix = "hatch fmt --linter -- --force-exclude {{ files }}"
+        check = "hatch check code -- --force-exclude {{ files }}"
+        fix = "hatch check code --fix --force-exclude {{ files }}"
     }
     ["zizmor"] = Builtins.zizmor
     ["actionlint"] = Builtins.actionlint
@@ -23,7 +23,7 @@ local linters = new Mapping<String, Step> {
 local type_checkers = new Mapping<String, Step> {
     ["hatch_type_check"] {
         glob = Builtins.ruff.glob
-        check = "hatch run types:check"
+        check = "hatch check types"
     }
 }
 local sarif = new Mapping<String, Step> {
