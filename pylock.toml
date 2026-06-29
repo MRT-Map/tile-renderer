@@ -15,9 +15,9 @@ wheels = [
 
 [[packages]]
 name = "click"
-version = "8.4.1"
-sdist = { url = "https://files.pythonhosted.org/packages/9b/98/518d8e5081007684232226f475082b30087d0f585e8457db087298259f49/click-8.4.1.tar.gz", upload-time = 2026-05-22T04:08:37Z, size = 353007, hashes = { sha256 = "918b5633eddf6b41c32d4f454bf0de810065c74e3f7dbf8ee5452f8be88d3e96" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/c7/0d/67e5b4109ea4a837e80daa87c2c696711955e40449a97e8926672534def2/click-8.4.1-py3-none-any.whl", upload-time = 2026-05-22T04:08:35Z, size = 116639, hashes = { sha256 = "482be17c6991b8c19c5429a1e995d9b0efdbb63172824c41f99965dc0ade8ec2" } }]
+version = "8.4.2"
+sdist = { url = "https://files.pythonhosted.org/packages/76/d4/81420972a676e8ffea40450d8c8c92943e7218a78fe9b64359836cc9876b/click-8.4.2.tar.gz", upload-time = 2026-06-24T17:45:15Z, size = 338000, hashes = { sha256 = "9a6cea6e60b17ebe0a44c5cc636d94f09bd66142c1cd7d8b4cd731c4917a15f6" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/fb/e2/79c688af8b210d232694e31e59da9f6ec747bae31c3f5946e4e9b98860d5/click-8.4.2-py3-none-any.whl", upload-time = 2026-06-24T17:45:13Z, size = 119243, hashes = { sha256 = "e6f9f66136c816745b9d65817da91d61d957fb16e02e4dcd0552553c5a197b76" } }]
 
 [[packages]]
 name = "h11"
@@ -60,9 +60,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/80/27/498b676bf5e4824
 
 [[packages]]
 name = "numpy"
-version = "2.4.6"
-sdist = { url = "https://files.pythonhosted.org/packages/d0/ad/fed0499ce6a338d2a03ebae59cd15093910c8875328855781952abf6c2fe/numpy-2.4.6.tar.gz", upload-time = 2026-05-18T23:37:14Z, size = 20735807, hashes = { sha256 = "f3a3570c4a2a16746ac2c31a7c7c7b0c186b95ce902e33db6f28094ed7387dda" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/f3/eb/ebffaa97dc55502df69584a8f0dcf07f69a3e0b3e2323670a2722db9aa39/numpy-2.4.6-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-05-18T23:35:54Z, size = 16638245, hashes = { sha256 = "a2c306dea656c12c68f51f4cea133cbe78ca7435eb28c735eac1d3ebe73be6e8" } }]
+version = "2.5.0"
+sdist = { url = "https://files.pythonhosted.org/packages/e7/05/3d27272d30698dc0ecb7fdfaa41ad70303b444f81722bb99bce1d818638a/numpy-2.5.0.tar.gz", upload-time = 2026-06-21T20:57:51Z, size = 20652461, hashes = { sha256 = "5a129578019311b6e56bdd714250f19b518f7dceeeb8d1af5490f4942d3f891c" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/a0/5e/2a902317d7fc4aa93236e80c932662dadfc459b323d758329e01775125e1/numpy-2.5.0-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-06-21T20:57:16Z, size = 16650797, hashes = { sha256 = "39a0433bd4086ebd462960cf375e19195bb07b53dc1d87dd5fcf47ad78576f03" } }]
 
 [[packages]]
 name = "pygments"
