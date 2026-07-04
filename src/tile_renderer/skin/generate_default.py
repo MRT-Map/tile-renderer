@@ -23,7 +23,7 @@ from tile_renderer.skin import (
 
 
 def get_url(url: str) -> tuple[str, bytes]:
-    path = Path(tempfile.gettempdir()) / "tile-renderer" / "url" / url
+    path = Path(tempfile.gettempdir()) / "tile-renderer" / "url" / re.sub(r"[<>:/\\|?*\"]", "", url)
     if path.exists():
         return url.split(".")[-1], path.read_bytes()
     response = niquests.get(url).content or b""

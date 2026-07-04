@@ -1,5 +1,6 @@
 # noqa: INP001
 import sys
+import tempfile
 import time
 from pathlib import Path
 
@@ -18,14 +19,16 @@ def main():
     suffix = sys.argv[1]
     zoom_levels = [int(a) for a in sys.argv[2:]] or [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
 
+    tempdir = Path(tempfile.gettempdir()) / "tile-renderer"
+
     if suffix == "png":
-        Path("/tmp/tile-renderer").mkdir(exist_ok=True)
+        tempdir.mkdir(exist_ok=True)
         for zoom in zoom_levels:
             for tile, b in render_tiles(pla2.components, skin, zoom, 32, 256).items():
-                Path(f"/tmp/tile-renderer/{tile}.png").write_bytes(b)
+                (tempdir / f"{tile}.png").write_bytes(b)
     elif suffix == "svg":
         for zoom in zoom_levels:
-            (Path(__file__).parent / f"out{zoom}.svg").write_text(str(render_svg(pla2.components, skin, zoom)))
+            (tempdir / f"out{zoom}.svg").write_text(str(render_svg(pla2.components, skin, zoom)))
     else:
         msg = f"Invalid suffix {suffix}"
         raise ValueError(msg)

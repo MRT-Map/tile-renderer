@@ -8,7 +8,7 @@ cargo-binstall = "1.20.1"
 "cargo:usvg" = "0.47.0"
 
 [env]
-HATCH_ENV_TYPE_VIRTUAL_UV_PATH = { tools = true, value = "{{ exec(command=mise_bin ~ ' which uv') }}" }
+HATCH_ENV_TYPE_VIRTUAL_UV_PATH = { tools = true, value = "{% if os_family() == 'unix' %}{{ [tools.uv.path, exec(command='ls \"' ~ tools.uv.path ~ '\"') | trim, 'uv'] | join(sep='/') }}{% else %}{{ [tools.uv.path, 'uv.exe'] | join(sep='\\') }}{% endif %}" }
 PIP_UPLOADED_PRIOR_TO = "P3D"
 UV_EXCLUDE_NEWER = "3 days"
 UV_CUSTOM_COMPILE_COMMAND = " "

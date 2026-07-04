@@ -1,8 +1,7 @@
 import multiprocessing
-import multiprocessing.sharedctypes
 import os
-import platform
 import re
+import shutil
 import subprocess
 import sys
 import tempfile
@@ -52,7 +51,9 @@ def render_tiles(
             _simplify_svg(str(doc), font_dir, tile_size),
         )
 
-        resvg_path = subprocess.check_output(["where" if platform.system() == "Windows" else "which", "resvg"]).strip()
+        if (resvg_path := shutil.which("resvg")) is None:
+            msg = "cannot find resvg"
+            raise OSError(msg)
         for i, (tile, b) in enumerate(
             pool.imap(
                 _f,
@@ -65,7 +66,7 @@ def render_tiles(
                         str(skin.background),
                         font_dir,
                         tile_size,
-                        resvg_path,
+                        resvg_path.strip(),
                     )
                     for tile in tiles
                 ),
@@ -80,10 +81,12 @@ def render_tiles(
 
 
 def _simplify_svg(doc: str, font_dir: Path, tile_size: int) -> str:
-    usvg_path = subprocess.check_output(["where" if platform.system() == "Windows" else "which", "usvg"]).strip()
+    if (usvg_path := shutil.which("usvg")) is None:
+        msg = "cannot find usvg"
+        raise OSError(msg)
     p = subprocess.Popen(
         [
-            usvg_path,
+            usvg_path.strip(),
             "-",
             "-c",
             "--resources-dir",
