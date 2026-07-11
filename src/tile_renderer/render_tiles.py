@@ -33,7 +33,7 @@ def render_tiles(
 ) -> dict[TileCoord, bytes]:
     images = {}
     doc = render_svg(components, skin, zoom)
-    tiles = {t for c in components for t in c.tiles(zoom, max_zoom_range)}
+    tiles = {t for c in components for t in c.tiles(zoom, max_zoom_range, offset)}
 
     font_dir = Path(tempfile.gettempdir()) / "tile-renderer" / "fonts"
     font_dir.mkdir(exist_ok=True, parents=True)
