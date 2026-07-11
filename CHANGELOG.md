@@ -2,11 +2,13 @@
 
 ## Planned
 
-## v5.0.10-rc.1 (20260608)
+## v5.0.10 (20260711)
 
 - update hatch to 1.17
+- fix mise uv path, resvg/usvg path, font path and test tempdir on Windows
+- add offset to `Component.tiles()`
 
-## v5.0.10-rc.0 (20260604)
+### v5.0.10-rc.0 (20260604)
 
 - move to mise and hk
 - revamp gh actions
