@@ -38,7 +38,7 @@ local sarif = new Mapping<String, Step> {
         fix = linters["zizmor"].fix.replaceAll("{{ files }}", ".") + " --format=sarif > .sarif/zizmor.sarif"
     }
     ["actionlint"] {
-        check = linters["actionlint"].check.replaceAll("{{ files }}", "") + " -format \"$(curl -sSL \"https://raw.githubusercontent.com/rhysd/actionlint/refs/heads/main/testdata/format/sarif_template.txt\")\" > .sarif/actionlint.sarif"
+        check = "actionlint -format \"$(curl -sSL \"https://raw.githubusercontent.com/rhysd/actionlint/refs/heads/main/testdata/format/sarif_template.txt\")\" > .sarif/actionlint.sarif"
     }
     ["poutine"] {
         check = linters["poutine"].check as String + " --format=sarif > .sarif/poutine.sarif"
