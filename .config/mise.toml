@@ -1,7 +1,7 @@
 [tools]
 python = "3.14.6"
 "pipx:hatch" = { version = "1.17.1", uvx_args = "--with pip" }
-uv = "0.11.29"
+uv = "0.11.30"
 
 cargo-binstall = "1.21.0"
 "cargo:resvg" = "0.47.0"
