@@ -4,7 +4,7 @@ python = "3.14.6"
 uv = "0.12.1"
 
 cargo-binstall = "1.21.1"
-"cargo:resvg" = "0.47.0"
+"cargo:resvg" = "0.48.1"
 "cargo:usvg" = "0.47.0"
 
 [env]
