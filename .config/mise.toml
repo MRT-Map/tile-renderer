@@ -5,7 +5,7 @@ uv = "0.12.1"
 
 cargo-binstall = "1.21.1"
 "cargo:resvg" = "0.48.1"
-"cargo:usvg" = "0.47.0"
+"cargo:usvg" = "0.48.1"
 
 [env]
 HATCH_ENV_TYPE_VIRTUAL_UV_PATH = { tools = true, value = "{% if os_family() == 'unix' %}{{ [tools.uv.path, exec(command='ls \"' ~ tools.uv.path ~ '\"') | trim, 'uv'] | join(sep='/') }}{% else %}{{ [tools.uv.path, 'uv.exe'] | join(sep='\\\\') }}{% endif %}" }
