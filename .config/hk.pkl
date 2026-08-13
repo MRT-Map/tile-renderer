@@ -22,7 +22,7 @@ local linters = new Mapping<String, Step> {
 }
 local type_checkers = new Mapping<String, Step> {
     ["hatch_type_check"] {
-        glob = Builtins.ruff.glob
+        types = Builtins.ruff.types
         check = "hatch check types"
     }
 }
