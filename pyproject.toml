@@ -48,6 +48,11 @@ lock-envs = true
 [tool.hatch.version]
 path = "src/tile_renderer/__about__.py"
 
+[tool.hatch.envs.default]
+post-install-commands = [
+  "hatch run uv pip install -e .",
+]
+
 [tool.hatch.envs.docs]
 extra-dependencies = [
   "sphinx==9.1.0", 
@@ -58,7 +63,6 @@ extra-dependencies = [
 ]
 [tool.hatch.envs.docs.scripts]
 build = """
-  (uv pip install -e . || pip install -e . || true) &&
   cd docs &&
   (mkdir _build || true) &&
   tile-renderer schema pla2 > _build/pla2.json &&
