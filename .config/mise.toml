@@ -3,7 +3,7 @@ python = "3.14.7"
 "pipx:hatch" = { version = "1.18.0", uvx_args = "--with pip" }
 uv = "0.12.5"
 
-cargo-binstall = "1.21.1"
+cargo-binstall = "1.22.0"
 "cargo:resvg" = "0.48.1"
 "cargo:usvg" = "0.48.1"
 
