@@ -71,6 +71,9 @@ build = """
   cd ..
 """
 
+[[tool.hatch.envs.hatch-test.matrix]]
+python = ["3.14", "3.13", "3.12"]
+
 [tool.coverage.run]
 source_pkgs = ["tile_renderer", "tests"]
 branch = true
