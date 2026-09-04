@@ -19,7 +19,7 @@ jobs:
         with:
           persist-credentials: true
           ref: dev
-      - uses: ./.github/actions/mise
+      - uses: $/.github/actions/mise
         with:
           envs: "py"
 
