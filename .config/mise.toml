@@ -1,5 +1,5 @@
 [tools]
-python = "3.14.7"
+python = "3.14.8"
 "pipx:hatch" = { version = "1.18.1", uvx_args = "--with pip" }
 uv = "0.12.21"
 
