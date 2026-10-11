@@ -2,6 +2,10 @@
 
 ## Planned
 
+## v5.0.11 (20261011)
+
+- upgrade dependencies
+
 ## v5.0.10 (20260711)
 
 - update hatch to 1.17
