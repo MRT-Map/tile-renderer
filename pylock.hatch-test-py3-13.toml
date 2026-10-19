@@ -87,9 +87,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/65/51/eb07449eb9e7eca
 
 [[packages]]
 name = "numpy"
-version = "2.5.3"
-sdist = { url = "https://files.pythonhosted.org/packages/13/01/11703282db468b85f6f7b8c7f22d058de5970d5c7e60a3a8aaa313c3de36/numpy-2.5.3.tar.gz", upload-time = 2026-09-06T16:27:47Z, size = 20791231, hashes = { sha256 = "df2d5874ff183595a4ba404edd04f6bd9b5505c1d7708573f6a6c17489a67563" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/3a/1b/3b16a9bc514a440a7a0883684111dcb1ef1aee960af2ca95da8fc775f124/numpy-2.5.3-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-09-06T16:25:14Z, size = 16708577, hashes = { sha256 = "a5fa86b80fd24bcd1aff83ad23be44ea323de3f787be8f8b15d4a65621e25321" } }]
+version = "2.5.4"
+sdist = { url = "https://files.pythonhosted.org/packages/95/b0/c7453d0b6e2073c3264468b106ee1563750cecc910965e67357e3698c83e/numpy-2.5.4.tar.gz", upload-time = 2026-10-10T20:05:31Z, size = 20866315, hashes = { sha256 = "9a94cf751c9ad8ebaa835bcd3d40dacf8534ad086b88c38029b65123c7999d2a" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/da/24/3bd070f3269dc609d8f26b2643f62ef91bb415841c0b294805aaf7fe06da/numpy-2.5.4-cp313-cp313-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-10-10T20:03:21Z, size = 16718044, hashes = { sha256 = "6ffa07666f8da0eef81d149934a626d0d95fbd6838432a33e66245423a9062c0" } }]
 
 [[packages]]
 name = "packaging"
@@ -99,9 +99,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/63/34/ba1c580383c9ead
 
 [[packages]]
 name = "pluggy"
-version = "1.6.0"
-sdist = { url = "https://files.pythonhosted.org/packages/f9/e2/3e91f31a7d2b083fe6ef3fa267035b518369d9511ffab804f839851d2779/pluggy-1.6.0.tar.gz", upload-time = 2025-05-15T12:30:07Z, size = 69412, hashes = { sha256 = "7dcc130b76258d33b90f61b658791dede3486c3e6bfb003ee5c9bfb396dd22f3" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/54/20/4d324d65cc6d9205fabedc306948156824eb9f0ee1633355a8f7ec5c66bf/pluggy-1.6.0-py3-none-any.whl", upload-time = 2025-05-15T12:30:06Z, size = 20538, hashes = { sha256 = "e920276dd6813095e9377c0bc5566d94c932c33b27a3e3945d8389c374dd4746" } }]
+version = "1.7.0"
+sdist = { url = "https://files.pythonhosted.org/packages/bf/db/7fc19e6f2dc92a966727031389fc2e08b558f0f25eb7403c1119ad4713cd/pluggy-1.7.0.tar.gz", upload-time = 2026-10-15T09:50:58Z, size = 123304, hashes = { sha256 = "d1eaa46ebb595891b860ab086b4d09c8588af65ebd4361b8e8f4bb8920b90ba8" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/40/9e/2b38731e0fc536806f16490e1a12d7f0dc2a1235aa8cc07bcc75416a7daa/pluggy-1.7.0-py3-none-any.whl", upload-time = 2026-10-15T09:50:56Z, size = 27082, hashes = { sha256 = "7dd7b0d8832ba3cb632c306926ded123429211b83641b35dc5c41ad2d34f9bec" } }]
 
 [[packages]]
 name = "psutil"
