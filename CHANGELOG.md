@@ -2,6 +2,11 @@
 
 ## Planned
 
+## v5.0.12 (20261022)
+
+- upgrade dependencies
+  - update for eMudhra
+
 ## v5.0.11 (20261011)
 
 - upgrade dependencies
