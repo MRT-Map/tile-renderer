@@ -55,7 +55,7 @@ post-install-commands = [
 
 [tool.hatch.envs.docs]
 extra-dependencies = [
-  "sphinx==9.1.1", 
+  "sphinx==9.2.0", 
   "sphinxcontrib-programoutput==0.20", 
   "sphinx-codeautolink==0.19.0", 
   "sphinx_rtd_theme==3.1.0", 
