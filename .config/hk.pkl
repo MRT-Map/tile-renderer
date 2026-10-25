@@ -1,48 +1,27 @@
-amends "package://github.com/jdx/hk/releases/download/v1.54.1/hk@1.54.1#/Config.pkl"
-import "package://github.com/jdx/hk/releases/download/v1.54.1/hk@1.54.1#/Builtins.pkl"
+amends "package://github.com/jdx/hk/releases/download/v2.8.0/hk@2.8.0#/Config.pkl"
+import "package://github.com/jdx/hk/releases/download/v2.8.0/hk@2.8.0#/Builtins.pkl"
+import "package://github.com/iiiii7d/hk/releases/download/v2.8.0-7/hk@2.8.0-7#/Hatch.pkl"
+import "package://github.com/iiiii7d/hk/releases/download/v2.8.0-7/hk@2.8.0-7#/Misc.pkl"
 
 local formatters = new Mapping<String, Step> {
-    ["hatch_format"] = (Builtins.ruff_format) {
-        check = "hatch check fmt -- --force-exclude {{ files }}"
-        fix = "hatch check fmt --fix -- --force-exclude {{ files }}"
-    }
+    ["ruff_fmt"] = Hatch.hatch_check_fmt
 }
 
 local linters = new Mapping<String, Step> {
-    ["hatch"] = (Builtins.ruff) {
-        check = "hatch check code -- --force-exclude {{ files }}"
-        fix = "hatch check code --fix --force-exclude {{ files }}"
-    }
-    ["zizmor"] = Builtins.zizmor
-    ["actionlint"] = Builtins.actionlint
-    ["poutine"] {
-        glob = Builtins.zizmor.glob
-        check = "poutine analyze_local . --skip github_action_from_unverified_creator_used"
-    }
+    ["ruff"] = Hatch.hatch_check_code
+    ["zizmor"] = Misc.zizmor
+    ["actionlint"] = Misc.actionlint
+    ["poutine"] = Misc.poutine
 }
 local type_checkers = new Mapping<String, Step> {
-    ["hatch_type_check"] {
-        types = Builtins.ruff.types
-        check = "hatch check types"
-    }
+    ["pyrefly"] = Hatch.hatch_check_types
 }
 local sarif = new Mapping<String, Step> {
-    ["mkdir"] {
-        fix = "mkdir .sarif || true"
-        exclusive = true
-    }
-    ["hatch"] {
-        fix = linters["hatch"].fix.replaceAll("{{ files }}", "") + " --output-format=sarif > .sarif/hatch.sarif"
-    }
-    ["zizmor"] {
-        fix = linters["zizmor"].fix.replaceAll("{{ files }}", ".") + " --format=sarif > .sarif/zizmor.sarif"
-    }
-    ["actionlint"] {
-        check = "actionlint -format \"$(curl -sSL \"https://cdn.jsdelivr.net/gh/kjanat/actionlint/sarif_template.txt\")\" > .sarif/actionlint.sarif"
-    }
-    ["poutine"] {
-        check = linters["poutine"].check as String + " --format=sarif > .sarif/poutine.sarif"
-    }
+    ["mkdir"] = Misc.mkdir_sarif(".sarif")
+    ["ruff"] = Hatch.hatch_check_code_sarif(".sarif")
+    ["zizmor"] = Misc.zizmor_sarif(".sarif")
+    ["actionlint"] = Misc.actionlint_sarif(".sarif")
+    ["poutine"] = Misc.poutine_sarif(".sarif")
     ...type_checkers
 }
 
