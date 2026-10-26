@@ -1,0 +1,184 @@
+lock-version = "1.0"
+created-by = "uv"
+requires-python = ">=3.15"
+
+[[packages]]
+name = "charset-normalizer"
+version = "3.5.2"
+sdist = { url = "https://files.pythonhosted.org/packages/33/1c/f41d4e74c28ab327ff3acd36053f7ea506c55872d7a90b0fa71aa3ab0c89/charset_normalizer-3.5.2.tar.gz", upload-time = 2026-09-30T04:39:23Z, size = 172659, hashes = { sha256 = "39de2a259fc954455c57274dc94c79d5842774e1247a016aff30bc0efed0f4ef" } }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/a0/a1/4fbf5d0f0f1b2a080474c1cf9a2f12c4c6531bb0e8ba591055e846d2b4e9/charset_normalizer-3.5.2-cp315-cp315-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-09-30T04:37:37Z, size = 257336, hashes = { sha256 = "3df041de8887954562c9b261cba85ca0e9ded74048daf125f45edcfaa4832229" } },
+    { url = "https://files.pythonhosted.org/packages/7e/84/371eac6b30bdbcbf2d632a1a01809103459216fcaae61b8b8d922c1bfb8a/charset_normalizer-3.5.2-cp37-abi3-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl", upload-time = 2026-09-30T04:38:28Z, size = 253276, hashes = { sha256 = "1c50fe28bbc2ced33386f298650d91218076c05420e6cbd790b913adc41659e7" } },
+    { url = "https://files.pythonhosted.org/packages/fc/ad/d07d7862a62ffa6d79d68074d14823243dd235a77c45262acbf6adeb28bf/charset_normalizer-3.5.2-py3-none-any.whl", upload-time = 2026-09-30T04:39:21Z, size = 68872, hashes = { sha256 = "b6b751274acb69d77b3323d6b7dbaa3c7fdfc1eb829b7eb61d262f32e1af9685" } },
+]
+
+[[packages]]
+name = "click"
+version = "8.5.0"
+sdist = { url = "https://files.pythonhosted.org/packages/c7/0e/7fa0ef50764b67090eca4114772a2abf8b6148198475e54c660b97caeee6/click-8.5.0.tar.gz", upload-time = 2026-08-26T13:33:14Z, size = 382235, hashes = { sha256 = "ba0d2089de75ea0310e2dde03160e6ca10009947fb95a182f9b54021bb272e34" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/58/50/6c0d534c5f134586a8e1ba4e330569e32f057e33372ae556463212fb4cd3/click-8.5.0-py3-none-any.whl", upload-time = 2026-08-26T13:33:12Z, size = 125251, hashes = { sha256 = "255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360" } }]
+
+[[packages]]
+name = "coverage"
+version = "7.17.0"
+sdist = { url = "https://files.pythonhosted.org/packages/d2/79/e78bd8f75a9b8e32233ce92d4607f0a21ce88a9156cace2884e7175a82f5/coverage-7.17.0.tar.gz", upload-time = 2026-10-22T16:06:50Z, size = 991021, hashes = { sha256 = "cc010a0a7fbdd9bb8bdfd0d3f04a5151275860213cbd7e2b876b29778489c712" } }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/95/ee/84ed138990ed752abd73db4adffc1842d6152017d8e21809cc109a413fda/coverage-7.17.0-cp315-cp315-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl", upload-time = 2026-10-22T16:06:08Z, size = 261735, hashes = { sha256 = "aed06129a9f530a948928260d7d2d81c47261355b0127e3c782251b38958463c" } },
+    { url = "https://files.pythonhosted.org/packages/c9/17/48032919343afa2906112d458aceda2043afdb24a2ee8eb4c60904d8ddf1/coverage-7.17.0-py3-none-any.whl", upload-time = 2026-10-22T16:06:48Z, size = 217383, hashes = { sha256 = "bac487dce0d2aff28ddf1a533a916f771416eee0e493960f611e49037b878e9d" } },
+]
+
+[[packages]]
+name = "coverage-enable-subprocess"
+version = "1.0"
+sdist = { url = "https://files.pythonhosted.org/packages/31/f4/57693bcf041ba641501b7a2fafc9d3d2de647355d78c6a2e07fb53648eaa/coverage_enable_subprocess-1.0.tar.gz", upload-time = 2016-05-11T18:49:48Z, size = 2695, hashes = { sha256 = "fdbd3dc9532007cd87ef84f38e16024c5b0ccb4ab2d1755225a7edf937acc011" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/31/58/d8dd7edbf5e120942b6395b4c034506c68e56f656074522c83b59d9a4991/coverage_enable_subprocess-1.0-py2.py3-none-any.whl", upload-time = 2016-05-11T18:48:49Z, size = 4033, hashes = { sha256 = "27982522339ec77662965e0d859da5662162962c874d54d2250426506818cbdc" } }]
+
+[[packages]]
+name = "execnet"
+version = "2.1.2"
+sdist = { url = "https://files.pythonhosted.org/packages/bf/89/780e11f9588d9e7128a3f87788354c7946a9cbb1401ad38a48c4db9a4f07/execnet-2.1.2.tar.gz", upload-time = 2025-11-12T09:56:37Z, size = 166622, hashes = { sha256 = "63d83bfdd9a23e35b9c6a3261412324f964c2ec8dcd8d3c6916ee9373e0befcd" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/ab/84/02fc1827e8cdded4aa65baef11296a9bbe595c474f0d6d758af082d849fd/execnet-2.1.2-py3-none-any.whl", upload-time = 2025-11-12T09:56:36Z, size = 40708, hashes = { sha256 = "67fba928dd5a544b783f6056f449e5e3931a5c378b128bc18501f7ea79e296ec" } }]
+
+[[packages]]
+name = "h11"
+version = "0.16.0"
+sdist = { url = "https://files.pythonhosted.org/packages/01/ee/02a2c011bdab74c6fb3c75474d40b3052059d95df7e73351460c8588d963/h11-0.16.0.tar.gz", upload-time = 2025-04-24T03:35:25Z, size = 101250, hashes = { sha256 = "4e35b956cf45792e4caa5885e69fba00bdbc6ffafbfa020300e549b208ee5ff1" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/04/4b/29cac41a4d98d144bf5f6d33995617b185d14b22401f75ca86f384e87ff1/h11-0.16.0-py3-none-any.whl", upload-time = 2025-04-24T03:35:24Z, size = 37515, hashes = { sha256 = "63cf8bbe7522de3bf65932fda1d9c2772064ffb3dae62d55932da54b31cb6c86" } }]
+
+[[packages]]
+name = "iniconfig"
+version = "2.3.1"
+sdist = { url = "https://files.pythonhosted.org/packages/01/e1/2069291243c926a2ff1cd706c7f3eeb9b62144bf60f77c9fb9ff2fb26bd3/iniconfig-2.3.1.tar.gz", upload-time = 2026-10-06T22:48:38Z, size = 21209, hashes = { sha256 = "67f4b9c50da0dedf52af349e7749a80a9057a5031199791b906c3bb3ae878960" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/56/43/4ca9e49d27a1fcf6bece6f6aec0ea46bb9112489b93d4b688fb415457bdb/iniconfig-2.3.1-py3-none-any.whl", upload-time = 2026-10-06T22:48:36Z, size = 7552, hashes = { sha256 = "9121e2c1fdb355232495be3194c8dfe87ccc2d5dee45947b78e68f499790d7a7" } }]
+
+[[packages]]
+name = "jh2"
+version = "5.0.15"
+sdist = { url = "https://files.pythonhosted.org/packages/57/fa/a3ba1417800b142d6777c48657f6b01fc46bd1a4777aba979463e36d78c5/jh2-5.0.15.tar.gz", upload-time = 2026-09-21T09:26:30Z, size = 7336589, hashes = { sha256 = "53fb377caca50441fd1892f60745c44d3ba8c43844c3792e73c34bf9f841adaf" } }
+wheels = [
+    { url = "https://files.pythonhosted.org/packages/55/fa/d80e721e77714ccda44437da86b8424dd03ce07977c8f7f0dc3d6efd805c/jh2-5.0.15-cp311-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", upload-time = 2026-09-21T09:23:20Z, size = 407364, hashes = { sha256 = "ea4ac921ddd2d519646df9b94f96e2cd55529f92f6d7ff4c65508ca2f65399ef" } },
+    { url = "https://files.pythonhosted.org/packages/6a/0b/3118b778d2cbc2eccac1ee6007d47fb0030398f4a6df3425656b1a624347/jh2-5.0.15-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", upload-time = 2026-09-21T09:24:35Z, size = 416188, hashes = { sha256 = "6cd7e4d259eab50e076e4b30ecbd937e55b319a58ad75642bdffb401455520b7" } },
+    { url = "https://files.pythonhosted.org/packages/60/9f/f94e7a18e880824bef49a1f80b4ce081570a3c19e8a3937ad2fea0544651/jh2-5.0.15-py3-none-any.whl", upload-time = 2026-09-21T09:26:28Z, size = 99140, hashes = { sha256 = "0ed7246846e68109fef261fdb00534ca5af3363d48dbf881d06a2d0e3a814e99" } },
+]
+
+[[packages]]
+name = "markdown-it-py"
+version = "4.2.0"
+sdist = { url = "https://files.pythonhosted.org/packages/06/ff/7841249c247aa650a76b9ee4bbaeae59370dc8bfd2f6c01f3630c35eb134/markdown_it_py-4.2.0.tar.gz", upload-time = 2026-05-07T12:08:28Z, size = 82454, hashes = { sha256 = "04a21681d6fbb623de53f6f364d352309d4094dd4194040a10fd51833e418d49" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/b3/81/4da04ced5a082363ecfa159c010d200ecbd959ae410c10c0264a38cac0f5/markdown_it_py-4.2.0-py3-none-any.whl", upload-time = 2026-05-07T12:08:27Z, size = 91687, hashes = { sha256 = "9f7ebbcd14fe59494226453aed97c1070d83f8d24b6fc3a3bcf9a38092641c4a" } }]
+
+[[packages]]
+name = "mdurl"
+version = "0.1.2"
+sdist = { url = "https://files.pythonhosted.org/packages/d6/54/cfe61301667036ec958cb99bd3efefba235e65cdeb9c84d24a8293ba1d90/mdurl-0.1.2.tar.gz", upload-time = 2022-08-14T12:40:10Z, size = 8729, hashes = { sha256 = "bb413d29f5eea38f31dd4754dd7377d4465116fb207585f97bf925588687c1ba" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/b3/38/89ba8ad64ae25be8de66a6d463314cf1eb366222074cfda9ee839c56a4b4/mdurl-0.1.2-py3-none-any.whl", upload-time = 2022-08-14T12:40:09Z, size = 9979, hashes = { sha256 = "84008a41e51615a49fc9966191ff91509e3c40b939176e643fd50a5c2196b8f8" } }]
+
+[[packages]]
+name = "msgspec"
+version = "0.22.0"
+sdist = { url = "https://files.pythonhosted.org/packages/d0/e6/6dcf9306ff3c5e486578f3bf29ed11dfbdbbc2a8bf0caf7e07d392887fda/msgspec-0.22.0.tar.gz", upload-time = 2026-09-29T14:14:11Z, size = 343188, hashes = { sha256 = "0a13624a4969159fe35d8c2a3d377b2b61bbd8585e327440d5e52725affcce38" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/dc/fb/c80c8842d40347cacf89a60a4986b849dae1a6dfd25830441efdd6faa65b/msgspec-0.22.0-cp315-cp315-manylinux2014_x86_64.manylinux_2_17_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-09-29T14:13:45Z, size = 231816, hashes = { sha256 = "71cbbdb39631064e2f2f9e9ac2b1b69931d72276eb5f9da4ed025726296bdbb6" } }]
+
+[[packages]]
+name = "niquests"
+version = "3.21.2"
+sdist = { url = "https://files.pythonhosted.org/packages/1c/2a/e368ec88a02c6bfc56c031ba6da9dd8099ad998fb818c28b687bee74c91a/niquests-3.21.2.tar.gz", upload-time = 2026-09-23T06:23:46Z, size = 1094494, hashes = { sha256 = "586d6b9475c9018a42f19f1e4688077b8158101cbf40673c63d2c1a096cc7665" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/65/51/eb07449eb9e7ecae4350b5a40bfcb002d6d26d58cf2cfd2f928ae7c2f559/niquests-3.21.2-py3-none-any.whl", upload-time = 2026-09-23T06:23:44Z, size = 229060, hashes = { sha256 = "73e52614a712ee2f4d410bdd29789ca6a4ed031f8961410156e395d42b091208" } }]
+
+[[packages]]
+name = "numpy"
+version = "2.5.4"
+sdist = { url = "https://files.pythonhosted.org/packages/95/b0/c7453d0b6e2073c3264468b106ee1563750cecc910965e67357e3698c83e/numpy-2.5.4.tar.gz", upload-time = 2026-10-10T20:05:31Z, size = 20866315, hashes = { sha256 = "9a94cf751c9ad8ebaa835bcd3d40dacf8534ad086b88c38029b65123c7999d2a" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/93/3a/01360c8036822ed9f7aa32189a77d1476567ec1e8e1383522389e4faac45/numpy-2.5.4-cp315-cp315-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-10-10T20:04:42Z, size = 16718648, hashes = { sha256 = "56733449d2544178beaa4545cee357370440cf056c197f9c7bfb19dbfdd0e86d" } }]
+
+[[packages]]
+name = "packaging"
+version = "26.3"
+sdist = { url = "https://files.pythonhosted.org/packages/7d/fa/3944b40b07da9ce895c0e6303a5ab7d53da063554f534556b134a54d6093/packaging-26.3.tar.gz", upload-time = 2026-08-04T18:15:28Z, size = 313412, hashes = { sha256 = "94edc256424af38762eb31306eed28beb9f0efc50a8837492c9d6fd6004aed79" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/63/34/ba1c580383c9eada3711951fef0795c80b829a078d72188184bcab9dd527/packaging-26.3-py3-none-any.whl", upload-time = 2026-08-04T18:15:27Z, size = 129956, hashes = { sha256 = "d7193f7c8e4e93f444fde0262bf90af30e16fa0ad0ad44cb553c87339b23cd1c" } }]
+
+[[packages]]
+name = "pluggy"
+version = "1.7.0"
+sdist = { url = "https://files.pythonhosted.org/packages/bf/db/7fc19e6f2dc92a966727031389fc2e08b558f0f25eb7403c1119ad4713cd/pluggy-1.7.0.tar.gz", upload-time = 2026-10-15T09:50:58Z, size = 123304, hashes = { sha256 = "d1eaa46ebb595891b860ab086b4d09c8588af65ebd4361b8e8f4bb8920b90ba8" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/40/9e/2b38731e0fc536806f16490e1a12d7f0dc2a1235aa8cc07bcc75416a7daa/pluggy-1.7.0-py3-none-any.whl", upload-time = 2026-10-15T09:50:56Z, size = 27082, hashes = { sha256 = "7dd7b0d8832ba3cb632c306926ded123429211b83641b35dc5c41ad2d34f9bec" } }]
+
+[[packages]]
+name = "psutil"
+version = "7.2.2"
+sdist = { url = "https://files.pythonhosted.org/packages/aa/c6/d1ddf4abb55e93cebc4f2ed8b5d6dbad109ecb8d63748dd2b20ab5e57ebe/psutil-7.2.2.tar.gz", upload-time = 2026-01-28T18:14:54Z, size = 493740, hashes = { sha256 = "0746f5f8d406af344fd547f1c8daa5f5c33dbc293bb8d6a16d80b4bb88f59372" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/b5/70/5d8df3b09e25bce090399cf48e452d25c935ab72dad19406c77f4e828045/psutil-7.2.2-cp36-abi3-manylinux2010_x86_64.manylinux_2_12_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-01-28T18:15:25Z, size = 155560, hashes = { sha256 = "076a2d2f923fd4821644f5ba89f059523da90dc9014e85f8e45a5774ca5bc6f9" } }]
+
+[[packages]]
+name = "pygments"
+version = "2.21.0"
+sdist = { url = "https://files.pythonhosted.org/packages/49/2e/ced460408999b33da6b31b0021b0f37d329e202d4169aeb164493778f25b/pygments-2.21.0.tar.gz", upload-time = 2026-08-17T08:02:48Z, size = 5005329, hashes = { sha256 = "610ca751c9bc2492b38eb9a38a7fbc93edbbb2d7182edaf34e66ae493dee5c8c" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/71/46/17f022dd3e953bf20a04a028a21ec746d942f8d2af30fa0f124fa0e6a684/pygments-2.21.0-py3-none-any.whl", upload-time = 2026-08-17T08:02:44Z, size = 1250147, hashes = { sha256 = "2363c69b61c4a97c838da3b130dcd6468f4848992b21a82f2a63ec34377137d9" } }]
+
+[[packages]]
+name = "pytest"
+version = "9.1.1"
+sdist = { url = "https://files.pythonhosted.org/packages/e4/47/b9efed96c114afcfa3c9d3fe98a76a1d14c74a9e266d397cf6eb64be5e01/pytest-9.1.1.tar.gz", upload-time = 2026-06-19T10:58:32Z, size = 1636369, hashes = { sha256 = "1088fbde8f2b49d95a549a195707afa7a76a3ce9bcadc26b6d71f0ffda5fe313" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/24/25/1de2678b631f5a49215c6c96fff41ba892b0a34df68d6d80292b1b48aa7f/pytest-9.1.1-py3-none-any.whl", upload-time = 2026-06-19T10:58:31Z, size = 386536, hashes = { sha256 = "37a86b45efb9a47a61a36449063e8e18d0cab3161329fc099eb21783169c4f0c" } }]
+
+[[packages]]
+name = "pytest-mock"
+version = "3.17.0"
+sdist = { url = "https://files.pythonhosted.org/packages/97/c2/28b9f5b955ff2bcd4727a6f768e2ca9b586cd7c37b95ea5f7b9b873ac7b3/pytest_mock-3.17.0.tar.gz", upload-time = 2026-10-17T16:21:42Z, size = 43064, hashes = { sha256 = "e36576e0985e01027e999891e7a966c67822d40c89ef1b4c8b6e22737e3590b4" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/e8/ea/47fbdc8f37410956fd445720e927589b1e2a47772c5f28109f0ce2fa26d9/pytest_mock-3.17.0-py3-none-any.whl", upload-time = 2026-10-17T16:21:41Z, size = 11248, hashes = { sha256 = "1b82aa4b37137248bd687055e109723debeb07b489de1565297dc9589c5f2d6b" } }]
+
+[[packages]]
+name = "pytest-randomly"
+version = "3.16.0"
+sdist = { url = "https://files.pythonhosted.org/packages/c0/68/d221ed7f4a2a49a664da721b8e87b52af6dd317af2a6cb51549cf17ac4b8/pytest_randomly-3.16.0.tar.gz", upload-time = 2024-10-25T15:45:34Z, size = 13367, hashes = { sha256 = "11bf4d23a26484de7860d82f726c0629837cf4064b79157bd18ec9d41d7feb26" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/22/70/b31577d7c46d8e2f9baccfed5067dd8475262a2331ffb0bfdf19361c9bde/pytest_randomly-3.16.0-py3-none-any.whl", upload-time = 2024-10-25T15:45:32Z, size = 8396, hashes = { sha256 = "8633d332635a1a0983d3bba19342196807f6afb17c3eef78e02c2f85dade45d6" } }]
+
+[[packages]]
+name = "pytest-rerunfailures"
+version = "14.0"
+sdist = { url = "https://files.pythonhosted.org/packages/cc/a4/6de45fe850759e94aa9a55cda807c76245af1941047294df26c851dfb4a9/pytest-rerunfailures-14.0.tar.gz", upload-time = 2024-03-13T08:21:39Z, size = 21350, hashes = { sha256 = "4a400bcbcd3c7a4ad151ab8afac123d90eca3abe27f98725dc4d9702887d2e92" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/dc/e7/e75bd157331aecc190f5f8950d7ea3d2cf56c3c57fb44da70e60b221133f/pytest_rerunfailures-14.0-py3-none-any.whl", upload-time = 2024-03-13T08:21:37Z, size = 12709, hashes = { sha256 = "4197bdd2eaeffdbf50b5ea6e7236f47ff0e44d1def8dae08e409f536d84e7b32" } }]
+
+[[packages]]
+name = "pytest-xdist"
+version = "3.8.0"
+sdist = { url = "https://files.pythonhosted.org/packages/78/b4/439b179d1ff526791eb921115fca8e44e596a13efeda518b9d845a619450/pytest_xdist-3.8.0.tar.gz", upload-time = 2025-07-01T13:30:59Z, size = 88069, hashes = { sha256 = "7e578125ec9bc6050861aa93f2d59f1d8d085595d6551c2c90b6f4fad8d3a9f1" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/ca/31/d4e37e9e550c2b92a9cbc2e4d0b7420a27224968580b5a447f420847c975/pytest_xdist-3.8.0-py3-none-any.whl", upload-time = 2025-07-01T13:30:56Z, size = 46396, hashes = { sha256 = "202ca578cfeb7370784a8c33d6d05bc6e13b4f25b5053c30a152269fd10f0b88" } }]
+
+[[packages]]
+name = "qh3"
+version = "2.0.4"
+marker = "(python_full_version > '3.7.10' and platform_machine == 'AMD64' and platform_python_implementation == 'CPython' and sys_platform == 'darwin') or (python_full_version < '3.12' and platform_machine == 'AMD64' and platform_python_implementation == 'PyPy' and sys_platform == 'darwin') or (python_full_version > '3.7.10' and platform_machine == 'ARM64' and platform_python_implementation == 'CPython' and sys_platform == 'darwin') or (python_full_version < '3.12' and platform_machine == 'ARM64' and platform_python_implementation == 'PyPy' and sys_platform == 'darwin') or (python_full_version > '3.7.10' and platform_machine == 'aarch64' and platform_python_implementation == 'CPython' and sys_platform == 'darwin') or (python_full_version < '3.12' and platform_machine == 'aarch64' and platform_python_implementation == 'PyPy' and sys_platform == 'darwin') or (python_full_version > '3.7.10' and platform_machine == 'arm64' and platform_python_implementation == 'CPython' and sys_platform == 'darwin') or (python_full_version < '3.12' and platform_machine == 'arm64' and platform_python_implementation == 'PyPy' and sys_platform == 'darwin') or (python_full_version > '3.7.10' and platform_machine == 'armv7l' and platform_python_implementation == 'CPython' and sys_platform == 'darwin') or (python_full_version < '3.12' and platform_machine == 'armv7l' and platform_python_implementation == 'PyPy' and sys_platform == 'darwin') or (python_full_version > '3.7.10' and platform_machine == 'i686' and platform_python_implementation == 'CPython' and sys_platform == 'darwin') or (python_full_version < '3.12' and platform_machine == 'i686' and platform_python_implementation == 'PyPy' and sys_platform == 'darwin') or (python_full_version > '3.7.10' and platform_machine == 'ppc64' and platform_python_implementation == 'CPython' and sys_platform == 'darwin') or (python_full_version < '3.12' and platform_machine == 'ppc64' and platform_python_implementation == 'PyPy' and sys_platform == 'darwin') or (python_full_version > '3.7.10' and platform_machine == 'ppc64le' and platform_python_implementation == 'CPython' and sys_platform == 'darwin') or (python_full_version < '3.12' and platform_machine == 'ppc64le' and platform_python_implementation == 'PyPy' and sys_platform == 'darwin') or (python_full_version > '3.7.10' and platform_machine == 'riscv64' and platform_python_implementation == 'CPython' and sys_platform == 'darwin') or (python_full_version < '3.12' and platform_machine == 'riscv64' and platform_python_implementation == 'PyPy' and sys_platform == 'darwin') or (python_full_version > '3.7.10' and platform_machine == 'riscv64gc' and platform_python_implementation == 'CPython' and sys_platform == 'darwin') or (python_full_version < '3.12' and platform_machine == 'riscv64gc' and platform_python_implementation == 'PyPy' and sys_platform == 'darwin') or (python_full_version > '3.7.10' and platform_machine == 's390x' and platform_python_implementation == 'CPython' and sys_platform == 'darwin') or (python_full_version < '3.12' and platform_machine == 's390x' and platform_python_implementation == 'PyPy' and sys_platform == 'darwin') or (python_full_version > '3.7.10' and platform_machine == 'x86' and platform_python_implementation == 'CPython' and sys_platform == 'darwin') or (python_full_version < '3.12' and platform_machine == 'x86' and platform_python_implementation == 'PyPy' and sys_platform == 'darwin') or (python_full_version > '3.7.10' and platform_machine == 'x86_64' and platform_python_implementation == 'CPython' and sys_platform == 'darwin') or (python_full_version < '3.12' and platform_machine == 'x86_64' and platform_python_implementation == 'PyPy' and sys_platform == 'darwin') or (python_full_version > '3.7.10' and platform_machine == 'AMD64' and platform_python_implementation == 'CPython' and sys_platform == 'linux') or (python_full_version < '3.12' and platform_machine == 'AMD64' and platform_python_implementation == 'PyPy' and sys_platform == 'linux') or (python_full_version > '3.7.10' and platform_machine == 'ARM64' and platform_python_implementation == 'CPython' and sys_platform == 'linux') or (python_full_version < '3.12' and platform_machine == 'ARM64' and platform_python_implementation == 'PyPy' and sys_platform == 'linux') or (python_full_version > '3.7.10' and platform_machine == 'aarch64' and platform_python_implementation == 'CPython' and sys_platform == 'linux') or (python_full_version < '3.12' and platform_machine == 'aarch64' and platform_python_implementation == 'PyPy' and sys_platform == 'linux') or (python_full_version > '3.7.10' and platform_machine == 'arm64' and platform_python_implementation == 'CPython' and sys_platform == 'linux') or (python_full_version < '3.12' and platform_machine == 'arm64' and platform_python_implementation == 'PyPy' and sys_platform == 'linux') or (python_full_version > '3.7.10' and platform_machine == 'armv7l' and platform_python_implementation == 'CPython' and sys_platform == 'linux') or (python_full_version < '3.12' and platform_machine == 'armv7l' and platform_python_implementation == 'PyPy' and sys_platform == 'linux') or (python_full_version > '3.7.10' and platform_machine == 'i686' and platform_python_implementation == 'CPython' and sys_platform == 'linux') or (python_full_version < '3.12' and platform_machine == 'i686' and platform_python_implementation == 'PyPy' and sys_platform == 'linux') or (python_full_version > '3.7.10' and platform_machine == 'ppc64' and platform_python_implementation == 'CPython' and sys_platform == 'linux') or (python_full_version < '3.12' and platform_machine == 'ppc64' and platform_python_implementation == 'PyPy' and sys_platform == 'linux') or (python_full_version > '3.7.10' and platform_machine == 'ppc64le' and platform_python_implementation == 'CPython' and sys_platform == 'linux') or (python_full_version < '3.12' and platform_machine == 'ppc64le' and platform_python_implementation == 'PyPy' and sys_platform == 'linux') or (python_full_version > '3.7.10' and platform_machine == 'riscv64' and platform_python_implementation == 'CPython' and sys_platform == 'linux') or (python_full_version < '3.12' and platform_machine == 'riscv64' and platform_python_implementation == 'PyPy' and sys_platform == 'linux') or (python_full_version > '3.7.10' and platform_machine == 'riscv64gc' and platform_python_implementation == 'CPython' and sys_platform == 'linux') or (python_full_version < '3.12' and platform_machine == 'riscv64gc' and platform_python_implementation == 'PyPy' and sys_platform == 'linux') or (python_full_version > '3.7.10' and platform_machine == 's390x' and platform_python_implementation == 'CPython' and sys_platform == 'linux') or (python_full_version < '3.12' and platform_machine == 's390x' and platform_python_implementation == 'PyPy' and sys_platform == 'linux') or (python_full_version > '3.7.10' and platform_machine == 'x86' and platform_python_implementation == 'CPython' and sys_platform == 'linux') or (python_full_version < '3.12' and platform_machine == 'x86' and platform_python_implementation == 'PyPy' and sys_platform == 'linux') or (python_full_version > '3.7.10' and platform_machine == 'x86_64' and platform_python_implementation == 'CPython' and sys_platform == 'linux') or (python_full_version < '3.12' and platform_machine == 'x86_64' and platform_python_implementation == 'PyPy' and sys_platform == 'linux') or (python_full_version > '3.7.10' and platform_machine == 'AMD64' and platform_python_implementation == 'CPython' and sys_platform == 'win32') or (python_full_version < '3.12' and platform_machine == 'AMD64' and platform_python_implementation == 'PyPy' and sys_platform == 'win32') or (python_full_version > '3.7.10' and platform_machine == 'ARM64' and platform_python_implementation == 'CPython' and sys_platform == 'win32') or (python_full_version < '3.12' and platform_machine == 'ARM64' and platform_python_implementation == 'PyPy' and sys_platform == 'win32') or (python_full_version > '3.7.10' and platform_machine == 'aarch64' and platform_python_implementation == 'CPython' and sys_platform == 'win32') or (python_full_version < '3.12' and platform_machine == 'aarch64' and platform_python_implementation == 'PyPy' and sys_platform == 'win32') or (python_full_version > '3.7.10' and platform_machine == 'arm64' and platform_python_implementation == 'CPython' and sys_platform == 'win32') or (python_full_version < '3.12' and platform_machine == 'arm64' and platform_python_implementation == 'PyPy' and sys_platform == 'win32') or (python_full_version > '3.7.10' and platform_machine == 'armv7l' and platform_python_implementation == 'CPython' and sys_platform == 'win32') or (python_full_version < '3.12' and platform_machine == 'armv7l' and platform_python_implementation == 'PyPy' and sys_platform == 'win32') or (python_full_version > '3.7.10' and platform_machine == 'i686' and platform_python_implementation == 'CPython' and sys_platform == 'win32') or (python_full_version < '3.12' and platform_machine == 'i686' and platform_python_implementation == 'PyPy' and sys_platform == 'win32') or (python_full_version > '3.7.10' and platform_machine == 'ppc64' and platform_python_implementation == 'CPython' and sys_platform == 'win32') or (python_full_version < '3.12' and platform_machine == 'ppc64' and platform_python_implementation == 'PyPy' and sys_platform == 'win32') or (python_full_version > '3.7.10' and platform_machine == 'ppc64le' and platform_python_implementation == 'CPython' and sys_platform == 'win32') or (python_full_version < '3.12' and platform_machine == 'ppc64le' and platform_python_implementation == 'PyPy' and sys_platform == 'win32') or (python_full_version > '3.7.10' and platform_machine == 'riscv64' and platform_python_implementation == 'CPython' and sys_platform == 'win32') or (python_full_version < '3.12' and platform_machine == 'riscv64' and platform_python_implementation == 'PyPy' and sys_platform == 'win32') or (python_full_version > '3.7.10' and platform_machine == 'riscv64gc' and platform_python_implementation == 'CPython' and sys_platform == 'win32') or (python_full_version < '3.12' and platform_machine == 'riscv64gc' and platform_python_implementation == 'PyPy' and sys_platform == 'win32') or (python_full_version > '3.7.10' and platform_machine == 's390x' and platform_python_implementation == 'CPython' and sys_platform == 'win32') or (python_full_version < '3.12' and platform_machine == 's390x' and platform_python_implementation == 'PyPy' and sys_platform == 'win32') or (python_full_version > '3.7.10' and platform_machine == 'x86' and platform_python_implementation == 'CPython' and sys_platform == 'win32') or (python_full_version < '3.12' and platform_machine == 'x86' and platform_python_implementation == 'PyPy' and sys_platform == 'win32') or (python_full_version > '3.7.10' and platform_machine == 'x86_64' and platform_python_implementation == 'CPython' and sys_platform == 'win32') or (python_full_version < '3.12' and platform_machine == 'x86_64' and platform_python_implementation == 'PyPy' and sys_platform == 'win32')"
+sdist = { url = "https://files.pythonhosted.org/packages/76/d3/692f1410aad9cfda0001e1e74533cb2cbdf0c525a8e7c2e4c587a51929ae/qh3-2.0.4.tar.gz", upload-time = 2026-10-01T08:40:22Z, size = 380633, hashes = { sha256 = "72b174c9dabfccdddf050dabc3c1b49972ed7a7564896d3db558e57376187f75" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/77/e0/25e888ca43626083989396eaa97394c87694f7032489586b33b455ffd363/qh3-2.0.4-cp37-abi3-manylinux_2_17_x86_64.manylinux2014_x86_64.whl", upload-time = 2026-10-01T08:37:36Z, size = 2518986, hashes = { sha256 = "af34fad8554560fa38304f61708176379d5efb192da2ece5fb25dec23c304b36" } }]
+
+[[packages]]
+name = "rich"
+version = "15.0.0"
+sdist = { url = "https://files.pythonhosted.org/packages/c0/8f/0722ca900cc807c13a6a0c696dacf35430f72e0ec571c4275d2371fca3e9/rich-15.0.0.tar.gz", upload-time = 2026-04-12T08:24:00Z, size = 230680, hashes = { sha256 = "edd07a4824c6b40189fb7ac9bc4c52536e9780fbbfbddf6f1e2502c31b068c36" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/82/3b/64d4899d73f91ba49a8c18a8ff3f0ea8f1c1d75481760df8c68ef5235bf5/rich-15.0.0-py3-none-any.whl", upload-time = 2026-04-12T08:24:02Z, size = 310654, hashes = { sha256 = "33bd4ef74232fb73fe9279a257718407f169c09b78a87ad3d296f548e27de0bb" } }]
+
+[[packages]]
+name = "shapely"
+version = "2.2.0"
+sdist = { url = "https://files.pythonhosted.org/packages/f3/ab/924b6e202f796d270a3041a230151f7908db5ea48c74effe6f8023e9bd05/shapely-2.2.0.tar.gz", upload-time = 2026-10-07T09:18:01Z, size = 380326, hashes = { sha256 = "e8865e553d874a1ec4a032057ea81fca9def37b188cd8fb550af3b3480b3f88c" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/f1/7f/55a7f6ae91c10aa58005e985d01756048b6e4ff82e731ea39003e1eeda3e/shapely-2.2.0-cp315-cp315-manylinux_2_24_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-10-07T09:17:31Z, size = 2299128, hashes = { sha256 = "fdb599ec540cea5b635ac47bf24fca4cdfd1c39730ffc0b6cf0d2666b0dd9a33" } }]
+
+[[packages]]
+name = "svg-py"
+version = "1.10.0"
+sdist = { url = "https://files.pythonhosted.org/packages/bc/1e/f36612d46266942c351de904bd9928610c485baee61220892277ac37be65/svg_py-1.10.0.tar.gz", upload-time = 2025-12-28T09:52:41Z, size = 43808, hashes = { sha256 = "2e1391411a205220a0e72ca303f3c2d11dbd564cb1dbc445406c5e11421bcc4b" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/18/9f/77a405e7b2a334ce774835263c3374d4ed307a3473f3925d9990a8c029e0/svg_py-1.10.0-py3-none-any.whl", upload-time = 2025-12-28T09:52:39Z, size = 15207, hashes = { sha256 = "54c7470347d5d79b30d059584a4f449da08b462903e8ce262981338bab755560" } }]
+
+[[packages]]
+name = "urllib3-future"
+version = "2.25.903"
+sdist = { url = "https://files.pythonhosted.org/packages/71/f0/3d87b7ecd92df7accecd0a4ac4d816cb151fabf6fdee359fe5d66f9b5f7d/urllib3_future-2.25.903.tar.gz", upload-time = 2026-10-21T08:30:13Z, size = 1590562, hashes = { sha256 = "ef0011def1c6724f418d7970200ab8ccaf7d034ece152717b368afe512fb6d53" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/59/6c/74a64afac964dc9ed0bc4c41871c73d386e4fb1867411b73fb50a7b7657f/urllib3_future-2.25.903-py3-none-any.whl", upload-time = 2026-10-21T08:30:10Z, size = 873806, hashes = { sha256 = "39352d455023402d86c4c1f567eba4f8b1bbf65571f8df96c2f5697c8058825f" } }]
+
+[[packages]]
+name = "wassima"
+version = "2.1.5"
+marker = "sys_platform != 'emscripten'"
+sdist = { url = "https://files.pythonhosted.org/packages/5c/8e/9167e3e39e921833d35119849422cfbbba68c90ad0723c2a9c7965303195/wassima-2.1.5.tar.gz", upload-time = 2026-10-22T07:24:05Z, size = 141994, hashes = { sha256 = "b02c1985e527c9539396cc85b909857d810dafaaa318a30266e585a0e7135f54" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/27/0e/9bc13dc706f86752a6afe36228f452be797c50183bddba513efad60a0272/wassima-2.1.5-py3-none-any.whl", upload-time = 2026-10-22T07:24:04Z, size = 132848, hashes = { sha256 = "53d9a56cf55fc969f8cdd1993f8dc69f857d1c32229fb9084dc2b267044b6dde" } }]

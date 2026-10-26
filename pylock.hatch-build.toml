@@ -1,6 +1,6 @@
 lock-version = "1.0"
 created-by = "uv"
-requires-python = ">=3.15"
+requires-python = ">=3.15.1"
 
 [[packages]]
 name = "hatchling"
