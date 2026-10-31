@@ -1,6 +1,6 @@
 [tools]
 python = "3.15.1"
-"pipx:hatch" = { version = "1.18.1", uvx_args = "--with pip" }
+"pipx:hatch" = { version = "1.18.2", uvx_args = "--with pip" }
 uv = "0.13.6"
 
 cargo-binstall = "1.26.1"
