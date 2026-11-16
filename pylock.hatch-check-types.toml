@@ -14,17 +14,17 @@ wheels = [
 
 [[packages]]
 name = "click"
-version = "8.5.0"
-sdist = { url = "https://files.pythonhosted.org/packages/c7/0e/7fa0ef50764b67090eca4114772a2abf8b6148198475e54c660b97caeee6/click-8.5.0.tar.gz", upload-time = 2026-08-26T13:33:14Z, size = 382235, hashes = { sha256 = "ba0d2089de75ea0310e2dde03160e6ca10009947fb95a182f9b54021bb272e34" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/58/50/6c0d534c5f134586a8e1ba4e330569e32f057e33372ae556463212fb4cd3/click-8.5.0-py3-none-any.whl", upload-time = 2026-08-26T13:33:12Z, size = 125251, hashes = { sha256 = "255bc9599cf7748b4b1a446ccc735421bd08a2ae529a8b88597d3de5664ee360" } }]
+version = "8.5.1"
+sdist = { url = "https://files.pythonhosted.org/packages/45/37/edbf1b0707709013c0cf2e8317e03d97ed29bf4cac709fe328904ae92a38/click-8.5.1.tar.gz", upload-time = 2026-11-06T17:37:01Z, size = 399151, hashes = { sha256 = "9bbfada76703fd1d784b83eea012e3e8c6a001a876543ef104fa56aaaeb072b4" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/31/7d/164b7ffc8624fe9efb4221bf9af485d5c1e41b9ae118045d2b6dc5457d8b/click-8.5.1-py3-none-any.whl", upload-time = 2026-11-06T17:36:59Z, size = 126163, hashes = { sha256 = "8bb5376d2006950386f8c6427613334a2acadc5f559cb80e638d00b4df957e37" } }]
 
 [[packages]]
 name = "coverage"
-version = "7.17.2"
-sdist = { url = "https://files.pythonhosted.org/packages/78/4a/740c3134227763ebc30a226d7f2f29b25e35898d162dd8b2dd792be83fb2/coverage-7.17.2.tar.gz", upload-time = 2026-11-04T19:52:34Z, size = 996756, hashes = { sha256 = "d05a1bef52f4d7f1b484a1cf46a8929e50963f910e51396373f06cd3b6248f38" } }
+version = "7.17.3"
+sdist = { url = "https://files.pythonhosted.org/packages/ed/8f/19651ed6f648de7e1383bb759207078e2ad8addeca711187e1cb3a495f14/coverage-7.17.3.tar.gz", upload-time = 2026-11-12T12:26:44Z, size = 1004507, hashes = { sha256 = "6695d1bb2a9a2fbd7806d69d78cf30f35eb0f65045da0ec5b5045242fadd6a78" } }
 wheels = [
-    { url = "https://files.pythonhosted.org/packages/f5/c6/4f3931c3ff80a6f2608209181adb00527970a4b43b64c3aa323383c37d51/coverage-7.17.2-cp315-cp315-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl", upload-time = 2026-11-04T19:51:49Z, size = 263632, hashes = { sha256 = "3bd065e75c077d6de8cd3fe68699a8b47be3ec595af6b66e3629926839094609" } },
-    { url = "https://files.pythonhosted.org/packages/da/91/1805cc144497d76a436f66a21fa57492bee7ed1257826fb992f03b9b2b6f/coverage-7.17.2-py3-none-any.whl", upload-time = 2026-11-04T19:52:32Z, size = 219280, hashes = { sha256 = "e674027ceb6bfd959f1bb035000fd20fa8b717dc6765adaaf8bca347822c8c7d" } },
+    { url = "https://files.pythonhosted.org/packages/10/61/1bd79ec66957f4ea7ce5f687a18aa50f3b3e8715e4843f6ed3e5f03f24bf/coverage-7.17.3-cp315-cp315-manylinux1_x86_64.manylinux_2_28_x86_64.manylinux_2_5_x86_64.whl", upload-time = 2026-11-12T12:26:05Z, size = 264469, hashes = { sha256 = "a13a946d8de807d8992e56a09502952d81bfbb4b80204ef77a6a2a38b4ce22be" } },
+    { url = "https://files.pythonhosted.org/packages/d1/8e/f7d7e69e2ad34ce08595b787eb578f669c00fd57d432ed4c7cfd71666f36/coverage-7.17.3-py3-none-any.whl", upload-time = 2026-11-12T12:26:43Z, size = 219999, hashes = { sha256 = "21745c08f2835b847a16887b748d3084dddeb0571ae2a0d62e33644413568b99" } },
 ]
 
 [[packages]]
@@ -63,9 +63,9 @@ wheels = [
 
 [[packages]]
 name = "markdown-it-py"
-version = "4.2.0"
-sdist = { url = "https://files.pythonhosted.org/packages/06/ff/7841249c247aa650a76b9ee4bbaeae59370dc8bfd2f6c01f3630c35eb134/markdown_it_py-4.2.0.tar.gz", upload-time = 2026-05-07T12:08:28Z, size = 82454, hashes = { sha256 = "04a21681d6fbb623de53f6f364d352309d4094dd4194040a10fd51833e418d49" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/b3/81/4da04ced5a082363ecfa159c010d200ecbd959ae410c10c0264a38cac0f5/markdown_it_py-4.2.0-py3-none-any.whl", upload-time = 2026-05-07T12:08:27Z, size = 91687, hashes = { sha256 = "9f7ebbcd14fe59494226453aed97c1070d83f8d24b6fc3a3bcf9a38092641c4a" } }]
+version = "4.3.0"
+sdist = { url = "https://files.pythonhosted.org/packages/16/fc/cee2c45553c9a9bf77d8b0c391560c556d7ed756b1f0bb35eb5d48db09ea/markdown_it_py-4.3.0.tar.gz", upload-time = 2026-11-10T16:18:30Z, size = 242701, hashes = { sha256 = "91a58fa5b72c71a40cf7177250fd767480d7a2bb3ac426ccfb76fb90305fdaaa" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/c9/31/5f0ac2f1a1c67423c995c731a11cd4ad05d081a2be969d74f868bdb9cc70/markdown_it_py-4.3.0-py3-none-any.whl", upload-time = 2026-11-10T16:18:28Z, size = 96951, hashes = { sha256 = "7aa1511a46c39138de78d9eba92ce47e63124d8003fc98b3a351909e04239efa" } }]
 
 [[packages]]
 name = "mdurl"
@@ -81,9 +81,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/dc/fb/c80c8842d40347c
 
 [[packages]]
 name = "niquests"
-version = "3.21.2"
-sdist = { url = "https://files.pythonhosted.org/packages/1c/2a/e368ec88a02c6bfc56c031ba6da9dd8099ad998fb818c28b687bee74c91a/niquests-3.21.2.tar.gz", upload-time = 2026-09-23T06:23:46Z, size = 1094494, hashes = { sha256 = "586d6b9475c9018a42f19f1e4688077b8158101cbf40673c63d2c1a096cc7665" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/65/51/eb07449eb9e7ecae4350b5a40bfcb002d6d26d58cf2cfd2f928ae7c2f559/niquests-3.21.2-py3-none-any.whl", upload-time = 2026-09-23T06:23:44Z, size = 229060, hashes = { sha256 = "73e52614a712ee2f4d410bdd29789ca6a4ed031f8961410156e395d42b091208" } }]
+version = "3.21.3"
+sdist = { url = "https://files.pythonhosted.org/packages/0b/e1/e73e2cdb3374e7b442d708de6f87555f00faa4fdb3e347d5ae6df66d472a/niquests-3.21.3.tar.gz", upload-time = 2026-11-09T07:05:00Z, size = 1103048, hashes = { sha256 = "6fd476cd2612da6690df6162bb4f314970695bc32ccb68033208d390bb1ac679" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/54/72/4a0ba16f82c2d66854480079f5d6eee25be14025e171a2c25566d0c82db2/niquests-3.21.3-py3-none-any.whl", upload-time = 2026-11-09T07:04:58Z, size = 229403, hashes = { sha256 = "fce4988339389965418ab4ef94f7f246dba648cbeffa90cca33f801b882d3d7a" } }]
 
 [[packages]]
 name = "numpy"
@@ -178,9 +178,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/18/9f/77a405e7b2a334c
 
 [[packages]]
 name = "urllib3-future"
-version = "2.25.905"
-sdist = { url = "https://files.pythonhosted.org/packages/36/28/765b30ba80b434803d287f873453463d9eef9d5cb4e28004196460166976/urllib3_future-2.25.905.tar.gz", upload-time = 2026-10-28T13:20:47Z, size = 1704064, hashes = { sha256 = "d5bd25dad01d7358b33f4c7b3f225506231158086ff790028c1de5b38c26e89e" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/37/78/e4f6952a009df5f65b3af31b6221d2d660e0a705245676b5fc73508d88ea/urllib3_future-2.25.905-py3-none-any.whl", upload-time = 2026-10-28T13:20:45Z, size = 890513, hashes = { sha256 = "c8e3629be86cf3c074769a23beb2b99993cc3454d2049bd3c0643952f6bfbafb" } }]
+version = "2.25.906"
+sdist = { url = "https://files.pythonhosted.org/packages/40/ba/65b899cde6b07d23f8a59fc97fbd2dd479eebcc396671c854a13acd41247/urllib3_future-2.25.906.tar.gz", upload-time = 2026-11-09T04:27:41Z, size = 1706510, hashes = { sha256 = "cc8d4e1151c8cf71d184696e358acd339d6a6092b1d23bcd73d3b8e3a6cc26e4" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/d3/6f/8d15be8a1921d92ed8f839a7523b2e8ebe951de56c74c145979417664616/urllib3_future-2.25.906-py3-none-any.whl", upload-time = 2026-11-09T04:27:39Z, size = 890721, hashes = { sha256 = "8b68780cd6dc526aa30b1aa6a0eb0ec2eb01a91c07bfe49554c8901f23db984f" } }]
 
 [[packages]]
 name = "wassima"
