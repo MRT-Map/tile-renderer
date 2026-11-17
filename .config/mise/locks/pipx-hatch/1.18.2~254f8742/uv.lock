@@ -1,9 +1,9 @@
 version = 1
 revision = 5
-requires-python = "==3.15.1"
+requires-python = "==3.15.2"
 
 [options]
-exclude-newer = "2026-11-14T16:54:30.519676854Z"
+exclude-newer = "2026-11-14T17:53:49.38356875Z"
 
 [[package]]
 name = "anyio"
