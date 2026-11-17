@@ -13,6 +13,7 @@ concurrency:
 
 jobs:
   test:
+    name: Test
     runs-on: ${{ matrix.runner }}
     permissions:
       contents: read
