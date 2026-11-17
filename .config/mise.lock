@@ -63,10 +63,10 @@ specifiers = ["0.50.0"]
 version = "1.18.2"
 backend = "pipx:hatch"
 specifiers = ["1.18.2"]
-uv = { path = "mise/locks/pipx-hatch/1.18.2~6cbbf470", digest = "sha256:6f4209b81659afbe76230fc7f5fbb169e2fda123941716d45ca030ea6b7c0d7d" }
+uv = { path = "mise/locks/pipx-hatch/1.18.2~254f8742", digest = "sha256:6074b256c24697851b411bf69a73f2f064b631b4b58131d4303a504e82a1e027" }
 
 [tools."pipx:hatch".options]
-python = "3.15.1"
+python = "3.15.2"
 
 [[tools.python]]
 version = "3.15.2"
