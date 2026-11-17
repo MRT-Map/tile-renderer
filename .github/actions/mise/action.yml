@@ -19,7 +19,7 @@ runs:
   steps:
     - id: mise-env
       shell: bash
-      run: echo "MISE_ENV=$ENVS" > "$GITHUB_ENV"  # zizmor: ignore[github-env]
+      run: echo "MISE_ENV=$(echo $ENVS | tr -d '\n')" >> "$GITHUB_ENV" # zizmor: ignore[github-env]
       env:
         ENVS: ${{ inputs.envs }}
 

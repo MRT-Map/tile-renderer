@@ -1,11 +1,11 @@
 [tools]
 python = "3.15.1"
-"pipx:hatch" = { version = "1.18.2", uvx_args = "--with pip" }
+"pipx:hatch" = { version = "1.18.2", python = "{{ read_toml(path='mise.toml')['tools']['python'] }}" }
 uv = "0.13.8"
 
 cargo-binstall = "1.27.0"
-"cargo:resvg" = "0.50.0"
-"cargo:usvg" = "0.50.0"
+"cargo:resvg" = { version = "0.50.0", depends = "cargo-binstall" }
+"cargo:usvg" = { version = "0.50.0", depends = "cargo-binstall" }
 
 [env]
 HATCH_ENV_TYPE_VIRTUAL_UV_PATH = { tools = true, value = "{% if os_family() == 'unix' %}{{ [tools.uv.path, exec(command='ls \"' ~ tools.uv.path ~ '\"') | trim, 'uv'] | join(sep='/') }}{% else %}{{ [tools.uv.path, 'uv.exe'] | join(sep='\\\\') }}{% endif %}" }

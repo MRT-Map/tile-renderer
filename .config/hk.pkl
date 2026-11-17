@@ -1,27 +1,25 @@
 amends "package://github.com/jdx/hk/releases/download/v2.12.0/hk@2.12.0#/Config.pkl"
 import "package://github.com/jdx/hk/releases/download/v2.12.0/hk@2.12.0#/Builtins.pkl"
-import "package://github.com/iiiii7d/hk/releases/download/v2.8.0-7/hk@2.8.0-7#/Hatch.pkl"
-import "package://github.com/iiiii7d/hk/releases/download/v2.8.0-7/hk@2.8.0-7#/Misc.pkl"
+import "package://github.com/iiiii7d/hk/releases/download/v2.12.0-11/hk@2.12.0-11#/Hatch.pkl"
+import "package://github.com/iiiii7d/hk/releases/download/v2.12.0-11/hk@2.12.0-11#/Misc.pkl"
 
 local formatters = new Mapping<String, Step> {
-    ["ruff_fmt"] = Hatch.hatch_check_fmt
+    ["ruff_fmt"] = Hatch.check_fmt
 }
 
 local linters = new Mapping<String, Step> {
-    ["ruff"] = Hatch.hatch_check_code
-    ["zizmor"] = Misc.zizmor
+    ["ruff"] = Hatch.check_code
+    ...Misc.zizmor.steps
     ["actionlint"] = Misc.actionlint
-    ["poutine"] = Misc.poutine
+    ...Misc.poutine.steps
 }
 local type_checkers = new Mapping<String, Step> {
-    ["pyrefly"] = Hatch.hatch_check_types
+    ["pyrefly"] = Hatch.check_types
 }
-local sarif = new Mapping<String, Step> {
-    ["mkdir"] = Misc.mkdir_sarif(".sarif")
-    ["ruff"] = Hatch.hatch_check_code_sarif(".sarif")
-    ["zizmor"] = Misc.zizmor_sarif(".sarif")
-    ["actionlint"] = Misc.actionlint_sarif(".sarif")
-    ["poutine"] = Misc.poutine_sarif(".sarif")
+
+steps = new Mapping<String, Step | Group> {
+    ...formatters
+    ...linters
     ...type_checkers
 }
 
@@ -29,37 +27,5 @@ hooks {
     ["pre-commit"] {
         fix = true
         stash = "git"
-        steps = new Mapping<String, Step | Group> {
-            ...formatters
-            ...linters
-            ...type_checkers
-        }
-    }
-    ["fix"] {
-        fix = true
-        steps = new Mapping<String, Step | Group> {
-            ...formatters
-            ...linters
-            ...type_checkers
-        }
-    }
-    ["check"] {
-        steps = new Mapping<String, Step | Group> {
-            ...formatters
-            ...linters
-            ...type_checkers
-        }
-    }
-    ["format"] {
-        fix = true
-        steps = new Mapping<String, Step | Group> {
-            ...formatters
-        }
-    }
-    ["sarif"] {
-        fix = true
-        steps = new Mapping<String, Step | Group> {
-            ...sarif
-        }
     }
 }
