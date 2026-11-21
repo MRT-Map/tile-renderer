@@ -1,7 +1,7 @@
 [tools]
 python = "3.15.2"
 "pipx:hatch" = { version = "1.18.2", python = "{{ read_toml(path='mise.toml')['tools']['python'] }}" }
-uv = "0.13.8"
+uv = "0.13.9"
 
 cargo-binstall = "1.27.0"
 "cargo:resvg" = { version = "0.50.0", depends = "cargo-binstall" }
