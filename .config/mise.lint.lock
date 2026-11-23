@@ -6,6 +6,7 @@ lockfile_version = 4
 version = "1.1.6"
 backend = "github:boostsecurityio/poutine"
 specifiers = ["1.1.6"]
+unsupported_platforms = ["windows-x64"]
 
 [tools."github:boostsecurityio/poutine"."platforms.linux-arm64"]
 checksum = "sha256:460c90300c6329106b551c150682d12e457365f6436a6cbbd08fe79eb9a98131"
@@ -94,6 +95,7 @@ provenance = "github-attestations"
 version = "2.13.0"
 backend = "packslip:github.com/jdx/hk"
 specifiers = ["2.13.0"]
+unsupported_platforms = ["macos-x64"]
 
 [tools.hk."platforms.linux-arm64"]
 checksum = "sha256:490196a4e638991c671f42941d72ade4d00b14750145f34fc64377b49fc070bb"
