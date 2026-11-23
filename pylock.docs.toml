@@ -120,9 +120,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/54/72/4a0ba16f82c2d66
 
 [[packages]]
 name = "numpy"
-version = "2.5.4"
-sdist = { url = "https://files.pythonhosted.org/packages/95/b0/c7453d0b6e2073c3264468b106ee1563750cecc910965e67357e3698c83e/numpy-2.5.4.tar.gz", upload-time = 2026-10-10T20:05:31Z, size = 20866315, hashes = { sha256 = "9a94cf751c9ad8ebaa835bcd3d40dacf8534ad086b88c38029b65123c7999d2a" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/93/3a/01360c8036822ed9f7aa32189a77d1476567ec1e8e1383522389e4faac45/numpy-2.5.4-cp315-cp315-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-10-10T20:04:42Z, size = 16718648, hashes = { sha256 = "56733449d2544178beaa4545cee357370440cf056c197f9c7bfb19dbfdd0e86d" } }]
+version = "2.5.5"
+sdist = { url = "https://files.pythonhosted.org/packages/4e/3a/8770c288c47f0b5c2a786d3c20e79f66fd245f2d42cd232d7cd5e00e83e5/numpy-2.5.5.tar.gz", upload-time = 2026-11-15T21:32:28Z, size = 20873892, hashes = { sha256 = "5cddc243c75114ba845f01b1f87aca1572dbf7b6c2d88636ed3e1d2bccd7f1bf" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/d0/ce/ef0ca1a7dbf657a68ec52ce150cc477a7cdd8d09c7ef77662cdecbca39e4/numpy-2.5.5-cp315-cp315-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-11-15T21:31:53Z, size = 15713633, hashes = { sha256 = "9c3e1ac3cd5d3329f4d38709ff4c21f0621bbe8779c094d6de8ec8347246fcdc" } }]
 
 [[packages]]
 name = "packaging"
@@ -180,9 +180,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/4c/07/2ebca9b11fb9be7
 
 [[packages]]
 name = "soupsieve"
-version = "4.1"
-sdist = { url = "https://files.pythonhosted.org/packages/95/48/21a393ff731b8f928fa4f8176f9a7ceba2252ee60a5149f25b45c292aa5c/soupsieve-4.1.tar.gz", upload-time = 2026-11-10T01:59:50Z, size = 161955, hashes = { sha256 = "ca9abf7126667010d8f6e9b39bfc1bc3b23c8aed9bcb0f54a754dde969bb8aab" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/88/73/6a2087c72975cfc07394623bca8d17654342ea4055ae368deafe5a81a542/soupsieve-4.1-py3-none-any.whl", upload-time = 2026-11-10T01:59:48Z, size = 52302, hashes = { sha256 = "e4d667b3974ce6e038e7390486b8093369854a1d345ffdd4c121dfc4a782e809" } }]
+version = "4.1.2"
+sdist = { url = "https://files.pythonhosted.org/packages/17/35/bf779c1cc376bc216a2d94e3b3d9ee48347296af29bedfc6caaf96bc132f/soupsieve-4.1.2.tar.gz", upload-time = 2026-11-18T17:21:03Z, size = 178884, hashes = { sha256 = "c6539a2638f26991463527337e39d630e3cbb86d024f52282a510535b8a7e09f" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/1e/33/f5082b3c480db024453077592057200955aed2a376327b8921d553404ca7/soupsieve-4.1.2-py3-none-any.whl", upload-time = 2026-11-18T17:21:02Z, size = 59295, hashes = { sha256 = "96b4115212a3abee1f572d62da706cca090b088cb5effa278db5702122e63a2c" } }]
 
 [[packages]]
 name = "sphinx"
@@ -276,9 +276,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/92/9d/c4e665119135114
 
 [[packages]]
 name = "urllib3-future"
-version = "2.25.906"
-sdist = { url = "https://files.pythonhosted.org/packages/40/ba/65b899cde6b07d23f8a59fc97fbd2dd479eebcc396671c854a13acd41247/urllib3_future-2.25.906.tar.gz", upload-time = 2026-11-09T04:27:41Z, size = 1706510, hashes = { sha256 = "cc8d4e1151c8cf71d184696e358acd339d6a6092b1d23bcd73d3b8e3a6cc26e4" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/d3/6f/8d15be8a1921d92ed8f839a7523b2e8ebe951de56c74c145979417664616/urllib3_future-2.25.906-py3-none-any.whl", upload-time = 2026-11-09T04:27:39Z, size = 890721, hashes = { sha256 = "8b68780cd6dc526aa30b1aa6a0eb0ec2eb01a91c07bfe49554c8901f23db984f" } }]
+version = "2.25.907"
+sdist = { url = "https://files.pythonhosted.org/packages/fd/30/cf3f81c6c160275c8c0205fd241ff099b5ff2c95cf0463dbde00f9438fad/urllib3_future-2.25.907.tar.gz", upload-time = 2026-11-19T09:46:02Z, size = 1708257, hashes = { sha256 = "bbfd8540fc8350200fb7f96441fc53b6209adbd7ce87498744492dc3174fb662" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/59/e0/c777f53acea0108be931df1dcd15ce2914837965b52ee3cbacb700cbd1b3/urllib3_future-2.25.907-py3-none-any.whl", upload-time = 2026-11-19T09:46:01Z, size = 890676, hashes = { sha256 = "c2538cecdec979f6c1b3f42d1ddf52121a3e0f315d72e47cc1579ab8438de948" } }]
 
 [[packages]]
 name = "wassima"
