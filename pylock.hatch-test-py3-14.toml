@@ -87,9 +87,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/54/72/4a0ba16f82c2d66
 
 [[packages]]
 name = "numpy"
-version = "2.5.4"
-sdist = { url = "https://files.pythonhosted.org/packages/95/b0/c7453d0b6e2073c3264468b106ee1563750cecc910965e67357e3698c83e/numpy-2.5.4.tar.gz", upload-time = 2026-10-10T20:05:31Z, size = 20866315, hashes = { sha256 = "9a94cf751c9ad8ebaa835bcd3d40dacf8534ad086b88c38029b65123c7999d2a" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/16/d5/928078d2b28f26829b138b4a6c3980045022fb409f570657a224ae60ef4e/numpy-2.5.4-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-10-10T20:03:49Z, size = 16721710, hashes = { sha256 = "d549420b8858885cea8838a727842249218b9c1da24dd517e25c9c7a948310a3" } }]
+version = "2.5.5"
+sdist = { url = "https://files.pythonhosted.org/packages/4e/3a/8770c288c47f0b5c2a786d3c20e79f66fd245f2d42cd232d7cd5e00e83e5/numpy-2.5.5.tar.gz", upload-time = 2026-11-15T21:32:28Z, size = 20873892, hashes = { sha256 = "5cddc243c75114ba845f01b1f87aca1572dbf7b6c2d88636ed3e1d2bccd7f1bf" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/a4/1f/fcdce1061fba2bfb2e9bfda01fbd8132d5f7522a4f7c8e2b2f629d54ee38/numpy-2.5.5-cp314-cp314-manylinux_2_27_x86_64.manylinux_2_28_x86_64.whl", upload-time = 2026-11-15T21:31:08Z, size = 15718051, hashes = { sha256 = "c48960d420e90cf305cb1fde0d4e6082cc90512cda87a9acf0b6e04e91cf4abe" } }]
 
 [[packages]]
 name = "packaging"
@@ -172,9 +172,9 @@ wheels = [{ url = "https://files.pythonhosted.org/packages/18/9f/77a405e7b2a334c
 
 [[packages]]
 name = "urllib3-future"
-version = "2.25.906"
-sdist = { url = "https://files.pythonhosted.org/packages/40/ba/65b899cde6b07d23f8a59fc97fbd2dd479eebcc396671c854a13acd41247/urllib3_future-2.25.906.tar.gz", upload-time = 2026-11-09T04:27:41Z, size = 1706510, hashes = { sha256 = "cc8d4e1151c8cf71d184696e358acd339d6a6092b1d23bcd73d3b8e3a6cc26e4" } }
-wheels = [{ url = "https://files.pythonhosted.org/packages/d3/6f/8d15be8a1921d92ed8f839a7523b2e8ebe951de56c74c145979417664616/urllib3_future-2.25.906-py3-none-any.whl", upload-time = 2026-11-09T04:27:39Z, size = 890721, hashes = { sha256 = "8b68780cd6dc526aa30b1aa6a0eb0ec2eb01a91c07bfe49554c8901f23db984f" } }]
+version = "2.25.907"
+sdist = { url = "https://files.pythonhosted.org/packages/fd/30/cf3f81c6c160275c8c0205fd241ff099b5ff2c95cf0463dbde00f9438fad/urllib3_future-2.25.907.tar.gz", upload-time = 2026-11-19T09:46:02Z, size = 1708257, hashes = { sha256 = "bbfd8540fc8350200fb7f96441fc53b6209adbd7ce87498744492dc3174fb662" } }
+wheels = [{ url = "https://files.pythonhosted.org/packages/59/e0/c777f53acea0108be931df1dcd15ce2914837965b52ee3cbacb700cbd1b3/urllib3_future-2.25.907-py3-none-any.whl", upload-time = 2026-11-19T09:46:01Z, size = 890676, hashes = { sha256 = "c2538cecdec979f6c1b3f42d1ddf52121a3e0f315d72e47cc1579ab8438de948" } }]
 
 [[packages]]
 name = "wassima"
