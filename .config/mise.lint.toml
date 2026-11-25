@@ -1,7 +1,7 @@
 [tools]
 hk = "2.13.0"
 pkl = "0.33.1"
-zizmor = "1.32.0"
+zizmor = "1.33.1"
 "github:kjanat/actionlint" = "1.17.1"
 "github:boostsecurityio/poutine" = "1.1.6"
 
